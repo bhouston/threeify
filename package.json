@@ -1,28 +1,24 @@
 {
-  
   "name": "three.ts",
   "version": "0.0.0",
   "description": "Three.ts Prototype",
   "keywords": [],
   "author": "Ben Houston",
   "license": "ISC",
-
   "main": "lib/index.ts",
-
   "scripts": {
-    "watch": "webpack --watch",
-    "start": "webpack-dev-server --open",
-    "build": "webpack"
+    "watch": "webpack --watch --config webpack.dev.js",
+    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
   },
-
   "devDependencies": {
     "ts-loader": "^7.0.5",
     "ts-node": "^7.0.1",
     "typescript": "^3.9.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^4.2.2"
   },
-
   "dependencies": {}
 }

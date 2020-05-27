@@ -3,7 +3,8 @@ import { Matrix4 } from './math/Matrix4';
 
 
 let a = new Vector3( 1, 0, 0 );
-let b = new Vector3( 0, 'ben', 0 ); // type bug.
+let b = new Vector3( 3, 2, 3 );
+// let b = new Vector3( 3, 'ben', 3 ); // a type bug, uncomment to see how it is caught automatically.
 
 let m = new Matrix4().set( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0 );
  
