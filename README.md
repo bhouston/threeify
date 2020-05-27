@@ -35,7 +35,7 @@ The bundle it produces will be here:
   
 The bundle used for development will be large as it includes the webpack reloader.
 
-If you want to build an optimized and small product version run:
+If you want to build an optimized production version run:
 
 ```
 npm run build
