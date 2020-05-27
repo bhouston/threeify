@@ -1,4 +1,2 @@
 node_modules/
-package-lock.json
-dist/index.js
-dist/index.js.map
+/lib/
