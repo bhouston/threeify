@@ -2,3 +2,4 @@ node_modules/
 /lib/
 dist/index.js.map
 dist/index.js
+three.js

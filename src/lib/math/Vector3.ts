@@ -1,4 +1,11 @@
-import { Matrix4 } from 'Matrix4';
+//
+// based on Vector3 from Three.js
+//
+// Authors:
+// * @bhouston
+//
+
+import { Matrix4 } from 'Matrix4.js';
 
 export class Vector3 {
 
@@ -44,4 +51,10 @@ export class Vector3 {
 		return this;
 
 	}
+
+    length() {
+
+        return Math.sqrt( this.x * this.x + this.y * this.y + this.z * this.z );
+
+    }
 }

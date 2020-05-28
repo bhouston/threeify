@@ -1,6 +1,8 @@
 import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
-
+import { Node } from './scenegraph/Node.js';
+import { IndexedGeometry } from './geometry/IndexedGeometry.js';
+import { Geometry } from './geometry/Geometry.js';
 
 let a = new Vector3( 1, 0, 0 );
 let b = new Vector3( 3, 2, 3 );

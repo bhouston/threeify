@@ -1,3 +1,9 @@
+//
+// based on Matrix4 from Three.js
+//
+// Authors:
+// * @bhouston
+//
 
 export class Matrix4 {
 
