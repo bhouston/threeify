@@ -5,20 +5,18 @@
   "keywords": [],
   "author": "Ben Houston",
   "license": "ISC",
-  "main": "lib/index.ts",
+  "type": "module",
+  "main": "index.ts",
+  "module": "index.ts",
   "scripts": {
-    "watch": "webpack --watch --config webpack.dev.js",
-    "start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "tsc",
+    "watch": "npm run build -- --watch",
+    "start": "es-dev-server --node-resolution",
+    "dev": "npm run watch & npm start"
   },
   "devDependencies": {
-    "ts-loader": "^7.0.5",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.9.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.2"
+    "es-dev-server": "^1.53.0",
+    "typescript": "^3.9.3"
   },
   "dependencies": {}
 }

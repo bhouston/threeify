@@ -1,5 +1,5 @@
-import { Vector3 } from './math/Vector3';
-import { Matrix4 } from './math/Matrix4';
+import { Vector3 } from './math/Vector3.js';
+import { Matrix4 } from './math/Matrix4.js';
 
 
 let a = new Vector3( 1, 0, 0 );
