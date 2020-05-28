@@ -70,5 +70,4 @@ var vertexShader = new Shader( context, vs, ShaderType.Vertex );
 var fragmentShader = new Shader( context, fs, ShaderType.Fragment );
 var program = new Program( context, vertexShader, fragmentShader );
 
-
-//console.log( evs );
+console.log( program );
