@@ -17,31 +17,8 @@ npm install
 npm run start
 ```
  
-The end result should be that a webbrowser window will open with a
-dev-webserver open this example webpage:
+Then open a web server to the address displayed in the console.  Usually this will be https://localhost:8000.
 
 ```
-dist/index.html
-```
-
-It will automatically reload when you change the source code that it is watching.
-
-The bundle it produces will be here:
-
-```
-/dist/index.js      // compiled source code
-/dist/index.js.map  // source maps
-```
-  
-The bundle used for development will be large as it includes the webpack reloader.
-
-If you want to build an optimized production version run:
-
-```
-npm run build
-```
-This will create only a small JavaScript file:
-
-```
-/dist.index.js
+/index.html
 ```
