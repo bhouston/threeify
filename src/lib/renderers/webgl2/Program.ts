@@ -3,6 +3,7 @@
 //
 // Authors:
 // * @bhouston
+//
 
 import { ShaderMaterial } from "../common/ShaderMaterial.js";
 import { Shader, ShaderType } from "./Shader.js";

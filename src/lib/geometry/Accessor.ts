@@ -7,16 +7,16 @@
 
 import { BufferView } from './BufferView.js'
 
-export class Accessor<PrimitiveArrayType,ClassType> {
+export class Accessor {
 
-    bufferView: BufferView<PrimitiveArrayType>;
+    bufferView: BufferView;
     byteOffset: number;
     byteLength: number;
     count: number;
     //minExtent: ComponentType;
     //maxExtent: ComponentType;
 
-    constructor( bufferView: BufferView<PrimitiveArrayType>, byteOffset: number = 0, byteLength: number = 0 ) {
+    constructor( bufferView: BufferView, byteOffset: number = 0, byteLength: number = 0 ) {
 
         this.bufferView = bufferView;
         this.byteOffset = byteOffset;

@@ -1,3 +1,10 @@
+//
+// basic shader
+//
+// Authors:
+// * @bhouston
+//
+
 import { Program } from "./Program";
 
 export class Uniform {

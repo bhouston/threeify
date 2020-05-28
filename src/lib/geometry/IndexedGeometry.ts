@@ -9,16 +9,16 @@ import { Vector3 } from '../math/Vector3.js'
 
 export class IndexedGeometry {
 
-    indices: Accessor<Int32Array,number>;
-    positions: Accessor<Float32Array,Vector3>;
-    normals: Accessor<Float32Array,Vector3>;
-    uvs: Accessor<Float32Array,Vector2>; // TODO: turn into an array (indices) or map (named)
+    indices: Accessor;
+    positions: Accessor;
+    normals: Accessor;
+    uvs: Accessor; // TODO: turn into an array (indices) or map (named)
 
     constructor(
-        indices: Accessor<Int32Array,number>,
-        positions: Accessor<Float32Array,Vector3>,
-        normals: Accessor<Float32Array,Vector3>,
-        uvs: Accessor<Float32Array,Vector2> ) {
+        indices: Accessor,
+        positions: Accessor,
+        normals: Accessor,
+        uvs: Accessor ) {
 
         this.indices = indices;
         this.positions = positions;
