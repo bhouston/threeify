@@ -8,8 +8,8 @@
 import { ShaderMaterial } from "../common/ShaderMaterial.js";
 import { Shader, ShaderType } from "./Shader.js";
 import { Context } from "./Context.js";
-import { Uniform } from "./Uniform.js";
-import { Attribute } from "./Attribute.js";
+import { ProgramUniform } from "./ProgramUniform.js";
+import { ProgramAttribute } from "./ProgramAttribute.js";
 
 export class Program {
 
@@ -17,8 +17,8 @@ export class Program {
     vertexShader: Shader;
     fragmentShader: Shader;
     glProgram: WebGLProgram;
-    uniforms: Array<Uniform> = [];
-    attributes: Array<Attribute> = [];
+    uniforms: Array<ProgramUniform> = [];
+    attributes: Array<ProgramAttribute> = [];
 
     // attributes (required attribute buffers)
     // varying (per instance parameters)
@@ -57,16 +57,17 @@ export class Program {
         var numActiveUniforms = gl.getProgramParameter( this.glProgram, gl.ACTIVE_UNIFORMS );
         for ( var i = 0; i < numActiveUniforms; ++ i ) {
     
-            this.uniforms.push( new Uniform( this, i ) );
+            this.uniforms.push( new ProgramUniform( this, i ) );
 
         }
 
     	var numActiveAttributes = gl.getProgramParameter( this.glProgram, gl.ACTIVE_ATTRIBUTES );
         for ( var i = 0; i < numActiveAttributes; ++ i ) {
     
-            this.attributes.push( new Attribute( this, i ) );
+            this.attributes.push( new ProgramAttribute( this, i ) );
 
         }
     
     }
+
 }

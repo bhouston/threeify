@@ -5,15 +5,16 @@
 // * @bhouston
 //
 
-import { Context } from "./Context";
-import { Program } from "./Program";
+import { Context } from "./Context.js";
+import { Program } from "./Program.js";
+import { BufferGeometry } from "./BufferGeometry.js";
 
 export class VertexArrayObject {
 
     program: Program;
     glVertexArrayObject: WebGLVertexArrayObject;
 
-    constructor(program: Program, buffers: Buffer[]) {
+    constructor(program: Program, bufferGeometry: BufferGeometry) {
 
         this.program = program;
 
@@ -27,31 +28,33 @@ export class VertexArrayObject {
             }
             this.glVertexArrayObject = vao;
         }
-    }
-
-    bind( buffers: Buffer[] ) {
-
-        let gl = this.program.context.gl;
 
         // and make it the one we're currently working with
         gl.bindVertexArray(this.glVertexArrayObject);
 
-        this.program.attributes.forEach( attribute => {
+        let namedBufferAccessors = [ // TODO: There is probably a more efficient way to do this via TS introspection
+            { name: 'indices', bufferAccessor: bufferGeometry.indices },
+            { name: 'position', bufferAccessor: bufferGeometry.positions },
+            { name: 'normals', bufferAccessor: bufferGeometry.normals },
+            { name: 'uvs', bufferAccessor: bufferGeometry.uvs }
+        ];
 
-     /*       // Turn on the attribute
-            gl.enableVertexAttribArray(positionAttributeLocation);
+        namedBufferAccessors.forEach( namedBufferAccessor => {
+            let programAttribute = this.program.attributes.find( attribute => ( attribute.name === namedBufferAccessor.name ) );
+            if( ! programAttribute ) { // only bind the attributes that exist in the program.
+                return;
+            }
+
+            gl.enableVertexAttribArray(programAttribute.glLocation);
+
+            let bufferAccessor = namedBufferAccessor.bufferAccessor;
+            let buffer = bufferAccessor.buffer;
 
             // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bindBuffer( buffer.target, buffer.glBuffer );
 
             // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-            var size = 2;          // 2 components per iteration
-            var type = gl.FLOAT;   // the data is 32bit floats
-            var normalize = false; // don't normalize the data
-            var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
-            var offset = 0;        // start at the beginning of the buffer
-            gl.vertexAttribPointer(
-                positionAttributeLocation, size, type, normalize, stride, offset);*/
+            gl.vertexAttribPointer( programAttribute.glLocation, bufferAccessor.componentsPerVertex, bufferAccessor.componentType, bufferAccessor.normalized, bufferAccessor.vertexStride, bufferAccessor.byteOffset );
 
         });
 

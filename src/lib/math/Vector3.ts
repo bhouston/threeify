@@ -1,5 +1,5 @@
 //
-// based on Vector3 from Three.js
+// based on Vector3 from Three
 //
 // Authors:
 // * @bhouston

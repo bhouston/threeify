@@ -1,20 +1,13 @@
-//
-// basic shader
-//
-// Authors:
-// * @bhouston
-//
+import { Program } from "./Program.js";
 
-import { Program } from "./Program";
-
-export class Uniform {
+export class ProgramAttribute {
 
     program: Program;
     index: number;
     name: string;
     size: number;
     type: number;
-    glLocation: WebGLUniformLocation;
+    glLocation: number; // attributes are indexed
 
     constructor(program: Program, index: number) {
 
@@ -27,7 +20,7 @@ export class Uniform {
         // look up uniform locations
         {
 
-            let activeInfo = gl.getActiveUniform(program.glProgram, index);
+            let activeInfo = gl.getActiveAttrib(program.glProgram, index);
             if (!activeInfo) {
                 throw new Error("Can not find uniform with index: " + index);
             }
@@ -36,12 +29,12 @@ export class Uniform {
             this.size = activeInfo.size;
             this.type = activeInfo.type;
 
-            var glLocation = gl.getUniformLocation(program.glProgram, this.name);
-            if (!glLocation) {
-                throw new Error("Can not find uniform named: " + this.name);
+            var glLocation = gl.getAttribLocation(program.glProgram, this.name);
+            if ( glLocation < 0 ) {
+                throw new Error("Can not find attribute named: " + this.name);
             }
             this.glLocation = glLocation;
-
+            
         }
 
     }

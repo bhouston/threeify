@@ -1,4 +1,4 @@
-export enum DataType {
+export enum ComponentType {
 
     Byte = WebGLRenderingContext.BYTE, // signed 8-bit integer, with values in [-128, 127]
     UnsignedByte = WebGLRenderingContext.UNSIGNED_BYTE, // unsigned 8-bit integer, with values in [0, 255]
@@ -8,3 +8,18 @@ export enum DataType {
     HalfFloat = WebGL2RenderingContext.HALF_FLOAT, //  16-bit IEEE floating point number
 
 }
+
+export function componentTypeSizeOf( componentType: ComponentType ) {
+
+    switch( componentType ) {
+        case ComponentType.Byte: return 1;
+        case ComponentType.UnsignedByte: return 1;
+        case ComponentType.Short: return 2;
+        case ComponentType.UnsignedShort: return 2;
+        case ComponentType.HalfFloat: return 2;
+        case ComponentType.Float: return 4;
+    }
+
+    throw new Error( "unknown data type:" + componentType );
+}
+

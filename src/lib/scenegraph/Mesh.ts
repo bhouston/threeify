@@ -4,17 +4,17 @@
 // Authors:
 // * @bhouston
 
-import { IndexedGeometry } from "../geometry/IndexedGeometry";
+import { AttributeGeometry } from "../geometry/AttributeGeometry.js";
 
 class Mesh extends Node {
 
-    indexedGeometry: IndexedGeometry;
+    attributeGeometry: AttributeGeometry;
  
-    constructor( indexedGeometry : IndexedGeometry ) {
+    constructor( attributeGeometry : AttributeGeometry ) {
 
         super();
 
-        this.indexedGeometry = indexedGeometry;
+        this.attributeGeometry = attributeGeometry;
 
     }
 
