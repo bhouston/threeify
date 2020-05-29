@@ -4,7 +4,7 @@
 // Authors:
 // * @bhouston
 
-import { AttributeGeometry } from "../geometry/AttributeGeometry.js";
+import { AttributeGeometry } from "../core/AttributeGeometry.js";
 
 class Mesh extends Node {
 
