@@ -9,23 +9,41 @@
 import { Context } from "./Context.js";
 import { VertexAttribute } from "./VertexAttribute.js";
 
+class NamedVertexAttribute {
+
+    name: string;
+    vertexAttribute: VertexAttribute;
+
+    constructor( name: string, vertexAttribute: VertexAttribute ) {
+        this.name = name;
+        this.vertexAttribute = vertexAttribute;
+    }
+
+}
+
 export class BufferGeometry { // TODO: find a better name/abstraction for this.  VertexAttributeSet?  NamedVertexAttributes?
 
-    indices: VertexAttribute;
-    positions: VertexAttribute;
-    normals: VertexAttribute;
-    uvs: VertexAttribute; // TODO: turn into an array (indices) or map (named)
+    indices: VertexAttribute | null = null;
+    namedVertexAttributes: NamedVertexAttribute[] = [];
 
-    constructor(
-        indices: VertexAttribute,
-        positions: VertexAttribute,
-        normals: VertexAttribute,
-        uvs: VertexAttribute ) {
+    constructor() {
+    }
 
+    setIndices( indices: VertexAttribute ) {
         this.indices = indices;
-        this.positions = positions;
-        this.normals = normals;
-        this.uvs = uvs;
+    }
+
+    setAttribute( name: string, vertexAttribute: VertexAttribute ) {
+
+        // TODO: Figure out how to do this more efficiently and less verbosely.
+        let namedVertexAttribute = this.namedVertexAttributes.find( item => item.name === name );
+        if( namedVertexAttribute ) {
+            namedVertexAttribute.vertexAttribute = vertexAttribute;
+        }
+        else {
+            this.namedVertexAttributes.push( new NamedVertexAttribute( name, vertexAttribute ) );
+        }
+
     }
 
 }

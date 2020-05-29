@@ -4,17 +4,17 @@
 // Authors:
 // * @bhouston
 
-import { AttributeGeometry } from "../core/AttributeGeometry.js";
+import { Geometry } from "../core/Geometry.js";
 
 class Mesh extends Node {
 
-    attributeGeometry: AttributeGeometry;
+    geometry: Geometry;
  
-    constructor( attributeGeometry : AttributeGeometry ) {
+    constructor( geometry: Geometry ) {
 
         super();
 
-        this.attributeGeometry = attributeGeometry;
+        this.geometry = geometry;
 
     }
 

@@ -1,7 +1,8 @@
 import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
 import { Node } from './objects/Node.js';
-import { AttributeGeometry } from './core/AttributeGeometry.js';
+import { Geometry } from './core/Geometry.js';
+import { BoxGeometry, BoxParameters } from './geometry/BoxGeometry.js';
 import { Shader, ShaderType } from './renderers/webgl2/Shader.js';
 import { ShaderMaterial } from './renderers/common/ShaderMaterial.js';
 import { Context } from './renderers/webgl2/Context.js';
@@ -10,9 +11,8 @@ import { Program } from './renderers/webgl2/Program.js';
 import { Buffer } from './renderers/webgl2/Buffer.js';
 import { VertexAttribute } from './renderers/webgl2/VertexAttribute.js';
 import { BufferGeometry } from './renderers/webgl2/BufferGeometry.js';
-import { AttributeArray } from './core/AttributeArray.js';
 import { AttributeView } from './core/AttributeView.js';
-import { AttributeAccessor } from './core/AttributeAccessor.js';
+import { AttributeAccessor, Int32AttributeAccessor, Float32AttributeAccessor, Int16AttributeAccessor } from './core/AttributeAccessor.js';
 import { ComponentType } from './core/ComponentType.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 
@@ -70,41 +70,38 @@ void main() {
 
 // main memory representation setup
 
-var indexAttributeArray = new AttributeArray( new Int16Array( [
+var indexAccessor = new Int16AttributeAccessor( new Int16Array( [
   0, 1, 2, 0, 2, 3
-] ) );
-var indexAttributeView = new AttributeView( indexAttributeArray, 0, -1, 2 );
-var indexAccessor = new AttributeAccessor( indexAttributeView, 0, ComponentType.UnsignedShort, 1, -1 );
+] ), 1 )
 
-var positionAttributeArray = new AttributeArray( new Float32Array( [
+var positionAccessor = new Float32AttributeAccessor( new Float32Array( [
   0.0, 0.0, 0.0,
   1.0, 0.0, 0.0,
   1.0, 1.0, 0.0,
   0.0, 1.0, 0.0,
-] ) );
-var positionAttributeView = new AttributeView( positionAttributeArray, 0, -1, 12 );
-var positionAccessor = new AttributeAccessor( positionAttributeView, 0, ComponentType.Float, 3, -1 );
+] ), 3 );
 
-var normalAttributeArray = new AttributeArray( new Float32Array( [
+var normalAccessor = new Float32AttributeAccessor( new Float32Array( [
   0.0, 0.0, 1.0,
   0.0, 0.0, 1.0,
   0.0, 0.0, 1.0,
   0.0, 0.0, 1.0,
-] ) );
-var normalAttributeView = new AttributeView( normalAttributeArray, 0, -1, 12 );
-var normalAccessor = new AttributeAccessor( normalAttributeView, 0, ComponentType.Float, 3, -1 );
+] ), 3 );
 
-var uvAttributeArray = new AttributeArray( new Float32Array( [
+var uvAccessor = new Float32AttributeAccessor( new Float32Array( [
   0.0, 0.0,
   1.0, 0.0,
   1.0, 1.0,
   0.0, 1.0,
-] ) );
-var uvAttributeView = new AttributeView( uvAttributeArray, 0, -1, 8 );
-var uvAccessor = new AttributeAccessor( uvAttributeView, 0, ComponentType.Float, 2, -1 );
+] ), 2 );
 
-var attributeGeometry = new AttributeGeometry( indexAccessor, positionAccessor, normalAccessor, uvAccessor );
-console.log( attributeGeometry );
+var geometry = new Geometry();
+geometry.setIndices( indexAccessor );
+geometry.setAttribute( 'position', positionAccessor );
+geometry.setAttribute( 'normal', normalAccessor );
+geometry.setAttribute( 'uv', uvAccessor );
+
+console.log( geometry );
 
 // setup webgl2
 var canvasElement = document.querySelector("#rendering-canvas") as HTMLCanvasElement;
@@ -115,19 +112,18 @@ var context = new Context( canvasElement );
 
 function toVertexAttribute( context: Context, attributeAccessor: AttributeAccessor ) {
   let attributeView = attributeAccessor.attributeView;
-  let attributeArray = attributeView.attributeArray;
 
-  let buffer = new Buffer( context, attributeArray.arrayBuffer, attributeView.target );
+  let buffer = new Buffer( context, attributeView.arrayBuffer, attributeView.target );
   let vertexAttribute = new VertexAttribute( buffer, attributeAccessor.componentType, attributeAccessor.componentsPerVertex, false, attributeView.byteStride, attributeView.byteOffset + attributeAccessor.byteOffset );
 
   return vertexAttribute;
 }
 
-var bufferGeometry = new BufferGeometry(
-  toVertexAttribute( context, indexAccessor ),
-  toVertexAttribute( context, positionAccessor ),
-  toVertexAttribute( context, normalAccessor ),
-  toVertexAttribute( context, uvAccessor ) );
+var bufferGeometry = new BufferGeometry();
+bufferGeometry.setIndices( toVertexAttribute( context, indexAccessor ) );
+bufferGeometry.setAttribute( 'position', toVertexAttribute( context, positionAccessor ) );
+bufferGeometry.setAttribute( 'normal', toVertexAttribute( context, normalAccessor ) );
+bufferGeometry.setAttribute( 'uv', toVertexAttribute( context, uvAccessor ) );
 
 console.log( bufferGeometry );
 
@@ -148,3 +144,7 @@ console.log( program );
 var vertexArrayObject = new VertexArrayObject( program, bufferGeometry );
 
 console.log( vertexArrayObject );
+
+var boxGeometry = new BoxGeometry( new BoxParameters( 10, 2, 3, 5, 5, 5 ) );
+
+console.log( boxGeometry );

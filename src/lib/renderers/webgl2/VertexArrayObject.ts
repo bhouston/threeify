@@ -32,14 +32,7 @@ export class VertexArrayObject {
         // and make it the one we're currently working with
         gl.bindVertexArray(this.glVertexArrayObject);
 
-        let namedVertexAttributes = [ // TODO: There is probably a more efficient way to do this via TS introspection
-            { name: 'indices', vertexAttribute: bufferGeometry.indices },
-            { name: 'position', vertexAttribute: bufferGeometry.positions },
-            { name: 'normals', vertexAttribute: bufferGeometry.normals },
-            { name: 'uvs', vertexAttribute: bufferGeometry.uvs }
-        ];
-
-        namedVertexAttributes.forEach( namedVertexAttribute => {
+        bufferGeometry.namedVertexAttributes.forEach( namedVertexAttribute => {
             let programAttribute = this.program.attributes.find( attribute => ( attribute.name === namedVertexAttribute.name ) );
             if( ! programAttribute ) { // only bind the attributes that exist in the program.
                 return;

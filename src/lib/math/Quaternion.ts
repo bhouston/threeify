@@ -1,5 +1,5 @@
 //
-// based on Quaternion from Three
+// based on Quaternion from Three.js
 //
 // Authors:
 // * @bhouston

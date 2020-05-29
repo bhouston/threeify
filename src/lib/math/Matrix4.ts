@@ -1,5 +1,5 @@
 //
-// based on Matrix4 from Three
+// based on Matrix4 from Three.js
 //
 // Authors:
 // * @bhouston

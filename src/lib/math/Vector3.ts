@@ -1,5 +1,5 @@
 //
-// based on Vector3 from Three
+// based on Vector3 from Three.js
 //
 // Authors:
 // * @bhouston
@@ -29,7 +29,31 @@ export class Vector3 {
 
 		return this;
 
-    }
+	}
+
+	getComponent( index: number ) {
+
+		switch( index ) {
+			case 0: return this.x;
+			case 1: return this.y;
+			case 2: return this.z;
+			default: throw new Error( "index of our range: " + index );
+		}
+
+	}
+
+
+	setComponent( index: number, value: number ) {
+
+		switch( index ) {
+			case 0: this.x = value; break;
+			case 1: this.y = value; break;
+			case 2: this.z = value; break;
+			default: throw new Error( "index of our range: " + index );
+		}
+
+		return this;
+	}
 
 	dot( v: Vector3 ) {
 
