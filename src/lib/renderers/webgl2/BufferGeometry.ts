@@ -9,7 +9,7 @@
 import { Context } from "./Context.js";
 import { VertexAttribute } from "./VertexAttribute.js";
 
-export class BufferGeometry {
+export class BufferGeometry { // TODO: find a better name/abstraction for this.  VertexAttributeSet?  NamedVertexAttributes?
 
     indices: VertexAttribute;
     positions: VertexAttribute;
