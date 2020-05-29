@@ -10,7 +10,7 @@ import * as evs from './renderers/webgl2/shaders/mesh_fs.glsl';
 import { Program } from './renderers/webgl2/Program.js';
 import { Buffer } from './renderers/webgl2/Buffer.js';
 import { VertexAttribute } from './renderers/webgl2/VertexAttribute.js';
-import { BufferGeometry } from './renderers/webgl2/BufferGeometry.js';
+import { VertexAttributeGeometry } from './renderers/webgl2/VertexAttributeGeometry.js';
 import { AttributeView } from './core/AttributeView.js';
 import { AttributeAccessor, Int32AttributeAccessor, Float32AttributeAccessor, Int16AttributeAccessor } from './core/AttributeAccessor.js';
 import { ComponentType } from './core/ComponentType.js';
@@ -119,13 +119,13 @@ function toVertexAttribute( context: Context, attributeAccessor: AttributeAccess
   return vertexAttribute;
 }
 
-var bufferGeometry = new BufferGeometry();
-bufferGeometry.setIndices( toVertexAttribute( context, indexAccessor ) );
-bufferGeometry.setAttribute( 'position', toVertexAttribute( context, positionAccessor ) );
-bufferGeometry.setAttribute( 'normal', toVertexAttribute( context, normalAccessor ) );
-bufferGeometry.setAttribute( 'uv', toVertexAttribute( context, uvAccessor ) );
+var vertexAttributeGeometry = new VertexAttributeGeometry();
+vertexAttributeGeometry.setIndices( toVertexAttribute( context, indexAccessor ) );
+vertexAttributeGeometry.setAttribute( 'position', toVertexAttribute( context, positionAccessor ) );
+vertexAttributeGeometry.setAttribute( 'normal', toVertexAttribute( context, normalAccessor ) );
+vertexAttributeGeometry.setAttribute( 'uv', toVertexAttribute( context, uvAccessor ) );
 
-console.log( bufferGeometry );
+console.log( vertexAttributeGeometry );
 
 // source code definition of material
 var shaderMaterial = new ShaderMaterial( vs, fs );
@@ -141,7 +141,7 @@ var program = new Program( context, vertexShader, fragmentShader );
 console.log( program );
 
 // bind to program
-var vertexArrayObject = new VertexArrayObject( program, bufferGeometry );
+var vertexArrayObject = new VertexArrayObject( program, vertexAttributeGeometry );
 
 console.log( vertexArrayObject );
 

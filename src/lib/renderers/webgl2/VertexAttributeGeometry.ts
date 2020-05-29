@@ -21,7 +21,7 @@ class NamedVertexAttribute {
 
 }
 
-export class BufferGeometry { // TODO: find a better name/abstraction for this.  VertexAttributeSet?  NamedVertexAttributes?
+export class VertexAttributeGeometry {
 
     indices: VertexAttribute | null = null;
     namedVertexAttributes: NamedVertexAttribute[] = [];

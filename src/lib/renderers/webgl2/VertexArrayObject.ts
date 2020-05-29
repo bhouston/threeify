@@ -7,14 +7,14 @@
 
 import { Context } from "./Context.js";
 import { Program } from "./Program.js";
-import { BufferGeometry } from "./BufferGeometry.js";
+import { VertexAttributeGeometry } from "./VertexAttributeGeometry.js";
 
 export class VertexArrayObject {
 
     program: Program;
     glVertexArrayObject: WebGLVertexArrayObject;
 
-    constructor(program: Program, bufferGeometry: BufferGeometry) {
+    constructor(program: Program, vertexAttributeGeometry: VertexAttributeGeometry) {
 
         this.program = program;
 
@@ -32,7 +32,7 @@ export class VertexArrayObject {
         // and make it the one we're currently working with
         gl.bindVertexArray(this.glVertexArrayObject);
 
-        bufferGeometry.namedVertexAttributes.forEach( namedVertexAttribute => {
+        vertexAttributeGeometry.namedVertexAttributes.forEach( namedVertexAttribute => {
             let programAttribute = this.program.attributes.find( attribute => ( attribute.name === namedVertexAttribute.name ) );
             if( ! programAttribute ) { // only bind the attributes that exist in the program.
                 return;
