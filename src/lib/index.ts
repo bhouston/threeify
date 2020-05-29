@@ -15,6 +15,11 @@ import { AttributeView } from './core/AttributeView.js';
 import { AttributeAccessor, Int32AttributeAccessor, Float32AttributeAccessor, Int16AttributeAccessor } from './core/AttributeAccessor.js';
 import { ComponentType } from './core/ComponentType.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
+import { Texture } from './textures/Texture.js';
+import { TextureWrap } from './textures/TextureWrap.js';
+import { TextureFilter } from './textures/TextureFilter.js';
+import { PixelFormat } from './textures/PixelFormat.js';
+import { DataType } from './textures/DataType.js';
 
 let a = new Vector3( 1, 0, 0 );
 let b = new Vector3( 3, 2, 3 );
@@ -139,3 +144,8 @@ console.log( boxGeometry );
 let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, boxGeometry );
 
 console.log( boxVertexAttributeGeometry );
+
+var imageElement = document.querySelector("#image") as HTMLImageElement;
+
+var texture = new Texture( imageElement );
+

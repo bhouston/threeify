@@ -1,3 +1,10 @@
+//
+// program attribute from introspection
+//
+// Authors:
+// * @bhouston
+//
+
 import { Program } from "./Program.js";
 
 export class ProgramAttribute {
