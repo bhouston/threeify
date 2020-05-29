@@ -8,6 +8,8 @@
 
 import { Buffer } from './Buffer.js'
 import { ComponentType, componentTypeSizeOf } from '../../core/ComponentType.js';
+import { Context } from './Context.js';
+import { AttributeAccessor } from '../../core/AttributeAccessor.js';
 
 export class VertexAttribute {
 
@@ -27,6 +29,16 @@ export class VertexAttribute {
         this.normalized = normalized;
         this.vertexStride = vertexStride;
         this.byteOffset = byteOffset;
+    }
+
+    static FromAttributeAccessor( context: Context, attributeAccessor: AttributeAccessor ) {
+        let attributeView = attributeAccessor.attributeView;
+    
+        let buffer = new Buffer( context, attributeView.arrayBuffer, attributeView.target );
+        let vertexAttribute = new VertexAttribute( buffer, attributeAccessor.componentType, attributeAccessor.componentsPerVertex, false, attributeView.byteStride, attributeView.byteOffset + attributeAccessor.byteOffset );
+    
+        return vertexAttribute;
+        
     }
 
 }

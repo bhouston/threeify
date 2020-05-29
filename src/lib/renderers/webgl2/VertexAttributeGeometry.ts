@@ -8,6 +8,7 @@
 
 import { Context } from "./Context.js";
 import { VertexAttribute } from "./VertexAttribute.js";
+import { Geometry } from "../../core/Geometry.js";
 
 class NamedVertexAttribute {
 
@@ -44,6 +45,22 @@ export class VertexAttributeGeometry {
             this.namedVertexAttributes.push( new NamedVertexAttribute( name, vertexAttribute ) );
         }
 
+    }
+
+    static FromGeometry( context: Context, geometry: Geometry ) {
+
+        var vertexAttributeGeometry = new VertexAttributeGeometry();
+      
+        if( geometry.indices ) {
+          vertexAttributeGeometry.setIndices( VertexAttribute.FromAttributeAccessor( context, geometry.indices ) );
+        }
+      
+        geometry.namedAttributeAccessors.forEach( item => {
+          vertexAttributeGeometry.setAttribute( item.name, VertexAttribute.FromAttributeAccessor( context, item.attributeAccessor ) );
+        } );
+      
+        return vertexAttributeGeometry;
+      
     }
 
 }

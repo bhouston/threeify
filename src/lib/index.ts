@@ -110,20 +110,7 @@ var context = new Context( canvasElement );
 
 // upload to GPU
 
-function toVertexAttribute( context: Context, attributeAccessor: AttributeAccessor ) {
-  let attributeView = attributeAccessor.attributeView;
-
-  let buffer = new Buffer( context, attributeView.arrayBuffer, attributeView.target );
-  let vertexAttribute = new VertexAttribute( buffer, attributeAccessor.componentType, attributeAccessor.componentsPerVertex, false, attributeView.byteStride, attributeView.byteOffset + attributeAccessor.byteOffset );
-
-  return vertexAttribute;
-}
-
-var vertexAttributeGeometry = new VertexAttributeGeometry();
-vertexAttributeGeometry.setIndices( toVertexAttribute( context, indexAccessor ) );
-vertexAttributeGeometry.setAttribute( 'position', toVertexAttribute( context, positionAccessor ) );
-vertexAttributeGeometry.setAttribute( 'normal', toVertexAttribute( context, normalAccessor ) );
-vertexAttributeGeometry.setAttribute( 'uv', toVertexAttribute( context, uvAccessor ) );
+let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, geometry );
 
 console.log( vertexAttributeGeometry );
 
@@ -148,3 +135,7 @@ console.log( vertexArrayObject );
 var boxGeometry = new BoxGeometry( new BoxParameters( 10, 2, 3, 5, 5, 5 ) );
 
 console.log( boxGeometry );
+
+let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, boxGeometry );
+
+console.log( boxVertexAttributeGeometry );
