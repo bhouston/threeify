@@ -14,7 +14,7 @@ npm install
 3. To run the automatic typescript builder and dev server go:
 
 ```
-npm run start
+npm run dev
 ```
  
 Then open a web server to the address displayed in the console.  Usually this will be https://localhost:8000.
