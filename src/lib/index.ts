@@ -20,6 +20,7 @@ import { TextureWrap } from './textures/TextureWrap.js';
 import { TextureFilter } from './textures/TextureFilter.js';
 import { PixelFormat } from './textures/PixelFormat.js';
 import { DataType } from './textures/DataType.js';
+import { TextureImage2D } from './renderers/webgl2/TextureImage2D.js';
 
 let a = new Vector3( 1, 0, 0 );
 let b = new Vector3( 3, 2, 3 );
@@ -145,7 +146,14 @@ let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, 
 
 console.log( boxVertexAttributeGeometry );
 
-var imageElement = document.querySelector("#image") as HTMLImageElement;
+let image = new Image();
+image.src = "./exocortex-logo.jpg";
+image.addEventListener('load', function() {
 
-var texture = new Texture( imageElement );
+  let texture = new Texture( image );
+  console.log( texture );
 
+  let textureImage2D = TextureImage2D.FromTexture( context, texture );
+
+  console.log( textureImage2D );
+});

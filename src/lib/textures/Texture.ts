@@ -14,31 +14,34 @@ export class Texture {
 
     name: string = "";
     image: HTMLImageElement | null;
-    sWrap: TextureWrap;
-    tWrap: TextureWrap;
+    wrapS: TextureWrap;
+    wrapT: TextureWrap;
     magFilter: TextureFilter;
     minFilter: TextureFilter;
     pixelFormat: PixelFormat;
     dataType: DataType;
+    generateMipmaps: boolean;
     anisotropyLevels: number;
 
     constructor(
         image: HTMLImageElement | null = null,
-        sWrap: TextureWrap = TextureWrap.ClampToEdge,
-        tWrap: TextureWrap = TextureWrap.ClampToEdge,
+        wrapS: TextureWrap = TextureWrap.ClampToEdge,
+        wrapT: TextureWrap = TextureWrap.ClampToEdge,
         magFilter: TextureFilter = TextureFilter.Linear,
         minFilter: TextureFilter = TextureFilter.LinearMipmapLinear,
         pixelFormat: PixelFormat = PixelFormat.RGBA,
         dataType: DataType = DataType.UnsignedByte,
+        generateMipmaps: boolean = true,
         anisotropyLevels: number = 1 ) {
 
         this.image = image;
-        this.sWrap = sWrap;
-        this.tWrap = tWrap;
+        this.wrapS = wrapS;
+        this.wrapT = wrapT;
         this.magFilter = magFilter;
         this.minFilter = minFilter;
         this.pixelFormat = pixelFormat;
         this.dataType = dataType;
+        this.generateMipmaps = generateMipmaps;
         this.anisotropyLevels = anisotropyLevels;
     }
 
@@ -46,8 +49,8 @@ export class Texture {
 
         this.name = source.name;
         this.image = source.image;
-        this.sWrap = source.sWrap;
-        this.tWrap = source.tWrap;
+        this.wrapS = source.wrapS;
+        this.wrapT = source.wrapT;
         this.magFilter = source.magFilter;
         this.minFilter = source.minFilter;
         this.pixelFormat = source.pixelFormat;

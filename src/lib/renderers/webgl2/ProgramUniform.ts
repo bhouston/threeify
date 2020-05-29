@@ -1,5 +1,5 @@
 //
-// basic shader
+// program uniform from introspection
 //
 // Authors:
 // * @bhouston
