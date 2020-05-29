@@ -15,6 +15,7 @@ export class AttributeAccessor {
     componentType: ComponentType;
     componentsPerVertex: number;
     count: number;
+    byteLength: number;
      //minExtent: ComponentType;
     //maxExtent: ComponentType;
 
@@ -24,13 +25,12 @@ export class AttributeAccessor {
         this.byteOffset = byteOffset;
         this.componentType = componentType;
         this.componentsPerVertex = componentsPerVertex;
-        this.count = count;
+
+        let bytesPerComponent = componentTypeSizeOf( this.componentType );
+        this.count = ( count < 0 ) ? ( attributeView.byteLength / bytesPerComponent ) : count;
+        this.byteLength = bytesPerComponent * this.componentsPerVertex * this.count;
         //this.minExtent = minExtent;
         //this.maxExtent = maxExtent;
-    }
-
-    get byteLength() : number {
-        return componentTypeSizeOf( this.componentType ) * this.componentsPerVertex * this.count;
     }
 
 }

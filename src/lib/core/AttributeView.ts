@@ -18,9 +18,11 @@ export class AttributeView {
 
     constructor( attributeArray: AttributeArray, byteOffset: number, byteLength: number, byteStride: number, target: BufferTarget = BufferTarget.Array ) {
 
+        if( byteLength > attributeArray.arrayBuffer.byteLength ) throw new Error( "byteLength too long" );
+        
         this.attributeArray = attributeArray;
         this.byteOffset = byteOffset;
-        this.byteLength = byteLength;
+        this.byteLength = ( byteLength < 0 ) ? attributeArray.arrayBuffer.byteLength : byteLength;
         this.byteStride = byteStride;
         this.target = target;
 
