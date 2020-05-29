@@ -7,7 +7,7 @@
 //
 
 import { Buffer } from './Buffer.js'
-import { ComponentType, componentTypeSizeOf } from '../../geometry/ComponentType.js';
+import { ComponentType, componentTypeSizeOf } from '../../core/ComponentType.js';
 
 export class BufferAccessor {
 

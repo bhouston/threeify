@@ -1,7 +1,7 @@
 import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
-import { Node } from './scenegraph/Node.js';
-import { AttributeGeometry } from './geometry/AttributeGeometry.js';
+import { Node } from './objects/Node.js';
+import { AttributeGeometry } from './core/AttributeGeometry.js';
 import { Shader, ShaderType } from './renderers/webgl2/Shader.js';
 import { ShaderMaterial } from './renderers/common/ShaderMaterial.js';
 import { Context } from './renderers/webgl2/Context.js';
@@ -10,10 +10,10 @@ import { Program } from './renderers/webgl2/Program.js';
 import { Buffer } from './renderers/webgl2/Buffer.js';
 import { BufferAccessor } from './renderers/webgl2/BufferAccessor.js';
 import { BufferGeometry } from './renderers/webgl2/BufferGeometry.js';
-import { AttributeArray } from './geometry/AttributeArray.js';
-import { AttributeView } from './geometry/AttributeView.js';
-import { AttributeAccessor } from './geometry/AttributeAccessor.js';
-import { ComponentType } from './geometry/ComponentType.js';
+import { AttributeArray } from './core/AttributeArray.js';
+import { AttributeView } from './core/AttributeView.js';
+import { AttributeAccessor } from './core/AttributeAccessor.js';
+import { ComponentType } from './core/ComponentType.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 
 let a = new Vector3( 1, 0, 0 );

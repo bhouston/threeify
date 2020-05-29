@@ -1,5 +1,5 @@
 import { Context } from "./Context.js";
-import { BufferTarget } from "../../geometry/BufferTarget.js";
+import { BufferTarget } from "../../core/BufferTarget.js";
 import { BufferUsage } from "./BufferUsage.js";
 
 
