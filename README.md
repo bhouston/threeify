@@ -11,13 +11,15 @@ To run:
 npm install
 ```
  
-3. Run webpack in dev-server mode, which includes hot-reloading
+3. To run the automatic typescript builder and dev server go:
 
 ```
-npm run start
+npm run dev
 ```
  
 Then open a web server to the address displayed in the console.  Usually this will be https://localhost:8000.
+
+It will automatically rebuild your code on each change.
 
 ```
 /index.html
