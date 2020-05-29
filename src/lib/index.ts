@@ -1,6 +1,6 @@
 import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
-import { Node } from './objects/Node.js';
+import { Node } from './nodes/Node.js';
 import { Geometry } from './core/Geometry.js';
 import { BoxGeometry, BoxParameters } from './geometry/BoxGeometry.js';
 import { Shader, ShaderType } from './renderers/webgl2/Shader.js';

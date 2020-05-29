@@ -19,6 +19,15 @@ export class Vector3 {
         this.y = y;
         this.z = z;
 
+	}
+	
+    copy( v: Vector3 ) {
+
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.x;
+
+        return this;
     }
 
 	add( v: Vector3 ) {

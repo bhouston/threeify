@@ -16,6 +16,14 @@ export class Vector2 {
         this.y = y;
 
     }
+	
+    copy( v: Vector2 ) {
+
+        this.x = v.x;
+        this.y = v.y;
+
+        return this;
+    }
 
 	add( v: Vector2 ) {
 

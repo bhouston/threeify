@@ -17,6 +17,20 @@ export class Node {
     children: Array<Node> = [];
 
     constructor() {
+
     }
+
+	copy( source: Node ) {
+        
+        this.name = source.name;
+        this.position.copy( source.position );
+        this.rotation.copy( source.rotation );
+        this.scale.copy( source.scale );
+
+        // NOTE: explicitly not copying children!
+
+		return this;
+
+	}
 
 }
