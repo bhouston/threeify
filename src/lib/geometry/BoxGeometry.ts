@@ -56,8 +56,7 @@ export class BoxGeometry extends Geometry {
 		// helper variables
 
 		let numberOfVertices = 0;
-		let groupStart = 0;
-
+	
 		// build each side of the box geometry
 
         let p = this.parameters;
