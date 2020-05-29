@@ -1,8 +1,9 @@
 //
-// basic light node inspired by Light from Three.js
+// basic light node initially based on Light from Three.js
 //
 // Authors:
 // * @bhouston
+//
 
 import { Color } from '../../math/Color.js';
 import { Node } from '../Node.js';

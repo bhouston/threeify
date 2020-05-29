@@ -3,6 +3,7 @@
 //
 // Authors:
 // * @bhouston
+//
 
 import { Vector3 } from '../math/Vector3.js';
 import { Quaternion } from '../math/Quaternion.js';

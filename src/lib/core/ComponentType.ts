@@ -1,3 +1,10 @@
+//
+// OpenGL-compatible component types for attribute buffers
+//
+// Authors:
+// * @bhouston
+//
+
 export enum ComponentType {
 
     Byte = WebGLRenderingContext.BYTE, // signed 8-bit integer, with values in [-128, 127]

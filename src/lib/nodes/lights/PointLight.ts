@@ -1,8 +1,9 @@
 //
-// point light inspired by PointLight from three.js
+// point light initially based on PointLight from Three.js
 //
 // Authors:
 // * @bhouston
+//
 
 import { Light } from './Light.js';
 import { Color } from '../../math/Color.js';
