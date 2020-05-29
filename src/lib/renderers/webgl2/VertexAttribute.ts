@@ -9,7 +9,7 @@
 import { Buffer } from './Buffer.js'
 import { ComponentType, componentTypeSizeOf } from '../../core/ComponentType.js';
 
-export class BufferAccessor {
+export class VertexAttribute {
 
     buffer: Buffer;
     componentType: ComponentType;

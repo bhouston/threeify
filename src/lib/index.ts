@@ -8,7 +8,7 @@ import { Context } from './renderers/webgl2/Context.js';
 import * as evs from './renderers/webgl2/shaders/mesh_fs.glsl';
 import { Program } from './renderers/webgl2/Program.js';
 import { Buffer } from './renderers/webgl2/Buffer.js';
-import { BufferAccessor } from './renderers/webgl2/BufferAccessor.js';
+import { VertexAttribute } from './renderers/webgl2/VertexAttribute.js';
 import { BufferGeometry } from './renderers/webgl2/BufferGeometry.js';
 import { AttributeArray } from './core/AttributeArray.js';
 import { AttributeView } from './core/AttributeView.js';
@@ -113,24 +113,23 @@ var context = new Context( canvasElement );
 
 // upload to GPU
 
-function toBufferAccessor( context: Context, attributeAccessor: AttributeAccessor ) {
+function toVertexAttribute( context: Context, attributeAccessor: AttributeAccessor ) {
   let attributeView = attributeAccessor.attributeView;
   let attributeArray = attributeView.attributeArray;
 
   let buffer = new Buffer( context, attributeArray.arrayBuffer, attributeView.target );
-  let bufferAccessor = new BufferAccessor( buffer, attributeAccessor.componentType, attributeAccessor.componentsPerVertex, false, attributeView.byteStride, attributeView.byteOffset + attributeAccessor.byteOffset );
+  let vertexAttribute = new VertexAttribute( buffer, attributeAccessor.componentType, attributeAccessor.componentsPerVertex, false, attributeView.byteStride, attributeView.byteOffset + attributeAccessor.byteOffset );
 
-  return bufferAccessor;
+  return vertexAttribute;
 }
 
 var bufferGeometry = new BufferGeometry(
-  toBufferAccessor( context, indexAccessor ),
-  toBufferAccessor( context, positionAccessor ),
-  toBufferAccessor( context, normalAccessor ),
-  toBufferAccessor( context, uvAccessor ) );
+  toVertexAttribute( context, indexAccessor ),
+  toVertexAttribute( context, positionAccessor ),
+  toVertexAttribute( context, normalAccessor ),
+  toVertexAttribute( context, uvAccessor ) );
 
-  console.log( bufferGeometry );
-
+console.log( bufferGeometry );
 
 // source code definition of material
 var shaderMaterial = new ShaderMaterial( vs, fs );

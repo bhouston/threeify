@@ -7,20 +7,20 @@
 //
 
 import { Context } from "./Context.js";
-import { BufferAccessor } from "./BufferAccessor.js";
+import { VertexAttribute } from "./VertexAttribute.js";
 
 export class BufferGeometry {
 
-    indices: BufferAccessor;
-    positions: BufferAccessor;
-    normals: BufferAccessor;
-    uvs: BufferAccessor; // TODO: turn into an array (indices) or map (named)
+    indices: VertexAttribute;
+    positions: VertexAttribute;
+    normals: VertexAttribute;
+    uvs: VertexAttribute; // TODO: turn into an array (indices) or map (named)
 
     constructor(
-        indices: BufferAccessor,
-        positions: BufferAccessor,
-        normals: BufferAccessor,
-        uvs: BufferAccessor ) {
+        indices: VertexAttribute,
+        positions: VertexAttribute,
+        normals: VertexAttribute,
+        uvs: VertexAttribute ) {
 
         this.indices = indices;
         this.positions = positions;

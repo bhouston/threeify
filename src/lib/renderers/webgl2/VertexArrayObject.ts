@@ -32,29 +32,28 @@ export class VertexArrayObject {
         // and make it the one we're currently working with
         gl.bindVertexArray(this.glVertexArrayObject);
 
-        let namedBufferAccessors = [ // TODO: There is probably a more efficient way to do this via TS introspection
-            { name: 'indices', bufferAccessor: bufferGeometry.indices },
-            { name: 'position', bufferAccessor: bufferGeometry.positions },
-            { name: 'normals', bufferAccessor: bufferGeometry.normals },
-            { name: 'uvs', bufferAccessor: bufferGeometry.uvs }
+        let namedVertexAttributes = [ // TODO: There is probably a more efficient way to do this via TS introspection
+            { name: 'indices', vertexAttribute: bufferGeometry.indices },
+            { name: 'position', vertexAttribute: bufferGeometry.positions },
+            { name: 'normals', vertexAttribute: bufferGeometry.normals },
+            { name: 'uvs', vertexAttribute: bufferGeometry.uvs }
         ];
 
-        namedBufferAccessors.forEach( namedBufferAccessor => {
-            let programAttribute = this.program.attributes.find( attribute => ( attribute.name === namedBufferAccessor.name ) );
+        namedVertexAttributes.forEach( namedVertexAttribute => {
+            let programAttribute = this.program.attributes.find( attribute => ( attribute.name === namedVertexAttribute.name ) );
             if( ! programAttribute ) { // only bind the attributes that exist in the program.
                 return;
             }
 
             gl.enableVertexAttribArray(programAttribute.glLocation);
 
-            let bufferAccessor = namedBufferAccessor.bufferAccessor;
-            let buffer = bufferAccessor.buffer;
-
             // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+            let buffer = namedVertexAttribute.vertexAttribute.buffer;
             gl.bindBuffer( buffer.target, buffer.glBuffer );
 
             // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-            gl.vertexAttribPointer( programAttribute.glLocation, bufferAccessor.componentsPerVertex, bufferAccessor.componentType, bufferAccessor.normalized, bufferAccessor.vertexStride, bufferAccessor.byteOffset );
+            let vertexAttribute = namedVertexAttribute.vertexAttribute;
+            gl.vertexAttribPointer( programAttribute.glLocation, vertexAttribute.componentsPerVertex, vertexAttribute.componentType, vertexAttribute.normalized, vertexAttribute.vertexStride, vertexAttribute.byteOffset );
 
         });
 
