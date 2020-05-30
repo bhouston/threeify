@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Euler, EulerOrder } from "./Euler";
-import { Vector3 } from "./Vector3";
-import { Matrix4 } from "./Matrix4";
+import { Euler, EulerOrder } from "./Euler.js";
+import { Vector3 } from "./Vector3.js";
+import { Matrix4 } from "./Matrix4.js";
 
 export class Quaternion {
 
