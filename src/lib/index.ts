@@ -1,6 +1,5 @@
 import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
-import { Node } from './nodes/Node.js';
 import { Geometry } from './core/Geometry.js';
 import { boxGeometry } from './geometry/BoxGeometry.js';
 import { Shader, ShaderType } from './renderers/webgl2/Shader.js';
@@ -21,6 +20,10 @@ import { TextureFilter } from './textures/TextureFilter.js';
 import { PixelFormat } from './textures/PixelFormat.js';
 import { DataType } from './textures/DataType.js';
 import { TextureImage2D } from './renderers/webgl2/TextureImage2D.js';
+import { Node } from './nodes/Node.js';
+import { Mesh } from './nodes/Mesh.js';
+import { PointLight } from './nodes/lights/PointLight.js';
+import { Color } from './math/Color.js';
 
 let a = new Vector3( 1, 0, 0 );
 let b = new Vector3( 3, 2, 3 );
@@ -157,3 +160,9 @@ image.addEventListener('load', function() {
 
   console.log( textureImage2D );
 });
+
+let light = new PointLight();
+let mesh = new Mesh( myBoxGeometry );
+let node = new Node();
+node.children.push( light );
+node.children.push( mesh );

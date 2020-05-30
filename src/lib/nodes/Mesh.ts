@@ -6,8 +6,9 @@
 //
 
 import { Geometry } from "../core/Geometry.js";
+import { Node } from "../nodes/Node.js";
 
-class Mesh extends Node {
+export class Mesh extends Node {
 
     geometry: Geometry;
  

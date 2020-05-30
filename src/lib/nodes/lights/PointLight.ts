@@ -13,7 +13,7 @@ export class PointLight extends Light {
     distance: number;
     decay: number;
 
-    constructor( color: Color, intensity: number, distance: number = -1, decay: number = 2.0 ) {
+    constructor( color: Color = new Color( 1, 1, 1 ), intensity: number = 1.0, distance: number = -1, decay: number = 2.0 ) {
 
         super( color, intensity );
 
