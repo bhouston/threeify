@@ -16,8 +16,7 @@ export function boxGeometry(
 	widthSegments: number = 1,
 	heightSegments: number = 1,
 	depthSegments: number = 1
-)
-{
+) {
 	// buffers
 
 	const indices: number[] = [];
@@ -53,38 +52,38 @@ export function boxGeometry(
 
 		// generate vertices, normals and uvs
 
-		for ( let iy = 0; iy < gridY1; iy ++ ) {
+		for (let iy = 0; iy < gridY1; iy++) {
 
 			const y = iy * segmentHeight - heightHalf;
 
-			for ( let ix = 0; ix < gridX1; ix ++ ) {
+			for (let ix = 0; ix < gridX1; ix++) {
 
 				const x = ix * segmentWidth - widthHalf;
 
 				// set values to correct vector component
 
-				vector.setComponent( u, x * udir );
-				vector.setComponent( v, y * vdir );
-				vector.setComponent( w, depthHalf );
+				vector.setComponent(u, x * udir);
+				vector.setComponent(v, y * vdir);
+				vector.setComponent(w, depthHalf);
 
 				// now apply vector to vertex buffer
 
-				vertices.push( vector.x, vector.y, vector.z );
+				vertices.push(vector.x, vector.y, vector.z);
 
 				// set values to correct vector component
 
-				vector.setComponent( u, 0 );
-				vector.setComponent( v, 0 );
-				vector.setComponent( w, depth > 0 ? 1 : - 1 );
+				vector.setComponent(u, 0);
+				vector.setComponent(v, 0);
+				vector.setComponent(w, depth > 0 ? 1 : - 1);
 
 				// now apply vector to normal buffer
 
-				normals.push( vector.x, vector.y, vector.z );
+				normals.push(vector.x, vector.y, vector.z);
 
 				// uvs
 
-				uvs.push( ix / gridX );
-				uvs.push( 1 - ( iy / gridY ) );
+				uvs.push(ix / gridX);
+				uvs.push(1 - (iy / gridY));
 
 				// counters
 
@@ -100,19 +99,19 @@ export function boxGeometry(
 		// 2. a single segment consists of two faces
 		// 3. so we need to generate six (2*3) indices per segment
 
-		for ( let iy = 0; iy < gridY; iy ++ ) {
+		for (let iy = 0; iy < gridY; iy++) {
 
-			for ( let ix = 0; ix < gridX; ix ++ ) {
+			for (let ix = 0; ix < gridX; ix++) {
 
 				const a = numberOfVertices + ix + gridX1 * iy;
-				const b = numberOfVertices + ix + gridX1 * ( iy + 1 );
-				const c = numberOfVertices + ( ix + 1 ) + gridX1 * ( iy + 1 );
-				const d = numberOfVertices + ( ix + 1 ) + gridX1 * iy;
+				const b = numberOfVertices + ix + gridX1 * (iy + 1);
+				const c = numberOfVertices + (ix + 1) + gridX1 * (iy + 1);
+				const d = numberOfVertices + (ix + 1) + gridX1 * iy;
 
 				// faces
 
-				indices.push( a, b, d );
-				indices.push( b, c, d );
+				indices.push(a, b, d);
+				indices.push(b, c, d);
 
 				// increase counter
 
@@ -126,21 +125,21 @@ export function boxGeometry(
 
 	// build each side of the box geometry
 
-	buildPlane( 2, 1, 0, - 1, - 1, depth, height, width, depthSegments, heightSegments ); // px
-	buildPlane( 2, 1, 0, 1, - 1, depth, height, - width, depthSegments, heightSegments ); // nx
-	buildPlane( 0, 2, 1, 1, 1, width, depth, height, widthSegments, depthSegments ); // py
-	buildPlane( 0, 2, 1, 1, - 1, width, depth, - height, widthSegments, depthSegments ); // ny
-	buildPlane( 0, 1, 2, 1, - 1, width, height, depth, widthSegments, heightSegments ); // pz
-	buildPlane( 0, 1, 2, - 1, - 1, width, height, - depth, widthSegments, heightSegments ); // nz
+	buildPlane(2, 1, 0, - 1, - 1, depth, height, width, depthSegments, heightSegments); // px
+	buildPlane(2, 1, 0, 1, - 1, depth, height, - width, depthSegments, heightSegments); // nx
+	buildPlane(0, 2, 1, 1, 1, width, depth, height, widthSegments, depthSegments); // py
+	buildPlane(0, 2, 1, 1, - 1, width, depth, - height, widthSegments, depthSegments); // ny
+	buildPlane(0, 1, 2, 1, - 1, width, height, depth, widthSegments, heightSegments); // pz
+	buildPlane(0, 1, 2, - 1, - 1, width, height, - depth, widthSegments, heightSegments); // nz
 
-// build geometry
+	// build geometry
 
 	let geometry = new Geometry();
 
-	geometry.setIndices( new Int32AttributeAccessor( new Int32Array( indices ), 1 ) );
-	geometry.setAttribute( 'position', new Float32AttributeAccessor( new Float32Array( vertices ), 3 ) );
-	geometry.setAttribute( 'normal', new Float32AttributeAccessor( new Float32Array( normals ), 3 ) );
-	geometry.setAttribute( 'uv', new Float32AttributeAccessor( new Float32Array( uvs ), 2 ) );
+	geometry.setIndices(new Int32AttributeAccessor(new Int32Array(indices), 1));
+	geometry.setAttribute('position', new Float32AttributeAccessor(new Float32Array(vertices), 3));
+	geometry.setAttribute('normal', new Float32AttributeAccessor(new Float32Array(normals), 3));
+	geometry.setAttribute('uv', new Float32AttributeAccessor(new Float32Array(uvs), 2));
 
 	return geometry;
 }
