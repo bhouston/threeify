@@ -2,7 +2,7 @@ import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
 import { Node } from './nodes/Node.js';
 import { Geometry } from './core/Geometry.js';
-import { BoxGeometry, BoxParameters } from './geometry/BoxGeometry.js';
+import { boxGeometry } from './geometry/BoxGeometry.js';
 import { Shader, ShaderType } from './renderers/webgl2/Shader.js';
 import { ShaderMaterial } from './renderers/common/ShaderMaterial.js';
 import { Context } from './renderers/webgl2/Context.js';
@@ -76,32 +76,32 @@ void main() {
 
 // main memory representation setup
 
-var indexAccessor = new Int16AttributeAccessor( new Int16Array( [
+let indexAccessor = new Int16AttributeAccessor( new Int16Array( [
   0, 1, 2, 0, 2, 3
 ] ), 1 )
 
-var positionAccessor = new Float32AttributeAccessor( new Float32Array( [
+let positionAccessor = new Float32AttributeAccessor( new Float32Array( [
   0.0, 0.0, 0.0,
   1.0, 0.0, 0.0,
   1.0, 1.0, 0.0,
   0.0, 1.0, 0.0,
 ] ), 3 );
 
-var normalAccessor = new Float32AttributeAccessor( new Float32Array( [
+let normalAccessor = new Float32AttributeAccessor( new Float32Array( [
   0.0, 0.0, 1.0,
   0.0, 0.0, 1.0,
   0.0, 0.0, 1.0,
   0.0, 0.0, 1.0,
 ] ), 3 );
 
-var uvAccessor = new Float32AttributeAccessor( new Float32Array( [
+let uvAccessor = new Float32AttributeAccessor( new Float32Array( [
   0.0, 0.0,
   1.0, 0.0,
   1.0, 1.0,
   0.0, 1.0,
 ] ), 2 );
 
-var geometry = new Geometry();
+let geometry = new Geometry();
 geometry.setIndices( indexAccessor );
 geometry.setAttribute( 'position', positionAccessor );
 geometry.setAttribute( 'normal', normalAccessor );
@@ -110,8 +110,8 @@ geometry.setAttribute( 'uv', uvAccessor );
 console.log( geometry );
 
 // setup webgl2
-var canvasElement = document.querySelector("#rendering-canvas") as HTMLCanvasElement;
-var context = new Context( canvasElement );
+let canvasElement = document.querySelector("#rendering-canvas") as HTMLCanvasElement;
+let context = new Context( canvasElement );
 
 
 // upload to GPU
@@ -121,28 +121,28 @@ let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, geo
 console.log( vertexAttributeGeometry );
 
 // source code definition of material
-var shaderMaterial = new ShaderMaterial( vs, fs );
+let shaderMaterial = new ShaderMaterial( vs, fs );
 
 console.log( shaderMaterial );
 
 // load material into gpu
 
-var vertexShader = new Shader( context, vs, ShaderType.Vertex );
-var fragmentShader = new Shader( context, fs, ShaderType.Fragment );
-var program = new Program( context, vertexShader, fragmentShader );
+let vertexShader = new Shader( context, vs, ShaderType.Vertex );
+let fragmentShader = new Shader( context, fs, ShaderType.Fragment );
+let program = new Program( context, vertexShader, fragmentShader );
 
 console.log( program );
 
 // bind to program
-var vertexArrayObject = new VertexArrayObject( program, vertexAttributeGeometry );
+let vertexArrayObject = new VertexArrayObject( program, vertexAttributeGeometry );
 
 console.log( vertexArrayObject );
 
-var boxGeometry = new BoxGeometry( new BoxParameters( 10, 2, 3, 5, 5, 5 ) );
+let myBoxGeometry = boxGeometry( 10, 2, 3, 5, 5, 5 );
 
-console.log( boxGeometry );
+console.log( myBoxGeometry );
 
-let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, boxGeometry );
+let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, myBoxGeometry );
 
 console.log( boxVertexAttributeGeometry );
 
