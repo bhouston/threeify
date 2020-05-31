@@ -5,18 +5,18 @@ import { Matrix4 } from '../../math/Matrix4.js';
 export class PerspectiveCamera extends Camera {
 
     verticalFov: number;
+    zoom: number;
     near: number;
     far: number;
-    pixelAspectRatio: number;
 
-    constructor( verticalFov: number, near: number, far: number, pixelAspectRatio: number = 1.0 ) {
+    constructor( verticalFov: number, zoom: number, near: number, far: number ) {
 
         super();
 
         this.verticalFov = verticalFov;
+        this.zoom = zoom;
         this.near = near;
         this.far = far;
-        this.pixelAspectRatio = pixelAspectRatio;
 
     }
 
@@ -26,6 +26,7 @@ export class PerspectiveCamera extends Camera {
         super.copy( c );
 
 	    this.verticalFov = c.verticalFov;
+        this.zoom = c.zoom;
         this.near = c.near;
         this.far = c.far;
 
@@ -33,34 +34,19 @@ export class PerspectiveCamera extends Camera {
 
     }
 
-    updateProjectionMatrix: function () {
+    toProjectionMatrix( viewAspectRatio: number ) : Matrix4 {
+       
+        let height = 2.0 * this.near * Math.tan( this.verticalFov * Math.PI / 180.0 ) / this.zoom;
+        let width = height * this.pixelAspectRatio * viewAspectRatio;
+        
+        let left = - width * 0.5;
+        let right = left + width;
 
-		var near = this.near,
-			top = near * Math.tan( MathUtils.DEG2RAD * 0.5 * this.fov ) / this.zoom,
-			height = 2 * top,
-			width = this.aspect * height,
-			left = - 0.5 * width,
-			view = this.view;
+        let top = - height * 0.5;
+        let bottom = -top + height;
 
-		if ( this.view !== null && this.view.enabled ) {
+		return new Matrix4().makePerspectiveProjection( left, right, top, bottom, this.near, this.far );
 
-			var fullWidth = view.fullWidth,
-				fullHeight = view.fullHeight;
-
-			left += view.offsetX * width / fullWidth;
-			top -= view.offsetY * height / fullHeight;
-			width *= view.width / fullWidth;
-			height *= view.height / fullHeight;
-
-		}
-
-		var skew = this.filmOffset;
-		if ( skew !== 0 ) left += near * skew / this.getFilmWidth();
-
-		this.projectionMatrix.makePerspective( left, left + width, top, top - height, near, this.far );
-
-		this.projectionMatrixInverse.getInverse( this.projectionMatrix );
-
-	},
+	}
 
 }

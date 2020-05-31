@@ -20,5 +20,7 @@ When a function takes a single parameter, the parameter should be named after it
 - q: Quaternion
 - m: Matrix4
 
-
+On Matrix4 these changes were made:
+- Matrix4.inverse() : Matrix4 -> inplace inversion: Matrix4.invert().  Ben felt the semantics were unclear, this is more efficient as well.
+- Matrix4.invert() always throws on degenerate matrix.  This is a serious error and should never be ignored.
 

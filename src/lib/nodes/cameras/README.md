@@ -5,6 +5,8 @@ Camera changes:
 - Rename projectionMatrixInverse -> screenToWorldUnprojection.  Per matrix naming conventions.
 - Added pixelAspectRatio.  This is a more natural aspect ratio specification.
 - Remove automatic updating of camera matrices upon changes.
+- Removed caching of camera matrices, replaced with toProjectionMatrix() abstract function.
+- Passing in viewAspectRatio when requesting camera projections, avoids the need for aspectRatio in all cameras.
 
 Perspective Camera Changes:
 
@@ -15,3 +17,4 @@ Orthographic Camera:
 
 - top, bottom -> replaced with center +/- verticalWidth;
 - left, right -> removed.  Derived from center +/- verticalWidth * pixelAspectRatio * view.aspectRatio();
+
