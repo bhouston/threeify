@@ -1,4 +1,9 @@
-
+//
+// based on Camera from Three.js
+//
+// Authors:
+// * @bhouston
+//
 
 import { Node } from '../Node.js';
 import { Matrix4 } from '../../math/Matrix4.js';

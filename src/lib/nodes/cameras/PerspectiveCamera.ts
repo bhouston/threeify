@@ -1,5 +1,11 @@
+//
+// based on Camera from Three.js
+//
+// Authors:
+// * @bhouston
+//
+
 import { Camera } from './Camera.js';
-import { Node } from '../Node.js';
 import { Matrix4 } from '../../math/Matrix4.js';
 
 export class PerspectiveCamera extends Camera {
@@ -9,14 +15,14 @@ export class PerspectiveCamera extends Camera {
     near: number;
     far: number;
 
-    constructor( verticalFov: number, zoom: number, near: number, far: number ) {
+    constructor( verticalFov: number, near: number, far: number, zoom: number = 1.0 ) {
 
         super();
 
         this.verticalFov = verticalFov;
-        this.zoom = zoom;
         this.near = near;
         this.far = far;
+        this.zoom = zoom;
 
     }
 
@@ -26,9 +32,9 @@ export class PerspectiveCamera extends Camera {
         super.copy( c );
 
 	    this.verticalFov = c.verticalFov;
-        this.zoom = c.zoom;
         this.near = c.near;
         this.far = c.far;
+        this.zoom = c.zoom;
 
 		return this;
 
