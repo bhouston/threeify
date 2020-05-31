@@ -16,7 +16,7 @@
     * HDR / RGBE?  Easy to port, small code.
     * EXR - large loader, but more standard.  Are the files smaller than HDR equivalents?
   * Compressed:
-  * Binomial?  How widely is this supported on mobile?  How big is the loader?  Can it support HDR?
+    * Binomial?  How widely is this supported on mobile?  How big is the loader?  Can it support HDR?
 
 * Meshes:
   * glTF.  It contains meshes in a compact and efficient form.
