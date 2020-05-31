@@ -4,7 +4,7 @@
 
 ## Changes from Three.js
 
-* Moved from top leve '/cameras' folder into '/nodes/cameras' because Cameras are types of Nodes
+* Moved from top level '/cameras' folder into '/nodes/cameras' because Cameras are types of Nodes
 
 # Camera
 
