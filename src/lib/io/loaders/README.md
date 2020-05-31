@@ -11,11 +11,11 @@
 
 * Standard Image Loader (png, jpg) - Easy.
 * High dynamic range texture format:
- * HDR / RGBE?
- * EXR - large loader.
+  * HDR / RGBE?  Easy to port, small code.
+  * EXR - large loader, but more standard.  Are the files smaller than HDR equivalents?
 * Compressed texture format:
- * Binomial?  How widely is this supported on mobile?  How big is the loader?  Can it support HDR?
+  * Binomial?  How widely is this supported on mobile?  How big is the loader?  Can it support HDR?
 
 * 3D Models:
- * glTF.  Maybe start with just scene graph, meshes and physical materials.  Skip animation, bones, skinning, points, lines and all non PBR materials.
+  * glTF.  Maybe start with just scene graph, meshes and physical materials.  Skip animation, bones, skinning, points, lines and all non PBR materials.
 
