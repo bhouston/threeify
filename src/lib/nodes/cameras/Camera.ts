@@ -5,9 +5,10 @@ import { Matrix4 } from '../../math/Matrix4.js';
 
 export class Camera extends Node {
 
-    localToWorldInverse: Matrix4 = new Matrix4();
-    projection: Matrix4 = new Matrix4();
-    projectionInverse: Matrix4 = new Matrix4();
+    worldToLocal: Matrix4 = new Matrix4();
+    localToScreenProjection: Matrix4 = new Matrix4();
+    screenToLocalUnprojection: Matrix4 = new Matrix4();
+    pixelAspectRatio: number = 1.0;
 
     super() {
     }
@@ -16,11 +17,12 @@ export class Camera extends Node {
 
         super.copy( c );
 
-		this.localToWorldInverse.copy( c.localToWorldInverse );
-		this.projection.copy( c.projection );
-		this.projectionInverse.copy( c.projectionInverse );
+		this.worldToLocal.copy( c.localToWorldInverse );
+		this.localToScreenProjection.copy( c.localToScreenProjection );
+		this.screenToLocalUnprojection.copy( c.screenToLocalUnprojection );
+		this.pixelAspectRatio = c.pixelAspectRatio;
 
-		return this;
+        return this;
 
     }
 
