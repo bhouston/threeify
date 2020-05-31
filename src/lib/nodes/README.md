@@ -1,3 +1,12 @@
+# General
+
+## Goals
+
+* Simplification
+* Minimize dependencies
+
+## Changes from Three.js
+
 # Node
 
 ## Changes from Three.js

@@ -1,8 +1,15 @@
-# Camera
+# General
+
+## Goals
 
 ## Changes from Three.js
 
 * Moved from top leve '/cameras' folder into '/nodes/cameras' because Cameras are types of Nodes
+
+# Camera
+
+## Changes from Three.js
+
 * Remove the local matrices variables from the Camera classes.  It is hard to cache these effectively.
  * This removes the need to automatically update the camera matrices upon changes.
 * Added pixelAspectRatio to base Camera class.

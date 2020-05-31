@@ -1,4 +1,6 @@
-# Light
+# General
+
+## Goals
 
 ## Changes from Three.js
 
