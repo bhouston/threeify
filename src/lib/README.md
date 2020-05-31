@@ -2,6 +2,7 @@
 
 * Inline JSDoc comments on most functions, variables.
 * Utilize the typing from Typscript to generate rich documentation.
+* Adopt semver?  Probably is a good idea.
 
 ## Naming Convention
 
