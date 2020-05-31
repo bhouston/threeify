@@ -1,5 +1,5 @@
 //
-// based on Camera from Three.js
+// based on PerspectiveCamera from Three.js
 //
 // Authors:
 // * @bhouston

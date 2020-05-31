@@ -1,5 +1,5 @@
 //
-// based on Camera from Three.js
+// based on OrthographicCamera from Three.js
 //
 // Authors:
 // * @bhouston
