@@ -17,7 +17,7 @@ export class OrthographicCamera extends Camera {
     center: Vector2;
     zoom: number;
 
-    constructor( height: number, near: number, far: number, center = new Vector2(0,0), zoom: number = 1 ) {
+    constructor(height: number, near: number, far: number, center = new Vector2(0, 0), zoom: number = 1) {
 
         super();
 
@@ -28,21 +28,21 @@ export class OrthographicCamera extends Camera {
         this.zoom = zoom;
     }
 
-    copy( c: OrthographicCamera) {
+    copy(c: OrthographicCamera) {
 
-        super.copy( c );
+        super.copy(c);
 
-		this.height = c.height;
-		this.near = c.near;
+        this.height = c.height;
+        this.near = c.near;
         this.far = c.far;
-        this.center.copy( c.center );
+        this.center.copy(c.center);
         this.zoom = c.zoom;
-        
+
         return this;
 
     }
 
-    toProjectionMatrix( viewAspectRatio: number ) : Matrix4 {
+    toProjectionMatrix(viewAspectRatio: number): Matrix4 {
 
         let width = this.height * viewAspectRatio * this.pixelAspectRatio / this.zoom;
 
@@ -52,7 +52,7 @@ export class OrthographicCamera extends Camera {
         let top = - this.height * 0.5 + this.center.y;
         let bottom = top + this.height;
 
-        return new Matrix4().makeOrthographicProjection( left, right, top, bottom, this.near, this.far );
+        return new Matrix4().makeOrthographicProjection(left, right, top, bottom, this.near, this.far);
 
     }
 

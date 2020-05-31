@@ -15,16 +15,16 @@ export abstract class Camera extends Node {
     super() {
     }
 
-	copy( c: Camera ) {
+    copy(c: Camera) {
 
-        super.copy( c );
+        super.copy(c);
 
-		this.pixelAspectRatio = c.pixelAspectRatio;
+        this.pixelAspectRatio = c.pixelAspectRatio;
 
         return this;
 
     }
 
-    abstract toProjectionMatrix( viewAspectRatio: number ): Matrix4;
+    abstract toProjectionMatrix(viewAspectRatio: number): Matrix4;
 
 }

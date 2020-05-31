@@ -15,7 +15,7 @@ export class PerspectiveCamera extends Camera {
     near: number;
     far: number;
 
-    constructor( verticalFov: number, near: number, far: number, zoom: number = 1.0 ) {
+    constructor(verticalFov: number, near: number, far: number, zoom: number = 1.0) {
 
         super();
 
@@ -27,32 +27,32 @@ export class PerspectiveCamera extends Camera {
     }
 
 
-	copy( c: PerspectiveCamera ) {
+    copy(c: PerspectiveCamera) {
 
-        super.copy( c );
+        super.copy(c);
 
-	    this.verticalFov = c.verticalFov;
+        this.verticalFov = c.verticalFov;
         this.near = c.near;
         this.far = c.far;
         this.zoom = c.zoom;
 
-		return this;
+        return this;
 
     }
 
-    toProjectionMatrix( viewAspectRatio: number ) : Matrix4 {
-       
-        let height = 2.0 * this.near * Math.tan( this.verticalFov * Math.PI / 180.0 ) / this.zoom;
+    toProjectionMatrix(viewAspectRatio: number): Matrix4 {
+
+        let height = 2.0 * this.near * Math.tan(this.verticalFov * Math.PI / 180.0) / this.zoom;
         let width = height * this.pixelAspectRatio * viewAspectRatio;
-        
+
         let left = - width * 0.5;
         let right = left + width;
 
         let top = - height * 0.5;
         let bottom = -top + height;
 
-		return new Matrix4().makePerspectiveProjection( left, right, top, bottom, this.near, this.far );
+        return new Matrix4().makePerspectiveProjection(left, right, top, bottom, this.near, this.far);
 
-	}
+    }
 
 }
