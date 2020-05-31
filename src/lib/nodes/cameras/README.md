@@ -1,20 +1,25 @@
-# Camera changes:
+# Camera
 
-- Rename matrixWorldInverse -> matrixToWorld.  Per matrix naming conventions.
-- Rename projectionMatrix -> worldToScreenProjection.  Per matrix naming conventions.
-- Rename projectionMatrixInverse -> screenToWorldUnprojection.  Per matrix naming conventions.
-- Added pixelAspectRatio.  This is a more natural aspect ratio specification.
-- Remove automatic updating of camera matrices upon changes.
-- Removed caching of camera matrices, replaced with toProjectionMatrix() abstract function.
-- Passing in viewAspectRatio when requesting camera projections, avoids the need for aspectRatio in all cameras.
+## Changes from Three.js
+
+* Remove the local matrices variables from the Camera classes.  It is hard to cache these effectively.
+ * This removes the need to automatically update the camera matrices upon changes.
+* Added pixelAspectRatio to base Camera class.
+* Passing in viewAspectRatio when requesting camera projections, avoids the need for aspectRatio in all cameras.
+
+Q: Why split aspectRatio into pixelAspectRatio and viewAspectRatio?
+
+A: PixelAspectRatio is almost always 1.0, thus leave it alone.  ViewAspectRatio comes from the render region, thus you can read it automatically.  The end result: No need to manually update aspectRatio any more.
 
 # PerspectiveCamera changes:
 
-- fov -> verticalFov so no one needs to every ask which dimension it is.
-- aspectRatio -> removed.  Replaced with Camera.pixelAspectRatio.
+## Changes from Three.js
+
+* fov -> verticalFov so no one needs to every ask which dimension it is.
+* Removed aspectRatio per above, instead using Camera.pixelAspectRatio and viewAspectRatio from render view.
 
 # Orthographic camera:
 
-- top, bottom, left, right -> replaced with center (Vector2 = (0,0)) and height;  everything can be derived.
+## Changes from Three.js
 
-
+* top, bottom, left, right -> height and center.  This is easier to use.  Everything else can be derived.
