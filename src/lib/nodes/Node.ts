@@ -19,7 +19,9 @@ export class Node {
     children: Array<Node> = [];
 
     constructor() {
+    }
 
+    dispose() {        
     }
 
 	copy( source: Node ) {

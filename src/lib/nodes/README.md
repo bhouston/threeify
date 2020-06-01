@@ -9,6 +9,12 @@
 
 # Node
 
+## Interface
+
+* clone() : T
+* copy( t: T )
+* dispose() - indicates that resources can be released. 
+
 ## Changes from Three.js
 
 * Removed automatic updating of local to world matrix.
