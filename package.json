@@ -1,22 +1,25 @@
 {
-  "name": "three.ts",
-  "version": "0.0.0",
-  "description": "Three.ts Prototype",
-  "keywords": [],
-  "author": "Ben Houston",
-  "license": "ISC",
-  "type": "module",
-  "main": "index.ts",
-  "module": "index.ts",
-  "scripts": {
-    "build": "tsc",
-    "watch": "npm run build -- --watch",
-    "start": "es-dev-server --node-resolution",
-    "dev": "npm run watch & npm start"
-  },
-  "devDependencies": {
-    "es-dev-server": "^1.53.0",
-    "typescript": "^3.9.3"
-  },
-  "dependencies": {}
+	"name": "three.ts",
+	"version": "0.0.0",
+	"description": "Three.ts Prototype",
+	"keywords": [],
+	"author": "Ben Houston",
+	"license": "ISC",
+	"type": "module",
+	"main": "index.ts",
+	"module": "index.ts",
+	"scripts": {
+		"build": "tsc",
+		"watch": "npm run build -- --watch",
+		"start": "es-dev-server --node-resolution",
+		"dev": "npm run watch & npm start",
+		"prettier": "npx prettier --single-quote --use-tabs --trailing-comma all --write docs package.json \"./src/lib/**/*.ts\""
+	},
+	"devDependencies": {
+		"es-dev-server": "^1.53.0",
+		"typescript": "^3.9.3"
+	},
+	"dependencies": {
+		"prettier": "^2.0.5"
+	}
 }

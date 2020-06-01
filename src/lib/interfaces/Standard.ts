@@ -6,33 +6,23 @@
 //
 
 export interface ICloneable<T> {
-
-    clone(): T;
-
+	clone(): T;
 }
 
 export interface IComparable<T> {
-
-    comparable(a: T, b: T): number;
-
+	comparable(a: T, b: T): number;
 }
 
 export interface IEquatable<T> {
-
-    equals(t: T): boolean;
-
+	equals(t: T): boolean;
 }
 
 export interface IDisposable {
-
-    dispose(): void;
-
+	dispose(): void;
 }
 
 export interface IVersionable {
+	version: number;
 
-    version: number;
-
-    dirty(): void;
-
+	dirty(): void;
 }

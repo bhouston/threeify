@@ -6,39 +6,59 @@
 // * @bhouston
 //
 
-import { Buffer } from './Buffer.js'
-import { ComponentType, componentTypeSizeOf } from '../../core/ComponentType.js';
+import { Buffer } from './Buffer.js';
+import {
+	ComponentType,
+	componentTypeSizeOf,
+} from '../../core/ComponentType.js';
 import { Context } from './Context.js';
 import { AttributeAccessor } from '../../core/AttributeAccessor.js';
 
 export class VertexAttribute {
+	buffer: Buffer;
+	componentType: ComponentType;
+	componentsPerVertex: number;
+	normalized: boolean;
+	vertexStride: number;
+	byteOffset: number;
 
-    buffer: Buffer;
-    componentType: ComponentType;
-    componentsPerVertex: number;
-    normalized: boolean;
-    vertexStride: number;
-    byteOffset: number;
+	constructor(
+		buffer: Buffer,
+		componentType: ComponentType,
+		componentsPerVertex: number,
+		normalized: boolean,
+		vertexStride: number,
+		byteOffset: number,
+	) {
+		this.buffer = buffer;
+		this.byteOffset = byteOffset;
+		this.componentType = componentType;
+		this.componentsPerVertex = componentsPerVertex;
+		this.normalized = normalized;
+		this.vertexStride = vertexStride;
+		this.byteOffset = byteOffset;
+	}
 
-    constructor( buffer: Buffer, componentType: ComponentType, componentsPerVertex: number, normalized: boolean, vertexStride: number, byteOffset: number ) {
+	static FromAttributeAccessor(
+		context: Context,
+		attributeAccessor: AttributeAccessor,
+	) {
+		let attributeView = attributeAccessor.attributeView;
 
-        this.buffer = buffer;
-        this.byteOffset = byteOffset;
-        this.componentType = componentType;
-        this.componentsPerVertex = componentsPerVertex;
-        this.normalized = normalized;
-        this.vertexStride = vertexStride;
-        this.byteOffset = byteOffset;
-    }
+		let buffer = new Buffer(
+			context,
+			attributeView.arrayBuffer,
+			attributeView.target,
+		);
+		let vertexAttribute = new VertexAttribute(
+			buffer,
+			attributeAccessor.componentType,
+			attributeAccessor.componentsPerVertex,
+			false,
+			attributeView.byteStride,
+			attributeView.byteOffset + attributeAccessor.byteOffset,
+		);
 
-    static FromAttributeAccessor( context: Context, attributeAccessor: AttributeAccessor ) {
-        let attributeView = attributeAccessor.attributeView;
-    
-        let buffer = new Buffer( context, attributeView.arrayBuffer, attributeView.target );
-        let vertexAttribute = new VertexAttribute( buffer, attributeAccessor.componentType, attributeAccessor.componentsPerVertex, false, attributeView.byteStride, attributeView.byteOffset + attributeAccessor.byteOffset );
-    
-        return vertexAttribute;
-        
-    }
-
+		return vertexAttribute;
+	}
 }

@@ -11,7 +11,12 @@ import { Buffer } from './renderers/webgl2/Buffer.js';
 import { VertexAttribute } from './renderers/webgl2/VertexAttribute.js';
 import { VertexAttributeGeometry } from './renderers/webgl2/VertexAttributeGeometry.js';
 import { AttributeView } from './core/AttributeView.js';
-import { AttributeAccessor, Int32AttributeAccessor, Float32AttributeAccessor, Int16AttributeAccessor } from './core/AttributeAccessor.js';
+import {
+	AttributeAccessor,
+	Int32AttributeAccessor,
+	Float32AttributeAccessor,
+	Int16AttributeAccessor,
+} from './core/AttributeAccessor.js';
 import { ComponentType } from './core/ComponentType.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 import { Texture } from './textures/Texture.js';
@@ -25,18 +30,17 @@ import { Mesh } from './nodes/Mesh.js';
 import { PointLight } from './nodes/lights/PointLight.js';
 import { Color } from './math/Color.js';
 
-let a = new Vector3( 1, 0, 0 );
-let b = new Vector3( 3, 2, 3 );
+let a = new Vector3(1, 0, 0);
+let b = new Vector3(3, 2, 3);
 //let e = new Vector3( 3, 'ben', 3 ); // a type bug, uncomment to see how it is caught automatically.
 
-let m = new Matrix4().set( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0 );
- 
-console.log( a );
-a.applyMatrix4( m );
-console.log( a );
-let c = a.add( b ).dot( b );
-console.log( c );
+let m = new Matrix4().set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0);
 
+console.log(a);
+a.applyMatrix4(m);
+console.log(a);
+let c = a.add(b).dot(b);
+console.log(c);
 
 let vs = `#version 300 es
 
@@ -61,7 +65,7 @@ void main() {
 
   gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
 }
-`
+`;
 
 var fs = `#version 300 es
 
@@ -75,94 +79,121 @@ out vec4 outColor;
 void main() {
   outColor = u_color;
 }
-`
+`;
 
 // main memory representation setup
 
-let indexAccessor = new Int16AttributeAccessor( new Int16Array( [
-  0, 1, 2, 0, 2, 3
-] ), 1 )
+let indexAccessor = new Int16AttributeAccessor(
+	new Int16Array([0, 1, 2, 0, 2, 3]),
+	1,
+);
 
-let positionAccessor = new Float32AttributeAccessor( new Float32Array( [
-  0.0, 0.0, 0.0,
-  1.0, 0.0, 0.0,
-  1.0, 1.0, 0.0,
-  0.0, 1.0, 0.0,
-] ), 3 );
+let positionAccessor = new Float32AttributeAccessor(
+	new Float32Array([
+		0.0,
+		0.0,
+		0.0,
+		1.0,
+		0.0,
+		0.0,
+		1.0,
+		1.0,
+		0.0,
+		0.0,
+		1.0,
+		0.0,
+	]),
+	3,
+);
 
-let normalAccessor = new Float32AttributeAccessor( new Float32Array( [
-  0.0, 0.0, 1.0,
-  0.0, 0.0, 1.0,
-  0.0, 0.0, 1.0,
-  0.0, 0.0, 1.0,
-] ), 3 );
+let normalAccessor = new Float32AttributeAccessor(
+	new Float32Array([
+		0.0,
+		0.0,
+		1.0,
+		0.0,
+		0.0,
+		1.0,
+		0.0,
+		0.0,
+		1.0,
+		0.0,
+		0.0,
+		1.0,
+	]),
+	3,
+);
 
-let uvAccessor = new Float32AttributeAccessor( new Float32Array( [
-  0.0, 0.0,
-  1.0, 0.0,
-  1.0, 1.0,
-  0.0, 1.0,
-] ), 2 );
+let uvAccessor = new Float32AttributeAccessor(
+	new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]),
+	2,
+);
 
 let geometry = new Geometry();
-geometry.setIndices( indexAccessor );
-geometry.setAttribute( 'position', positionAccessor );
-geometry.setAttribute( 'normal', normalAccessor );
-geometry.setAttribute( 'uv', uvAccessor );
+geometry.setIndices(indexAccessor);
+geometry.setAttribute('position', positionAccessor);
+geometry.setAttribute('normal', normalAccessor);
+geometry.setAttribute('uv', uvAccessor);
 
-console.log( geometry );
+console.log(geometry);
 
 // setup webgl2
-let canvasElement = document.querySelector("#rendering-canvas") as HTMLCanvasElement;
-let context = new Context( canvasElement );
-
+let canvasElement = document.querySelector(
+	'#rendering-canvas',
+) as HTMLCanvasElement;
+let context = new Context(canvasElement);
 
 // upload to GPU
 
-let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, geometry );
+let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
+	context,
+	geometry,
+);
 
-console.log( vertexAttributeGeometry );
+console.log(vertexAttributeGeometry);
 
 // source code definition of material
-let shaderMaterial = new ShaderMaterial( vs, fs );
+let shaderMaterial = new ShaderMaterial(vs, fs);
 
-console.log( shaderMaterial );
+console.log(shaderMaterial);
 
 // load material into gpu
 
-let vertexShader = new Shader( context, vs, ShaderType.Vertex );
-let fragmentShader = new Shader( context, fs, ShaderType.Fragment );
-let program = new Program( context, vertexShader, fragmentShader );
+let vertexShader = new Shader(context, vs, ShaderType.Vertex);
+let fragmentShader = new Shader(context, fs, ShaderType.Fragment);
+let program = new Program(context, vertexShader, fragmentShader);
 
-console.log( program );
+console.log(program);
 
 // bind to program
-let vertexArrayObject = new VertexArrayObject( program, vertexAttributeGeometry );
+let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
 
-console.log( vertexArrayObject );
+console.log(vertexArrayObject);
 
-let myBoxGeometry = boxGeometry( 10, 2, 3, 5, 5, 5 );
+let myBoxGeometry = boxGeometry(10, 2, 3, 5, 5, 5);
 
-console.log( myBoxGeometry );
+console.log(myBoxGeometry);
 
-let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry( context, myBoxGeometry );
+let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
+	context,
+	myBoxGeometry,
+);
 
-console.log( boxVertexAttributeGeometry );
+console.log(boxVertexAttributeGeometry);
 
 let image = new Image();
-image.src = "./exocortex-logo.jpg";
-image.addEventListener('load', function() {
+image.src = './exocortex-logo.jpg';
+image.addEventListener('load', function () {
+	let texture = new Texture(image);
+	console.log(texture);
 
-  let texture = new Texture( image );
-  console.log( texture );
+	let textureImage2D = TextureImage2D.FromTexture(context, texture);
 
-  let textureImage2D = TextureImage2D.FromTexture( context, texture );
-
-  console.log( textureImage2D );
+	console.log(textureImage2D);
 });
 
 let light = new PointLight();
-let mesh = new Mesh( myBoxGeometry );
+let mesh = new Mesh(myBoxGeometry);
 let node = new Node();
-node.children.push( light );
-node.children.push( mesh );
+node.children.push(light);
+node.children.push(mesh);
