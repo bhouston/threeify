@@ -4,3 +4,4 @@ dist/index.js.map
 dist/index.js
 three.js
 src/lib/renderers/webgl2/webgl2_fundamentals.js
+package-lock.json
