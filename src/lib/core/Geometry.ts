@@ -6,8 +6,6 @@
 //
 
 import { AttributeAccessor } from './AttributeAccessor.js';
-import { Vector2 } from '../math/Vector2.js';
-import { Vector3 } from '../math/Vector3.js';
 import { IVersionable } from '../interfaces/Standard.js';
 
 class NamedAttributeAccessor {
