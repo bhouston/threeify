@@ -10,8 +10,9 @@ import { Shader, ShaderType } from './Shader.js';
 import { Context } from './Context.js';
 import { ProgramUniform } from './ProgramUniform.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
+import { IDisposable } from '../../interfaces/Standard.js';
 
-export class Program {
+export class Program implements IDisposable {
 	context: Context;
 	vertexShader: Shader;
 	fragmentShader: Shader;
@@ -69,5 +70,12 @@ export class Program {
 		for (var i = 0; i < numActiveAttributes; ++i) {
 			this.attributes.push(new ProgramAttribute(this, i));
 		}
+	}
+
+	dispose() {
+		this.vertexShader.dispose();
+		this.fragmentShader.dispose();
+
+		this.context.gl.deleteProgram(this.glProgram);
 	}
 }

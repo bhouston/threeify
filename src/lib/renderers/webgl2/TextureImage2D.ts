@@ -13,8 +13,9 @@ import { Context } from './Context.js';
 import { Texture } from '../../textures/Texture.js';
 import { TextureWrap } from '../../textures/TextureWrap.js';
 import { TextureFilter } from '../../textures/TextureFilter.js';
+import { IDisposable } from '../../interfaces/Standard.js';
 
-export class TextureImage2D {
+export class TextureImage2D implements IDisposable {
 	context: Context;
 	target: TextureTarget;
 	level: number;
@@ -93,6 +94,10 @@ export class TextureImage2D {
 
 		gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, this.magFilter);
 		gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, this.minFilter);
+	}
+
+	dispose() {
+		this.context.gl.deleteTexture(this.glTexture);
 	}
 
 	static FromTexture(context: Context, texture: Texture) {

@@ -6,13 +6,14 @@
 //
 
 import { Context } from './Context.js';
+import { IDisposable } from '../../interfaces/Standard.js';
 
 export enum ShaderType {
 	Vertex = WebGL2RenderingContext.VERTEX_SHADER,
 	Fragment = WebGL2RenderingContext.FRAGMENT_SHADER,
 }
 
-export class Shader {
+export class Shader implements IDisposable {
 	context: Context;
 	sourceCode: string;
 	shaderType: ShaderType;
@@ -48,5 +49,9 @@ export class Shader {
 				'could not compile shader:' + gl.getShaderInfoLog(this.glShader),
 			);
 		}
+	}
+
+	dispose() {
+		this.context.gl.deleteShader(this.glShader);
 	}
 }

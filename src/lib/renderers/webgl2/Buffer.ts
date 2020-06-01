@@ -1,8 +1,9 @@
 import { Context } from './Context.js';
 import { BufferTarget } from '../../core/BufferTarget.js';
 import { BufferUsage } from './BufferUsage.js';
+import { IDisposable } from '../../interfaces/Standard.js';
 
-export class Buffer {
+export class Buffer implements IDisposable {
 	context: Context;
 	target: BufferTarget;
 	usage: BufferUsage;
@@ -33,5 +34,9 @@ export class Buffer {
 
 		// load data
 		gl.bufferData(this.target, arrayBuffer, this.usage);
+	}
+
+	dispose() {
+		this.context.gl.deleteBuffer(this.glBuffer);
 	}
 }
