@@ -8,8 +8,9 @@
 import { Euler, EulerOrder } from "./Euler.js";
 import { Vector3 } from "./Vector3.js";
 import { Matrix4 } from "./Matrix4.js";
+import { IPrimitive } from "./IPrimitive.js";
 
-export class Quaternion {
+export class Quaternion implements IPrimitive<Quaternion> {
 
     x: number;
     y: number;
@@ -22,6 +23,12 @@ export class Quaternion {
         this.y = y;
         this.z = z;
         this.w = w;
+
+    }
+
+    clone() {
+
+        return new Quaternion().copy(this);
 
     }
 
@@ -45,6 +52,38 @@ export class Quaternion {
         return this;
 
     }
+
+	getComponent(index: number) {
+
+		switch (index) {
+			case 0: return this.x;
+			case 1: return this.y;
+            case 2: return this.z;
+            case 3: return this.w;
+			default: throw new Error("index of our range: " + index);
+		}
+
+	}
+
+	setComponent(index: number, value: number) {
+
+		switch (index) {
+			case 0: this.x = value; break;
+			case 1: this.y = value; break;
+            case 2: this.z = value; break;
+            case 3: this.w = value; break;
+			default: throw new Error("index of our range: " + index);
+		}
+
+		return this;
+	}
+
+	numComponents() {
+
+		return 4;
+        
+    }
+    
 
     dot(q: Quaternion) {
 
@@ -159,64 +198,64 @@ export class Quaternion {
 
     }
 
-    setFromRotationMatrix4( m: Matrix4 ) {
+    setFromRotationMatrix4(m: Matrix4) {
 
-		// http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+        // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
         // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
-        
+
         // TODO, allocate x, y, z, w and only set this.* at the end.
 
-		let te = m.elements,
+        let te = m.elements,
 
-			m11 = te[ 0 ], m12 = te[ 4 ], m13 = te[ 8 ],
-			m21 = te[ 1 ], m22 = te[ 5 ], m23 = te[ 9 ],
-			m31 = te[ 2 ], m32 = te[ 6 ], m33 = te[ 10 ],
+            m11 = te[0], m12 = te[4], m13 = te[8],
+            m21 = te[1], m22 = te[5], m23 = te[9],
+            m31 = te[2], m32 = te[6], m33 = te[10],
 
-			trace = m11 + m22 + m33,
-			s;
+            trace = m11 + m22 + m33,
+            s;
 
-		if ( trace > 0 ) {
+        if (trace > 0) {
 
-			s = 0.5 / Math.sqrt( trace + 1.0 );
+            s = 0.5 / Math.sqrt(trace + 1.0);
 
-			this.w = 0.25 / s;
-			this.x = ( m32 - m23 ) * s;
-			this.y = ( m13 - m31 ) * s;
-			this.z = ( m21 - m12 ) * s;
+            this.w = 0.25 / s;
+            this.x = (m32 - m23) * s;
+            this.y = (m13 - m31) * s;
+            this.z = (m21 - m12) * s;
 
-		} else if ( m11 > m22 && m11 > m33 ) {
+        } else if (m11 > m22 && m11 > m33) {
 
-			s = 2.0 * Math.sqrt( 1.0 + m11 - m22 - m33 );
+            s = 2.0 * Math.sqrt(1.0 + m11 - m22 - m33);
 
-			this.w = ( m32 - m23 ) / s;
-			this.x = 0.25 * s;
-			this.y = ( m12 + m21 ) / s;
-			this.z = ( m13 + m31 ) / s;
+            this.w = (m32 - m23) / s;
+            this.x = 0.25 * s;
+            this.y = (m12 + m21) / s;
+            this.z = (m13 + m31) / s;
 
-		} else if ( m22 > m33 ) {
+        } else if (m22 > m33) {
 
-			s = 2.0 * Math.sqrt( 1.0 + m22 - m11 - m33 );
+            s = 2.0 * Math.sqrt(1.0 + m22 - m11 - m33);
 
-			this.w = ( m13 - m31 ) / s;
-			this.x = ( m12 + m21 ) / s;
-			this.y = 0.25 * s;
-			this.z = ( m23 + m32 ) / s;
+            this.w = (m13 - m31) / s;
+            this.x = (m12 + m21) / s;
+            this.y = 0.25 * s;
+            this.z = (m23 + m32) / s;
 
-		} else {
+        } else {
 
-			s = 2.0 * Math.sqrt( 1.0 + m33 - m11 - m22 );
+            s = 2.0 * Math.sqrt(1.0 + m33 - m11 - m22);
 
-			this.w = ( m21 - m12 ) / s;
-			this.x = ( m13 + m31 ) / s;
-			this.y = ( m23 + m32 ) / s;
-			this.z = 0.25 * s;
+            this.w = (m21 - m12) / s;
+            this.x = (m13 + m31) / s;
+            this.y = (m23 + m32) / s;
+            this.z = 0.25 * s;
 
-		}
+        }
 
-		return this;
+        return this;
 
-	}
+    }
 
     setFromAxisAngle(axis: Vector3, angle: number) {
 

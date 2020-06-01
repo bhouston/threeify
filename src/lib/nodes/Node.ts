@@ -9,16 +9,23 @@ import { Vector3 } from '../math/Vector3.js';
 import { Quaternion } from '../math/Quaternion.js';
 import { Matrix4 } from '../math/Matrix4.js';
 import { Euler } from '../math/Euler.js';
+import { IVersioned } from '../interfaces/IVersioned.js';
+import { IDisposable } from '../interfaces/IDisposable.js';
 
-export class Node {
+export class Node implements IVersioned, IDisposable {
 
+    version: number = 0;
     name: string = "";
     position: Vector3 = new Vector3( 0, 0, 0 );
     rotation: Euler = new Euler();
     scale: Vector3 = new Vector3( 0, 0, 0 );
     children: Array<Node> = [];
-
+    
     constructor() {
+    }
+
+    dirty() {
+        this.version ++;
     }
 
     dispose() {        

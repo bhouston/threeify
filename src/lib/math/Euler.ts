@@ -1,3 +1,8 @@
+import { Quaternion } from './Quaternion.js';
+import { Vector3 } from './Vector3.js';
+import { Matrix4 } from './Matrix4.js';
+import { IPrimitive } from "./IPrimitive.js";
+
 
 export enum EulerOrder {
     XYZ,
@@ -9,13 +14,7 @@ export enum EulerOrder {
     Default = EulerOrder.XYZ
 };
 
-
-import { Quaternion } from './Quaternion.js';
-import { Vector3 } from './Vector3.js';
-import { Matrix4 } from './Matrix4.js';
-
-
-export class Euler {
+export class Euler implements IPrimitive<Euler> {
 
     x: number;
     y: number;
@@ -60,8 +59,8 @@ export class Euler {
 
     setFromRotationMatrix4(m: Matrix4, order: EulerOrder = EulerOrder.Default) {
 
-        let clamp = ( value: number, min: number, max: number ) => Math.min( Math.max( value, min ), max );
-        
+        let clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
         // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
         var te = m.elements;
@@ -183,7 +182,7 @@ export class Euler {
 
         }
 
-        this.set( x, y, z, order );
+        this.set(x, y, z, order);
 
         return this;
 
@@ -191,13 +190,13 @@ export class Euler {
 
     setFromQuaternion(q: Quaternion, order: EulerOrder = this.order) {
 
-        var m = new Matrix4().makeRotationFromQuaternion( q );
+        var m = new Matrix4().makeRotationFromQuaternion(q);
 
-        return this.setFromRotationMatrix4( m, this.order);
+        return this.setFromRotationMatrix4(m, this.order);
 
     }
 
-    equals( e: Euler ) {
+    equals(e: Euler) {
 
         return (e.x === this.x) && (e.y === this.y) && (e.z === this.z) && (e.order === this.order);
 

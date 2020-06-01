@@ -8,8 +8,9 @@
 import { Vector3 } from './Vector3.js';
 import { Quaternion } from './Quaternion.js';
 import { EulerOrder, Euler } from './Euler.js';
+import { IPrimitive } from "./IPrimitive.js";
 
-export class Matrix4 {
+export class Matrix4 implements IPrimitive<Matrix4> {
 
     elements: number[] = [
 
@@ -58,6 +59,25 @@ export class Matrix4 {
         return this;
 
     }
+
+	getComponent(index: number) {
+
+        return this.elements[ index ];
+
+	}
+
+	setComponent(index: number, value: number) {
+
+        this.elements[ index ] = value;
+
+		return this;
+	}
+
+	numComponents() {
+
+		return 16;
+		
+	}
 
     multiplyByScalar(s: number) {
 
@@ -531,12 +551,9 @@ export class Matrix4 {
 
     equals(m: Matrix4) {
 
-        let te = this.elements;
-        let me = m.elements;
-
         for (let i = 0; i < 16; i++) {
 
-            if (te[i] !== me[i]) return false;
+            if (m.elements[i] !== this.elements[i]) return false;
 
         }
 

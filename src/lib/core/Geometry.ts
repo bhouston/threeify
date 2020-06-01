@@ -8,6 +8,7 @@
 import { AttributeAccessor } from './AttributeAccessor.js'
 import { Vector2 } from '../math/Vector2.js'
 import { Vector3 } from '../math/Vector3.js'
+import { IVersioned } from '../interfaces/IVersioned.js';
 
 class NamedAttributeAccessor {
 
@@ -21,12 +22,17 @@ class NamedAttributeAccessor {
 
 }
 
-export class Geometry {
+export class Geometry implements IVersioned {
 
+    version: number = 0;
     indices: AttributeAccessor | null = null;
     namedAttributeAccessors: NamedAttributeAccessor[] = [];
 
     constructor() {
+    }
+
+    dirty() {
+        this.version ++;
     }
 
     setIndices( indices: AttributeAccessor ) {
