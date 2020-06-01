@@ -9,10 +9,9 @@ import { Vector3 } from '../math/Vector3.js';
 import { Quaternion } from '../math/Quaternion.js';
 import { Matrix4 } from '../math/Matrix4.js';
 import { Euler } from '../math/Euler.js';
-import { IVersioned } from '../interfaces/IVersioned.js';
-import { IDisposable } from '../interfaces/IDisposable.js';
+import { IDisposable, IVersionable } from '../interfaces/Standard.js';
 
-export class Node implements IVersioned, IDisposable {
+export class Node implements IVersionable, IDisposable {
 
     version: number = 0;
     name: string = "";
