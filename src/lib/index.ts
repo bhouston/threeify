@@ -155,10 +155,8 @@ async function test() {
 	let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
 	console.log(vertexArrayObject);
 
-
-	let image = await fetchImage( './exocortex-logo.jpg' );
-
-	let texture = new Texture(image);
+	let texture = new Texture( await fetchImage( './exocortex-logo.jpg' ) );
+	
 	console.log(texture);
 
 	let textureImage2D = new TextureImage2D( context );

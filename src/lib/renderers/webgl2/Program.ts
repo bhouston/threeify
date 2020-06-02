@@ -13,6 +13,7 @@ import { IDisposable } from '../../interfaces/Standard.js';
 import { ShaderType } from '../../materials/ShaderType.js';
 import { ShaderCodeMaterial } from '../../materials/ShaderCodeMaterial.js';
 import { Pool } from '../Pool.js';
+import { UniformValue } from './UniformValue.js';
 
 export class Program implements IDisposable {
 	disposed: boolean = false;
@@ -76,6 +77,11 @@ export class Program implements IDisposable {
 
 	}
 
+	setUniformValues( uniformValues: Array<UniformValue> ) {
+		// https://github.com/greggman/twgl.js/blob/cf0767dbddb48015c8bb0300e308569aeee4f78a/src/programs.js
+		throw new Error( "not implemented" );
+	}
+
 	dispose() {
 		if( ! this.disposed ) {
 			this.vertexShader.dispose();
@@ -85,6 +91,7 @@ export class Program implements IDisposable {
 			this.disposed = true;
 		}
 	}
+
 }
 
 export class ProgramPool extends Pool<ShaderCodeMaterial, Program> {

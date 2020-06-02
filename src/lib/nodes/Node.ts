@@ -55,7 +55,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	}
 }
 
-function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
+export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 	node.children.forEach((child) => {
 		depthFirstVisitor(child, callback);
 	});
