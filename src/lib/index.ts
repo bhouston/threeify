@@ -30,159 +30,160 @@ import { Mesh } from './nodes/Mesh.js';
 import { PointLight } from './nodes/lights/PointLight.js';
 import { Color } from './math/Color.js';
 import { ShaderCodeMaterial } from './materials/ShaderCodeMaterial.js';
+import { fetchImage } from './io/loaders/Image.js';
 
-let a = new Vector3(1, 0, 0);
-let b = new Vector3(3, 2, 3);
-//let e = new Vector3( 3, 'ben', 3 ); // a type bug, uncomment to see how it is caught automatically.
+async function test() {
+	let a = new Vector3(1, 0, 0);
+	let b = new Vector3(3, 2, 3);
+	//let e = new Vector3( 3, 'ben', 3 ); // a type bug, uncomment to see how it is caught automatically.
 
-let m = new Matrix4().set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0);
+	let m = new Matrix4().set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0);
 
-console.log(a);
-a.applyMatrix4(m);
-console.log(a);
-let c = a.add(b).dot(b);
-console.log(c);
+	console.log(a);
+	a.applyMatrix4(m);
+	console.log(a);
+	let c = a.add(b).dot(b);
+	console.log(c);
 
-let vs = `#version 300 es
+	let vs = `#version 300 es
 
-// an attribute is an input (in) to a vertex shader.
-// It will receive data from a buffer
-in vec2 position;
+	// an attribute is an input (in) to a vertex shader.
+	// It will receive data from a buffer
+	in vec2 position;
 
-// Used to pass in the resolution of the canvas
-uniform vec2 u_resolution;
+	// Used to pass in the resolution of the canvas
+	uniform vec2 u_resolution;
 
-// all shaders have a main function
-void main() {
+	// all shaders have a main function
+	void main() {
 
-  // convert the position from pixels to 0.0 to 1.0
-  vec2 zeroToOne = position / u_resolution;
+	// convert the position from pixels to 0.0 to 1.0
+	vec2 zeroToOne = position / u_resolution;
 
-  // convert from 0->1 to 0->2
-  vec2 zeroToTwo = zeroToOne * 2.0;
+	// convert from 0->1 to 0->2
+	vec2 zeroToTwo = zeroToOne * 2.0;
 
-  // convert from 0->2 to -1->+1 (clipspace)
-  vec2 clipSpace = zeroToTwo - 1.0;
+	// convert from 0->2 to -1->+1 (clipspace)
+	vec2 clipSpace = zeroToTwo - 1.0;
 
-  gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-}
-`;
+	gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+	}
+	`;
 
-var fs = `#version 300 es
+	var fs = `#version 300 es
 
-precision highp float;
+	precision highp float;
 
-uniform vec4 u_color;
+	uniform vec4 u_color;
 
-// we need to declare an output for the fragment shader
-out vec4 outColor;
+	// we need to declare an output for the fragment shader
+	out vec4 outColor;
 
-void main() {
-  outColor = u_color;
-}
-`;
+	void main() {
+	outColor = u_color;
+	}
+	`;
 
-// main memory representation setup
+	// main memory representation setup
 
-let indexAccessor = new Int16AttributeAccessor(
-	new Int16Array([0, 1, 2, 0, 2, 3]),
-	1,
-);
+	let indexAccessor = new Int16AttributeAccessor(
+		new Int16Array([0, 1, 2, 0, 2, 3]),
+		1,
+	);
 
-let positionAccessor = new Float32AttributeAccessor(
-	new Float32Array([
-		0.0,
-		0.0,
-		0.0,
-		1.0,
-		0.0,
-		0.0,
-		1.0,
-		1.0,
-		0.0,
-		0.0,
-		1.0,
-		0.0,
-	]),
-	3,
-);
+	let positionAccessor = new Float32AttributeAccessor(
+		new Float32Array([
+			0.0,
+			0.0,
+			0.0,
+			1.0,
+			0.0,
+			0.0,
+			1.0,
+			1.0,
+			0.0,
+			0.0,
+			1.0,
+			0.0,
+		]),
+		3,
+	);
 
-let normalAccessor = new Float32AttributeAccessor(
-	new Float32Array([
-		0.0,
-		0.0,
-		1.0,
-		0.0,
-		0.0,
-		1.0,
-		0.0,
-		0.0,
-		1.0,
-		0.0,
-		0.0,
-		1.0,
-	]),
-	3,
-);
+	let normalAccessor = new Float32AttributeAccessor(
+		new Float32Array([
+			0.0,
+			0.0,
+			1.0,
+			0.0,
+			0.0,
+			1.0,
+			0.0,
+			0.0,
+			1.0,
+			0.0,
+			0.0,
+			1.0,
+		]),
+		3,
+	);
 
-let uvAccessor = new Float32AttributeAccessor(
-	new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]),
-	2,
-);
+	let uvAccessor = new Float32AttributeAccessor(
+		new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]),
+		2,
+	);
 
-let geometry = new Geometry();
-geometry.setIndices(indexAccessor);
-geometry.setAttribute('position', positionAccessor);
-geometry.setAttribute('normal', normalAccessor);
-geometry.setAttribute('uv', uvAccessor);
+	let geometry = new Geometry();
+	geometry.setIndices(indexAccessor);
+	geometry.setAttribute('position', positionAccessor);
+	geometry.setAttribute('normal', normalAccessor);
+	geometry.setAttribute('uv', uvAccessor);
 
-console.log(geometry);
+	console.log(geometry);
 
-// setup webgl2
-let canvasElement = document.querySelector(
-	'#rendering-canvas',
-) as HTMLCanvasElement;
-let context = new Context(canvasElement);
+	// setup webgl2
+	let canvasElement = document.querySelector(
+		'#rendering-canvas',
+	) as HTMLCanvasElement;
+	let context = new Context(canvasElement);
 
-// upload to GPU
+	// upload to GPU
 
-let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
-	context,
-	geometry,
-);
+	let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
+		context,
+		geometry,
+	);
 
-console.log(vertexAttributeGeometry);
+	console.log(vertexAttributeGeometry);
 
-// source code definition of material
-let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
+	// source code definition of material
+	let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
 
-console.log(shaderCodeMaterial);
+	console.log(shaderCodeMaterial);
 
-// load material into gpu
+	// load material into gpu
 
-let program = new Program( context, shaderCodeMaterial );
+	let program = new Program( context, shaderCodeMaterial );
 
-console.log(program);
+	console.log(program);
 
-// bind to program
-let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
+	// bind to program
+	let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
 
-console.log(vertexArrayObject);
+	console.log(vertexArrayObject);
 
-let myBoxGeometry = boxGeometry(10, 2, 3, 5, 5, 5);
+	let myBoxGeometry = boxGeometry(10, 2, 3, 5, 5, 5);
 
-console.log(myBoxGeometry);
+	console.log(myBoxGeometry);
 
-let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
-	context,
-	myBoxGeometry,
-);
+	let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
+		context,
+		myBoxGeometry,
+	);
 
-console.log(boxVertexAttributeGeometry);
+	console.log(boxVertexAttributeGeometry);
 
-let image = new Image();
-image.src = './exocortex-logo.jpg';
-image.addEventListener('load', function () {
+	let image = await fetchImage( './exocortex-logo.jpg' );
+
 	let texture = new Texture(image);
 	console.log(texture);
 
@@ -190,10 +191,13 @@ image.addEventListener('load', function () {
 	textureImage2D.update( texture );
 
 	console.log(textureImage2D);
-});
 
-let light = new PointLight();
-let mesh = new Mesh(myBoxGeometry);
-let node = new Node();
-node.children.push(light);
-node.children.push(mesh);
+	let light = new PointLight();
+	let mesh = new Mesh(myBoxGeometry);
+	let node = new Node();
+	node.children.push(light);
+	node.children.push(mesh);
+
+}
+
+test();

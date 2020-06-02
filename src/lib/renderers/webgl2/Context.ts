@@ -5,12 +5,9 @@
 // * @bhouston
 //
 
-import { Pool } from "../Pool.js";
-import { Texture } from "../../textures/Texture.js";
-import { TextureImage2D, TextureImage2DPool } from "./TextureImage2D.js";
-import { AttributeView } from "../../core/AttributeView.js";
-import { Buffer, BufferPool } from "./Buffer.js";
-import { Program, ProgramPool } from "./Program.js";
+import { BufferPool } from "./Buffer.js";
+import { ProgramPool } from "./Program.js";
+import { TextureImage2DPool } from "./TextureImage2D.js";
 
 export class Context {
 	canvas: HTMLCanvasElement;
