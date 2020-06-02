@@ -6,9 +6,9 @@
 //
 
 import { Euler, EulerOrder } from './Euler.js';
-import { Vector3 } from './Vector3.js';
-import { Matrix4 } from './Matrix4.js';
 import { IPrimitive } from './IPrimitive.js';
+import { Matrix4 } from './Matrix4.js';
+import { Vector3 } from './Vector3.js';
 
 export class Quaternion implements IPrimitive<Quaternion> {
 	x: number;

@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Node } from '../Node.js';
 import { Matrix4 } from '../../math/Matrix4.js';
+import { Node } from '../Node.js';
 
 export abstract class Camera extends Node {
 	pixelAspectRatio: number = 1.0;

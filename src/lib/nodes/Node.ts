@@ -5,16 +5,12 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../math/Vector3.js';
-import { Quaternion } from '../math/Quaternion.js';
-import { Matrix4 } from '../math/Matrix4.js';
-import { Euler } from '../math/Euler.js';
-import {
-	IDisposable,
-	IVersionable,
-	IIdentifiable,
-} from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../interfaces/Standard.js';
+import { Euler } from '../math/Euler.js';
+import { Matrix4 } from '../math/Matrix4.js';
+import { Quaternion } from '../math/Quaternion.js';
+import { Vector3 } from '../math/Vector3.js';
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
 	disposed: boolean = false;

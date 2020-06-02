@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Light } from './Light.js';
 import { Color } from '../../math/Color.js';
+import { Light } from './Light.js';
 
 export class PointLight extends Light {
 	distance: number;

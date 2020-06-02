@@ -6,7 +6,7 @@
 //
 
 import { AttributeView } from './AttributeView.js';
-import { componentTypeSizeOf, ComponentType } from './ComponentType.js';
+import { ComponentType, componentTypeSizeOf } from './ComponentType.js';
 
 export class AttributeAccessor {
 	attributeView: AttributeView;

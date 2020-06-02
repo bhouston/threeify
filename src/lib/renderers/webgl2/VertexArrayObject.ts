@@ -5,7 +5,6 @@
 // * @bhouston
 //
 
-import { Context } from './Context.js';
 import { Program } from './Program.js';
 import { VertexAttributeGeometry } from './VertexAttributeGeometry.js';
 

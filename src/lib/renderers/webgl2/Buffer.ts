@@ -1,9 +1,9 @@
-import { Context } from './Context.js';
+import { AttributeView } from '../../core/AttributeView.js';
 import { BufferTarget } from '../../core/BufferTarget.js';
-import { BufferUsage } from './BufferUsage.js';
 import { IDisposable } from '../../interfaces/Standard.js';
 import { Pool } from '../Pool.js';
-import { AttributeView } from '../../core/AttributeView.js';
+import { BufferUsage } from './BufferUsage.js';
+import { Context } from './Context.js';
 
 export class Buffer implements IDisposable {
 	disposed: boolean = false;

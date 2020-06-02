@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Camera } from './Camera.js';
 import { Matrix4 } from '../../math/Matrix4.js';
+import { Camera } from './Camera.js';
 
 export class PerspectiveCamera extends Camera {
 	verticalFov: number;

@@ -5,12 +5,9 @@
 // * @bhouston
 //
 
+import { Float32AttributeAccessor, Int32AttributeAccessor } from '../core/AttributeAccessor.js';
 import { Geometry } from '../core/Geometry.js';
 import { Vector3 } from '../math/Vector3.js';
-import {
-	Int32AttributeAccessor,
-	Float32AttributeAccessor,
-} from '../core/AttributeAccessor.js';
 
 export function boxGeometry(
 	width: number = 1,

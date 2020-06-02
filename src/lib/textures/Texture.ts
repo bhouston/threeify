@@ -5,19 +5,14 @@
 // * @bhouston
 //
 
-import { TextureWrap } from './TextureWrap.js';
-import { TextureFilter } from './TextureFilter.js';
-import { PixelFormat } from './PixelFormat.js';
-import { DataType } from './DataType.js';
-import {
-	IVersionable,
-	IDisposable,
-	IIdentifiable,
-} from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
-import { IPoolUser } from '../renderers/Pool.js';
-import { Box2 } from '../math/Box2.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../interfaces/Standard.js';
 import { Vector2 } from '../math/Vector2.js';
+import { IPoolUser } from '../renderers/Pool.js';
+import { DataType } from './DataType.js';
+import { PixelFormat } from './PixelFormat.js';
+import { TextureFilter } from './TextureFilter.js';
+import { TextureWrap } from './TextureWrap.js';
 
 export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	disposed: boolean = false;

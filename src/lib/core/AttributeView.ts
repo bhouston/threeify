@@ -5,14 +5,10 @@
 // * @bhouston
 //
 
-import { BufferTarget } from './BufferTarget.js';
-import {
-	IVersionable,
-	IDisposable,
-	IIdentifiable,
-} from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../interfaces/Standard.js';
 import { IPoolUser } from '../renderers/Pool.js';
+import { BufferTarget } from './BufferTarget.js';
 
 export class AttributeView implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	disposed: boolean = false;

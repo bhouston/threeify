@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { Vector3 } from './Vector3.js';
-import { Quaternion } from './Quaternion.js';
-import { EulerOrder, Euler } from './Euler.js';
+import { Euler, EulerOrder } from './Euler.js';
 import { IPrimitive } from './IPrimitive.js';
+import { Quaternion } from './Quaternion.js';
+import { Vector3 } from './Vector3.js';
 
 export class Matrix4 implements IPrimitive<Matrix4> {
 	elements: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];

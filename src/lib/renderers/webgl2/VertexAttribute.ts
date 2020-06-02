@@ -6,13 +6,10 @@
 // * @bhouston
 //
 
-import { Buffer } from './Buffer.js';
-import {
-	ComponentType,
-	componentTypeSizeOf,
-} from '../../core/ComponentType.js';
-import { Context } from './Context.js';
 import { AttributeAccessor } from '../../core/AttributeAccessor.js';
+import { ComponentType } from '../../core/ComponentType.js';
+import { Buffer } from './Buffer.js';
+import { Context } from './Context.js';
 
 export class VertexAttribute {
 	buffer: Buffer;
