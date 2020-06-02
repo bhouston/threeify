@@ -49,7 +49,7 @@ export class Shader implements IDisposable {
 	}
 
 	dispose() {
-		if( ! this.disposed ) {
+		if (!this.disposed) {
 			this.context.gl.deleteShader(this.glShader);
 			this.disposed = true;
 		}

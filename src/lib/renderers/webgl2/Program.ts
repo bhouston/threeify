@@ -29,8 +29,16 @@ export class Program implements IDisposable {
 
 	constructor(context: Context, shaderCodeMaterial: ShaderCodeMaterial) {
 		this.context = context;
-		this.vertexShader = new Shader( this.context, shaderCodeMaterial.vertexShaderCode, ShaderType.Vertex );
-		this.fragmentShader = new Shader( this.context, shaderCodeMaterial.fragmentShaderCode, ShaderType.Fragment );
+		this.vertexShader = new Shader(
+			this.context,
+			shaderCodeMaterial.vertexShaderCode,
+			ShaderType.Vertex,
+		);
+		this.fragmentShader = new Shader(
+			this.context,
+			shaderCodeMaterial.fragmentShaderCode,
+			ShaderType.Fragment,
+		);
 
 		let gl = this.context.gl;
 
@@ -74,16 +82,15 @@ export class Program implements IDisposable {
 		for (var i = 0; i < numActiveAttributes; ++i) {
 			this.attributes.push(new ProgramAttribute(this, i));
 		}
-
 	}
 
-	setUniformValues( uniformValues: Array<UniformValue> ) {
+	setUniformValues(uniformValues: Array<UniformValue>) {
 		// https://github.com/greggman/twgl.js/blob/cf0767dbddb48015c8bb0300e308569aeee4f78a/src/programs.js
-		throw new Error( "not implemented" );
+		throw new Error('not implemented');
 	}
 
 	dispose() {
-		if( ! this.disposed ) {
+		if (!this.disposed) {
 			this.vertexShader.dispose();
 			this.fragmentShader.dispose();
 
@@ -91,16 +98,18 @@ export class Program implements IDisposable {
 			this.disposed = true;
 		}
 	}
-
 }
 
 export class ProgramPool extends Pool<ShaderCodeMaterial, Program> {
-
-	constructor( context: Context ) {
+	constructor(context: Context) {
 		super(
 			context,
-			(context: Context, shaderCodeMaterial: ShaderCodeMaterial, program: Program | null) => {
-				if( program ) {
+			(
+				context: Context,
+				shaderCodeMaterial: ShaderCodeMaterial,
+				program: Program | null,
+			) => {
+				if (program) {
 					program.dispose();
 				}
 				return new Program(context, shaderCodeMaterial);

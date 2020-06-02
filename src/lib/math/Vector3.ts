@@ -22,24 +22,24 @@ export class Vector3 implements IPrimitive<Vector3> {
 	get width() {
 		return this.x;
 	}
-	set width( width: number ) {
+	set width(width: number) {
 		this.x = width;
 	}
-	
+
 	get height() {
 		return this.y;
 	}
-	set height( height: number ) {
+	set height(height: number) {
 		this.y = height;
 	}
-	
+
 	get depth() {
 		return this.z;
 	}
-	set depth( depth: number ) {
+	set depth(depth: number) {
 		this.z = depth;
 	}
-	
+
 	clone() {
 		return new Vector3().copy(this);
 	}

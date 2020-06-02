@@ -1,3 +1,1 @@
-export class UniformValue {
-
-}
+export class UniformValue {}

@@ -22,10 +22,7 @@ export class ShaderCodeMaterial
 	vertexShaderCode: string;
 	fragmentShaderCode: string;
 
-	constructor(
-		vertexShaderCode: string,
-		fragmentShaderCode: string,
-	) {
+	constructor(vertexShaderCode: string, fragmentShaderCode: string) {
 		this.vertexShaderCode = vertexShaderCode;
 		this.fragmentShaderCode = fragmentShaderCode;
 	}

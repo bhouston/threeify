@@ -6,11 +6,16 @@
 //
 
 import { generateUUID } from '../generateUuid.js';
-import { IDisposable, IIdentifiable, IVersionable } from '../interfaces/Standard.js';
+import {
+	IDisposable,
+	IIdentifiable,
+	IVersionable,
+} from '../interfaces/Standard.js';
 import { IPoolUser } from '../renderers/Pool.js';
 import { BufferTarget } from './BufferTarget.js';
 
-export class AttributeView implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
+export class AttributeView
+	implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	disposed: boolean = false;
 	uuid: string = generateUUID();
 	version: number = 0;
@@ -42,7 +47,7 @@ export class AttributeView implements IIdentifiable, IVersionable, IDisposable, 
 	}
 
 	dispose() {
-		if( ! this.disposed ) {
+		if (!this.disposed) {
 			this.disposed = true;
 			this.dirty();
 		}

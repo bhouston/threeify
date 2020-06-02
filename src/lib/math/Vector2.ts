@@ -19,14 +19,14 @@ export class Vector2 implements IPrimitive<Vector2> {
 	get width() {
 		return this.x;
 	}
-	set width( width: number ) {
+	set width(width: number) {
 		this.x = width;
 	}
-	
+
 	get height() {
 		return this.y;
 	}
-	set height( height: number ) {
+	set height(height: number) {
 		this.y = height;
 	}
 
@@ -94,32 +94,26 @@ export class Vector2 implements IPrimitive<Vector2> {
 	}
 
 	min(v: Vector2) {
-
 		this.x = Math.min(this.x, v.x);
 		this.y = Math.min(this.y, v.y);
 
 		return this;
-
 	}
 
 	max(v: Vector2) {
-
 		this.x = Math.max(this.x, v.x);
 		this.y = Math.max(this.y, v.y);
 
 		return this;
-
 	}
 
 	clamp(min: Vector2, max: Vector2) {
-
 		// assumes min < max, componentwise
 
 		this.x = Math.max(min.x, Math.min(max.x, this.x));
 		this.y = Math.max(min.y, Math.min(max.y, this.y));
 
 		return this;
-
 	}
 
 	equals(v: Vector2) {

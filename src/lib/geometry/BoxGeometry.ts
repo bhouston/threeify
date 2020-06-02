@@ -5,7 +5,10 @@
 // * @bhouston
 //
 
-import { Float32AttributeAccessor, Int32AttributeAccessor } from '../core/AttributeAccessor.js';
+import {
+	Float32AttributeAccessor,
+	Int32AttributeAccessor,
+} from '../core/AttributeAccessor.js';
 import { Geometry } from '../core/Geometry.js';
 import { Vector3 } from '../math/Vector3.js';
 

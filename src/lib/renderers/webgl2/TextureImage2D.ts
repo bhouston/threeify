@@ -24,7 +24,7 @@ export class TextureImage2D implements IDisposable {
 	glTexture: WebGLTexture;
 	target: TextureTarget = TextureTarget.Texture2D;
 	level: number = 0;
-	internalFormat: PixelFormat = PixelFormat.RGBA
+	internalFormat: PixelFormat = PixelFormat.RGBA;
 	size: Vector2 = new Vector2();
 	pixelFormat: PixelFormat = PixelFormat.RGBA;
 	dataType: DataType = DataType.UnsignedByte;
@@ -34,9 +34,7 @@ export class TextureImage2D implements IDisposable {
 	minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
 	generateMipmaps: boolean = true;
 
-	constructor(
-		context: Context,
-	) {
+	constructor(context: Context) {
 		this.context = context;
 
 		let gl = this.context.gl;
@@ -47,7 +45,6 @@ export class TextureImage2D implements IDisposable {
 			if (!glTexture) throw new Error('can not create texture');
 			this.glTexture = glTexture;
 		}
-	
 	}
 	/*level: number = 0;
 	internalFormat: PixelFormat = PixelFormat.RGBA
@@ -62,8 +59,7 @@ export class TextureImage2D implements IDisposable {
 	generateMipmaps: boolean = true;*/
 
 	update(texture: Texture): void {
-
-		if( ! texture.image ) throw new Error( "texture.image is null" );
+		if (!texture.image) throw new Error('texture.image is null');
 
 		this.target = TextureTarget.Texture2D;
 		this.level = 0;
@@ -89,7 +85,7 @@ export class TextureImage2D implements IDisposable {
 			0,
 			this.internalFormat,
 			this.dataType,
-			texture.image
+			texture.image,
 		);
 
 		if (this.generateMipmaps) {
@@ -104,25 +100,26 @@ export class TextureImage2D implements IDisposable {
 	}
 
 	dispose() {
-		if( ! this.disposed ) {
+		if (!this.disposed) {
 			this.context.gl.deleteTexture(this.glTexture);
 			this.disposed = true;
 		}
 	}
-
 }
 
-
 export class TextureImage2DPool extends Pool<Texture, TextureImage2D> {
-
-	constructor( context: Context ) {
+	constructor(context: Context) {
 		super(
 			context,
-			(context: Context, texture: Texture, textureImage2D: TextureImage2D | null) => {
-				if( ! textureImage2D ) {
-					textureImage2D = new TextureImage2D(context );				
+			(
+				context: Context,
+				texture: Texture,
+				textureImage2D: TextureImage2D | null,
+			) => {
+				if (!textureImage2D) {
+					textureImage2D = new TextureImage2D(context);
 				}
-				textureImage2D.update( texture );
+				textureImage2D.update(texture);
 				return textureImage2D;
 			},
 		);

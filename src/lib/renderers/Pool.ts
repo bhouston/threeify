@@ -12,28 +12,31 @@ import {
 } from '../interfaces/Standard';
 import { Context } from './webgl2/Context';
 
-export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable { }
+export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
 
-export type UserResourceUpdater<U, R> = (context: Context, user: U, resource: R | null) => R;
+export type UserResourceUpdater<U, R> = (
+	context: Context,
+	user: U,
+	resource: R | null,
+) => R;
 
 class UserResource<U extends IPoolUser, R extends IDisposable> {
 	user: U;
 	resource: R;
 	resourceVersion: number = -1;
-	
+
 	constructor(user: U, resource: R) {
 		this.user = user;
 		this.resource = resource;
 	}
 
-	update( context: Context, updater: UserResourceUpdater<U, R>) {
+	update(context: Context, updater: UserResourceUpdater<U, R>) {
 		let disposed = false;
 		if (this.resourceVersion < this.user.version) {
 			if (this.user.disposed) {
 				this.resource.dispose();
 				disposed = true;
-			}
-			else {
+			} else {
 				this.resource = updater(context, this.user, this.resource);
 			}
 			this.resourceVersion = this.user.version;
@@ -58,7 +61,10 @@ export class Pool<U extends IPoolUser, R extends IDisposable> {
 			(userResource) => userResource.user.uuid == user.uuid,
 		);
 		if (!userResource) {
-			userResource = new UserResource(user, this.updater(this.context, user, null));
+			userResource = new UserResource(
+				user,
+				this.updater(this.context, user, null),
+			);
 			this.userResources.push(userResource);
 		}
 
@@ -66,12 +72,11 @@ export class Pool<U extends IPoolUser, R extends IDisposable> {
 	}
 
 	update() {
-
 		let disposeCount = 0;
 
 		// update all
 		this.userResources.forEach((userResource) => {
-			if (userResource.update( this.context, this.updater)) {
+			if (userResource.update(this.context, this.updater)) {
 				disposeCount++;
 			}
 		});

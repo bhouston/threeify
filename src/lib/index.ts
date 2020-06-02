@@ -1,4 +1,7 @@
-import { Float32AttributeAccessor, Int16AttributeAccessor } from './core/AttributeAccessor.js';
+import {
+	Float32AttributeAccessor,
+	Int16AttributeAccessor,
+} from './core/AttributeAccessor.js';
 import { Geometry } from './core/Geometry.js';
 import { boxGeometry } from './geometry/BoxGeometry.js';
 import { fetchImage } from './io/loaders/Image.js';
@@ -148,19 +151,22 @@ async function test() {
 	let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
 	console.log(shaderCodeMaterial);
 
-	let program = new Program( context, shaderCodeMaterial );
+	let program = new Program(context, shaderCodeMaterial);
 	console.log(program);
 
 	// bind to program
-	let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
+	let vertexArrayObject = new VertexArrayObject(
+		program,
+		vertexAttributeGeometry,
+	);
 	console.log(vertexArrayObject);
 
-	let texture = new Texture( await fetchImage( './exocortex-logo.jpg' ) );
-	
+	let texture = new Texture(await fetchImage('./exocortex-logo.jpg'));
+
 	console.log(texture);
 
-	let textureImage2D = new TextureImage2D( context );
-	textureImage2D.update( texture );
+	let textureImage2D = new TextureImage2D(context);
+	textureImage2D.update(texture);
 	console.log(textureImage2D);
 
 	let node = new Node();

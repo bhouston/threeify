@@ -6,7 +6,11 @@
 //
 
 import { generateUUID } from '../generateUuid.js';
-import { IDisposable, IIdentifiable, IVersionable } from '../interfaces/Standard.js';
+import {
+	IDisposable,
+	IIdentifiable,
+	IVersionable,
+} from '../interfaces/Standard.js';
 import { Vector2 } from '../math/Vector2.js';
 import { IPoolUser } from '../renderers/Pool.js';
 import { DataType } from './DataType.js';
@@ -14,7 +18,8 @@ import { PixelFormat } from './PixelFormat.js';
 import { TextureFilter } from './TextureFilter.js';
 import { TextureWrap } from './TextureWrap.js';
 
-export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
+export class Texture
+	implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	disposed: boolean = false;
 	uuid: string = generateUUID();
 	version: number = 0;
@@ -42,8 +47,8 @@ export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolU
 		anisotropyLevels: number = 1,
 	) {
 		this.image = image;
-		if( image ) {
-			this.size = new Vector2( image.width, image.height );
+		if (image) {
+			this.size = new Vector2(image.width, image.height);
 		}
 		this.wrapS = wrapS;
 		this.wrapT = wrapT;
@@ -72,7 +77,7 @@ export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolU
 	}
 
 	dispose() {
-		if( ! this.disposed ) {
+		if (!this.disposed) {
 			this.disposed = true;
 			this.dirty();
 		}

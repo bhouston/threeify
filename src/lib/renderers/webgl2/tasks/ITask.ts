@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Context } from "../Context";
+import { Context } from '../Context';
 
 export interface ITask {
-    execute( context: Context ): void;
+	execute(context: Context): void;
 }

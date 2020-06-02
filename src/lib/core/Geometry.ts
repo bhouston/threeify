@@ -31,11 +31,11 @@ export class Geometry implements IVersionable, IDisposable {
 	}
 
 	dispose() {
-		if( ! this.disposed ) {
+		if (!this.disposed) {
 			// reaching deep to dispose of all attribute views, but technically they may be reused with other geometries.
-			this.namedAttributeAccessors.forEach( namedAttributeAccessor => {
+			this.namedAttributeAccessors.forEach((namedAttributeAccessor) => {
 				namedAttributeAccessor.attributeAccessor.attributeView.dispose();
-			})
+			});
 			this.disposed = true;
 			this.dirty();
 		}
