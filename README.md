@@ -1,6 +1,6 @@
 # three.ts
 
-Prototype of a Typescript-based Three.js focused on just proving Typescript can build and load into the browser with minimal effort.
+A Typescript 3D Library loosely based on Three.js
 
 To run:
 
