@@ -5,12 +5,14 @@
 // * @bhouston
 //
 
-import { ShaderMaterial } from '../common/ShaderMaterial.js';
-import { Shader, ShaderType } from './Shader.js';
+import { Shader } from './Shader.js';
 import { Context } from './Context.js';
 import { ProgramUniform } from './ProgramUniform.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
 import { IDisposable } from '../../interfaces/Standard.js';
+import { ShaderType } from '../../materials/ShaderType.js';
+import { ShaderCodeMaterial } from '../../materials/ShaderCodeMaterial.js';
+import { Pool } from '../Pool.js';
 
 export class Program implements IDisposable {
 	disposed: boolean = false;
@@ -24,10 +26,10 @@ export class Program implements IDisposable {
 	// attributes (required attribute buffers)
 	// varying (per instance parameters)
 
-	constructor(context: Context, vertexShader: Shader, fragmentShader: Shader) {
+	constructor(context: Context, shaderCodeMaterial: ShaderCodeMaterial) {
 		this.context = context;
-		this.vertexShader = vertexShader;
-		this.fragmentShader = fragmentShader;
+		this.vertexShader = new Shader( this.context, shaderCodeMaterial.vertexShaderCode, ShaderType.Vertex );
+		this.fragmentShader = new Shader( this.context, shaderCodeMaterial.fragmentShaderCode, ShaderType.Fragment );
 
 		let gl = this.context.gl;
 
@@ -71,6 +73,7 @@ export class Program implements IDisposable {
 		for (var i = 0; i < numActiveAttributes; ++i) {
 			this.attributes.push(new ProgramAttribute(this, i));
 		}
+
 	}
 
 	dispose() {
@@ -81,5 +84,20 @@ export class Program implements IDisposable {
 			this.context.gl.deleteProgram(this.glProgram);
 			this.disposed = true;
 		}
+	}
+}
+
+export class ProgramPool extends Pool<ShaderCodeMaterial, Program> {
+
+	constructor( context: Context ) {
+		super(
+			context,
+			(context: Context, shaderCodeMaterial: ShaderCodeMaterial, program: Program | null) => {
+				if( program ) {
+					program.dispose();
+				}
+				return new Program(context, shaderCodeMaterial);
+			},
+		);
 	}
 }

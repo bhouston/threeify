@@ -12,8 +12,9 @@ import {
 	IIdentifiable,
 } from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
+import { IPoolUser } from '../renderers/Pool.js';
 
-export class AttributeView implements IIdentifiable, IVersionable, IDisposable {
+export class AttributeView implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	disposed: boolean = false;
 	uuid: string = generateUUID();
 	version: number = 0;

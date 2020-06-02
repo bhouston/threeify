@@ -11,22 +11,23 @@ import {
 	IIdentifiable,
 } from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
+import { IPoolUser } from '../renderers/Pool.js';
 
-export class ShaderMaterial
-	implements IIdentifiable, IVersionable, IDisposable {
+export class ShaderCodeMaterial
+	implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	uuid: string = generateUUID();
 	version: number = 0;
 	disposed: boolean = false;
 	name: string = '';
-	vertexShaderSourceCode: string;
-	fragmentShaderSourceCode: string;
+	vertexShaderCode: string;
+	fragmentShaderCode: string;
 
 	constructor(
-		vertexShaderSourceCode: string,
-		fragmentShaderSourceCode: string,
+		vertexShaderCode: string,
+		fragmentShaderCode: string,
 	) {
-		this.vertexShaderSourceCode = vertexShaderSourceCode;
-		this.fragmentShaderSourceCode = fragmentShaderSourceCode;
+		this.vertexShaderCode = vertexShaderCode;
+		this.fragmentShaderCode = fragmentShaderCode;
 	}
 
 	dirty() {

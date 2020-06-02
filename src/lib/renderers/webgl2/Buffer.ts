@@ -2,18 +2,20 @@ import { Context } from './Context.js';
 import { BufferTarget } from '../../core/BufferTarget.js';
 import { BufferUsage } from './BufferUsage.js';
 import { IDisposable } from '../../interfaces/Standard.js';
+import { Pool } from '../Pool.js';
+import { AttributeView } from '../../core/AttributeView.js';
 
 export class Buffer implements IDisposable {
 	disposed: boolean = false;
 	context: Context;
-	target: BufferTarget;
-	usage: BufferUsage;
 	glBuffer: WebGLBuffer;
+	target: BufferTarget = BufferTarget.Array;
+	usage: BufferUsage = BufferUsage.StaticDraw;
 
 	constructor(
 		context: Context,
 		arrayBuffer: ArrayBuffer,
-		target: BufferTarget,
+		target: BufferTarget = BufferTarget.Array,
 		usage: BufferUsage = BufferUsage.StaticDraw,
 	) {
 		this.context = context;
@@ -29,7 +31,23 @@ export class Buffer implements IDisposable {
 			}
 			this.glBuffer = glBuffer;
 		}
+		
+		// Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+		gl.bindBuffer(this.target, this.glBuffer);
 
+		// load data
+		gl.bufferData(this.target, arrayBuffer, this.usage);
+
+	}
+
+	update( arrayBuffer: ArrayBuffer,
+		target: BufferTarget = BufferTarget.Array,
+		usage: BufferUsage = BufferUsage.StaticDraw, ) {
+		this.target = target;
+		this.usage = usage;
+
+		let gl = this.context.gl;
+	
 		// Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
 		gl.bindBuffer(this.target, this.glBuffer);
 
@@ -37,10 +55,27 @@ export class Buffer implements IDisposable {
 		gl.bufferData(this.target, arrayBuffer, this.usage);
 	}
 
+	
 	dispose() {
 		if( ! this.disposed ) {
 			this.context.gl.deleteBuffer(this.glBuffer);
 			this.disposed = true;
 		}
+	}
+}
+
+export class BufferPool extends Pool<AttributeView, Buffer> {
+
+	constructor( context: Context ) {
+		super(
+			context,
+			(context: Context, attributeView: AttributeView, buffer: Buffer | null) => {
+				if( ! buffer ) {
+					return new Buffer(context, attributeView.arrayBuffer, attributeView.target );
+				}
+				buffer.update( attributeView.arrayBuffer, attributeView.target );
+				return buffer;
+			},
+		);
 	}
 }

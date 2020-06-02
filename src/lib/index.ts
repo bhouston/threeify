@@ -2,7 +2,7 @@ import { Vector3 } from './math/Vector3.js';
 import { Matrix4 } from './math/Matrix4.js';
 import { Geometry } from './core/Geometry.js';
 import { boxGeometry } from './geometry/BoxGeometry.js';
-import { Shader, ShaderType } from './renderers/webgl2/Shader.js';
+import { Shader } from './renderers/webgl2/Shader.js';
 import { ShaderMaterial } from './renderers/common/ShaderMaterial.js';
 import { Context } from './renderers/webgl2/Context.js';
 import * as evs from './renderers/webgl2/shaders/mesh_fs.glsl';
@@ -29,6 +29,7 @@ import { Node } from './nodes/Node.js';
 import { Mesh } from './nodes/Mesh.js';
 import { PointLight } from './nodes/lights/PointLight.js';
 import { Color } from './math/Color.js';
+import { ShaderCodeMaterial } from './materials/ShaderCodeMaterial.js';
 
 let a = new Vector3(1, 0, 0);
 let b = new Vector3(3, 2, 3);
@@ -153,15 +154,13 @@ let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
 console.log(vertexAttributeGeometry);
 
 // source code definition of material
-let shaderMaterial = new ShaderMaterial(vs, fs);
+let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
 
-console.log(shaderMaterial);
+console.log(shaderCodeMaterial);
 
 // load material into gpu
 
-let vertexShader = new Shader(context, vs, ShaderType.Vertex);
-let fragmentShader = new Shader(context, fs, ShaderType.Fragment);
-let program = new Program(context, vertexShader, fragmentShader);
+let program = new Program( context, shaderCodeMaterial );
 
 console.log(program);
 
@@ -187,7 +186,8 @@ image.addEventListener('load', function () {
 	let texture = new Texture(image);
 	console.log(texture);
 
-	let textureImage2D = TextureImage2D.FromTexture(context, texture);
+	let textureImage2D = new TextureImage2D( context );
+	textureImage2D.update( texture );
 
 	console.log(textureImage2D);
 });

@@ -15,12 +15,16 @@ import {
 	IIdentifiable,
 } from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
+import { IPoolUser } from '../renderers/Pool.js';
+import { Box2 } from '../math/Box2.js';
+import { Vector2 } from '../math/Vector2.js';
 
-export class Texture implements IIdentifiable, IVersionable, IDisposable {
+export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
 	disposed: boolean = false;
 	uuid: string = generateUUID();
 	version: number = 0;
 	name: string = '';
+	size: Vector2 = new Vector2();
 	image: HTMLImageElement | null;
 	wrapS: TextureWrap;
 	wrapT: TextureWrap;
@@ -43,6 +47,9 @@ export class Texture implements IIdentifiable, IVersionable, IDisposable {
 		anisotropyLevels: number = 1,
 	) {
 		this.image = image;
+		if( image ) {
+			this.size = new Vector2( image.width, image.height );
+		}
 		this.wrapS = wrapS;
 		this.wrapT = wrapT;
 		this.magFilter = magFilter;

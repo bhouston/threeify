@@ -13,56 +13,31 @@ import { Context } from './Context.js';
 import { Texture } from '../../textures/Texture.js';
 import { TextureWrap } from '../../textures/TextureWrap.js';
 import { TextureFilter } from '../../textures/TextureFilter.js';
-import { IDisposable, IUpdateable } from '../../interfaces/Standard.js';
+import { IDisposable } from '../../interfaces/Standard.js';
+import { Pool } from '../Pool.js';
+import { Box2 } from '../../math/Box2.js';
+import { Vector2 } from '../../math/Vector2.js';
 
 export class TextureImage2D implements IDisposable {
 	disposed: boolean = false;
 	context: Context;
-	target: TextureTarget;
-	level: number;
-	internalFormat: PixelFormat;
-	width: number;
-	height: number;
-	pixelFormat: PixelFormat;
-	dataType: DataType;
-	wrapS: TextureWrap;
-	wrapT: TextureWrap;
-	magFilter: TextureFilter;
-	minFilter: TextureFilter;
-	generateMipmaps: boolean;
 	glTexture: WebGLTexture;
-	pixelData: HTMLImageElement;
+	target: TextureTarget = TextureTarget.Texture2D;
+	level: number = 0;
+	internalFormat: PixelFormat = PixelFormat.RGBA
+	size: Vector2 = new Vector2();
+	pixelFormat: PixelFormat = PixelFormat.RGBA;
+	dataType: DataType = DataType.UnsignedByte;
+	wrapS: TextureWrap = TextureWrap.Repeat;
+	wrapT: TextureWrap = TextureWrap.Repeat;
+	magFilter: TextureFilter = TextureFilter.Linear;
+	minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
+	generateMipmaps: boolean = true;
 
 	constructor(
 		context: Context,
-		target: TextureTarget,
-		level: number,
-		internalFormat: PixelFormat,
-		width: number,
-		height: number,
-		pixelFormat: PixelFormat,
-		dataType: DataType,
-		wrapS: TextureWrap,
-		wrapT: TextureWrap,
-		magFilter: TextureFilter,
-		minFilter: TextureFilter,
-		generateMipmaps: boolean,
-		pixelData: HTMLImageElement,
 	) {
 		this.context = context;
-		this.target = target;
-		this.level = level;
-		this.internalFormat = internalFormat;
-		this.width = width;
-		this.height = height;
-		this.pixelFormat = pixelFormat;
-		this.dataType = dataType;
-		this.wrapS = wrapS;
-		this.wrapT = wrapT;
-		this.magFilter = magFilter;
-		this.minFilter = minFilter;
-		this.generateMipmaps = generateMipmaps;
-		this.pixelData = pixelData;
 
 		let gl = this.context.gl;
 
@@ -72,18 +47,49 @@ export class TextureImage2D implements IDisposable {
 			if (!glTexture) throw new Error('can not create texture');
 			this.glTexture = glTexture;
 		}
+	
+	}
+	/*level: number = 0;
+	internalFormat: PixelFormat = PixelFormat.RGBA
+	width: number = 0;
+	height: number = 0;
+	pixelFormat: PixelFormat = PixelFormat.RGBA;
+	dataType: DataType = DataType.UnsignedByte;
+	wrapS: TextureWrap = TextureWrap.Repeat;
+	wrapT: TextureWrap = TextureWrap.Repeat;
+	magFilter: TextureFilter = TextureFilter.Linear;
+	minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
+	generateMipmaps: boolean = true;*/
+
+	update(texture: Texture): void {
+
+		if( ! texture.image ) throw new Error( "texture.image is null" );
+
+		this.target = TextureTarget.Texture2D;
+		this.level = 0;
+		this.internalFormat = texture.pixelFormat;
+		this.size = texture.size;
+		this.pixelFormat = texture.pixelFormat;
+		this.dataType = texture.dataType;
+		this.wrapS = texture.wrapS;
+		this.wrapT = texture.wrapT;
+		this.magFilter = texture.magFilter;
+		this.minFilter = texture.minFilter;
+		this.generateMipmaps = texture.generateMipmaps;
+
+		let gl = this.context.gl;
 
 		gl.bindTexture(this.target, this.glTexture);
 		gl.texImage2D(
 			this.target,
 			this.level,
 			this.internalFormat,
-			this.width,
-			this.height,
+			this.size.width,
+			this.size.height,
 			0,
 			this.internalFormat,
 			this.dataType,
-			this.pixelData,
+			texture.image
 		);
 
 		if (this.generateMipmaps) {
@@ -104,24 +110,21 @@ export class TextureImage2D implements IDisposable {
 		}
 	}
 
-	static FromTexture(context: Context, texture: Texture) {
-		if (!texture.image) throw new Error('texture.image is null');
+}
 
-		return new TextureImage2D(
+
+export class TextureImage2DPool extends Pool<Texture, TextureImage2D> {
+
+	constructor( context: Context ) {
+		super(
 			context,
-			TextureTarget.Texture2D,
-			0,
-			texture.pixelFormat,
-			texture.image.width,
-			texture.image.height,
-			texture.pixelFormat,
-			texture.dataType,
-			texture.wrapS,
-			texture.wrapT,
-			texture.magFilter,
-			texture.minFilter,
-			texture.generateMipmaps,
-			texture.image,
+			(context: Context, texture: Texture, textureImage2D: TextureImage2D | null) => {
+				if( ! textureImage2D ) {
+					textureImage2D = new TextureImage2D(context );				
+				}
+				textureImage2D.update( texture );
+				return textureImage2D;
+			},
 		);
 	}
 }

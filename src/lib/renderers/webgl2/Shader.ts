@@ -7,11 +7,7 @@
 
 import { Context } from './Context.js';
 import { IDisposable } from '../../interfaces/Standard.js';
-
-export enum ShaderType {
-	Vertex = WebGL2RenderingContext.VERTEX_SHADER,
-	Fragment = WebGL2RenderingContext.FRAGMENT_SHADER,
-}
+import { ShaderType } from '../../materials/ShaderType.js';
 
 export class Shader implements IDisposable {
 	disposed: boolean = false;

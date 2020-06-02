@@ -6,46 +6,51 @@
 //
 
 import {
-	IUpdateable,
 	IVersionable,
 	IDisposable,
 	IIdentifiable,
 } from '../interfaces/Standard';
+import { Context } from './webgl2/Context';
 
-export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
+export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable { }
 
-export interface IPoolResource<T> extends IDisposable, IUpdateable<T> {
-	resourceUserVersion: number;
-}
+export type UserResourceUpdater<U, R> = (context: Context, user: U, resource: R | null) => R;
 
-class UserResource<U extends IPoolUser, R extends IPoolResource<U>> {
+class UserResource<U extends IPoolUser, R extends IDisposable> {
 	user: U;
 	resource: R;
 	resourceVersion: number = -1;
-
+	
 	constructor(user: U, resource: R) {
 		this.user = user;
 		this.resource = resource;
 	}
 
-	refresh() {
-		if (this.user.disposed) {
-			this.resource.dispose();
-		} else if (this.resourceVersion < this.user.version) {
-			this.resource.update(this.user);
+	update( context: Context, updater: UserResourceUpdater<U, R>) {
+		let disposed = false;
+		if (this.resourceVersion < this.user.version) {
+			if (this.user.disposed) {
+				this.resource.dispose();
+				disposed = true;
+			}
+			else {
+				this.resource = updater(context, this.user, this.resource);
+			}
 			this.resourceVersion = this.user.version;
 		}
 
-		return this;
+		return disposed;
 	}
 }
 
-export class Pool<U extends IPoolUser, R extends IPoolResource<U>> {
+export class Pool<U extends IPoolUser, R extends IDisposable> {
+	context: Context;
+	updater: UserResourceUpdater<U, R>;
 	userResources: Array<UserResource<U, R>> = [];
-	createResource: (u: U) => R;
 
-	constructor(createResource: (u: U) => R) {
-		this.createResource = createResource;
+	constructor(context: Context, updater: UserResourceUpdater<U, R>) {
+		this.context = context;
+		this.updater = updater;
 	}
 
 	request(user: U) {
@@ -53,18 +58,28 @@ export class Pool<U extends IPoolUser, R extends IPoolResource<U>> {
 			(userResource) => userResource.user.uuid == user.uuid,
 		);
 		if (!userResource) {
-			userResource = new UserResource(user, this.createResource(user));
+			userResource = new UserResource(user, this.updater(this.context, user, null));
 			this.userResources.push(userResource);
 		}
 
 		return userResource;
 	}
 
-	refresh() {
+	update() {
+
+		let disposeCount = 0;
+
 		// update all
 		this.userResources.forEach((userResource) => {
-			userResource.refresh();
+			if (userResource.update( this.context, this.updater)) {
+				disposeCount++;
+			}
 		});
+
+		// TODO: should this be this frequent?
+		if (disposeCount > 0) {
+			this.garbageCollect();
+		}
 
 		return this;
 	}
