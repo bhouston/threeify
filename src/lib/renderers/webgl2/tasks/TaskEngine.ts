@@ -2,10 +2,10 @@ import { Context } from "../Context";
 import { Framebuffer } from "../Framebuffer";
 import { Node, depthFirstVisitor } from "../../../nodes/Node";
 import { Mesh } from "../../../nodes/Mesh";
-import { DrawTask } from "../tasks/DrawTask";
-import { ITask } from "../tasks/ITask";
+import { DrawTask } from "./DrawTask";
+import { ITask } from "./ITask";
 
-export class TestEngine {
+export class TaskEngine {
 
     context: Context;
 
