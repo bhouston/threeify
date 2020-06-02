@@ -6,10 +6,13 @@
 //
 
 import { BufferTarget } from './BufferTarget.js';
-import { IVersionable } from '../interfaces/Standard.js';
+import { IVersionable, IDisposable, IIdentifiable } from '../interfaces/Standard.js';
+import { generateUUID } from '../generateUuid.js';
 
-export class AttributeView implements IVersionable {
+export class AttributeView implements IIdentifiable, IVersionable, IDisposable {
+	uuid: string = generateUUID();
 	version: number = 0;
+	disposed: boolean = false;
 	arrayBuffer: ArrayBuffer;
 	byteOffset: number;
 	byteLength: number;
@@ -36,4 +39,10 @@ export class AttributeView implements IVersionable {
 	dirty() {
 		this.version++;
 	}
+
+	dispose() {
+		this.disposed = true;
+		this.dirty();
+	}
+
 }

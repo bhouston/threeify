@@ -73,6 +73,7 @@ export class Program implements IDisposable {
 	}
 
 	dispose() {
+		
 		this.vertexShader.dispose();
 		this.fragmentShader.dispose();
 

@@ -13,7 +13,7 @@ import { Context } from './Context.js';
 import { Texture } from '../../textures/Texture.js';
 import { TextureWrap } from '../../textures/TextureWrap.js';
 import { TextureFilter } from '../../textures/TextureFilter.js';
-import { IDisposable } from '../../interfaces/Standard.js';
+import { IDisposable, IUpdateable } from '../../interfaces/Standard.js';
 
 export class TextureImage2D implements IDisposable {
 	context: Context;

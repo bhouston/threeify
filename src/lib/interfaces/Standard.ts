@@ -21,6 +21,14 @@ export interface IDisposable {
 	dispose(): void;
 }
 
+export interface IIdentifiable {
+	uuid: string;
+}
+
+export interface IUpdateable<T> {
+	update(t:T): void;
+}
+
 export interface IVersionable {
 	version: number;
 

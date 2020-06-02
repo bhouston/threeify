@@ -9,8 +9,13 @@ import { TextureWrap } from './TextureWrap.js';
 import { TextureFilter } from './TextureFilter.js';
 import { PixelFormat } from './PixelFormat.js';
 import { DataType } from './DataType.js';
+import { IVersionable, IDisposable, IIdentifiable } from '../interfaces/Standard.js';
+import { generateUUID } from '../generateUuid.js';
 
-export class Texture {
+export class Texture implements IIdentifiable, IVersionable, IDisposable {
+	uuid: string = generateUUID();
+	version: number = 0;
+	disposed: boolean = false;
 	name: string = '';
 	image: HTMLImageElement | null;
 	wrapS: TextureWrap;
@@ -54,5 +59,14 @@ export class Texture {
 		this.pixelFormat = source.pixelFormat;
 		this.dataType = source.dataType;
 		this.anisotropyLevels = source.anisotropyLevels;
+	}
+
+	dirty() {
+		this.version++;
+	}
+
+	dispose() {
+		this.disposed = true;
+		this.dirty();
 	}
 }
