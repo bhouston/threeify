@@ -9,13 +9,17 @@ import { Vector3 } from '../math/Vector3.js';
 import { Quaternion } from '../math/Quaternion.js';
 import { Matrix4 } from '../math/Matrix4.js';
 import { Euler } from '../math/Euler.js';
-import { IDisposable, IVersionable, IIdentifiable } from '../interfaces/Standard.js';
+import {
+	IDisposable,
+	IVersionable,
+	IIdentifiable,
+} from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
+	disposed: boolean = false;
 	uuid: string = generateUUID();
 	version: number = 0;
-	disposed: boolean = false;
 	name: string = '';
 	position: Vector3 = new Vector3(0, 0, 0);
 	rotation: Euler = new Euler();
@@ -29,8 +33,10 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	}
 
 	dispose() {
-		this.disposed = true;
-		this.dirty();
+		if( ! this.disposed ) {
+			this.disposed = true;
+			this.dirty();
+		}
 	}
 
 	copy(source: Node) {

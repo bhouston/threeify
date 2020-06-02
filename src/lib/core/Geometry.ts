@@ -6,7 +6,7 @@
 //
 
 import { AttributeAccessor } from './AttributeAccessor.js';
-import { IVersionable } from '../interfaces/Standard.js';
+import { IVersionable, IDisposable } from '../interfaces/Standard.js';
 
 class NamedAttributeAccessor {
 	name: string;
@@ -18,7 +18,8 @@ class NamedAttributeAccessor {
 	}
 }
 
-export class Geometry implements IVersionable {
+export class Geometry implements IVersionable, IDisposable {
+	disposed: boolean = false;
 	version: number = 0;
 	indices: AttributeAccessor | null = null;
 	namedAttributeAccessors: NamedAttributeAccessor[] = [];
@@ -27,6 +28,17 @@ export class Geometry implements IVersionable {
 
 	dirty() {
 		this.version++;
+	}
+
+	dispose() {
+		if( ! this.disposed ) {
+			// reaching deep to dispose of all attribute views, but technically they may be reused with other geometries.
+			this.namedAttributeAccessors.forEach( namedAttributeAccessor => {
+				namedAttributeAccessor.attributeAccessor.attributeView.dispose();
+			})
+			this.disposed = true;
+			this.dirty();
+		}
 	}
 
 	setIndices(indices: AttributeAccessor) {

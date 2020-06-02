@@ -4,6 +4,7 @@ import { BufferUsage } from './BufferUsage.js';
 import { IDisposable } from '../../interfaces/Standard.js';
 
 export class Buffer implements IDisposable {
+	disposed: boolean = false;
 	context: Context;
 	target: BufferTarget;
 	usage: BufferUsage;
@@ -37,6 +38,9 @@ export class Buffer implements IDisposable {
 	}
 
 	dispose() {
-		this.context.gl.deleteBuffer(this.glBuffer);
+		if( ! this.disposed ) {
+			this.context.gl.deleteBuffer(this.glBuffer);
+			this.disposed = true;
+		}
 	}
 }

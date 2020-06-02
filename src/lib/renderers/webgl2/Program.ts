@@ -13,6 +13,7 @@ import { ProgramAttribute } from './ProgramAttribute.js';
 import { IDisposable } from '../../interfaces/Standard.js';
 
 export class Program implements IDisposable {
+	disposed: boolean = false;
 	context: Context;
 	vertexShader: Shader;
 	fragmentShader: Shader;
@@ -73,10 +74,12 @@ export class Program implements IDisposable {
 	}
 
 	dispose() {
-		
-		this.vertexShader.dispose();
-		this.fragmentShader.dispose();
+		if( ! this.disposed ) {
+			this.vertexShader.dispose();
+			this.fragmentShader.dispose();
 
-		this.context.gl.deleteProgram(this.glProgram);
+			this.context.gl.deleteProgram(this.glProgram);
+			this.disposed = true;
+		}
 	}
 }

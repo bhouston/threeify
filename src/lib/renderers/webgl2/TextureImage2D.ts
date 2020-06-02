@@ -16,6 +16,7 @@ import { TextureFilter } from '../../textures/TextureFilter.js';
 import { IDisposable, IUpdateable } from '../../interfaces/Standard.js';
 
 export class TextureImage2D implements IDisposable {
+	disposed: boolean = false;
 	context: Context;
 	target: TextureTarget;
 	level: number;
@@ -97,7 +98,10 @@ export class TextureImage2D implements IDisposable {
 	}
 
 	dispose() {
-		this.context.gl.deleteTexture(this.glTexture);
+		if( ! this.disposed ) {
+			this.context.gl.deleteTexture(this.glTexture);
+			this.disposed = true;
+		}
 	}
 
 	static FromTexture(context: Context, texture: Texture) {

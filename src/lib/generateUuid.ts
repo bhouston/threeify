@@ -22,4 +22,4 @@ export function generateUUID() {
     // .toUpperCase() here flattens concatenated strings to save heap memory space.
     return uuid.toUpperCase();
 
-},
+}

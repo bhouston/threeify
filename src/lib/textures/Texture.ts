@@ -9,13 +9,17 @@ import { TextureWrap } from './TextureWrap.js';
 import { TextureFilter } from './TextureFilter.js';
 import { PixelFormat } from './PixelFormat.js';
 import { DataType } from './DataType.js';
-import { IVersionable, IDisposable, IIdentifiable } from '../interfaces/Standard.js';
+import {
+	IVersionable,
+	IDisposable,
+	IIdentifiable,
+} from '../interfaces/Standard.js';
 import { generateUUID } from '../generateUuid.js';
 
 export class Texture implements IIdentifiable, IVersionable, IDisposable {
+	disposed: boolean = false;
 	uuid: string = generateUUID();
 	version: number = 0;
-	disposed: boolean = false;
 	name: string = '';
 	image: HTMLImageElement | null;
 	wrapS: TextureWrap;
@@ -66,7 +70,9 @@ export class Texture implements IIdentifiable, IVersionable, IDisposable {
 	}
 
 	dispose() {
-		this.disposed = true;
-		this.dirty();
+		if( ! this.disposed ) {
+			this.disposed = true;
+			this.dirty();
+		}
 	}
 }

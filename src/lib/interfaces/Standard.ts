@@ -18,6 +18,7 @@ export interface IEquatable<T> {
 }
 
 export interface IDisposable {
+	disposed: boolean;
 	dispose(): void;
 }
 
@@ -26,11 +27,10 @@ export interface IIdentifiable {
 }
 
 export interface IUpdateable<T> {
-	update(t:T): void;
+	update(t: T): void;
 }
 
 export interface IVersionable {
 	version: number;
-
 	dirty(): void;
 }

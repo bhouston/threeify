@@ -14,6 +14,7 @@ export enum ShaderType {
 }
 
 export class Shader implements IDisposable {
+	disposed: boolean = false;
 	context: Context;
 	sourceCode: string;
 	shaderType: ShaderType;
@@ -52,6 +53,9 @@ export class Shader implements IDisposable {
 	}
 
 	dispose() {
-		this.context.gl.deleteShader(this.glShader);
+		if( ! this.disposed ) {
+			this.context.gl.deleteShader(this.glShader);
+			this.disposed = true;
+		}
 	}
 }
