@@ -1,4 +1,4 @@
-# three.ts
+# Threeify
 
 A Typescript 3D Library loosely based on Three.js
 

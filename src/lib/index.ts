@@ -120,7 +120,6 @@ async function test() {
 	geometry.setAttribute('position', positionAccessor);
 	geometry.setAttribute('normal', normalAccessor);
 	geometry.setAttribute('uv', uvAccessor);
-
 	console.log(geometry);
 
 	// setup webgl2
@@ -130,40 +129,32 @@ async function test() {
 	let context = new Context(canvasElement);
 
 	// upload to GPU
-
 	let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
 		context,
 		geometry,
 	);
-
 	console.log(vertexAttributeGeometry);
 
-	// source code definition of material
-	let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
-
-	console.log(shaderCodeMaterial);
-
-	// load material into gpu
-
-	let program = new Program( context, shaderCodeMaterial );
-
-	console.log(program);
-
-	// bind to program
-	let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
-
-	console.log(vertexArrayObject);
-
 	let myBoxGeometry = boxGeometry(10, 2, 3, 5, 5, 5);
-
 	console.log(myBoxGeometry);
 
 	let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
 		context,
 		myBoxGeometry,
 	);
-
 	console.log(boxVertexAttributeGeometry);
+
+	// source code definition of material
+	let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
+	console.log(shaderCodeMaterial);
+
+	let program = new Program( context, shaderCodeMaterial );
+	console.log(program);
+
+	// bind to program
+	let vertexArrayObject = new VertexArrayObject(program, vertexAttributeGeometry);
+	console.log(vertexArrayObject);
+
 
 	let image = await fetchImage( './exocortex-logo.jpg' );
 
@@ -172,15 +163,16 @@ async function test() {
 
 	let textureImage2D = new TextureImage2D( context );
 	textureImage2D.update( texture );
-
 	console.log(textureImage2D);
 
-	let light = new PointLight();
-	let mesh = new Mesh(myBoxGeometry);
 	let node = new Node();
-	node.children.push(light);
-	node.children.push(mesh);
+	console.log(node);
 
+	let light = new PointLight();
+	node.children.push(light);
+
+	let mesh = new Mesh(myBoxGeometry);
+	node.children.push(mesh);
 }
 
 test();
