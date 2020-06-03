@@ -7,6 +7,7 @@
 
 import { Matrix4 } from 'Matrix4.js';
 import { IPrimitive } from './IPrimitive.js';
+import { hashFloat3 } from '../hash.js';
 
 export class Vector3 implements IPrimitive<Vector3> {
 	x: number;
@@ -41,11 +42,7 @@ export class Vector3 implements IPrimitive<Vector3> {
 	}
 
 	getHashCode() {
-		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L718
-		let hash = this.x | 0;
-		hash = (hash * 397) ^ (this.y | 0);
-		hash = (hash * 397) ^ (this.z | 0);
-		return hash;
+		return hashFloat3( this.x, this.y, this.z );
 	}
 
 	clone() {

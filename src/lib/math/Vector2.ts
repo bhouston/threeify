@@ -6,6 +6,7 @@
 //
 
 import { IPrimitive } from './IPrimitive.js';
+import { hashFloat2 } from '../hash.js';
 
 export class Vector2 implements IPrimitive<Vector2> {
 	x: number;
@@ -30,11 +31,8 @@ export class Vector2 implements IPrimitive<Vector2> {
 		this.y = height;
 	}
 
-	getHashCode() {
-		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L42
-		let hash = this.x | 0;
-		hash = (hash * 397) ^ (this.y | 0);
-		return hash;
+	getHashCode() {		
+		return hashFloat2( this.x, this.y );
 	}
 
 	clone() {
