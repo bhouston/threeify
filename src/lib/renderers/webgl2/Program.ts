@@ -44,7 +44,7 @@ export class Program implements IDisposable {
 
 		// create a program.
 		{
-			var glProgram = gl.createProgram();
+			let glProgram = gl.createProgram();
 			if (!glProgram) {
 				throw new Error('could not create program');
 			}
@@ -59,7 +59,7 @@ export class Program implements IDisposable {
 		gl.linkProgram(this.glProgram);
 
 		// Check if it linked.
-		var success = gl.getProgramParameter(this.glProgram, gl.LINK_STATUS);
+		let success = gl.getProgramParameter(this.glProgram, gl.LINK_STATUS);
 		if (!success) {
 			// something went wrong with the link
 			throw new Error(
@@ -67,19 +67,19 @@ export class Program implements IDisposable {
 			);
 		}
 
-		var numActiveUniforms = gl.getProgramParameter(
+		let numActiveUniforms = gl.getProgramParameter(
 			this.glProgram,
 			gl.ACTIVE_UNIFORMS,
 		);
-		for (var i = 0; i < numActiveUniforms; ++i) {
+		for (let i = 0; i < numActiveUniforms; ++i) {
 			this.uniforms.push(new ProgramUniform(this, i));
 		}
 
-		var numActiveAttributes = gl.getProgramParameter(
+		let numActiveAttributes = gl.getProgramParameter(
 			this.glProgram,
 			gl.ACTIVE_ATTRIBUTES,
 		);
-		for (var i = 0; i < numActiveAttributes; ++i) {
+		for (let i = 0; i < numActiveAttributes; ++i) {
 			this.attributes.push(new ProgramAttribute(this, i));
 		}
 	}

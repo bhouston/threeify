@@ -90,7 +90,7 @@ export class Box2 {
 	}
 
 	distanceToPoint(point: Vector2) {
-		var clampedPoint = new Vector2().copy(point).clamp(this.min, this.max);
+		let clampedPoint = new Vector2().copy(point).clamp(this.min, this.max);
 		return clampedPoint.sub(point).length();
 	}
 

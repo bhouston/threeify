@@ -58,14 +58,14 @@ export class Euler implements IPrimitive<Euler> {
 
 		// assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-		var te = m.elements;
-		var m11 = te[0],
+		let te = m.elements;
+		let m11 = te[0],
 			m12 = te[4],
 			m13 = te[8];
-		var m21 = te[1],
+		let m21 = te[1],
 			m22 = te[5],
 			m23 = te[9];
-		var m31 = te[2],
+		let m31 = te[2],
 			m32 = te[6],
 			m33 = te[10];
 
@@ -159,7 +159,7 @@ export class Euler implements IPrimitive<Euler> {
 	}
 
 	setFromQuaternion(q: Quaternion, order: EulerOrder = this.order) {
-		var m = new Matrix4().makeRotationFromQuaternion(q);
+		let m = new Matrix4().makeRotationFromQuaternion(q);
 
 		return this.setFromRotationMatrix4(m, this.order);
 	}
@@ -173,17 +173,17 @@ export class Euler implements IPrimitive<Euler> {
 		);
 	}
 
-	setFromArray( floatArray: Float32Array, offset: number ) {
-		this.x = floatArray[offset+0];
-		this.y = floatArray[offset+1];
-		this.z = floatArray[offset+2];
-		this.order = floatArray[offset+3] as EulerOrder;
+	setFromArray(floatArray: Float32Array, offset: number) {
+		this.x = floatArray[offset + 0];
+		this.y = floatArray[offset + 1];
+		this.z = floatArray[offset + 2];
+		this.order = floatArray[offset + 3] as EulerOrder;
 	}
-	
-	toArray( floatArray: Float32Array, offset: number ) {
-		floatArray[offset+0] = this.x;
-		floatArray[offset+1] = this.y;
-		floatArray[offset+2] = this.z;
-		floatArray[offset+3] = this.order as number;
+
+	toArray(floatArray: Float32Array, offset: number) {
+		floatArray[offset + 0] = this.x;
+		floatArray[offset + 1] = this.y;
+		floatArray[offset + 2] = this.z;
+		floatArray[offset + 3] = this.order as number;
 	}
 }

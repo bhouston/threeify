@@ -22,7 +22,7 @@ export class VertexArrayObject {
 
 		{
 			// Create a vertex array object (attribute state)
-			var vao = gl.createVertexArray();
+			let vao = gl.createVertexArray();
 			if (!vao) {
 				throw new Error('can not create vertex array object');
 			}

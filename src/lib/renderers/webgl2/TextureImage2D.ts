@@ -41,7 +41,7 @@ export class TextureImage2D implements IDisposable {
 
 		// Create a texture.
 		{
-			var glTexture = gl.createTexture();
+			let glTexture = gl.createTexture();
 			if (!glTexture) throw new Error('can not create texture');
 			this.glTexture = glTexture;
 		}

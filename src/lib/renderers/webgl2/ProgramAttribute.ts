@@ -33,7 +33,7 @@ export class ProgramAttribute {
 			this.size = activeInfo.size;
 			this.type = activeInfo.type;
 
-			var glLocation = gl.getAttribLocation(program.glProgram, this.name);
+			let glLocation = gl.getAttribLocation(program.glProgram, this.name);
 			if (glLocation < 0) {
 				throw new Error('Can not find attribute named: ' + this.name);
 			}

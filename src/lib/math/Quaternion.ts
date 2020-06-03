@@ -104,7 +104,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 	}
 
 	normalize() {
-		var l = this.length();
+		let l = this.length();
 
 		if (l === 0) {
 			this.x = 0;
@@ -260,11 +260,11 @@ export class Quaternion implements IPrimitive<Quaternion> {
 	multiplyQuaternion(q: Quaternion) {
 		// from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
 
-		var qax = this.x,
+		let qax = this.x,
 			qay = this.y,
 			qaz = this.z,
 			qaw = this.w;
-		var qbx = q.x,
+		let qbx = q.x,
 			qby = q.y,
 			qbz = q.z,
 			qbw = q.w;
@@ -281,7 +281,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		if (t === 0) return this;
 		if (t === 1) return this.copy(qb);
 
-		var x = this.x,
+		let x = this.x,
 			y = this.y,
 			z = this.z,
 			w = this.w;
@@ -289,7 +289,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		// http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
 		// TODO, allocate x, y, z, w and only set this.* at the end.
 
-		var cosHalfTheta = w * qb.w + x * qb.x + y * qb.y + z * qb.z;
+		let cosHalfTheta = w * qb.w + x * qb.x + y * qb.y + z * qb.z;
 
 		if (cosHalfTheta < 0) {
 			this.w = -qb.w;
@@ -311,10 +311,10 @@ export class Quaternion implements IPrimitive<Quaternion> {
 			return this;
 		}
 
-		var sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
+		let sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
 
 		if (sqrSinHalfTheta <= Number.EPSILON) {
-			var s = 1 - t;
+			let s = 1 - t;
 			this.w = s * w + t * this.w;
 			this.x = s * x + t * this.x;
 			this.y = s * y + t * this.y;
@@ -325,9 +325,9 @@ export class Quaternion implements IPrimitive<Quaternion> {
 			return this;
 		}
 
-		var sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
-		var halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
-		var ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta,
+		let sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
+		let halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
+		let ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta,
 			ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
 
 		this.w = w * ratioA + this.w * ratioB;

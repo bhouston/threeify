@@ -39,7 +39,7 @@ export class Shader implements IDisposable {
 		gl.compileShader(this.glShader);
 
 		// Check if it compiled
-		var success = gl.getShaderParameter(this.glShader, gl.COMPILE_STATUS);
+		let success = gl.getShaderParameter(this.glShader, gl.COMPILE_STATUS);
 		if (!success) {
 			// Something went wrong during compilation; get the error
 			throw new Error(

@@ -19,8 +19,8 @@ export class TaskEngine {
 			if (node instanceof Mesh) {
 				let mesh = node as Mesh;
 				let geometry = mesh.geometry;
-				/*var bufferGeometry = context.bufferGeometryPool.request( mesh.geometry );
-                var program = context.materialPool.request( node.material );
+				/*let bufferGeometry = context.bufferGeometryPool.request( mesh.geometry );
+                let program = context.materialPool.request( node.material );
                 tasks.push( new DrawTask( program, bufferGeometry, uniforms, geometry.primitiveType, 0, geometry.indices.count ) );
                 */
 			}

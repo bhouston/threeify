@@ -46,7 +46,7 @@ export class VertexAttributeGeometry {
 	}
 
 	static FromGeometry(context: Context, geometry: Geometry) {
-		var vertexAttributeGeometry = new VertexAttributeGeometry();
+		let vertexAttributeGeometry = new VertexAttributeGeometry();
 
 		if (geometry.indices) {
 			vertexAttributeGeometry.setIndices(

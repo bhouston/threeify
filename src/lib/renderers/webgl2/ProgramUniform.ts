@@ -65,7 +65,7 @@ export class ProgramUniform {
 			this.size = activeInfo.size;
 			this.uniformType = activeInfo.type as UniformType;
 
-			var glLocation = gl.getUniformLocation(program.glProgram, this.name);
+			let glLocation = gl.getUniformLocation(program.glProgram, this.name);
 			if (!glLocation) {
 				throw new Error('Can not find uniform named: ' + this.name);
 			}

@@ -57,7 +57,7 @@ async function test() {
 	}
 	`;
 
-	var fs = `#version 300 es
+	let fs = `#version 300 es
 
 	precision highp float;
 
@@ -163,12 +163,11 @@ async function test() {
 		emissive: Color = new Color(1, 1, 1);
 		normalFactor: number = 1.0;
 	}
-	var pbrMaterialUniforms = new PBRMaterialUniforms();
+	let pbrMaterialUniforms = new PBRMaterialUniforms();
 	program.setUniformValues( pbrMaterialUniforms );
 
-
 	// using uniform sets just from maps
-	var unstructuredUniforms = {
+	let unstructuredUniforms = {
 		albedo: new Color(1, 1, 1),
 		roughness: 0.5,
 		metalness: 0.0,
