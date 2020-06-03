@@ -84,8 +84,10 @@ export class Program implements IDisposable {
 		}
 	}
 
-	setUniformValues(uniformValues: any) {
-		const uniformNames = Object.keys(uniformValues) as Array<keyof string>;
+	setUniformValues(uniformValues: any, uniformNames: string[] | null = null ) {
+		if( ! uniformNames ) {
+			uniformNames = Object.keys(uniformValues) as string[];
+		}
 		uniformNames.forEach( uniformName => {
 			let programUniform = this.uniforms.find( uniform => uniform.name == uniformName );
 			if( programUniform ) {
