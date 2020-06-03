@@ -40,6 +40,14 @@ export class Vector3 implements IPrimitive<Vector3> {
 		this.z = depth;
 	}
 
+	get hashCode() {
+		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L718
+		let hash = this.x | 0;
+        hash = (hash * 397) ^ (this.y | 0);
+        hash = (hash * 397) ^ (this.z | 0);
+        return hash;
+	}
+
 	clone() {
 		return new Vector3().copy(this);
 	}

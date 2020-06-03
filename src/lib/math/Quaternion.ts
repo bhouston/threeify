@@ -23,6 +23,15 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		this.w = w;
 	}
 
+	get hashCode() {
+		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L2731
+        let hash = this.x | 0;
+        hash = (hash * 397) ^ (this.y | 0);
+        hash = (hash * 397) ^ (this.z | 0);
+        hash = (hash * 397) ^ (this.w | 0);
+        return hash;
+	}
+
 	clone() {
 		return new Quaternion().copy(this);
 	}

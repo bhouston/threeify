@@ -28,6 +28,14 @@ export class Color implements IPrimitive<Color> {
 		this.b = b;
 	}
 
+	get hashCode() {
+		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.color.ts#L53
+        let hash = (this.r * 255) | 0;
+        hash = (hash * 397) ^ ((this.g * 255) | 0);
+        hash = (hash * 397) ^ ((this.b * 255) | 0);
+        return hash;
+	}
+
 	clone() {
 		return new Color().copy(this);
 	}

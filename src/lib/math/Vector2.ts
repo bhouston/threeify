@@ -30,6 +30,13 @@ export class Vector2 implements IPrimitive<Vector2> {
 		this.y = height;
 	}
 
+	get hashCode() {
+		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L42
+		let hash = this.x | 0;
+        hash = (hash * 397) ^ (this.y | 0);
+		return hash;
+	}
+
 	clone() {
 		return new Vector2().copy(this);
 	}

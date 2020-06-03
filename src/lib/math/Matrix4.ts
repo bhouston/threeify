@@ -15,6 +15,15 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 
 	constructor() {}
 
+	get hashCode() {
+		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L4017
+        let hash = this.elements[0] | 0;
+        for (let i = 1; i < 16; i++) {
+            hash = (hash * 397) ^ (this.elements[i] | 0);
+        }
+        return hash;
+	}
+
 	set(
 		n11: number,
 		n12: number,
