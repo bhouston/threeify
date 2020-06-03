@@ -1,12 +1,11 @@
 //
-// OpenGL-compatible texture constants
+// OpenGL-compatible depth test
 //
 // Authors:
 // * @bhouston
 //
 
 const GL = WebGLRenderingContext;
-const GL2 = WebGL2RenderingContext;
 
 export enum DepthTestFunc {
 	Never = GL.NEVER, // never pass
@@ -19,7 +18,7 @@ export enum DepthTestFunc {
 	Always = GL.ALWAYS, //always pass
 }
 
-export class DepthTest {
+export class DepthTestState {
 	enabled: boolean = true;
 	func: DepthTestFunc = DepthTestFunc.Less;
 }

@@ -13,7 +13,9 @@ import { Box2 } from '../../math/Box2.js';
 import { Vector3 } from '../../math/Vector3.js';
 import { Vector2 } from '../../math/Vector2.js';
 import { Blend } from './Blend.js';
-import { DepthTest } from './DepthTest.js';
+import { DepthTest, DepthTestState } from './DepthTest.js';
+import { Clear, ClearState } from './Clear.js';
+import { MaskState } from './Mask.js';
 
 const GL = WebGLRenderingContext;
 const GL2 = WebGL2RenderingContext;
@@ -103,17 +105,45 @@ export class Context {
 		this.cachedBlend = blend;
 	}
 
-	private cachedDepthTest: DepthTest = new DepthTest();
-	get depthTest(): DepthTest {
-		return this.cachedDepthTest;
+	private cachedDepthTestState: DepthTestState = new DepthTestState();
+	get depthTestState(): DepthTestState {
+		return this.cachedDepthTestState;
 	}
-	set depthTest(depthTest: DepthTest) {
-		if (depthTest.enabled) {
+	set depthTestState(depthTestState: DepthTestState) {
+		if (depthTestState.enabled) {
 			this.gl.enable(GL.DEPTH_TEST);
 		} else {
 			this.gl.disable(GL.DEPTH_TEST);
 		}
-		this.gl.depthFunc(depthTest.func);
-		this.cachedDepthTest = depthTest;
+		this.gl.depthFunc(depthTestState.func);
+		this.cachedDepthTestState = depthTestState;
 	}
+
+	private cachedClearState: ClearState = new ClearState();
+	get clearState(): ClearState {
+		return this.cachedClearState;
+	}
+	set clearState(clearState: ClearState) {
+		this.gl.clearColor(clearState.color.r, clearState.color.g, clearState.color.b, clearState.alpha);
+		this.gl.clearDepth(clearState.depth);
+		this.gl.clearStencil(clearState.stencil);
+		this.cachedClearState = clearState;
+	}
+
+	private cachedMaskState: MaskState = new MaskState();
+	get maskState(): MaskState {
+		return this.cachedMaskState;
+	}
+	set maskState(maskState: MaskState) {
+		this.gl.colorMask(maskState.red, maskState.green, maskState.blue, maskState.alpha);
+		this.gl.depthMask(maskState.depth);
+		this.gl.stencilMask(maskState.stencil);
+		this.cachedMaskState = maskState;
+	}
+
+
+// gl.colorMask(true, true, true, false);
+//void gl.depthMask(flag); // boolean
+//gl.stencilMask(mask);
+
 }

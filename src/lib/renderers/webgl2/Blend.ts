@@ -1,12 +1,11 @@
 //
-// OpenGL-compatible texture constants
+// OpenGL-compatible depth state
 //
 // Authors:
 // * @bhouston
 //
 
 const GL = WebGLRenderingContext;
-const GL2 = WebGL2RenderingContext;
 
 export enum BlendEquation {
 	Add = GL.FUNC_ADD, // source + destination
@@ -32,7 +31,7 @@ export enum BlendFunc {
 	SourceAlphaSaturate = GL.SRC_ALPHA_SATURATE, // Multiplies the RGB colors by the smaller of either the source alpha value or the value of 1 minus the destination alpha value. The alpha value is multiplied by 1.
 }
 
-export class Blend {
+export class BlendState {
 	enabled: boolean = true;
 	equation: BlendEquation = BlendEquation.Add;
 	sourceFactor: BlendFunc = BlendFunc.One;
