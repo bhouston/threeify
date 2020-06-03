@@ -22,7 +22,7 @@ export class Geometry implements IVersionable, IDisposable {
 	disposed: boolean = false;
 	version: number = 0;
 	indices: AttributeAccessor | null = null;
-	namedAttributeAccessors: NamedAttributeAccessor[] = [];
+	namedAttributeAccessors: NamedAttributeAccessor[] = []; // TODO replace with a map for faster access
 
 	constructor() {}
 
@@ -46,7 +46,7 @@ export class Geometry implements IVersionable, IDisposable {
 	}
 
 	setAttribute(name: string, attributeAccessor: AttributeAccessor) {
-		// TODO: Figure out how to do this more efficiently and less verbosely.
+		// TODO this.namedAttributeAccessors replace with a map for faster access
 		let namedAttributeAccessor = this.namedAttributeAccessors.find(
 			(item) => item.name === name,
 		);
@@ -60,6 +60,7 @@ export class Geometry implements IVersionable, IDisposable {
 	}
 
 	findAttribute(name: string): AttributeAccessor | null {
+		// TODO this.namedAttributeAccessors replace with a map for faster access
 		let namedAttributeAccessor = this.namedAttributeAccessors.find(
 			(item) => item.name === name,
 		);

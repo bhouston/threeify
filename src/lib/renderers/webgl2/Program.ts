@@ -21,8 +21,8 @@ export class Program implements IDisposable {
 	vertexShader: Shader;
 	fragmentShader: Shader;
 	glProgram: WebGLProgram;
-	uniforms: Array<ProgramUniform> = [];
-	attributes: Array<ProgramAttribute> = [];
+	uniforms: Array<ProgramUniform> = []; // TODO replace with a map for faster access
+	attributes: Array<ProgramAttribute> = []; // TODO replace with a map for faster access
 
 	// attributes (required attribute buffers)
 	// varying (per instance parameters)
@@ -88,7 +88,8 @@ export class Program implements IDisposable {
 		if( ! uniformNames ) {
 			uniformNames = Object.keys(uniformValues) as string[];
 		}
-		uniformNames.forEach( uniformName => {
+		uniformNames.forEach( uniformName => {			
+			// TODO replace this.uniforms with a map for faster access
 			let programUniform = this.uniforms.find( uniform => uniform.name == uniformName );
 			if( programUniform ) {
 				programUniform.set( uniformValues[ uniformName ] );

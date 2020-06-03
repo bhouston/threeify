@@ -22,7 +22,8 @@ class NamedVertexAttribute {
 
 export class VertexAttributeGeometry {
 	indices: VertexAttribute | null = null;
-	namedVertexAttributes: NamedVertexAttribute[] = [];
+	namedVertexAttributes: NamedVertexAttribute[] = []; // TODO replace with a map for faster access
+
 
 	constructor() {}
 
@@ -31,7 +32,7 @@ export class VertexAttributeGeometry {
 	}
 
 	setAttribute(name: string, vertexAttribute: VertexAttribute) {
-		// TODO: Figure out how to do this more efficiently and less verbosely.
+		// TODO this.namedVertexAttributes replace with a map for faster access
 		let namedVertexAttribute = this.namedVertexAttributes.find(
 			(item) => item.name === name,
 		);
