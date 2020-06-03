@@ -5,7 +5,9 @@
 // * @bhouston
 //
 
-export class MaskState {
+import { ICloneable } from "../../interfaces/Standard";
+
+export class MaskState implements ICloneable<MaskState> {
 	red: boolean;
 	green: boolean;
 	blue: boolean;

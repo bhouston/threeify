@@ -5,6 +5,8 @@
 // * @bhouston
 //
 
+import { ICloneable } from "../../interfaces/Standard";
+
 const GL = WebGLRenderingContext;
 
 export enum DepthTestFunc {
@@ -18,7 +20,7 @@ export enum DepthTestFunc {
 	Always = GL.ALWAYS, //always pass
 }
 
-export class DepthTestState {
+export class DepthTestState implements ICloneable<DepthTestState>  {
 	enabled: boolean;
 	func: DepthTestFunc;
 

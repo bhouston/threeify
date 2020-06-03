@@ -6,8 +6,9 @@
 //
 
 import { Color } from '../../math/Color.js';
+import { ICloneable } from '../../interfaces/Standard.js';
 
-export class ClearState {
+export class ClearState implements ICloneable<ClearState> {
 	color: Color;
 	alpha: number;
 	depth: number; // float

@@ -5,6 +5,8 @@
 // * @bhouston
 //
 
+import { ICloneable } from "../../interfaces/Standard";
+
 const GL = WebGLRenderingContext;
 
 export enum BlendEquation {
@@ -31,7 +33,7 @@ export enum BlendFunc {
 	SourceAlphaSaturate = GL.SRC_ALPHA_SATURATE, // Multiplies the RGB colors by the smaller of either the source alpha value or the value of 1 minus the destination alpha value. The alpha value is multiplied by 1.
 }
 
-export class BlendState {
+export class BlendState implements ICloneable<BlendState> {
 	enabled: boolean;
 	equation: BlendEquation;
 	sourceFactor: BlendFunc;
