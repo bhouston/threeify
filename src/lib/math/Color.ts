@@ -30,10 +30,10 @@ export class Color implements IPrimitive<Color> {
 
 	get hashCode() {
 		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.color.ts#L53
-        let hash = (this.r * 255) | 0;
-        hash = (hash * 397) ^ ((this.g * 255) | 0);
-        hash = (hash * 397) ^ ((this.b * 255) | 0);
-        return hash;
+		let hash = (this.r * 255) | 0;
+		hash = (hash * 397) ^ ((this.g * 255) | 0);
+		hash = (hash * 397) ^ ((this.b * 255) | 0);
+		return hash;
 	}
 
 	clone() {
@@ -131,15 +131,15 @@ export class Color implements IPrimitive<Color> {
 		return c.r === this.r && c.g === this.g && c.b === this.b;
 	}
 
-	setFromArray( floatArray: Float32Array, offset: number ) {
-		this.r = floatArray[offset+0];
-		this.g = floatArray[offset+1];
-		this.b = floatArray[offset+2];
+	setFromArray(floatArray: Float32Array, offset: number) {
+		this.r = floatArray[offset + 0];
+		this.g = floatArray[offset + 1];
+		this.b = floatArray[offset + 2];
 	}
-	
-	toArray( floatArray: Float32Array, offset: number ) {
-		floatArray[offset+0] = this.r;
-		floatArray[offset+1] = this.g;
-		floatArray[offset+2] = this.b;
+
+	toArray(floatArray: Float32Array, offset: number) {
+		floatArray[offset + 0] = this.r;
+		floatArray[offset + 1] = this.g;
+		floatArray[offset + 2] = this.b;
 	}
 }

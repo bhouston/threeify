@@ -24,7 +24,6 @@ export class VertexAttributeGeometry {
 	indices: VertexAttribute | null = null;
 	namedVertexAttributes: NamedVertexAttribute[] = []; // TODO replace with a map for faster access
 
-
 	constructor() {}
 
 	setIndices(indices: VertexAttribute) {

@@ -164,7 +164,7 @@ async function test() {
 		normalFactor: number = 1.0;
 	}
 	let pbrMaterialUniforms = new PBRMaterialUniforms();
-	program.setUniformValues( pbrMaterialUniforms );
+	program.setUniformValues(pbrMaterialUniforms);
 
 	// using uniform sets just from maps
 	let unstructuredUniforms = {
@@ -172,9 +172,9 @@ async function test() {
 		roughness: 0.5,
 		metalness: 0.0,
 		emissive: new Color(1, 1, 1),
-		normalFactor: 1.0
-	}
-	program.setUniformValues( unstructuredUniforms );
+		normalFactor: 1.0,
+	};
+	program.setUniformValues(unstructuredUniforms);
 
 	// bind to program
 	let vertexArrayObject = new VertexArrayObject(

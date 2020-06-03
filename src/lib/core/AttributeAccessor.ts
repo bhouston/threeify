@@ -33,8 +33,7 @@ export class AttributeAccessor {
 		let bytesPerComponent = componentTypeSizeOf(this.componentType);
 		this.count =
 			count < 0 ? attributeView.byteLength / bytesPerComponent : count;
-		this.byteLength =
-			bytesPerComponent * this.componentsPerVertex * this.count;
+		this.byteLength = bytesPerComponent * this.componentsPerVertex * this.count;
 		//this.minExtent = minExtent;
 		//this.maxExtent = maxExtent;
 	}

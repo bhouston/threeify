@@ -33,7 +33,7 @@ export class Vector2 implements IPrimitive<Vector2> {
 	get hashCode() {
 		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L42
 		let hash = this.x | 0;
-        hash = (hash * 397) ^ (this.y | 0);
+		hash = (hash * 397) ^ (this.y | 0);
 		return hash;
 	}
 
@@ -127,14 +127,13 @@ export class Vector2 implements IPrimitive<Vector2> {
 		return v.x === this.x && v.y === this.y;
 	}
 
-	setFromArray( floatArray: Float32Array, offset: number ) {
-		this.x = floatArray[offset+0];
-		this.y = floatArray[offset+1];
+	setFromArray(floatArray: Float32Array, offset: number) {
+		this.x = floatArray[offset + 0];
+		this.y = floatArray[offset + 1];
 	}
-	
-	toArray( floatArray: Float32Array, offset: number ) {
-		floatArray[offset+0] = this.x;
-		floatArray[offset+1] = this.y;
+
+	toArray(floatArray: Float32Array, offset: number) {
+		floatArray[offset + 0] = this.x;
+		floatArray[offset + 1] = this.y;
 	}
-	
 }

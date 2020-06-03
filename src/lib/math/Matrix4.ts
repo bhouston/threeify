@@ -17,11 +17,11 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 
 	get hashCode() {
 		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L4017
-        let hash = this.elements[0] | 0;
-        for (let i = 1; i < 16; i++) {
-            hash = (hash * 397) ^ (this.elements[i] | 0);
-        }
-        return hash;
+		let hash = this.elements[0] | 0;
+		for (let i = 1; i < 16; i++) {
+			hash = (hash * 397) ^ (this.elements[i] | 0);
+		}
+		return hash;
 	}
 
 	set(
@@ -798,14 +798,14 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 		return true;
 	}
 
-	setFromArray( floatArray: Float32Array, offset: number ) {
-		for( let i = 0; i < this.elements.length; i ++ ) {
+	setFromArray(floatArray: Float32Array, offset: number) {
+		for (let i = 0; i < this.elements.length; i++) {
 			this.elements[i] = floatArray[offset + i];
 		}
 	}
-	
-	toArray( floatArray: Float32Array, offset: number ) {
-		for( let i = 0; i < this.elements.length; i ++ ) {
+
+	toArray(floatArray: Float32Array, offset: number) {
+		for (let i = 0; i < this.elements.length; i++) {
 			floatArray[offset + i] = this.elements[i];
 		}
 	}

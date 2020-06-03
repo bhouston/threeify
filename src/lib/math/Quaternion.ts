@@ -25,11 +25,11 @@ export class Quaternion implements IPrimitive<Quaternion> {
 
 	get hashCode() {
 		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L2731
-        let hash = this.x | 0;
-        hash = (hash * 397) ^ (this.y | 0);
-        hash = (hash * 397) ^ (this.z | 0);
-        hash = (hash * 397) ^ (this.w | 0);
-        return hash;
+		let hash = this.x | 0;
+		hash = (hash * 397) ^ (this.y | 0);
+		hash = (hash * 397) ^ (this.z | 0);
+		hash = (hash * 397) ^ (this.w | 0);
+		return hash;
 	}
 
 	clone() {
@@ -351,17 +351,17 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		return q.x === this.x && q.y === this.y && q.z === this.z && q.w === this.w;
 	}
 
-	setFromArray( floatArray: Float32Array, offset: number ) {
-		this.x = floatArray[offset+0];
-		this.y = floatArray[offset+1];
-		this.z = floatArray[offset+2];
-		this.w = floatArray[offset+3];
+	setFromArray(floatArray: Float32Array, offset: number) {
+		this.x = floatArray[offset + 0];
+		this.y = floatArray[offset + 1];
+		this.z = floatArray[offset + 2];
+		this.w = floatArray[offset + 3];
 	}
-	
-	toArray( floatArray: Float32Array, offset: number ) {
-		floatArray[offset+0] = this.x;
-		floatArray[offset+1] = this.y;
-		floatArray[offset+2] = this.z;
-		floatArray[offset+3] = this.w;
+
+	toArray(floatArray: Float32Array, offset: number) {
+		floatArray[offset + 0] = this.x;
+		floatArray[offset + 1] = this.y;
+		floatArray[offset + 2] = this.z;
+		floatArray[offset + 3] = this.w;
 	}
 }

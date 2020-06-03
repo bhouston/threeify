@@ -32,6 +32,6 @@ export interface IVersionable {
 }
 
 export interface IArrayable {
-	setFromArray( floatArray: Float32Array, offset: number ): void;
-	toArray( floatArray: Float32Array, offset: number ): void;
+	setFromArray(floatArray: Float32Array, offset: number): void;
+	toArray(floatArray: Float32Array, offset: number): void;
 }

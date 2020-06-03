@@ -84,15 +84,17 @@ export class Program implements IDisposable {
 		}
 	}
 
-	setUniformValues(uniformValues: any, uniformNames: string[] | null = null ) {
-		if( ! uniformNames ) {
+	setUniformValues(uniformValues: any, uniformNames: string[] | null = null) {
+		if (!uniformNames) {
 			uniformNames = Object.keys(uniformValues) as string[];
 		}
-		uniformNames.forEach( uniformName => {			
+		uniformNames.forEach((uniformName) => {
 			// TODO replace this.uniforms with a map for faster access
-			let programUniform = this.uniforms.find( uniform => uniform.name == uniformName );
-			if( programUniform ) {
-				programUniform.set( uniformValues[ uniformName ] );
+			let programUniform = this.uniforms.find(
+				(uniform) => uniform.name == uniformName,
+			);
+			if (programUniform) {
+				programUniform.set(uniformValues[uniformName]);
 			}
 		});
 	}

@@ -43,9 +43,9 @@ export class Vector3 implements IPrimitive<Vector3> {
 	get hashCode() {
 		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L718
 		let hash = this.x | 0;
-        hash = (hash * 397) ^ (this.y | 0);
-        hash = (hash * 397) ^ (this.z | 0);
-        return hash;
+		hash = (hash * 397) ^ (this.y | 0);
+		hash = (hash * 397) ^ (this.z | 0);
+		return hash;
 	}
 
 	clone() {
@@ -130,15 +130,15 @@ export class Vector3 implements IPrimitive<Vector3> {
 		return v.x === this.x && v.y === this.y && v.z === this.z;
 	}
 
-	setFromArray( floatArray: Float32Array, offset: number ) {
-		this.x = floatArray[offset+0];
-		this.y = floatArray[offset+1];
-		this.z = floatArray[offset+2];
+	setFromArray(floatArray: Float32Array, offset: number) {
+		this.x = floatArray[offset + 0];
+		this.y = floatArray[offset + 1];
+		this.z = floatArray[offset + 2];
 	}
-	
-	toArray( floatArray: Float32Array, offset: number ) {
-		floatArray[offset+0] = this.x;
-		floatArray[offset+1] = this.y;
-		floatArray[offset+2] = this.z;
+
+	toArray(floatArray: Float32Array, offset: number) {
+		floatArray[offset + 0] = this.x;
+		floatArray[offset + 1] = this.y;
+		floatArray[offset + 2] = this.z;
 	}
 }
