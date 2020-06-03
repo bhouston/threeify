@@ -1,5 +1,5 @@
 //
-// OpenGL-compatible depth test
+// OpenGL-compatible depth test state
 //
 // Authors:
 // * @bhouston

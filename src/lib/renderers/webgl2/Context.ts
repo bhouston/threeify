@@ -5,17 +5,15 @@
 // * @bhouston
 //
 
-import { BufferPool } from './Buffer.js';
-import { ProgramPool, Program } from './Program.js';
-import { TexImage2DPool } from './TexImage2D.js';
-import { Framebuffer } from './Framebuffer.js';
 import { Box2 } from '../../math/Box2.js';
-import { Vector3 } from '../../math/Vector3.js';
-import { Vector2 } from '../../math/Vector2.js';
-import { BlendState } from './Blend.js';
-import { DepthTestState } from './DepthTest.js';
-import { ClearState } from './Clear.js';
-import { MaskState } from './Mask.js';
+import { BlendState } from './BlendState.js';
+import { BufferPool } from './Buffer.js';
+import { ClearState } from './ClearState.js';
+import { DepthTestState } from './DepthTestState.js';
+import { Framebuffer } from './Framebuffer.js';
+import { MaskState } from './MaskState.js';
+import { Program, ProgramPool } from './Program.js';
+import { TexImage2DPool } from './TexImage2D.js';
 
 const GL = WebGLRenderingContext;
 const GL2 = WebGL2RenderingContext;
@@ -92,17 +90,26 @@ export class Context {
 
 	private cachedBlendState: BlendState = new BlendState();
 	get blendState(): BlendState {
-		return this.cachedBlendState;
+		return this.cachedBlendState; // this is a bug if it is modified after read.
 	}
 	set blendState(blendState: BlendState) {
-		if (blendState.enabled) {
-			this.gl.enable(GL.BLEND);
-		} else {
-			this.gl.disable(GL.BLEND);
+		if (this.cachedBlendState !== blendState) {
+			if (blendState.enabled) {
+				this.gl.enable(GL.BLEND);
+			} else {
+				this.gl.disable(GL.BLEND);
+			}
+			this.cachedBlendState = blendState;
 		}
-		this.gl.blendEquation(blendState.equation);
-		this.gl.blendFunc(blendState.sourceFactor, blendState.destFactor);
-		this.cachedBlendState = blendState;
+		if (this.cachedBlendState.equation !== blendState.equation) {
+			this.gl.blendEquation(blendState.equation);
+			this.cachedBlendState.equation = blendState.equation;
+		}
+		if (this.cachedBlendState.sourceFactor !== blendState.sourceFactor || this.cachedBlendState.destFactor !== blendState.destFactor) {
+			this.gl.blendFunc(blendState.sourceFactor, blendState.destFactor);
+			this.cachedBlendState.sourceFactor = blendState.sourceFactor;
+			this.cachedBlendState.destFactor = blendState.destFactor;
+		}
 	}
 
 	private cachedDepthTestState: DepthTestState = new DepthTestState();
@@ -110,13 +117,18 @@ export class Context {
 		return this.cachedDepthTestState;
 	}
 	set depthTestState(depthTestState: DepthTestState) {
-		if (depthTestState.enabled) {
-			this.gl.enable(GL.DEPTH_TEST);
-		} else {
-			this.gl.disable(GL.DEPTH_TEST);
+		if (this.cachedDepthTestState.enabled !== depthTestState.enabled) {
+			if (depthTestState.enabled) {
+				this.gl.enable(GL.DEPTH_TEST);
+			} else {
+				this.gl.disable(GL.DEPTH_TEST);
+			}
+			this.cachedDepthTestState.enabled = depthTestState.enabled;
 		}
-		this.gl.depthFunc(depthTestState.func);
-		this.cachedDepthTestState = depthTestState;
+		if (this.cachedDepthTestState.func !== depthTestState.func) {
+			this.gl.depthFunc(depthTestState.func);
+			this.cachedDepthTestState.func = depthTestState.func;
+		}
 	}
 
 	private cachedClearState: ClearState = new ClearState();
@@ -124,15 +136,24 @@ export class Context {
 		return this.cachedClearState;
 	}
 	set clearState(clearState: ClearState) {
-		this.gl.clearColor(
-			clearState.color.r,
-			clearState.color.g,
-			clearState.color.b,
-			clearState.alpha,
-		);
-		this.gl.clearDepth(clearState.depth);
-		this.gl.clearStencil(clearState.stencil);
-		this.cachedClearState = clearState;
+		if (!this.cachedClearState.color.equals(clearState.color) || this.cachedClearState.alpha !== clearState.alpha) {
+			this.gl.clearColor(
+				clearState.color.r,
+				clearState.color.g,
+				clearState.color.b,
+				clearState.alpha,
+			);
+			this.cachedClearState.color.copy(clearState.color);
+			this.cachedClearState.alpha = clearState.alpha;
+		}
+		if (this.cachedClearState.depth !== clearState.depth) {
+			this.gl.clearDepth(clearState.depth);
+			this.cachedClearState.depth = clearState.depth;
+		}
+		if (this.cachedClearState.stencil !== clearState.stencil) {
+			this.gl.clearStencil(clearState.stencil);
+			this.cachedClearState.stencil = clearState.stencil;
+		}
 	}
 
 	private cachedMaskState: MaskState = new MaskState();
@@ -140,15 +161,24 @@ export class Context {
 		return this.cachedMaskState;
 	}
 	set maskState(maskState: MaskState) {
-		this.gl.colorMask(
-			maskState.red,
-			maskState.green,
-			maskState.blue,
-			maskState.alpha,
-		);
-		this.gl.depthMask(maskState.depth);
-		this.gl.stencilMask(maskState.stencil);
-		this.cachedMaskState = maskState;
+		if (this.cachedMaskState.red !== maskState.red || this.cachedMaskState.green !== maskState.green || this.cachedMaskState.blue !== maskState.blue || this.cachedMaskState.alpha !== maskState.alpha) {
+			this.gl.colorMask(
+				maskState.red,
+				maskState.green,
+				maskState.blue,
+				maskState.alpha,
+			);
+			this.cachedMaskState.red = maskState.red;
+			this.cachedMaskState.green = maskState.green;
+			this.cachedMaskState.blue = maskState.blue;
+			this.cachedMaskState.alpha = maskState.alpha;
+		}
+		if (this.cachedMaskState.depth !== maskState.depth) {
+			this.gl.depthMask(maskState.depth);
+		}
+		if (this.cachedMaskState.stencil !== maskState.stencil) {
+			this.gl.stencilMask(maskState.stencil);
+		}
 	}
 
 	// gl.colorMask(true, true, true, false);

@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Color } from '../../math/Color';
+import { Color } from '../../math/Color.js';
 
 export class ClearState {
 	color: Color = new Color();
