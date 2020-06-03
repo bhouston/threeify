@@ -84,6 +84,12 @@ export class Program implements IDisposable {
 		}
 	}
 
+	reset() {
+		this.uniforms.forEach( uniform => {
+			uniform.reset();
+		});
+	}
+
 	setUniformValues(uniformValues: any, uniformNames: string[] | null = null) {
 		if (!uniformNames) {
 			uniformNames = Object.keys(uniformValues) as string[];

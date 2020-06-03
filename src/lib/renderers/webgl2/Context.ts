@@ -6,7 +6,7 @@
 //
 
 import { BufferPool } from './Buffer.js';
-import { ProgramPool } from './Program.js';
+import { ProgramPool, Program } from './Program.js';
 import { TextureImage2DPool } from './TextureImage2D.js';
 
 export class Context {
@@ -26,4 +26,22 @@ export class Context {
 			this.gl = gl;
 		}
 	}
+
+	private cachedActiveProgram: Program | null = null;
+	set activeProgram( program: Program | null ) {
+		if( this.cachedActiveProgram !== program ) {
+			if( program ) {
+				program.reset();
+				this.gl.useProgram(program.glProgram);
+			}
+			else {
+				this.gl.useProgram(null);
+			}
+			this.cachedActiveProgram = program;
+		}
+	}
+	get activeProgram(): Program | null {
+		return this.cachedActiveProgram;
+	}
+
 }

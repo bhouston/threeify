@@ -42,8 +42,7 @@ export class DrawTask implements ITask {
 	execute(context: Context) {
 		let gl = context.gl;
 
-		// pick program
-		gl.useProgram(this.program.glProgram);
+		context.activeProgram = this.program;
 
 		// set attributes
 		gl.bindVertexArray(this.vertexArrayObject.glVertexArrayObject);
