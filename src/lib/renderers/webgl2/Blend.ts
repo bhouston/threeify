@@ -1,5 +1,5 @@
 //
-// OpenGL-compatible depth state
+// OpenGL-compatible blend state
 //
 // Authors:
 // * @bhouston

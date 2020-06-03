@@ -12,9 +12,9 @@ import { Framebuffer } from './Framebuffer.js';
 import { Box2 } from '../../math/Box2.js';
 import { Vector3 } from '../../math/Vector3.js';
 import { Vector2 } from '../../math/Vector2.js';
-import { Blend } from './Blend.js';
-import { DepthTest, DepthTestState } from './DepthTest.js';
-import { Clear, ClearState } from './Clear.js';
+import { BlendState } from './Blend.js';
+import { DepthTestState } from './DepthTest.js';
+import { ClearState } from './Clear.js';
 import { MaskState } from './Mask.js';
 
 const GL = WebGLRenderingContext;
@@ -90,19 +90,19 @@ export class Context {
 		}
 	}
 
-	private cachedBlend: Blend = new Blend();
-	get blend(): Blend {
-		return this.cachedBlend;
+	private cachedBlendState: BlendState = new BlendState();
+	get blendState(): BlendState {
+		return this.cachedBlendState;
 	}
-	set blend(blend: Blend) {
-		if (blend.enabled) {
+	set blendState(blendState: BlendState) {
+		if (blendState.enabled) {
 			this.gl.enable(GL.BLEND);
 		} else {
 			this.gl.disable(GL.BLEND);
 		}
-		this.gl.blendEquation(blend.equation);
-		this.gl.blendFunc(blend.sourceFactor, blend.destFactor);
-		this.cachedBlend = blend;
+		this.gl.blendEquation(blendState.equation);
+		this.gl.blendFunc(blendState.sourceFactor, blendState.destFactor);
+		this.cachedBlendState = blendState;
 	}
 
 	private cachedDepthTestState: DepthTestState = new DepthTestState();
@@ -124,7 +124,12 @@ export class Context {
 		return this.cachedClearState;
 	}
 	set clearState(clearState: ClearState) {
-		this.gl.clearColor(clearState.color.r, clearState.color.g, clearState.color.b, clearState.alpha);
+		this.gl.clearColor(
+			clearState.color.r,
+			clearState.color.g,
+			clearState.color.b,
+			clearState.alpha,
+		);
 		this.gl.clearDepth(clearState.depth);
 		this.gl.clearStencil(clearState.stencil);
 		this.cachedClearState = clearState;
@@ -135,15 +140,18 @@ export class Context {
 		return this.cachedMaskState;
 	}
 	set maskState(maskState: MaskState) {
-		this.gl.colorMask(maskState.red, maskState.green, maskState.blue, maskState.alpha);
+		this.gl.colorMask(
+			maskState.red,
+			maskState.green,
+			maskState.blue,
+			maskState.alpha,
+		);
 		this.gl.depthMask(maskState.depth);
 		this.gl.stencilMask(maskState.stencil);
 		this.cachedMaskState = maskState;
 	}
 
-
-// gl.colorMask(true, true, true, false);
-//void gl.depthMask(flag); // boolean
-//gl.stencilMask(mask);
-
+	// gl.colorMask(true, true, true, false);
+	//void gl.depthMask(flag); // boolean
+	//gl.stencilMask(mask);
 }
