@@ -72,11 +72,7 @@ export class ProgramUniform {
             this.glLocation = glLocation;
         }
     }
-
-    reset() {
-        this.valueHashCode = 0;
-    }
-
+    
     set(value: Matrix4): ProgramUniform;
     set(value: Color): ProgramUniform;
     set(value: Vector3): ProgramUniform;

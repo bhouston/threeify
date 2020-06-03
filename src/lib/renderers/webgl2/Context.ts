@@ -31,7 +31,6 @@ export class Context {
 	set activeProgram( program: Program | null ) {
 		if( this.cachedActiveProgram !== program ) {
 			if( program ) {
-				program.reset();
 				this.gl.useProgram(program.glProgram);
 			}
 			else {
