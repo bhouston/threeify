@@ -107,7 +107,7 @@ export class Framebuffer implements IDisposable {
 		throw new Error('not implemented');
 	}
 
-	readPixels() {
+	readPixels(pixelBuffer: ArrayBufferView) {
 		let attachment = this.attachments.find(
 			(attachment) => attachment.attachmentPoint == AttachmentPoints.Color0,
 		);
@@ -134,7 +134,7 @@ export class Framebuffer implements IDisposable {
 				numPixelFormatComponents(pixelFormat) *
 				texImage2D.size.width *
 				texImage2D.size.height;
-			let pixelBuffer = new Uint8Array(pixelByteLength);
+			if (pixelBuffer.byteLength < pixelByteLength) throw new Error("pixelBuffer too small");
 
 			this.context.gl.readPixels(
 				0,
@@ -145,8 +145,9 @@ export class Framebuffer implements IDisposable {
 				dataType,
 				pixelBuffer,
 			);
-
+			
 			return pixelBuffer;
+
 		} finally {
 			this.context.framebuffer = oldFramebuffer;
 		}
