@@ -49,7 +49,7 @@ class UserResource<U extends IPoolUser, R extends IDisposable> {
 export class Pool<U extends IPoolUser, R extends IDisposable> {
 	context: Context;
 	updater: UserResourceUpdater<U, R>;
-	userResources: Array<UserResource<U, R>> = [];
+	userResources: Array<UserResource<U, R>> = []; // TODO replace with a map for faster access
 
 	constructor(context: Context, updater: UserResourceUpdater<U, R>) {
 		this.context = context;
