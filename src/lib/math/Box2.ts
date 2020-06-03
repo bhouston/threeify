@@ -5,18 +5,48 @@
 // * @bhouston
 //
 
-import { Vector2 } from './Vector2';
+import { Vector2 } from './Vector2.js';
 
 export class Box2 {
-	min: Vector2;
-	max: Vector2;
+	min: Vector2 = new Vector2(+Infinity, +Infinity);
+	max: Vector2 = new Vector2(-Infinity, -Infinity);
 
-	constructor(
-		min: Vector2 = new Vector2(+Infinity, +Infinity),
-		max: Vector2 = new Vector2(-Infinity, -Infinity),
-	) {
-		this.min = min;
-		this.max = max;
+	constructor(min: Vector2 | null = null, max: Vector2 | null = null) {
+		if (min !== null) {
+			this.min.copy(min);
+		}
+		if (max !== null) {
+			this.max.copy(max);
+		}
+	}
+
+	get x() {
+		return this.min.x;
+	}
+	get y() {
+		return this.min.y;
+	}
+	get left() {
+		return this.min.x;
+	}
+	get top() {
+		return this.min.y;
+	}
+	get width() {
+		return this.max.x - this.min.x;
+	}
+	get height() {
+		return this.max.y - this.min.y;
+	}
+	get bottom() {
+		return this.max.y;
+	}
+	get right() {
+		return this.max.x;
+	}
+
+	getHashCode() {
+		return (this.min.getHashCode() * 397) ^ (this.max.getHashCode() | 0);
 	}
 
 	set(min: Vector2, max: Vector2) {

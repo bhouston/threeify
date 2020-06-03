@@ -42,7 +42,7 @@ export class Vector3 implements IPrimitive<Vector3> {
 	}
 
 	getHashCode() {
-		return hashFloat3( this.x, this.y, this.z );
+		return hashFloat3(this.x, this.y, this.z);
 	}
 
 	clone() {

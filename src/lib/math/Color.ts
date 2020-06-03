@@ -6,6 +6,7 @@
 //
 
 import { IPrimitive } from './IPrimitive.js';
+import { hashFloat3 } from '../hash.js';
 
 function hue2rgb(p: number, q: number, t: number) {
 	if (t < 0) t += 1;
@@ -29,11 +30,7 @@ export class Color implements IPrimitive<Color> {
 	}
 
 	getHashCode() {
-		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.color.ts#L53
-		let hash = (this.r * 255) | 0;
-		hash = (hash * 397) ^ ((this.g * 255) | 0);
-		hash = (hash * 397) ^ ((this.b * 255) | 0);
-		return hash;
+		return hashFloat3(this.r, this.g, this.b);
 	}
 
 	clone() {

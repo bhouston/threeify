@@ -18,7 +18,18 @@ import { Pool } from '../Pool.js';
 import { Box2 } from '../../math/Box2.js';
 import { Vector2 } from '../../math/Vector2.js';
 
-export class TextureImage2D implements IDisposable {
+const GL = WebGLRenderingContext;
+
+export enum TextureSourceType {
+	ArrayBufferView,
+	ImageDate,
+	HTMLImageElement,
+	HTMLCanvasElement,
+	HTMLVideoElement,
+	ImageBitmap,
+}
+
+export class TexImage2D implements IDisposable {
 	disposed: boolean = false;
 	context: Context;
 	glTexture: WebGLTexture;
@@ -107,20 +118,16 @@ export class TextureImage2D implements IDisposable {
 	}
 }
 
-export class TextureImage2DPool extends Pool<Texture, TextureImage2D> {
+export class TexImage2DPool extends Pool<Texture, TexImage2D> {
 	constructor(context: Context) {
 		super(
 			context,
-			(
-				context: Context,
-				texture: Texture,
-				textureImage2D: TextureImage2D | null,
-			) => {
-				if (!textureImage2D) {
-					textureImage2D = new TextureImage2D(context);
+			(context: Context, texture: Texture, texImage2D: TexImage2D | null) => {
+				if (!texImage2D) {
+					texImage2D = new TexImage2D(context);
 				}
-				textureImage2D.update(texture);
-				return textureImage2D;
+				texImage2D.update(texture);
+				return texImage2D;
 			},
 		);
 	}

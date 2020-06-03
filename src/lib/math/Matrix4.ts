@@ -9,6 +9,7 @@ import { Euler, EulerOrder } from './Euler.js';
 import { IPrimitive } from './IPrimitive.js';
 import { Quaternion } from './Quaternion.js';
 import { Vector3 } from './Vector3.js';
+import { hashFloatArray } from '../hash.js';
 
 export class Matrix4 implements IPrimitive<Matrix4> {
 	elements: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
@@ -16,12 +17,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 	constructor() {}
 
 	getHashCode() {
-		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L4017
-		let hash = this.elements[0] | 0;
-		for (let i = 1; i < 16; i++) {
-			hash = (hash * 397) ^ (this.elements[i] | 0);
-		}
-		return hash;
+		return hashFloatArray(this.elements);
 	}
 
 	set(

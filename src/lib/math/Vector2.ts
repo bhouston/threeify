@@ -31,8 +31,8 @@ export class Vector2 implements IPrimitive<Vector2> {
 		this.y = height;
 	}
 
-	getHashCode() {		
-		return hashFloat2( this.x, this.y );
+	getHashCode() {
+		return hashFloat2(this.x, this.y);
 	}
 
 	clone() {

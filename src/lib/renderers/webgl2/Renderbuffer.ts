@@ -1,10 +1,10 @@
-import { Context } from './Context';
-import { Vector2 } from '../../math/Vector2';
-import { IDisposable } from '../../interfaces/Standard';
-import { VertexArrayObject } from './VertexArrayObject';
-import { Program } from './Program';
-import { ProgramUniform } from './ProgramUniform';
-import { Color } from '../../math/Color';
+import { Context } from './Context.js';
+import { Vector2 } from '../../math/Vector2.js';
+import { IDisposable } from '../../interfaces/Standard.js';
+import { VertexArrayObject } from './VertexArrayObject.js';
+import { Program } from './Program.js';
+import { ProgramUniform } from './ProgramUniform.js';
+import { Color } from '../../math/Color.js';
 
 export class Renderbuffer implements IDisposable {
 	disposed: boolean = false;

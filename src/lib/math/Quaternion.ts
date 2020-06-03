@@ -24,8 +24,8 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		this.w = w;
 	}
 
-	getHashCode() {		
-		return hashFloat4( this.x, this.y, this.z, this.w );
+	getHashCode() {
+		return hashFloat4(this.x, this.y, this.z, this.w);
 	}
 
 	clone() {

@@ -19,3 +19,20 @@ export enum DataType {
 	HalfFloat = GL2.HALF_FLOAT,
 	Float = GL.FLOAT,
 }
+
+export function sizeOfDataType(dataType: DataType) {
+	switch (dataType) {
+		case DataType.Byte:
+		case DataType.UnsignedByte:
+			return 1;
+		case DataType.Short:
+		case DataType.UnsignedShort:
+		case DataType.HalfFloat:
+			return 2;
+		case DataType.Int:
+		case DataType.UnsignedInt:
+		case DataType.Float:
+			return 5;
+	}
+	throw new Error('unknown data type: ' + dataType);
+}

@@ -13,7 +13,7 @@ import { Mesh } from './nodes/Mesh.js';
 import { Node } from './nodes/Node.js';
 import { Context } from './renderers/webgl2/Context.js';
 import { Program } from './renderers/webgl2/Program.js';
-import { TextureImage2D } from './renderers/webgl2/TextureImage2D.js';
+import { TexImage2D } from './renderers/webgl2/TexImage2D.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 import { VertexAttributeGeometry } from './renderers/webgl2/VertexAttributeGeometry.js';
 import { Texture } from './textures/Texture.js';
@@ -187,9 +187,9 @@ async function test() {
 
 	console.log(texture);
 
-	let textureImage2D = new TextureImage2D(context);
-	textureImage2D.update(texture);
-	console.log(textureImage2D);
+	let texImage2D = new TexImage2D(context);
+	texImage2D.update(texture);
+	console.log(texImage2D);
 
 	let node = new Node();
 	console.log(node);

@@ -32,7 +32,7 @@ export class Euler implements IPrimitive<Euler> {
 	}
 
 	getHashCode() {
-		return hashFloat4( this.x, this.y, this.z, this.order as number );
+		return hashFloat4(this.x, this.y, this.z, this.order as number);
 	}
 
 	set(x: number, y: number, z: number, order: EulerOrder) {

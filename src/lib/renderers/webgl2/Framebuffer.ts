@@ -5,13 +5,21 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../interfaces/Standard';
-import { Color } from '../../math/Color';
-import { Context } from './Context';
-import { Program } from './Program';
-import { ProgramUniform } from './ProgramUniform';
-import { TextureImage2D } from './TextureImage2D';
-import { VertexArrayObject } from './VertexArrayObject';
+import { IDisposable } from '../../interfaces/Standard.js';
+import { Color } from '../../math/Color.js';
+import { Context } from './Context.js';
+import { Program } from './Program.js';
+import { ProgramUniform } from './ProgramUniform.js';
+import { TexImage2D } from './TexImage2D.js';
+import { VertexArrayObject } from './VertexArrayObject.js';
+import { Box2 } from '../../math/Box2.js';
+import { Vector2 } from '../../math/Vector2.js';
+import { Vector3 } from '../../math/Vector3.js';
+import {
+	PixelFormat,
+	numPixelFormatComponents,
+} from '../../textures/PixelFormat.js';
+import { sizeOfDataType } from '../../textures/DataType.js';
 
 const GL = WebGLRenderingContext;
 
@@ -30,11 +38,11 @@ export enum AttachmentFlags {
 
 export class FramebufferAttachment {
 	attachmentPoint: number;
-	textureImage2D: TextureImage2D;
+	texImage2D: TexImage2D;
 
-	constructor(attachmentPoint: number, textureImage2D: TextureImage2D) {
+	constructor(attachmentPoint: number, TexImage2D: TexImage2D) {
 		this.attachmentPoint = attachmentPoint;
-		this.textureImage2D = textureImage2D;
+		this.texImage2D = TexImage2D;
 	}
 }
 
@@ -62,7 +70,7 @@ export class Framebuffer implements IDisposable {
 				gl.FRAMEBUFFER,
 				attachment.attachmentPoint,
 				gl.TEXTURE_2D,
-				attachment.textureImage2D,
+				attachment.texImage2D,
 				0,
 			);
 		});
@@ -97,5 +105,50 @@ export class Framebuffer implements IDisposable {
 		uniforms: Array<ProgramUniform>,
 	) {
 		throw new Error('not implemented');
+	}
+
+	readPixels() {
+		let attachment = this.attachments.find(
+			(attachment) => attachment.attachmentPoint == AttachmentPoints.Color0,
+		);
+		if (!attachment) throw new Error('Can not find Color0 attachment');
+
+		let texImage2D = attachment.texImage2D;
+		var dataType = texImage2D.dataType;
+		var pixelFormat = texImage2D.pixelFormat;
+		if (pixelFormat !== PixelFormat.RGBA)
+			throw new Error('can not read non-RGBA color0 attachment');
+
+		let oldFramebuffer = this.context.framebuffer;
+		this.context.framebuffer = this;
+		try {
+			if (
+				this.context.gl.checkFramebufferStatus(GL.FRAMEBUFFER) !==
+				GL.FRAMEBUFFER_COMPLETE
+			) {
+				throw new Error('can not read non-complete Framebuffer status');
+			}
+
+			let pixelByteLength =
+				sizeOfDataType(dataType) *
+				numPixelFormatComponents(pixelFormat) *
+				texImage2D.size.width *
+				texImage2D.size.height;
+			let pixelBuffer = new Uint8Array(pixelByteLength);
+
+			this.context.gl.readPixels(
+				0,
+				0,
+				texImage2D.size.width,
+				texImage2D.size.height,
+				pixelFormat,
+				dataType,
+				pixelBuffer,
+			);
+
+			return pixelBuffer;
+		} finally {
+			this.context.framebuffer = oldFramebuffer;
+		}
 	}
 }
