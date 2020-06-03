@@ -134,7 +134,8 @@ export class Framebuffer implements IDisposable {
 				numPixelFormatComponents(pixelFormat) *
 				texImage2D.size.width *
 				texImage2D.size.height;
-			if (pixelBuffer.byteLength < pixelByteLength) throw new Error("pixelBuffer too small");
+			if (pixelBuffer.byteLength < pixelByteLength)
+				throw new Error('pixelBuffer too small');
 
 			this.context.gl.readPixels(
 				0,
@@ -145,9 +146,8 @@ export class Framebuffer implements IDisposable {
 				dataType,
 				pixelBuffer,
 			);
-			
-			return pixelBuffer;
 
+			return pixelBuffer;
 		} finally {
 			this.context.framebuffer = oldFramebuffer;
 		}

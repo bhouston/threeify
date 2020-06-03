@@ -12,6 +12,11 @@ import { Framebuffer } from './Framebuffer.js';
 import { Box2 } from '../../math/Box2.js';
 import { Vector3 } from '../../math/Vector3.js';
 import { Vector2 } from '../../math/Vector2.js';
+import { Blend } from './Blend.js';
+import { DepthTest } from './DepthTest.js';
+
+const GL = WebGLRenderingContext;
+const GL2 = WebGL2RenderingContext;
 
 export class Context {
 	canvas: HTMLCanvasElement;
@@ -81,5 +86,34 @@ export class Context {
 			this.gl.scissor(viewport.x, viewport.y, viewport.width, viewport.height);
 			this.cachedViewport.copy(viewport);
 		}
+	}
+
+	private cachedBlend: Blend = new Blend();
+	get blend(): Blend {
+		return this.cachedBlend;
+	}
+	set blend(blend: Blend) {
+		if (blend.enabled) {
+			this.gl.enable(GL.BLEND);
+		} else {
+			this.gl.disable(GL.BLEND);
+		}
+		this.gl.blendEquation(blend.equation);
+		this.gl.blendFunc(blend.sourceFactor, blend.destFactor);
+		this.cachedBlend = blend;
+	}
+
+	private cachedDepthTest: DepthTest = new DepthTest();
+	get depthTest(): DepthTest {
+		return this.cachedDepthTest;
+	}
+	set depthTest(depthTest: DepthTest) {
+		if (depthTest.enabled) {
+			this.gl.enable(GL.DEPTH_TEST);
+		} else {
+			this.gl.disable(GL.DEPTH_TEST);
+		}
+		this.gl.depthFunc(depthTest.func);
+		this.cachedDepthTest = depthTest;
 	}
 }
