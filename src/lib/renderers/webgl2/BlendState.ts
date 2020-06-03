@@ -32,8 +32,26 @@ export enum BlendFunc {
 }
 
 export class BlendState {
-	enabled: boolean = true;
-	equation: BlendEquation = BlendEquation.Add;
-	sourceFactor: BlendFunc = BlendFunc.One;
-	destFactor: BlendFunc = BlendFunc.Zero;
+	enabled: boolean;
+	equation: BlendEquation;
+	sourceFactor: BlendFunc;
+	destFactor: BlendFunc;
+
+	constructor(enabled: boolean = true, equation: BlendEquation = BlendEquation.Add, sourceFactor: BlendFunc = BlendFunc.One, destFactor: BlendFunc = BlendFunc.Zero ) {
+		this.enabled = enabled;
+		this.equation = equation;
+		this.sourceFactor = sourceFactor;
+		this.destFactor = destFactor;
+	}
+
+	clone() {
+		return new BlendState( this.enabled, this.equation, this.sourceFactor, this.destFactor );
+	}
+
+	copy( bs: BlendState ) {
+		this.enabled = bs.enabled;
+		this.equation = bs.equation;
+		this.sourceFactor = bs.sourceFactor;
+		this.destFactor = bs.destFactor;
+	}
 }

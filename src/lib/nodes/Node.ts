@@ -27,7 +27,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	scale: Vector3 = new Vector3(0, 0, 0);
 	readonly children: Array<Node> = [];
 
-	constructor() {}
+	constructor() { }
 
 	dirty() {
 		this.version++;

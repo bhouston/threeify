@@ -19,6 +19,20 @@ export enum DepthTestFunc {
 }
 
 export class DepthTestState {
-	enabled: boolean = true;
-	func: DepthTestFunc = DepthTestFunc.Less;
+	enabled: boolean;
+	func: DepthTestFunc;
+
+	constructor(enabled: boolean = true, func: DepthTestFunc = DepthTestFunc.Less ) {
+		this.enabled = enabled;
+		this.func = func;
+	}
+
+	clone() {
+		return new DepthTestState( this.enabled, this.func );
+	}
+
+	copy( dts: DepthTestState ) {
+		this.enabled = dts.enabled;
+		this.func = dts.func;
+	}
 }

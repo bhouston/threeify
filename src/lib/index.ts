@@ -18,6 +18,10 @@ import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 import { VertexAttributeGeometry } from './renderers/webgl2/VertexAttributeGeometry.js';
 import { Texture } from './textures/Texture.js';
 import { Color } from './math/Color.js';
+import { BlendState } from './renderers/webgl2/BlendState.js';
+import { DepthTestState } from './renderers/webgl2/DepthTestState.js';
+import { ClearState } from './renderers/webgl2/ClearState.js';
+import { MaskState } from './renderers/webgl2/MaskState.js';
 
 async function test() {
 	let a = new Vector3(1, 0, 0);
@@ -199,6 +203,12 @@ async function test() {
 
 	let mesh = new Mesh(myBoxGeometry);
 	node.children.push(mesh);
+
+	// test if states work
+	context.blendState = new BlendState();
+	context.clearState = new ClearState();
+	context.depthTestState = new DepthTestState();
+	context.maskState = new MaskState();
 }
 
 test();

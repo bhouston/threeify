@@ -66,122 +66,109 @@ export class Context {
 		return this.cachedFramebuffer;
 	}
 
-	private cachedScissor: Box2 = new Box2();
+	private _scissor: Box2 = new Box2();
 	get scissor(): Box2 {
-		return this.cachedScissor;
+		return this._scissor.clone();
 	}
-	set scissor(scissor: Box2) {
-		if (!this.cachedScissor.equals(scissor)) {
-			this.gl.scissor(scissor.x, scissor.y, scissor.width, scissor.height);
-			this.cachedScissor.copy(scissor);
+	set scissor(s: Box2) {
+		if (!this._scissor.equals(s)) {
+			this.gl.scissor(s.x, s.y, s.width, s.height);
+			this._scissor.copy(s);
 		}
 	}
 
-	private cachedViewport: Box2 = new Box2();
+	private _viewport: Box2 = new Box2();
 	get viewport(): Box2 {
-		return this.cachedViewport;
+		return this._viewport.clone();
 	}
-	set viewport(viewport: Box2) {
-		if (!this.cachedViewport.equals(viewport)) {
-			this.gl.scissor(viewport.x, viewport.y, viewport.width, viewport.height);
-			this.cachedViewport.copy(viewport);
+	set viewport(v: Box2) {
+		if (!this._viewport.equals(v)) {
+			this.gl.scissor(v.x, v.y, v.width, v.height);
+			this._viewport.copy(v);
 		}
 	}
 
-	private cachedBlendState: BlendState = new BlendState();
+	private _blendState: BlendState = new BlendState();
 	get blendState(): BlendState {
-		return this.cachedBlendState; // this is a bug if it is modified after read.
+		return this._blendState.clone();
 	}
-	set blendState(blendState: BlendState) {
-		if (this.cachedBlendState !== blendState) {
-			if (blendState.enabled) {
+	set blendState(bs: BlendState) {
+		if (this._blendState !== bs) {
+			if (bs.enabled) {
 				this.gl.enable(GL.BLEND);
 			} else {
 				this.gl.disable(GL.BLEND);
 			}
-			this.cachedBlendState = blendState;
 		}
-		if (this.cachedBlendState.equation !== blendState.equation) {
-			this.gl.blendEquation(blendState.equation);
-			this.cachedBlendState.equation = blendState.equation;
+		if (this._blendState.equation !== bs.equation) {
+			this.gl.blendEquation(bs.equation);
 		}
-		if (this.cachedBlendState.sourceFactor !== blendState.sourceFactor || this.cachedBlendState.destFactor !== blendState.destFactor) {
-			this.gl.blendFunc(blendState.sourceFactor, blendState.destFactor);
-			this.cachedBlendState.sourceFactor = blendState.sourceFactor;
-			this.cachedBlendState.destFactor = blendState.destFactor;
+		if (this._blendState.sourceFactor !== bs.sourceFactor || this._blendState.destFactor !== bs.destFactor) {
+			this.gl.blendFunc(bs.sourceFactor, bs.destFactor);
 		}
+		this._blendState.copy(bs);
 	}
 
-	private cachedDepthTestState: DepthTestState = new DepthTestState();
+	private _depthTestState: DepthTestState = new DepthTestState();
 	get depthTestState(): DepthTestState {
-		return this.cachedDepthTestState;
+		return this._depthTestState.clone();
 	}
-	set depthTestState(depthTestState: DepthTestState) {
-		if (this.cachedDepthTestState.enabled !== depthTestState.enabled) {
-			if (depthTestState.enabled) {
+	set depthTestState(dts: DepthTestState) {
+		if (this._depthTestState.enabled !== dts.enabled) {
+			if (dts.enabled) {
 				this.gl.enable(GL.DEPTH_TEST);
 			} else {
 				this.gl.disable(GL.DEPTH_TEST);
 			}
-			this.cachedDepthTestState.enabled = depthTestState.enabled;
 		}
-		if (this.cachedDepthTestState.func !== depthTestState.func) {
-			this.gl.depthFunc(depthTestState.func);
-			this.cachedDepthTestState.func = depthTestState.func;
+		if (this._depthTestState.func !== dts.func) {
+			this.gl.depthFunc(dts.func);
 		}
+		this._depthTestState.copy(dts);
 	}
 
-	private cachedClearState: ClearState = new ClearState();
+	private _clearState: ClearState = new ClearState();
 	get clearState(): ClearState {
-		return this.cachedClearState;
+		return this._clearState.clone();
 	}
-	set clearState(clearState: ClearState) {
-		if (!this.cachedClearState.color.equals(clearState.color) || this.cachedClearState.alpha !== clearState.alpha) {
+	set clearState(cs: ClearState) {
+		if (!this._clearState.color.equals(cs.color) || this._clearState.alpha !== cs.alpha) {
 			this.gl.clearColor(
-				clearState.color.r,
-				clearState.color.g,
-				clearState.color.b,
-				clearState.alpha,
+				cs.color.r,
+				cs.color.g,
+				cs.color.b,
+				cs.alpha,
 			);
-			this.cachedClearState.color.copy(clearState.color);
-			this.cachedClearState.alpha = clearState.alpha;
 		}
-		if (this.cachedClearState.depth !== clearState.depth) {
-			this.gl.clearDepth(clearState.depth);
-			this.cachedClearState.depth = clearState.depth;
+		if (this._clearState.depth !== cs.depth) {
+			this.gl.clearDepth(cs.depth);
 		}
-		if (this.cachedClearState.stencil !== clearState.stencil) {
-			this.gl.clearStencil(clearState.stencil);
-			this.cachedClearState.stencil = clearState.stencil;
+		if (this._clearState.stencil !== cs.stencil) {
+			this.gl.clearStencil(cs.stencil);
 		}
+		this._clearState.copy(cs);
 	}
 
-	private cachedMaskState: MaskState = new MaskState();
+	private _maskState: MaskState = new MaskState();
 	get maskState(): MaskState {
-		return this.cachedMaskState;
+		return this._maskState.clone();
 	}
-	set maskState(maskState: MaskState) {
-		if (this.cachedMaskState.red !== maskState.red || this.cachedMaskState.green !== maskState.green || this.cachedMaskState.blue !== maskState.blue || this.cachedMaskState.alpha !== maskState.alpha) {
+	set maskState(ms: MaskState) {
+		if (this._maskState.red !== ms.red || this._maskState.green !== ms.green || this._maskState.blue !== ms.blue || this._maskState.alpha !== ms.alpha) {
 			this.gl.colorMask(
-				maskState.red,
-				maskState.green,
-				maskState.blue,
-				maskState.alpha,
+				ms.red,
+				ms.green,
+				ms.blue,
+				ms.alpha,
 			);
-			this.cachedMaskState.red = maskState.red;
-			this.cachedMaskState.green = maskState.green;
-			this.cachedMaskState.blue = maskState.blue;
-			this.cachedMaskState.alpha = maskState.alpha;
 		}
-		if (this.cachedMaskState.depth !== maskState.depth) {
-			this.gl.depthMask(maskState.depth);
+		if (this._maskState.depth !== ms.depth) {
+			this.gl.depthMask(ms.depth);
 		}
-		if (this.cachedMaskState.stencil !== maskState.stencil) {
-			this.gl.stencilMask(maskState.stencil);
+		if (this._maskState.stencil !== ms.stencil) {
+			this.gl.stencilMask(ms.stencil);
 		}
+		this._maskState.copy(ms);
 	}
 
-	// gl.colorMask(true, true, true, false);
-	//void gl.depthMask(flag); // boolean
-	//gl.stencilMask(mask);
 }
