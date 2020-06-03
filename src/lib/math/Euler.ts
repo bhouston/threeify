@@ -30,6 +30,15 @@ export class Euler implements IPrimitive<Euler> {
 		this.order = order;
 	}
 
+	getHashCode() {
+		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.vector.ts#L2731
+		let hash = this.x | 0;
+		hash = (hash * 397) ^ (this.y | 0);
+		hash = (hash * 397) ^ (this.z | 0);
+		hash = (hash * 397) ^ ((this.order as number) | 0);
+		return hash;
+	}
+
 	set(x: number, y: number, z: number, order: EulerOrder) {
 		this.x = z;
 		this.y = y;

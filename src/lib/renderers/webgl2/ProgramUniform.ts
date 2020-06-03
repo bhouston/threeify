@@ -106,7 +106,7 @@ export class ProgramUniform {
             }
             case UniformType.FloatVec2: {
                 let v = value as Vector2;
-                let hashCode = v.hashCode;
+                let hashCode = v.getHashCode();
                 if (hashCode !== this.valueHashCode) {
                     gl.uniform2f(this.glLocation, v.x, v.y);
                     this.valueHashCode = hashCode;
@@ -116,7 +116,7 @@ export class ProgramUniform {
             case UniformType.FloatVec3: {
                 if (value instanceof Vector3) {
                     let v = value as Vector3;
-                    let hashCode = v.hashCode;
+                    let hashCode = v.getHashCode();
                     if (hashCode !== this.valueHashCode) {
                         gl.uniform3f(this.glLocation, v.x, v.y, v.z);
                         this.valueHashCode = hashCode;
@@ -124,7 +124,7 @@ export class ProgramUniform {
                     return this;
                 } else if (value instanceof Color) {
                     let c = value as Color;
-                    let hashCode = c.hashCode;
+                    let hashCode = c.getHashCode();
                     if (hashCode !== this.valueHashCode) {
                         gl.uniform3f(this.glLocation, c.r, c.g, c.b);
                         this.valueHashCode = hashCode;
@@ -144,7 +144,7 @@ export class ProgramUniform {
             //case UniformType.FloatMat4x3:
             case UniformType.FloatMat4: {
                 let m = value as Matrix4;
-                let hashCode = m.hashCode;
+                let hashCode = m.getHashCode();
                 if (hashCode !== this.valueHashCode) {
                     gl.uniformMatrix4fv(this.glLocation, false, m.elements);
                     this.valueHashCode = hashCode;

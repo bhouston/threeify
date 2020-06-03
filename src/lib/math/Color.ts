@@ -28,7 +28,7 @@ export class Color implements IPrimitive<Color> {
 		this.b = b;
 	}
 
-	get hashCode() {
+	getHashCode() {
 		// https://github.com/BabylonJS/Babylon.js/blob/master/src/Maths/math.color.ts#L53
 		let hash = (this.r * 255) | 0;
 		hash = (hash * 397) ^ ((this.g * 255) | 0);
