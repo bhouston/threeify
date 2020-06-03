@@ -17,6 +17,7 @@ import { TextureImage2D } from './renderers/webgl2/TextureImage2D.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 import { VertexAttributeGeometry } from './renderers/webgl2/VertexAttributeGeometry.js';
 import { Texture } from './textures/Texture.js';
+import { Color } from './math/Color.js';
 
 async function test() {
 	let a = new Vector3(1, 0, 0);
@@ -153,6 +154,28 @@ async function test() {
 
 	let program = new Program(context, shaderCodeMaterial);
 	console.log(program);
+
+	// using uniform set structures
+	class PBRMaterialUniforms {
+		albedo: Color = new Color(1, 1, 1);
+		roughness: number = 0.5;
+		metalness: number = 0.0;
+		emissive: Color = new Color(1, 1, 1);
+		normalFactor: number = 1.0;
+	}
+	var pbrMaterialUniforms = new PBRMaterialUniforms();
+	program.setUniformValues( pbrMaterialUniforms );
+
+
+	// using uniform sets just from maps
+	var unstructuredUniforms = {
+		albedo: new Color(1, 1, 1),
+		roughness: 0.5,
+		metalness: 0.0,
+		emissive: new Color(1, 1, 1),
+		normalFactor: 1.0
+	}
+	program.setUniformValues( unstructuredUniforms );
 
 	// bind to program
 	let vertexArrayObject = new VertexArrayObject(

@@ -341,4 +341,18 @@ export class Quaternion implements IPrimitive<Quaternion> {
 	equals(q: Quaternion) {
 		return q.x === this.x && q.y === this.y && q.z === this.z && q.w === this.w;
 	}
+
+	setFromArray( floatArray: Float32Array, offset: number ) {
+		this.x = floatArray[offset+0];
+		this.y = floatArray[offset+1];
+		this.z = floatArray[offset+2];
+		this.w = floatArray[offset+3];
+	}
+	
+	toArray( floatArray: Float32Array, offset: number ) {
+		floatArray[offset+0] = this.x;
+		floatArray[offset+1] = this.y;
+		floatArray[offset+2] = this.z;
+		floatArray[offset+3] = this.w;
+	}
 }

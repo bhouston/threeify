@@ -30,3 +30,8 @@ export interface IVersionable {
 	version: number;
 	dirty(): void;
 }
+
+export interface IArrayable {
+	setFromArray( floatArray: Float32Array, offset: number ): void;
+	toArray( floatArray: Float32Array, offset: number ): void;
+}

@@ -172,4 +172,18 @@ export class Euler implements IPrimitive<Euler> {
 			e.order === this.order
 		);
 	}
+
+	setFromArray( floatArray: Float32Array, offset: number ) {
+		this.x = floatArray[offset+0];
+		this.y = floatArray[offset+1];
+		this.z = floatArray[offset+2];
+		this.order = floatArray[offset+3] as EulerOrder;
+	}
+	
+	toArray( floatArray: Float32Array, offset: number ) {
+		floatArray[offset+0] = this.x;
+		floatArray[offset+1] = this.y;
+		floatArray[offset+2] = this.z;
+		floatArray[offset+3] = this.order as number;
+	}
 }

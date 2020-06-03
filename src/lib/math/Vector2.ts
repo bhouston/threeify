@@ -119,4 +119,15 @@ export class Vector2 implements IPrimitive<Vector2> {
 	equals(v: Vector2) {
 		return v.x === this.x && v.y === this.y;
 	}
+
+	setFromArray( floatArray: Float32Array, offset: number ) {
+		this.x = floatArray[offset+0];
+		this.y = floatArray[offset+1];
+	}
+	
+	toArray( floatArray: Float32Array, offset: number ) {
+		floatArray[offset+0] = this.x;
+		floatArray[offset+1] = this.y;
+	}
+	
 }

@@ -84,9 +84,15 @@ export class Program implements IDisposable {
 		}
 	}
 
-	setUniformValues(uniformValues: Array<UniformValue>) {
+	setUniformValues(uniformValues: any) {
 		// https://github.com/greggman/twgl.js/blob/cf0767dbddb48015c8bb0300e308569aeee4f78a/src/programs.js
-		throw new Error('not implemented');
+		const uniformNames = Object.keys(uniformValues) as Array<keyof string>;
+		uniformNames.forEach( uniformName => {
+			let programUniform = this.uniforms.find( uniform => uniform.name == uniformName );
+			if( programUniform ) {
+				programUniform.set( uniformValues[ uniformName ] );
+			}
+		});
 	}
 
 	dispose() {

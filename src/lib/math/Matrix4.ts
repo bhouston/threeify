@@ -788,4 +788,16 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 
 		return true;
 	}
+
+	setFromArray( floatArray: Float32Array, offset: number ) {
+		for( let i = 0; i < this.elements.length; i ++ ) {
+			this.elements[i] = floatArray[offset + i];
+		}
+	}
+	
+	toArray( floatArray: Float32Array, offset: number ) {
+		for( let i = 0; i < this.elements.length; i ++ ) {
+			floatArray[offset + i] = this.elements[i];
+		}
+	}
 }

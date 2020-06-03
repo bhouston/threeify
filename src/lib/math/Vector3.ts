@@ -121,4 +121,16 @@ export class Vector3 implements IPrimitive<Vector3> {
 	equals(v: Vector3) {
 		return v.x === this.x && v.y === this.y && v.z === this.z;
 	}
+
+	setFromArray( floatArray: Float32Array, offset: number ) {
+		this.x = floatArray[offset+0];
+		this.y = floatArray[offset+1];
+		this.z = floatArray[offset+2];
+	}
+	
+	toArray( floatArray: Float32Array, offset: number ) {
+		floatArray[offset+0] = this.x;
+		floatArray[offset+1] = this.y;
+		floatArray[offset+2] = this.z;
+	}
 }

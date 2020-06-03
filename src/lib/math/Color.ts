@@ -122,4 +122,16 @@ export class Color implements IPrimitive<Color> {
 	equals(c: Color) {
 		return c.r === this.r && c.g === this.g && c.b === this.b;
 	}
+
+	setFromArray( floatArray: Float32Array, offset: number ) {
+		this.r = floatArray[offset+0];
+		this.g = floatArray[offset+1];
+		this.b = floatArray[offset+2];
+	}
+	
+	toArray( floatArray: Float32Array, offset: number ) {
+		floatArray[offset+0] = this.r;
+		floatArray[offset+1] = this.g;
+		floatArray[offset+2] = this.b;
+	}
 }
