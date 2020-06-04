@@ -3,6 +3,7 @@
 #define PI_HALF 1.5707963267948966
 #define RECIPROCAL_PI 0.3183098861837907
 #define RECIPROCAL_PI2 0.15915494309189535
+#define EPSILON 1e-6
 
 #define saturate(a) clamp( a, 0.0, 1.0 )
 #define whiteComplement(a) ( 1.0 - saturate( a ) )
