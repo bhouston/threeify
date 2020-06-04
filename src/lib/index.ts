@@ -31,7 +31,7 @@ async function test() {
 	let m = new Matrix4().set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0);
 
 	console.log(a);
-	a.applyMatrix4(m);
+	a.transformMatrix4(m);
 	console.log(a);
 	let c = a.add(b).dot(b);
 	console.log(c);

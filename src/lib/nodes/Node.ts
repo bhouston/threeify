@@ -11,7 +11,7 @@ import {
 	IIdentifiable,
 	IVersionable,
 } from '../interfaces/Standard.js';
-import { Euler } from '../math/Euler.js';
+import { Euler3 } from '../math/Euler3.js';
 import { Matrix4 } from '../math/Matrix4.js';
 import { Quaternion } from '../math/Quaternion.js';
 import { Vector3 } from '../math/Vector3.js';
@@ -23,7 +23,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	version: number = 0;
 	name: string = '';
 	position: Vector3 = new Vector3(0, 0, 0);
-	rotation: Euler = new Euler();
+	rotation: Euler3 = new Euler3();
 	scale: Vector3 = new Vector3(0, 0, 0);
 	readonly children: Array<Node> = [];
 
