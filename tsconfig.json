@@ -5,7 +5,7 @@
     "declaration": true,
     "sourceMap": true,
     "declarationMap": true,
-    "outDir": "./",
+    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "forceConsistentCasingInFileNames": true,

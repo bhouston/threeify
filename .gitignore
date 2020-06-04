@@ -1,7 +1,7 @@
-node_modules/
-/lib/
-dist/index.js.map
-dist/index.js
+node_modules
+lib
+dist
+dist
 three.js
 src/lib/renderers/webgl2/webgl2_fundamentals.js
 package-lock.json
