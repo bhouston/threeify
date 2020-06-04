@@ -50,13 +50,24 @@ vec2 uv( int uvIndex ) {
     return vec2(0,0);
 }
 
-vec3 ( vec3 modulator, sampler2D textureMap, vec2 uv ) {
+vec3 ( vec3 modulator, sampler2D map, vec2 uv ) {
+    texture2D( map, uv );
 }
+
+pbr_brdf(
+    vec3 albedo,
+    float roughness,
+    float metalness,
+    vec3 emissive,
+     ) {
+
+ }
+
 void main() {
 
-    vec3 albedo = albedoModular * ( albedoMap, uv( albedoUVIndex ) );
-    vec3 roughness = metalnessModular * ( roughnessMap, uv( roughnessUVIndex ) );
-    vec3 metalness = metalnessModular * ( metalnessMap, uv( metalnessUVIndex ) );
+    vec3 albedo = albedoModular * texture2D( albedoMap, uv( albedoUVIndex ) );
+    float roughness = metalnessModular * texture2D( roughnessMap, uv( roughnessUVIndex ) ).g;
+    float metalness = metalnessModular * texture2D( metalnessMap, uv( metalnessUVIndex ) ).b;
     
     gl_color = vec4(1, 0, 0.5, 1);
 }
