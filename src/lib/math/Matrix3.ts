@@ -216,8 +216,17 @@ export class Matrix3 implements IPrimitive<Matrix3> {
 		return this;
 	}
 
-	makeTranslation2(x: number, y: number) {
-		this.set(1, 0, x, 0, 1, y, 0, 0, 1);
+	makeTranslation2(t: Vector2) {
+		this.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
+
+		return this;
+	}
+
+	makeRotation2FromAngle(angle: number) {
+		let c = Math.cos(angle);
+		let s = Math.sin(angle);
+
+		this.set(c, -s, 0, s, c, 0, 0, 0, 1);
 
 		return this;
 	}

@@ -10,6 +10,7 @@ import {
 	IDisposable,
 	IIdentifiable,
 	IVersionable,
+	ICloneable,
 } from '../interfaces/Standard.js';
 import { Euler3 } from '../math/Euler3.js';
 import { Matrix4 } from '../math/Matrix4.js';
@@ -27,7 +28,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	scale: Vector3 = new Vector3(0, 0, 0);
 	readonly children: Array<Node> = [];
 
-	constructor() { }
+	constructor() {}
 
 	dirty() {
 		this.version++;
@@ -38,17 +39,6 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 			this.disposed = true;
 			this.dirty();
 		}
-	}
-
-	copy(source: Node) {
-		this.name = source.name;
-		this.position.copy(source.position);
-		this.rotation.copy(source.rotation);
-		this.scale.copy(source.scale);
-
-		// NOTE: explicitly not copying children!
-
-		return this;
 	}
 
 	private versionedLocalToWorldMatrix: VersionedValue<

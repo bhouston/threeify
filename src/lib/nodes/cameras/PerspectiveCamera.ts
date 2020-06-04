@@ -28,17 +28,6 @@ export class PerspectiveCamera extends Camera {
 		this.zoom = zoom;
 	}
 
-	copy(c: PerspectiveCamera) {
-		super.copy(c);
-
-		this.verticalFov = c.verticalFov;
-		this.near = c.near;
-		this.far = c.far;
-		this.zoom = c.zoom;
-
-		return this;
-	}
-
 	toProjectionMatrix(viewAspectRatio: number): Matrix4 {
 		let height =
 			(2.0 * this.near * Math.tan((this.verticalFov * Math.PI) / 180.0)) /

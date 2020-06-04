@@ -432,8 +432,8 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 		return this;
 	}
 
-	makeTranslation(x: number, y: number, z: number) {
-		this.set(1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
+	makeTranslation(t: Vector3) {
+		this.set(1, 0, 0, t.x, 0, 1, 0, t.y, 0, 0, 1, t.z, 0, 0, 0, 1);
 
 		return this;
 	}

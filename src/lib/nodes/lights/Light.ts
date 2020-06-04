@@ -18,13 +18,4 @@ export class Light extends Node {
 		this.color = color;
 		this.intensity = intensity;
 	}
-
-	copy(source: Light) {
-		super.copy(source);
-
-		this.color.copy(source.color);
-		this.intensity = source.intensity;
-
-		return this;
-	}
 }

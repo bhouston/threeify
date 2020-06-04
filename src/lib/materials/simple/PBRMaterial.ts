@@ -5,36 +5,23 @@
 // * @bhouston
 //
 
-import { Color } from "../../math/Color.js";
-import { Matrix3 } from "../../math/Matrix3.js";
-import { Texture } from "../../textures/Texture.js";
+import { Color } from '../../math/Color.js';
+import { TextureAccessor } from '../../textures/TextureAccessor.js';
+import { ICloneable } from '../../interfaces/Standard.js';
 
-export class TextureAccessor {
-    texture: Texture;
-    uvIndex: number;
-    uvTransform: Matrix3;
+export class PBRMaterial implements ICloneable<TextureAccessor> {
+	albedo: Color = new Color(1, 1, 1);
+	albedoTextureAccessor: TextureAccessor | null = null;
 
-    constructor( texture: Texture, uvIndex: number, uvTransform: Matrix3 ) {
-        this.texture = texture;
-        this.uvIndex = uvIndex;
-        this.uvTransform = uvTransform;
-    }
+	roughness: number = 0.5;
+	roughnessTextureAccessor: TextureAccessor | null = null;
 
-}
+	metalness: number = 0.0;
+	metalnessTextureAccessor: TextureAccessor | null = null;
 
-export class PBRMaterial {
-    albedo: Color = new Color(1, 1, 1);
-    albedoTexture: TextureAccessor | null = null;
+	emissive: Color = new Color(1, 1, 1);
+	emissiveTextureAccessor: TextureAccessor | null = null;
 
-    roughness: number = 0.5;
-    roughnessTexture: TextureAccessor | null = null;
-
-    metalness: number = 0.0;
-    metalnessTexture: TextureAccessor | null = null;
-
-    emissive: Color = new Color(1, 1, 1);
-    emissiveTexture: TextureAccessor | null = null;
-
-    normalFactor: number = 1.0;
-    normalTexture: TextureAccessor | null = null;
+	normalFactor: number = 1.0;
+	normalTextureAccessor: TextureAccessor | null = null;
 }
