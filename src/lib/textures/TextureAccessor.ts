@@ -1,8 +1,8 @@
-import { Texture } from './Texture.js';
-import { Matrix3 } from '../math/Matrix3.js';
-import { Matrix4 } from '../math/Matrix4.js';
-import { Vector2 } from '../math/Vector2.js';
 import { ICloneable, ICopyable, IVersionable } from '../interfaces/Standard.js';
+import { Matrix3 } from '../math/Matrix3.js';
+import { Vector2 } from '../math/Vector2.js';
+import { Texture } from './Texture.js';
+import { Matrix4 } from '../math/Matrix4.js';
 
 export class TextureAccessor
 	implements
@@ -49,16 +49,19 @@ export class TextureAccessor
 		return this;
 	}
 
-	// TODO: add node-like caching with a dirty() and version number if this ever becomes slow.
-	toUvTransform(): Matrix3 {
-		let m = new Matrix3();
-		m.makeTranslation2(this.uvTranslation);
-		m.makeConcatenation(
-			m,
-			new Matrix3().makeRotation2FromAngle(this.uvRotation),
-		);
-		m.makeConcatenation(m, new Matrix3().makeScale2(this.uvScale));
-		return m;
+	private _uvTransform = new Matrix3();
+	private _uvTransformVersion = -1;
+	get uvTransform(): Matrix3 {
+		if( this._uvTransformVersion < this.version ) {
+			this._uvTransform.makeTranslation2(this.uvTranslation);
+			this._uvTransform.makeConcatenation(
+				this._uvTransform,
+				new Matrix3().makeRotation2FromAngle(this.uvRotation),
+			);
+			this._uvTransform.makeConcatenation(this._uvTransform, new Matrix3().makeScale2(this.uvScale));
+			this._uvTransformVersion = this.version;
+		}
+		return this._uvTransform;
 	}
 
 	dirty() {

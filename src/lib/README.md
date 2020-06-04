@@ -20,3 +20,9 @@ let localToWorld = worldToLocal.clone.invert();
 let localToScreenProjection = new Matrix4().makePerspectiveProjection( 1.0, 1.0, 1000.0, 1.0 );
 let screenToLocalUnprojection = localToScreenProjection.clone().invert();
 ```
+
+# Lines of Code
+
+Calculated by ```cloc src/lib/**/*.ts```:
+
+2020-06-4: blank 522, comment 208, code 2535
