@@ -9,7 +9,7 @@ import { Color } from '../../math/Color.js';
 import { TextureAccessor } from '../../textures/TextureAccessor.js';
 import { ICloneable } from '../../interfaces/Standard.js';
 
-export class PBRMaterial implements ICloneable<TextureAccessor> {
+export class PBRMaterial {
 	albedo: Color = new Color(1, 1, 1);
 	albedoTextureAccessor: TextureAccessor | null = null;
 
