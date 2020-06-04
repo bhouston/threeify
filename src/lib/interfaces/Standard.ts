@@ -9,8 +9,8 @@ export interface ICloneable<T> {
 	clone(): T;
 }
 
-export interface IClopyable<T> {
-	copy( t: T ): T;
+export interface ICopyable<T> {
+	copy(t: T): T;
 }
 
 export interface IComparable<T> {
