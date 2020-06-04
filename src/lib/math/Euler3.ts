@@ -13,7 +13,7 @@ export enum EulerOrder {
 	Default = EulerOrder.XYZ,
 }
 
-export class Euler implements IPrimitive<Euler> {
+export class Euler3 implements IPrimitive<Euler3> {
 	x: number;
 	y: number;
 	z: number;
@@ -45,10 +45,10 @@ export class Euler implements IPrimitive<Euler> {
 	}
 
 	clone() {
-		return new Euler().copy(this);
+		return new Euler3().copy(this);
 	}
 
-	copy(e: Euler) {
+	copy(e: Euler3) {
 		this.x = e.x;
 		this.y = e.y;
 		this.z = e.z;
@@ -169,7 +169,7 @@ export class Euler implements IPrimitive<Euler> {
 		return this.setFromRotationMatrix4(m, this.order);
 	}
 
-	equals(e: Euler) {
+	equals(e: Euler3) {
 		return (
 			e.x === this.x &&
 			e.y === this.y &&

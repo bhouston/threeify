@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Euler, EulerOrder } from './Euler.js';
+import { Euler3, EulerOrder } from './Euler3.js';
 import { IPrimitive } from './IPrimitive.js';
 import { Matrix4 } from './Matrix4.js';
 import { Vector3 } from './Vector3.js';
@@ -128,7 +128,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		return this;
 	}
 
-	setFromEuler(euler: Euler) {
+	setFromEuler(euler: Euler3) {
 		let x = euler.x,
 			y = euler.y,
 			z = euler.z,

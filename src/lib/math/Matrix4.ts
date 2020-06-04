@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Euler, EulerOrder } from './Euler.js';
+import { Euler3, EulerOrder } from './Euler3.js';
 import { IPrimitive } from './IPrimitive.js';
 import { Quaternion } from './Quaternion.js';
 import { Vector3 } from './Vector3.js';
@@ -432,8 +432,8 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 		return this;
 	}
 
-	makeTranslation(x: number, y: number, z: number) {
-		this.set(1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1);
+	makeTranslation(t: Vector3) {
+		this.set(1, 0, 0, t.x, 0, 1, 0, t.y, 0, 0, 1, t.z, 0, 0, 0, 1);
 
 		return this;
 	}
@@ -472,7 +472,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 		return this;
 	}
 
-	makeRotationFromEuler(euler: Euler) {
+	makeRotationFromEuler(euler: Euler3) {
 		let te = this.elements;
 
 		let x = euler.x,

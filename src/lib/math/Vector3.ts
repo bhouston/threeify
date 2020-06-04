@@ -104,7 +104,9 @@ export class Vector3 implements IPrimitive<Vector3> {
 		return this.x * v.x + this.y * v.y + this.z * v.z;
 	}
 
-	applyMatrix4(m: Matrix4) {
+	// TODO: think about moving this to a helper function -- it may allow for better code shaking...
+	// homogeneous coordinate projection
+	transformMatrix4(m: Matrix4) {
 		let x = this.x,
 			y = this.y,
 			z = this.z;

@@ -37,6 +37,7 @@ Each math class should have the following:
 
 ## Changes from Three.js
 
+* Always use the primitive instead of a destructured set of variables in a method call: e.g. makeTranslation( v: Vector3) rather than makeTranslation( x: number, y: number, z: number )
 * A bunch of name changes based on the above naming conventions.
 * Matrix4.inverse() : Matrix4 -> inplace inversion: Matrix4.invert().  Ben felt the semantics were unclear, this is more efficient as well.
 * Matrix4.invert() always throws on degenerate matrix.  This is a serious error and should never be ignored.

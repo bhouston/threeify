@@ -35,13 +35,4 @@ export class PointLight extends Light {
 		// ref: equation (15) from https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
 		this.intensity = value / (4 * Math.PI);
 	}
-
-	copy(source: PointLight) {
-		super.copy(source);
-
-		this.distance = source.distance;
-		this.decay = source.decay;
-
-		return this;
-	}
 }

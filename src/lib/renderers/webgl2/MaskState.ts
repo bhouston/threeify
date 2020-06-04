@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable } from "../../interfaces/Standard";
+import { ICloneable } from '../../interfaces/Standard';
 
 export class MaskState implements ICloneable<MaskState> {
 	red: boolean;
@@ -15,8 +15,14 @@ export class MaskState implements ICloneable<MaskState> {
 	depth: boolean;
 	stencil: number; // bitmask
 
-
-	constructor(red: boolean = true, green: boolean = true, blue: boolean = true, alpha: boolean = true, depth: boolean = true, stencil: number = 0 ) {
+	constructor(
+		red: boolean = true,
+		green: boolean = true,
+		blue: boolean = true,
+		alpha: boolean = true,
+		depth: boolean = true,
+		stencil: number = 0,
+	) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
@@ -26,10 +32,17 @@ export class MaskState implements ICloneable<MaskState> {
 	}
 
 	clone() {
-		return new MaskState( this.red, this.green, this.blue, this.alpha, this.depth, this.stencil );
+		return new MaskState(
+			this.red,
+			this.green,
+			this.blue,
+			this.alpha,
+			this.depth,
+			this.stencil,
+		);
 	}
 
-	copy( ms: MaskState ) {
+	copy(ms: MaskState) {
 		this.red = ms.red;
 		this.green = ms.green;
 		this.blue = ms.blue;

@@ -103,7 +103,10 @@ export class Context {
 		if (this._blendState.equation !== bs.equation) {
 			this.gl.blendEquation(bs.equation);
 		}
-		if (this._blendState.sourceFactor !== bs.sourceFactor || this._blendState.destFactor !== bs.destFactor) {
+		if (
+			this._blendState.sourceFactor !== bs.sourceFactor ||
+			this._blendState.destFactor !== bs.destFactor
+		) {
 			this.gl.blendFunc(bs.sourceFactor, bs.destFactor);
 		}
 		this._blendState.copy(bs);
@@ -132,13 +135,11 @@ export class Context {
 		return this._clearState.clone();
 	}
 	set clearState(cs: ClearState) {
-		if (!this._clearState.color.equals(cs.color) || this._clearState.alpha !== cs.alpha) {
-			this.gl.clearColor(
-				cs.color.r,
-				cs.color.g,
-				cs.color.b,
-				cs.alpha,
-			);
+		if (
+			!this._clearState.color.equals(cs.color) ||
+			this._clearState.alpha !== cs.alpha
+		) {
+			this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
 		}
 		if (this._clearState.depth !== cs.depth) {
 			this.gl.clearDepth(cs.depth);
@@ -154,13 +155,13 @@ export class Context {
 		return this._maskState.clone();
 	}
 	set maskState(ms: MaskState) {
-		if (this._maskState.red !== ms.red || this._maskState.green !== ms.green || this._maskState.blue !== ms.blue || this._maskState.alpha !== ms.alpha) {
-			this.gl.colorMask(
-				ms.red,
-				ms.green,
-				ms.blue,
-				ms.alpha,
-			);
+		if (
+			this._maskState.red !== ms.red ||
+			this._maskState.green !== ms.green ||
+			this._maskState.blue !== ms.blue ||
+			this._maskState.alpha !== ms.alpha
+		) {
+			this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
 		}
 		if (this._maskState.depth !== ms.depth) {
 			this.gl.depthMask(ms.depth);
@@ -170,5 +171,4 @@ export class Context {
 		}
 		this._maskState.copy(ms);
 	}
-
 }

@@ -32,18 +32,6 @@ export class OrthographicCamera extends Camera {
 		this.zoom = zoom;
 	}
 
-	copy(c: OrthographicCamera) {
-		super.copy(c);
-
-		this.height = c.height;
-		this.near = c.near;
-		this.far = c.far;
-		this.center.copy(c.center);
-		this.zoom = c.zoom;
-
-		return this;
-	}
-
 	toProjectionMatrix(viewAspectRatio: number): Matrix4 {
 		let width =
 			(this.height * viewAspectRatio * this.pixelAspectRatio) / this.zoom;

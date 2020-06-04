@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable } from "../../interfaces/Standard";
+import { ICloneable } from '../../interfaces/Standard';
 
 const GL = WebGLRenderingContext;
 
@@ -20,20 +20,23 @@ export enum DepthTestFunc {
 	Always = GL.ALWAYS, //always pass
 }
 
-export class DepthTestState implements ICloneable<DepthTestState>  {
+export class DepthTestState implements ICloneable<DepthTestState> {
 	enabled: boolean;
 	func: DepthTestFunc;
 
-	constructor(enabled: boolean = true, func: DepthTestFunc = DepthTestFunc.Less ) {
+	constructor(
+		enabled: boolean = true,
+		func: DepthTestFunc = DepthTestFunc.Less,
+	) {
 		this.enabled = enabled;
 		this.func = func;
 	}
 
 	clone() {
-		return new DepthTestState( this.enabled, this.func );
+		return new DepthTestState(this.enabled, this.func);
 	}
 
-	copy( dts: DepthTestState ) {
+	copy(dts: DepthTestState) {
 		this.enabled = dts.enabled;
 		this.func = dts.func;
 	}

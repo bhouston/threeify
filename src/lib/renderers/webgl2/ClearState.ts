@@ -14,7 +14,12 @@ export class ClearState implements ICloneable<ClearState> {
 	depth: number; // float
 	stencil: number; // integer
 
-	constructor(color: Color = new Color(), alpha: number = 0, depth: number = 1, stencil: number = 0 ) {
+	constructor(
+		color: Color = new Color(),
+		alpha: number = 0,
+		depth: number = 1,
+		stencil: number = 0,
+	) {
 		this.color = color;
 		this.alpha = alpha;
 		this.depth = depth;
@@ -22,14 +27,13 @@ export class ClearState implements ICloneable<ClearState> {
 	}
 
 	clone() {
-		return new ClearState( this.color, this.alpha, this.depth, this.stencil );
+		return new ClearState(this.color, this.alpha, this.depth, this.stencil);
 	}
 
-	copy( cs: ClearState ) {
-		this.color.copy( cs.color );
+	copy(cs: ClearState) {
+		this.color.copy(cs.color);
 		this.alpha = cs.alpha;
 		this.depth = cs.depth;
 		this.stencil = cs.stencil;
 	}
-
 }
