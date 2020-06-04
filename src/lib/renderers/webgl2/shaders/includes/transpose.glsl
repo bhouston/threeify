@@ -1,4 +1,3 @@
-
 mat3 transposeMat3( const in mat3 m ) {
 
 	mat3 tmp;
