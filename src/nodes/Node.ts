@@ -22,7 +22,11 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	disposed: boolean = false;
 	readonly uuid: string = generateUUID();
 	version: number = 0;
-	parent: Node | null = null; // TODO: Figure out a pattern to set this automatically.  set on all children when dirty?  Have a NodeList<Node> wrapper around Array<Node>[] children?  Override add to set
+	 // TODO: Figure out a pattern to set this automatically.  set on all children when dirty?
+	 // Have a NodeList<Node> wrapper around Array<Node>[] children?  Override add to set
+	 // Specify parent on child via child.parent = node?  This would be a setter/getter.  Add its to parent.children automatically.
+	 // This last solution is a bit tricky.
+	parent: Node | null = null;
 	name: string = '';
 	position: Vector3 = new Vector3(0, 0, 0);
 	rotation: Euler3 = new Euler3();
