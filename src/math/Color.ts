@@ -92,7 +92,7 @@ export class Color implements IPrimitive<Color> {
 			case 2:
 				return this.b;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 	}
 
@@ -108,7 +108,7 @@ export class Color implements IPrimitive<Color> {
 				this.b = value;
 				break;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 
 		return this;

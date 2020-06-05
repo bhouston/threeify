@@ -74,7 +74,7 @@ export class Vector3 implements IPrimitive<Vector3> {
 			case 2:
 				return this.z;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 	}
 
@@ -90,7 +90,7 @@ export class Vector3 implements IPrimitive<Vector3> {
 				this.z = value;
 				break;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 
 		return this;

@@ -39,5 +39,5 @@ export function componentTypeSizeOf(componentType: ComponentType) {
 			return 4;
 	}
 
-	throw new Error('unknown data type:' + componentType);
+	throw new Error(`unsupported component type: ${componentType}`);
 }

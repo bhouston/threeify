@@ -53,7 +53,7 @@ export class TexImage2D implements IDisposable {
 		// Create a texture.
 		{
 			let glTexture = gl.createTexture();
-			if (!glTexture) throw new Error('can not create texture');
+			if (!glTexture) throw new Error('createTexture failed');
 			this.glTexture = glTexture;
 		}
 	}

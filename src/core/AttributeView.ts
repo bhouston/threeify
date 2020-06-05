@@ -33,7 +33,7 @@ export class AttributeView
 		target: BufferTarget = BufferTarget.Array,
 	) {
 		if (byteLength > arrayBuffer.byteLength)
-			throw new Error('byteLength too long');
+			throw new Error(`byteLength too long: ${byteLength} > ${arrayBuffer.byteLength}`);
 
 		this.arrayBuffer = arrayBuffer;
 		this.byteOffset = byteOffset;

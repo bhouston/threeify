@@ -26,9 +26,9 @@ export class Buffer implements IDisposable {
 		// Create a buffer and put three 2d clip space points in it
 		{
 			let glBuffer = gl.createBuffer();
-			if (!glBuffer) {
-				throw new Error('can not create buffer');
-			}
+			if (!glBuffer)
+				throw new Error('createBuffer failed');
+			
 			this.glBuffer = glBuffer;
 		}
 

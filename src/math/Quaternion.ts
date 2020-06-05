@@ -70,7 +70,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 			case 3:
 				return this.w;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 	}
 
@@ -89,7 +89,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 				this.w = value;
 				break;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 
 		return this;

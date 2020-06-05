@@ -57,18 +57,18 @@ export class ProgramUniform {
 		// look up uniform locations
 		{
 			let activeInfo = gl.getActiveUniform(program.glProgram, index);
-			if (!activeInfo) {
-				throw new Error('Can not find uniform with index: ' + index);
-			}
+			if (!activeInfo)
+				throw new Error(`Can not find uniform with index: ${index}`);
+		
 
 			this.name = activeInfo.name;
 			this.size = activeInfo.size;
 			this.uniformType = activeInfo.type as UniformType;
 
 			let glLocation = gl.getUniformLocation(program.glProgram, this.name);
-			if (!glLocation) {
-				throw new Error('Can not find uniform named: ' + this.name);
-			}
+			if (!glLocation)
+				throw new Error(`can not find uniform named: ${this.name}`);
+		
 			this.glLocation = glLocation;
 		}
 	}
@@ -152,6 +152,6 @@ export class ProgramUniform {
 				return this;
 			}
 		}
-		throw new Error('unsupported uniform type');
+		throw new Error(`unsupported uniform type: ${this.uniformType}`);
 	}
 }

@@ -36,5 +36,5 @@ export function numPixelFormatComponents(pixelFormat: PixelFormat) {
 		case PixelFormat.DepthStencil:
 			return 2;
 	}
-	throw new Error('unknown pixel format: ' + pixelFormat);
+	throw new Error(`unsupported pixel format: ${pixelFormat}`);
 }

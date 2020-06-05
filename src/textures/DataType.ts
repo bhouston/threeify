@@ -34,5 +34,5 @@ export function sizeOfDataType(dataType: DataType) {
 		case DataType.Float:
 			return 5;
 	}
-	throw new Error('unknown data type: ' + dataType);
+	throw new Error(`unsupported data type: ${dataType}`);
 }

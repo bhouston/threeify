@@ -79,7 +79,6 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 }
 
 export function rootVisitor(node: Node, callback: (node: Node) => void) {
-	throw new Error('not implemented'); // TODO: remove this once Node.parent works!
-	//callback(node);
-	//if (node.parent) rootVisitor(node.parent, callback);
+	callback(node);
+	if (node.parent) rootVisitor(node.parent, callback);
 }

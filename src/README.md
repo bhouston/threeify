@@ -23,6 +23,6 @@ let screenToLocalUnprojection = localToScreenProjection.clone().invert();
 
 # Lines of Code
 
-Calculated by ```cloc src/lib/**/*.ts```:
+Calculated by ```cloc src/**/*.ts```:
 
 2020-06-4: blank 522, comment 208, code 2535

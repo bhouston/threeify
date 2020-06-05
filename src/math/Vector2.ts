@@ -67,7 +67,7 @@ export class Vector2 implements IPrimitive<Vector2> {
 			case 1:
 				return this.y;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 	}
 
@@ -80,7 +80,7 @@ export class Vector2 implements IPrimitive<Vector2> {
 				this.y = value;
 				break;
 			default:
-				throw new Error('index of our range: ' + index);
+				throw new Error(`index of our range: ${index}`);
 		}
 
 		return this;

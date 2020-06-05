@@ -18,9 +18,9 @@ export class Renderbuffer implements IDisposable {
 
 		{
 			let glRenderbuffer = gl.createRenderbuffer();
-			if (!glRenderbuffer) {
-				throw new Error('can not create render buffer');
-			}
+			if (!glRenderbuffer)
+				throw new Error('createRenderbuffer failed');
+			
 			this.glRenderbuffer = glRenderbuffer;
 		}
 	}

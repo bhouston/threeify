@@ -11,7 +11,7 @@ export function fetchImage(url: string): Promise<HTMLImageElement> {
 
 		image.addEventListener('load', (e) => resolve(image));
 		image.addEventListener('error', () => {
-			reject(new Error(`Failed to load image's URL: ${url}`));
+			reject(new Error(`failed to load image: ${url}`));
 		});
 
 		image.src = url;
