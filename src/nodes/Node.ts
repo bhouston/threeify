@@ -17,21 +17,18 @@ import { Matrix4 } from '../math/Matrix4.js';
 import { Quaternion } from '../math/Quaternion.js';
 import { Vector3 } from '../math/Vector3.js';
 import { VersionedValue } from '../VersionedValue.js';
+import { NodeCollection } from './NodeCollection.js';
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
 	disposed: boolean = false;
 	readonly uuid: string = generateUUID();
 	version: number = 0;
-	 // TODO: Figure out a pattern to set this automatically.  set on all children when dirty?
-	 // Have a NodeList<Node> wrapper around Array<Node>[] children?  Override add to set
-	 // Specify parent on child via child.parent = node?  This would be a setter/getter.  Add its to parent.children automatically.
-	 // This last solution is a bit tricky.
 	parent: Node | null = null;
 	name: string = '';
-	position: Vector3 = new Vector3(0, 0, 0);
+	readonly children: NodeCollection = new NodeCollection(this);
+	position: Vector3 = new Vector3();
 	rotation: Euler3 = new Euler3();
-	scale: Vector3 = new Vector3(0, 0, 0);
-	readonly children: Array<Node> = [];
+	scale: Vector3 = new Vector3(1, 1, 1);
 
 	constructor() {}
 

@@ -33,14 +33,14 @@ async function test() {
 	let rootNode = new Node();
 
 	let light = new PointLight();
-	light.parent = rootNode;  // TODO: Make this work!
+	rootNode.children.add(light);
 
 	let mesh = new Mesh(boxGeometry(1, 1, 1, 1, 1, 1));
-	mesh.parent = rootNode;  // TODO: Make this work!
+	rootNode.children.add(mesh);
 
 	let camera = new PerspectiveCamera(60, 1, 10);
 	camera.position.x -= 5;
-	camera.parent = rootNode;  // TODO: Make this work!
+	rootNode.children.add(camera);
 
 	let texture = new Texture(await fetchImage('./exocortex-logo.jpg'));
 	console.log(texture);

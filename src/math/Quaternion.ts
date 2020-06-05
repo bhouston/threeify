@@ -50,6 +50,15 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		return this;
 	}
 
+	sub(q: Quaternion) {
+		this.x -= q.x;
+		this.y -= q.y;
+		this.z -= q.z;
+		this.w -= q.w;
+
+		return this;
+	}
+
 	getComponent(index: number) {
 		switch (index) {
 			case 0:
@@ -88,6 +97,30 @@ export class Quaternion implements IPrimitive<Quaternion> {
 
 	numComponents() {
 		return 4;
+	}
+
+	multiply(q: Quaternion) {
+		// from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
+
+		let qax = this.x,
+			qay = this.y,
+			qaz = this.z,
+			qaw = this.w;
+		let qbx = q.x,
+			qby = q.y,
+			qbz = q.z,
+			qbw = q.w;
+
+		this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
+		this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
+		this.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
+		this.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
+
+		return this;
+	}
+
+	angleTo(q: Quaternion) {
+		return 2 * Math.acos(Math.abs(Math.min(Math.max(this.dot(q), -1), 1)));
 	}
 
 	dot(q: Quaternion) {
@@ -258,26 +291,6 @@ export class Quaternion implements IPrimitive<Quaternion> {
 		this.y = axis.y * s;
 		this.z = axis.z * s;
 		this.w = Math.cos(halfAngle);
-
-		return this;
-	}
-
-	multiplyQuaternion(q: Quaternion) {
-		// from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
-
-		let qax = this.x,
-			qay = this.y,
-			qaz = this.z,
-			qaw = this.w;
-		let qbx = q.x,
-			qby = q.y,
-			qbz = q.z,
-			qbw = q.w;
-
-		this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
-		this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
-		this.z = qaz * qbw + qaw * qbz + qax * qby - qay * qbx;
-		this.w = qaw * qbw - qax * qbx - qay * qby - qaz * qbz;
 
 		return this;
 	}
