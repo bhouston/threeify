@@ -18,7 +18,7 @@ import { TexImage2DPool } from './TexImage2D.js';
 const GL = WebGLRenderingContext;
 const GL2 = WebGL2RenderingContext;
 
-export class Context {
+export class RenderingContext {
 	canvas: HTMLCanvasElement;
 	gl: WebGL2RenderingContext;
 	TexImage2DPool: TexImage2DPool = new TexImage2DPool(this);
@@ -29,9 +29,8 @@ export class Context {
 		this.canvas = canvas;
 		{
 			let gl = canvas.getContext('webgl2');
-			if (!gl)
-				throw new Error('webgl2 not supported');
-			
+			if (!gl) throw new Error('webgl2 not supported');
+
 			this.gl = gl;
 		}
 	}

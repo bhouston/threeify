@@ -8,7 +8,7 @@
 import { Color } from '../../../math/Color';
 import { AttachmentFlags } from '../Framebuffer';
 import { ITask } from './ITask';
-import { Context } from '../Context';
+import { RenderingContext } from '../RenderingContext';
 
 export class ClearTask implements ITask {
 	color: Color = new Color();
@@ -16,7 +16,7 @@ export class ClearTask implements ITask {
 	attachmentFlags: AttachmentFlags =
 		AttachmentFlags.Color | AttachmentFlags.Depth;
 
-	execute(context: Context) {
+	execute(context: RenderingContext) {
 		let gl = context.gl;
 		let color = this.color;
 

@@ -7,11 +7,7 @@
 
 import { Color } from '../../math/Color.js';
 import { TextureAccessor } from '../../textures/TextureAccessor.js';
-import {
-	ICloneable,
-	ICopyable,
-	IVersionable,
-} from '../../model/interfaces.js';
+import { ICloneable, ICopyable, IVersionable } from '../../model/interfaces.js';
 
 export class PhysicalMaterial
 	implements

@@ -5,17 +5,13 @@
 // * @bhouston
 //
 
-import {
-	IVersionable,
-	IDisposable,
-	IIdentifiable,
-} from '../model/interfaces';
-import { Context } from './webgl2/Context';
+import { IVersionable, IDisposable, IIdentifiable } from '../model/interfaces';
+import { RenderingContext } from './webgl2/RenderingContext';
 
 export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
 
 export type UserResourceUpdater<U, R> = (
-	context: Context,
+	context: RenderingContext,
 	user: U,
 	resource: R | null,
 ) => R;
@@ -30,7 +26,7 @@ class UserResource<U extends IPoolUser, R extends IDisposable> {
 		this.resource = resource;
 	}
 
-	update(context: Context, updater: UserResourceUpdater<U, R>) {
+	update(context: RenderingContext, updater: UserResourceUpdater<U, R>) {
 		let disposed = false;
 		if (this.resourceVersion < this.user.version) {
 			if (this.user.disposed) {
@@ -47,11 +43,11 @@ class UserResource<U extends IPoolUser, R extends IDisposable> {
 }
 
 export class Pool<U extends IPoolUser, R extends IDisposable> {
-	context: Context;
+	context: RenderingContext;
 	updater: UserResourceUpdater<U, R>;
 	userResources: Array<UserResource<U, R>> = []; // TODO replace with a map for faster access
 
-	constructor(context: Context, updater: UserResourceUpdater<U, R>) {
+	constructor(context: RenderingContext, updater: UserResourceUpdater<U, R>) {
 		this.context = context;
 		this.updater = updater;
 	}

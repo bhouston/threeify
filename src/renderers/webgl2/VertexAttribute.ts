@@ -9,7 +9,7 @@
 import { AttributeAccessor } from '../../core/AttributeAccessor.js';
 import { ComponentType } from '../../core/ComponentType.js';
 import { Buffer } from './Buffer.js';
-import { Context } from './Context.js';
+import { RenderingContext } from './RenderingContext.js';
 
 export class VertexAttribute {
 	buffer: Buffer;
@@ -37,7 +37,7 @@ export class VertexAttribute {
 	}
 
 	static FromAttributeAccessor(
-		context: Context,
+		context: RenderingContext,
 		attributeAccessor: AttributeAccessor,
 	) {
 		let attributeView = attributeAccessor.attributeView;

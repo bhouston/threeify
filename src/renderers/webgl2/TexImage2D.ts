@@ -8,8 +8,7 @@
 
 import { PixelFormat } from '../../textures/PixelFormat.js';
 import { DataType } from '../../textures/DataType.js';
-import { TextureTarget } from './TextureTarget.js';
-import { Context } from './Context.js';
+import { RenderingContext } from './RenderingContext.js';
 import { Texture } from '../../textures/Texture.js';
 import { TextureWrap } from '../../textures/TextureWrap.js';
 import { TextureFilter } from '../../textures/TextureFilter.js';
@@ -19,6 +18,17 @@ import { Box2 } from '../../math/Box2.js';
 import { Vector2 } from '../../math/Vector2.js';
 
 const GL = WebGLRenderingContext;
+
+// from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
+export enum TextureTarget {
+	Texture2D = GL.TEXTURE_2D, //  A two-dimensional texture.
+	CubeMapPositiveX = GL.TEXTURE_CUBE_MAP_POSITIVE_X, // Cube map sides...
+	CubeMapNegativeX = GL.TEXTURE_CUBE_MAP_NEGATIVE_X,
+	CubeMapPositiveY = GL.TEXTURE_CUBE_MAP_POSITIVE_Y,
+	CubeMapNegativeY = GL.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+	CubeMapPositiveZ = GL.TEXTURE_CUBE_MAP_POSITIVE_Z,
+	CubeMapNegativeZ = GL.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+}
 
 export enum TextureSourceType {
 	ArrayBufferView,
@@ -31,7 +41,7 @@ export enum TextureSourceType {
 
 export class TexImage2D implements IDisposable {
 	disposed: boolean = false;
-	context: Context;
+	context: RenderingContext;
 	glTexture: WebGLTexture;
 	target: TextureTarget = TextureTarget.Texture2D;
 	level: number = 0;
@@ -45,7 +55,7 @@ export class TexImage2D implements IDisposable {
 	minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
 	generateMipmaps: boolean = true;
 
-	constructor(context: Context) {
+	constructor(context: RenderingContext) {
 		this.context = context;
 
 		let gl = this.context.gl;
@@ -119,10 +129,10 @@ export class TexImage2D implements IDisposable {
 }
 
 export class TexImage2DPool extends Pool<Texture, TexImage2D> {
-	constructor(context: Context) {
+	constructor(context: RenderingContext) {
 		super(
 			context,
-			(context: Context, texture: Texture, texImage2D: TexImage2D | null) => {
+			(context: RenderingContext, texture: Texture, texImage2D: TexImage2D | null) => {
 				if (!texImage2D) {
 					texImage2D = new TexImage2D(context);
 				}

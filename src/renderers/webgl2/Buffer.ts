@@ -2,18 +2,33 @@ import { AttributeView } from '../../core/AttributeView.js';
 import { BufferTarget } from '../../core/BufferTarget.js';
 import { IDisposable } from '../../model/interfaces.js';
 import { Pool } from '../Pool.js';
-import { BufferUsage } from './BufferUsage.js';
-import { Context } from './Context.js';
+import { RenderingContext } from './RenderingContext.js';
+
+const GL = WebGLRenderingContext;
+const GL2 = WebGL2RenderingContext;
+
+export enum BufferUsage {
+	StaticDraw = GL.STATIC_DRAW, // The contents are intended to be specified once by the application, and used many times as the source for WebGL drawing and image specification commands.
+	DynamicDraw = GL.DYNAMIC_DRAW, // The contents are intended to be respecified repeatedly by the application, and used many times as the source for WebGL drawing and image specification commands.
+	StreamDraw = GL2.STREAM_DRAW, // The contents are intended to be specified once by the application, and used at most a few times as the source for WebGL drawing and image specification commands.
+	StaticRead = GL2.STATIC_READ, // The contents are intended to be specified once by reading data from WebGL, and queried many times by the application.
+	DynamicRead = GL2.DYNAMIC_READ, // The contents are intended to be respecified repeatedly by reading data from WebGL, and queried many times by the application.
+	StreamRead = GL2.STREAM_READ, // The contents are intended to be specified once by reading data from WebGL, and queried at most a few times by the application
+	StaticCopy = GL2.STATIC_COPY, // The contents are intended to be specified once by reading data from WebGL, and used many times as the source for WebGL drawing and image specification commands.
+	DynamicCopy = GL2.DYNAMIC_COPY, // The contents are intended to be respecified repeatedly by reading data from WebGL, and used many times as the source for WebGL drawing and image specification commands.
+	StreamCopy = GL2.STREAM_COPY, // The contents are intended to be specified once by reading data from WebGL, and used at most a few times as the source for WebGL drawing and image specification commands.
+}
+
 
 export class Buffer implements IDisposable {
 	disposed: boolean = false;
-	context: Context;
+	context: RenderingContext;
 	glBuffer: WebGLBuffer;
 	target: BufferTarget = BufferTarget.Array;
 	usage: BufferUsage = BufferUsage.StaticDraw;
 
 	constructor(
-		context: Context,
+		context: RenderingContext,
 		arrayBuffer: ArrayBuffer,
 		target: BufferTarget = BufferTarget.Array,
 		usage: BufferUsage = BufferUsage.StaticDraw,
@@ -26,9 +41,8 @@ export class Buffer implements IDisposable {
 		// Create a buffer and put three 2d clip space points in it
 		{
 			let glBuffer = gl.createBuffer();
-			if (!glBuffer)
-				throw new Error('createBuffer failed');
-			
+			if (!glBuffer) throw new Error('createBuffer failed');
+
 			this.glBuffer = glBuffer;
 		}
 
@@ -65,11 +79,11 @@ export class Buffer implements IDisposable {
 }
 
 export class BufferPool extends Pool<AttributeView, Buffer> {
-	constructor(context: Context) {
+	constructor(context: RenderingContext) {
 		super(
 			context,
 			(
-				context: Context,
+				context: RenderingContext,
 				attributeView: AttributeView,
 				buffer: Buffer | null,
 			) => {
