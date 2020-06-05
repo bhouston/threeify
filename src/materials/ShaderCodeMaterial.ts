@@ -9,8 +9,8 @@ import {
 	IDisposable,
 	IVersionable,
 	IIdentifiable,
-} from '../interfaces/Standard.js';
-import { generateUUID } from '../generateUuid.js';
+} from '../model/interfaces.js';
+import { generateUUID } from '../model/generateUuid.js';
 import { IPoolUser } from '../renderers/Pool.js';
 
 export class ShaderCodeMaterial

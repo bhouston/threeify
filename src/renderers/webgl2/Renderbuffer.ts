@@ -1,6 +1,6 @@
 import { Context } from './Context.js';
 import { Vector2 } from '../../math/Vector2.js';
-import { IDisposable } from '../../interfaces/Standard.js';
+import { IDisposable } from '../../model/interfaces.js';
 import { VertexArrayObject } from './VertexArrayObject.js';
 import { Program } from './Program.js';
 import { ProgramUniform } from './ProgramUniform.js';

@@ -1,7 +1,7 @@
 import { IPrimitive } from './IPrimitive.js';
 import { Matrix4 } from './Matrix4.js';
 import { Quaternion } from './Quaternion.js';
-import { hashFloat4 } from '../hash.js';
+import { hashFloat4 } from '../model/hash.js';
 
 export enum EulerOrder {
 	XYZ,

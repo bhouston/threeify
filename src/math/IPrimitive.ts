@@ -10,7 +10,7 @@ import {
 	IEquatable,
 	IArrayable,
 	IHashable,
-} from '../interfaces/Standard.js';
+} from '../model/interfaces.js';
 
 export interface IPrimitive<T>
 	extends ICloneable<T>,

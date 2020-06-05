@@ -1,4 +1,4 @@
-import { ICloneable, ICopyable, IVersionable } from '../interfaces/Standard.js';
+import { ICloneable, ICopyable, IVersionable } from '../model/interfaces.js';
 import { Matrix3 } from '../math/Matrix3.js';
 import { Vector2 } from '../math/Vector2.js';
 import { Texture } from './Texture.js';

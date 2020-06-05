@@ -7,7 +7,7 @@
 
 import { Matrix4 } from './Matrix4.js';
 import { IPrimitive } from './IPrimitive.js';
-import { hashFloat3 } from '../hash.js';
+import { hashFloat3 } from '../model/hash.js';
 
 export class Vector3 implements IPrimitive<Vector3> {
 	x: number;

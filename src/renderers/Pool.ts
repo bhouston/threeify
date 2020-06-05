@@ -9,7 +9,7 @@ import {
 	IVersionable,
 	IDisposable,
 	IIdentifiable,
-} from '../interfaces/Standard';
+} from '../model/interfaces';
 import { Context } from './webgl2/Context';
 
 export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}

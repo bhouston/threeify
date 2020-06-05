@@ -9,7 +9,7 @@ import { Euler3, EulerOrder } from './Euler3.js';
 import { IPrimitive } from './IPrimitive.js';
 import { Quaternion } from './Quaternion.js';
 import { Vector3 } from './Vector3.js';
-import { hashFloatArray } from '../hash.js';
+import { hashFloatArray } from '../model/hash.js';
 import { Matrix4 } from './Matrix4.js';
 import { Vector2 } from './Vector2.js';
 

@@ -5,18 +5,17 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../generateUuid.js';
+import { generateUUID } from '../model/generateUuid.js';
 import {
 	IDisposable,
 	IIdentifiable,
 	IVersionable,
 	ICloneable,
-} from '../interfaces/Standard.js';
+} from '../model/interfaces.js';
 import { Euler3 } from '../math/Euler3.js';
 import { Matrix4 } from '../math/Matrix4.js';
 import { Quaternion } from '../math/Quaternion.js';
 import { Vector3 } from '../math/Vector3.js';
-import { VersionedValue } from '../VersionedValue.js';
 import { NodeCollection } from './NodeCollection.js';
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {

@@ -11,7 +11,7 @@ import {
 	ICloneable,
 	ICopyable,
 	IVersionable,
-} from '../../interfaces/Standard.js';
+} from '../../model/interfaces.js';
 
 export class PhysicalMaterial
 	implements

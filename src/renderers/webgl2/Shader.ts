@@ -6,7 +6,7 @@
 //
 
 import { Context } from "./Context.js";
-import { IDisposable } from "../../interfaces/Standard.js";
+import { IDisposable } from "../../model/interfaces.js";
 import { ShaderType } from "../../materials/ShaderType.js";
 
 export class Shader implements IDisposable {

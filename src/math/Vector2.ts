@@ -6,7 +6,7 @@
 //
 
 import { IPrimitive } from './IPrimitive.js';
-import { hashFloat2 } from '../hash.js';
+import { hashFloat2 } from '../model/hash.js';
 
 export class Vector2 implements IPrimitive<Vector2> {
 	x: number;

@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { IDisposable, IVersionable } from '../interfaces/Standard.js';
+import { IDisposable, IVersionable } from '../model/interfaces.js';
 import { AttributeAccessor } from './AttributeAccessor.js';
 
 class NamedAttributeAccessor {

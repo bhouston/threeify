@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../interfaces/Standard.js";
+import { IDisposable } from "../../model/interfaces.js";
 import { Color } from "../../math/Color.js";
 import { Context } from "./Context.js";
 import { Program } from "./Program.js";

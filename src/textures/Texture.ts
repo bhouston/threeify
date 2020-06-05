@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../generateUuid.js';
+import { generateUUID } from '../model/generateUuid.js';
 import {
 	IDisposable,
 	IIdentifiable,
 	IVersionable,
-} from '../interfaces/Standard.js';
+} from '../model/interfaces.js';
 import { Vector2 } from '../math/Vector2.js';
 import { IPoolUser } from '../renderers/Pool.js';
 import { DataType } from './DataType.js';

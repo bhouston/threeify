@@ -7,9 +7,9 @@
 
 import { Shader } from "./Shader.js";
 import { Context } from "./Context.js";
-import { ProgramUniform } from "./ProgramUniform.js";
+import { ProgramUniform, numTextureUnits } from "./ProgramUniform.js";
 import { ProgramAttribute } from "./ProgramAttribute.js";
-import { IDisposable } from "../../interfaces/Standard.js";
+import { IDisposable } from "../../model/interfaces.js";
 import { ShaderType } from "../../materials/ShaderType.js";
 import { ShaderCodeMaterial } from "../../materials/ShaderCodeMaterial.js";
 import { Pool } from "../Pool.js";
@@ -66,11 +66,18 @@ export class Program implements IDisposable {
       throw new Error(`program filed to link: ${infoLog}`);
     }
 
+    let textureUnitCount = 0;
+
     let numActiveUniforms = gl.getProgramParameter(
       this.glProgram,
       gl.ACTIVE_UNIFORMS
     );
     for (let i = 0; i < numActiveUniforms; ++i) {
+      let uniform = new ProgramUniform(this, i);
+      if( numTextureUnits( uniform.uniformType ) > 0 ) {
+        uniform.textureUnit = textureUnitCount;
+        textureUnitCount ++;
+      }
       this.uniforms.push(new ProgramUniform(this, i));
     }
 

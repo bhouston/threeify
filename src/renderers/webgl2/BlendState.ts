@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable } from '../../interfaces/Standard';
+import { ICloneable } from '../../model/interfaces';
 
 const GL = WebGLRenderingContext;
 

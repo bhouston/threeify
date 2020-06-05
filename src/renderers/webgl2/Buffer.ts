@@ -1,6 +1,6 @@
 import { AttributeView } from '../../core/AttributeView.js';
 import { BufferTarget } from '../../core/BufferTarget.js';
-import { IDisposable } from '../../interfaces/Standard.js';
+import { IDisposable } from '../../model/interfaces.js';
 import { Pool } from '../Pool.js';
 import { BufferUsage } from './BufferUsage.js';
 import { Context } from './Context.js';

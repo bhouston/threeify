@@ -9,7 +9,7 @@ import { Euler3, EulerOrder } from './Euler3.js';
 import { IPrimitive } from './IPrimitive.js';
 import { Matrix4 } from './Matrix4.js';
 import { Vector3 } from './Vector3.js';
-import { hashFloat4 } from '../hash.js';
+import { hashFloat4 } from '../model/hash.js';
 
 export class Quaternion implements IPrimitive<Quaternion> {
 	x: number;
