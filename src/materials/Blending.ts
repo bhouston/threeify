@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-export enum BlendMode {
-    None,
+export enum Blending {
+	None,
 	Over,
 	Add,
 	Subtract,
-	Multiply
+	Multiply,
 }

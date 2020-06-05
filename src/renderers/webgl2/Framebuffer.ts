@@ -52,7 +52,10 @@ export class Framebuffer implements IDisposable {
 	attachments: Array<FramebufferAttachment>;
 	glFramebuffer: WebGLFramebuffer;
 
-	constructor(context: RenderingContext, attachments: Array<FramebufferAttachment>) {
+	constructor(
+		context: RenderingContext,
+		attachments: Array<FramebufferAttachment>,
+	) {
 		this.context = context;
 		this.attachments = attachments;
 

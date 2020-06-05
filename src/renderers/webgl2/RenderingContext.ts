@@ -53,11 +53,10 @@ export class RenderingContext {
 	private cachedFramebuffer: Framebuffer | null = null;
 	set framebuffer(framebuffer: Framebuffer | null) {
 		if (this.cachedFramebuffer !== framebuffer) {
-			if (framebuffer) {
-				this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, framebuffer.glFramebuffer);
-			} else {
-				this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
-			}
+			this.gl.bindFramebuffer(
+				this.gl.FRAMEBUFFER,
+				framebuffer ? framebuffer.glFramebuffer : null,
+			);
 			this.cachedFramebuffer = framebuffer;
 		}
 	}
@@ -65,7 +64,7 @@ export class RenderingContext {
 		return this.cachedFramebuffer;
 	}
 
-	// 
+	//
 	private _scissor: Box2 = new Box2();
 	get scissor(): Box2 {
 		return this._scissor.clone();
@@ -94,15 +93,19 @@ export class RenderingContext {
 		return this._blendState.clone();
 	}
 	set blendState(bs: BlendState) {
-		if ( ! this._blendState.equals( bs ) ) {
-			if( bs.enabled ) {
+		if (!this._blendState.equals(bs)) {
+			if (bs.enabled) {
 				this.gl.enable(GL.BLEND);
-			}
-			else {
+			} else {
 				this.gl.disable(GL.BLEND);
 			}
 			this.gl.blendEquation(bs.equation);
-			this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
+			this.gl.blendFuncSeparate(
+				bs.sourceRGBFactor,
+				bs.destRGBFactor,
+				bs.sourceAlphaFactor,
+				bs.destAlphaFactor,
+			);
 			this._blendState.copy(bs);
 		}
 	}
@@ -112,17 +115,15 @@ export class RenderingContext {
 		return this._depthTestState.clone();
 	}
 	set depthTestState(dts: DepthTestState) {
-		if (this._depthTestState.enabled !== dts.enabled) {
+		if (!this._depthTestState.equals(dts)) {
 			if (dts.enabled) {
 				this.gl.enable(GL.DEPTH_TEST);
 			} else {
 				this.gl.disable(GL.DEPTH_TEST);
 			}
-		}
-		if (this._depthTestState.func !== dts.func) {
 			this.gl.depthFunc(dts.func);
+			this._depthTestState.copy(dts);
 		}
-		this._depthTestState.copy(dts);
 	}
 
 	private _clearState: ClearState = new ClearState();
@@ -130,19 +131,12 @@ export class RenderingContext {
 		return this._clearState.clone();
 	}
 	set clearState(cs: ClearState) {
-		if (
-			!this._clearState.color.equals(cs.color) ||
-			this._clearState.alpha !== cs.alpha
-		) {
+		if (!this._clearState.equals(cs)) {
 			this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
-		}
-		if (this._clearState.depth !== cs.depth) {
 			this.gl.clearDepth(cs.depth);
-		}
-		if (this._clearState.stencil !== cs.stencil) {
 			this.gl.clearStencil(cs.stencil);
+			this._clearState.copy(cs);
 		}
-		this._clearState.copy(cs);
 	}
 
 	private _maskState: MaskState = new MaskState();
@@ -150,20 +144,11 @@ export class RenderingContext {
 		return this._maskState.clone();
 	}
 	set maskState(ms: MaskState) {
-		if (
-			this._maskState.red !== ms.red ||
-			this._maskState.green !== ms.green ||
-			this._maskState.blue !== ms.blue ||
-			this._maskState.alpha !== ms.alpha
-		) {
+		if (!this._maskState.equals(ms)) {
 			this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
-		}
-		if (this._maskState.depth !== ms.depth) {
 			this.gl.depthMask(ms.depth);
-		}
-		if (this._maskState.stencil !== ms.stencil) {
 			this.gl.stencilMask(ms.stencil);
+			this._maskState.copy(ms);
 		}
-		this._maskState.copy(ms);
 	}
 }

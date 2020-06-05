@@ -132,7 +132,11 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
 	constructor(context: RenderingContext) {
 		super(
 			context,
-			(context: RenderingContext, texture: Texture, texImage2D: TexImage2D | null) => {
+			(
+				context: RenderingContext,
+				texture: Texture,
+				texImage2D: TexImage2D | null,
+			) => {
 				if (!texImage2D) {
 					texImage2D = new TexImage2D(context);
 				}

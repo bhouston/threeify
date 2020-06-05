@@ -26,7 +26,10 @@ export class Program implements IDisposable {
 	// attributes (required attribute buffers)
 	// varying (per instance parameters)
 
-	constructor(context: RenderingContext, shaderCodeMaterial: ShaderCodeMaterial) {
+	constructor(
+		context: RenderingContext,
+		shaderCodeMaterial: ShaderCodeMaterial,
+	) {
 		this.context = context;
 		this.vertexShader = new Shader(
 			this.context,

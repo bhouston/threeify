@@ -16,7 +16,11 @@ export class Shader implements IDisposable {
 	shaderType: ShaderType;
 	glShader: WebGLShader;
 
-	constructor(context: RenderingContext, sourceCode: string, shaderType: ShaderType) {
+	constructor(
+		context: RenderingContext,
+		sourceCode: string,
+		shaderType: ShaderType,
+	) {
 		this.context = context;
 		this.sourceCode = sourceCode;
 		this.shaderType = shaderType;

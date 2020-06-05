@@ -19,7 +19,6 @@ export enum BufferUsage {
 	StreamCopy = GL2.STREAM_COPY, // The contents are intended to be specified once by reading data from WebGL, and used at most a few times as the source for WebGL drawing and image specification commands.
 }
 
-
 export class Buffer implements IDisposable {
 	disposed: boolean = false;
 	context: RenderingContext;

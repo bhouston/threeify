@@ -6,9 +6,10 @@
 //
 
 import { Color } from '../../math/Color.js';
-import { ICloneable } from '../../model/interfaces.js';
+import { ICloneable, IEquatable } from '../../model/interfaces.js';
 
-export class ClearState implements ICloneable<ClearState> {
+export class ClearState
+	implements ICloneable<ClearState>, IEquatable<ClearState> {
 	color: Color;
 	alpha: number;
 	depth: number; // float
@@ -35,5 +36,14 @@ export class ClearState implements ICloneable<ClearState> {
 		this.alpha = cs.alpha;
 		this.depth = cs.depth;
 		this.stencil = cs.stencil;
+	}
+
+	equals(cs: ClearState) {
+		return (
+			this.color.equals(cs.color) &&
+			this.alpha === cs.alpha &&
+			this.depth === cs.depth &&
+			this.stencil === cs.stencil
+		);
 	}
 }
