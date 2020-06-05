@@ -1,5 +1,5 @@
 vec3 transformPosition( in vec3 p, in mat4 m ) {
-    return ( m * vec4( p, 0.0 ) ).xyz;
+    return ( m * vec4( p, 1.0 ) ).xyz;
 }
 
 vec3 transformDirection( in vec3 d, in mat4 m ) {

@@ -1,208 +1,88 @@
-import {
-	Float32AttributeAccessor,
-	Int16AttributeAccessor,
-} from './core/AttributeAccessor.js';
-import { Geometry } from './core/Geometry.js';
 import { boxGeometry } from './geometry/BoxGeometry.js';
 import { fetchImage } from './io/loaders/Image.js';
 import { ShaderCodeMaterial } from './materials/ShaderCodeMaterial.js';
-import { Matrix4 } from './math/Matrix4.js';
-import { Vector3 } from './math/Vector3.js';
+import { Color } from './math/Color.js';
+import { PerspectiveCamera } from './nodes/cameras/PerspectiveCamera.js';
 import { PointLight } from './nodes/lights/PointLight.js';
 import { Mesh } from './nodes/Mesh.js';
 import { Node } from './nodes/Node.js';
+import { BlendState } from './renderers/webgl2/BlendState.js';
+import { ClearState } from './renderers/webgl2/ClearState.js';
 import { Context } from './renderers/webgl2/Context.js';
+import { DepthTestState } from './renderers/webgl2/DepthTestState.js';
+import { MaskState } from './renderers/webgl2/MaskState.js';
 import { Program } from './renderers/webgl2/Program.js';
+import debug_fragment from './renderers/webgl2/shaders/materials/debug/fragment.glsl.js';
+import debug_vertex from './renderers/webgl2/shaders/materials/debug/vertex.glsl.js';
 import { TexImage2D } from './renderers/webgl2/TexImage2D.js';
 import { VertexArrayObject } from './renderers/webgl2/VertexArrayObject.js';
 import { VertexAttributeGeometry } from './renderers/webgl2/VertexAttributeGeometry.js';
 import { Texture } from './textures/Texture.js';
-import { Color } from './math/Color.js';
-import { BlendState } from './renderers/webgl2/BlendState.js';
-import { DepthTestState } from './renderers/webgl2/DepthTestState.js';
-import { ClearState } from './renderers/webgl2/ClearState.js';
-import { MaskState } from './renderers/webgl2/MaskState.js';
 
 async function test() {
-	let a = new Vector3(1, 0, 0);
-	let b = new Vector3(3, 2, 3);
-	//let e = new Vector3( 3, 'ben', 3 ); // a type bug, uncomment to see how it is caught automatically.
-
-	let m = new Matrix4().set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 2, 3, 0);
-
-	console.log(a);
-	a.transformMatrix4(m);
-	console.log(a);
-	let c = a.add(b).dot(b);
-	console.log(c);
-
-	let vs = `#version 300 es
-
-	// an attribute is an input (in) to a vertex shader.
-	// It will receive data from a buffer
-	in vec2 position;
-
-	// Used to pass in the resolution of the canvas
-	uniform vec2 u_resolution;
-
-	// all shaders have a main function
-	void main() {
-
-	// convert the position from pixels to 0.0 to 1.0
-	vec2 zeroToOne = position / u_resolution;
-
-	// convert from 0->1 to 0->2
-	vec2 zeroToTwo = zeroToOne * 2.0;
-
-	// convert from 0->2 to -1->+1 (clipspace)
-	vec2 clipSpace = zeroToTwo - 1.0;
-
-	gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-	}
-	`;
-
-	let fs = `#version 300 es
-
-	precision highp float;
-
-	uniform vec4 u_color;
-
-	// we need to declare an output for the fragment shader
-	out vec4 outColor;
-
-	void main() {
-	outColor = u_color;
-	}
-	`;
-
-	// main memory representation setup
-
-	let indexAccessor = new Int16AttributeAccessor(
-		new Int16Array([0, 1, 2, 0, 2, 3]),
-		1,
-	);
-
-	let positionAccessor = new Float32AttributeAccessor(
-		new Float32Array([
-			0.0,
-			0.0,
-			0.0,
-			1.0,
-			0.0,
-			0.0,
-			1.0,
-			1.0,
-			0.0,
-			0.0,
-			1.0,
-			0.0,
-		]),
-		3,
-	);
-
-	let normalAccessor = new Float32AttributeAccessor(
-		new Float32Array([
-			0.0,
-			0.0,
-			1.0,
-			0.0,
-			0.0,
-			1.0,
-			0.0,
-			0.0,
-			1.0,
-			0.0,
-			0.0,
-			1.0,
-		]),
-		3,
-	);
-
-	let uvAccessor = new Float32AttributeAccessor(
-		new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]),
-		2,
-	);
-
-	let geometry = new Geometry();
-	geometry.setIndices(indexAccessor);
-	geometry.setAttribute('position', positionAccessor);
-	geometry.setAttribute('normal', normalAccessor);
-	geometry.setAttribute('uv', uvAccessor);
-	console.log(geometry);
-
 	// setup webgl2
 	let canvasElement = document.querySelector(
 		'#rendering-canvas',
 	) as HTMLCanvasElement;
 	let context = new Context(canvasElement);
 
-	// upload to GPU
-	let vertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
-		context,
-		geometry,
-	);
-	console.log(vertexAttributeGeometry);
+	//
+	// create scene graph
+	//
 
-	let myBoxGeometry = boxGeometry(10, 2, 3, 5, 5, 5);
-	console.log(myBoxGeometry);
+	let rootNode = new Node();
 
-	let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
-		context,
-		myBoxGeometry,
-	);
-	console.log(boxVertexAttributeGeometry);
+	let light = new PointLight();
+	rootNode.children.push(light);
 
-	// source code definition of material
-	let shaderCodeMaterial = new ShaderCodeMaterial(vs, fs);
-	console.log(shaderCodeMaterial);
+	let mesh = new Mesh(boxGeometry(1, 1, 1, 1, 1, 1));
+	rootNode.children.push(mesh);
 
-	let program = new Program(context, shaderCodeMaterial);
-	console.log(program);
-
-	// using uniform set structures
-	class PBRMaterialUniforms {
-		albedo: Color = new Color(1, 1, 1);
-		roughness: number = 0.5;
-		metalness: number = 0.0;
-		emissive: Color = new Color(1, 1, 1);
-		normalFactor: number = 1.0;
-	}
-	let pbrMaterialUniforms = new PBRMaterialUniforms();
-	program.setUniformValues(pbrMaterialUniforms);
-
-	// using uniform sets just from maps
-	let unstructuredUniforms = {
-		albedo: new Color(1, 1, 1),
-		roughness: 0.5,
-		metalness: 0.0,
-		emissive: new Color(1, 1, 1),
-		normalFactor: 1.0,
-	};
-	program.setUniformValues(unstructuredUniforms);
-
-	// bind to program
-	let vertexArrayObject = new VertexArrayObject(
-		program,
-		vertexAttributeGeometry,
-	);
-	console.log(vertexArrayObject);
+	let camera = new PerspectiveCamera(60, 1, 10);
+	camera.position.x -= 5;
+	rootNode.children.push(camera);
 
 	let texture = new Texture(await fetchImage('./exocortex-logo.jpg'));
-
 	console.log(texture);
 
 	let texImage2D = new TexImage2D(context);
 	texImage2D.update(texture);
 	console.log(texImage2D);
 
-	let node = new Node();
-	console.log(node);
+	let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
+		context,
+		mesh.geometry,
+	);
+	console.log(boxVertexAttributeGeometry);
 
-	let light = new PointLight();
-	node.children.push(light);
+	// source code definition of material
+	let shaderCodeMaterial = new ShaderCodeMaterial(debug_vertex, debug_fragment);
+	console.log(shaderCodeMaterial);
+	let program = new Program(context, shaderCodeMaterial);
+	console.log(program);
 
-	let mesh = new Mesh(myBoxGeometry);
-	node.children.push(mesh);
+	// using uniform set structures
+	let materialUniforms = {
+		albedo: new Color(1, 0.5, 0.5),
+		albedoUvIndex: 0,
+		albedoMap: texImage2D,
+	};
+	let sceneUniforms = {
+		localToWorldTransform: mesh.localToParentTransform,
+		worldToViewTransform: camera.parentToLocalTransform,
+		viewToScreenProjection: camera.getProjection(
+			canvasElement.width / canvasElement.height,
+		),
+	};
+	program.setUniformValues(materialUniforms);
+	program.setUniformValues(sceneUniforms);
+
+	// bind to program
+	let vertexArrayObject = new VertexArrayObject(
+		program,
+		boxVertexAttributeGeometry,
+	);
+	console.log(vertexArrayObject);
 
 	// test if states work
 	context.blendState = new BlendState();

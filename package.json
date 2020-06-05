@@ -13,7 +13,7 @@
 		"watch": "npm run build -- --watch",
 		"start": "es-dev-server --node-resolution",
 		"dev": "npm run watch & npm start",
-		"prettier": "npx prettier --single-quote --use-tabs --trailing-comma all --write docs package.json \"./src/lib/**/*.ts\""
+		"prettier": "npx prettier --single-quote --use-tabs --trailing-comma all --write docs package.json \"./src/**/*.ts\""
 	},
 	"devDependencies": {
 		"es-dev-server": "^1.53.0",

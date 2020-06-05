@@ -3,7 +3,9 @@
 //
 
 // geometry
-uniform mat4 localToWorld;
+uniform mat4 localToWorld; // node
+uniform mat4 worldToView; // camera
+uniform mat4 viewToScreen; // projection
 
 // material
 uniform vec3  albedoModular;
@@ -17,8 +19,8 @@ uniform sampler2D metalnessMap;
 uniform int metalnessUVIndex;
 
 // lights
+uniform vec3 lightsSpotViewPosition;
 uniform vec3 lightsSpotColor;
-uniform vec3 lightsSpotPosition;
 uniform float lightsSpotFalloffExponent;
 uniform float lightsSpotCutoffDistance;
 
@@ -31,14 +33,12 @@ uniform int outputEncoding;
 // varyings from the vertex shader
 //
 
-varying vec3 v_position;
-varying vec3 v_normal;
+varying vec3 v_viewPosition;
+varying vec3 v_viewNormal;
 varying vec2 v_uv0;
 varying vec2 v_uv1;
 varying vec2 v_uv2;
 varying vec2 v_uv3;
-
-out vec4 outColor;
 
 vec2 uv( int uvIndex ) {
     switch( uvIndex ) {
@@ -50,24 +50,11 @@ vec2 uv( int uvIndex ) {
     return vec2(0,0);
 }
 
-vec3 ( vec3 modulator, sampler2D map, vec2 uv ) {
-    texture2D( map, uv );
-}
-
-pbr_brdf(
-    vec3 albedo,
-    float roughness,
-    float metalness,
-    vec3 emissive,
-     ) {
-
- }
-
 void main() {
 
-    vec3 albedo = albedoModular * texture2D( albedoMap, uv( albedoUVIndex ) );
-    float roughness = metalnessModular * texture2D( roughnessMap, uv( roughnessUVIndex ) ).g;
-    float metalness = metalnessModular * texture2D( metalnessMap, uv( metalnessUVIndex ) ).b;
+    vec4 albedo = albedoModular * texture2D( albedoMap, uv( albedoUVIndex ) );
+    //float roughness = metalnessModular * texture2D( roughnessMap, uv( roughnessUVIndex ) ).g;
+    //float metalness = metalnessModular * texture2D( metalnessMap, uv( metalnessUVIndex ) ).b;
     
-    gl_color = vec4(1, 0, 0.5, 1);
+    gl_FragColor = albedo;
 }

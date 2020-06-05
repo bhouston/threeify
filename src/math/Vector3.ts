@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Matrix4 } from 'Matrix4.js';
+import { Matrix4 } from './Matrix4.js';
 import { IPrimitive } from './IPrimitive.js';
 import { hashFloat3 } from '../hash.js';
 

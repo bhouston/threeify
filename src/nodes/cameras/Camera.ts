@@ -13,5 +13,5 @@ export abstract class Camera extends Node {
 
 	super() {}
 
-	abstract toProjectionMatrix(viewAspectRatio: number): Matrix4;
+	abstract getProjection(viewAspectRatio: number): Matrix4;
 }

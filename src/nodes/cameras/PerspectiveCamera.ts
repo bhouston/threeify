@@ -28,7 +28,7 @@ export class PerspectiveCamera extends Camera {
 		this.zoom = zoom;
 	}
 
-	toProjectionMatrix(viewAspectRatio: number): Matrix4 {
+	getProjection(viewAspectRatio: number = 1.0): Matrix4 {
 		let height =
 			(2.0 * this.near * Math.tan((this.verticalFov * Math.PI) / 180.0)) /
 			this.zoom;

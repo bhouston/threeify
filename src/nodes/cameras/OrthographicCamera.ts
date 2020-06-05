@@ -32,7 +32,7 @@ export class OrthographicCamera extends Camera {
 		this.zoom = zoom;
 	}
 
-	toProjectionMatrix(viewAspectRatio: number): Matrix4 {
+	getProjection(viewAspectRatio: number = 1.0): Matrix4 {
 		let width =
 			(this.height * viewAspectRatio * this.pixelAspectRatio) / this.zoom;
 

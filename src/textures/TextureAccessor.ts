@@ -52,13 +52,16 @@ export class TextureAccessor
 	private _uvTransform = new Matrix3();
 	private _uvTransformVersion = -1;
 	get uvTransform(): Matrix3 {
-		if( this._uvTransformVersion < this.version ) {
+		if (this._uvTransformVersion < this.version) {
 			this._uvTransform.makeTranslation2(this.uvTranslation);
 			this._uvTransform.makeConcatenation(
 				this._uvTransform,
 				new Matrix3().makeRotation2FromAngle(this.uvRotation),
 			);
-			this._uvTransform.makeConcatenation(this._uvTransform, new Matrix3().makeScale2(this.uvScale));
+			this._uvTransform.makeConcatenation(
+				this._uvTransform,
+				new Matrix3().makeScale2(this.uvScale),
+			);
 			this._uvTransformVersion = this.version;
 		}
 		return this._uvTransform;

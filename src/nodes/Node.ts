@@ -22,6 +22,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	disposed: boolean = false;
 	readonly uuid: string = generateUUID();
 	version: number = 0;
+	parent: Node | null = null;
 	name: string = '';
 	position: Vector3 = new Vector3(0, 0, 0);
 	rotation: Euler3 = new Euler3();
@@ -41,32 +42,31 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 		}
 	}
 
-	private versionedLocalToWorldMatrix: VersionedValue<
-		Matrix4
-	> = new VersionedValue<Matrix4>(new Matrix4());
-	get localToWorldMatrix() {
-		if (this.versionedLocalToWorldMatrix.version < this.version) {
-			this.versionedLocalToWorldMatrix.value.compose(
+	private _derivedVersion = -1;
+	private _parentToLocalTransform: Matrix4 = new Matrix4();
+	private _localToParentTransform: Matrix4 = new Matrix4();
+	private _localToWorldTransform: Matrix4 = new Matrix4();
+	private _worldToLocalTransform: Matrix4 = new Matrix4();
+
+	private updateDerived() {
+		if (this._derivedVersion !== this.version) {
+			this._localToParentTransform.compose(
 				this.position,
 				new Quaternion().setFromEuler(this.rotation),
 				this.scale,
 			);
-			this.versionedLocalToWorldMatrix.version = this.version;
+			this._parentToLocalTransform.copy(this._localToParentTransform).invert();
+			this._derivedVersion = this.version;
 		}
-		return this.versionedLocalToWorldMatrix.value;
 	}
 
-	private versionedWorldToLocalMatrix: VersionedValue<
-		Matrix4
-	> = new VersionedValue<Matrix4>(new Matrix4());
-	get worldToLocalMatrix() {
-		if (this.versionedWorldToLocalMatrix.version < this.version) {
-			this.versionedWorldToLocalMatrix.value
-				.copy(this.localToWorldMatrix)
-				.invert();
-			this.versionedWorldToLocalMatrix.version = this.version;
-		}
-		return this.versionedWorldToLocalMatrix.value;
+	get localToParentTransform() {
+		this.updateDerived();
+		return this._localToParentTransform;
+	}
+	get parentToLocalTransform() {
+		this.updateDerived();
+		return this._parentToLocalTransform;
 	}
 }
 
@@ -76,4 +76,10 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 	});
 
 	callback(node);
+}
+
+export function rootVisitor(node: Node, callback: (node: Node) => void) {
+	callback(node);
+
+	if (node.parent) rootVisitor(node.parent, callback);
 }
