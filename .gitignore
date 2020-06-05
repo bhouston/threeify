@@ -5,3 +5,11 @@ dist
 three.js
 src/lib/renderers/webgl2/webgl2_fundamentals.js
 package-lock.json
+
+### IDE & Docker related exclusions
+# Theiaide
+.theia
+# WebStrom
+.idea
+ # docker environment variables
+.env

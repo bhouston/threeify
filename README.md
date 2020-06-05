@@ -17,10 +17,18 @@ npm install
 npm run dev
 ```
  
-Then open a web server to the address displayed in the console.  Usually this will be https://localhost:8000.
+Then open a web server to the address displayed in the console.  Usually this will be http://localhost:8000.
 
 It will automatically rebuild your code on each change.
 
 ```
 /index.html
 ```
+
+Optionally, use theia-ide to start coding immediately. If you have docker and docker-compose available do:
+
+```
+docker-compose up -d
+```
+
+theia-ide is available at http://localhost:3000. Perform step 2 and 3 in the theia-ide terminal. 
