@@ -65,6 +65,7 @@ export class RenderingContext {
 		return this.cachedFramebuffer;
 	}
 
+	// 
 	private _scissor: Box2 = new Box2();
 	get scissor(): Box2 {
 		return this._scissor.clone();
@@ -76,6 +77,7 @@ export class RenderingContext {
 		}
 	}
 
+	// specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
 	private _viewport: Box2 = new Box2();
 	get viewport(): Box2 {
 		return this._viewport.clone();
@@ -92,23 +94,17 @@ export class RenderingContext {
 		return this._blendState.clone();
 	}
 	set blendState(bs: BlendState) {
-		if (this._blendState !== bs) {
-			if (bs.enabled) {
+		if ( ! this._blendState.equals( bs ) ) {
+			if( bs.enabled ) {
 				this.gl.enable(GL.BLEND);
-			} else {
+			}
+			else {
 				this.gl.disable(GL.BLEND);
 			}
-		}
-		if (this._blendState.equation !== bs.equation) {
 			this.gl.blendEquation(bs.equation);
+			this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
+			this._blendState.copy(bs);
 		}
-		if (
-			this._blendState.sourceFactor !== bs.sourceFactor ||
-			this._blendState.destFactor !== bs.destFactor
-		) {
-			this.gl.blendFunc(bs.sourceFactor, bs.destFactor);
-		}
-		this._blendState.copy(bs);
 	}
 
 	private _depthTestState: DepthTestState = new DepthTestState();

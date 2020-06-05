@@ -8,12 +8,14 @@
 import { Color } from '../../math/Color.js';
 import { TextureAccessor } from '../../textures/TextureAccessor.js';
 import { ICloneable, ICopyable, IVersionable } from '../../model/interfaces.js';
+import { BlendMode } from '../BlendMode.js';
 
 export class PhysicalMaterial
 	implements
 		ICloneable<PhysicalMaterial>,
 		ICopyable<PhysicalMaterial>,
 		IVersionable {
+			
 	version: number = 0;
 	albedo: Color = new Color(1, 1, 1);
 	albedoMap: TextureAccessor = new TextureAccessor();
@@ -25,6 +27,7 @@ export class PhysicalMaterial
 	emissiveMap: TextureAccessor = new TextureAccessor();
 	normalFactor: number = 1.0;
 	normalMap: TextureAccessor = new TextureAccessor();
+	blendMode: BlendMode = BlendMode.Over;
 
 	constructor() {}
 
@@ -43,6 +46,7 @@ export class PhysicalMaterial
 		this.emissiveMap.copy(m.emissiveMap);
 		this.normalFactor = m.normalFactor;
 		this.normalMap.copy(m.normalMap);
+		this.blendMode = m.blendMode;
 		return this;
 	}
 
