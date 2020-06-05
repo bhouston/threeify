@@ -22,7 +22,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	disposed: boolean = false;
 	readonly uuid: string = generateUUID();
 	version: number = 0;
-	parent: Node | null = null;	// TODO: Figure out a pattern to set this automatically.  set on all children when dirty?  Have a NodeList<Node> wrapper around Array<Node>[] children?  Override add to set
+	parent: Node | null = null; // TODO: Figure out a pattern to set this automatically.  set on all children when dirty?  Have a NodeList<Node> wrapper around Array<Node>[] children?  Override add to set
 	name: string = '';
 	position: Vector3 = new Vector3(0, 0, 0);
 	rotation: Euler3 = new Euler3();
@@ -74,13 +74,11 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 	node.children.forEach((child) => {
 		depthFirstVisitor(child, callback);
 	});
-
 	callback(node);
 }
 
 export function rootVisitor(node: Node, callback: (node: Node) => void) {
-	throw new Error( "not implemented"); // TODO: remove this once Node.parent works!
-	callback(node);
-
-	if (node.parent) rootVisitor(node.parent, callback);
+	throw new Error('not implemented'); // TODO: remove this once Node.parent works!
+	//callback(node);
+	//if (node.parent) rootVisitor(node.parent, callback);
 }
