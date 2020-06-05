@@ -22,7 +22,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	disposed: boolean = false;
 	readonly uuid: string = generateUUID();
 	version: number = 0;
-	parent: Node | null = null;
+	parent: Node | null = null;	// TODO: Figure out a pattern to set this automatically.  set on all children when dirty?  Have a NodeList<Node> wrapper around Array<Node>[] children?  Override add to set
 	name: string = '';
 	position: Vector3 = new Vector3(0, 0, 0);
 	rotation: Euler3 = new Euler3();
@@ -45,10 +45,10 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	private _derivedVersion = -1;
 	private _parentToLocalTransform: Matrix4 = new Matrix4();
 	private _localToParentTransform: Matrix4 = new Matrix4();
-	private _localToWorldTransform: Matrix4 = new Matrix4();
-	private _worldToLocalTransform: Matrix4 = new Matrix4();
+	//private _localToWorldTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
+	//private _worldToLocalTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
 
-	private updateDerived() {
+	private refresh() {
 		if (this._derivedVersion !== this.version) {
 			this._localToParentTransform.compose(
 				this.position,
@@ -61,11 +61,11 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 	}
 
 	get localToParentTransform() {
-		this.updateDerived();
+		this.refresh();
 		return this._localToParentTransform;
 	}
 	get parentToLocalTransform() {
-		this.updateDerived();
+		this.refresh();
 		return this._parentToLocalTransform;
 	}
 }
@@ -79,6 +79,7 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 }
 
 export function rootVisitor(node: Node, callback: (node: Node) => void) {
+	throw new Error( "not implemented"); // TODO: remove this once Node.parent works!
 	callback(node);
 
 	if (node.parent) rootVisitor(node.parent, callback);
