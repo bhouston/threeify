@@ -1,0 +1,71 @@
+// eslint-disable-next-line no-undef
+module.exports = {
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: "tsconfig.json",
+    ecmaVersion: 2020,
+    sourceType: "module",
+    ecmaFeatures: {
+      jsx: true,
+    },
+  },
+  plugins: ["@typescript-eslint", "cflint"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+  ],
+  rules: {
+    "@typescript-eslint/explicit-function-return-type": 2,
+    "@typescript-eslint/member-ordering": 2,
+    "@typescript-eslint/naming-convention": [
+      2,
+      {
+        selector: "default",
+        format: ["camelCase"],
+        leadingUnderscore: "allow",
+        trailingUnderscore: "allow",
+      },
+      {
+        selector: "variable",
+        format: ["camelCase", "UPPER_CASE"],
+        leadingUnderscore: "allow",
+        trailingUnderscore: "allow",
+      },
+      {
+        selector: "typeLike",
+        format: ["PascalCase"],
+      },
+    ],
+    "@typescript-eslint/no-unnecessary-condition": 2,
+    "@typescript-eslint/no-unsafe-call": 2,
+    "@typescript-eslint/no-unsafe-member-access": 2,
+    "@typescript-eslint/no-unsafe-return": 2,
+    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/prefer-nullish-coalescing": 2,
+    "cflint/no-this-assignment": 2,
+    curly: [2, "all"],
+    eqeqeq: "error",
+    "import/newline-after-import": ["error", { count: 1 }],
+    "max-len": 2,
+    "no-alert": 2,
+    "no-invalid-this": 2,
+    "no-var": 2,
+    "no-unused-expressions": 2,
+    quotes: ["error", "double"],
+    "sort-imports": [
+      "error",
+      {
+        ignoreCase: false,
+        ignoreDeclarationSort: false,
+        ignoreMemberSort: false,
+        memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+      },
+    ],
+    "spaced-comment": 2,
+  },
+};
