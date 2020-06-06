@@ -1,6 +1,10 @@
-node_modules
-dist # build files
-package-lock.json  # this is important to check for reliability
+node_modules/
+
+# build files
+dist/
+
+# this is important to check for reliability
+package-lock.json
 
 # IDE & Docker related exclusions
 .theia  # Theiaide
@@ -8,6 +12,6 @@ package-lock.json  # this is important to check for reliability
 .env    # docker environment variables
 
 # Ben is using this as a reference.  Remove after 0.1 release
-three.js 
+three.js
 src/lib/renderers/webgl2/webgl2_fundamentals.js
 

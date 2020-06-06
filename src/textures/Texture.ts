@@ -5,30 +5,17 @@
 // * @bhouston
 //
 
-import { generateUUID } from "../model/generateUuid.js";
-import {
-  IDisposable,
-  IIdentifiable,
-  IVersionable,
-} from "../model/interfaces.js";
-import { Vector2 } from "../math/Vector2.js";
-import { IPoolUser } from "../renderers/Pool.js";
-import { DataType } from "./DataType.js";
-import { PixelFormat } from "./PixelFormat.js";
-import { TextureFilter } from "./TextureFilter.js";
-import { TextureWrap } from "./TextureWrap.js";
+import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
+import { DataType } from "./DataType";
+import { IPoolUser } from "../renderers/Pool";
+import { PixelFormat } from "./PixelFormat";
+import { TextureFilter } from "./TextureFilter";
+import { TextureWrap } from "./TextureWrap";
+import { Vector2 } from "../math/Vector2";
+import { generateUUID } from "../model/generateUuid";
 
 export class ArrayBufferImage {
-	data: ArrayBuffer;
-	width:number;
-	height:number;
-
-	constructor( data: ArrayBuffer, width: number, height: number ){
-		this.data=data;
-		this.width=width;
-		this.height=height;
-	}
-
+  constructor(public data: ArrayBuffer, public width: number, public height: number) {}
 }
 
 /*
@@ -40,47 +27,28 @@ void gl.texImage2D(target, level, internalformat, format, type, HTMLVideoElement
 void gl.texImage2D(target, level, internalformat, format, type, ImageBitmap? pixels);
 */
 
-export class Texture
-  implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
-  disposed: boolean = false;
+export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
+  disposed = false;
   uuid: string = generateUUID();
-  version: number = 0;
-  name: string = "";
-  image: ArrayBufferImage | HTMLImageElement;
+  version = 0;
+  name = "";
   size: Vector2 = new Vector2();
-  wrapS: TextureWrap;
-  wrapT: TextureWrap;
-  magFilter: TextureFilter;
-  minFilter: TextureFilter;
-  pixelFormat: PixelFormat;
-  dataType: DataType;
-  generateMipmaps: boolean;
-  anisotropyLevels: number;
 
   constructor(
-    image: ArrayBufferImage | HTMLImageElement,
-    wrapS: TextureWrap = TextureWrap.ClampToEdge,
-    wrapT: TextureWrap = TextureWrap.ClampToEdge,
-    magFilter: TextureFilter = TextureFilter.Linear,
-    minFilter: TextureFilter = TextureFilter.LinearMipmapLinear,
-    pixelFormat: PixelFormat = PixelFormat.RGBA,
-    dataType: DataType = DataType.UnsignedByte,
-    generateMipmaps: boolean = true,
-    anisotropyLevels: number = 1
+    public image: ArrayBufferImage | HTMLImageElement,
+    public wrapS: TextureWrap = TextureWrap.ClampToEdge,
+    public wrapT: TextureWrap = TextureWrap.ClampToEdge,
+    public magFilter: TextureFilter = TextureFilter.Linear,
+    public minFilter: TextureFilter = TextureFilter.LinearMipmapLinear,
+    public pixelFormat: PixelFormat = PixelFormat.RGBA,
+    public dataType: DataType = DataType.UnsignedByte,
+    public generateMipmaps = true,
+    public anisotropyLevels = 1,
   ) {
-    this.image = image;
-	this.size = new Vector2(image.width, image.height);
-    this.wrapS = wrapS;
-    this.wrapT = wrapT;
-    this.magFilter = magFilter;
-    this.minFilter = minFilter;
-    this.pixelFormat = pixelFormat;
-    this.dataType = dataType;
-    this.generateMipmaps = generateMipmaps;
-    this.anisotropyLevels = anisotropyLevels;
+    this.size = new Vector2(image.width, image.height);
   }
 
-  copy(source: Texture) {
+  copy(source: Texture): void {
     this.name = source.name;
     this.image = source.image;
     this.wrapS = source.wrapS;
@@ -92,11 +60,11 @@ export class Texture
     this.anisotropyLevels = source.anisotropyLevels;
   }
 
-  dirty() {
+  dirty(): void {
     this.version++;
   }
 
-  dispose() {
+  dispose(): void {
     if (!this.disposed) {
       this.disposed = true;
       this.dirty();

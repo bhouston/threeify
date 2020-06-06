@@ -5,67 +5,57 @@
 // * @bhouston
 //
 
-import { IDisposable, IVersionable } from '../model/interfaces.js';
-import { AttributeAccessor } from './AttributeAccessor.js';
+import { IDisposable, IVersionable } from "../model/interfaces";
+import { AttributeAccessor } from "./AttributeAccessor";
 
 class NamedAttributeAccessor {
-	name: string;
-	attributeAccessor: AttributeAccessor;
+  name: string;
+  attributeAccessor: AttributeAccessor;
 
-	constructor(name: string, attributeAccessor: AttributeAccessor) {
-		this.name = name;
-		this.attributeAccessor = attributeAccessor;
-	}
+  constructor(name: string, attributeAccessor: AttributeAccessor) {
+    this.name = name;
+    this.attributeAccessor = attributeAccessor;
+  }
 }
 
 export class Geometry implements IVersionable, IDisposable {
-	disposed: boolean = false;
-	version: number = 0;
-	indices: AttributeAccessor | null = null;
-	namedAttributeAccessors: NamedAttributeAccessor[] = []; // TODO replace with a map for faster access
+  disposed = false;
+  version = 0;
+  indices: AttributeAccessor | null = null;
+  namedAttributeAccessors: NamedAttributeAccessor[] = []; // TODO replace with a map for faster access
 
-	constructor() {}
+  dirty(): void {
+    this.version++;
+  }
 
-	dirty() {
-		this.version++;
-	}
+  dispose(): void {
+    if (!this.disposed) {
+      // reaching deep to dispose of all attribute views, but technically they may be reused with other geometries.
+      this.namedAttributeAccessors.forEach((namedAttributeAccessor) => {
+        namedAttributeAccessor.attributeAccessor.attributeView.dispose();
+      });
+      this.disposed = true;
+      this.dirty();
+    }
+  }
 
-	dispose() {
-		if (!this.disposed) {
-			// reaching deep to dispose of all attribute views, but technically they may be reused with other geometries.
-			this.namedAttributeAccessors.forEach((namedAttributeAccessor) => {
-				namedAttributeAccessor.attributeAccessor.attributeView.dispose();
-			});
-			this.disposed = true;
-			this.dirty();
-		}
-	}
+  setIndices(indices: AttributeAccessor): void {
+    this.indices = indices;
+  }
 
-	setIndices(indices: AttributeAccessor) {
-		this.indices = indices;
-	}
+  setAttribute(name: string, attributeAccessor: AttributeAccessor): void {
+    // TODO this.namedAttributeAccessors replace with a map for faster access
+    const namedAttributeAccessor = this.namedAttributeAccessors.find((item) => item.name === name);
+    if (namedAttributeAccessor) {
+      namedAttributeAccessor.attributeAccessor = attributeAccessor;
+    } else {
+      this.namedAttributeAccessors.push(new NamedAttributeAccessor(name, attributeAccessor));
+    }
+  }
 
-	setAttribute(name: string, attributeAccessor: AttributeAccessor) {
-		// TODO this.namedAttributeAccessors replace with a map for faster access
-		let namedAttributeAccessor = this.namedAttributeAccessors.find(
-			(item) => item.name === name,
-		);
-		if (namedAttributeAccessor) {
-			namedAttributeAccessor.attributeAccessor = attributeAccessor;
-		} else {
-			this.namedAttributeAccessors.push(
-				new NamedAttributeAccessor(name, attributeAccessor),
-			);
-		}
-	}
-
-	findAttribute(name: string): AttributeAccessor | null {
-		// TODO this.namedAttributeAccessors replace with a map for faster access
-		let namedAttributeAccessor = this.namedAttributeAccessors.find(
-			(item) => item.name === name,
-		);
-		return namedAttributeAccessor
-			? namedAttributeAccessor.attributeAccessor
-			: null;
-	}
+  findAttribute(name: string): AttributeAccessor | null {
+    // TODO this.namedAttributeAccessors replace with a map for faster access
+    const namedAttributeAccessor = this.namedAttributeAccessors.find((item) => item.name === name);
+    return namedAttributeAccessor ? namedAttributeAccessor.attributeAccessor : null;
+  }
 }

@@ -1,41 +1,35 @@
-import { RenderingContext } from '../RenderingContext';
-import { Framebuffer } from '../Framebuffer';
-import { Node, depthFirstVisitor } from '../../../nodes/Node';
-import { Mesh } from '../../../nodes/Mesh';
-import { DrawTask } from './DrawTask';
-import { ITask } from './ITask';
+import { Node, depthFirstVisitor } from "../../../nodes/Node";
+import { ITask } from "./ITask";
+import { Mesh } from "../../../nodes/Mesh";
+import { RenderingContext } from "../RenderingContext";
 
 export class TaskEngine {
-	context: RenderingContext;
+  constructor(public context: RenderingContext) {}
 
-	constructor(context: RenderingContext) {
-		this.context = context;
-	}
-
-	compileToTasks(node: Node) {
-		let context = this.context;
-		let tasks: ITask[] = [];
-		depthFirstVisitor(node, (node) => {
-			if (node instanceof Mesh) {
-				let mesh = node as Mesh;
-				let geometry = mesh.geometry;
-				/*let bufferGeometry = context.bufferGeometryPool.request( mesh.geometry );
+  compileToTasks(node: Node): ITask[] {
+    const context = this.context;
+    const tasks: ITask[] = [];
+    depthFirstVisitor(node, (node) => {
+      if (node instanceof Mesh) {
+        const mesh = node as Mesh;
+        const geometry = mesh.geometry;
+        /* let bufferGeometry = context.bufferGeometryPool.request( mesh.geometry );
                 let program = context.materialPool.request( node.material );
                 tasks.push( new DrawTask( program, bufferGeometry, uniforms, geometry.primitiveType, 0, geometry.indices.count ) );
                 */
-			}
-		});
+      }
+    });
 
-		return tasks;
-	}
+    return tasks;
+  }
 
-	render(node: Node) {
-		this.executeTasks(this.compileToTasks(node));
-	}
+  render(node: Node): void {
+    this.executeTasks(this.compileToTasks(node));
+  }
 
-	executeTasks(tasks: ITask[]) {
-		tasks.forEach((task) => {
-			task.execute(this.context);
-		});
-	}
+  executeTasks(tasks: ITask[]): void {
+    tasks.forEach((task) => {
+      task.execute(this.context);
+    });
+  }
 }
