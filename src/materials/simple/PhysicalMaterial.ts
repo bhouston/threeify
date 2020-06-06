@@ -7,11 +7,8 @@
 
 import { Color } from '../../math/Color.js';
 import { TextureAccessor } from '../../textures/TextureAccessor.js';
-import {
-	ICloneable,
-	ICopyable,
-	IVersionable,
-} from '../../model/interfaces.js';
+import { ICloneable, ICopyable, IVersionable } from '../../model/interfaces.js';
+import { Blending } from '../Blending.js';
 
 export class PhysicalMaterial
 	implements
@@ -29,6 +26,7 @@ export class PhysicalMaterial
 	emissiveMap: TextureAccessor = new TextureAccessor();
 	normalFactor: number = 1.0;
 	normalMap: TextureAccessor = new TextureAccessor();
+	blendMode: Blending = Blending.Over;
 
 	constructor() {}
 
@@ -47,6 +45,7 @@ export class PhysicalMaterial
 		this.emissiveMap.copy(m.emissiveMap);
 		this.normalFactor = m.normalFactor;
 		this.normalMap.copy(m.normalMap);
+		this.blendMode = m.blendMode;
 		return this;
 	}
 

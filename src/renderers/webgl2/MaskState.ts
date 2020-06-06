@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { ICloneable } from '../../model/interfaces';
+import { ICloneable, IEquatable } from '../../model/interfaces.js';
 
-export class MaskState implements ICloneable<MaskState> {
+export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
 	red: boolean;
 	green: boolean;
 	blue: boolean;
@@ -49,5 +49,16 @@ export class MaskState implements ICloneable<MaskState> {
 		this.alpha = ms.alpha;
 		this.depth = ms.depth;
 		this.stencil = ms.stencil;
+	}
+
+	equals(ms: MaskState) {
+		return (
+			this.red === ms.red &&
+			this.green === ms.green &&
+			this.blue === ms.blue &&
+			this.alpha === ms.alpha &&
+			this.depth === ms.depth &&
+			this.stencil === ms.stencil
+		);
 	}
 }

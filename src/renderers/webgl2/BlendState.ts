@@ -5,7 +5,8 @@
 // * @bhouston
 //
 
-import { ICloneable } from '../../model/interfaces';
+import { ICloneable, IEquatable } from '../../model/interfaces.js';
+import { Blending } from '../../materials/Blending.js';
 
 const GL = WebGLRenderingContext;
 
@@ -33,37 +34,137 @@ export enum BlendFunc {
 	SourceAlphaSaturate = GL.SRC_ALPHA_SATURATE, // Multiplies the RGB colors by the smaller of either the source alpha value or the value of 1 minus the destination alpha value. The alpha value is multiplied by 1.
 }
 
-export class BlendState implements ICloneable<BlendState> {
+export class BlendState
+	implements ICloneable<BlendState>, IEquatable<BlendState> {
 	enabled: boolean;
+	sourceRGBFactor: BlendFunc;
+	destRGBFactor: BlendFunc;
+	sourceAlphaFactor: BlendFunc;
+	destAlphaFactor: BlendFunc;
 	equation: BlendEquation;
-	sourceFactor: BlendFunc;
-	destFactor: BlendFunc;
 
 	constructor(
 		enabled: boolean = true,
+		sourceRGBFactor: BlendFunc = BlendFunc.One,
+		destRGBFactor: BlendFunc = BlendFunc.Zero,
+		sourceAlphaFactor: BlendFunc = BlendFunc.One,
+		destAlphaFactor: BlendFunc = BlendFunc.Zero,
 		equation: BlendEquation = BlendEquation.Add,
-		sourceFactor: BlendFunc = BlendFunc.One,
-		destFactor: BlendFunc = BlendFunc.Zero,
 	) {
 		this.enabled = enabled;
+		this.sourceRGBFactor = sourceRGBFactor;
+		this.destRGBFactor = destRGBFactor;
+		this.sourceAlphaFactor = sourceAlphaFactor;
+		this.destAlphaFactor = destAlphaFactor;
 		this.equation = equation;
-		this.sourceFactor = sourceFactor;
-		this.destFactor = destFactor;
 	}
 
 	clone() {
 		return new BlendState(
 			this.enabled,
+			this.sourceRGBFactor,
+			this.destRGBFactor,
+			this.sourceAlphaFactor,
+			this.destAlphaFactor,
 			this.equation,
-			this.sourceFactor,
-			this.destFactor,
 		);
 	}
 
 	copy(bs: BlendState) {
 		this.enabled = bs.enabled;
+		this.sourceRGBFactor = bs.sourceRGBFactor;
+		this.destRGBFactor = bs.destRGBFactor;
+		this.sourceAlphaFactor = bs.sourceAlphaFactor;
+		this.destAlphaFactor = bs.destAlphaFactor;
 		this.equation = bs.equation;
-		this.sourceFactor = bs.sourceFactor;
-		this.destFactor = bs.destFactor;
+	}
+
+	equals(bs: BlendState) {
+		return (
+			this.enabled === bs.enabled &&
+			this.sourceRGBFactor === bs.sourceRGBFactor &&
+			this.destRGBFactor === bs.destRGBFactor &&
+			this.sourceAlphaFactor === bs.sourceAlphaFactor &&
+			this.destAlphaFactor === bs.destAlphaFactor &&
+			this.equation === bs.equation
+		);
+	}
+}
+
+function blendModeToBlendState(blending: Blending, premultiplied: boolean) {
+	if (premultiplied) {
+		switch (blending) {
+			case Blending.None:
+				return new BlendState(false);
+			case Blending.Over:
+				return new BlendState(
+					true,
+					BlendFunc.One,
+					BlendFunc.OneMinusSourceAlpha,
+					BlendFunc.One,
+					BlendFunc.OneMinusSourceAlpha,
+				);
+			case Blending.Add:
+				return new BlendState(
+					true,
+					BlendFunc.One,
+					BlendFunc.One,
+					BlendFunc.One,
+					BlendFunc.One,
+				);
+			case Blending.Subtract:
+				return new BlendState(
+					true,
+					BlendFunc.Zero,
+					BlendFunc.Zero,
+					BlendFunc.OneMinusSourceColor,
+					BlendFunc.OneMinusSourceAlpha,
+				);
+			case Blending.Multiply:
+				return new BlendState(
+					true,
+					BlendFunc.Zero,
+					BlendFunc.SourceColor,
+					BlendFunc.Zero,
+					BlendFunc.SourceAlpha,
+				);
+		}
+	} else {
+		switch (blending) {
+			case Blending.None:
+				return new BlendState(false);
+			case Blending.Over:
+				return new BlendState(
+					true,
+					BlendFunc.SourceAlpha,
+					BlendFunc.OneMinusSourceAlpha,
+					BlendFunc.One,
+					BlendFunc.OneMinusSourceAlpha,
+				);
+			case Blending.Add:
+				return new BlendState(
+					true,
+					BlendFunc.SourceAlpha,
+					BlendFunc.SourceAlpha,
+					BlendFunc.One,
+					BlendFunc.One,
+				);
+			case Blending.Subtract:
+				return new BlendState(
+					true,
+					BlendFunc.Zero,
+					BlendFunc.Zero,
+					BlendFunc.OneMinusSourceColor,
+					BlendFunc.OneMinusSourceColor,
+				);
+			case Blending.Multiply:
+				return new BlendState(
+					true,
+					BlendFunc.Zero,
+					BlendFunc.Zero,
+					BlendFunc.SourceColor,
+					BlendFunc.SourceColor,
+				);
+		}
 	}
 }

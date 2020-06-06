@@ -6,7 +6,7 @@
 // * @bhouston
 //
 
-import { Context } from './Context.js';
+import { RenderingContext } from './RenderingContext.js';
 import { VertexAttribute } from './VertexAttribute.js';
 import { Geometry } from '../../core/Geometry.js';
 
@@ -44,7 +44,7 @@ export class VertexAttributeGeometry {
 		}
 	}
 
-	static FromGeometry(context: Context, geometry: Geometry) {
+	static FromGeometry(context: RenderingContext, geometry: Geometry) {
 		let vertexAttributeGeometry = new VertexAttributeGeometry();
 
 		if (geometry.indices) {

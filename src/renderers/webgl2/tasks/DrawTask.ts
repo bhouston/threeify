@@ -5,20 +5,16 @@
 // * @bhouston
 //
 
-import { Color } from '../../../math/Color';
-import { AttachmentFlags, Framebuffer } from '../Framebuffer';
-import { ITask } from './ITask';
-import { Context } from '../Context';
-import { Program } from '../Program';
-import { VertexAttributeGeometry } from '../VertexAttributeGeometry';
-import { VertexArrayObject } from '../VertexArrayObject';
-import { UniformValue } from '../UniformValue';
 import { PrimitiveType } from '../PrimitiveType';
+import { Program } from '../Program';
+import { RenderingContext } from '../RenderingContext';
+import { VertexArrayObject } from '../VertexArrayObject';
+import { ITask } from './ITask';
 
 export class DrawTask implements ITask {
 	program: Program;
 	vertexArrayObject: VertexArrayObject;
-	uniformValues: Array<UniformValue>;
+	uniformValues: any;
 	primitiveType: PrimitiveType;
 	offset: number = 0;
 	count: number = 0;
@@ -26,7 +22,7 @@ export class DrawTask implements ITask {
 	constructor(
 		program: Program,
 		vertexArrayObject: VertexArrayObject,
-		uniformValues: Array<UniformValue>,
+		uniformValues: any,
 		primitiveType: PrimitiveType,
 		offset: number,
 		count: number,
@@ -39,7 +35,7 @@ export class DrawTask implements ITask {
 		this.count = count;
 	}
 
-	execute(context: Context) {
+	execute(context: RenderingContext) {
 		let gl = context.gl;
 
 		context.program = this.program;

@@ -1,4 +1,4 @@
-import { Context } from '../Context';
+import { RenderingContext } from '../RenderingContext';
 import { Framebuffer } from '../Framebuffer';
 import { Node, depthFirstVisitor } from '../../../nodes/Node';
 import { Mesh } from '../../../nodes/Mesh';
@@ -6,9 +6,9 @@ import { DrawTask } from './DrawTask';
 import { ITask } from './ITask';
 
 export class TaskEngine {
-	context: Context;
+	context: RenderingContext;
 
-	constructor(context: Context) {
+	constructor(context: RenderingContext) {
 		this.context = context;
 	}
 

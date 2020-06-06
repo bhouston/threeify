@@ -1,15 +1,13 @@
 node_modules
-lib
-dist
-dist
-three.js
-src/lib/renderers/webgl2/webgl2_fundamentals.js
-package-lock.json
+dist # build files
+package-lock.json  # this is important to check for reliability
 
-### IDE & Docker related exclusions
-# Theiaide
-.theia
-# WebStrom
-.idea
- # docker environment variables
-.env
+# IDE & Docker related exclusions
+.theia  # Theiaide
+.idea   # WebStrom
+.env    # docker environment variables
+
+# Ben is using this as a reference.  Remove after 0.1 release
+three.js 
+src/lib/renderers/webgl2/webgl2_fundamentals.js
+

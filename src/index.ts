@@ -8,7 +8,7 @@ import { Mesh } from './nodes/Mesh.js';
 import { Node } from './nodes/Node.js';
 import { BlendState } from './renderers/webgl2/BlendState.js';
 import { ClearState } from './renderers/webgl2/ClearState.js';
-import { Context } from './renderers/webgl2/Context.js';
+import { RenderingContext } from './renderers/webgl2/RenderingContext.js';
 import { DepthTestState } from './renderers/webgl2/DepthTestState.js';
 import { MaskState } from './renderers/webgl2/MaskState.js';
 import { Program } from './renderers/webgl2/Program.js';
@@ -24,7 +24,7 @@ async function test() {
 	let canvasElement = document.querySelector(
 		'#rendering-canvas',
 	) as HTMLCanvasElement;
-	let context = new Context(canvasElement);
+	let context = new RenderingContext(canvasElement);
 
 	//
 	// create scene graph
@@ -45,8 +45,7 @@ async function test() {
 	let texture = new Texture(await fetchImage('./exocortex-logo.jpg'));
 	console.log(texture);
 
-	let texImage2D = new TexImage2D(context);
-	texImage2D.update(texture);
+	let texImage2D = new TexImage2D(context, texture.image);
 	console.log(texImage2D);
 
 	let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
@@ -67,6 +66,7 @@ async function test() {
 		albedoUvIndex: 0,
 		albedoMap: texImage2D,
 	};
+	console.log(materialUniforms);
 	let sceneUniforms = {
 		localToWorldTransform: mesh.localToParentTransform,
 		worldToViewTransform: camera.parentToLocalTransform,
@@ -74,6 +74,7 @@ async function test() {
 			canvasElement.width / canvasElement.height,
 		),
 	};
+	console.log(sceneUniforms);
 	program.setUniformValues(materialUniforms);
 	program.setUniformValues(sceneUniforms);
 
