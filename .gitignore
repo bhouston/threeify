@@ -1,11 +1,16 @@
 node_modules
-dist # build files
-package-lock.json  # this is important to check for reliability
+# build files
+dist
+# this is important to check for reliability
+package-lock.json
 
 # IDE & Docker related exclusions
-.theia  # Theiaide
-.idea   # WebStrom
-.env    # docker environment variables
+# Theiaide
+.theia  
+# WebStrom
+.idea  
+# docker environment variables
+.env    
 
 # Ben is using this as a reference.  Remove after 0.1 release
 three.js 
