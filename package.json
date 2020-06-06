@@ -1,9 +1,9 @@
 {
   "name": "threeify",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "description": "Typescript 3D Library",
   "keywords": [],
-  "author": "Ben Houston",
+  "author": "threeify authors",
   "license": "ISC",
   "type": "module",
   "main": "index.ts",
