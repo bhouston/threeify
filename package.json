@@ -1,9 +1,9 @@
 {
-  "name": "three.ts",
-  "version": "0.0.0",
-  "description": "Three.ts Prototype",
+  "name": "threeify",
+  "version": "0.0.2-alpha",
+  "description": "Typescript 3D Library",
   "keywords": [],
-  "author": "Ben Houston",
+  "author": "threeify authors",
   "license": "ISC",
   "type": "module",
   "main": "index.ts",
@@ -12,8 +12,7 @@
     "build": "tsc",
     "watch": "npm run build -- --watch",
     "start": "es-dev-server --node-resolution",
-    "dev": "npm run watch & npm start",
-    "prettier": "npx prettier --single-quote --use-tabs --trailing-comma all --write docs package.json \"./src/**/*.ts\""
+    "dev": "npm run watch & npm start"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.1.0",
