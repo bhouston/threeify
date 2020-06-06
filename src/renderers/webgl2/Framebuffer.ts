@@ -5,21 +5,15 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../model/interfaces.js';
 import { Color } from '../../math/Color.js';
-import { RenderingContext } from './RenderingContext.js';
+import { IDisposable } from '../../model/interfaces.js';
+import { sizeOfDataType } from '../../textures/DataType.js';
+import { numPixelFormatComponents, PixelFormat } from '../../textures/PixelFormat.js';
 import { Program } from './Program.js';
 import { ProgramUniform } from './ProgramUniform.js';
+import { RenderingContext } from './RenderingContext.js';
 import { TexImage2D } from './TexImage2D.js';
 import { VertexArrayObject } from './VertexArrayObject.js';
-import { Box2 } from '../../math/Box2.js';
-import { Vector2 } from '../../math/Vector2.js';
-import { Vector3 } from '../../math/Vector3.js';
-import {
-	PixelFormat,
-	numPixelFormatComponents,
-} from '../../textures/PixelFormat.js';
-import { sizeOfDataType } from '../../textures/DataType.js';
 
 const GL = WebGLRenderingContext;
 

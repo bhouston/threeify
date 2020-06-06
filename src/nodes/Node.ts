@@ -42,33 +42,36 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 		}
 	}
 
-	private _derivedVersion = -1;
-	private _parentToLocalTransform: Matrix4 = new Matrix4();
-	private _localToParentTransform: Matrix4 = new Matrix4();
-	//private _localToWorldTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
-	//private _worldToLocalTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
-
-	private refresh() {
-		if (this._derivedVersion !== this.version) {
-			this._localToParentTransform.compose(
+	private _parentToLocalVersion = -1;
+	private _parentToLocal: Matrix4 = new Matrix4();
+	get localToParentTransform() {
+		if( this._parentToLocalVersion !== this.version ) {
+			this._localToParent.compose(
 				this.position,
 				new Quaternion().setFromEuler(this.rotation),
 				this.scale,
 			);
-			this._parentToLocalTransform.copy(this._localToParentTransform).invert();
-			this._derivedVersion = this.version;
+			this._parentToLocalVersion = this.version;
 		}
+		return this._localToParent;
 	}
 
-	get localToParentTransform() {
-		this.refresh();
-		return this._localToParentTransform;
-	}
+	private _localToParentVersion = -1;
+	private _localToParent: Matrix4 = new Matrix4();
 	get parentToLocalTransform() {
-		this.refresh();
-		return this._parentToLocalTransform;
+		if( this._localToParentVersion !== this.version ) {
+			this._parentToLocal.copy(this.localToParentTransform).invert();		
+			this._localToParentVersion = this.version;
+		}
+		return this._localToParent;
 	}
+
+	//private _localToWorldTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
+	//private _worldToLocalTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
+
 }
+
+// visitors
 
 export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 	node.children.forEach((child) => {
@@ -77,7 +80,12 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void) {
 	callback(node);
 }
 
-export function rootVisitor(node: Node, callback: (node: Node) => void) {
+export function rootLastVisitor(node: Node, callback: (node: Node) => void) {
 	callback(node);
-	if (node.parent) rootVisitor(node.parent, callback);
+	if (node.parent) rootLastVisitor(node.parent, callback);
+}
+
+export function rootFirstVisitor(node: Node, callback: (node: Node) => void) {
+	if (node.parent) rootFirstVisitor(node.parent, callback);
+	callback(node);
 }

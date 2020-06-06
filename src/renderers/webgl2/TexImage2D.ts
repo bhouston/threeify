@@ -6,16 +6,16 @@
 // * @bhouston
 //
 
-import { PixelFormat } from '../../textures/PixelFormat.js';
-import { DataType } from '../../textures/DataType.js';
-import { RenderingContext } from './RenderingContext.js';
-import { Texture } from '../../textures/Texture.js';
-import { TextureWrap } from '../../textures/TextureWrap.js';
-import { TextureFilter } from '../../textures/TextureFilter.js';
-import { IDisposable } from '../../model/interfaces.js';
-import { Pool } from '../Pool.js';
-import { Box2 } from '../../math/Box2.js';
 import { Vector2 } from '../../math/Vector2.js';
+import { IDisposable } from '../../model/interfaces.js';
+import { DataType } from '../../textures/DataType.js';
+import { PixelFormat } from '../../textures/PixelFormat.js';
+import { Texture, ArrayBufferImage } from '../../textures/Texture.js';
+import { TextureFilter } from '../../textures/TextureFilter.js';
+import { TextureWrap } from '../../textures/TextureWrap.js';
+import { Pool } from '../Pool.js';
+import { RenderingContext } from './RenderingContext.js';
+import { TexParameters } from './TexParameters.js';
 
 const GL = WebGLRenderingContext;
 
@@ -43,20 +43,35 @@ export class TexImage2D implements IDisposable {
 	disposed: boolean = false;
 	context: RenderingContext;
 	glTexture: WebGLTexture;
-	target: TextureTarget = TextureTarget.Texture2D;
-	level: number = 0;
-	internalFormat: PixelFormat = PixelFormat.RGBA;
-	size: Vector2 = new Vector2();
-	pixelFormat: PixelFormat = PixelFormat.RGBA;
-	dataType: DataType = DataType.UnsignedByte;
-	wrapS: TextureWrap = TextureWrap.Repeat;
-	wrapT: TextureWrap = TextureWrap.Repeat;
-	magFilter: TextureFilter = TextureFilter.Linear;
-	minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
-	generateMipmaps: boolean = true;
+	image: ArrayBufferImage | HTMLImageElement;
+	target: TextureTarget;
+	level: number;
+	internalFormat: PixelFormat;
+	size: Vector2;
+	pixelFormat: PixelFormat;
+	dataType: DataType;
+	texParameters: TexParameters;
 
-	constructor(context: RenderingContext) {
+	constructor(
+		context: RenderingContext,
+		image: ArrayBufferImage | HTMLImageElement,
+		target: TextureTarget = TextureTarget.Texture2D,
+		level: number = 0,
+		internalFormat: PixelFormat = PixelFormat.RGBA,
+		size: Vector2 = new Vector2(0,0),
+		pixelFormat: PixelFormat = PixelFormat.RGBA,
+		dataType: DataType = DataType.UnsignedByte,
+		texParameters: TexParameters = new TexParameters() 
+		) {
 		this.context = context;
+		this.image = image;
+		this.target = target;
+		this.level = level;
+		this.internalFormat = internalFormat;
+		this.size = size;
+		this.pixelFormat = pixelFormat;
+		this.dataType = dataType;
+		this.texParameters = texParameters;
 
 		let gl = this.context.gl;
 
@@ -65,59 +80,49 @@ export class TexImage2D implements IDisposable {
 			let glTexture = gl.createTexture();
 			if (!glTexture) throw new Error('createTexture failed');
 			this.glTexture = glTexture;
-		}
-	}
-	/*level: number = 0;
-	internalFormat: PixelFormat = PixelFormat.RGBA
-	width: number = 0;
-	height: number = 0;
-	pixelFormat: PixelFormat = PixelFormat.RGBA;
-	dataType: DataType = DataType.UnsignedByte;
-	wrapS: TextureWrap = TextureWrap.Repeat;
-	wrapT: TextureWrap = TextureWrap.Repeat;
-	magFilter: TextureFilter = TextureFilter.Linear;
-	minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
-	generateMipmaps: boolean = true;*/
-
-	update(texture: Texture): void {
-		if (!texture.image) throw new Error('texture.image is null');
-
-		this.target = TextureTarget.Texture2D;
-		this.level = 0;
-		this.internalFormat = texture.pixelFormat;
-		this.size = texture.size;
-		this.pixelFormat = texture.pixelFormat;
-		this.dataType = texture.dataType;
-		this.wrapS = texture.wrapS;
-		this.wrapT = texture.wrapT;
-		this.magFilter = texture.magFilter;
-		this.minFilter = texture.minFilter;
-		this.generateMipmaps = texture.generateMipmaps;
-
-		let gl = this.context.gl;
+        }
 
 		gl.bindTexture(this.target, this.glTexture);
-		gl.texImage2D(
-			this.target,
-			this.level,
-			this.internalFormat,
-			this.size.width,
-			this.size.height,
-			0,
-			this.internalFormat,
-			this.dataType,
-			texture.image,
-		);
+		if( this.image instanceof ArrayBufferImage ) {
+			gl.texImage2D(
+				this.target,
+				this.level,
+				this.internalFormat,
+				this.size.width,
+				this.size.height,
+				0,
+				this.internalFormat,
+				this.dataType,
+				new Uint8Array( this.image.data ), 0 );
+	
+		}
+		else if( this.image instanceof HTMLImageElement ) {
+			gl.texImage2D(
+				this.target,
+				this.level,
+				this.internalFormat,
+				this.size.width,
+				this.size.height,
+				0,
+				this.internalFormat,
+				this.dataType,
+				this.image
+			);
+	
+		}
 
-		if (this.generateMipmaps) {
+		if (texParameters.generateMipmaps) {
 			gl.generateMipmap(this.target);
 		}
 
-		gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, this.wrapS);
-		gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, this.wrapS);
+		gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, texParameters.wrapS);
+		gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, texParameters.wrapS);
 
-		gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, this.magFilter);
-		gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, this.minFilter);
+		gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, texParameters.magFilter);
+		gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, texParameters.minFilter);
+
+		//gl.texParameteri(this.target, gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT, texParameters.anisotropicLevels);
+
 	}
 
 	dispose() {
@@ -138,9 +143,10 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
 				texImage2D: TexImage2D | null,
 			) => {
 				if (!texImage2D) {
-					texImage2D = new TexImage2D(context);
+					texImage2D = new TexImage2D(context,texture.image);
 				}
-				texImage2D.update(texture);
+				// TODO: Create a new image here.
+				//texImage2D.update(texture);
 				return texImage2D;
 			},
 		);

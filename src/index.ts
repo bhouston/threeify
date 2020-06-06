@@ -45,8 +45,7 @@ async function test() {
 	let texture = new Texture(await fetchImage('./exocortex-logo.jpg'));
 	console.log(texture);
 
-	let texImage2D = new TexImage2D(context);
-	texImage2D.update(texture);
+	let texImage2D = new TexImage2D(context, texture.image);
 	console.log(texImage2D);
 
 	let boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(
