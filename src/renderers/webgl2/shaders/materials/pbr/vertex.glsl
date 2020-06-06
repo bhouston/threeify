@@ -34,7 +34,7 @@ varying vec3 v_normal;
 #include <transforms>
 
 void main() {
- 
+
     v_position = transformPosition( localToWorld, position );
     v_normal = transformNormal( localToWorld, normal );
 

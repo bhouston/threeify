@@ -6,60 +6,57 @@
 // * @bhouston
 //
 
-import { RenderingContext } from './RenderingContext.js';
-import { VertexAttribute } from './VertexAttribute.js';
-import { Geometry } from '../../core/Geometry.js';
+import { Geometry } from "../../core/Geometry";
+import { RenderingContext } from "./RenderingContext";
+import { VertexAttribute } from "./VertexAttribute";
 
 class NamedVertexAttribute {
-	name: string;
-	vertexAttribute: VertexAttribute;
+  name: string;
+  vertexAttribute: VertexAttribute;
 
-	constructor(name: string, vertexAttribute: VertexAttribute) {
-		this.name = name;
-		this.vertexAttribute = vertexAttribute;
-	}
+  constructor(name: string, vertexAttribute: VertexAttribute) {
+    this.name = name;
+    this.vertexAttribute = vertexAttribute;
+  }
 }
 
 export class VertexAttributeGeometry {
-	indices: VertexAttribute | null = null;
-	namedVertexAttributes: NamedVertexAttribute[] = []; // TODO replace with a map for faster access
+  namedVertexAttributes: NamedVertexAttribute[] = [];
+  // TODO replace the following array with a map for faster access.
+  indices: VertexAttribute | null = null;
 
-	constructor() {}
+  constructor() {}
 
-	setIndices(indices: VertexAttribute) {
-		this.indices = indices;
-	}
+  static FromGeometry(context: RenderingContext, geometry: Geometry): VertexAttributeGeometry {
+    const vertexAttributeGeometry = new VertexAttributeGeometry();
 
-	setAttribute(name: string, vertexAttribute: VertexAttribute) {
-		// TODO this.namedVertexAttributes replace with a map for faster access
-		let namedVertexAttribute = this.namedVertexAttributes.find(
-			(item) => item.name === name,
-		);
-		if (namedVertexAttribute) {
-			namedVertexAttribute.vertexAttribute = vertexAttribute;
-		} else {
-			this.namedVertexAttributes.push(
-				new NamedVertexAttribute(name, vertexAttribute),
-			);
-		}
-	}
+    if (geometry.indices) {
+      vertexAttributeGeometry.setIndices(
+        VertexAttribute.FromAttributeAccessor(context, geometry.indices),
+      );
+    }
 
-	static FromGeometry(context: RenderingContext, geometry: Geometry) {
-		let vertexAttributeGeometry = new VertexAttributeGeometry();
+    geometry.namedAttributeAccessors.forEach((item) => {
+      vertexAttributeGeometry.setAttribute(
+        item.name,
+        VertexAttribute.FromAttributeAccessor(context, item.attributeAccessor),
+      );
+    });
 
-		if (geometry.indices) {
-			vertexAttributeGeometry.setIndices(
-				VertexAttribute.FromAttributeAccessor(context, geometry.indices),
-			);
-		}
+    return vertexAttributeGeometry;
+  }
 
-		geometry.namedAttributeAccessors.forEach((item) => {
-			vertexAttributeGeometry.setAttribute(
-				item.name,
-				VertexAttribute.FromAttributeAccessor(context, item.attributeAccessor),
-			);
-		});
+  setIndices(indices: VertexAttribute): void {
+    this.indices = indices;
+  }
 
-		return vertexAttributeGeometry;
-	}
+  setAttribute(name: string, vertexAttribute: VertexAttribute): void {
+    // TODO this.namedVertexAttributes replace with a map for faster access
+    const namedVertexAttribute = this.namedVertexAttributes.find((item) => item.name === name);
+    if (namedVertexAttribute) {
+      namedVertexAttribute.vertexAttribute = vertexAttribute;
+    } else {
+      this.namedVertexAttributes.push(new NamedVertexAttribute(name, vertexAttribute));
+    }
+  }
 }

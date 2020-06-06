@@ -5,34 +5,24 @@
 // * @bhouston
 //
 
-import {
-	IDisposable,
-	IVersionable,
-	IIdentifiable,
-} from '../model/interfaces.js';
-import { generateUUID } from '../model/generateUuid.js';
-import { IPoolUser } from '../renderers/Pool.js';
+import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
+import { IPoolUser } from "../renderers/Pool";
+import { generateUUID } from "../model/generateUuid";
 
-export class ShaderCodeMaterial
-	implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
-	uuid: string = generateUUID();
-	version: number = 0;
-	disposed: boolean = false;
-	name: string = '';
-	vertexShaderCode: string;
-	fragmentShaderCode: string;
+export class ShaderCodeMaterial implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
+  uuid: string = generateUUID();
+  version = 0;
+  disposed = false;
+  name = "";
 
-	constructor(vertexShaderCode: string, fragmentShaderCode: string) {
-		this.vertexShaderCode = vertexShaderCode;
-		this.fragmentShaderCode = fragmentShaderCode;
-	}
+  constructor(public vertexShaderCode: string, public fragmentShaderCode: string) {}
 
-	dirty() {
-		this.version++;
-	}
+  dirty(): void {
+    this.version++;
+  }
 
-	dispose() {
-		this.disposed = true;
-		this.dirty();
-	}
+  dispose(): void {
+    this.disposed = true;
+    this.dirty();
+  }
 }

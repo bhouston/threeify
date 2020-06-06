@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { RenderingContext } from '../RenderingContext';
+import { RenderingContext } from "../RenderingContext";
 
 export interface ITask {
-	execute(context: RenderingContext): void;
+  execute(context: RenderingContext): void;
 }
