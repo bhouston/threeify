@@ -10,7 +10,6 @@
     "type": "git",
     "url": "https://github.com/bhouston/threeify"
   },
-
   "main": "index.ts",
   "module": "index.ts",
   "scripts": {
@@ -28,6 +27,7 @@
     "eslint-plugin-cflint": "^1.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.3",
+    "threeify-glsl-transpiler": "0.0.1-alpha",
     "typescript": "^3.9.3"
   },
   "dependencies": {
