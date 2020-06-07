@@ -1,4 +1,3 @@
-export default /* glsl */ `
 precision highp float;
 
 // uniforms
@@ -31,4 +30,3 @@ void main() {
     gl_FragColor.xyz = albedo * texture2D( albedoMap, uv( albedoUvIndex ) ).xyz;
 
 }
-`;

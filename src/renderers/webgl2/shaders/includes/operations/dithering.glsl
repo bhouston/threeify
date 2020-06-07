@@ -1,4 +1,4 @@
-#include <random>
+#include <../math/random>
 
 // based on https://www.shadertoy.com/view/MslGR8
 vec3 dithering( vec3 color ) {

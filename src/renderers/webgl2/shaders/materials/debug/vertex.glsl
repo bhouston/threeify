@@ -1,4 +1,3 @@
-export default /* glsl */ `
 // uniforms
 uniform mat4 localToWorldTransform; // node
 uniform mat4 worldToViewTransform; // camera
@@ -28,4 +27,3 @@ void main() {
     gl_Position = ( localToViewTransform * viewToScreenProjection ) * vec4( position, 1.0 );
 
 }
-`;

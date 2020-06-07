@@ -1,7 +1,7 @@
-#include <math/math>
-#include <brdfs/f_schlick>
-#include <brdfs/g_ggx_smithcorrelated>
-#include <brdfs/d_ggx>
+#include <../math/math.glsl>
+#include <f_schlick.glsl>
+#include <g_ggx_smithcorrelated.glsl>
+#include <d_ggx.glsl>
 
 // GGX Distribution, Schlick Fresnel, GGX-Smith Visibility
 vec3 BRDF_Specular_GGX( const in IncidentLight incidentLight, const in vec3 viewDir, const in vec3 normal, const in vec3 specularColor, const in float roughness ) {

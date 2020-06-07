@@ -6,6 +6,11 @@
   "author": "threeify authors",
   "license": "ISC",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bhouston/threeify"
+  },
+
   "main": "index.ts",
   "module": "index.ts",
   "scripts": {
