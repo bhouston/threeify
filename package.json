@@ -16,7 +16,8 @@
     "build": "tsc",
     "watch": "npm run build -- --watch",
     "start": "es-dev-server --node-resolution",
-    "dev": "npm run watch & npm start"
+    "dev": "npm run watch & npm start",
+    "build-glsl": "tgt -i ./src -o ./dist"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.1.0",
@@ -27,7 +28,7 @@
     "eslint-plugin-cflint": "^1.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.3",
-    "threeify-glsl-transpiler": "0.0.1-alpha",
+    "threeify-glsl-transpiler": "0.0.6-alpha",
     "typescript": "^3.9.3"
   },
   "dependencies": {
