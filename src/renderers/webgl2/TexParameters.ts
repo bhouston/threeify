@@ -1,11 +1,11 @@
-import { TextureWrap } from "../../textures/TextureWrap.js";
-import { TextureFilter } from "../../textures/TextureFilter.js";
+import { TextureFilter } from "../../textures/TextureFilter";
+import { TextureWrap } from "../../textures/TextureWrap";
 
 export class TexParameters {
-  generateMipmaps: boolean = true;
+  generateMipmaps = true;
   wrapS: TextureWrap = TextureWrap.Repeat;
   wrapT: TextureWrap = TextureWrap.Repeat;
   magFilter: TextureFilter = TextureFilter.Linear;
   minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
-  anisotropicLevels: number = 1;
+  anisotropicLevels = 1;
 }

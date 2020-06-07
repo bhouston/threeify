@@ -1,32 +1,51 @@
 {
-	"folders": [
-		{
-			"path": "./"
-		}
-	],
-	"extensions": {
-		"recommendations": [
-			"esbenp.prettier-vscode",
-			"editorconfig.editorconfig",
-			"dbaeumer.vscode-eslint",
-			"kisstkondoros.vscode-codemetrics",
-			"shardulm94.trailing-spaces",
-			"streetsidesoftware.code-spell-checker",
-			"waderyan.gitblame"
-		]
-	},
-	"settings": {
-		"editor.formatOnSave": true,
-		"editor.formatOnPaste": true,
-		"editor.codeActionsOnSave": {
-			"source.fixAll.eslint": true
-		},
-		"editor.wordWrap": "wordWrapColumn",
-		"editor.wordWrapColumn": 80,
-		"editor.rulers": [80],
-		"files.exclude": {
-			"node_modules/": true
-		},
-		"cSpell.words": ["Threeify", "cflint", "glsl"]
-	}
+  "folders": [{
+    "path": "./"
+  }],
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "editorconfig.editorconfig",
+      "dbaeumer.vscode-eslint",
+      "kisstkondoros.vscode-codemetrics",
+      "shardulm94.trailing-spaces",
+      "streetsidesoftware.code-spell-checker",
+      "waderyan.gitblame"
+    ]
+  },
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
+    "editor.rulers": [80],
+    "files.exclude": {
+      "node_modules/": true
+    },
+    "cSpell.words": [
+      "Arrayable",
+      "Clearcoat",
+      "Cloneable",
+      "Hashable",
+      "Metalness",
+      "Mipmaps",
+      "Threeify",
+      "Unprojection",
+      "Versionable",
+      "bhouston",
+      "bitmask",
+      "cflint",
+      "cloc",
+      "destructured",
+      "exocortex",
+      "glsl",
+      "highp",
+      "renderable",
+      "threeifydev",
+      "varyings"
+    ]
+  }
 }

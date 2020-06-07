@@ -17,7 +17,7 @@ varying vec2 v_uv0;
 
 
 void main() {
- 
+
     mat4 localToViewTransform = localToWorldTransform * worldToViewTransform;
 
     v_viewPosition = ( localToViewTransform * vec4( position, 1.0 ) ).xyz;
