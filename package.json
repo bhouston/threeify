@@ -2,7 +2,7 @@
   "name": "threeify",
   "version": "0.0.2-alpha",
   "description": "Typescript 3D Library",
-  "keywords": [],
+  "keywords": ["threeify","webgl","webgpu","3D"],
   "author": "threeify authors",
   "license": "ISC",
   "type": "module",
@@ -27,7 +27,7 @@
     "eslint-plugin-cflint": "^1.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.3",
-    "threeify-glsl-transpiler": "0.1.1",
+    "threeify-glsl-transpiler": "0.1.2",
     "typescript": "^3.9.3"
   },
   "dependencies": {

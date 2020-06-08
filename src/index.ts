@@ -93,3 +93,6 @@ async function test() {
 }
 
 test();
+
+console.log( debug_vertex);
+console.log( debug_fragment);
