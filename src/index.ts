@@ -83,6 +83,3 @@ async function test(): Promise<void> {
 }
 
 test();
-
-console.log( debug_vertex);
-console.log( debug_fragment);
