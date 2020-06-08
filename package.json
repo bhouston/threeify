@@ -2,7 +2,12 @@
   "name": "threeify",
   "version": "0.0.2-alpha",
   "description": "Typescript 3D Library",
-  "keywords": ["threeify","webgl","webgpu","3D"],
+  "keywords": [
+    "threeify",
+    "webgl",
+    "webgpu",
+    "3D"
+  ],
   "author": "threeify authors",
   "license": "ISC",
   "type": "module",
@@ -15,7 +20,7 @@
   "scripts": {
     "build": "tsc && tgt -i ./src -o ./dist",
     "watch": "npm run build -- --watch & tgt -i ./src -o ./dist -w",
-    "start": "es-dev-server --node-resolution",
+    "start": "es-dev-server --node-resolve",
     "dev": "npm run watch & npm start"
   },
   "devDependencies": {
