@@ -13,11 +13,10 @@
   "main": "index.ts",
   "module": "index.ts",
   "scripts": {
-    "build": "tsc",
-    "watch": "npm run build -- --watch",
+    "build": "tsc && tgt -i ./src -o ./dist",
+    "watch": "npm run build -- --watch & tgt -i ./src -o ./dist -w",
     "start": "es-dev-server --node-resolution",
-    "dev": "npm run watch & npm start",
-    "build-glsl": "tgt -i ./src -o ./dist"
+    "dev": "npm run watch & npm start"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.1.0",
@@ -28,7 +27,7 @@
     "eslint-plugin-cflint": "^1.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-prettier": "^3.1.3",
-    "threeify-glsl-transpiler": "0.0.6-alpha",
+    "threeify-glsl-transpiler": "0.1.1",
     "typescript": "^3.9.3"
   },
   "dependencies": {

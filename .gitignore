@@ -1,8 +1,6 @@
 node_modules
 # build files
 dist
-# this is important to check for reliability
-package-lock.json
 
 # IDE & Docker related exclusions
 # Theiaide
