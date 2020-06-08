@@ -5,90 +5,92 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
-import { RenderingContext } from "./webgl2/RenderingContext";
+import { IVersionable, IDisposable, IIdentifiable } from '../model/interfaces';
+import { RenderingContext } from './webgl2/RenderingContext';
 
 export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
 
 export type UserResourceUpdater<U, R> = (
-  context: RenderingContext,
-  user: U,
-  resource: R | null,
+	context: RenderingContext,
+	user: U,
+	resource: R | null,
 ) => R;
 
 class UserResource<U extends IPoolUser, R extends IDisposable> {
-  user: U;
-  resource: R;
-  resourceVersion = -1;
+	user: U;
+	resource: R;
+	resourceVersion: number = -1;
 
-  constructor(user: U, resource: R) {
-    this.user = user;
-    this.resource = resource;
-  }
+	constructor(user: U, resource: R) {
+		this.user = user;
+		this.resource = resource;
+	}
 
-  update(context: RenderingContext, updater: UserResourceUpdater<U, R>): boolean {
-    let disposed = false;
-    if (this.resourceVersion < this.user.version) {
-      if (this.user.disposed) {
-        this.resource.dispose();
-        disposed = true;
-      } else {
-        this.resource = updater(context, this.user, this.resource);
-      }
-      this.resourceVersion = this.user.version;
-    }
+	update(context: RenderingContext, updater: UserResourceUpdater<U, R>) {
+		let disposed = false;
+		if (this.resourceVersion < this.user.version) {
+			if (this.user.disposed) {
+				this.resource.dispose();
+				disposed = true;
+			} else {
+				this.resource = updater(context, this.user, this.resource);
+			}
+			this.resourceVersion = this.user.version;
+		}
 
-    return disposed;
-  }
+		return disposed;
+	}
 }
 
 export class Pool<U extends IPoolUser, R extends IDisposable> {
-  context: RenderingContext;
-  updater: UserResourceUpdater<U, R>;
-  // TODO replace the following array with a map for faster access.
-  userResources: Array<UserResource<U, R>> = [];
+	context: RenderingContext;
+	updater: UserResourceUpdater<U, R>;
+	userResources: Array<UserResource<U, R>> = []; // TODO replace with a map for faster access
 
-  constructor(context: RenderingContext, updater: UserResourceUpdater<U, R>) {
-    this.context = context;
-    this.updater = updater;
-  }
+	constructor(context: RenderingContext, updater: UserResourceUpdater<U, R>) {
+		this.context = context;
+		this.updater = updater;
+	}
 
-  request(user: U): UserResource<U, R> {
-    let userResource = this.userResources.find(
-      (userResource) => userResource.user.uuid === user.uuid,
-    );
-    if (!userResource) {
-      userResource = new UserResource(user, this.updater(this.context, user, null));
-      this.userResources.push(userResource);
-    }
+	request(user: U) {
+		let userResource = this.userResources.find(
+			(userResource) => userResource.user.uuid == user.uuid,
+		);
+		if (!userResource) {
+			userResource = new UserResource(
+				user,
+				this.updater(this.context, user, null),
+			);
+			this.userResources.push(userResource);
+		}
 
-    return userResource;
-  }
+		return userResource;
+	}
 
-  update(): this {
-    let disposeCount = 0;
+	update() {
+		let disposeCount = 0;
 
-    // update all
-    this.userResources.forEach((userResource) => {
-      if (userResource.update(this.context, this.updater)) {
-        disposeCount++;
-      }
-    });
+		// update all
+		this.userResources.forEach((userResource) => {
+			if (userResource.update(this.context, this.updater)) {
+				disposeCount++;
+			}
+		});
 
-    // TODO: should this be this frequent?
-    if (disposeCount > 0) {
-      this.garbageCollect();
-    }
+		// TODO: should this be this frequent?
+		if (disposeCount > 0) {
+			this.garbageCollect();
+		}
 
-    return this;
-  }
+		return this;
+	}
 
-  garbageCollect(): this {
-    // removed disposed resources
-    this.userResources = this.userResources.filter(
-      (userResource) => !userResource.resource.disposed,
-    );
+	garbageCollect() {
+		// removed disposed resources
+		this.userResources = this.userResources.filter(
+			(userResource) => !userResource.resource.disposed,
+		);
 
-    return this;
-  }
+		return this;
+	}
 }

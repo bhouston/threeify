@@ -1,4 +1,5 @@
 node_modules
+
 # build files
 dist
 
@@ -11,6 +12,6 @@ dist
 .env    
 
 # Ben is using this as a reference.  Remove after 0.1 release
-three.js
+three.js 
 src/lib/renderers/webgl2/webgl2_fundamentals.js
 

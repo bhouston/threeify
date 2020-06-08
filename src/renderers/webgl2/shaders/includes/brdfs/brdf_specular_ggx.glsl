@@ -20,7 +20,7 @@ vec3 BRDF_Specular_GGX( const in IncidentLight incidentLight, const in vec3 view
 	float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );
 
 	float D = D_GGX( alpha, dotNH );
-
+	
 	return F * ( G * D );
 } // validated
 

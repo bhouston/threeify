@@ -34,7 +34,7 @@
     "prettier": "^2.0.5"
   },
   "prettier": {
-    "trailingComma": "all",
+    "trailingComma": "es5",
     "tabWidth": 2,
     "semi": true,
     "singleQuote": false

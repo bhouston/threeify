@@ -5,11 +5,15 @@
 // * @bhouston
 //
 
-import { Geometry } from "../core/Geometry";
-import { Node } from "../nodes/Node";
+import { Geometry } from '../core/Geometry.js';
+import { Node } from '../nodes/Node.js';
 
 export class Mesh extends Node {
-  constructor(public geometry: Geometry) {
-    super();
-  }
+	geometry: Geometry;
+
+	constructor(geometry: Geometry) {
+		super();
+
+		this.geometry = geometry;
+	}
 }

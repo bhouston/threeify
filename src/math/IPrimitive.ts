@@ -5,6 +5,15 @@
 // * @bhouston
 //
 
-import { IArrayable, ICloneable, IEquatable, IHashable } from "../model/interfaces";
+import {
+	ICloneable,
+	IEquatable,
+	IArrayable,
+	IHashable,
+} from '../model/interfaces.js';
 
-export interface IPrimitive<T> extends ICloneable<T>, IEquatable<T>, IHashable, IArrayable {}
+export interface IPrimitive<T>
+	extends ICloneable<T>,
+		IEquatable<T>,
+		IHashable,
+		IArrayable {}

@@ -55,6 +55,6 @@ void main() {
     vec4 albedo = albedoModular * texture2D( albedoMap, uv( albedoUVIndex ) );
     //float roughness = metalnessModular * texture2D( roughnessMap, uv( roughnessUVIndex ) ).g;
     //float metalness = metalnessModular * texture2D( metalnessMap, uv( metalnessUVIndex ) ).b;
-
+    
     gl_FragColor = albedo;
 }

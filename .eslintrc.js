@@ -40,10 +40,6 @@ module.exports = {
         selector: "typeLike",
         format: ["PascalCase"],
       },
-      {
-        selector: "enumMember",
-        format: ["PascalCase"],
-      },
     ],
     "@typescript-eslint/no-unnecessary-condition": 2,
     "@typescript-eslint/no-unsafe-call": 2,

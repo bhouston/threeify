@@ -8,7 +8,7 @@
 const GL = WebGLRenderingContext;
 
 export enum TextureWrap {
-  MirroredRepeat = GL.MIRRORED_REPEAT,
-  ClampToEdge = GL.CLAMP_TO_EDGE,
-  Repeat = GL.REPEAT,
+	MirroredRepeat = GL.MIRRORED_REPEAT,
+	ClampToEdge = GL.CLAMP_TO_EDGE,
+	Repeat = GL.REPEAT,
 }

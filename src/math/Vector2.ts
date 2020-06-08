@@ -5,127 +5,133 @@
 // * @bhouston
 //
 
-import { IPrimitive } from "./IPrimitive";
-import { hashFloat2 } from "../model/hash";
+import { IPrimitive } from './IPrimitive.js';
+import { hashFloat2 } from '../model/hash.js';
 
 export class Vector2 implements IPrimitive<Vector2> {
-  constructor(public x = 0, public y = 0) {}
+	x: number;
+	y: number;
 
-  get width(): number {
-    return this.x;
-  }
-  set width(width: number) {
-    this.x = width;
-  }
+	constructor(x: number = 0, y: number = 0) {
+		this.x = x;
+		this.y = y;
+	}
 
-  get height(): number {
-    return this.y;
-  }
-  set height(height: number) {
-    this.y = height;
-  }
+	get width() {
+		return this.x;
+	}
+	set width(width: number) {
+		this.x = width;
+	}
 
-  getHashCode(): number {
-    return hashFloat2(this.x, this.y);
-  }
+	get height() {
+		return this.y;
+	}
+	set height(height: number) {
+		this.y = height;
+	}
 
-  clone(): Vector2 {
-    return new Vector2().copy(this);
-  }
+	getHashCode() {
+		return hashFloat2(this.x, this.y);
+	}
 
-  copy(v: Vector2): this {
-    this.x = v.x;
-    this.y = v.y;
+	clone() {
+		return new Vector2().copy(this);
+	}
 
-    return this;
-  }
+	copy(v: Vector2) {
+		this.x = v.x;
+		this.y = v.y;
 
-  add(v: Vector2): this {
-    this.x += v.x;
-    this.y += v.y;
+		return this;
+	}
 
-    return this;
-  }
+	add(v: Vector2) {
+		this.x += v.x;
+		this.y += v.y;
 
-  sub(v: Vector2): this {
-    this.x -= v.x;
-    this.y -= v.y;
+		return this;
+	}
 
-    return this;
-  }
+	sub(v: Vector2) {
+		this.x -= v.x;
+		this.y -= v.y;
 
-  getComponent(index: number): number {
-    switch (index) {
-      case 0:
-        return this.x;
-      case 1:
-        return this.y;
-      default:
-        throw new Error(`index of our range: ${index}`);
-    }
-  }
+		return this;
+	}
 
-  setComponent(index: number, value: number): this {
-    switch (index) {
-      case 0:
-        this.x = value;
-        break;
-      case 1:
-        this.y = value;
-        break;
-      default:
-        throw new Error(`index of our range: ${index}`);
-    }
+	getComponent(index: number) {
+		switch (index) {
+			case 0:
+				return this.x;
+			case 1:
+				return this.y;
+			default:
+				throw new Error(`index of our range: ${index}`);
+		}
+	}
 
-    return this;
-  }
+	setComponent(index: number, value: number) {
+		switch (index) {
+			case 0:
+				this.x = value;
+				break;
+			case 1:
+				this.y = value;
+				break;
+			default:
+				throw new Error(`index of our range: ${index}`);
+		}
 
-  numComponents(): 2 {
-    return 2;
-  }
+		return this;
+	}
 
-  dot(v: Vector2): number {
-    return this.x * v.x + this.y * v.y;
-  }
+	numComponents() {
+		return 3;
+	}
 
-  length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
-  }
+	dot(v: Vector2) {
+		return this.x * v.x + this.y * v.y;
+	}
 
-  min(v: Vector2): this {
-    this.x = Math.min(this.x, v.x);
-    this.y = Math.min(this.y, v.y);
+	length() {
+		return Math.sqrt(this.x * this.x + this.y * this.y);
+	}
 
-    return this;
-  }
+	min(v: Vector2) {
+		this.x = Math.min(this.x, v.x);
+		this.y = Math.min(this.y, v.y);
 
-  max(v: Vector2): this {
-    this.x = Math.max(this.x, v.x);
-    this.y = Math.max(this.y, v.y);
+		return this;
+	}
 
-    return this;
-  }
+	max(v: Vector2) {
+		this.x = Math.max(this.x, v.x);
+		this.y = Math.max(this.y, v.y);
 
-  clamp(min: Vector2, max: Vector2): this {
-    // assumes min < max, componentwise
+		return this;
+	}
 
-    this.x = Math.max(min.x, Math.min(max.x, this.x));
-    this.y = Math.max(min.y, Math.min(max.y, this.y));
+	clamp(min: Vector2, max: Vector2) {
+		// assumes min < max, componentwise
 
-    return this;
-  }
+		this.x = Math.max(min.x, Math.min(max.x, this.x));
+		this.y = Math.max(min.y, Math.min(max.y, this.y));
 
-  equals(v: Vector2): boolean {
-    return v.x === this.x && v.y === this.y;
-  }
+		return this;
+	}
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
-    this.x = floatArray[offset + 0];
-    this.y = floatArray[offset + 1];
-  }
+	equals(v: Vector2) {
+		return v.x === this.x && v.y === this.y;
+	}
 
-  toArray(floatArray: Float32Array, offset: number): void {
-    floatArray[offset + 0] = this.x;
-    floatArray[offset + 1] = this.y;
-  }
+	setFromArray(floatArray: Float32Array, offset: number) {
+		this.x = floatArray[offset + 0];
+		this.y = floatArray[offset + 1];
+	}
+
+	toArray(floatArray: Float32Array, offset: number) {
+		floatArray[offset + 0] = this.x;
+		floatArray[offset + 1] = this.y;
+	}
 }

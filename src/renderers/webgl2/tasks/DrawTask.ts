@@ -5,37 +5,51 @@
 // * @bhouston
 //
 
-import { ITask } from "./ITask";
-import { PrimitiveType } from "../PrimitiveType";
-import { Program } from "../Program";
-import { RenderingContext } from "../RenderingContext";
-import { VertexArrayObject } from "../VertexArrayObject";
+import { PrimitiveType } from '../PrimitiveType';
+import { Program } from '../Program';
+import { RenderingContext } from '../RenderingContext';
+import { VertexArrayObject } from '../VertexArrayObject';
+import { ITask } from './ITask';
 
 export class DrawTask implements ITask {
-  constructor(
-    public program: Program,
-    public vertexArrayObject: VertexArrayObject,
-    public uniformValues: any,
-    public primitiveType: PrimitiveType,
-    public offset = 0,
-    public count = 0,
-  ) {}
+	program: Program;
+	vertexArrayObject: VertexArrayObject;
+	uniformValues: any;
+	primitiveType: PrimitiveType;
+	offset: number = 0;
+	count: number = 0;
 
-  execute(context: RenderingContext): void {
-    const gl = context.gl;
+	constructor(
+		program: Program,
+		vertexArrayObject: VertexArrayObject,
+		uniformValues: any,
+		primitiveType: PrimitiveType,
+		offset: number,
+		count: number,
+	) {
+		this.program = program;
+		this.vertexArrayObject = vertexArrayObject;
+		this.uniformValues = uniformValues;
+		this.primitiveType = primitiveType;
+		this.offset = offset;
+		this.count = count;
+	}
 
-    context.program = this.program;
+	execute(context: RenderingContext) {
+		let gl = context.gl;
 
-    // set attributes
-    gl.bindVertexArray(this.vertexArrayObject.glVertexArrayObject);
+		context.program = this.program;
 
-    // set uniforms
-    this.program.setUniformValues(this.uniformValues);
+		// set attributes
+		gl.bindVertexArray(this.vertexArrayObject.glVertexArrayObject);
 
-    // draw primitives
-    // if( this.indexed ) {
-    //    gl.drawElements( this.primitiveType, this.count, this.elementType, this.offset ); // TODO: Support indexed geometry draws
-    // }
-    gl.drawArrays(this.primitiveType, this.offset, this.count);
-  }
+		// set uniforms
+		this.program.setUniformValues(this.uniformValues);
+
+		// draw primitives
+		//if( this.indexed ) {
+		//    gl.drawElements( this.primitiveType, this.count, this.elementType, this.offset ); // TODO: Support indexed geometry draws
+		//}
+		gl.drawArrays(this.primitiveType, this.offset, this.count);
+	}
 }

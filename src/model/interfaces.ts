@@ -6,40 +6,40 @@
 //
 
 export interface ICloneable<T> {
-  clone(): T;
+	clone(): T;
 }
 
 export interface ICopyable<T> {
-  copy(t: T): T;
+	copy(t: T): T;
 }
 
 export interface IComparable<T> {
-  comparable(a: T, b: T): number;
+	comparable(a: T, b: T): number;
 }
 
 export interface IEquatable<T> {
-  equals(t: T): boolean;
+	equals(t: T): boolean;
 }
 
 export interface IDisposable {
-  disposed: boolean;
-  dispose(): void;
+	disposed: boolean;
+	dispose(): void;
 }
 
 export interface IIdentifiable {
-  uuid: string;
+	uuid: string;
 }
 
 export interface IVersionable {
-  version: number;
-  dirty(): void;
+	version: number;
+	dirty(): void;
 }
 
 export interface IHashable {
-  getHashCode(): number;
+	getHashCode(): number;
 }
 
 export interface IArrayable {
-  setFromArray(floatArray: Float32Array, offset: number): void;
-  toArray(floatArray: Float32Array, offset: number): void;
+	setFromArray(floatArray: Float32Array, offset: number): void;
+	toArray(floatArray: Float32Array, offset: number): void;
 }

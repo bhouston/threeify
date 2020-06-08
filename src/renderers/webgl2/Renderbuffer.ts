@@ -1,31 +1,29 @@
-import { IDisposable } from "../../model/interfaces";
-import { RenderingContext } from "./RenderingContext";
+import { IDisposable } from '../../model/interfaces.js';
+import { RenderingContext } from './RenderingContext.js';
 
 export class Renderbuffer implements IDisposable {
-  disposed = false;
-  context: RenderingContext;
-  glRenderbuffer: WebGLRenderbuffer;
+	disposed: boolean = false;
+	context: RenderingContext;
+	glRenderbuffer: WebGLRenderbuffer;
 
-  constructor(context: RenderingContext) {
-    this.context = context;
+	constructor(context: RenderingContext) {
+		this.context = context;
 
-    const gl = this.context.gl;
+		let gl = this.context.gl;
 
-    {
-      const glRenderbuffer = gl.createRenderbuffer();
-      if (!glRenderbuffer) {
-        throw new Error("createRenderbuffer failed");
-      }
+		{
+			let glRenderbuffer = gl.createRenderbuffer();
+			if (!glRenderbuffer) throw new Error('createRenderbuffer failed');
 
-      this.glRenderbuffer = glRenderbuffer;
-    }
-  }
+			this.glRenderbuffer = glRenderbuffer;
+		}
+	}
 
-  dispose(): void {
-    if (!this.disposed) {
-      const gl = this.context.gl;
-      gl.deleteRenderbuffer(this.glRenderbuffer);
-      this.disposed = true;
-    }
-  }
+	dispose() {
+		if (!this.disposed) {
+			let gl = this.context.gl;
+			gl.deleteRenderbuffer(this.glRenderbuffer);
+			this.disposed = true;
+		}
+	}
 }

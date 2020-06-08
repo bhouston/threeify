@@ -5,8 +5,13 @@
 // * @bhouston
 
 export class ShaderMaterial {
-  // attributes (required attribute buffers)
-  // varying (per instance parameters)
+	vertexSourceCode: string;
+	fragmentSourceCode: string;
+	// attributes (required attribute buffers)
+	// varying (per instance parameters)
 
-  constructor(public vertexSourceCode: string, public fragmentSourceCode: string) {}
+	constructor(vertexSourceCode: string, fragmentSourceCode: string) {
+		this.vertexSourceCode = vertexSourceCode;
+		this.fragmentSourceCode = fragmentSourceCode;
+	}
 }

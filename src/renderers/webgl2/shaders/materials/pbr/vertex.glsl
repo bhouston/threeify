@@ -35,7 +35,7 @@ varying vec3 v_normal;
 #include <../../includes/math/matrix4>
 
 void main() {
-
+ 
     v_position = transformPosition( localToWorld, position );
     v_normal = transformNormal( localToWorld, normal );
 
