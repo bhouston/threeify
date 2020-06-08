@@ -1,3 +1,4 @@
+#pragma once
 
 // Per-Pixel Tangent Space Normal Mapping
 // http://hacksoflife.blogspot.ch/2009/11/per-pixel-tangent-space-normal-mapping.html

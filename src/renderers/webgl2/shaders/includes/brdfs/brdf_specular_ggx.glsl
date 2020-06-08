@@ -1,3 +1,4 @@
+#pragma once
 #include <../math/math.glsl>
 #include <f_schlick.glsl>
 #include <g_ggx_smithcorrelated.glsl>

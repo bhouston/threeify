@@ -1,3 +1,5 @@
+#pragma once
+
 vec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {
 
 	// Original approximation by Christophe Schlick '94

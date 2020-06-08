@@ -1,3 +1,4 @@
+#pragma once
 #include <../../math/math.glsl>
 
 vec4 sRGBToLinear( in vec4 value ) {

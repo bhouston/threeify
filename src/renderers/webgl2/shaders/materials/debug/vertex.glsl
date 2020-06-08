@@ -1,3 +1,5 @@
+#include <../../includes/math/math.glsl>
+
 // uniforms
 uniform mat4 localToWorldTransform; // node
 uniform mat4 worldToViewTransform; // camera

@@ -1,3 +1,5 @@
+#pragma once
+
 vec3 projectOnPlane( in vec3 point, in vec3 pointOnPlane, in vec3 planeNormal ) {
 	float distance = dot( planeNormal, point - pointOnPlane );
 	return - distance * planeNormal + point;

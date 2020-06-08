@@ -1,3 +1,4 @@
+#pragma once
 #include <../math/math>
 
 // Microfacet Models for Refraction through Rough Surfaces - equation (34)

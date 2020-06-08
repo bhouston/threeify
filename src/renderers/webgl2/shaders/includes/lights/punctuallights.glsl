@@ -1,3 +1,5 @@
+#pragma once
+
 float punctualLightIrradiance( const in float lightDistance, const in float cutoffDistance, const in float decayExponent ) {
 
 	// based upon Frostbite 3 Moving to Physically-based Rendering

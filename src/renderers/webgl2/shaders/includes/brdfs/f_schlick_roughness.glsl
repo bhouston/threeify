@@ -1,3 +1,5 @@
+#pragma once
+
 vec3 F_Schlick_RoughnessDependent( const in vec3 F0, const in float dotNV, const in float roughness ) {
 
 	// See F_Schlick

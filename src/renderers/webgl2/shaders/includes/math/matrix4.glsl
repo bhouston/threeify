@@ -1,3 +1,5 @@
+#pragma once
+
 vec3 transformPosition( in vec3 p, in mat4 m ) {
     return ( m * vec4( p, 1.0 ) ).xyz;
 }

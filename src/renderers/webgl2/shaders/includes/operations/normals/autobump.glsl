@@ -1,3 +1,4 @@
+#pragma once
 
 // Bump Mapping Unparametrized Surfaces on the GPU by Morten S. Mikkelsen
 // http://api.unrealengine.com/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace/mm_sfgrad_bump.pdf

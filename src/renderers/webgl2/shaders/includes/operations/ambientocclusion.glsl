@@ -1,3 +1,4 @@
+#pragma once
 #include <../math/math>
 
 // reads channel R, compatible with a combined OcclusionRoughnessMetallic (RGB) texture

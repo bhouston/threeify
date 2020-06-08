@@ -1,3 +1,5 @@
+#pragma once
+
 vec3 normalToRgb( const in vec3 normal ) {
 	return normalize( normal ) * 0.5 + 0.5;
 }

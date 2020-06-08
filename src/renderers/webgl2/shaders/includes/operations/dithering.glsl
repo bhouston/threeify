@@ -1,3 +1,4 @@
+#pragma once
 #include <../math/random>
 
 // based on https://www.shadertoy.com/view/MslGR8
