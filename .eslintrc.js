@@ -55,7 +55,7 @@ module.exports = {
     curly: [2, "all"],
     eqeqeq: "error",
     "import/newline-after-import": ["error", { count: 1 }],
-    "max-len": 2,
+    "max-len": [2, 120],
     "no-alert": 2,
     "no-invalid-this": 2,
     "no-var": 2,

@@ -1,7 +1,9 @@
 {
-  "folders": [{
-    "path": "./"
-  }],
+  "folders": [
+    {
+      "path": "./"
+    }
+  ],
   "extensions": {
     "recommendations": [
       "esbenp.prettier-vscode",
@@ -20,8 +22,8 @@
       "source.fixAll.eslint": true
     },
     "editor.wordWrap": "wordWrapColumn",
-    "editor.wordWrapColumn": 80,
-    "editor.rulers": [80],
+    "editor.wordWrapColumn": 120,
+    "editor.rulers": [120],
     "files.exclude": {
       "node_modules/": true
     },
