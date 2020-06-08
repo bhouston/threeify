@@ -2,8 +2,8 @@
 
 ## Goals
 
-* Simplification
-* Minimize dependencies
+- Simplification
+- Minimize dependencies
 
 ## Changes from Three.js
 
@@ -11,13 +11,12 @@
 
 ## Interface
 
-* clone() : T
-* copy( t: T )
-* dispose() - indicates that resources can be released. 
+- clone() : T
+- copy( t: T )
+- dispose() - indicates that resources can be released.
 
 ## Changes from Three.js
 
-* Removed automatic updating of local to world matrix.
-* Rename worldMatrix to localToWorldMatrix per matrix naming conversions.
-* add toLocalToWorldMatrix function to get the latest version of the matrices.
-
+- Removed automatic updating of local to world matrix.
+- Rename worldMatrix to localToWorldMatrix per matrix naming conversions.
+- add toLocalToWorldMatrix function to get the latest version of the matrices.

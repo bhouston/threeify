@@ -14,6 +14,9 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts", "src/**/*.glsl", "src/renderers/webgl2/shaders/materials/debug/fragment.glsl.js", "src/renderers/webgl2/shaders/materials/debug/vertex.glsl.js"],
+  "include": ["src/**/*.ts", "src/**/*.glsl",
+    "src/renderers/webgl2/shaders/materials/debug/fragment.glsl.js",
+    "src/renderers/webgl2/shaders/materials/debug/vertex.glsl.js"
+  ],
   "exclude": []
 }
