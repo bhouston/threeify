@@ -7,7 +7,7 @@
 
 import { IPrimitive } from "./IPrimitive";
 import { Matrix4 } from "./Matrix4";
-import { hashFloat3 } from "../model/hash";
+import { hashFloat3 } from "../hash";
 
 export class Vector3 implements IPrimitive<Vector3> {
   constructor(public x = 0, public y = 0, public z = 0) {}

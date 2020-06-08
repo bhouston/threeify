@@ -5,14 +5,14 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
+import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
 import { DataType } from "./DataType";
 import { IPoolUser } from "../renderers/Pool";
 import { PixelFormat } from "./PixelFormat";
 import { TextureFilter } from "./TextureFilter";
 import { TextureWrap } from "./TextureWrap";
 import { Vector2 } from "../math/Vector2";
-import { generateUUID } from "../model/generateUuid";
+import { generateUUID } from "../generateUuid";
 
 export class ArrayBufferImage {
   constructor(public data: ArrayBuffer, public width: number, public height: number) {}

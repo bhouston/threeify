@@ -6,7 +6,7 @@
 //
 
 import { ProgramUniform, numTextureUnits } from "./ProgramUniform";
-import { IDisposable } from "../../model/interfaces";
+import { IDisposable } from "../../types/types";
 import { Pool } from "../Pool";
 import { ProgramAttribute } from "./ProgramAttribute";
 import { RenderingContext } from "./RenderingContext";
@@ -30,16 +30,8 @@ export class Program implements IDisposable {
 
   constructor(context: RenderingContext, shaderCodeMaterial: ShaderCodeMaterial) {
     this.context = context;
-    this.vertexShader = new Shader(
-      this.context,
-      shaderCodeMaterial.vertexShaderCode,
-      ShaderType.Vertex,
-    );
-    this.fragmentShader = new Shader(
-      this.context,
-      shaderCodeMaterial.fragmentShaderCode,
-      ShaderType.Fragment,
-    );
+    this.vertexShader = new Shader(this.context, shaderCodeMaterial.vertexShaderCode, ShaderType.Vertex);
+    this.fragmentShader = new Shader(this.context, shaderCodeMaterial.fragmentShaderCode, ShaderType.Fragment);
 
     const gl = this.context.gl;
 
@@ -113,18 +105,11 @@ export class Program implements IDisposable {
 
 export class ProgramPool extends Pool<ShaderCodeMaterial, Program> {
   constructor(context: RenderingContext) {
-    super(
-      context,
-      (
-        context: RenderingContext,
-        shaderCodeMaterial: ShaderCodeMaterial,
-        program: Program | null,
-      ) => {
-        if (program) {
-          program.dispose();
-        }
-        return new Program(context, shaderCodeMaterial);
-      },
-    );
+    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderCodeMaterial, program: Program | null) => {
+      if (program) {
+        program.dispose();
+      }
+      return new Program(context, shaderCodeMaterial);
+    });
   }
 }

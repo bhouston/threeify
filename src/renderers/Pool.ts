@@ -5,16 +5,12 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
+import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
 import { RenderingContext } from "./webgl2/RenderingContext";
 
 export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
 
-export type UserResourceUpdater<U, R> = (
-  context: RenderingContext,
-  user: U,
-  resource: R | null,
-) => R;
+export type UserResourceUpdater<U, R> = (context: RenderingContext, user: U, resource: R | null) => R;
 
 class UserResource<U extends IPoolUser, R extends IDisposable> {
   user: U;
@@ -54,9 +50,7 @@ export class Pool<U extends IPoolUser, R extends IDisposable> {
   }
 
   request(user: U): UserResource<U, R> {
-    let userResource = this.userResources.find(
-      (userResource) => userResource.user.uuid === user.uuid,
-    );
+    let userResource = this.userResources.find((userResource) => userResource.user.uuid === user.uuid);
     if (!userResource) {
       userResource = new UserResource(user, this.updater(this.context, user, null));
       this.userResources.push(userResource);
@@ -85,9 +79,7 @@ export class Pool<U extends IPoolUser, R extends IDisposable> {
 
   garbageCollect(): this {
     // removed disposed resources
-    this.userResources = this.userResources.filter(
-      (userResource) => !userResource.resource.disposed,
-    );
+    this.userResources = this.userResources.filter((userResource) => !userResource.resource.disposed);
 
     return this;
   }

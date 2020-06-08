@@ -8,7 +8,7 @@
 
 import { ArrayBufferImage, Texture } from "../../textures/Texture";
 import { DataType } from "../../textures/DataType";
-import { IDisposable } from "../../model/interfaces";
+import { IDisposable } from "../../types/types";
 import { PixelFormat } from "../../textures/PixelFormat";
 import { Pool } from "../Pool";
 import { RenderingContext } from "./RenderingContext";

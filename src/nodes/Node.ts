@@ -5,13 +5,13 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
+import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
 import { Euler3 } from "../math/Euler3";
 import { Matrix4 } from "../math/Matrix4";
 import { NodeCollection } from "./NodeCollection";
 import { Quaternion } from "../math/Quaternion";
 import { Vector3 } from "../math/Vector3";
-import { generateUUID } from "../model/generateUuid";
+import { generateUUID } from "../generateUuid";
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;
@@ -19,16 +19,23 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   version = 0;
   parent: Node | null = null;
   name = "";
-  readonly children: NodeCollection = new NodeCollection(this);
+  children: NodeCollection;
   position: Vector3 = new Vector3();
   rotation: Euler3 = new Euler3();
   scale: Vector3 = new Vector3(1, 1, 1);
 
   private _parentToLocalVersion = -1;
   private _parentToLocal: Matrix4 = new Matrix4();
-
   private _localToParentVersion = -1;
   private _localToParent: Matrix4 = new Matrix4();
+  // TODO: implement this one this.parent works!
+  private _localToWorldTransform: Matrix4 = new Matrix4();
+  // TODO: implement this one this.parent works!
+  private _worldToLocalTransform: Matrix4 = new Matrix4();
+
+  constructor() {
+    this.children = new NodeCollection(this);
+  }
 
   dirty(): void {
     this.version++;
@@ -43,11 +50,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 
   get localToParentTransform(): Matrix4 {
     if (this._parentToLocalVersion !== this.version) {
-      this._localToParent.compose(
-        this.position,
-        new Quaternion().setFromEuler(this.rotation),
-        this.scale,
-      );
+      this._localToParent.compose(this.position, new Quaternion().setFromEuler(this.rotation), this.scale);
       this._parentToLocalVersion = this.version;
     }
     return this._localToParent;
@@ -59,9 +62,6 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
     }
     return this._localToParent;
   }
-
-  // private _localToWorldTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
-  // private _worldToLocalTransform: Matrix4 = new Matrix4();	// TODO: implement this one this.parent works!
 }
 
 // visitors

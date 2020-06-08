@@ -1,47 +1,58 @@
-import { BlendState } from "./renderers/webgl2/BlendState";
-import { ClearState } from "./renderers/webgl2/ClearState";
-import { Color } from "./math/Color";
-import { DepthTestState } from "./renderers/webgl2/DepthTestState";
-import { MaskState } from "./renderers/webgl2/MaskState";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { PointLight } from "./nodes/lights/PointLight";
-import { Program } from "./renderers/webgl2/Program";
-import { RenderingContext } from "./renderers/webgl2/RenderingContext";
-import { ShaderCodeMaterial } from "./materials/ShaderCodeMaterial";
-import { TexImage2D } from "./renderers/webgl2/TexImage2D";
-import { Texture } from "./textures/Texture";
-import { VertexArrayObject } from "./renderers/webgl2/VertexArrayObject";
-import { VertexAttributeGeometry } from "./renderers/webgl2/VertexAttributeGeometry";
 import { boxGeometry } from "./geometry/BoxGeometry";
 import { fetchImage } from "./io/loaders/Image";
+import { ShaderCodeMaterial } from "./materials/ShaderCodeMaterial";
+import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
+import { Color } from "./math/Color";
+import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
+import { PointLight } from "./nodes/lights/PointLight";
+import { Mesh } from "./nodes/Mesh";
+import { Node } from "./nodes/Node";
+import { BlendState } from "./renderers/webgl2/BlendState";
+import { ClearState } from "./renderers/webgl2/ClearState";
+import { DepthTestState } from "./renderers/webgl2/DepthTestState";
+import { MaskState } from "./renderers/webgl2/MaskState";
+import { Program } from "./renderers/webgl2/Program";
+import { RenderingContext } from "./renderers/webgl2/RenderingContext";
 import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
 import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
+import { TexImage2D } from "./renderers/webgl2/TexImage2D";
+import { VertexArrayObject } from "./renderers/webgl2/VertexArrayObject";
+import { VertexAttributeGeometry } from "./renderers/webgl2/VertexAttributeGeometry";
+import { Texture } from "./textures/Texture";
+import { TextureAccessor } from "./textures/TextureAccessor";
+import { AttachmentFlags, AttachmentPoints } from "./renderers/webgl2/Framebuffer";
 
 async function test(): Promise<void> {
   // setup webgl2
   const canvasElement = document.querySelector("#rendering-canvas") as HTMLCanvasElement;
   const context = new RenderingContext(canvasElement);
 
-  //
-  // create scene graph
-  //
+  // create texture
+  const texture = new Texture(await fetchImage("./exocortex-logo.jpg"));
 
+  // create material
+  const pbrMaterial = new PhysicalMaterial();
+  pbrMaterial.albedo.setFromHex(0x808080);
+  pbrMaterial.albedoMap = new TextureAccessor(texture);
+
+  // create scene graph
   const rootNode = new Node();
 
   const light = new PointLight();
   rootNode.children.add(light);
 
-  const mesh = new Mesh(boxGeometry(1, 1, 1, 1, 1, 1));
+  const mesh = new Mesh(boxGeometry(1, 1, 1, 1, 1, 1), pbrMaterial);
   rootNode.children.add(mesh);
 
   const camera = new PerspectiveCamera(60, 1, 10);
   camera.position.x -= 5;
   rootNode.children.add(camera);
 
-  const texture = new Texture(await fetchImage("./exocortex-logo.jpg"));
-  console.log(texture);
+  // render to the screen
+  const canvasFramebuffer = context.canvasFramebuffer;
+  const depthClear = new ClearState(new Color(0, 0, 0), 0);
+  canvasFramebuffer.clear(AttachmentFlags.Default, depthClear);
+  canvasFramebuffer.render(rootNode, camera);
 
   const texImage2D = new TexImage2D(context, texture.image);
   console.log(texImage2D);

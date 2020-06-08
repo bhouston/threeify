@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../model/interfaces";
+import { ICloneable, IEquatable } from "../../types/types";
 import { Blending } from "../../materials/Blending";
 
 const GL = WebGLRenderingContext;
@@ -114,13 +114,7 @@ function blendModeToBlendState(blending: Blending, premultiplied: boolean): Blen
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Multiply:
-        return new BlendState(
-          true,
-          BlendFunc.Zero,
-          BlendFunc.SourceColor,
-          BlendFunc.Zero,
-          BlendFunc.SourceAlpha,
-        );
+        return new BlendState(true, BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceAlpha);
     }
   } else {
     switch (blending) {
@@ -135,13 +129,7 @@ function blendModeToBlendState(blending: Blending, premultiplied: boolean): Blen
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Add:
-        return new BlendState(
-          true,
-          BlendFunc.SourceAlpha,
-          BlendFunc.SourceAlpha,
-          BlendFunc.One,
-          BlendFunc.One,
-        );
+        return new BlendState(true, BlendFunc.SourceAlpha, BlendFunc.SourceAlpha, BlendFunc.One, BlendFunc.One);
       case Blending.Subtract:
         return new BlendState(
           true,
@@ -151,13 +139,7 @@ function blendModeToBlendState(blending: Blending, premultiplied: boolean): Blen
           BlendFunc.OneMinusSourceColor,
         );
       case Blending.Multiply:
-        return new BlendState(
-          true,
-          BlendFunc.Zero,
-          BlendFunc.Zero,
-          BlendFunc.SourceColor,
-          BlendFunc.SourceColor,
-        );
+        return new BlendState(true, BlendFunc.Zero, BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.SourceColor);
     }
   }
 }

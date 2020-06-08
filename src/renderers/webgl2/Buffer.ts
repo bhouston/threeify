@@ -1,6 +1,6 @@
 import { AttributeView } from "../../core/AttributeView";
 import { BufferTarget } from "../../core/BufferTarget";
-import { IDisposable } from "../../model/interfaces";
+import { IDisposable } from "../../types/types";
 import { Pool } from "../Pool";
 import { RenderingContext } from "./RenderingContext";
 
@@ -81,15 +81,12 @@ export class Buffer implements IDisposable {
 
 export class BufferPool extends Pool<AttributeView, Buffer> {
   constructor(context: RenderingContext) {
-    super(
-      context,
-      (context: RenderingContext, attributeView: AttributeView, buffer: Buffer | null) => {
-        if (!buffer) {
-          return new Buffer(context, attributeView.arrayBuffer, attributeView.target);
-        }
-        buffer.update(attributeView.arrayBuffer, attributeView.target);
-        return buffer;
-      },
-    );
+    super(context, (context: RenderingContext, attributeView: AttributeView, buffer: Buffer | null) => {
+      if (!buffer) {
+        return new Buffer(context, attributeView.arrayBuffer, attributeView.target);
+      }
+      buffer.update(attributeView.arrayBuffer, attributeView.target);
+      return buffer;
+    });
   }
 }

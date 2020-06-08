@@ -1,10 +1,9 @@
-import { ICloneable, ICopyable, IVersionable } from "../model/interfaces";
+import { ICloneable, ICopyable, IVersionable } from "../types/types";
 import { Matrix3 } from "../math/Matrix3";
 import { Texture } from "./Texture";
 import { Vector2 } from "../math/Vector2";
 
-export class TextureAccessor
-  implements ICloneable<TextureAccessor>, ICopyable<TextureAccessor>, IVersionable {
+export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<TextureAccessor>, IVersionable {
   version = 0;
   private _uvTransform = new Matrix3();
   private _uvTransformVersion = -1;
@@ -18,13 +17,7 @@ export class TextureAccessor
   ) {}
 
   clone(): TextureAccessor {
-    return new TextureAccessor(
-      this.texture,
-      this.uvIndex,
-      this.uvScale,
-      this.uvRotation,
-      this.uvTranslation,
-    );
+    return new TextureAccessor(this.texture, this.uvIndex, this.uvScale, this.uvRotation, this.uvTranslation);
   }
 
   copy(ta: TextureAccessor): this {
@@ -39,14 +32,8 @@ export class TextureAccessor
   get uvTransform(): Matrix3 {
     if (this._uvTransformVersion < this.version) {
       this._uvTransform.makeTranslation2(this.uvTranslation);
-      this._uvTransform.makeConcatenation(
-        this._uvTransform,
-        new Matrix3().makeRotation2FromAngle(this.uvRotation),
-      );
-      this._uvTransform.makeConcatenation(
-        this._uvTransform,
-        new Matrix3().makeScale2(this.uvScale),
-      );
+      this._uvTransform.makeConcatenation(this._uvTransform, new Matrix3().makeRotation2FromAngle(this.uvRotation));
+      this._uvTransform.makeConcatenation(this._uvTransform, new Matrix3().makeScale2(this.uvScale));
       this._uvTransformVersion = this.version;
     }
     return this._uvTransform;

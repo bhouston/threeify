@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../model/interfaces";
+import { IDisposable } from "../../types/types";
 import { RenderingContext } from "./RenderingContext";
 import { ShaderType } from "../../materials/ShaderType";
 

@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { IDisposable, IVersionable } from "../model/interfaces";
+import { IDisposable, IVersionable } from "../types/types";
 import { AttributeAccessor } from "./AttributeAccessor";
 
 class NamedAttributeAccessor {

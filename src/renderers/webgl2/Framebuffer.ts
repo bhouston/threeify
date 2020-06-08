@@ -7,13 +7,16 @@
 
 import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
 import { Color } from "../../math/Color";
-import { IDisposable } from "../../model/interfaces";
+import { IDisposable } from "../../types/types";
 import { Program } from "./Program";
 import { ProgramUniform } from "./ProgramUniform";
 import { RenderingContext } from "./RenderingContext";
 import { TexImage2D } from "./TexImage2D";
 import { VertexArrayObject } from "./VertexArrayObject";
 import { sizeOfDataType } from "../../textures/DataType";
+import { ClearState } from "./ClearState";
+import { Camera } from "../../nodes/cameras/Camera";
+import { Node } from "../../nodes/Node";
 
 const GL = WebGLRenderingContext;
 
@@ -28,6 +31,8 @@ export enum AttachmentFlags {
   Color = GL.COLOR_BUFFER_BIT,
   Depth = GL.DEPTH_BUFFER_BIT,
   Stencil = GL.STENCIL_BUFFER_BIT,
+  Default = Color | Depth,
+  All = Color | Depth | Stencil,
 }
 
 export class FramebufferAttachment {
@@ -37,15 +42,25 @@ export class FramebufferAttachment {
 export class Framebuffer implements IDisposable {
   disposed = false;
   context: RenderingContext;
+  canvas: HTMLCanvasElement | null = null;
   attachments: Array<FramebufferAttachment>;
-  glFramebuffer: WebGLFramebuffer;
+  glFramebuffer: WebGLFramebuffer | null;
+  private _clearState: ClearState = new ClearState();
 
-  constructor(context: RenderingContext, attachments: Array<FramebufferAttachment>) {
+  constructor(
+    context: RenderingContext,
+    canvas: HTMLCanvasElement | null = null,
+    attachments: Array<FramebufferAttachment> = [],
+  ) {
     this.context = context;
     this.attachments = attachments;
+    this.canvas = canvas;
 
     const gl = this.context.gl;
-    {
+
+    if (this.canvas) {
+      this.glFramebuffer = null;
+    } else {
       const glFramebuffer = gl.createFramebuffer();
       if (!glFramebuffer) {
         throw new Error("createFramebuffer failed");
@@ -55,46 +70,52 @@ export class Framebuffer implements IDisposable {
     }
 
     attachments.forEach((attachment) => {
-      gl.framebufferTexture2D(
-        gl.FRAMEBUFFER,
-        attachment.attachmentPoint,
-        gl.TEXTURE_2D,
-        attachment.texImage2D,
-        0,
-      );
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, attachment.attachmentPoint, gl.TEXTURE_2D, attachment.texImage2D, 0);
     });
   }
 
   dispose(): void {
     if (!this.disposed) {
-      const gl = this.context.gl;
-      gl.deleteFramebuffer(this.glFramebuffer);
+      if (this.glFramebuffer) {
+        const gl = this.context.gl;
+        gl.deleteFramebuffer(this.glFramebuffer);
+      }
       this.disposed = true;
     }
   }
 
+  get clearState(): ClearState {
+    return this._clearState.clone();
+  }
+  set clearState(clearState: ClearState) {
+    this._clearState = clearState;
+  }
+
   clear(
-    color: Color,
-    alpha: number,
     attachmentFlags: AttachmentFlags = AttachmentFlags.Color | AttachmentFlags.Depth,
+    clearState: ClearState | null = null,
   ): void {
+    if (clearState) {
+      this.context.clearState = clearState;
+    } else {
+      this.context.clearState = this.clearState;
+    }
+
+    this.context.framebuffer = this;
     const gl = this.context.gl;
-
-    // render to our targetTexture by binding the framebuffer
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this.glFramebuffer);
-
-    gl.clearColor(color.r, color.g, color.b, alpha); // clear to blue
     gl.clear(attachmentFlags);
   }
 
-  render(program: Program, vao: VertexArrayObject, uniforms: Array<ProgramUniform>) {
+  renderDraw(program: Program, vao: VertexArrayObject, uniforms: any): void {
+    throw new Error("not implemented");
+  }
+
+  render(node: Node, camera: Camera): void {
     throw new Error("not implemented");
   }
 
   readPixels(pixelBuffer: ArrayBufferView): ArrayBufferView {
-    const attachment = this.attachments.find(
-      (attachment) => attachment.attachmentPoint == AttachmentPoints.Color0,
-    );
+    const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoints.Color0);
     if (!attachment) {
       throw new Error("can not find Color0 attachment");
     }

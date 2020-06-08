@@ -5,13 +5,13 @@
 // * @bhouston
 //
 
-import { ICloneable, ICopyable, IVersionable } from "../../model/interfaces";
+import { ICloneable, ICopyable, IVersionable } from "../../types/types";
 import { Blending } from "../Blending";
 import { Color } from "../../math/Color";
 import { TextureAccessor } from "../../textures/TextureAccessor";
+import { Material } from "../Material";
 
-export class PhysicalMaterial
-  implements ICloneable<PhysicalMaterial>, ICopyable<PhysicalMaterial>, IVersionable {
+export class PhysicalMaterial extends Material implements ICloneable<PhysicalMaterial>, ICopyable<PhysicalMaterial> {
   version = 0;
   albedo: Color = new Color(1, 1, 1);
   albedoMap: TextureAccessor = new TextureAccessor();
@@ -30,6 +30,7 @@ export class PhysicalMaterial
   }
 
   copy(m: PhysicalMaterial): this {
+    this.name = m.name;
     this.albedo.copy(m.albedo);
     this.albedoMap.copy(m.albedoMap);
     this.roughness = m.roughness;

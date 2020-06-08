@@ -18,12 +18,16 @@ import { TexImage2DPool } from "./TexImage2D";
 const GL = WebGLRenderingContext;
 
 export class RenderingContext {
+  canvasRenderbuffer() {
+    throw new Error("Method not implemented.");
+  }
   canvas: HTMLCanvasElement;
   gl: WebGL2RenderingContext;
-  TexImage2DPool: TexImage2DPool = new TexImage2DPool(this);
+  texImage2DPool: TexImage2DPool = new TexImage2DPool(this);
   programPool: ProgramPool = new ProgramPool(this);
   bufferPool: BufferPool = new BufferPool(this);
 
+  private _canvasFrameBuffer: Framebuffer;
   private cachedActiveProgram: Program | null = null;
   private cachedFramebuffer: Framebuffer | null = null;
   private _scissor: Box2 = new Box2();
@@ -43,6 +47,11 @@ export class RenderingContext {
 
       this.gl = gl;
     }
+    this._canvasFrameBuffer = new Framebuffer(this, this.canvas);
+  }
+
+  get canvasFramebuffer(): Framebuffer {
+    return this._canvasFrameBuffer;
   }
 
   set program(program: Program | null) {
@@ -102,12 +111,7 @@ export class RenderingContext {
         this.gl.disable(GL.BLEND);
       }
       this.gl.blendEquation(bs.equation);
-      this.gl.blendFuncSeparate(
-        bs.sourceRGBFactor,
-        bs.destRGBFactor,
-        bs.sourceAlphaFactor,
-        bs.destAlphaFactor,
-      );
+      this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
       this._blendState.copy(bs);
     }
   }

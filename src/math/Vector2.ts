@@ -6,7 +6,7 @@
 //
 
 import { IPrimitive } from "./IPrimitive";
-import { hashFloat2 } from "../model/hash";
+import { hashFloat2 } from "../hash";
 
 export class Vector2 implements IPrimitive<Vector2> {
   constructor(public x = 0, public y = 0) {}

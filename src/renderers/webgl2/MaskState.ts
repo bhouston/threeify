@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../model/interfaces";
+import { ICloneable, IEquatable } from "../../types/types";
 
 export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
   red: boolean;

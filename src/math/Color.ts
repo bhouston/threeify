@@ -6,7 +6,7 @@
 //
 
 import { IPrimitive } from "./IPrimitive";
-import { hashFloat3 } from "../model/hash";
+import { hashFloat3 } from "../hash";
 
 function hue2rgb(p: number, q: number, t: number): number {
   if (t < 0) {

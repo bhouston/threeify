@@ -1,10 +1,12 @@
-import { IDisposable } from "../../model/interfaces";
+import { IDisposable } from "../../types/types";
 import { RenderingContext } from "./RenderingContext";
+import { ClearState } from "./ClearState";
 
 export class Renderbuffer implements IDisposable {
   disposed = false;
   context: RenderingContext;
   glRenderbuffer: WebGLRenderbuffer;
+  private _clearState: ClearState = new ClearState();
 
   constructor(context: RenderingContext) {
     this.context = context;

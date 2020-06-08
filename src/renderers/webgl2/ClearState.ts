@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../model/interfaces";
+import { ICloneable, IEquatable } from "../../types/types";
 import { Color } from "../../math/Color";
 
 export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState> {
@@ -34,10 +34,7 @@ export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState
 
   equals(cs: ClearState): boolean {
     return (
-      this.color.equals(cs.color) &&
-      this.alpha === cs.alpha &&
-      this.depth === cs.depth &&
-      this.stencil === cs.stencil
+      this.color.equals(cs.color) && this.alpha === cs.alpha && this.depth === cs.depth && this.stencil === cs.stencil
     );
   }
 }

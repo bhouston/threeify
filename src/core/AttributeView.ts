@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../model/interfaces";
+import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
 import { BufferTarget } from "./BufferTarget";
 import { IPoolUser } from "../renderers/Pool";
-import { generateUUID } from "../model/generateUuid";
+import { generateUUID } from "../generateUuid";
 
 export class AttributeView implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
   disposed = false;
