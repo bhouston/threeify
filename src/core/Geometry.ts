@@ -7,6 +7,7 @@
 
 import { IDisposable, IVersionable } from "../types/types";
 import { AttributeAccessor } from "./AttributeAccessor";
+import { PrimitiveType } from "../renderers/webgl2/PrimitiveType";
 
 class NamedAttributeAccessor {
   name: string;
@@ -23,6 +24,7 @@ export class Geometry implements IVersionable, IDisposable {
   version = 0;
   indices: AttributeAccessor | null = null;
   namedAttributeAccessors: NamedAttributeAccessor[] = []; // TODO replace with a map for faster access
+  primitive: PrimitiveType = PrimitiveType.Triangles;
 
   dirty(): void {
     this.version++;

@@ -7,13 +7,19 @@
 
 import { Program } from "./Program";
 import { VertexAttributeGeometry } from "./VertexAttributeGeometry";
+import { PrimitiveType } from "./PrimitiveType";
 
 export class VertexArrayObject {
   program: Program;
   glVertexArrayObject: WebGLVertexArrayObject;
+  primitive: PrimitiveType = PrimitiveType.Triangles;
+  offset = 0;
+  count = -1;
 
   constructor(program: Program, vertexAttributeGeometry: VertexAttributeGeometry) {
     this.program = program;
+    this.primitive = vertexAttributeGeometry.primitive;
+    this.count = vertexAttributeGeometry.count;
 
     const gl = this.program.context.gl;
 

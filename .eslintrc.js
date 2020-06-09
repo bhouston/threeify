@@ -44,6 +44,12 @@ module.exports = {
         selector: "enumMember",
         format: ["PascalCase"],
       },
+      {
+        selector: "static",
+        format: ["PascalCase"],
+        leadingUnderscore: "disallow",
+        trailingUnderscore: "disallow",
+      },
     ],
     "@typescript-eslint/no-unnecessary-condition": 2,
     "@typescript-eslint/no-unsafe-call": 2,

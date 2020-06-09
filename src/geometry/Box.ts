@@ -9,7 +9,7 @@ import { Float32AttributeAccessor, Int32AttributeAccessor } from "../core/Attrib
 import { Geometry } from "../core/Geometry";
 import { Vector3 } from "../math/Vector3";
 
-export function boxGeometry(
+export function box(
   width = 1,
   height = 1,
   depth = 1,

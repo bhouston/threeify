@@ -5,31 +5,31 @@
 // * @bhouston
 //
 
-import { Program, ProgramPool } from "./Program";
-import { BlendState } from "./BlendState";
 import { Box2 } from "../../math/Box2";
+import { Camera } from "../../nodes/cameras/Camera";
+import { Node } from "../../nodes/Node";
+import { BlendState } from "./BlendState";
 import { BufferPool } from "./Buffer";
+import { CanvasFramebuffer } from "./CanvasFramebuffer";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
-import { Framebuffer } from "./Framebuffer";
 import { MaskState } from "./MaskState";
+import { Program, ProgramPool } from "./Program";
 import { TexImage2DPool } from "./TexImage2D";
+import { VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Framebuffer } from "./Framebuffer";
 
 const GL = WebGLRenderingContext;
 
 export class RenderingContext {
-  canvasRenderbuffer() {
-    throw new Error("Method not implemented.");
-  }
-  canvas: HTMLCanvasElement;
-  gl: WebGL2RenderingContext;
-  texImage2DPool: TexImage2DPool = new TexImage2DPool(this);
-  programPool: ProgramPool = new ProgramPool(this);
-  bufferPool: BufferPool = new BufferPool(this);
+  readonly gl: WebGL2RenderingContext;
+  readonly canvasFramebuffer: CanvasFramebuffer;
+  readonly texImage2DPool: TexImage2DPool = new TexImage2DPool(this);
+  readonly programPool: ProgramPool = new ProgramPool(this);
+  readonly bufferPool: BufferPool = new BufferPool(this);
 
-  private _canvasFrameBuffer: Framebuffer;
-  private cachedActiveProgram: Program | null = null;
-  private cachedFramebuffer: Framebuffer | null = null;
+  private _program: Program | null = null;
+  private _framebuffer: VirtualFramebuffer;
   private _scissor: Box2 = new Box2();
   private _viewport: Box2 = new Box2();
   private _depthTestState: DepthTestState = new DepthTestState();
@@ -37,8 +37,12 @@ export class RenderingContext {
   private _clearState: ClearState = new ClearState();
   private _maskState: MaskState = new MaskState();
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
+  constructor(canvas: HTMLCanvasElement | null = null) {
+    if (!canvas) {
+      canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas") as HTMLCanvasElement;
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+    }
     {
       const gl = canvas.getContext("webgl2");
       if (!gl) {
@@ -47,35 +51,36 @@ export class RenderingContext {
 
       this.gl = gl;
     }
-    this._canvasFrameBuffer = new Framebuffer(this, this.canvas);
-  }
-
-  get canvasFramebuffer(): Framebuffer {
-    return this._canvasFrameBuffer;
+    this.canvasFramebuffer = new CanvasFramebuffer(this, canvas);
+    this._framebuffer = this.canvasFramebuffer;
   }
 
   set program(program: Program | null) {
-    if (this.cachedActiveProgram !== program) {
+    if (this._program !== program) {
       if (program) {
         this.gl.useProgram(program.glProgram);
       } else {
         this.gl.useProgram(null);
       }
-      this.cachedActiveProgram = program;
+      this._program = program;
     }
   }
   get program(): Program | null {
-    return this.cachedActiveProgram;
+    return this._program;
   }
 
-  set framebuffer(framebuffer: Framebuffer | null) {
-    if (this.cachedFramebuffer !== framebuffer) {
-      this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, framebuffer ? framebuffer.glFramebuffer : null);
-      this.cachedFramebuffer = framebuffer;
+  set framebuffer(framebuffer: VirtualFramebuffer) {
+    if (this._framebuffer !== framebuffer) {
+      if (framebuffer instanceof CanvasFramebuffer) {
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+      } else if (framebuffer instanceof Framebuffer) {
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, framebuffer.glFramebuffer);
+      }
+      this._framebuffer = framebuffer;
     }
   }
-  get framebuffer(): Framebuffer | null {
-    return this.cachedFramebuffer;
+  get framebuffer(): VirtualFramebuffer {
+    return this._framebuffer;
   }
 
   //
@@ -153,5 +158,13 @@ export class RenderingContext {
       this.gl.stencilMask(ms.stencil);
       this._maskState.copy(ms);
     }
+  }
+
+  renderPass(program: Program, uniforms: any): void {
+    throw new Error("not implemented");
+  }
+
+  render(node: Node, camera: Camera): void {
+    throw new Error("not implemented");
   }
 }

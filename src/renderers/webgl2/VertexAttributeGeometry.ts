@@ -9,6 +9,7 @@
 import { Geometry } from "../../core/Geometry";
 import { RenderingContext } from "./RenderingContext";
 import { VertexAttribute } from "./VertexAttribute";
+import { PrimitiveType } from "./PrimitiveType";
 
 class NamedVertexAttribute {
   name: string;
@@ -24,16 +25,14 @@ export class VertexAttributeGeometry {
   namedVertexAttributes: NamedVertexAttribute[] = [];
   // TODO replace the following array with a map for faster access.
   indices: VertexAttribute | null = null;
-
-  constructor() {}
+  primitive: PrimitiveType = PrimitiveType.Triangles;
+  count = -1;
 
   static FromGeometry(context: RenderingContext, geometry: Geometry): VertexAttributeGeometry {
     const vertexAttributeGeometry = new VertexAttributeGeometry();
-
     if (geometry.indices) {
-      vertexAttributeGeometry.setIndices(
-        VertexAttribute.FromAttributeAccessor(context, geometry.indices),
-      );
+      vertexAttributeGeometry.setIndices(VertexAttribute.FromAttributeAccessor(context, geometry.indices));
+      vertexAttributeGeometry.count = geometry.indices.count;
     }
 
     geometry.namedAttributeAccessors.forEach((item) => {
@@ -41,7 +40,12 @@ export class VertexAttributeGeometry {
         item.name,
         VertexAttribute.FromAttributeAccessor(context, item.attributeAccessor),
       );
+      if (vertexAttributeGeometry.count === -1) {
+        vertexAttributeGeometry.count = item.attributeAccessor.count;
+      }
     });
+
+    vertexAttributeGeometry.primitive = geometry.primitive;
 
     return vertexAttributeGeometry;
   }

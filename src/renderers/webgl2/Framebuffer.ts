@@ -17,6 +17,7 @@ import { sizeOfDataType } from "../../textures/DataType";
 import { ClearState } from "./ClearState";
 import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
+import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
 const GL = WebGLRenderingContext;
 
@@ -39,28 +40,15 @@ export class FramebufferAttachment {
   constructor(public attachmentPoint: number, public texImage2D: TexImage2D) {}
 }
 
-export class Framebuffer implements IDisposable {
-  disposed = false;
-  context: RenderingContext;
-  canvas: HTMLCanvasElement | null = null;
-  attachments: Array<FramebufferAttachment>;
-  glFramebuffer: WebGLFramebuffer | null;
-  private _clearState: ClearState = new ClearState();
+export class Framebuffer extends VirtualFramebuffer {
+  glFramebuffer: WebGLFramebuffer;
 
-  constructor(
-    context: RenderingContext,
-    canvas: HTMLCanvasElement | null = null,
-    attachments: Array<FramebufferAttachment> = [],
-  ) {
-    this.context = context;
-    this.attachments = attachments;
-    this.canvas = canvas;
+  constructor(context: RenderingContext, attachments: Array<FramebufferAttachment> = []) {
+    super(context, attachments);
 
     const gl = this.context.gl;
 
-    if (this.canvas) {
-      this.glFramebuffer = null;
-    } else {
+    {
       const glFramebuffer = gl.createFramebuffer();
       if (!glFramebuffer) {
         throw new Error("createFramebuffer failed");
@@ -81,82 +69,6 @@ export class Framebuffer implements IDisposable {
         gl.deleteFramebuffer(this.glFramebuffer);
       }
       this.disposed = true;
-    }
-  }
-
-  get clearState(): ClearState {
-    return this._clearState.clone();
-  }
-  set clearState(clearState: ClearState) {
-    this._clearState = clearState;
-  }
-
-  clear(
-    attachmentFlags: AttachmentFlags = AttachmentFlags.Color | AttachmentFlags.Depth,
-    clearState: ClearState | null = null,
-  ): void {
-    if (clearState) {
-      this.context.clearState = clearState;
-    } else {
-      this.context.clearState = this.clearState;
-    }
-
-    this.context.framebuffer = this;
-    const gl = this.context.gl;
-    gl.clear(attachmentFlags);
-  }
-
-  renderDraw(program: Program, vao: VertexArrayObject, uniforms: any): void {
-    throw new Error("not implemented");
-  }
-
-  render(node: Node, camera: Camera): void {
-    throw new Error("not implemented");
-  }
-
-  readPixels(pixelBuffer: ArrayBufferView): ArrayBufferView {
-    const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoints.Color0);
-    if (!attachment) {
-      throw new Error("can not find Color0 attachment");
-    }
-
-    const texImage2D = attachment.texImage2D;
-    const dataType = texImage2D.dataType;
-    const pixelFormat = texImage2D.pixelFormat;
-    if (pixelFormat !== PixelFormat.RGBA) {
-      throw new Error(`can not read non-RGBA color0 attachment: ${pixelFormat}`);
-    }
-
-    const oldFramebuffer = this.context.framebuffer;
-    this.context.framebuffer = this;
-    try {
-      const status = this.context.gl.checkFramebufferStatus(GL.FRAMEBUFFER);
-      if (status !== GL.FRAMEBUFFER_COMPLETE) {
-        throw new Error(`can not read non-complete Framebuffer: ${status}`);
-      }
-
-      const pixelByteLength =
-        sizeOfDataType(dataType) *
-        numPixelFormatComponents(pixelFormat) *
-        texImage2D.size.width *
-        texImage2D.size.height;
-      if (pixelBuffer.byteLength < pixelByteLength) {
-        throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
-      }
-
-      this.context.gl.readPixels(
-        0,
-        0,
-        texImage2D.size.width,
-        texImage2D.size.height,
-        pixelFormat,
-        dataType,
-        pixelBuffer,
-      );
-
-      return pixelBuffer;
-    } finally {
-      this.context.framebuffer = oldFramebuffer;
     }
   }
 }

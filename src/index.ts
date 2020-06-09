@@ -1,4 +1,4 @@
-import { boxGeometry } from "./geometry/BoxGeometry";
+import { box } from "./geometry/Box";
 import { fetchImage } from "./io/loaders/Image";
 import { ShaderCodeMaterial } from "./materials/ShaderCodeMaterial";
 import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
@@ -41,7 +41,7 @@ async function test(): Promise<void> {
   const light = new PointLight();
   rootNode.children.add(light);
 
-  const mesh = new Mesh(boxGeometry(1, 1, 1, 1, 1, 1), pbrMaterial);
+  const mesh = new Mesh(box(1, 1, 1, 1, 1, 1), pbrMaterial);
   rootNode.children.add(mesh);
 
   const camera = new PerspectiveCamera(60, 1, 10);

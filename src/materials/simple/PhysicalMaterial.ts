@@ -10,6 +10,7 @@ import { Blending } from "../Blending";
 import { Color } from "../../math/Color";
 import { TextureAccessor } from "../../textures/TextureAccessor";
 import { Material } from "../Material";
+import { MaterialOutputFlags } from "../MaterialOutputFlags";
 
 export class PhysicalMaterial extends Material implements ICloneable<PhysicalMaterial>, ICopyable<PhysicalMaterial> {
   version = 0;
@@ -23,7 +24,8 @@ export class PhysicalMaterial extends Material implements ICloneable<PhysicalMat
   emissiveMap: TextureAccessor = new TextureAccessor();
   normalFactor = 1.0;
   normalMap: TextureAccessor = new TextureAccessor();
-  blendMode: Blending = Blending.Over;
+  blendMode = Blending.Over;
+  outputs = MaterialOutputFlags.Beauty;
 
   clone(): PhysicalMaterial {
     return new PhysicalMaterial().copy(this);
@@ -42,6 +44,7 @@ export class PhysicalMaterial extends Material implements ICloneable<PhysicalMat
     this.normalFactor = m.normalFactor;
     this.normalMap.copy(m.normalMap);
     this.blendMode = m.blendMode;
+    this.outputs = m.outputs;
     return this;
   }
 
