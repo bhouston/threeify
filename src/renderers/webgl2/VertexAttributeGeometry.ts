@@ -7,9 +7,9 @@
 //
 
 import { Geometry } from "../../core/Geometry";
+import { PrimitiveType } from "./PrimitiveType";
 import { RenderingContext } from "./RenderingContext";
 import { VertexAttribute } from "./VertexAttribute";
-import { PrimitiveType } from "./PrimitiveType";
 
 class NamedVertexAttribute {
   name: string;

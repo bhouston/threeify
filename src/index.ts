@@ -1,26 +1,26 @@
-import { box } from "./geometry/Box";
-import { fetchImage } from "./io/loaders/Image";
-import { ShaderCodeMaterial } from "./materials/ShaderCodeMaterial";
-import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
-import { Color } from "./math/Color";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { PointLight } from "./nodes/lights/PointLight";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
+import { AttachmentFlags } from "./renderers/webgl2/Framebuffer";
 import { BlendState } from "./renderers/webgl2/BlendState";
 import { ClearState } from "./renderers/webgl2/ClearState";
+import { Color } from "./math/Color";
 import { DepthTestState } from "./renderers/webgl2/DepthTestState";
 import { MaskState } from "./renderers/webgl2/MaskState";
+import { Mesh } from "./nodes/Mesh";
+import { Node } from "./nodes/Node";
+import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
+import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
+import { PointLight } from "./nodes/lights/PointLight";
 import { Program } from "./renderers/webgl2/Program";
 import { RenderingContext } from "./renderers/webgl2/RenderingContext";
-import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
-import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
+import { ShaderCodeMaterial } from "./materials/ShaderCodeMaterial";
 import { TexImage2D } from "./renderers/webgl2/TexImage2D";
-import { VertexArrayObject } from "./renderers/webgl2/VertexArrayObject";
-import { VertexAttributeGeometry } from "./renderers/webgl2/VertexAttributeGeometry";
 import { Texture } from "./textures/Texture";
 import { TextureAccessor } from "./textures/TextureAccessor";
-import { AttachmentFlags, AttachmentPoints } from "./renderers/webgl2/Framebuffer";
+import { VertexArrayObject } from "./renderers/webgl2/VertexArrayObject";
+import { VertexAttributeGeometry } from "./renderers/webgl2/VertexAttributeGeometry";
+import { box } from "./geometry/Box";
+import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
+import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
+import { fetchImage } from "./io/loaders/Image";
 
 async function test(): Promise<void> {
   // setup webgl2

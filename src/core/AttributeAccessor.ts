@@ -43,25 +43,13 @@ export class AttributeAccessor {
 
 export class Int16AttributeAccessor extends AttributeAccessor {
   constructor(intArray: Int16Array, componentsPerVertex: number) {
-    super(
-      new AttributeView(intArray, 0, -1, 2 * componentsPerVertex),
-      0,
-      ComponentType.Int,
-      componentsPerVertex,
-      -1,
-    );
+    super(new AttributeView(intArray, 0, -1, 2 * componentsPerVertex), 0, ComponentType.Int, componentsPerVertex, -1);
   }
 }
 
 export class Int32AttributeAccessor extends AttributeAccessor {
   constructor(intArray: Int32Array, componentsPerVertex: number) {
-    super(
-      new AttributeView(intArray, 0, -1, 4 * componentsPerVertex),
-      0,
-      ComponentType.Int,
-      componentsPerVertex,
-      -1,
-    );
+    super(new AttributeView(intArray, 0, -1, 4 * componentsPerVertex), 0, ComponentType.Int, componentsPerVertex, -1);
   }
 }
 

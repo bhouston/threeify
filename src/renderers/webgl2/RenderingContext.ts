@@ -5,19 +5,19 @@
 // * @bhouston
 //
 
-import { Box2 } from "../../math/Box2";
-import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
+import { Program, ProgramPool } from "./Program";
 import { BlendState } from "./BlendState";
+import { Box2 } from "../../math/Box2";
 import { BufferPool } from "./Buffer";
+import { Camera } from "../../nodes/cameras/Camera";
 import { CanvasFramebuffer } from "./CanvasFramebuffer";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
+import { Framebuffer } from "./Framebuffer";
 import { MaskState } from "./MaskState";
-import { Program, ProgramPool } from "./Program";
+import { Node } from "../../nodes/Node";
 import { TexImage2DPool } from "./TexImage2D";
 import { VirtualFramebuffer } from "./VirtualFramebuffer";
-import { Framebuffer } from "./Framebuffer";
 
 const GL = WebGLRenderingContext;
 

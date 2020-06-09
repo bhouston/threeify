@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
+import { PrimitiveType } from "./PrimitiveType";
 import { Program } from "./Program";
 import { VertexAttributeGeometry } from "./VertexAttributeGeometry";
-import { PrimitiveType } from "./PrimitiveType";
 
 export class VertexArrayObject {
   program: Program;

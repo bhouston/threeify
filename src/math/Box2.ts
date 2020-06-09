@@ -85,7 +85,8 @@ export class Box2 {
   }
 
   isEmpty(): boolean {
-    // this is a more robust check for empty than ( volume <= 0 ) because volume can get positive with two negative axes
+    // this is a more robust check for empty than ( volume <= 0 ) because
+    // volume can get positive with two negative axes
 
     return this.max.x < this.min.x || this.max.y < this.min.y;
   }
@@ -98,21 +99,11 @@ export class Box2 {
   }
 
   containsPoint(point: Vector2): boolean {
-    return point.x < this.min.x ||
-      point.x > this.max.x ||
-      point.y < this.min.y ||
-      point.y > this.max.y
-      ? false
-      : true;
+    return point.x < this.min.x || point.x > this.max.x || point.y < this.min.y || point.y > this.max.y ? false : true;
   }
 
   containsBox(box: Box2): boolean {
-    return (
-      this.min.x <= box.min.x &&
-      box.max.x <= this.max.x &&
-      this.min.y <= box.min.y &&
-      box.max.y <= this.max.y
-    );
+    return this.min.x <= box.min.x && box.max.x <= this.max.x && this.min.y <= box.min.y && box.max.y <= this.max.y;
   }
 
   clampPoint(point: Vector2): Vector2 {

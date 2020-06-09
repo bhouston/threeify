@@ -34,7 +34,8 @@ export class DrawTask implements ITask {
 
     // draw primitives
     // if( this.indexed ) {
-    //    gl.drawElements( this.primitiveType, this.count, this.elementType, this.offset ); // TODO: Support indexed geometry draws
+    //   TODO: Support indexed geometry draws
+    //   gl.drawElements(this.primitiveType, this.count, this.elementType, this.offset);
     // }
     gl.drawArrays(this.primitiveType, this.offset, this.count);
   }

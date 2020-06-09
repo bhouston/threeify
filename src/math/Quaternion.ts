@@ -155,9 +155,8 @@ export class Quaternion implements IPrimitive<Quaternion> {
       z = euler.z,
       order = euler.order;
 
-    // http://www.mathworks.com/matlabcentral/fileexchange/
-    // 	20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/
-    //	content/SpinCalc.m
+    // eslint-disable-next-line max-len
+    // http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m
 
     const c1 = Math.cos(x / 2);
     const c2 = Math.cos(y / 2);
@@ -221,7 +220,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
 
     // TODO, allocate x, y, z, w and only set this.* at the end.
 
-    let te = m.elements,
+    const te = m.elements,
       m11 = te[0],
       m12 = te[4],
       m13 = te[8],
@@ -231,8 +230,8 @@ export class Quaternion implements IPrimitive<Quaternion> {
       m31 = te[2],
       m32 = te[6],
       m33 = te[10],
-      trace = m11 + m22 + m33,
-      s;
+      trace = m11 + m22 + m33;
+    let s;
 
     if (trace > 0) {
       s = 0.5 / Math.sqrt(trace + 1.0);

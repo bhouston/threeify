@@ -13,10 +13,20 @@ export class TaskEngine {
       if (node instanceof Mesh) {
         const mesh = node as Mesh;
         const geometry = mesh.geometry;
-        /* let bufferGeometry = context.bufferGeometryPool.request( mesh.geometry );
-                let program = context.materialPool.request( node.material );
-                tasks.push( new DrawTask( program, bufferGeometry, uniforms, geometry.primitiveType, 0, geometry.indices.count ) );
-                */
+        /* const bufferGeometry = context.bufferGeometryPool.request(
+          mesh.geometry,
+        );
+        const program = context.materialPool.request(node.material);
+        tasks.push(
+          new DrawTask(
+            program,
+            bufferGeometry,
+            uniforms,
+            geometry.primitiveType,
+            0,
+            geometry.indices.count,
+          ),
+        ); */
       }
     });
 

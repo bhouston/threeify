@@ -19,9 +19,10 @@
   "module": "index.ts",
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch & tgt -i ./src -o ./dist -w",
+    "dev": "npm run watch & npm start",
+    "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
-    "dev": "npm run watch & npm start"
+    "watch": "tsc --watch & tgt -i ./src -o ./dist -w"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.1.0",

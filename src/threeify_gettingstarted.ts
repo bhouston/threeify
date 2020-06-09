@@ -1,10 +1,10 @@
-import { box } from "./geometry/Box";
 import { MaterialOutputFlags } from "./materials/MaterialOutputFlags";
-import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
 import { Mesh } from "./nodes/Mesh";
 import { Node } from "./nodes/Node";
+import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
+import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
 import { RenderingContext } from "./renderers/webgl2/RenderingContext";
+import { box } from "./geometry/Box";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
 camera.position.x = 1;
@@ -22,7 +22,7 @@ const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;
 document.body.appendChild(canvasFramebuffer.canvas);
 
-function animate() {
+function animate(): void {
   requestAnimationFrame(animate);
 
   mesh.rotation.x += 0.01;

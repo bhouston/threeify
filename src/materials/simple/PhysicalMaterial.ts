@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { ICloneable, ICopyable, IVersionable } from "../../types/types";
+import { ICloneable, ICopyable } from "../../types/types";
 import { Blending } from "../Blending";
 import { Color } from "../../math/Color";
-import { TextureAccessor } from "../../textures/TextureAccessor";
 import { Material } from "../Material";
 import { MaterialOutputFlags } from "../MaterialOutputFlags";
+import { TextureAccessor } from "../../textures/TextureAccessor";
 
 export class PhysicalMaterial extends Material implements ICloneable<PhysicalMaterial>, ICopyable<PhysicalMaterial> {
   version = 0;

@@ -5,19 +5,12 @@
 // * @bhouston
 //
 
-import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
-import { Color } from "../../math/Color";
-import { IDisposable } from "../../types/types";
-import { Program } from "./Program";
-import { ProgramUniform } from "./ProgramUniform";
-import { RenderingContext } from "./RenderingContext";
-import { TexImage2D } from "./TexImage2D";
-import { VertexArrayObject } from "./VertexArrayObject";
-import { sizeOfDataType } from "../../textures/DataType";
-import { ClearState } from "./ClearState";
 import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
 import { Framebuffer } from "./Framebuffer";
+import { Node } from "../../nodes/Node";
+import { Program } from "./Program";
+import { RenderingContext } from "./RenderingContext";
+import { VertexArrayObject } from "./VertexArrayObject";
 
 const GL = WebGLRenderingContext;
 
@@ -31,12 +24,6 @@ export class CanvasFramebuffer extends Framebuffer {
     // TODO: add listening to the canvas and resize the canvas width/height?
   }
 
-  private syncCanvas() {
-    // ...then set the internal size to match
-    this.canvas.width = Math.round(this.canvas.offsetWidth / this.devicePixelRatio);
-    this.canvas.height = Math.round(this.canvas.offsetHeight / this.devicePixelRatio);
-  }
-
   renderDraw(program: Program, uniforms: any, vao: VertexArrayObject): void {
     this.syncCanvas();
     super.renderDraw(program, uniforms, vao);
@@ -47,8 +34,14 @@ export class CanvasFramebuffer extends Framebuffer {
     super.renderPass(program, uniforms);
   }
 
-  render(node: Node, camera: Camera, clear: boolean = false): void {
+  render(node: Node, camera: Camera, clear = false): void {
     this.syncCanvas();
     super.render(node, camera, clear);
+  }
+
+  private syncCanvas(): void {
+    // ...then set the internal size to match
+    this.canvas.width = Math.round(this.canvas.offsetWidth / this.devicePixelRatio);
+    this.canvas.height = Math.round(this.canvas.offsetHeight / this.devicePixelRatio);
   }
 }

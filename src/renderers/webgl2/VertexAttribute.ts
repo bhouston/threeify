@@ -36,10 +36,7 @@ export class VertexAttribute {
     this.byteOffset = byteOffset;
   }
 
-  static FromAttributeAccessor(
-    context: RenderingContext,
-    attributeAccessor: AttributeAccessor,
-  ): VertexAttribute {
+  static FromAttributeAccessor(context: RenderingContext, attributeAccessor: AttributeAccessor): VertexAttribute {
     const attributeView = attributeAccessor.attributeView;
 
     const buffer = new Buffer(context, attributeView.arrayBuffer, attributeView.target);

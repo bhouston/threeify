@@ -5,18 +5,8 @@
 // * @bhouston
 //
 
-import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
-import { Color } from "../../math/Color";
-import { IDisposable } from "../../types/types";
-import { Program } from "./Program";
-import { ProgramUniform } from "./ProgramUniform";
 import { RenderingContext } from "./RenderingContext";
 import { TexImage2D } from "./TexImage2D";
-import { VertexArrayObject } from "./VertexArrayObject";
-import { sizeOfDataType } from "../../textures/DataType";
-import { ClearState } from "./ClearState";
-import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
 import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
 const GL = WebGLRenderingContext;

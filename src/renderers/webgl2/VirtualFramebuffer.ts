@@ -6,17 +6,15 @@
 //
 
 import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
-import { Color } from "../../math/Color";
+import { Camera } from "../../nodes/cameras/Camera";
+import { ClearState } from "./ClearState";
 import { IDisposable } from "../../types/types";
+import { Node } from "../../nodes/Node";
 import { Program } from "./Program";
-import { ProgramUniform } from "./ProgramUniform";
 import { RenderingContext } from "./RenderingContext";
 import { TexImage2D } from "./TexImage2D";
 import { VertexArrayObject } from "./VertexArrayObject";
 import { sizeOfDataType } from "../../textures/DataType";
-import { ClearState } from "./ClearState";
-import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
 
 const GL = WebGLRenderingContext;
 
@@ -49,8 +47,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.context = context;
     this.attachments = attachments;
   }
-
-  abstract dispose(): void;
 
   get clearState(): ClearState {
     return this._clearState.clone();
@@ -89,7 +85,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
   }
 
-  render(node: Node, camera: Camera, clear: boolean = false): void {
+  render(node: Node, camera: Camera, clear = false): void {
     this.context.framebuffer = this;
     if (clear) {
       this.clear();
@@ -142,4 +138,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
       this.context.framebuffer = oldFramebuffer;
     }
   }
+
+  abstract dispose(): void;
 }

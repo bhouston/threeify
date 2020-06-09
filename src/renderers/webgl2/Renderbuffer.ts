@@ -1,6 +1,6 @@
+import { ClearState } from "./ClearState";
 import { IDisposable } from "../../types/types";
 import { RenderingContext } from "./RenderingContext";
-import { ClearState } from "./ClearState";
 
 export class Renderbuffer implements IDisposable {
   disposed = false;
