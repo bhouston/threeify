@@ -1,7 +1,7 @@
 {
   "name": "threeify",
-  "version": "0.0.2-alpha",
-  "description": "Typescript 3D Library",
+  "version": "0.0.3-alpha",
+  "description": "Typescript 3D Library loosely based on three.js",
   "keywords": [
     "threeify",
     "webgl",
