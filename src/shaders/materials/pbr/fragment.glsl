@@ -1,12 +1,3 @@
-//
-// uniforms
-//
-
-// geometry
-uniform mat4 localToWorld; // node
-uniform mat4 worldToView; // camera
-uniform mat4 viewToScreen; // projection
-
 // material
 uniform vec3  albedoModular;
 uniform sampler2D albedoMap;
@@ -18,27 +9,13 @@ uniform float metalnessModular;
 uniform sampler2D metalnessMap;
 uniform int metalnessUVIndex;
 
-// lights
-uniform vec3 lightsSpotViewPosition;
-uniform vec3 lightsSpotColor;
-uniform float lightsSpotFalloffExponent;
-uniform float lightsSpotCutoffDistance;
-
-// output
-uniform float exposure;
-uniform int toneMapping;
-uniform int outputEncoding;
-
-//
 // varyings from the vertex shader
-//
-
 varying vec3 v_viewPosition;
 varying vec3 v_viewNormal;
 varying vec2 v_uv0;
-varying vec2 v_uv1;
-varying vec2 v_uv2;
-varying vec2 v_uv3;
+varying vec2 v_uv1; // if there is no uv1 on the geometry, this will be a copy of uv0
+varying vec2 v_uv2; // if there is no uv2 on the geometry, this will be a copy of uv0
+varying vec2 v_uv3; // if there is no uv3 on the geometry, this will be a copy of uv0
 
 vec2 uv( int uvIndex ) {
     switch( uvIndex ) {
@@ -53,8 +30,8 @@ vec2 uv( int uvIndex ) {
 void main() {
 
     vec4 albedo = albedoModular * texture2D( albedoMap, uv( albedoUVIndex ) );
-    //float roughness = metalnessModular * texture2D( roughnessMap, uv( roughnessUVIndex ) ).g;
-    //float metalness = metalnessModular * texture2D( metalnessMap, uv( metalnessUVIndex ) ).b;
+    float roughness = metalnessModular * texture2D( roughnessMap, uv( roughnessUVIndex ) ).g;
+    float metalness = metalnessModular * texture2D( metalnessMap, uv( metalnessUVIndex ) ).b;
 
-    gl_FragColor = albedo;
+    gl_FragColor = brdf_ggx_specular( v_viewPosition, v_viewNormal, albedo, roughness, metalness );
 }

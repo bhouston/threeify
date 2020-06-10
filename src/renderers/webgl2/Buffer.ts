@@ -1,9 +1,9 @@
-import { Attribute } from "../../geometry/Attribute";
-import { BufferTarget } from "./BufferTarget";
 import { IDisposable } from "../../core/types";
+import { Attribute } from "../../geometry/Attribute";
 import { Pool } from "../Pool";
-import { RenderingContext } from "./RenderingContext";
+import { BufferTarget } from "./BufferTarget";
 import { BufferUsage } from "./BufferUsage";
+import { RenderingContext } from "./RenderingContext";
 
 export class Buffer implements IDisposable {
   disposed = false;
