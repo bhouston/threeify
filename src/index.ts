@@ -8,7 +8,7 @@ import { PointLight } from "./nodes/lights/PointLight";
 import { Mesh } from "./nodes/Mesh";
 import { Node } from "./nodes/Node";
 import {
-  AttachmentFlags,
+  Attachments,
   BlendState,
   ClearState,
   DepthTestState,
@@ -53,7 +53,7 @@ async function test(): Promise<void> {
   // render to the screen
   const canvasFramebuffer = context.canvasFramebuffer;
   const depthClear = new ClearState(new Color(0, 0, 0), 0);
-  canvasFramebuffer.clear(AttachmentFlags.Default, depthClear);
+  canvasFramebuffer.clear(Attachments.Default, depthClear);
   canvasFramebuffer.render(rootNode, camera);
 
   const texImage2D = new TexImage2D(context, texture.image);

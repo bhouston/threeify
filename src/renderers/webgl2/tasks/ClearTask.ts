@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { AttachmentFlags } from "../Framebuffer";
+import { Attachments } from "../Attachments";
 import { Color } from "../../../math/Color";
 import { ITask } from "./ITask";
 import { RenderingContext } from "../RenderingContext";
@@ -13,7 +13,7 @@ import { RenderingContext } from "../RenderingContext";
 export class ClearTask implements ITask {
   color: Color = new Color();
   alpha = 1.0;
-  attachmentFlags: AttachmentFlags = AttachmentFlags.Color | AttachmentFlags.Depth;
+  attachmentFlags = Attachments.Color | Attachments.Depth;
 
   execute(context: RenderingContext): void {
     const gl = context.gl;

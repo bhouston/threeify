@@ -1,5 +1,9 @@
+export { Attachments } from "./Attachments";
+export { AttachmentPoints } from "./AttachmentPoints";
 export { BlendEquation, BlendFunc, BlendState } from "./BlendState";
 export { Buffer } from "./Buffer";
+export { BufferAccessor as VertexAttribute } from "./BufferAccessor";
+export { BufferGeometry as VertexAttributeGeometry } from "./BufferGeometry";
 export { BufferUsage } from "./BufferUsage";
 export { CanvasFramebuffer } from "./CanvasFramebuffer";
 export { ClearState } from "./ClearState";
@@ -17,6 +21,4 @@ export { ShaderType } from "./ShaderType";
 export { TexImage2D } from "./TexImage2D";
 export { TexParameters } from "./TexParameters";
 export { VertexArrayObject } from "./VertexArrayObject";
-export { BufferAccessor as VertexAttribute } from "./BufferAccessor";
-export { BufferGeometry as VertexAttributeGeometry } from "./BufferGeometry";
-export { AttachmentFlags, AttachmentPoints, VirtualFramebuffer } from "./VirtualFramebuffer";
+export { VirtualFramebuffer } from "./VirtualFramebuffer";

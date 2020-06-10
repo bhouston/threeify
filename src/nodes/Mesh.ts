@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Geometry } from "../core/Geometry";
+import { Geometry } from "../geometry/Geometry";
 import { Material } from "../materials/Material";
-import { Node } from "../nodes/Node";
+import { Node } from "./Node";
 
 export class Mesh extends Node {
   constructor(public geometry: Geometry, public material: Material) {
