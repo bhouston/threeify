@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-export enum MaterialOutputFlags {
+export enum MaterialOutputs {
   Beauty = 0x1,
   Albedo = 0x2,
   Normal = 0x4,

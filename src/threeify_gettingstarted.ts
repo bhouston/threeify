@@ -1,7 +1,6 @@
-import { box } from "./geometry/Box";
-import { MaterialOutputFlags } from "./materials/MaterialOutputFlags";
-import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
-import { Node, Mesh, PerspectiveCamera } from "./nodes";
+import { box } from "./geometry";
+import { MaterialOutputs, PhysicalMaterial } from "./materials";
+import { Mesh, Node, PerspectiveCamera } from "./nodes";
 import { RenderingContext } from "./renderers/webgl2";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
@@ -9,7 +8,7 @@ camera.position.x = 1;
 
 const geometry = box(0.2, 0.2, 0.2);
 const material = new PhysicalMaterial();
-material.outputs = MaterialOutputFlags.Normal;
+material.outputs = MaterialOutputs.Normal;
 
 const mesh = new Mesh(geometry, material);
 
@@ -25,6 +24,7 @@ function animate() {
 
   mesh.rotation.x += 0.01;
   mesh.rotation.y += 0.02;
+  mesh.dirty();
 
   canvasFramebuffer.render(scene, camera, true);
 }

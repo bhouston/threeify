@@ -7,7 +7,7 @@
 
 import { IDisposable } from "../../types/types";
 import { RenderingContext } from "./RenderingContext";
-import { ShaderType } from "../../materials/ShaderType";
+import { ShaderType } from "./ShaderType";
 
 export class Shader implements IDisposable {
   disposed = false;

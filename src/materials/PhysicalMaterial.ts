@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { ICloneable, ICopyable, IVersionable } from "../../types/types";
-import { Blending } from "../Blending";
-import { Color } from "../../math/Color";
-import { TextureAccessor } from "../../textures/TextureAccessor";
-import { Material } from "../Material";
-import { MaterialOutputFlags } from "../MaterialOutputFlags";
+import { Color } from "../math/Color";
+import { TextureAccessor } from "../textures/TextureAccessor";
+import { ICloneable, ICopyable } from "../types/types";
+import { Blending } from "./Blending";
+import { Material } from "./Material";
+import { MaterialOutputs } from "./MaterialOutputs";
 
 export class PhysicalMaterial extends Material implements ICloneable<PhysicalMaterial>, ICopyable<PhysicalMaterial> {
   version = 0;
@@ -25,7 +25,7 @@ export class PhysicalMaterial extends Material implements ICloneable<PhysicalMat
   normalFactor = 1.0;
   normalMap: TextureAccessor = new TextureAccessor();
   blendMode = Blending.Over;
-  outputs = MaterialOutputFlags.Beauty;
+  outputs = MaterialOutputs.Beauty;
 
   clone(): PhysicalMaterial {
     return new PhysicalMaterial().copy(this);

@@ -1,26 +1,23 @@
-import { box } from "./geometry/Box";
+import { box } from "./geometry";
 import { fetchImage } from "./io/loaders/Image";
-import { ShaderCodeMaterial } from "./materials/ShaderCodeMaterial";
-import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
+import { PhysicalMaterial, ShaderMaterial } from "./materials";
 import { Color } from "./math/Color";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { PointLight } from "./nodes/lights/PointLight";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
-import { BlendState } from "./renderers/webgl2/BlendState";
-import { ClearState } from "./renderers/webgl2/ClearState";
-import { DepthTestState } from "./renderers/webgl2/DepthTestState";
-import { MaskState } from "./renderers/webgl2/MaskState";
-import { Program } from "./renderers/webgl2/Program";
-import { RenderingContext } from "./renderers/webgl2/RenderingContext";
+import { Mesh, Node, PerspectiveCamera, PointLight } from "./nodes";
+import { Texture, TextureAccessor } from "./textures";
+import {
+  AttachmentPoints,
+  BlendState,
+  ClearState,
+  DepthTestState,
+  MaskState,
+  Program,
+  RenderingContext,
+  TexImage2D,
+  VertexArrayObject,
+  VertexAttributeGeometry,
+} from "./renderers/webgl2";
 import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
 import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
-import { TexImage2D } from "./renderers/webgl2/TexImage2D";
-import { VertexArrayObject } from "./renderers/webgl2/VertexArrayObject";
-import { VertexAttributeGeometry } from "./renderers/webgl2/VertexAttributeGeometry";
-import { Texture } from "./textures/Texture";
-import { TextureAccessor } from "./textures/TextureAccessor";
-import { AttachmentFlags, AttachmentPoints } from "./renderers/webgl2/Framebuffer";
 
 async function test(): Promise<void> {
   // setup webgl2
@@ -61,7 +58,7 @@ async function test(): Promise<void> {
   console.log(boxVertexAttributeGeometry);
 
   // source code definition of material
-  const shaderCodeMaterial = new ShaderCodeMaterial(debug_vertex, debug_fragment);
+  const shaderCodeMaterial = new ShaderMaterial(debug_vertex, debug_fragment);
   console.log(shaderCodeMaterial);
   const program = new Program(context, shaderCodeMaterial);
   console.log(program);

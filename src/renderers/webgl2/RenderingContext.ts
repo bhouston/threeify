@@ -13,11 +13,11 @@ import { BufferPool } from "./Buffer";
 import { CanvasFramebuffer } from "./CanvasFramebuffer";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
+import { Framebuffer } from "./Framebuffer";
 import { MaskState } from "./MaskState";
 import { Program, ProgramPool } from "./Program";
 import { TexImage2DPool } from "./TexImage2D";
 import { VirtualFramebuffer } from "./VirtualFramebuffer";
-import { Framebuffer } from "./Framebuffer";
 
 const GL = WebGLRenderingContext;
 

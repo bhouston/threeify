@@ -11,8 +11,8 @@ import { Pool } from "../Pool";
 import { ProgramAttribute } from "./ProgramAttribute";
 import { RenderingContext } from "./RenderingContext";
 import { Shader } from "./Shader";
-import { ShaderCodeMaterial } from "../../materials/ShaderCodeMaterial";
-import { ShaderType } from "../../materials/ShaderType";
+import { ShaderMaterial } from "../../materials/ShaderMaterial";
+import { ShaderType } from "./ShaderType";
 
 export class Program implements IDisposable {
   disposed = false;
@@ -28,7 +28,7 @@ export class Program implements IDisposable {
   // attributes (required attribute buffers)
   // varying (per instance parameters)
 
-  constructor(context: RenderingContext, shaderCodeMaterial: ShaderCodeMaterial) {
+  constructor(context: RenderingContext, shaderCodeMaterial: ShaderMaterial) {
     this.context = context;
     this.vertexShader = new Shader(this.context, shaderCodeMaterial.vertexShaderCode, ShaderType.Vertex);
     this.fragmentShader = new Shader(this.context, shaderCodeMaterial.fragmentShaderCode, ShaderType.Fragment);
@@ -103,9 +103,9 @@ export class Program implements IDisposable {
   }
 }
 
-export class ProgramPool extends Pool<ShaderCodeMaterial, Program> {
+export class ProgramPool extends Pool<ShaderMaterial, Program> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderCodeMaterial, program: Program | null) => {
+    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderMaterial, program: Program | null) => {
       if (program) {
         program.dispose();
       }
