@@ -1,11 +1,14 @@
-import { box } from "./geometry";
+import { box } from "./geometry/primitives/Box";
 import { fetchImage } from "./io/loaders/Image";
-import { PhysicalMaterial, ShaderMaterial } from "./materials";
+import { PhysicalMaterial } from "./materials/PhysicalMaterial";
+import { ShaderMaterial } from "./materials/ShaderMaterial";
 import { Color } from "./math/Color";
-import { Mesh, Node, PerspectiveCamera, PointLight } from "./nodes";
-import { Texture, TextureAccessor } from "./textures";
+import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
+import { PointLight } from "./nodes/lights/PointLight";
+import { Mesh } from "./nodes/Mesh";
+import { Node } from "./nodes/Node";
 import {
-  AttachmentPoints,
+  AttachmentFlags,
   BlendState,
   ClearState,
   DepthTestState,
@@ -16,8 +19,10 @@ import {
   VertexArrayObject,
   VertexAttributeGeometry,
 } from "./renderers/webgl2";
-import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
+import { Texture, TextureAccessor } from "./textures";
+
 import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
+import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
 
 async function test(): Promise<void> {
   // setup webgl2
