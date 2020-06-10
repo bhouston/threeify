@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
+import { Vector3 } from "../../math/Vector3";
 import { Float32AttributeAccessor, Int32AttributeAccessor } from "../AttributeAccessor";
 import { Geometry } from "../Geometry";
-import { Vector3 } from "../../math/Vector3";
 
 export function box(
   width = 1,

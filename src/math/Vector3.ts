@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
+import { hashFloat3 } from "../core/hash";
 import { IPrimitive } from "./IPrimitive";
 import { Matrix4 } from "./Matrix4";
-import { hashFloat3 } from "../core/hash";
 
 export class Vector3 implements IPrimitive<Vector3> {
   constructor(public x = 0, public y = 0, public z = 0) {}

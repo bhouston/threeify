@@ -9,7 +9,7 @@ import { IDisposable } from "../../core/types";
 import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
 import { sizeOfDataType } from "../../textures/DataType";
-import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
+import { numPixelFormatComponents, PixelFormat } from "../../textures/PixelFormat";
 import { AttachmentPoints } from "./AttachmentPoints";
 import { Attachments } from "./Attachments";
 import { ClearState } from "./ClearState";

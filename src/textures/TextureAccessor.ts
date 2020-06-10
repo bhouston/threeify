@@ -1,7 +1,7 @@
 import { ICloneable, ICopyable, IVersionable } from "../core/types";
 import { Matrix3 } from "../math/Matrix3";
-import { Texture } from "./Texture";
 import { Vector2 } from "../math/Vector2";
+import { Texture } from "./Texture";
 
 export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<TextureAccessor>, IVersionable {
   version = 0;

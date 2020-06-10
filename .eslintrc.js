@@ -70,7 +70,7 @@ module.exports = {
     "no-unused-expressions": 2,
     quotes: ["error", "double"],
     "sort-imports": [
-      "error",
+      0,
       {
         ignoreCase: false,
         ignoreDeclarationSort: false,

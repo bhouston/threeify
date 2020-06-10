@@ -1,5 +1,5 @@
-export { Attachments } from "./Attachments";
 export { AttachmentPoints } from "./AttachmentPoints";
+export { Attachments } from "./Attachments";
 export { BlendEquation, BlendFunc, BlendState } from "./BlendState";
 export { Buffer } from "./Buffer";
 export { BufferAccessor as VertexAttribute } from "./BufferAccessor";

@@ -19,10 +19,9 @@ import {
   VertexArrayObject,
   VertexAttributeGeometry,
 } from "./renderers/webgl2";
-import { Texture, TextureAccessor } from "./textures";
-
-import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
 import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
+import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
+import { Texture, TextureAccessor } from "./textures";
 
 async function test(): Promise<void> {
   // setup webgl2

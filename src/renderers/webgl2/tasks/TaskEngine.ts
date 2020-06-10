@@ -1,7 +1,7 @@
-import { Node, depthFirstVisitor } from "../../../nodes/Node";
-import { ITask } from "./ITask";
 import { Mesh } from "../../../nodes/Mesh";
+import { depthFirstVisitor, Node } from "../../../nodes/Node";
 import { RenderingContext } from "../RenderingContext";
+import { ITask } from "./ITask";
 
 export class TaskEngine {
   constructor(public context: RenderingContext) {}

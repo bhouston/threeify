@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
+import { hashFloatArray } from "../core/hash";
 import { Euler3, EulerOrder } from "./Euler3";
 import { IPrimitive } from "./IPrimitive";
 import { Quaternion } from "./Quaternion";
 import { Vector3 } from "./Vector3";
-import { hashFloatArray } from "../core/hash";
 
 export class Matrix4 implements IPrimitive<Matrix4> {
   elements: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];

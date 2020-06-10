@@ -5,13 +5,13 @@
 // * @bhouston
 //
 
-import { ProgramUniform, numTextureUnits } from "./ProgramUniform";
 import { IDisposable } from "../../core/types";
+import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { Pool } from "../Pool";
 import { ProgramAttribute } from "./ProgramAttribute";
+import { numTextureUnits, ProgramUniform } from "./ProgramUniform";
 import { RenderingContext } from "./RenderingContext";
 import { Shader } from "./Shader";
-import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { ShaderType } from "./ShaderType";
 
 export class Program implements IDisposable {
