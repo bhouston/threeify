@@ -1,5 +1,5 @@
 #pragma once
-#include <../math/math>
+#pragma include <math/math>
 
 // reads channel R, compatible with a combined OcclusionRoughnessMetallic (RGB) texture
 // ao = texture2D( aoMap, vUv2 ).r

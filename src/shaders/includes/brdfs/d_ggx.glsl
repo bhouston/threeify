@@ -1,5 +1,5 @@
 #pragma once
-#include <../math/math>
+#pragma include <math/math>
 
 // Microfacet Models for Refraction through Rough Surfaces - equation (33)
 // http://graphicrants.blogspot.com/2013/08/specular-brdf-reference.html

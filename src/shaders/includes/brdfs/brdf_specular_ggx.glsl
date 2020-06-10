@@ -1,8 +1,8 @@
 #pragma once
-#include <../math/math.glsl>
-#include <f_schlick.glsl>
-#include <g_ggx_smithcorrelated.glsl>
-#include <d_ggx.glsl>
+#pragma include <math/math>
+#pragma include "f_schlick"
+#pragma include "g_ggx_smithcorrelated"
+#pragma include "d_ggx"
 
 // GGX Distribution, Schlick Fresnel, GGX-Smith Visibility
 vec3 BRDF_Specular_GGX( const in IncidentLight incidentLight, const in vec3 viewDir, const in vec3 normal, const in vec3 specularColor, const in float roughness ) {

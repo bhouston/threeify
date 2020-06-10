@@ -1,4 +1,5 @@
 #pragma once
+#pragma include <math/math>
 
 float punctualLightIrradiance( const in float lightDistance, const in float cutoffDistance, const in float decayExponent ) {
 

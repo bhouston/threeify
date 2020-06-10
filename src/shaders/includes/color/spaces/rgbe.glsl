@@ -1,5 +1,5 @@
 #pragma once
-#include <../../math/math.glsl>
+#pragma include <math/math>
 
 vec4 rgbeToLinear( in vec4 value ) {
 	return vec4( value.rgb * exp2( value.a * 255.0 - 128.0 ), 1.0 );

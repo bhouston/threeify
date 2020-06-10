@@ -1,7 +1,3 @@
-//
-// attributes
-//
-
 attribute vec4 position;
 attribute vec3 normal;
 attribute vec2 uv0;
@@ -14,33 +10,19 @@ varying vec3 v_normal;
 varying vec2 v_uv0;
 varying vec2 v_uv1;
 varying vec2 v_uv2;
-varying vec2 v_uv3;
 
-//
-// uniforms
-//
+uniform mat4 localToView;  // geometry
+uniform mat4 viewToScreen; // camera
 
-// geometry
-uniform mat4 localToWorld;
-
-// camera
-uniform mat4 worldToScreen;
-
-//
-// varyings from the vertex shader
-//
-
-
-#include <../../includes/math/matrix4>
+#pragma include <math/matrix4>
 
 void main() {
 
-    v_position = transformPosition( localToWorld, position );
-    v_normal = transformNormal( localToWorld, normal );
+    v_viewPosition = transformPosition( localToView, position );
+    v_viewNormal = transformNormal( localToView, normal );
     v_uv0 = uv0;
     v_uv1 = uv1;
     v_uv2 = uv2;
-    v_uv3 = uv3;
 
     gl_Position = projectPosition( localToWorld * localToWorld, position );
 }
