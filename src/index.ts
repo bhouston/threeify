@@ -4,9 +4,9 @@ import { PhysicalMaterial } from "./materials/PhysicalMaterial";
 import { ShaderMaterial } from "./materials/ShaderMaterial";
 import { Color } from "./math/Color";
 import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
+import { Group } from "./nodes/Group";
 import { PointLight } from "./nodes/lights/PointLight";
 import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
 import {
   AttachmentFlags,
   BlendState,
@@ -19,10 +19,9 @@ import {
   VertexArrayObject,
   VertexAttributeGeometry,
 } from "./renderers/webgl2";
-import { Texture, TextureAccessor } from "./textures";
-
-import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
 import debug_fragment from "./renderers/webgl2/shaders/materials/debug/fragment.glsl";
+import debug_vertex from "./renderers/webgl2/shaders/materials/debug/vertex.glsl";
+import { Texture, TextureAccessor } from "./textures";
 
 async function test(): Promise<void> {
   // setup webgl2
@@ -38,7 +37,7 @@ async function test(): Promise<void> {
   pbrMaterial.albedoMap = new TextureAccessor(texture);
 
   // create scene graph
-  const rootNode = new Node();
+  const rootNode = new Group();
 
   const light = new PointLight();
   rootNode.children.add(light);

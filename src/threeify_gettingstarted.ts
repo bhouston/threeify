@@ -3,7 +3,7 @@ import { MaterialOutputs } from "./materials/MaterialOutputs";
 import { PhysicalMaterial } from "./materials/PhysicalMaterial";
 import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
 import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
+import { Group } from "./nodes/Group";
 import { RenderingContext } from "./renderers/webgl2";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
@@ -15,7 +15,7 @@ material.outputs = MaterialOutputs.Normal;
 
 const mesh = new Mesh(geometry, material);
 
-const scene = new Node();
+const scene = new Group();
 scene.children.add(mesh);
 
 const context = new RenderingContext();

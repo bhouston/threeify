@@ -1,4 +1,4 @@
-import { Node, depthFirstVisitor } from "../../../nodes/Node";
+import { Group, depthFirstVisitor } from "../../../nodes/Group";
 import { ITask } from "./ITask";
 import { Mesh } from "../../../nodes/Mesh";
 import { RenderingContext } from "../RenderingContext";
@@ -6,7 +6,7 @@ import { RenderingContext } from "../RenderingContext";
 export class TaskEngine {
   constructor(public context: RenderingContext) {}
 
-  compileToTasks(node: Node): ITask[] {
+  compileToTasks(node: Group): ITask[] {
     const context = this.context;
     const tasks: ITask[] = [];
     depthFirstVisitor(node, (node) => {
@@ -23,7 +23,7 @@ export class TaskEngine {
     return tasks;
   }
 
-  render(node: Node): void {
+  render(node: Group): void {
     this.executeTasks(this.compileToTasks(node));
   }
 

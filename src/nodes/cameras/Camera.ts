@@ -6,9 +6,9 @@
 //
 
 import { Matrix4 } from "../../math/Matrix4";
-import { Node } from "../Node";
+import { Group } from "../Group";
 
-export abstract class Camera extends Node {
+export abstract class Camera extends Group {
   pixelAspectRatio = 1.0;
 
   abstract getProjection(viewAspectRatio: number): Matrix4;

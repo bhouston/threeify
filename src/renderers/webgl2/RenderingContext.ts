@@ -7,7 +7,7 @@
 
 import { Box2 } from "../../math/Box2";
 import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
+import { Group } from "../../nodes/Group";
 import { BlendState } from "./BlendState";
 import { BufferPool } from "./Buffer";
 import { CanvasFramebuffer } from "./CanvasFramebuffer";
@@ -164,7 +164,7 @@ export class RenderingContext {
     throw new Error("not implemented");
   }
 
-  render(node: Node, camera: Camera): void {
+  render(node: Group, camera: Camera): void {
     throw new Error("not implemented");
   }
 }
