@@ -11,6 +11,8 @@
 
 **threeify** is a Typescript 3D library loosely based on three.js.
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 ### Warning
 
 **_In Development, Not Yet Ready for Use of Any Kind_**
