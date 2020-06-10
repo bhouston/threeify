@@ -14,11 +14,12 @@
 Examples:
 
 ```js
-let worldToLocal = new Matrix4();
-let localToWorld = worldToLocal.clone.invert();
+const worldToLocal = new Matrix4();
+const localToWorld = worldToLocal.clone.invert();
 
-let localToScreenProjection = new Matrix4().makePerspectiveProjection(1.0, 1.0, 1000.0, 1.0);
-let screenToLocalUnprojection = localToScreenProjection.clone().invert();
+const localToScreenProjection = new Matrix4();
+localToScreenProjection.makePerspectiveProjection(1.0, 1.0, 1000.0, 1.0);
+const screenToLocalUnprojection = localToScreenProjection.clone().invert();
 ```
 
 # Lines of Code

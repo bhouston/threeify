@@ -22,7 +22,7 @@ const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;
 document.body.appendChild(canvasFramebuffer.canvas);
 
-function animate() {
+function animate(): void {
   requestAnimationFrame(animate);
 
   mesh.rotation.x += 0.01;

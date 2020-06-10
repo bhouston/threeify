@@ -8,21 +8,14 @@
 import { ICloneable, IEquatable } from "../../core/types";
 
 export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
-  red: boolean;
-  green: boolean;
-  blue: boolean;
-  alpha: boolean;
-  depth: boolean;
-  stencil: number; // bitmask
-
-  constructor(red = true, green = true, blue = true, alpha = true, depth = true, stencil = 0) {
-    this.red = red;
-    this.green = green;
-    this.blue = blue;
-    this.alpha = alpha;
-    this.depth = depth;
-    this.stencil = stencil;
-  }
+  constructor(
+    public red = true,
+    public green = true,
+    public blue = true,
+    public alpha = true,
+    public depth = true,
+    public stencil = 0,
+  ) {}
 
   clone(): MaskState {
     return new MaskState(this.red, this.green, this.blue, this.alpha, this.depth, this.stencil);

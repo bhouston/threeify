@@ -21,20 +21,17 @@ export enum PixelFormat {
 
 export function numPixelFormatComponents(pixelFormat: PixelFormat): number {
   switch (pixelFormat) {
-    case PixelFormat.RGBA:
-      return 4;
-    case PixelFormat.RGB:
-      return 3;
     case PixelFormat.Alpha:
-      return 1;
     case PixelFormat.Luminance:
-      return 1;
-    case PixelFormat.LuminanceAlpha:
-      return 2;
     case PixelFormat.DepthComponent:
       return 1;
+    case PixelFormat.LuminanceAlpha:
     case PixelFormat.DepthStencil:
       return 2;
+    case PixelFormat.RGB:
+      return 3;
+    case PixelFormat.RGBA:
+      return 4;
   }
   throw new Error(`unsupported pixel format: ${pixelFormat}`);
 }

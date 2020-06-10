@@ -16,7 +16,6 @@ import { ShaderType } from "./ShaderType";
 
 export class Program implements IDisposable {
   disposed = false;
-  context: RenderingContext;
   vertexShader: Shader;
   fragmentShader: Shader;
   glProgram: WebGLProgram;
@@ -28,10 +27,9 @@ export class Program implements IDisposable {
   // attributes (required attribute buffers)
   // varying (per instance parameters)
 
-  constructor(context: RenderingContext, shaderCodeMaterial: ShaderMaterial) {
-    this.context = context;
-    this.vertexShader = new Shader(this.context, shaderCodeMaterial.vertexShaderCode, ShaderType.Vertex);
-    this.fragmentShader = new Shader(this.context, shaderCodeMaterial.fragmentShaderCode, ShaderType.Fragment);
+  constructor(public context: RenderingContext, shaderMaterial: ShaderMaterial) {
+    this.vertexShader = new Shader(this.context, shaderMaterial.vertexShaderCode, ShaderType.Vertex);
+    this.fragmentShader = new Shader(this.context, shaderMaterial.fragmentShaderCode, ShaderType.Fragment);
 
     const gl = this.context.gl;
 

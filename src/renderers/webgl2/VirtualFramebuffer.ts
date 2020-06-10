@@ -9,9 +9,9 @@ import { IDisposable } from "../../core/types";
 import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
 import { sizeOfDataType } from "../../textures/DataType";
-import { numPixelFormatComponents, PixelFormat } from "../../textures/PixelFormat";
-import { Attachments } from "./Attachments";
+import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
 import { AttachmentPoints } from "./AttachmentPoints";
+import { Attachments } from "./Attachments";
 import { ClearState } from "./ClearState";
 import { Program } from "./Program";
 import { RenderingContext } from "./RenderingContext";
@@ -34,8 +34,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.context = context;
     this.attachments = attachments;
   }
-
-  abstract dispose(): void;
 
   get clearState(): ClearState {
     return this._clearState.clone();
@@ -74,7 +72,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
   }
 
-  render(node: Node, camera: Camera, clear: boolean = false): void {
+  render(node: Node, camera: Camera, clear = false): void {
     this.context.framebuffer = this;
     if (clear) {
       this.clear();
@@ -127,4 +125,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
       this.context.framebuffer = oldFramebuffer;
     }
   }
+
+  abstract dispose(): void;
 }

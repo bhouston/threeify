@@ -19,7 +19,7 @@ export class ArrayBufferImage {
 }
 
 /*
-void gl.texImage2D(target, level, internalformat, width, height, border, format, type, ArrayBufferView? pixels);
+void gl.texImage2D( target, level, internalformat, width, height, border, format, type, ArrayBufferView? pixels);
 void gl.texImage2D(target, level, internalformat, format, type, ImageData? pixels);
 void gl.texImage2D(target, level, internalformat, format, type, HTMLImageElement? pixels);
 void gl.texImage2D(target, level, internalformat, format, type, HTMLCanvasElement? pixels);

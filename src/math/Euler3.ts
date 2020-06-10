@@ -43,7 +43,7 @@ export class Euler3 implements IPrimitive<Euler3> {
   }
 
   setFromRotationMatrix4(m: Matrix4, order: EulerOrder = EulerOrder.Default): this {
-    const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+    const clamp = (value: number, min: number, max: number): number => Math.min(Math.max(value, min), max);
 
     // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
