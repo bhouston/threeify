@@ -24,9 +24,9 @@ const GL = WebGLRenderingContext;
 export class RenderingContext {
   readonly gl: WebGL2RenderingContext;
   readonly canvasFramebuffer: CanvasFramebuffer;
-  readonly texImage2DPool: TexImage2DPool = new TexImage2DPool(this);
-  readonly programPool: ProgramPool = new ProgramPool(this);
-  readonly bufferPool: BufferPool = new BufferPool(this);
+  readonly texImage2DPool: TexImage2DPool;
+  readonly programPool: ProgramPool;
+  readonly bufferPool: BufferPool;
 
   private _program: Program | null = null;
   private _framebuffer: VirtualFramebuffer;
@@ -52,6 +52,9 @@ export class RenderingContext {
       this.gl = gl;
     }
     this.canvasFramebuffer = new CanvasFramebuffer(this, canvas);
+    this.texImage2DPool = new TexImage2DPool(this);
+    this.programPool = new ProgramPool(this);
+    this.bufferPool = new BufferPool(this);
     this._framebuffer = this.canvasFramebuffer;
   }
 

@@ -12,8 +12,6 @@ import { Program } from "./Program";
 import { RenderingContext } from "./RenderingContext";
 import { VertexArrayObject } from "./VertexArrayObject";
 
-const GL = WebGLRenderingContext;
-
 export class CanvasFramebuffer extends Framebuffer {
   readonly canvas: HTMLCanvasElement;
   devicePixelRatio = 1.0;

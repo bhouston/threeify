@@ -8,8 +8,6 @@
 import { RenderingContext } from "./RenderingContext";
 import { FramebufferAttachment, VirtualFramebuffer } from "./VirtualFramebuffer";
 
-const GL = WebGLRenderingContext;
-
 export class Framebuffer extends VirtualFramebuffer {
   glFramebuffer: WebGLFramebuffer;
 
@@ -34,10 +32,8 @@ export class Framebuffer extends VirtualFramebuffer {
 
   dispose(): void {
     if (!this.disposed) {
-      if (this.glFramebuffer) {
-        const gl = this.context.gl;
-        gl.deleteFramebuffer(this.glFramebuffer);
-      }
+      const gl = this.context.gl;
+      gl.deleteFramebuffer(this.glFramebuffer);
       this.disposed = true;
     }
   }

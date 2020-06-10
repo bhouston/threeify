@@ -9,23 +9,19 @@ import { IDisposable } from "../../core/types";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { Pool } from "../Pool";
 import { ProgramAttribute } from "./ProgramAttribute";
-import { numTextureUnits, ProgramUniform } from "./ProgramUniform";
+import { ProgramUniform } from "./ProgramUniform";
 import { RenderingContext } from "./RenderingContext";
 import { Shader } from "./Shader";
 import { ShaderType } from "./ShaderType";
+import { numTextureUnits } from "./UniformType";
 
 export class Program implements IDisposable {
   disposed = false;
   vertexShader: Shader;
   fragmentShader: Shader;
   glProgram: WebGLProgram;
-  // TODO replace with a map for faster access
-  uniforms: Array<ProgramUniform> = [];
-  // TODO replace with a map for faster access
-  attributes: Array<ProgramAttribute> = [];
-
-  // attributes (required attribute buffers)
-  // varying (per instance parameters)
+  uniforms: Array<ProgramUniform> = []; // TODO replace with a map for faster access
+  attributes: Array<ProgramAttribute> = []; // TODO replace with a map for faster access
 
   constructor(public context: RenderingContext, shaderMaterial: ShaderMaterial) {
     this.vertexShader = new Shader(this.context, shaderMaterial.vertexShaderCode, ShaderType.Vertex);

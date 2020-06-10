@@ -50,9 +50,6 @@ export function box(
     const gridX1 = gridX + 1;
     const gridY1 = gridY + 1;
 
-    let vertexCounter = 0;
-    let groupCount = 0;
-
     const vector = new Vector3();
 
     // generate vertices, normals and uvs
@@ -87,10 +84,6 @@ export function box(
 
         uvs.push(ix / gridX);
         uvs.push(1 - iy / gridY);
-
-        // counters
-
-        vertexCounter += 1;
       }
     }
 
@@ -111,10 +104,6 @@ export function box(
 
         indices.push(a, b, d);
         indices.push(b, c, d);
-
-        // increase counter
-
-        groupCount += 6;
       }
     }
   }

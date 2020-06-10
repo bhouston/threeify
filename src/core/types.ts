@@ -43,3 +43,7 @@ export interface IArrayable {
   setFromArray(floatArray: Float32Array, offset: number): void;
   toArray(floatArray: Float32Array, offset: number): void;
 }
+
+export interface Dictionary<T> {
+  [key: string]: T;
+}
