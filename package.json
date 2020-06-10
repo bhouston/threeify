@@ -44,5 +44,9 @@
     "tabWidth": 2,
     "semi": true,
     "singleQuote": false
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": "12.13.0"
   }
 }

@@ -70,13 +70,13 @@ To run:
 1. Run npm install to install all the required node modules from package.json
 
 ```
-npm install
+yarn
 ```
 
 3. To run the automatic typescript builder and dev server go:
 
 ```
-npm run dev
+yarn dev
 ```
 
 Then open a web server to the address displayed in the console. Usually this will be http://localhost:8000.
