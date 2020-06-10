@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { IPrimitive } from "./IPrimitive";
 import { hashFloat3 } from "../core/hash";
+import { IPrimitive } from "./IPrimitive";
 
 function hue2rgb(p: number, q: number, t: number): number {
   if (t < 0) {

@@ -7,9 +7,9 @@
 //
 
 import { Geometry } from "../../geometry/Geometry";
-import { RenderingContext } from "./RenderingContext";
 import { BufferAccessor } from "./BufferAccessor";
 import { PrimitiveType } from "./PrimitiveType";
+import { RenderingContext } from "./RenderingContext";
 
 class NamedVertexAttribute {
   name: string;

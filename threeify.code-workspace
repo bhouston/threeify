@@ -1,6 +1,5 @@
 {
-  "folders": [
-    {
+  "folders": [{
       "path": "./"
     },
     {
@@ -25,7 +24,8 @@
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
+      "source.fixAll.eslint": true,
+      "source.organizeImports": true
     },
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
@@ -34,31 +34,31 @@
       "node_modules/": true
     },
     "cSpell.words": [
-        "Arrayable",
-        "Clearcoat",
-        "Cloneable",
-        "Hashable",
-        "Metalness",
-        "Mipmaps",
-        "Threeify",
-        "Unprojection",
-        "Versionable",
-        "bhouston",
-        "bitmask",
-        "cflint",
-        "cloc",
-        "destructured",
-        "exocortex",
-        "framebuffer",
-        "glsl",
-        "highp",
-        "renderable",
-        "slerp",
-        "threeifydev",
-        "transpiler",
-        "varyings",
-        "webgl",
-        "webgpu"
+      "Arrayable",
+      "Clearcoat",
+      "Cloneable",
+      "Hashable",
+      "Metalness",
+      "Mipmaps",
+      "Threeify",
+      "Unprojection",
+      "Versionable",
+      "bhouston",
+      "bitmask",
+      "cflint",
+      "cloc",
+      "destructured",
+      "exocortex",
+      "framebuffer",
+      "glsl",
+      "highp",
+      "renderable",
+      "slerp",
+      "threeifydev",
+      "transpiler",
+      "varyings",
+      "webgl",
+      "webgpu"
     ]
   }
 }

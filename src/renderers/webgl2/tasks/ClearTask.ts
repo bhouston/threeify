@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { Attachments } from "../Attachments";
 import { Color } from "../../../math/Color";
-import { ITask } from "./ITask";
+import { Attachments } from "../Attachments";
 import { RenderingContext } from "../RenderingContext";
+import { ITask } from "./ITask";
 
 export class ClearTask implements ITask {
   color: Color = new Color();

@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
+import { hashFloatArray } from "../core/hash";
 import { IPrimitive } from "./IPrimitive";
 import { Matrix4 } from "./Matrix4";
 import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
-import { hashFloatArray } from "../core/hash";
 
 export class Matrix3 implements IPrimitive<Matrix3> {
   elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1];

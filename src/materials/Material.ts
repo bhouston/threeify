@@ -1,5 +1,5 @@
-import { ICloneable, ICopyable, IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { generateUUID } from "../core/generateUuid";
+import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 
 export class Material implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;

@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { ITask } from "./ITask";
 import { PrimitiveType } from "../PrimitiveType";
 import { Program } from "../Program";
 import { RenderingContext } from "../RenderingContext";
 import { VertexArrayObject } from "../VertexArrayObject";
+import { ITask } from "./ITask";
 
 export class DrawTask implements ITask {
   constructor(

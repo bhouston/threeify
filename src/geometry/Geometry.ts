@@ -6,8 +6,8 @@
 //
 
 import { IDisposable, IVersionable } from "../core/types";
-import { AttributeAccessor } from "./AttributeAccessor";
 import { PrimitiveType } from "../renderers/webgl2/PrimitiveType";
+import { AttributeAccessor } from "./AttributeAccessor";
 
 class NamedAttributeAccessor {
   name: string;

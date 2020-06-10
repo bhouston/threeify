@@ -1,7 +1,7 @@
+import { hashFloat4 } from "../core/hash";
 import { IPrimitive } from "./IPrimitive";
 import { Matrix4 } from "./Matrix4";
 import { Quaternion } from "./Quaternion";
-import { hashFloat4 } from "../core/hash";
 
 export enum EulerOrder {
   XYZ,

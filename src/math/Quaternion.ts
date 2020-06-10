@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
+import { hashFloat4 } from "../core/hash";
 import { Euler3, EulerOrder } from "./Euler3";
 import { IPrimitive } from "./IPrimitive";
 import { Matrix4 } from "./Matrix4";
 import { Vector3 } from "./Vector3";
-import { hashFloat4 } from "../core/hash";
 
 export class Quaternion implements IPrimitive<Quaternion> {
   constructor(public x = 0, public y = 0, public z = 0, public w = 1) {}
