@@ -6,7 +6,7 @@
 //
 
 import { Program } from "./Program";
-import { VertexAttributeGeometry } from "./VertexAttributeGeometry";
+import { BufferGeometry } from "./BufferGeometry";
 import { PrimitiveType } from "./PrimitiveType";
 
 export class VertexArrayObject {
@@ -16,7 +16,7 @@ export class VertexArrayObject {
   offset = 0;
   count = -1;
 
-  constructor(program: Program, vertexAttributeGeometry: VertexAttributeGeometry) {
+  constructor(program: Program, vertexAttributeGeometry: BufferGeometry) {
     this.program = program;
     this.primitive = vertexAttributeGeometry.primitive;
     this.count = vertexAttributeGeometry.count;

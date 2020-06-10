@@ -7,7 +7,7 @@
 
 import { Color } from "../math/Color";
 import { TextureAccessor } from "../textures/TextureAccessor";
-import { ICloneable, ICopyable } from "../types/types";
+import { ICloneable, ICopyable } from "../core/types";
 import { Blending } from "./Blending";
 import { Material } from "./Material";
 import { MaterialOutputs } from "./MaterialOutputs";

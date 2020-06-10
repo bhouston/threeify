@@ -5,13 +5,13 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
+import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { Euler3 } from "../math/Euler3";
 import { Matrix4 } from "../math/Matrix4";
 import { NodeCollection } from "./NodeCollection";
 import { Quaternion } from "../math/Quaternion";
 import { Vector3 } from "../math/Vector3";
-import { generateUUID } from "../generateUuid";
+import { generateUUID } from "../core/generateUuid";
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;

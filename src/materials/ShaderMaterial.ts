@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
+import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { IPoolUser } from "../renderers/Pool";
-import { generateUUID } from "../generateUuid";
+import { generateUUID } from "../core/generateUuid";
 
 export class ShaderMaterial implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
   uuid: string = generateUUID();

@@ -1,4 +1,4 @@
-import { IDisposable } from "../../types/types";
+import { IDisposable } from "../../core/types";
 import { RenderingContext } from "./RenderingContext";
 import { ClearState } from "./ClearState";
 

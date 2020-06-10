@@ -17,6 +17,6 @@ export { ShaderType } from "./ShaderType";
 export { TexImage2D } from "./TexImage2D";
 export { TexParameters } from "./TexParameters";
 export { VertexArrayObject } from "./VertexArrayObject";
-export { VertexAttribute } from "./VertexAttribute";
-export { VertexAttributeGeometry } from "./VertexAttributeGeometry";
+export { BufferAccessor as VertexAttribute } from "./BufferAccessor";
+export { BufferGeometry as VertexAttributeGeometry } from "./BufferGeometry";
 export { AttachmentFlags, AttachmentPoints, VirtualFramebuffer } from "./VirtualFramebuffer";

@@ -6,7 +6,7 @@
 //
 
 import { ProgramUniform, numTextureUnits } from "./ProgramUniform";
-import { IDisposable } from "../../types/types";
+import { IDisposable } from "../../core/types";
 import { Pool } from "../Pool";
 import { ProgramAttribute } from "./ProgramAttribute";
 import { RenderingContext } from "./RenderingContext";

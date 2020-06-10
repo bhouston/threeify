@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
+import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { RenderingContext } from "./webgl2/RenderingContext";
 
 export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}

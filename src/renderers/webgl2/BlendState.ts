@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../types/types";
+import { ICloneable, IEquatable } from "../../core/types";
 import { Blending } from "../../materials/Blending";
 
 const GL = WebGLRenderingContext;

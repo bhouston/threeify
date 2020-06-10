@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../types/types";
+import { ICloneable, IEquatable } from "../../core/types";
 import { Color } from "../../math/Color";
 
 export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState> {

@@ -7,7 +7,7 @@
 
 import { PixelFormat, numPixelFormatComponents } from "../../textures/PixelFormat";
 import { Color } from "../../math/Color";
-import { IDisposable } from "../../types/types";
+import { IDisposable } from "../../core/types";
 import { Program } from "./Program";
 import { ProgramUniform } from "./ProgramUniform";
 import { RenderingContext } from "./RenderingContext";
