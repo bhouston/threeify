@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { IDisposable, IIdentifiable, IVersionable } from "../types/types";
-import { BufferTarget } from "./BufferTarget";
+import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
+import { BufferTarget } from "../renderers/webgl2/BufferTarget";
 import { IPoolUser } from "../renderers/Pool";
-import { generateUUID } from "../generateUuid";
+import { generateUUID } from "../core/generateUuid";
 
-export class AttributeView implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
+export class Attribute implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
   disposed = false;
   uuid: string = generateUUID();
   version = 0;

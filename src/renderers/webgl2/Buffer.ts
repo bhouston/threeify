@@ -1,6 +1,6 @@
-import { AttributeView } from "../../core/AttributeView";
-import { BufferTarget } from "../../core/BufferTarget";
-import { IDisposable } from "../../types/types";
+import { Attribute } from "../../geometry/Attribute";
+import { BufferTarget } from "./BufferTarget";
+import { IDisposable } from "../../core/types";
 import { Pool } from "../Pool";
 import { RenderingContext } from "./RenderingContext";
 import { BufferUsage } from "./BufferUsage";
@@ -68,13 +68,13 @@ export class Buffer implements IDisposable {
   }
 }
 
-export class BufferPool extends Pool<AttributeView, Buffer> {
+export class BufferPool extends Pool<Attribute, Buffer> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, attributeView: AttributeView, buffer: Buffer | null) => {
+    super(context, (context: RenderingContext, attribute: Attribute, buffer: Buffer | null) => {
       if (!buffer) {
-        return new Buffer(context, attributeView.arrayBuffer, attributeView.target);
+        return new Buffer(context, attribute.arrayBuffer, attribute.target);
       }
-      buffer.update(attributeView.arrayBuffer, attributeView.target);
+      buffer.update(attribute.arrayBuffer, attribute.target);
       return buffer;
     });
   }

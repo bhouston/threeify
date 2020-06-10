@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { IDisposable, IVersionable } from "../types/types";
+import { IDisposable, IVersionable } from "../core/types";
 import { AttributeAccessor } from "./AttributeAccessor";
 import { PrimitiveType } from "../renderers/webgl2/PrimitiveType";
 

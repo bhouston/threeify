@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { ComponentType, componentTypeSizeOf } from "./ComponentType";
-import { AttributeView } from "./AttributeView";
+import { ComponentType, componentTypeSizeOf } from "../renderers/webgl2/ComponentType";
+import { Attribute } from "./Attribute";
 
 export class AttributeAccessor {
-  attributeView: AttributeView;
+  attributeView: Attribute;
   byteOffset: number;
   componentType: ComponentType;
   componentsPerVertex: number;
@@ -19,7 +19,7 @@ export class AttributeAccessor {
   // maxExtent: ComponentType;
 
   constructor(
-    attributeView: AttributeView,
+    attributeView: Attribute,
     byteOffset: number,
     componentType: ComponentType,
     componentsPerVertex: number,
@@ -43,32 +43,20 @@ export class AttributeAccessor {
 
 export class Int16AttributeAccessor extends AttributeAccessor {
   constructor(intArray: Int16Array, componentsPerVertex: number) {
-    super(
-      new AttributeView(intArray, 0, -1, 2 * componentsPerVertex),
-      0,
-      ComponentType.Int,
-      componentsPerVertex,
-      -1,
-    );
+    super(new Attribute(intArray, 0, -1, 2 * componentsPerVertex), 0, ComponentType.Int, componentsPerVertex, -1);
   }
 }
 
 export class Int32AttributeAccessor extends AttributeAccessor {
   constructor(intArray: Int32Array, componentsPerVertex: number) {
-    super(
-      new AttributeView(intArray, 0, -1, 4 * componentsPerVertex),
-      0,
-      ComponentType.Int,
-      componentsPerVertex,
-      -1,
-    );
+    super(new Attribute(intArray, 0, -1, 4 * componentsPerVertex), 0, ComponentType.Int, componentsPerVertex, -1);
   }
 }
 
 export class Float32AttributeAccessor extends AttributeAccessor {
   constructor(vec2Array: Float32Array, componentsPerVertex: number) {
     super(
-      new AttributeView(new Float32Array(vec2Array), 0, -1, 4 * componentsPerVertex),
+      new Attribute(new Float32Array(vec2Array), 0, -1, 4 * componentsPerVertex),
       0,
       ComponentType.Float,
       componentsPerVertex,

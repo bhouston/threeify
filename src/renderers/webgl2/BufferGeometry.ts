@@ -6,39 +6,39 @@
 // * @bhouston
 //
 
-import { Geometry } from "../../core/Geometry";
+import { Geometry } from "../../geometry/Geometry";
 import { RenderingContext } from "./RenderingContext";
-import { VertexAttribute } from "./VertexAttribute";
+import { BufferAccessor } from "./BufferAccessor";
 import { PrimitiveType } from "./PrimitiveType";
 
 class NamedVertexAttribute {
   name: string;
-  vertexAttribute: VertexAttribute;
+  vertexAttribute: BufferAccessor;
 
-  constructor(name: string, vertexAttribute: VertexAttribute) {
+  constructor(name: string, vertexAttribute: BufferAccessor) {
     this.name = name;
     this.vertexAttribute = vertexAttribute;
   }
 }
 
-export class VertexAttributeGeometry {
+export class BufferGeometry {
   namedVertexAttributes: NamedVertexAttribute[] = [];
   // TODO replace the following array with a map for faster access.
-  indices: VertexAttribute | null = null;
+  indices: BufferAccessor | null = null;
   primitive: PrimitiveType = PrimitiveType.Triangles;
   count = -1;
 
-  static FromGeometry(context: RenderingContext, geometry: Geometry): VertexAttributeGeometry {
-    const vertexAttributeGeometry = new VertexAttributeGeometry();
+  static FromGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
+    const vertexAttributeGeometry = new BufferGeometry();
     if (geometry.indices) {
-      vertexAttributeGeometry.setIndices(VertexAttribute.FromAttributeAccessor(context, geometry.indices));
+      vertexAttributeGeometry.setIndices(BufferAccessor.FromAttributeAccessor(context, geometry.indices));
       vertexAttributeGeometry.count = geometry.indices.count;
     }
 
     geometry.namedAttributeAccessors.forEach((item) => {
       vertexAttributeGeometry.setAttribute(
         item.name,
-        VertexAttribute.FromAttributeAccessor(context, item.attributeAccessor),
+        BufferAccessor.FromAttributeAccessor(context, item.attributeAccessor),
       );
       if (vertexAttributeGeometry.count === -1) {
         vertexAttributeGeometry.count = item.attributeAccessor.count;
@@ -50,11 +50,11 @@ export class VertexAttributeGeometry {
     return vertexAttributeGeometry;
   }
 
-  setIndices(indices: VertexAttribute): void {
+  setIndices(indices: BufferAccessor): void {
     this.indices = indices;
   }
 
-  setAttribute(name: string, vertexAttribute: VertexAttribute): void {
+  setAttribute(name: string, vertexAttribute: BufferAccessor): void {
     // TODO this.namedVertexAttributes replace with a map for faster access
     const namedVertexAttribute = this.namedVertexAttributes.find((item) => item.name === name);
     if (namedVertexAttribute) {
