@@ -1,9 +1,9 @@
-import { MaterialOutputFlags } from "../../../../../materials/MaterialOutputFlags";
+import { MaterialOutputs } from "../../../../../materials/MaterialOutputs";
 
 function createEnumDefines(): string {
   let output = [];
-  for (let name in Object.keys(MaterialOutputFlags)) {
-    output.push(`#define MATERIAL_OUTPUTS ${MaterialOutputFlags[name]}`);
+  for (let name in Object.keys(MaterialOutputs)) {
+    output.push(`#define MATERIAL_OUTPUTS ${MaterialOutputs[name]}`);
   }
   return output.join("\n");
 }
