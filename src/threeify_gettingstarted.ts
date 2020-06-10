@@ -1,10 +1,8 @@
 import { box } from "./geometry/Box";
 import { MaterialOutputFlags } from "./materials/MaterialOutputFlags";
 import { PhysicalMaterial } from "./materials/simple/PhysicalMaterial";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
-import { RenderingContext } from "./renderers/webgl2/RenderingContext";
+import { Node, Mesh, PerspectiveCamera } from "./nodes";
+import { RenderingContext } from "./renderers/webgl2";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
 camera.position.x = 1;

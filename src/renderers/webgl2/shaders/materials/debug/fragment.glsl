@@ -1,5 +1,7 @@
 precision highp float;
 
+#include "materials/output_flags.glsl"
+
 // uniforms
 uniform mat4 localToWorldTransform; // node
 uniform mat4 worldToViewTransform; // camera
@@ -8,7 +10,7 @@ uniform mat4 viewToScreenProjection; // projection
 uniform vec3 albedo; // material
 uniform int albedoUvIndex; // material
 uniform sampler2D albedoMap; // material
-
+uniform int outputFlags; //
 
 // varyings from vertex shader
 varying vec3 v_viewPosition;

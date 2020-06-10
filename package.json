@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch & tgt -i ./src -o ./dist -w",
+    "build-glsl": "tgt -i ./src -o ./dist -w",
     "start": "es-dev-server --node-resolve --watch",
     "dev": "npm run watch & npm start"
   },

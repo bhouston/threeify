@@ -1,4 +1,4 @@
-#include <../../includes/math/math.glsl>
+#pragma include( "math/math.glsl" )
 
 // uniforms
 uniform mat4 localToWorldTransform; // node
