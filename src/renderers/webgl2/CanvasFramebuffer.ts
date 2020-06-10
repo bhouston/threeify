@@ -16,7 +16,7 @@ import { VertexArrayObject } from "./VertexArrayObject";
 import { sizeOfDataType } from "../../textures/DataType";
 import { ClearState } from "./ClearState";
 import { Camera } from "../../nodes/cameras/Camera";
-import { Group } from "../../nodes/Group";
+import { Node } from "../../nodes/Node";
 import { Framebuffer } from "./Framebuffer";
 
 const GL = WebGLRenderingContext;
@@ -47,7 +47,7 @@ export class CanvasFramebuffer extends Framebuffer {
     super.renderPass(program, uniforms);
   }
 
-  render(node: Group, camera: Camera, clear: boolean = false): void {
+  render(node: Node, camera: Camera, clear: boolean = false): void {
     this.syncCanvas();
     super.render(node, camera, clear);
   }

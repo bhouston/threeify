@@ -7,9 +7,9 @@
 
 import { Geometry } from "../core/Geometry";
 import { Material } from "../materials/Material";
-import { Group } from "./Group";
+import { Node } from "../nodes/Node";
 
-export class Mesh extends Group {
+export class Mesh extends Node {
   constructor(public geometry: Geometry, public material: Material) {
     super();
   }

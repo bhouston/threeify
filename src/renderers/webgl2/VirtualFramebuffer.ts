@@ -16,7 +16,7 @@ import { VertexArrayObject } from "./VertexArrayObject";
 import { sizeOfDataType } from "../../textures/DataType";
 import { ClearState } from "./ClearState";
 import { Camera } from "../../nodes/cameras/Camera";
-import { Group } from "../../nodes/Group";
+import { Node } from "../../nodes/Node";
 
 const GL = WebGLRenderingContext;
 
@@ -89,7 +89,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
   }
 
-  render(node: Group, camera: Camera, clear: boolean = false): void {
+  render(node: Node, camera: Camera, clear: boolean = false): void {
     this.context.framebuffer = this;
     if (clear) {
       this.clear();

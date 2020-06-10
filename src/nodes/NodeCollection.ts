@@ -1,20 +1,20 @@
-import { Group } from "./Group";
+import { Node } from "./Node";
 
 export class NodeCollection {
-  private parent: Group;
-  private array: Array<Group> = [];
+  private parent: Node;
+  private array: Array<Node> = [];
 
-  constructor(parent: Group) {
+  constructor(parent: Node) {
     this.parent = parent;
   }
 
-  add(node: Group): this {
+  add(node: Node): this {
     this.array.push(node);
     node.parent = this.parent;
     return this;
   }
 
-  remove(node: Group): this {
+  remove(node: Node): this {
     const index = this.array.findIndex((n) => n.uuid === node.uuid);
     if (index >= 0) {
       this.array.splice(index, 1);
@@ -23,7 +23,7 @@ export class NodeCollection {
     return this;
   }
 
-  forEach(callbackFn: (value: Group, index: number, array: Group[]) => void): void {
+  forEach(callbackFn: (value: Node, index: number, array: Node[]) => void): void {
     this.array.forEach(callbackFn);
   }
 

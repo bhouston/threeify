@@ -13,11 +13,11 @@ import { Quaternion } from "../math/Quaternion";
 import { Vector3 } from "../math/Vector3";
 import { generateUUID } from "../core/generateUuid";
 
-export class Group implements IIdentifiable, IVersionable, IDisposable {
+export class Node implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;
   readonly uuid: string = generateUUID();
   version = 0;
-  parent: Group | null = null;
+  parent: Node | null = null;
   name = "";
   children: NodeCollection;
   position: Vector3 = new Vector3();
@@ -66,21 +66,21 @@ export class Group implements IIdentifiable, IVersionable, IDisposable {
 
 // visitors
 
-export function depthFirstVisitor(node: Group, callback: (node: Group) => void): void {
+export function depthFirstVisitor(node: Node, callback: (node: Node) => void): void {
   node.children.forEach((child) => {
     depthFirstVisitor(child, callback);
   });
   callback(node);
 }
 
-export function rootLastVisitor(node: Group, callback: (node: Group) => void): void {
+export function rootLastVisitor(node: Node, callback: (node: Node) => void): void {
   callback(node);
   if (node.parent) {
     rootLastVisitor(node.parent, callback);
   }
 }
 
-export function rootFirstVisitor(node: Group, callback: (node: Group) => void): void {
+export function rootFirstVisitor(node: Node, callback: (node: Node) => void): void {
   if (node.parent) {
     rootFirstVisitor(node.parent, callback);
   }

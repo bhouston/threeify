@@ -6,9 +6,9 @@
 //
 
 import { Color } from "../../math/Color";
-import { Group } from "../Group";
+import { Node } from "../Node";
 
-export class Light extends Group {
+export class Light extends Node {
   color: Color;
   intensity: number;
 
