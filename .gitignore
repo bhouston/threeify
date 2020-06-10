@@ -1,6 +1,7 @@
 node_modules
 # build files
 dist
+package-lock.json
 
 # IDE & Docker related exclusions
 # Theiaide

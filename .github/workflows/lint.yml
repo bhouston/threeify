@@ -14,5 +14,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12.13.0"
-      - run: npm i
-      - run: npm run lint
+      - run: npm i -g yarn
+      - run: yarn lint
