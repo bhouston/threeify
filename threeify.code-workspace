@@ -15,6 +15,7 @@
       "editorconfig.editorconfig",
       "dbaeumer.vscode-eslint",
       "kisstkondoros.vscode-codemetrics",
+      "knisterpeter.vscode-commitizen",
       "shardulm94.trailing-spaces",
       "streetsidesoftware.code-spell-checker",
       "waderyan.gitblame"
@@ -52,6 +53,7 @@
       "framebuffer",
       "glsl",
       "highp",
+      "knisterpeter",
       "renderable",
       "slerp",
       "threeifydev",
