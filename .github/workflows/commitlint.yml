@@ -1,4 +1,4 @@
-name: lint
+name: commitlint
 
 on:
   pull_request:
@@ -7,13 +7,14 @@ on:
     branches: "**"
 
 jobs:
-  lint:
+  commitlint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: "12.13.0"
-      - run: npm i -g yarn
-      - run: yarn
-      - run: yarn lint
+      - name: install commitlint
+        run: npm i @commitlint/{cli,config-conventional}
+      - name: vet last commit message
+        run: git log -1 --pretty=format:"%s" | npx commitlint
