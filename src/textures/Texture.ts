@@ -9,23 +9,14 @@ import { generateUUID } from "../core/generateUuid";
 import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { Vector2 } from "../math/Vector2";
 import { IPoolUser } from "../renderers/Pool";
-import { DataType } from "./DataType";
-import { PixelFormat } from "./PixelFormat";
-import { TextureFilter } from "./TextureFilter";
-import { TextureWrap } from "./TextureWrap";
+import { DataType } from "../renderers/webgl2/DataType";
+import { PixelFormat } from "../renderers/webgl2/PixelFormat";
+import { TextureFilter } from "../renderers/webgl2/TextureFilter";
+import { TextureWrap } from "../renderers/webgl2/TextureWrap";
 
 export class ArrayBufferImage {
   constructor(public data: ArrayBuffer, public width: number, public height: number) {}
 }
-
-/*
-void gl.texImage2D( target, level, internalformat, width, height, border, format, type, ArrayBufferView? pixels);
-void gl.texImage2D(target, level, internalformat, format, type, ImageData? pixels);
-void gl.texImage2D(target, level, internalformat, format, type, HTMLImageElement? pixels);
-void gl.texImage2D(target, level, internalformat, format, type, HTMLCanvasElement? pixels);
-void gl.texImage2D(target, level, internalformat, format, type, HTMLVideoElement? pixels);
-void gl.texImage2D(target, level, internalformat, format, type, ImageBitmap? pixels);
-*/
 
 export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
   disposed = false;

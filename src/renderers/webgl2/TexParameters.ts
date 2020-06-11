@@ -1,5 +1,5 @@
-import { TextureFilter } from "../../textures/TextureFilter";
-import { TextureWrap } from "../../textures/TextureWrap";
+import { TextureFilter } from "./TextureFilter";
+import { TextureWrap } from "./TextureWrap";
 
 export class TexParameters {
   generateMipmaps = true;

@@ -8,10 +8,10 @@
 
 import { IDisposable } from "../../core/types";
 import { Vector2 } from "../../math/Vector2";
-import { DataType } from "../../textures/DataType";
-import { PixelFormat } from "../../textures/PixelFormat";
 import { ArrayBufferImage, Texture } from "../../textures/Texture";
 import { Pool } from "../Pool";
+import { DataType } from "./DataType";
+import { PixelFormat } from "./PixelFormat";
 import { RenderingContext } from "./RenderingContext";
 import { TexParameters } from "./TexParameters";
 
