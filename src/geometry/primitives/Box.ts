@@ -122,9 +122,9 @@ export function box(
   const geometry = new Geometry();
 
   geometry.setIndices(new Int32AttributeAccessor(new Int32Array(indices), 1));
-  geometry.setAttribute("position", new Float32AttributeAccessor(new Float32Array(vertices), 3));
-  geometry.setAttribute("normal", new Float32AttributeAccessor(new Float32Array(normals), 3));
-  geometry.setAttribute("uv", new Float32AttributeAccessor(new Float32Array(uvs), 2));
+  geometry.attributeAccessors.set("position", new Float32AttributeAccessor(new Float32Array(vertices), 3));
+  geometry.attributeAccessors.set("normal", new Float32AttributeAccessor(new Float32Array(normals), 3));
+  geometry.attributeAccessors.set("uv", new Float32AttributeAccessor(new Float32Array(uvs), 2));
 
   return geometry;
 }

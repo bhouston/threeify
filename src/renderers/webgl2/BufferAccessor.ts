@@ -37,18 +37,18 @@ export class BufferAccessor {
   }
 
   static FromAttributeAccessor(context: RenderingContext, attributeAccessor: AttributeAccessor): BufferAccessor {
-    const attributeView = attributeAccessor.attributeView;
+    const attribute = attributeAccessor.attributeView;
 
-    const buffer = new Buffer(context, attributeView.arrayBuffer, attributeView.target);
-    const vertexAttribute = new BufferAccessor(
+    const buffer = new Buffer(context, attribute.arrayBuffer, attribute.target);
+    const bufferAccessor = new BufferAccessor(
       buffer,
       attributeAccessor.componentType,
       attributeAccessor.componentsPerVertex,
       false,
-      attributeView.byteStride,
-      attributeView.byteOffset + attributeAccessor.byteOffset,
+      attribute.byteStride,
+      attribute.byteOffset + attributeAccessor.byteOffset,
     );
 
-    return vertexAttribute;
+    return bufferAccessor;
   }
 }

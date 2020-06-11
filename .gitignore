@@ -16,3 +16,4 @@ three.js
 src/lib/renderers/webgl2/webgl2_fundamentals.js
 
 examples/gettingstarted/threejs_gettingstarted.js
+src/learning_ts.ts

@@ -16,10 +16,10 @@ export class VertexArrayObject {
   offset = 0;
   count = -1;
 
-  constructor(program: Program, vertexAttributeGeometry: BufferGeometry) {
+  constructor(program: Program, bufferGeometry: BufferGeometry) {
     this.program = program;
-    this.primitive = vertexAttributeGeometry.primitive;
-    this.count = vertexAttributeGeometry.count;
+    this.primitive = bufferGeometry.primitive;
+    this.count = bufferGeometry.count;
 
     const gl = this.program.context.gl;
 
@@ -35,30 +35,27 @@ export class VertexArrayObject {
     // and make it the one we're currently working with
     gl.bindVertexArray(this.glVertexArrayObject);
 
-    vertexAttributeGeometry.namedVertexAttributes.forEach((namedVertexAttribute) => {
-      const programAttribute = this.program.attributes.find(
-        (attribute) => attribute.name === namedVertexAttribute.name,
-      );
-      if (!programAttribute) {
+    bufferGeometry.bufferAccessors.forEach((bufferAccessor, name) => {
+      const attribute = this.program.attributes.get(name);
+      if (!attribute) {
         // only bind the attributes that exist in the program.
         return;
       }
 
-      gl.enableVertexAttribArray(programAttribute.glLocation);
+      gl.enableVertexAttribArray(attribute.glLocation);
 
       // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-      const buffer = namedVertexAttribute.vertexAttribute.buffer;
+      const buffer = bufferAccessor.buffer;
       gl.bindBuffer(buffer.target, buffer.glBuffer);
 
       // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-      const vertexAttribute = namedVertexAttribute.vertexAttribute;
       gl.vertexAttribPointer(
-        programAttribute.glLocation,
-        vertexAttribute.componentsPerVertex,
-        vertexAttribute.componentType,
-        vertexAttribute.normalized,
-        vertexAttribute.vertexStride,
-        vertexAttribute.byteOffset,
+        attribute.glLocation,
+        bufferAccessor.componentsPerVertex,
+        bufferAccessor.componentType,
+        bufferAccessor.normalized,
+        bufferAccessor.vertexStride,
+        bufferAccessor.byteOffset,
       );
     });
   }

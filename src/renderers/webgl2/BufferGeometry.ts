@@ -6,61 +6,38 @@
 // * @bhouston
 //
 
+import { Dictionary } from "../../core/Dictionary";
 import { Geometry } from "../../geometry/Geometry";
 import { BufferAccessor } from "./BufferAccessor";
 import { PrimitiveType } from "./PrimitiveType";
 import { RenderingContext } from "./RenderingContext";
 
-class NamedVertexAttribute {
-  name: string;
-  vertexAttribute: BufferAccessor;
-
-  constructor(name: string, vertexAttribute: BufferAccessor) {
-    this.name = name;
-    this.vertexAttribute = vertexAttribute;
-  }
-}
-
 export class BufferGeometry {
-  namedVertexAttributes: NamedVertexAttribute[] = [];
-  // TODO replace the following array with a map for faster access.
+  bufferAccessors = new Dictionary<string, BufferAccessor>();
   indices: BufferAccessor | null = null;
   primitive: PrimitiveType = PrimitiveType.Triangles;
   count = -1;
 
-  static FromGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
-    const vertexAttributeGeometry = new BufferGeometry();
+  static FromAttributeGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
+    const bufferGeometry = new BufferGeometry();
     if (geometry.indices) {
-      vertexAttributeGeometry.setIndices(BufferAccessor.FromAttributeAccessor(context, geometry.indices));
-      vertexAttributeGeometry.count = geometry.indices.count;
+      bufferGeometry.setIndices(BufferAccessor.FromAttributeAccessor(context, geometry.indices));
+      bufferGeometry.count = geometry.indices.count;
     }
 
-    geometry.namedAttributeAccessors.forEach((item) => {
-      vertexAttributeGeometry.setAttribute(
-        item.name,
-        BufferAccessor.FromAttributeAccessor(context, item.attributeAccessor),
-      );
-      if (vertexAttributeGeometry.count === -1) {
-        vertexAttributeGeometry.count = item.attributeAccessor.count;
+    geometry.attributeAccessors.forEach((attributeAccessor, name) => {
+      bufferGeometry.bufferAccessors.set(name, BufferAccessor.FromAttributeAccessor(context, attributeAccessor));
+      if (bufferGeometry.count === -1) {
+        bufferGeometry.count = attributeAccessor.count;
       }
     });
 
-    vertexAttributeGeometry.primitive = geometry.primitive;
+    bufferGeometry.primitive = geometry.primitive;
 
-    return vertexAttributeGeometry;
+    return bufferGeometry;
   }
 
   setIndices(indices: BufferAccessor): void {
     this.indices = indices;
-  }
-
-  setAttribute(name: string, vertexAttribute: BufferAccessor): void {
-    // TODO this.namedVertexAttributes replace with a map for faster access
-    const namedVertexAttribute = this.namedVertexAttributes.find((item) => item.name === name);
-    if (namedVertexAttribute) {
-      namedVertexAttribute.vertexAttribute = vertexAttribute;
-    } else {
-      this.namedVertexAttributes.push(new NamedVertexAttribute(name, vertexAttribute));
-    }
   }
 }

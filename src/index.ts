@@ -17,7 +17,7 @@ import {
   RenderingContext,
   TexImage2D,
   VertexArrayObject,
-  VertexAttributeGeometry,
+  VertexAttributeGeometry as BufferGeometry,
 } from "./renderers/webgl2";
 import debug_fragment from "./shaders/materials/pbr/fragment.glsl";
 import debug_vertex from "./shaders/materials/pbr/vertex.glsl";
@@ -58,8 +58,8 @@ async function test(): Promise<void> {
   const texImage2D = new TexImage2D(context, texture.image);
   console.log(texImage2D);
 
-  const boxVertexAttributeGeometry = VertexAttributeGeometry.FromGeometry(context, mesh.geometry);
-  console.log(boxVertexAttributeGeometry);
+  const boxBufferGeometry = BufferGeometry.FromAttributeGeometry(context, mesh.geometry);
+  console.log(boxBufferGeometry);
 
   // source code definition of material
   const shaderCodeMaterial = new ShaderMaterial(debug_vertex, debug_fragment);
@@ -80,11 +80,11 @@ async function test(): Promise<void> {
     viewToScreenProjection: camera.getProjection(canvasElement.width / canvasElement.height),
   };
   console.log(sceneUniforms);
-  program.setUniformValues(materialUniforms);
+  +program.setUniformValues(materialUniforms);
   program.setUniformValues(sceneUniforms);
 
   // bind to program
-  const vertexArrayObject = new VertexArrayObject(program, boxVertexAttributeGeometry);
+  const vertexArrayObject = new VertexArrayObject(program, boxBufferGeometry);
   console.log(vertexArrayObject);
 
   // test if states work

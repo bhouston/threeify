@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { Dictionary } from "../../core/Dictionary";
 import { IDisposable } from "../../core/types";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { Pool } from "../Pool";
@@ -20,8 +21,8 @@ export class Program implements IDisposable {
   vertexShader: Shader;
   fragmentShader: Shader;
   glProgram: WebGLProgram;
-  uniforms: Array<ProgramUniform> = []; // TODO replace with a map for faster access
-  attributes: Array<ProgramAttribute> = []; // TODO replace with a map for faster access
+  uniforms = new Dictionary<string, ProgramUniform>();
+  attributes = new Dictionary<string, ProgramAttribute>();
 
   constructor(public context: RenderingContext, shaderMaterial: ShaderMaterial) {
     this.vertexShader = new Shader(this.context, shaderMaterial.vertexShaderCode, ShaderType.Vertex);
@@ -63,12 +64,13 @@ export class Program implements IDisposable {
         uniform.textureUnit = textureUnitCount;
         textureUnitCount++;
       }
-      this.uniforms.push(uniform);
+      this.uniforms.set(uniform.name, uniform);
     }
 
     const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
     for (let i = 0; i < numActiveAttributes; ++i) {
-      this.attributes.push(new ProgramAttribute(this, i));
+      const attribute = new ProgramAttribute(this, i);
+      this.attributes.set(attribute.name, attribute);
     }
   }
 
@@ -79,9 +81,9 @@ export class Program implements IDisposable {
     }
     uniformNames.forEach((uniformName) => {
       // TODO replace this.uniforms with a map for faster access
-      const programUniform = this.uniforms.find((uniform) => uniform.name === uniformName);
-      if (programUniform) {
-        programUniform.set(uniformValues[uniformName]);
+      const uniform = this.uniforms.get(uniformName);
+      if (uniform) {
+        uniform.set(uniformValues[uniformName]);
       }
     });
   }
