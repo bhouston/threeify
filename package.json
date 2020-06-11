@@ -11,7 +11,7 @@
   "homepage": "http://threeify.org",
   "author": "threeify authors",
   "bugs": {
-    "url": "https://github.com/bhouston/threeify/issues",
+    "url": "https://github.com/bhouston/threeify/issues"
   },
   "license": "ISC",
   "main": "index.ts",
