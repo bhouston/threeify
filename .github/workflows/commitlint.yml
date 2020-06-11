@@ -3,18 +3,21 @@ name: commitlint
 on:
   pull_request:
     branches: "**"
-  push:
-    branches: "**"
 
 jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
           node-version: "12.13.0"
-      - name: install commitlint
-        run: npm i @commitlint/{cli,config-conventional}
-      - name: vet last commit message
-        run: git log -1 --pretty=format:"%s" | npx commitlint
+      - run: npm i @commitlint/{cli,config-conventional}
+      - run: git fetch
+      - name: Debug commit messages passed to the linter
+        run: git log origin/${{ github.event.pull_request.base.ref }}.. --pretty=format:"%s"
+      - name: Vet PR messages
+        run: git log origin/${{ github.event.pull_request.base.ref }}.. --pretty=format:"%s" | npx commitlint
