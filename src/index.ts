@@ -19,8 +19,8 @@ import {
   VertexArrayObject,
   VertexAttributeGeometry,
 } from "./renderers/webgl2";
-import debug_fragment from "./shaders/materials/debug/fragment.glsl";
-import debug_vertex from "./shaders/materials/debug/vertex.glsl";
+import debug_fragment from "./shaders/materials/pbr/fragment.glsl";
+import debug_vertex from "./shaders/materials/pbr/vertex.glsl";
 import { Texture, TextureAccessor } from "./textures";
 
 async function test(): Promise<void> {
