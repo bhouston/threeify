@@ -8,15 +8,17 @@
     "webgpu",
     "3D"
   ],
+  "homepage": "http://threeify.org",
   "author": "threeify authors",
+  "bugs": {
+    "url": "https://github.com/bhouston/threeify/issues",
+  },
   "license": "ISC",
-  "type": "module",
+  "main": "index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/bhouston/threeify"
   },
-  "main": "index.ts",
-  "module": "index.ts",
   "scripts": {
     "build": "tsc",
     "build-glsl": "tgt -i ./src -o ./dist",
@@ -25,6 +27,7 @@
     "start": "es-dev-server --node-resolve --watch",
     "watch": "tsc --watch & tgt -i ./src -o ./dist -w"
   },
+  "dependencies": {},
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.1.0",
     "@typescript-eslint/parser": "^3.1.0",
@@ -38,15 +41,16 @@
     "threeify-glsl-transpiler": "0.1.2",
     "typescript": "^3.9.3"
   },
-  "dependencies": {},
+  "engines": {
+    "node": "12.13.0"
+  },
+  "engineStrict": true,
   "prettier": {
     "trailingComma": "all",
     "tabWidth": 2,
     "semi": true,
     "singleQuote": false
   },
-  "engineStrict": true,
-  "engines": {
-    "node": "12.13.0"
-  }
+  "module": "index.ts",
+  "type": "module"
 }
