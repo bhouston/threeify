@@ -6,13 +6,13 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../core/types";
-import { Vector2 } from "../../math/Vector2";
-import { ArrayBufferImage, Texture } from "../../textures/Texture";
-import { Pool } from "../Pool";
+import { IDisposable } from "../../../core/types";
+import { Vector2 } from "../../../math/Vector2";
+import { ArrayBufferImage, Texture } from "../../../textures/Texture";
+import { Pool } from "../../Pool";
+import { RenderingContext } from "../RenderingContext";
 import { DataType } from "./DataType";
 import { PixelFormat } from "./PixelFormat";
-import { RenderingContext } from "./RenderingContext";
 import { TexParameters } from "./TexParameters";
 
 const GL = WebGLRenderingContext;

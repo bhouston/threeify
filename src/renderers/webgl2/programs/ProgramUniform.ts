@@ -1,10 +1,10 @@
-import { Color } from "../../math/Color";
-import { Matrix4 } from "../../math/Matrix4";
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
+import { Color } from "../../../math/Color";
+import { Matrix4 } from "../../../math/Matrix4";
+import { Vector2 } from "../../../math/Vector2";
+import { Vector3 } from "../../../math/Vector3";
+import { RenderingContext } from "../RenderingContext";
+import { TexImage2D } from "../textures/TexImage2D";
 import { Program } from "./Program";
-import { RenderingContext } from "./RenderingContext";
-import { TexImage2D } from "./TexImage2D";
 import { UniformType } from "./UniformType";
 
 export const GL2 = WebGL2RenderingContext;

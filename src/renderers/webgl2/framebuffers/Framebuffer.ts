@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { RenderingContext } from "./RenderingContext";
+import { RenderingContext } from "../RenderingContext";
 import { FramebufferAttachment, VirtualFramebuffer } from "./VirtualFramebuffer";
 
 export class Framebuffer extends VirtualFramebuffer {

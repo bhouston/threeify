@@ -7,7 +7,7 @@
 
 import { Dictionary } from "../core/Dictionary";
 import { IDisposable, IVersionable } from "../core/types";
-import { PrimitiveType } from "../renderers/webgl2/PrimitiveType";
+import { PrimitiveType } from "../renderers/webgl2/buffers/PrimitiveType";
 import { AttributeAccessor } from "./AttributeAccessor";
 
 export class Geometry implements IVersionable, IDisposable {

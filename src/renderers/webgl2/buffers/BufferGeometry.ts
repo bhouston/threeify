@@ -6,11 +6,11 @@
 // * @bhouston
 //
 
-import { Dictionary } from "../../core/Dictionary";
-import { Geometry } from "../../geometry/Geometry";
+import { Dictionary } from "../../../core/Dictionary";
+import { Geometry } from "../../../geometry/Geometry";
+import { RenderingContext } from "../RenderingContext";
 import { BufferAccessor } from "./BufferAccessor";
 import { PrimitiveType } from "./PrimitiveType";
-import { RenderingContext } from "./RenderingContext";
 
 export class BufferGeometry {
   bufferAccessors = new Dictionary<string, BufferAccessor>();

@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { BufferGeometry } from "./BufferGeometry";
-import { PrimitiveType } from "./PrimitiveType";
-import { Program } from "./Program";
+import { BufferGeometry } from "./buffers/BufferGeometry";
+import { PrimitiveType } from "./buffers/PrimitiveType";
+import { Program } from "./programs/Program";
 
 export class VertexArrayObject {
   program: Program;

@@ -6,10 +6,10 @@
 // * @bhouston
 //
 
-import { AttributeAccessor } from "../../geometry/AttributeAccessor";
+import { AttributeAccessor } from "../../../geometry/AttributeAccessor";
+import { RenderingContext } from "../RenderingContext";
 import { Buffer } from "./Buffer";
 import { ComponentType } from "./ComponentType";
-import { RenderingContext } from "./RenderingContext";
 
 export class BufferAccessor {
   buffer: Buffer;

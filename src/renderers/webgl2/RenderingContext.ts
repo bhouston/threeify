@@ -9,15 +9,15 @@ import { Box2 } from "../../math/Box2";
 import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
 import { BlendState } from "./BlendState";
-import { BufferPool } from "./Buffer";
-import { CanvasFramebuffer } from "./CanvasFramebuffer";
+import { BufferPool } from "./buffers/Buffer";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
-import { Framebuffer } from "./Framebuffer";
+import { CanvasFramebuffer } from "./framebuffers/CanvasFramebuffer";
+import { Framebuffer } from "./framebuffers/Framebuffer";
+import { VirtualFramebuffer } from "./framebuffers/VirtualFramebuffer";
 import { MaskState } from "./MaskState";
-import { Program, ProgramPool } from "./Program";
-import { TexImage2DPool } from "./TexImage2D";
-import { VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Program, ProgramPool } from "./programs/Program";
+import { TexImage2DPool } from "./textures/TexImage2D";
 
 const GL = WebGLRenderingContext;
 

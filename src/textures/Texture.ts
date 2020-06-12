@@ -9,10 +9,10 @@ import { generateUUID } from "../core/generateUuid";
 import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { Vector2 } from "../math/Vector2";
 import { IPoolUser } from "../renderers/Pool";
-import { DataType } from "../renderers/webgl2/DataType";
-import { PixelFormat } from "../renderers/webgl2/PixelFormat";
-import { TextureFilter } from "../renderers/webgl2/TextureFilter";
-import { TextureWrap } from "../renderers/webgl2/TextureWrap";
+import { DataType } from "../renderers/webgl2/textures/DataType";
+import { PixelFormat } from "../renderers/webgl2/textures/PixelFormat";
+import { TextureFilter } from "../renderers/webgl2/textures/TextureFilter";
+import { TextureWrap } from "../renderers/webgl2/textures/TextureWrap";
 
 export class ArrayBufferImage {
   constructor(public data: ArrayBuffer, public width: number, public height: number) {}

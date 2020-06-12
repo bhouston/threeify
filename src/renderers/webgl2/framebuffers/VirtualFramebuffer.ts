@@ -5,18 +5,18 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../core/types";
-import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
+import { IDisposable } from "../../../core/types";
+import { Camera } from "../../../nodes/cameras/Camera";
+import { Node } from "../../../nodes/Node";
+import { ClearState } from "../ClearState";
+import { Program } from "../programs/Program";
+import { RenderingContext } from "../RenderingContext";
+import { sizeOfDataType } from "../textures/DataType";
+import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
+import { TexImage2D } from "../textures/TexImage2D";
+import { VertexArrayObject } from "../VertexArrayObject";
 import { AttachmentPoints } from "./AttachmentPoints";
 import { Attachments } from "./Attachments";
-import { ClearState } from "./ClearState";
-import { sizeOfDataType } from "./DataType";
-import { numPixelFormatComponents, PixelFormat } from "./PixelFormat";
-import { Program } from "./Program";
-import { RenderingContext } from "./RenderingContext";
-import { TexImage2D } from "./TexImage2D";
-import { VertexArrayObject } from "./VertexArrayObject";
 
 const GL = WebGLRenderingContext;
 

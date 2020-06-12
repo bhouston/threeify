@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
+import { Camera } from "../../../nodes/cameras/Camera";
+import { Node } from "../../../nodes/Node";
+import { Program } from "../programs/Program";
+import { RenderingContext } from "../RenderingContext";
+import { VertexArrayObject } from "../VertexArrayObject";
 import { Framebuffer } from "./Framebuffer";
-import { Program } from "./Program";
-import { RenderingContext } from "./RenderingContext";
-import { VertexArrayObject } from "./VertexArrayObject";
 
 export class CanvasFramebuffer extends Framebuffer {
   readonly canvas: HTMLCanvasElement;

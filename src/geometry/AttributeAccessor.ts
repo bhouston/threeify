@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ComponentType, componentTypeSizeOf } from "../renderers/webgl2/ComponentType";
+import { ComponentType, componentTypeSizeOf } from "../renderers/webgl2/buffers/ComponentType";
 import { Attribute } from "./Attribute";
 
 export class AttributeAccessor {

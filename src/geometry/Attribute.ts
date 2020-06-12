@@ -8,7 +8,7 @@
 import { generateUUID } from "../core/generateUuid";
 import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
 import { IPoolUser } from "../renderers/Pool";
-import { BufferTarget } from "../renderers/webgl2/BufferTarget";
+import { BufferTarget } from "../renderers/webgl2/buffers/BufferTarget";
 
 export class Attribute implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
   disposed = false;
