@@ -3,6 +3,9 @@ import { Matrix4 } from "../../math/Matrix4";
 import { Vector3 } from "../../math/Vector3";
 
 export function negativeZDirectionToEuler(d: Vector3): Euler3 {
+  // NOTE: This has never been tested.  It may not work.
+  // found on stackoverflow.
+
   /* Find cosφ and sinφ */
   const c1 = d.length();
   const s1 = d.z;
