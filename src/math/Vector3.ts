@@ -66,9 +66,9 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   multiplyByScalar(s: number): this {
-    this.x += s;
-    this.y += s;
-    this.z += s;
+    this.x *= s;
+    this.y *= s;
+    this.z *= s;
 
     return this;
   }
