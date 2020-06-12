@@ -123,6 +123,10 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     return this;
   }
 
+  toDirection(): Vector3 {
+    return new Vector3(this.elements[0], this.elements[4], this.elements[8]);
+  }
+
   multiply(m: Matrix4): this {
     const ae = this.elements;
     const be = m.elements;

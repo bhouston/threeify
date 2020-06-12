@@ -57,6 +57,26 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
+  sub(v: Vector3): this {
+    this.x -= v.x;
+    this.y -= v.y;
+    this.z -= v.z;
+
+    return this;
+  }
+
+  multiplyByScalar(s: number): this {
+    this.x += s;
+    this.y += s;
+    this.z += s;
+
+    return this;
+  }
+
+  normalize(): this {
+    return this.multiplyByScalar(this.length() || 1);
+  }
+
   getComponent(index: number): number {
     switch (index) {
       case 0:

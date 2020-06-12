@@ -54,6 +54,17 @@ export class Vector2 implements IPrimitive<Vector2> {
     return this;
   }
 
+  multiplyByScalar(s: number): this {
+    this.x += s;
+    this.y += s;
+
+    return this;
+  }
+
+  normalize(): this {
+    return this.multiplyByScalar(this.length() || 1);
+  }
+
   getComponent(index: number): number {
     switch (index) {
       case 0:

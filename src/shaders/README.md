@@ -8,6 +8,9 @@
 - Ability to specific the output of a shader via a uniform (e.g. depth, normal, albedo, beauty.) How to reconcile with multi-target rendering. Single output per pass to start with, then later adopt the multi-target rendering approach.
 - Adopt a layered approach where one calculates the outside layer.
 - Rederive the environment BRDFs, including the multi-scatter. No one truly understands them. Create a Mathematic workbook or an Octive workbook that derives using the final equation.\_
+- Use the GLTF-Sample-Viewer as reference.
+- Start with cubemap-based IBL and later upgrade to PMREM.
+- Have a single unified light structure for punctual lights - based on GLTF-Sample-Viewer.
 
 ## Challenges
 
@@ -18,3 +21,21 @@
 ## Changes from Three.js
 
 - A complete rewrite.
+
+## Naming Conventions
+
+- Attributes are named a\_[camelCase]
+- For each attribute that exists, create a A\_[ALLCAPS] define?
+- Uniforms are named u\_[camelCase]
+- Varyings are named v\_[camelCase]
+- For each varying that exists create a V*[ALLCAPS] define? Or combine with A*[ALLCAPS] define into a HAS\_[ALLCAPS] define?
+
+## Learnings from the glTF Sample Viewer
+
+- They pass in uniforms for which uv set to use as well.
+- They have a UVTransform matrix.
+- They have a function to get the normal, binormal, tangent matrix.
+- What is the difference between MetallicRoughnessSpecular sampler and the MetallicRoughnessSampler?
+- I guess SpecularGlossiness and Diffuse are for BlinnPhong model.
+- No support for bump maps.
+- Subsurface support, neat.
