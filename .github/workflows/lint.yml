@@ -1,12 +1,9 @@
 name: lint
 
-on:
-  pull_request:
-    branches: "**"
-  push:
-    branches: "**"
+on: [push, pull_request]
 
 jobs:
+  # Ensure that the codebase is linted: run eslint.
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -17,3 +14,22 @@ jobs:
       - run: npm i -g yarn
       - run: yarn
       - run: yarn lint
+  # Ensure that the commit messages in a PR are linted:
+  # - we want to run `<messages> | npx commitlint` (last line)
+  # - we get the messages via `git log <target_branch>.. --pretty=format:"%s"`
+  pr-commitlint:
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.13.0"
+      - run: git fetch
+      - run: npm i @commitlint/{cli,config-conventional}
+      - name: Debug PR commit messages passed to the linter
+        run: git log origin/${{ github.event.pull_request.base.ref }}.. --pretty=format:"%s"
+      - name: Vet PR commit messages
+        run: git log origin/${{ github.event.pull_request.base.ref }}.. --pretty=format:"%s" | npx commitlint
