@@ -80,7 +80,7 @@ async function test(): Promise<void> {
     viewToScreenProjection: camera.getProjection(canvasElement.width / canvasElement.height),
   };
   console.log(sceneUniforms);
-  +program.setUniformValues(materialUniforms);
+  program.setUniformValues(materialUniforms);
   program.setUniformValues(sceneUniforms);
 
   // bind to program
