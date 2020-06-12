@@ -3,6 +3,7 @@ name: lint
 on: [push, pull_request]
 
 jobs:
+  # Ensure that the codebase is linted: run eslint.
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -13,6 +14,9 @@ jobs:
       - run: npm i -g yarn
       - run: yarn
       - run: yarn lint
+  # Ensure that the commit messages in a PR are linted:
+  # - we want to run `<messages> | npx commitlint` (last line)
+  # - we get the messages via `git log <target_branch>.. --pretty=format:"%s"`
   pr-commitlint:
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/master'
