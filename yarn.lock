@@ -3066,9 +3066,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.413:
-  version "1.3.468"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.468.tgz#7ff3e162e4ca91fd972c67dd51b00e7e421ceba2"
-  integrity sha512-+KAppdklzPd5v8nLOvtDiD/S67mCT9gFRAvngYe8zuFy9azHhT9vWWH6WEPPCcyjQ1JMYVgqbN29yZ0paqxsEw==
+  version "1.3.469"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.469.tgz#05a06ec9c915127ed6c9f5b657cd1d7e11a3f944"
+  integrity sha512-O9JM6ZsFhS0uy0S2Y3G8EoNfqio3srdxCuwuJh8tKgQKa6rf7je/xQ3TIoiEaEtpf2/qFFLAGt/xB4MjuUZqRw==
 
 emoji-regex@^7.0.1:
   version "7.0.3"
@@ -3217,9 +3217,9 @@ es-dev-server@^1.53.0:
     whatwg-url "^7.0.0"
 
 es-module-lexer@^0.3.13:
-  version "0.3.20"
-  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.3.20.tgz#13661aa6d793da74684b3353ad4327d5fa59d3d3"
-  integrity sha512-kfB4R9F6FJ5Bgvxyk6W/u/a9cncXEGRyaD2UxyBhrF3+ty4qLzptgStLfe0J90o/qkSiiY0+yyzMcIIPvAOjIw==
+  version "0.3.21"
+  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.3.21.tgz#980c46eaae4431127f7581d960ce060b8482defc"
+  integrity sha512-nwMhXomqz/xmJzc7c53gTcNcbWdHIOFoBb7g8ZnFtVr5ZefAZZcbcz8Nsb0VU1xmNQGcztpfOlT0O2yLfKtTWg==
 
 es-module-shims@^0.4.6:
   version "0.4.6"
