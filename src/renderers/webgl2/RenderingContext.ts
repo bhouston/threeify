@@ -28,14 +28,14 @@ export class RenderingContext {
   readonly programPool: ProgramPool;
   readonly bufferPool: BufferPool;
 
-  private _program: Program | null = null;
-  private _framebuffer: VirtualFramebuffer;
-  private _scissor: Box2 = new Box2();
-  private _viewport: Box2 = new Box2();
-  private _depthTestState: DepthTestState = new DepthTestState();
-  private _blendState: BlendState = new BlendState();
-  private _clearState: ClearState = new ClearState();
-  private _maskState: MaskState = new MaskState();
+  #program: Program | null = null;
+  #framebuffer: VirtualFramebuffer;
+  #scissor: Box2 = new Box2();
+  #viewport: Box2 = new Box2();
+  #depthTestState: DepthTestState = new DepthTestState();
+  #blendState: BlendState = new BlendState();
+  #clearState: ClearState = new ClearState();
+  #maskState: MaskState = new MaskState();
 
   constructor(canvas: HTMLCanvasElement | null = null) {
     if (!canvas) {
@@ -55,64 +55,64 @@ export class RenderingContext {
     this.texImage2DPool = new TexImage2DPool(this);
     this.programPool = new ProgramPool(this);
     this.bufferPool = new BufferPool(this);
-    this._framebuffer = this.canvasFramebuffer;
+    this.#framebuffer = this.canvasFramebuffer;
   }
 
   set program(program: Program | null) {
-    if (this._program !== program) {
+    if (this.#program !== program) {
       if (program) {
         this.gl.useProgram(program.glProgram);
       } else {
         this.gl.useProgram(null);
       }
-      this._program = program;
+      this.#program = program;
     }
   }
   get program(): Program | null {
-    return this._program;
+    return this.#program;
   }
 
   set framebuffer(framebuffer: VirtualFramebuffer) {
-    if (this._framebuffer !== framebuffer) {
+    if (this.#framebuffer !== framebuffer) {
       if (framebuffer instanceof CanvasFramebuffer) {
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
       } else if (framebuffer instanceof Framebuffer) {
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, framebuffer.glFramebuffer);
       }
-      this._framebuffer = framebuffer;
+      this.#framebuffer = framebuffer;
     }
   }
   get framebuffer(): VirtualFramebuffer {
-    return this._framebuffer;
+    return this.#framebuffer;
   }
 
   //
   get scissor(): Box2 {
-    return this._scissor.clone();
+    return this.#scissor.clone();
   }
   set scissor(s: Box2) {
-    if (!this._scissor.equals(s)) {
+    if (!this.#scissor.equals(s)) {
       this.gl.scissor(s.x, s.y, s.width, s.height);
-      this._scissor.copy(s);
+      this.#scissor.copy(s);
     }
   }
 
   // specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
   get viewport(): Box2 {
-    return this._viewport.clone();
+    return this.#viewport.clone();
   }
   set viewport(v: Box2) {
-    if (!this._viewport.equals(v)) {
+    if (!this.#viewport.equals(v)) {
       this.gl.scissor(v.x, v.y, v.width, v.height);
-      this._viewport.copy(v);
+      this.#viewport.copy(v);
     }
   }
 
   get blendState(): BlendState {
-    return this._blendState.clone();
+    return this.#blendState.clone();
   }
   set blendState(bs: BlendState) {
-    if (!this._blendState.equals(bs)) {
+    if (!this.#blendState.equals(bs)) {
       if (bs.enabled) {
         this.gl.enable(GL.BLEND);
       } else {
@@ -120,46 +120,46 @@ export class RenderingContext {
       }
       this.gl.blendEquation(bs.equation);
       this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
-      this._blendState.copy(bs);
+      this.#blendState.copy(bs);
     }
   }
 
   get depthTestState(): DepthTestState {
-    return this._depthTestState.clone();
+    return this.#depthTestState.clone();
   }
   set depthTestState(dts: DepthTestState) {
-    if (!this._depthTestState.equals(dts)) {
+    if (!this.#depthTestState.equals(dts)) {
       if (dts.enabled) {
         this.gl.enable(GL.DEPTH_TEST);
       } else {
         this.gl.disable(GL.DEPTH_TEST);
       }
       this.gl.depthFunc(dts.func);
-      this._depthTestState.copy(dts);
+      this.#depthTestState.copy(dts);
     }
   }
 
   get clearState(): ClearState {
-    return this._clearState.clone();
+    return this.#clearState.clone();
   }
   set clearState(cs: ClearState) {
-    if (!this._clearState.equals(cs)) {
+    if (!this.#clearState.equals(cs)) {
       this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
       this.gl.clearDepth(cs.depth);
       this.gl.clearStencil(cs.stencil);
-      this._clearState.copy(cs);
+      this.#clearState.copy(cs);
     }
   }
 
   get maskState(): MaskState {
-    return this._maskState.clone();
+    return this.#maskState.clone();
   }
   set maskState(ms: MaskState) {
-    if (!this._maskState.equals(ms)) {
+    if (!this.#maskState.equals(ms)) {
       this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
       this.gl.depthMask(ms.depth);
       this.gl.stencilMask(ms.stencil);
-      this._maskState.copy(ms);
+      this.#maskState.copy(ms);
     }
   }
 
