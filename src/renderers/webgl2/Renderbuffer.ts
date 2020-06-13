@@ -12,7 +12,7 @@ export class Renderbuffer implements IDisposable {
 
     {
       const glRenderbuffer = gl.createRenderbuffer();
-      if (!glRenderbuffer) {
+      if (glRenderbuffer === null) {
         throw new Error("createRenderbuffer failed");
       }
 

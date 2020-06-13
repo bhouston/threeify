@@ -41,7 +41,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     attachmentFlags: Attachments = Attachments.Color | Attachments.Depth,
     clearState: ClearState | null = null,
   ): void {
-    if (clearState) {
+    if (clearState !== null) {
       this.context.clearState = clearState;
     } else {
       this.context.clearState = this.clearState;
@@ -77,7 +77,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   readPixels(pixelBuffer: ArrayBufferView): ArrayBufferView {
     const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoints.Color0);
-    if (!attachment) {
+    if (attachment === undefined) {
       throw new Error("can not find Color0 attachment");
     }
 

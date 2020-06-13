@@ -75,13 +75,13 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void): v
 
 export function rootLastVisitor(node: Node, callback: (node: Node) => void): void {
   callback(node);
-  if (node.parent) {
+  if (node.parent !== null) {
     rootLastVisitor(node.parent, callback);
   }
 }
 
 export function rootFirstVisitor(node: Node, callback: (node: Node) => void): void {
-  if (node.parent) {
+  if (node.parent !== null) {
     rootFirstVisitor(node.parent, callback);
   }
   callback(node);

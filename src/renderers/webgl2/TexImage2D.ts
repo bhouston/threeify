@@ -57,7 +57,7 @@ export class TexImage2D implements IDisposable {
     // Create a texture.
     {
       const glTexture = gl.createTexture();
-      if (!glTexture) {
+      if (glTexture === null) {
         throw new Error("createTexture failed");
       }
       this.glTexture = glTexture;
@@ -115,7 +115,7 @@ export class TexImage2D implements IDisposable {
 export class TexImage2DPool extends Pool<Texture, TexImage2D> {
   constructor(context: RenderingContext) {
     super(context, (context: RenderingContext, texture: Texture, texImage2D: TexImage2D | null) => {
-      if (!texImage2D) {
+      if (texImage2D === null) {
         texImage2D = new TexImage2D(context, texture.image);
       }
       // TODO: Create a new image here.

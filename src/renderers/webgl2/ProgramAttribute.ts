@@ -21,7 +21,7 @@ export class ProgramAttribute {
     // look up uniform locations
     {
       const activeInfo = gl.getActiveAttrib(program.glProgram, index);
-      if (!activeInfo) {
+      if (activeInfo === null) {
         throw new Error(`can not find attribute with index: ${index}`);
       }
 
