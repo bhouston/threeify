@@ -26,14 +26,9 @@ export class FramebufferAttachment {
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
-  context: RenderingContext;
-  attachments: Array<FramebufferAttachment>;
   private _clearState: ClearState = new ClearState();
 
-  constructor(context: RenderingContext, attachments: Array<FramebufferAttachment> = []) {
-    this.context = context;
-    this.attachments = attachments;
-  }
+  constructor(public context: RenderingContext, public attachments: Array<FramebufferAttachment> = []) {}
 
   get clearState(): ClearState {
     return this._clearState.clone();

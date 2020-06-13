@@ -9,17 +9,7 @@ import { ICloneable, IEquatable } from "../../core/types";
 import { Color } from "../../math/Color";
 
 export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState> {
-  color: Color;
-  alpha: number;
-  depth: number; // float
-  stencil: number; // integer
-
-  constructor(color: Color = new Color(), alpha = 0, depth = 1, stencil = 0) {
-    this.color = color;
-    this.alpha = alpha;
-    this.depth = depth;
-    this.stencil = stencil;
-  }
+  constructor(public color: Color = new Color(), public alpha = 0, public depth = 1, public stencil = 0) {}
 
   clone(): ClearState {
     return new ClearState(this.color, this.alpha, this.depth, this.stencil);

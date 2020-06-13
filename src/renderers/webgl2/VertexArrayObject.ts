@@ -10,14 +10,12 @@ import { PrimitiveType } from "./PrimitiveType";
 import { Program } from "./Program";
 
 export class VertexArrayObject {
-  program: Program;
   glVertexArrayObject: WebGLVertexArrayObject;
   primitive: PrimitiveType = PrimitiveType.Triangles;
   offset = 0;
   count = -1;
 
-  constructor(program: Program, bufferGeometry: BufferGeometry) {
-    this.program = program;
+  constructor(public program: Program, bufferGeometry: BufferGeometry) {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 

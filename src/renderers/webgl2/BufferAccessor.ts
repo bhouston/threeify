@@ -12,29 +12,14 @@ import { ComponentType } from "./ComponentType";
 import { RenderingContext } from "./RenderingContext";
 
 export class BufferAccessor {
-  buffer: Buffer;
-  componentType: ComponentType;
-  componentsPerVertex: number;
-  normalized: boolean;
-  vertexStride: number;
-  byteOffset: number;
-
   constructor(
-    buffer: Buffer,
-    componentType: ComponentType,
-    componentsPerVertex: number,
-    normalized: boolean,
-    vertexStride: number,
-    byteOffset: number,
-  ) {
-    this.buffer = buffer;
-    this.byteOffset = byteOffset;
-    this.componentType = componentType;
-    this.componentsPerVertex = componentsPerVertex;
-    this.normalized = normalized;
-    this.vertexStride = vertexStride;
-    this.byteOffset = byteOffset;
-  }
+    public buffer: Buffer,
+    public componentType: ComponentType,
+    public componentsPerVertex: number,
+    public normalized: boolean,
+    public vertexStride: number,
+    public byteOffset: number,
+  ) {}
 
   static FromAttributeAccessor(context: RenderingContext, attributeAccessor: AttributeAccessor): BufferAccessor {
     const attribute = attributeAccessor.attributeView;

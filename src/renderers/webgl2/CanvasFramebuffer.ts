@@ -13,12 +13,10 @@ import { RenderingContext } from "./RenderingContext";
 import { VertexArrayObject } from "./VertexArrayObject";
 
 export class CanvasFramebuffer extends Framebuffer {
-  readonly canvas: HTMLCanvasElement;
   devicePixelRatio = 1.0;
 
-  constructor(context: RenderingContext, canvas: HTMLCanvasElement) {
+  constructor(context: RenderingContext, public readonly canvas: HTMLCanvasElement) {
     super(context);
-    this.canvas = canvas;
     // TODO: add listening to the canvas and resize the canvas width/height?
   }
 

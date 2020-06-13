@@ -9,18 +9,8 @@ import { Matrix4 } from "../../math/Matrix4";
 import { Camera } from "./Camera";
 
 export class PerspectiveCamera extends Camera {
-  verticalFov: number;
-  zoom: number;
-  near: number;
-  far: number;
-
-  constructor(verticalFov: number, near: number, far: number, zoom = 1.0) {
+  constructor(public verticalFov: number, public near: number, public far: number, public zoom = 1.0) {
     super();
-
-    this.verticalFov = verticalFov;
-    this.near = near;
-    this.far = far;
-    this.zoom = zoom;
   }
 
   getProjection(viewAspectRatio = 1.0): Matrix4 {
