@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/bhouston/threeify/compare/v1.1.0...v1.1.1) (2020-06-13)
+
+
+### Bug Fixes
+
+* **commit-hook:** fix double commit hook ([502e2ec](https://github.com/bhouston/threeify/commit/502e2ecafd9b4875b210d9d26318806bb3716e89))
+
 # [1.1.0](https://github.com/bhouston/threeify/compare/v1.0.0...v1.1.0) (2020-06-13)
 
 
