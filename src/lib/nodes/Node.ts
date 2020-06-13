@@ -25,14 +25,14 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   scale: Vector3 = new Vector3(1, 1, 1);
   visible = true;
 
-  private _parentToLocalVersion = -1;
-  private _parentToLocal: Matrix4 = new Matrix4();
-  private _localToParentVersion = -1;
-  private _localToParent: Matrix4 = new Matrix4();
+  #parentToLocalVersion = -1;
+  #parentToLocal: Matrix4 = new Matrix4();
+  #localToParentVersion = -1;
+  #localToParent: Matrix4 = new Matrix4();
   // TODO: implement this one this.parent works!
-  private _localToWorldTransform: Matrix4 = new Matrix4();
+  #localToWorldTransform: Matrix4 = new Matrix4();
   // TODO: implement this one this.parent works!
-  private _worldToLocalTransform: Matrix4 = new Matrix4();
+  #worldToLocalTransform: Matrix4 = new Matrix4();
 
   constructor() {
     this.children = new NodeCollection(this);
@@ -50,18 +50,18 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   }
 
   get localToParentTransform(): Matrix4 {
-    if (this._parentToLocalVersion !== this.version) {
-      this._localToParent.compose(this.position, new Quaternion().setFromEuler(this.rotation), this.scale);
-      this._parentToLocalVersion = this.version;
+    if (this.#parentToLocalVersion !== this.version) {
+      this.#localToParent.compose(this.position, new Quaternion().setFromEuler(this.rotation), this.scale);
+      this.#parentToLocalVersion = this.version;
     }
-    return this._localToParent;
+    return this.#localToParent;
   }
   get parentToLocalTransform(): Matrix4 {
-    if (this._localToParentVersion !== this.version) {
-      this._parentToLocal.copy(this.localToParentTransform).invert();
-      this._localToParentVersion = this.version;
+    if (this.#localToParentVersion !== this.version) {
+      this.#parentToLocal.copy(this.localToParentTransform).invert();
+      this.#localToParentVersion = this.version;
     }
-    return this._localToParent;
+    return this.#localToParent;
   }
 }
 

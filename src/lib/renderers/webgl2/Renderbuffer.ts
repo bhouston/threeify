@@ -5,7 +5,7 @@ import { RenderingContext } from "./RenderingContext";
 export class Renderbuffer implements IDisposable {
   disposed = false;
   glRenderbuffer: WebGLRenderbuffer;
-  private _clearState: ClearState = new ClearState();
+  #clearState: ClearState = new ClearState();
 
   constructor(public context: RenderingContext) {
     const gl = this.context.gl;

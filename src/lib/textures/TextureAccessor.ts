@@ -5,8 +5,8 @@ import { Texture } from "./Texture";
 
 export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<TextureAccessor>, IVersionable {
   version = 0;
-  private _uvTransform = new Matrix3();
-  private _uvTransformVersion = -1;
+  #uvTransform = new Matrix3();
+  #uvTransformVersion = -1;
 
   constructor(
     public texture: Texture | null = null,
@@ -30,13 +30,13 @@ export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<T
   }
 
   get uvTransform(): Matrix3 {
-    if (this._uvTransformVersion < this.version) {
-      this._uvTransform.makeTranslation2(this.uvTranslation);
-      this._uvTransform.makeConcatenation(this._uvTransform, new Matrix3().makeRotation2FromAngle(this.uvRotation));
-      this._uvTransform.makeConcatenation(this._uvTransform, new Matrix3().makeScale2(this.uvScale));
-      this._uvTransformVersion = this.version;
+    if (this.#uvTransformVersion < this.version) {
+      this.#uvTransform.makeTranslation2(this.uvTranslation);
+      this.#uvTransform.makeConcatenation(this.#uvTransform, new Matrix3().makeRotation2FromAngle(this.uvRotation));
+      this.#uvTransform.makeConcatenation(this.#uvTransform, new Matrix3().makeScale2(this.uvScale));
+      this.#uvTransformVersion = this.version;
     }
-    return this._uvTransform;
+    return this.#uvTransform;
   }
 
   dirty(): void {
