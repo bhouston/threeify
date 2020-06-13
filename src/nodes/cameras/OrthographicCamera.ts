@@ -10,20 +10,14 @@ import { Vector2 } from "../../math/Vector2";
 import { Camera } from "./Camera";
 
 export class OrthographicCamera extends Camera {
-  height: number;
-  near: number;
-  far: number;
-  center: Vector2;
-  zoom: number;
-
-  constructor(height: number, near: number, far: number, center = new Vector2(0, 0), zoom = 1) {
+  constructor(
+    public height: number,
+    public near: number,
+    public far: number,
+    public center = new Vector2(),
+    public zoom = 1,
+  ) {
     super();
-
-    this.height = height;
-    this.near = near;
-    this.far = far;
-    this.center = center;
-    this.zoom = zoom;
   }
 
   getProjection(viewAspectRatio = 1.0): Matrix4 {

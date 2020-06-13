@@ -11,8 +11,6 @@ export const GL2 = WebGL2RenderingContext;
 
 export class ProgramUniform {
   context: RenderingContext;
-  program: Program;
-  index: number;
   name: string;
   size: number;
   uniformType: UniformType;
@@ -20,10 +18,8 @@ export class ProgramUniform {
   valueHashCode = 0;
   textureUnit = -1;
 
-  constructor(program: Program, index: number) {
+  constructor(public program: Program, public index: number) {
     this.context = program.context;
-    this.program = program;
-    this.index = index;
     this.name = name;
 
     const gl = program.context.gl;

@@ -9,27 +9,18 @@ import { ComponentType, componentTypeSizeOf } from "../renderers/webgl2/Componen
 import { Attribute } from "./Attribute";
 
 export class AttributeAccessor {
-  attributeView: Attribute;
-  byteOffset: number;
-  componentType: ComponentType;
-  componentsPerVertex: number;
   count: number;
   byteLength: number;
   // minExtent: ComponentType;
   // maxExtent: ComponentType;
 
   constructor(
-    attributeView: Attribute,
-    byteOffset: number,
-    componentType: ComponentType,
-    componentsPerVertex: number,
+    public attributeView: Attribute,
+    public byteOffset: number,
+    public componentType: ComponentType,
+    public componentsPerVertex: number,
     count: number,
   ) {
-    this.attributeView = attributeView;
-    this.byteOffset = byteOffset;
-    this.componentType = componentType;
-    this.componentsPerVertex = componentsPerVertex;
-
     const bytesPerComponent = componentTypeSizeOf(this.componentType);
     this.count = count < 0 ? attributeView.byteLength / bytesPerComponent : count;
     this.byteLength = bytesPerComponent * this.componentsPerVertex * this.count;

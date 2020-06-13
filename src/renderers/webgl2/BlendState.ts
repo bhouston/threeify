@@ -91,28 +91,14 @@ export enum BlendFunc {
 }
 
 export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState> {
-  enabled: boolean;
-  sourceRGBFactor: BlendFunc;
-  destRGBFactor: BlendFunc;
-  sourceAlphaFactor: BlendFunc;
-  destAlphaFactor: BlendFunc;
-  equation: BlendEquation;
-
   constructor(
-    enabled = true,
-    sourceRGBFactor: BlendFunc = BlendFunc.One,
-    destRGBFactor: BlendFunc = BlendFunc.Zero,
-    sourceAlphaFactor: BlendFunc = BlendFunc.One,
-    destAlphaFactor: BlendFunc = BlendFunc.Zero,
-    equation: BlendEquation = BlendEquation.Add,
-  ) {
-    this.enabled = enabled;
-    this.sourceRGBFactor = sourceRGBFactor;
-    this.destRGBFactor = destRGBFactor;
-    this.sourceAlphaFactor = sourceAlphaFactor;
-    this.destAlphaFactor = destAlphaFactor;
-    this.equation = equation;
-  }
+    public enabled = true,
+    public sourceRGBFactor: BlendFunc = BlendFunc.One,
+    public destRGBFactor: BlendFunc = BlendFunc.Zero,
+    public sourceAlphaFactor: BlendFunc = BlendFunc.One,
+    public destAlphaFactor: BlendFunc = BlendFunc.Zero,
+    public equation: BlendEquation = BlendEquation.Add,
+  ) {}
 
   clone(): BlendState {
     return new BlendState(
