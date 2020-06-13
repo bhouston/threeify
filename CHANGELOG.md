@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/bhouston/threeify/compare/v1.0.0...v1.1.0) (2020-06-13)
+
+
+### Features
+
+* **changelog:** store the commitizen git hook ([#34](https://github.com/bhouston/threeify/issues/34)) ([05f72f6](https://github.com/bhouston/threeify/commit/05f72f6ccb17146c8756aab6070bbb013ac76e7c))
+
 # 1.0.0 (2020-06-13)
 
 
