@@ -23,6 +23,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   position: Vector3 = new Vector3();
   rotation: Euler3 = new Euler3();
   scale: Vector3 = new Vector3(1, 1, 1);
+  visible = true;
 
   private _parentToLocalVersion = -1;
   private _parentToLocal: Matrix4 = new Matrix4();
