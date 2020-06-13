@@ -7440,11 +7440,6 @@ shady-css-scoped-element@^0.0.2:
   resolved "https://registry.yarnpkg.com/shady-css-scoped-element/-/shady-css-scoped-element-0.0.2.tgz#c538fcfe2317e979cd02dfec533898b95b4ea8fe"
   integrity sha512-Dqfl70x6JiwYDujd33ZTbtCK0t52E7+H2swdWQNSTzfsolSa6LJHnTpN4T9OpJJEq4bxuzHRLFO9RBcy/UfrMQ==
 
-shared-git-hooks@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/shared-git-hooks/-/shared-git-hooks-1.2.1.tgz#f17f59677cbf8fc3ee8ee71934a9de70a0920cce"
-  integrity sha1-8X9ZZ3y/j8PujucZNKnecKCSDM4=
-
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
