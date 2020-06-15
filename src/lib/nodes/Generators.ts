@@ -1,6 +1,6 @@
 import { Node } from "./Node";
 
-function* traverse(root: Node): Generator<Node, void, void> {
+export function* traverse(root: Node): Generator<Node, void, void> {
   const stack = [];
   stack.push(root);
   while (stack.length > 0) {

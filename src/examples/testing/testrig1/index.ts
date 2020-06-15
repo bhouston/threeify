@@ -1,12 +1,12 @@
-import { box } from "../../../src/geometry/primitives/Box";
-import { fetchImage } from "../../../src/io/loaders/Image";
-import { PhysicalMaterial } from "../../../src/materials/PhysicalMaterial";
-import { ShaderMaterial } from "../../../src/materials/ShaderMaterial";
-import { Color } from "../../../src/math/Color";
-import { PerspectiveCamera } from "../../../src/nodes/cameras/PerspectiveCamera";
-import { PointLight } from "../../../src/nodes/lights/PointLight";
-import { Mesh } from "../../../src/nodes/Mesh";
-import { Node } from "../../../src/nodes/Node";
+import { box } from "@threeify/geometry/primitives/Box";
+import { fetchImage } from "@threeify/io/loaders/Image";
+import { PhysicalMaterial } from "@threeify/materials/PhysicalMaterial";
+import { ShaderMaterial } from "@threeify/materials/ShaderMaterial";
+import { Color } from "@threeify/math/Color";
+import { PerspectiveCamera } from "@threeify/nodes/cameras/PerspectiveCamera";
+import { PointLight } from "@threeify/nodes/lights/PointLight";
+import { Mesh } from "@threeify/nodes/Mesh";
+import { Node } from "@threeify/nodes/Node";
 import {
   Attachments,
   BlendState,
@@ -18,10 +18,10 @@ import {
   TexImage2D,
   VertexArrayObject,
   VertexAttributeGeometry as BufferGeometry,
-} from "../../../src/renderers/webgl2";
-import { Texture, TextureAccessor } from "../../../src/textures";
-import debug_fragment from "./shaders/materials/pbr/fragment.glsl";
-import debug_vertex from "./shaders/materials/pbr/vertex.glsl";
+} from "@threeify/renderers/webgl2";
+import debug_fragment from "@threeify/shaders/materials/pbr/fragment.glsl";
+import debug_vertex from "@threeify/shaders/materials/pbr/vertex.glsl";
+import { Texture, TextureAccessor } from "@threeify/textures";
 
 async function test(): Promise<void> {
   // setup webgl2

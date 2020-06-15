@@ -1,10 +1,10 @@
-import { box } from "../../../src/geometry/primitives/Box";
-import { MaterialOutputs } from "../../../src/materials/MaterialOutputs";
-import { PhysicalMaterial } from "../../../src/materials/PhysicalMaterial";
-import { PerspectiveCamera } from "../../../src/nodes/cameras/PerspectiveCamera";
-import { Mesh } from "../../../src/nodes/Mesh";
-import { Node } from "../../../src/nodes/Node";
-import { RenderingContext } from "../../../src/renderers/webgl2";
+import { box } from "@threeify/geometry/primitives/Box";
+import { MaterialOutputs } from "@threeify/materials/MaterialOutputs";
+import { PhysicalMaterial } from "@threeify/materials/PhysicalMaterial";
+import { PerspectiveCamera } from "@threeify/nodes/cameras/PerspectiveCamera";
+import { Mesh } from "@threeify/nodes/Mesh";
+import { Node } from "@threeify/nodes/Node";
+import { RenderingContext } from "@threeify/renderers/webgl2";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
 camera.position.x = 1;

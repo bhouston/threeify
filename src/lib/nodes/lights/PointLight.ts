@@ -10,6 +10,7 @@
 
 import { Color } from "../../math/Color";
 import { Light } from "./Light";
+import { LightType } from "./LightType";
 
 /**
  * Point lights emit light in all directions from their position in space; rotation and
@@ -25,7 +26,7 @@ export class PointLight extends Light {
    * @param range - The distance cutoff at which the light's intensity reaches zero.  If <= 0, assumed to be infinite.
    */
   constructor(color: Color = new Color(1, 1, 1), intensity = 1.0, public range = -1) {
-    super(color, intensity);
+    super(LightType.Point, color, intensity);
   }
 
   get power(): number {
