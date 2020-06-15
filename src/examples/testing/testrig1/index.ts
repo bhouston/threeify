@@ -1,3 +1,4 @@
+// TODO: figure out a way to get rid of the long "../../../lib" from the includes
 import { box } from "../../../lib/geometry/primitives/Box";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";

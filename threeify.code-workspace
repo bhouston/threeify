@@ -1,5 +1,6 @@
 {
-  "folders": [{
+  "folders": [
+    {
       "path": "./"
     },
     {
@@ -18,7 +19,8 @@
       "knisterpeter.vscode-commitizen",
       "shardulm94.trailing-spaces",
       "streetsidesoftware.code-spell-checker",
-      "waderyan.gitblame"
+      "waderyan.gitblame",
+      "orta.vscode-jest"
     ]
   },
   "settings": {
