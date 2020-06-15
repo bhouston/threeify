@@ -21,11 +21,11 @@
   },
   "scripts": {
     "build": "tsc",
-    "build-glsl": "tgt -i ./src -o ./dist",
+    "build-glsl": "tgt -i ./src -o ./dist/src",
     "dev": "npm run watch & npm start",
     "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
-    "watch": "tsc --watch & tgt -i ./src -o ./dist -w"
+    "watch": "tsc --watch & tgt -i ./src -o ./dist/src -w"
   },
   "dependencies": {},
   "devDependencies": {

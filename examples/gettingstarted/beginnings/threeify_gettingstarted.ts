@@ -1,10 +1,10 @@
-import { box } from "./geometry/primitives/Box";
-import { MaterialOutputs } from "./materials/MaterialOutputs";
-import { PhysicalMaterial } from "./materials/PhysicalMaterial";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
-import { RenderingContext } from "./renderers/webgl2";
+import { box } from "../../../src/geometry/primitives/Box";
+import { MaterialOutputs } from "../../../src/materials/MaterialOutputs";
+import { PhysicalMaterial } from "../../../src/materials/PhysicalMaterial";
+import { PerspectiveCamera } from "../../../src/nodes/cameras/PerspectiveCamera";
+import { Mesh } from "../../../src/nodes/Mesh";
+import { Node } from "../../../src/nodes/Node";
+import { RenderingContext } from "../../../src/renderers/webgl2";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
 camera.position.x = 1;

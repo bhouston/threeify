@@ -1,12 +1,12 @@
-import { box } from "./geometry/primitives/Box";
-import { fetchImage } from "./io/loaders/Image";
-import { PhysicalMaterial } from "./materials/PhysicalMaterial";
-import { ShaderMaterial } from "./materials/ShaderMaterial";
-import { Color } from "./math/Color";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { PointLight } from "./nodes/lights/PointLight";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
+import { box } from "../../../src/geometry/primitives/Box";
+import { fetchImage } from "../../../src/io/loaders/Image";
+import { PhysicalMaterial } from "../../../src/materials/PhysicalMaterial";
+import { ShaderMaterial } from "../../../src/materials/ShaderMaterial";
+import { Color } from "../../../src/math/Color";
+import { PerspectiveCamera } from "../../../src/nodes/cameras/PerspectiveCamera";
+import { PointLight } from "../../../src/nodes/lights/PointLight";
+import { Mesh } from "../../../src/nodes/Mesh";
+import { Node } from "../../../src/nodes/Node";
 import {
   Attachments,
   BlendState,
@@ -18,10 +18,10 @@ import {
   TexImage2D,
   VertexArrayObject,
   VertexAttributeGeometry as BufferGeometry,
-} from "./renderers/webgl2";
+} from "../../../src/renderers/webgl2";
+import { Texture, TextureAccessor } from "../../../src/textures";
 import debug_fragment from "./shaders/materials/pbr/fragment.glsl";
 import debug_vertex from "./shaders/materials/pbr/vertex.glsl";
-import { Texture, TextureAccessor } from "./textures";
 
 async function test(): Promise<void> {
   // setup webgl2
@@ -80,7 +80,7 @@ async function test(): Promise<void> {
     viewToScreenProjection: camera.getProjection(canvasElement.width / canvasElement.height),
   };
   console.log(sceneUniforms);
-  +program.setUniformValues(materialUniforms);
+  program.setUniformValues(materialUniforms);
   program.setUniformValues(sceneUniforms);
 
   // bind to program

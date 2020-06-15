@@ -13,7 +13,6 @@ struct PunctualLight
     float range;
     float innerConeCos;
     float outerConeCos;
-    vec2 padding;
 };
 
 const int LightType_Directional = 0;
