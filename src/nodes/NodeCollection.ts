@@ -1,12 +1,9 @@
 import { Node } from "./Node";
 
 export class NodeCollection {
-  private parent: Node;
   private array: Array<Node> = [];
 
-  constructor(parent: Node) {
-    this.parent = parent;
-  }
+  constructor(public parent: Node) {}
 
   add(node: Node): this {
     this.array.push(node);

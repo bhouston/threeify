@@ -13,14 +13,9 @@ export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
 export type UserResourceUpdater<U, R> = (context: RenderingContext, user: U, resource: R | null) => R;
 
 class UserResource<U extends IPoolUser, R extends IDisposable> {
-  user: U;
-  resource: R;
   resourceVersion = -1;
 
-  constructor(user: U, resource: R) {
-    this.user = user;
-    this.resource = resource;
-  }
+  constructor(public user: U, public resource: R) {}
 
   update(context: RenderingContext, updater: UserResourceUpdater<U, R>): boolean {
     let disposed = false;
@@ -39,15 +34,10 @@ class UserResource<U extends IPoolUser, R extends IDisposable> {
 }
 
 export class Pool<U extends IPoolUser, R extends IDisposable> {
-  context: RenderingContext;
-  updater: UserResourceUpdater<U, R>;
   // TODO replace the following array with a map for faster access.
   userResources: Array<UserResource<U, R>> = [];
 
-  constructor(context: RenderingContext, updater: UserResourceUpdater<U, R>) {
-    this.context = context;
-    this.updater = updater;
-  }
+  constructor(public context: RenderingContext, public updater: UserResourceUpdater<U, R>) {}
 
   request(user: U): UserResource<U, R> {
     let userResource = this.userResources.find((userResource) => userResource.user.uuid === user.uuid);

@@ -11,16 +11,9 @@ import { ShaderType } from "./ShaderType";
 
 export class Shader implements IDisposable {
   disposed = false;
-  context: RenderingContext;
-  sourceCode: string;
-  shaderType: ShaderType;
   glShader: WebGLShader;
 
-  constructor(context: RenderingContext, sourceCode: string, shaderType: ShaderType) {
-    this.context = context;
-    this.sourceCode = sourceCode;
-    this.shaderType = shaderType;
-
+  constructor(public context: RenderingContext, public sourceCode: string, public shaderType: ShaderType) {
     const gl = this.context.gl;
 
     // Create the shader object

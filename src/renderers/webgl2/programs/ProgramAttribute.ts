@@ -8,16 +8,12 @@
 import { Program } from "./Program";
 
 export class ProgramAttribute {
-  program: Program;
-  index: number;
   name: string;
   size: number;
   type: number;
   glLocation: number; // attributes are indexed
 
-  constructor(program: Program, index: number) {
-    this.program = program;
-    this.index = index;
+  constructor(public program: Program, public index: number) {
     this.name = name;
 
     const gl = program.context.gl;

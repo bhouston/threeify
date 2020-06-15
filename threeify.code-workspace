@@ -48,6 +48,7 @@
       "bitmask",
       "cflint",
       "cloc",
+      "commitlint",
       "destructured",
       "exocortex",
       "framebuffer",

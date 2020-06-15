@@ -39,38 +39,19 @@ export enum TextureSourceType {
 
 export class TexImage2D implements IDisposable {
   disposed = false;
-  context: RenderingContext;
   glTexture: WebGLTexture;
-  image: ArrayBufferImage | HTMLImageElement;
-  target: TextureTarget;
-  level: number;
-  internalFormat: PixelFormat;
-  size: Vector2;
-  pixelFormat: PixelFormat;
-  dataType: DataType;
-  texParameters: TexParameters;
 
   constructor(
-    context: RenderingContext,
-    image: ArrayBufferImage | HTMLImageElement,
-    target: TextureTarget = TextureTarget.Texture2D,
-    level = 0,
-    internalFormat: PixelFormat = PixelFormat.RGBA,
-    size: Vector2 = new Vector2(0, 0),
-    pixelFormat: PixelFormat = PixelFormat.RGBA,
-    dataType: DataType = DataType.UnsignedByte,
-    texParameters: TexParameters = new TexParameters(),
+    public context: RenderingContext,
+    public image: ArrayBufferImage | HTMLImageElement,
+    public target: TextureTarget = TextureTarget.Texture2D,
+    public level = 0,
+    public internalFormat: PixelFormat = PixelFormat.RGBA,
+    public size: Vector2 = new Vector2(0, 0),
+    public pixelFormat: PixelFormat = PixelFormat.RGBA,
+    public dataType: DataType = DataType.UnsignedByte,
+    public texParameters: TexParameters = new TexParameters(),
   ) {
-    this.context = context;
-    this.image = image;
-    this.target = target;
-    this.level = level;
-    this.internalFormat = internalFormat;
-    this.size = size;
-    this.pixelFormat = pixelFormat;
-    this.dataType = dataType;
-    this.texParameters = texParameters;
-
     const gl = this.context.gl;
 
     // Create a texture.
