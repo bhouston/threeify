@@ -24,13 +24,13 @@ This library is currently in alpha and in midst of significant development. It m
 This code creates a scene, a camera, and a geometric cube, and it adds the cube to the scene. It then creates a `WebGL` renderer context for the scene and camera, and it adds that viewport to the `document.body` element. Finally, it animates the cube within the scene for the camera.
 
 ```typescript
-import { box } from "./geometry/primitives/Box";
-import { MaterialOutputs } from "./materials/MaterialOutputs";
-import { PhysicalMaterial } from "./materials/PhysicalMaterial";
-import { PerspectiveCamera } from "./nodes/cameras/PerspectiveCamera";
-import { Mesh } from "./nodes/Mesh";
-import { Node } from "./nodes/Node";
-import { RenderingContext } from "./renderers/webgl2";
+import { box } from "@threeify/geometry/primitives/Box";
+import { MaterialOutputs } from "@threeify/materials/MaterialOutputs";
+import { PhysicalMaterial } from "@threeify/materials/PhysicalMaterial";
+import { PerspectiveCamera } from "@threeify/nodes/cameras/PerspectiveCamera";
+import { Mesh } from "@threeify/nodes/Mesh";
+import { Node } from "@threeify/nodes/Node";
+import { RenderingContext } from "@threeify/renderers/webgl2";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
 camera.position.x = 1;
@@ -48,7 +48,7 @@ const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;
 document.body.appendChild(canvasFramebuffer.canvas);
 
-function animate() {
+function animate(): void {
   requestAnimationFrame(animate);
 
   mesh.rotation.x += 0.01;

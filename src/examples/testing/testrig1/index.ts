@@ -1,4 +1,3 @@
-// TODO: figure out a way to get rid of the long "@threeify" from the includes
 import { box } from "@threeify/geometry/primitives/Box";
 import { fetchImage } from "@threeify/io/loaders/Image";
 import { PhysicalMaterial } from "@threeify/materials/PhysicalMaterial";
