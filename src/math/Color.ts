@@ -54,7 +54,13 @@ export class Color implements IPrimitive<Color> {
 
     return this;
   }
+  multiplyByScalar(s: number): Color {
+    this.r *= s;
+    this.g *= s;
+    this.b *= s;
 
+    return this;
+  }
   setFromHex(hex: number): this {
     hex = Math.floor(hex);
 
