@@ -7,18 +7,13 @@
     "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./src",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-      "*": ["*"],
-      "@threeify/*": ["lib/*"]
-    }
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts", "examples/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": []
 }
