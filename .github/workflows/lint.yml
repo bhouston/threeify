@@ -1,6 +1,6 @@
-name: lint and release
+name: lint
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   # Ensure that the codebase is linted: run eslint.
@@ -16,7 +16,7 @@ jobs:
       - run: yarn lint
   # Ensure that the commit messages in a PR are linted:
   # - we want to run `<messages> | npx commitlint` (last line)
-  # - we get the messages via `git log <target_branch>.. --pretty=format:"%s"`
+  # - we debug the messages via `git log <target_branch>.. --pretty=format:"%s"`
   pr-commitlint:
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/master'
@@ -33,19 +33,3 @@ jobs:
         run: git log origin/${{ github.event.pull_request.base.ref }}.. --pretty=format:"%s"
       - name: Vet PR commit messages
         run: git log origin/${{ github.event.pull_request.base.ref }}.. --pretty=format:"%s" | npx commitlint
-  release:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    needs: [lint] # Do not release if the linter fails. pr-commitlint is missing because it doesn't run on master.
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "12.13.0"
-      - run: npm i -g yarn
-      - run: yarn
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
