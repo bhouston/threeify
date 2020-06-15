@@ -120,7 +120,6 @@ export function box(
   // build geometry
 
   const geometry = new Geometry();
-
   geometry.setIndices(new Int32AttributeAccessor(new Int32Array(indices), 1));
   geometry.attributeAccessors.set("position", new Float32AttributeAccessor(new Float32Array(vertices), 3));
   geometry.attributeAccessors.set("normal", new Float32AttributeAccessor(new Float32Array(normals), 3));
