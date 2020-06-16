@@ -19,7 +19,7 @@ export class Buffer implements IDisposable {
     // Create a buffer and put three 2d clip space points in it
     {
       const glBuffer = gl.createBuffer();
-      if (!glBuffer) {
+      if (glBuffer === null) {
         throw new Error("createBuffer failed");
       }
 
@@ -61,7 +61,7 @@ export class Buffer implements IDisposable {
 export class BufferPool extends Pool<Attribute, Buffer> {
   constructor(context: RenderingContext) {
     super(context, (context: RenderingContext, attribute: Attribute, buffer: Buffer | null) => {
-      if (!buffer) {
+      if (buffer === null) {
         return new Buffer(context, attribute.arrayBuffer, attribute.target);
       }
       buffer.update(attribute.arrayBuffer, attribute.target);

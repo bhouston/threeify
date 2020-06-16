@@ -27,7 +27,7 @@ export class ProgramUniform {
     // look up uniform locations
     {
       const activeInfo = gl.getActiveUniform(program.glProgram, index);
-      if (!activeInfo) {
+      if (activeInfo === null) {
         throw new Error(`Can not find uniform with index: ${index}`);
       }
 
@@ -36,7 +36,7 @@ export class ProgramUniform {
       this.uniformType = activeInfo.type as UniformType;
 
       const glLocation = gl.getUniformLocation(program.glProgram, this.name);
-      if (!glLocation) {
+      if (glLocation === null) {
         throw new Error(`can not find uniform named: ${this.name}`);
       }
 

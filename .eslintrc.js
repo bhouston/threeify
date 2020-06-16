@@ -59,6 +59,10 @@ module.exports = {
     "@typescript-eslint/no-unsafe-return": 2,
     "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/prefer-nullish-coalescing": 2,
+    "@typescript-eslint/strict-boolean-expressions": [
+      1,
+      { allowString: false, allowNumber: false, allowNullableObject: false },
+    ],
     "cflint/no-this-assignment": 1,
     curly: [2, "all"],
     eqeqeq: "error",

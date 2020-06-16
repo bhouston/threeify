@@ -20,7 +20,7 @@ export class BufferGeometry {
 
   static FromAttributeGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
     const bufferGeometry = new BufferGeometry();
-    if (geometry.indices) {
+    if (geometry.indices !== null) {
       bufferGeometry.setIndices(BufferAccessor.FromAttributeAccessor(context, geometry.indices));
       bufferGeometry.count = geometry.indices.count;
     }

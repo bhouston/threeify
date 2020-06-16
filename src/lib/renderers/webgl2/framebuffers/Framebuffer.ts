@@ -18,7 +18,7 @@ export class Framebuffer extends VirtualFramebuffer {
 
     {
       const glFramebuffer = gl.createFramebuffer();
-      if (!glFramebuffer) {
+      if (glFramebuffer === null) {
         throw new Error("createFramebuffer failed");
       }
 

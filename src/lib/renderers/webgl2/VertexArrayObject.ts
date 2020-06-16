@@ -24,7 +24,7 @@ export class VertexArrayObject {
     {
       // Create a vertex array object (attribute state)
       const vao = gl.createVertexArray();
-      if (!vao) {
+      if (vao === null) {
         throw new Error("createVertexArray failed");
       }
       this.glVertexArrayObject = vao;
@@ -35,7 +35,7 @@ export class VertexArrayObject {
 
     bufferGeometry.bufferAccessors.forEach((bufferAccessor, name) => {
       const attribute = this.program.attributes.get(name);
-      if (!attribute) {
+      if (attribute === null) {
         // only bind the attributes that exist in the program.
         return;
       }

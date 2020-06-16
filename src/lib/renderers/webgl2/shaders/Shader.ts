@@ -19,7 +19,7 @@ export class Shader implements IDisposable {
     // Create the shader object
     {
       const glShader = gl.createShader(shaderType);
-      if (!glShader) {
+      if (glShader === null) {
         throw new Error("createShader failed");
       }
 
@@ -34,6 +34,7 @@ export class Shader implements IDisposable {
 
     // Check if it compiled
     const success = gl.getShaderParameter(this.glShader, gl.COMPILE_STATUS);
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!success) {
       // Something went wrong during compilation; get the error
       const infoLog = gl.getShaderInfoLog(this.glShader);

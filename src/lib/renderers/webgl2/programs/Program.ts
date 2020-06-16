@@ -33,7 +33,7 @@ export class Program implements IDisposable {
     // create a program.
     {
       const glProgram = gl.createProgram();
-      if (!glProgram) {
+      if (glProgram === null) {
         throw new Error("createProgram failed");
       }
 
@@ -49,6 +49,7 @@ export class Program implements IDisposable {
 
     // Check if it linked.
     const success = gl.getProgramParameter(this.glProgram, gl.LINK_STATUS);
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!success) {
       // something went wrong with the link
       const infoLog = gl.getProgramInfoLog(this.glProgram);
@@ -76,13 +77,13 @@ export class Program implements IDisposable {
 
   setUniformValues(uniformValues: any, uniformNames: string[] | null = null): void {
     this.context.program = this;
-    if (!uniformNames) {
+    if (uniformNames === null) {
       uniformNames = Object.keys(uniformValues) as string[];
     }
     uniformNames.forEach((uniformName) => {
       // TODO replace this.uniforms with a map for faster access
       const uniform = this.uniforms.get(uniformName);
-      if (uniform) {
+      if (uniform !== null) {
         uniform.set(uniformValues[uniformName]);
       }
     });
@@ -102,7 +103,7 @@ export class Program implements IDisposable {
 export class ProgramPool extends Pool<ShaderMaterial, Program> {
   constructor(context: RenderingContext) {
     super(context, (context: RenderingContext, shaderCodeMaterial: ShaderMaterial, program: Program | null) => {
-      if (program) {
+      if (program !== null) {
         program.dispose();
       }
       return new Program(context, shaderCodeMaterial);

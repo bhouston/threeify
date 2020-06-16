@@ -5,13 +5,14 @@ import { Vector3 } from "../../math/Vector3";
 export function negativeZDirectionToEuler(d: Vector3): Euler3 {
   // NOTE: This has never been tested.  It may not work.
   // found on stackoverflow.
+  console.warn("This has never been tested.");
 
   /* Find cosφ and sinφ */
   const c1 = d.length();
   const s1 = d.z;
   /* Find cosθ and sinθ; if gimbal lock, choose (1,0) arbitrarily */
-  const c2 = c1 ? d.x / c1 : 1.0;
-  const s2 = c1 ? d.y / c1 : 0.0;
+  const c2 = c1 !== 0 ? d.x / c1 : 1.0;
+  const s2 = c1 !== 0 ? d.y / c1 : 0.0;
 
   const m = new Matrix4();
   const te = m.elements;
@@ -39,6 +40,7 @@ export function negativeZDirectionToEuler(d: Vector3): Euler3 {
 }
 
 export function eulerToNegativeZDirection(e: Euler3): Vector3 {
+  console.warn("This has never been tested.");
   const m = new Matrix4().makeRotationFromEuler(e);
   const te = m.elements;
   return new Vector3(te[2], te[6], te[10]);

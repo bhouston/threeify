@@ -16,12 +16,12 @@ export class Dictionary<K, V> {
   }
 
   contains(key: K): boolean {
-    return !!this.entries.find((item) => item.key === key);
+    return this.entries.find((item) => item.key === key) !== undefined;
   }
 
   get(key: K): V | null {
     const entry = this.entries.find((item) => item.key === key);
-    if (entry) {
+    if (entry !== undefined) {
       return entry.value;
     }
     return null;
@@ -29,7 +29,7 @@ export class Dictionary<K, V> {
 
   set(key: K, value: V): void {
     const entry = this.entries.find((item) => item.key === key);
-    if (!entry) {
+    if (entry === undefined) {
       this.entries.push(new DictionaryEntry<K, V>(key, value));
     } else {
       entry.value = value;

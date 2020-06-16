@@ -5,7 +5,7 @@ export function* traverse(root: Node): Generator<Node, void, void> {
   stack.push(root);
   while (stack.length > 0) {
     const node = stack.pop();
-    if (node) {
+    if (node !== undefined) {
       yield node;
       node.children.forEach((childNode) => {
         stack.push(childNode);

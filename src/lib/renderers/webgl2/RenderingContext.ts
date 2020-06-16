@@ -38,14 +38,14 @@ export class RenderingContext {
   #maskState: MaskState = new MaskState();
 
   constructor(canvas: HTMLCanvasElement | null = null) {
-    if (!canvas) {
+    if (canvas === null) {
       canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas") as HTMLCanvasElement;
       canvas.style.width = "100%";
       canvas.style.height = "100%";
     }
     {
       const gl = canvas.getContext("webgl2");
-      if (!gl) {
+      if (gl === null) {
         throw new Error("webgl2 not supported");
       }
 
@@ -60,7 +60,7 @@ export class RenderingContext {
 
   set program(program: Program | null) {
     if (this.#program !== program) {
-      if (program) {
+      if (program !== null) {
         this.gl.useProgram(program.glProgram);
       } else {
         this.gl.useProgram(null);
@@ -163,10 +163,12 @@ export class RenderingContext {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderPass(program: Program, uniforms: any): void {
     throw new Error("not implemented");
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   render(node: Node, camera: Camera): void {
     throw new Error("not implemented");
   }
