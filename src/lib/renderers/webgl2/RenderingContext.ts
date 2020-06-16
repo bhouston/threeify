@@ -28,7 +28,7 @@ export class RenderingContext {
   readonly programPool: ProgramPool;
   readonly bufferPool: BufferPool;
 
-  #program: Program | null = null;
+  #program: Program | undefined = undefined;
   #framebuffer: VirtualFramebuffer;
   #scissor: Box2 = new Box2();
   #viewport: Box2 = new Box2();
@@ -37,8 +37,8 @@ export class RenderingContext {
   #clearState: ClearState = new ClearState();
   #maskState: MaskState = new MaskState();
 
-  constructor(canvas: HTMLCanvasElement | null = null) {
-    if (canvas === null) {
+  constructor(canvas: HTMLCanvasElement | undefined = undefined) {
+    if (canvas === undefined) {
       canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas") as HTMLCanvasElement;
       canvas.style.width = "100%";
       canvas.style.height = "100%";
@@ -58,9 +58,9 @@ export class RenderingContext {
     this.#framebuffer = this.canvasFramebuffer;
   }
 
-  set program(program: Program | null) {
+  set program(program: Program | undefined) {
     if (this.#program !== program) {
-      if (program !== null) {
+      if (program !== undefined) {
         this.gl.useProgram(program.glProgram);
       } else {
         this.gl.useProgram(null);
@@ -68,7 +68,7 @@ export class RenderingContext {
       this.#program = program;
     }
   }
-  get program(): Program | null {
+  get program(): Program | undefined {
     return this.#program;
   }
 

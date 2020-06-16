@@ -14,13 +14,13 @@ import { PrimitiveType } from "./PrimitiveType";
 
 export class BufferGeometry {
   bufferAccessors = new Dictionary<string, BufferAccessor>();
-  indices: BufferAccessor | null = null;
+  indices: BufferAccessor | undefined = undefined;
   primitive: PrimitiveType = PrimitiveType.Triangles;
   count = -1;
 
   static FromAttributeGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
     const bufferGeometry = new BufferGeometry();
-    if (geometry.indices !== null) {
+    if (geometry.indices !== undefined) {
       bufferGeometry.setIndices(BufferAccessor.FromAttributeAccessor(context, geometry.indices));
       bufferGeometry.count = geometry.indices.count;
     }

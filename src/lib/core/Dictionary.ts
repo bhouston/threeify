@@ -19,12 +19,12 @@ export class Dictionary<K, V> {
     return this.entries.find((item) => item.key === key) !== undefined;
   }
 
-  get(key: K): V | null {
+  get(key: K): V | undefined {
     const entry = this.entries.find((item) => item.key === key);
     if (entry !== undefined) {
       return entry.value;
     }
-    return null;
+    return undefined;
   }
 
   set(key: K, value: V): void {

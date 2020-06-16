@@ -10,7 +10,7 @@ import { RenderingContext } from "./webgl2/RenderingContext";
 
 export interface IPoolUser extends IIdentifiable, IVersionable, IDisposable {}
 
-export type UserResourceUpdater<U, R> = (context: RenderingContext, user: U, resource: R | null) => R;
+export type UserResourceUpdater<U, R> = (context: RenderingContext, user: U, resource: R | undefined) => R;
 
 class UserResource<U extends IPoolUser, R extends IDisposable> {
   resourceVersion = -1;
@@ -42,7 +42,7 @@ export class Pool<U extends IPoolUser, R extends IDisposable> {
   request(user: U): UserResource<U, R> {
     let userResource = this.userResources.find((userResource) => userResource.user.uuid === user.uuid);
     if (userResource === undefined) {
-      userResource = new UserResource(user, this.updater(this.context, user, null));
+      userResource = new UserResource(user, this.updater(this.context, user, undefined));
       this.userResources.push(userResource);
     }
 

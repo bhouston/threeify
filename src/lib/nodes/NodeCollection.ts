@@ -15,7 +15,7 @@ export class NodeCollection {
     const index = this.array.findIndex((n) => n.uuid === node.uuid);
     if (index >= 0) {
       this.array.splice(index, 1);
-      node.parent = null;
+      node.parent = undefined;
     }
     return this;
   }

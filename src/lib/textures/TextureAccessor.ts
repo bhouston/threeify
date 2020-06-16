@@ -9,7 +9,7 @@ export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<T
   #uvTransformVersion = -1;
 
   constructor(
-    public texture: Texture | null = null,
+    public texture: Texture | undefined = undefined,
     public uvIndex = 0,
     public uvScale: Vector2 = new Vector2(1, 1),
     public uvRotation = 0,

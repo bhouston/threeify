@@ -75,15 +75,15 @@ export class Program implements IDisposable {
     }
   }
 
-  setUniformValues(uniformValues: any, uniformNames: string[] | null = null): void {
+  setUniformValues(uniformValues: any, uniformNames: string[] | undefined = undefined): void {
     this.context.program = this;
-    if (uniformNames === null) {
+    if (uniformNames === undefined) {
       uniformNames = Object.keys(uniformValues) as string[];
     }
     uniformNames.forEach((uniformName) => {
       // TODO replace this.uniforms with a map for faster access
       const uniform = this.uniforms.get(uniformName);
-      if (uniform !== null) {
+      if (uniform !== undefined) {
         uniform.set(uniformValues[uniformName]);
       }
     });
@@ -102,8 +102,8 @@ export class Program implements IDisposable {
 
 export class ProgramPool extends Pool<ShaderMaterial, Program> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderMaterial, program: Program | null) => {
-      if (program !== null) {
+    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderMaterial, program: Program | undefined) => {
+      if (program !== undefined) {
         program.dispose();
       }
       return new Program(context, shaderCodeMaterial);

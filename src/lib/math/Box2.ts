@@ -12,11 +12,11 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   min: Vector2 = new Vector2(+Infinity, +Infinity);
   max: Vector2 = new Vector2(-Infinity, -Infinity);
 
-  constructor(min: Vector2 | null = null, max: Vector2 | null = null) {
-    if (min !== null) {
+  constructor(min: Vector2 | undefined = undefined, max: Vector2 | undefined = undefined) {
+    if (min !== undefined) {
       this.min.copy(min);
     }
-    if (max !== null) {
+    if (max !== undefined) {
       this.max.copy(max);
     }
   }
