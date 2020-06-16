@@ -17,7 +17,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;
   readonly uuid: string = generateUUID();
   version = 0;
-  parent: Node | null = null;
+  parent: Node | undefined = undefined;
   name = "";
   children: NodeCollection;
   position: Vector3 = new Vector3();
@@ -76,13 +76,13 @@ export function depthFirstVisitor(node: Node, callback: (node: Node) => void): v
 
 export function rootLastVisitor(node: Node, callback: (node: Node) => void): void {
   callback(node);
-  if (node.parent !== null) {
+  if (node.parent !== undefined) {
     rootLastVisitor(node.parent, callback);
   }
 }
 
 export function rootFirstVisitor(node: Node, callback: (node: Node) => void): void {
-  if (node.parent !== null) {
+  if (node.parent !== undefined) {
     rootFirstVisitor(node.parent, callback);
   }
   callback(node);

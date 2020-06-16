@@ -13,7 +13,7 @@ import { AttributeAccessor } from "./AttributeAccessor";
 export class Geometry implements IVersionable, IDisposable {
   disposed = false;
   version = 0;
-  indices: AttributeAccessor | null = null;
+  indices: AttributeAccessor | undefined = undefined;
   attributeAccessors = new Dictionary<string, AttributeAccessor>();
   primitive: PrimitiveType = PrimitiveType.Triangles;
 

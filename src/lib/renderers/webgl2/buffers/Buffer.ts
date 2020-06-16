@@ -60,8 +60,8 @@ export class Buffer implements IDisposable {
 
 export class BufferPool extends Pool<Attribute, Buffer> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, attribute: Attribute, buffer: Buffer | null) => {
-      if (buffer === null) {
+    super(context, (context: RenderingContext, attribute: Attribute, buffer: Buffer | undefined) => {
+      if (buffer === undefined) {
         return new Buffer(context, attribute.arrayBuffer, attribute.target);
       }
       buffer.update(attribute.arrayBuffer, attribute.target);

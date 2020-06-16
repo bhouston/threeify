@@ -114,8 +114,8 @@ export class TexImage2D implements IDisposable {
 
 export class TexImage2DPool extends Pool<Texture, TexImage2D> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, texture: Texture, texImage2D: TexImage2D | null) => {
-      if (texImage2D === null) {
+    super(context, (context: RenderingContext, texture: Texture, texImage2D: TexImage2D | undefined) => {
+      if (texImage2D === undefined) {
         texImage2D = new TexImage2D(context, texture.image);
       }
       // TODO: Create a new image here.

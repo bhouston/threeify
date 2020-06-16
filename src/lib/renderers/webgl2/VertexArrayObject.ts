@@ -35,7 +35,7 @@ export class VertexArrayObject {
 
     bufferGeometry.bufferAccessors.forEach((bufferAccessor, name) => {
       const attribute = this.program.attributes.get(name);
-      if (attribute === null) {
+      if (attribute === undefined) {
         // only bind the attributes that exist in the program.
         return;
       }

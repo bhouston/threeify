@@ -39,9 +39,9 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   clear(
     attachmentFlags: Attachments = Attachments.Color | Attachments.Depth,
-    clearState: ClearState | null = null,
+    clearState: ClearState | undefined = undefined,
   ): void {
-    if (clearState !== null) {
+    if (clearState !== undefined) {
       this.context.clearState = clearState;
     } else {
       this.context.clearState = this.clearState;
