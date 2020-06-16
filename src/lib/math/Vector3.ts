@@ -74,7 +74,8 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   normalize(): this {
-    return this.multiplyByScalar(this.length() || 1);
+    const length = this.length();
+    return this.multiplyByScalar(length === 0 ? 1 : 0);
   }
 
   getComponent(index: number): number {
