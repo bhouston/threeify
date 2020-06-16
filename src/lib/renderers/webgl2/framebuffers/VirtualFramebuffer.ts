@@ -5,16 +5,17 @@
 // * @bhouston
 //
 
+import { VertexArrayObject } from "..";
 import { IDisposable } from "../../../core/types";
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
+import { BufferGeometry } from "../buffers/BufferGeometry";
 import { ClearState } from "../ClearState";
 import { Program } from "../programs/Program";
 import { RenderingContext } from "../RenderingContext";
 import { sizeOfDataType } from "../textures/DataType";
 import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { TexImage2D } from "../textures/TexImage2D";
-import { VertexArrayObject } from "../VertexArrayObject";
 import { AttachmentPoints } from "./AttachmentPoints";
 import { Attachments } from "./Attachments";
 
@@ -52,14 +53,30 @@ export abstract class VirtualFramebuffer implements IDisposable {
     gl.clear(attachmentFlags);
   }
 
-  renderDraw(program: Program, uniforms: any, vao: VertexArrayObject): void {
+  renderBufferGeometry(program: Program, uniforms: any, bufferGeometry: BufferGeometry): void {
     this.context.framebuffer = this;
     this.context.program = program;
     this.context.program.setUniformValues(uniforms);
-    this.context.program.setUniformValues(uniforms);
+    this.context.program.setAttributeBuffers(bufferGeometry);
 
     // draw
-    this.context.gl.drawArrays(vao.primitive, vao.offset, vao.count);
+    const gl = this.context.gl;
+    if (bufferGeometry.indices !== undefined) {
+      throw new Error("not implemented");
+    } else {
+      gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
+    }
+  }
+
+  renderVertexArrayObject(program: Program, uniforms: any, vao: VertexArrayObject): void {
+    this.context.framebuffer = this;
+    this.context.program = program;
+    this.context.program.setUniformValues(uniforms);
+    this.context.program.setAttributeBuffers(vao);
+
+    // draw
+    const gl = this.context.gl;
+    gl.drawArrays(vao.primitive, vao.offset, vao.count);
   }
 
   renderPass(program: Program, uniforms: any): void {

@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { BufferAccessor } from "../buffers/BufferAccessor";
 import { Program } from "./Program";
 
 export class ProgramAttribute {
@@ -36,5 +37,23 @@ export class ProgramAttribute {
 
       this.glLocation = glLocation;
     }
+  }
+
+  setBuffer(bufferAccessor: BufferAccessor): this {
+    const gl = this.program.context.gl;
+    gl.enableVertexAttribArray(this.glLocation);
+    // Bind the position buffer.
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufferAccessor.buffer);
+
+    // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+    gl.vertexAttribPointer(
+      this.glLocation,
+      bufferAccessor.componentsPerVertex,
+      bufferAccessor.componentType,
+      bufferAccessor.normalized,
+      bufferAccessor.vertexStride,
+      bufferAccessor.byteOffset,
+    );
+    return this;
   }
 }

@@ -39,14 +39,14 @@ export class Pool<U extends IPoolUser, R extends IDisposable> {
 
   constructor(public context: RenderingContext, public updater: UserResourceUpdater<U, R>) {}
 
-  request(user: U): UserResource<U, R> {
+  request(user: U): R {
     let userResource = this.userResources.find((userResource) => userResource.user.uuid === user.uuid);
     if (userResource === undefined) {
       userResource = new UserResource(user, this.updater(this.context, user, undefined));
       this.userResources.push(userResource);
     }
 
-    return userResource;
+    return userResource.resource;
   }
 
   update(): this {

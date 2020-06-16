@@ -7,12 +7,13 @@
 
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
+import { BufferGeometry } from "../buffers/BufferGeometry";
 import { Program } from "../programs/Program";
 import { RenderingContext } from "../RenderingContext";
 import { VertexArrayObject } from "../VertexArrayObject";
-import { Framebuffer } from "./Framebuffer";
+import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
-export class CanvasFramebuffer extends Framebuffer {
+export class CanvasFramebuffer extends VirtualFramebuffer {
   devicePixelRatio = 1.0;
 
   constructor(context: RenderingContext, public readonly canvas: HTMLCanvasElement) {
@@ -20,9 +21,17 @@ export class CanvasFramebuffer extends Framebuffer {
     // TODO: add listening to the canvas and resize the canvas width/height?
   }
 
-  renderDraw(program: Program, uniforms: any, vao: VertexArrayObject): void {
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  dispose(): void {}
+
+  renderVertexArrayObject(program: Program, uniforms: any, vao: VertexArrayObject): void {
     this.syncCanvas();
-    super.renderDraw(program, uniforms, vao);
+    super.renderVertexArrayObject(program, uniforms, vao);
+  }
+
+  renderBufferGeometry(program: Program, uniforms: any, bufferGeometry: BufferGeometry): void {
+    this.syncCanvas();
+    super.renderBufferGeometry(program, uniforms, bufferGeometry);
   }
 
   renderPass(program: Program, uniforms: any): void {

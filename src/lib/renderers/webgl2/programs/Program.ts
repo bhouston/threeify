@@ -9,7 +9,9 @@ import { Dictionary } from "../../../core/Dictionary";
 import { IDisposable } from "../../../core/types";
 import { ShaderMaterial } from "../../../materials/ShaderMaterial";
 import { Pool } from "../../Pool";
+import { BufferGeometry } from "../buffers/BufferGeometry";
 import { ShaderType } from "../shaders/ShaderType";
+import { VertexArrayObject } from "../VertexArrayObject";
 import { RenderingContext } from "./../RenderingContext";
 import { Shader } from "./../shaders/Shader";
 import { ProgramAttribute } from "./ProgramAttribute";
@@ -75,7 +77,7 @@ export class Program implements IDisposable {
     }
   }
 
-  setUniformValues(uniformValues: any, uniformNames: string[] | undefined = undefined): void {
+  setUniformValues(uniformValues: any, uniformNames: string[] | undefined = undefined): this {
     this.context.program = this;
     if (uniformNames === undefined) {
       uniformNames = Object.keys(uniformValues) as string[];
@@ -87,6 +89,44 @@ export class Program implements IDisposable {
         uniform.set(uniformValues[uniformName]);
       }
     });
+    return this;
+  }
+
+  setAttributeBuffers(vao: VertexArrayObject): this;
+  setAttributeBuffers(bufferGeometry: BufferGeometry): this;
+  setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
+    const gl = this.context.gl;
+    if (buffers instanceof BufferGeometry) {
+      const bufferGeometry = buffers as BufferGeometry;
+      this.attributes.forEach((attribute, name) => {
+        const bufferAccessor = bufferGeometry.bufferAccessors.get(name);
+        if (bufferAccessor !== undefined) {
+          attribute.setBuffer(bufferAccessor);
+        }
+      });
+      bufferGeometry.bufferAccessors.forEach((bufferAccessor, name) => {
+        const attribute = this.attributes.get(name);
+        if (attribute !== undefined) {
+          gl.enableVertexAttribArray(attribute.glLocation);
+          // Bind the position buffer.
+          gl.bindBuffer(gl.ARRAY_BUFFER, bufferAccessor.buffer);
+
+          const size = 2; // 2 components per iteration
+          const type = gl.FLOAT; // the data is 32bit floats
+          const normalize = false; // don't normalize the data
+          const stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+          const offset = 0; // start at the beginning of the buffer
+          gl.vertexAttribPointer(attribute.glLocation, size, type, normalize, stride, offset);
+        }
+      });
+    } else if (buffers instanceof VertexArrayObject) {
+      const vao = buffers as VertexArrayObject;
+      gl.bindVertexArray(vao.glVertexArrayObject);
+    } else {
+      throw new Error("not implemented");
+    }
+
+    return this;
   }
 
   dispose(): void {
