@@ -15,7 +15,7 @@ export class VertexArrayObject {
   offset = 0;
   count = -1;
 
-  constructor(public program: Program, bufferGeometry: BufferGeometry) {
+  constructor(public readonly program: Program, bufferGeometry: BufferGeometry) {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 
@@ -33,28 +33,6 @@ export class VertexArrayObject {
     // and make it the one we're currently working with
     gl.bindVertexArray(this.glVertexArrayObject);
 
-    bufferGeometry.bufferAccessors.forEach((bufferAccessor, name) => {
-      const attribute = this.program.attributes.get(name);
-      if (attribute === undefined) {
-        // only bind the attributes that exist in the program.
-        return;
-      }
-
-      gl.enableVertexAttribArray(attribute.glLocation);
-
-      // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-      const buffer = bufferAccessor.buffer;
-      gl.bindBuffer(buffer.target, buffer.glBuffer);
-
-      // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
-      gl.vertexAttribPointer(
-        attribute.glLocation,
-        bufferAccessor.componentsPerVertex,
-        bufferAccessor.componentType,
-        bufferAccessor.normalized,
-        bufferAccessor.vertexStride,
-        bufferAccessor.byteOffset,
-      );
-    });
+    program.setAttributeBuffers(bufferGeometry);
   }
 }
