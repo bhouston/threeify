@@ -2,14 +2,19 @@
 module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "tsconfig.json",
+    project: "./tsconfig.json",
     ecmaVersion: 2020,
     sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
   },
-  plugins: ["@typescript-eslint", "cflint"],
+  plugins: ["@typescript-eslint", "cflint", "import"],
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    },
+  },
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -60,7 +65,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/prefer-nullish-coalescing": 2,
     "@typescript-eslint/strict-boolean-expressions": [
-      1,
+      2,
       { allowString: false, allowNumber: false, allowNullableObject: false },
     ],
     "cflint/no-this-assignment": 1,
