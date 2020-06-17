@@ -27,9 +27,11 @@ export class Buffer implements IDisposable {
     }
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+    // console.log(`gl.bindBuffer(${this.target}, ${this.glBuffer})`);
     gl.bindBuffer(this.target, this.glBuffer);
 
     // load data
+    // console.log(`gl.bufferData(${this.target}, ${arrayBuffer}, ${this.usage})`);
     gl.bufferData(this.target, arrayBuffer, this.usage);
   }
 

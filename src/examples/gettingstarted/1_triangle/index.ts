@@ -18,5 +18,6 @@ document.body.appendChild(canvasFramebuffer.canvas);
 
 const bufferGeometry = new BufferGeometry(context, geometry);
 const program = new Program(context, material);
+const uniforms = {};
 
-canvasFramebuffer.renderBufferGeometry(program, {}, bufferGeometry);
+canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);

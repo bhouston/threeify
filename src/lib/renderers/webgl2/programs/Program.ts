@@ -104,6 +104,14 @@ export class Program implements IDisposable {
           attribute.setBuffer(bufferAccessor);
         }
       });
+      if (bufferGeometry.indices !== undefined) {
+        // bind the buffer containing the indices
+        // console.log(
+        //  `gl.bindBuffer(${bufferGeometry.indices.buffer.target}, ${bufferGeometry.indices.buffer.glBuffer})`,
+        // );
+
+        gl.bindBuffer(bufferGeometry.indices.buffer.target, bufferGeometry.indices.buffer.glBuffer);
+      }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
       gl.bindVertexArray(vao.glVertexArrayObject);

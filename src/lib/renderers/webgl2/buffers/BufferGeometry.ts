@@ -11,6 +11,7 @@ import { Dictionary } from "../../../core/Dictionary";
 import { Geometry } from "../../../geometry/Geometry";
 import { RenderingContext } from "../RenderingContext";
 import { BufferAccessor } from "./BufferAccessor";
+import { BufferTarget } from "./BufferTarget";
 import { PrimitiveType } from "./PrimitiveType";
 
 export class BufferGeometry implements IDisposable {
@@ -22,7 +23,7 @@ export class BufferGeometry implements IDisposable {
 
   constructor(context: RenderingContext, geometry: Geometry) {
     if (geometry.indices !== undefined) {
-      this.setIndices(BufferAccessor.FromAttribute(context, geometry.indices));
+      this.indices = BufferAccessor.FromAttribute(context, geometry.indices, BufferTarget.ElementArray);
       this.count = geometry.indices.count;
     }
 

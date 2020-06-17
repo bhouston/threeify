@@ -128,9 +128,9 @@ export class ProgramUniform {
       case UniformType.UnsignedIntSampler2D:
       case UniformType.Sampler2DShadow: {
         const t = value as TexImage2D;
-        gl.uniform1i(this.glLocation, this.textureUnit);
         gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
         gl.bindTexture(GL2.TEXTURE_2D, t.glTexture);
+        gl.uniform1i(this.glLocation, this.textureUnit);
         return this;
       }
     }

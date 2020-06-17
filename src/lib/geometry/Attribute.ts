@@ -33,7 +33,7 @@ export class Attribute {
 // see here for ideas: https://www.typescriptlang.org/docs/handbook/advanced-types.html
 
 export class Int16Attribute extends Attribute {
-  constructor(array: Int16Array | number[], componentsPerVertex: number) {
+  constructor(array: Int16Array | number[], componentsPerVertex = 1) {
     super(
       new AttributeData(array instanceof Int16Array ? array : new Int16Array(array), 0, -1, 2 * componentsPerVertex),
       0,
@@ -44,8 +44,19 @@ export class Int16Attribute extends Attribute {
   }
 }
 
+export class Uint32Attribute extends Attribute {
+  constructor(array: Uint32Array | number[], componentsPerVertex = 1) {
+    super(
+      new AttributeData(array instanceof Uint32Array ? array : new Uint32Array(array), 0, -1, 4 * componentsPerVertex),
+      0,
+      ComponentType.UnsignedInt,
+      componentsPerVertex,
+      -1,
+    );
+  }
+}
 export class Int32Attribute extends Attribute {
-  constructor(array: Int32Array | number[], componentsPerVertex: number) {
+  constructor(array: Int32Array | number[], componentsPerVertex = 1) {
     super(
       new AttributeData(array instanceof Int32Array ? array : new Int32Array(array), 0, -1, 4 * componentsPerVertex),
       0,
@@ -57,7 +68,7 @@ export class Int32Attribute extends Attribute {
 }
 
 export class Float32Attribute extends Attribute {
-  constructor(array: Float32Array | number[], componentsPerVertex: number) {
+  constructor(array: Float32Array | number[], componentsPerVertex = 1) {
     super(
       new AttributeData(
         array instanceof Float32Array ? array : new Float32Array(array),
