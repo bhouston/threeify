@@ -8,13 +8,13 @@
 import { Dictionary } from "../core/Dictionary";
 import { IDisposable, IVersionable } from "../core/types";
 import { PrimitiveType } from "../renderers/webgl2/buffers/PrimitiveType";
-import { AttributeAccessor } from "./AttributeAccessor";
+import { Attribute } from "./Attribute";
 
 export class Geometry implements IVersionable, IDisposable {
   disposed = false;
   version = 0;
-  indices: AttributeAccessor | undefined = undefined;
-  attributeAccessors = new Dictionary<string, AttributeAccessor>();
+  indices: Attribute | undefined = undefined;
+  attributes = new Dictionary<string, Attribute>();
   primitive: PrimitiveType = PrimitiveType.Triangles;
 
   dirty(): void {
@@ -24,15 +24,15 @@ export class Geometry implements IVersionable, IDisposable {
   dispose(): void {
     if (!this.disposed) {
       // reaching deep to dispose of all attribute views, but technically they may be reused with other geometries.
-      this.attributeAccessors.forEach((attributeAccessor) => {
-        attributeAccessor.attributeView.dispose();
+      this.attributes.forEach((attribute) => {
+        attribute.attributeData.dispose();
       });
       this.disposed = true;
       this.dirty();
     }
   }
 
-  setIndices(indices: AttributeAccessor): void {
+  setIndices(indices: Attribute): void {
     this.indices = indices;
   }
 }

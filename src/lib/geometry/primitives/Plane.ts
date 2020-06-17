@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Float32AttributeAccessor, Int32AttributeAccessor } from "../AttributeAccessor";
+import { Float32Attribute, Int32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 
 export function plane(width = 1, height = 1, widthSegments = 1, heightSegments = 1): Geometry {
@@ -64,10 +64,10 @@ export function plane(width = 1, height = 1, widthSegments = 1, heightSegments =
   // build geometry
 
   const geometry = new Geometry();
-  geometry.setIndices(new Int32AttributeAccessor(new Int32Array(indices), 1));
-  geometry.attributeAccessors.set("position", new Float32AttributeAccessor(new Float32Array(vertices), 3));
-  geometry.attributeAccessors.set("normal", new Float32AttributeAccessor(new Float32Array(normals), 3));
-  geometry.attributeAccessors.set("uv", new Float32AttributeAccessor(new Float32Array(uvs), 2));
+  geometry.setIndices(new Int32Attribute(new Int32Array(indices), 1));
+  geometry.attributes.set("position", new Float32Attribute(new Float32Array(vertices), 3));
+  geometry.attributes.set("normal", new Float32Attribute(new Float32Array(normals), 3));
+  geometry.attributes.set("uv", new Float32Attribute(new Float32Array(uvs), 2));
 
   return geometry;
 }

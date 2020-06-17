@@ -6,7 +6,7 @@
 // * @bhouston
 //
 
-import { AttributeAccessor } from "../../../geometry/AttributeAccessor";
+import { Attribute } from "../../../geometry/Attribute";
 import { RenderingContext } from "../RenderingContext";
 import { Buffer } from "./Buffer";
 import { ComponentType } from "./ComponentType";
@@ -21,17 +21,17 @@ export class BufferAccessor {
     public byteOffset: number,
   ) {}
 
-  static FromAttributeAccessor(context: RenderingContext, attributeAccessor: AttributeAccessor): BufferAccessor {
-    const attribute = attributeAccessor.attributeView;
+  static FromAttribute(context: RenderingContext, attribute: Attribute): BufferAccessor {
+    const attributeData = attribute.attributeData;
 
-    const buffer = new Buffer(context, attribute.arrayBuffer, attribute.target);
+    const buffer = new Buffer(context, attributeData.arrayBuffer, attributeData.target);
     const bufferAccessor = new BufferAccessor(
       buffer,
-      attributeAccessor.componentType,
-      attributeAccessor.componentsPerVertex,
+      attribute.componentType,
+      attribute.componentsPerVertex,
       false,
-      attribute.byteStride,
-      attribute.byteOffset + attributeAccessor.byteOffset,
+      attributeData.byteStride,
+      attributeData.byteOffset + attributeData.byteOffset,
     );
 
     return bufferAccessor;
