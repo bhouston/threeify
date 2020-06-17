@@ -20,10 +20,9 @@ const bufferGeometry = new BufferGeometry(context, geometry);
 const program = new Program(context, material);
 const uniforms = { scale: 1.0, color: new Color() };
 
-canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
-
 function animate(): void {
   requestAnimationFrame(animate);
+
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
   uniforms.color.setFromHSL(Date.now() * 0.001, 1.0, 0.5);
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
