@@ -25,4 +25,5 @@ async function init(): Promise<null> {
 
   return null;
 }
+
 init();
