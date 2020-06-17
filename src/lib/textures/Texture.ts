@@ -30,7 +30,7 @@ export class Texture implements IIdentifiable, IVersionable, IDisposable, IPoolU
     public wrapS: TextureWrap = TextureWrap.ClampToEdge,
     public wrapT: TextureWrap = TextureWrap.ClampToEdge,
     public magFilter: TextureFilter = TextureFilter.Linear,
-    public minFilter: TextureFilter = TextureFilter.LinearMipmapLinear,
+    public minFilter: TextureFilter = TextureFilter.Linear,
     public pixelFormat: PixelFormat = PixelFormat.RGBA,
     public dataType: DataType = DataType.UnsignedByte,
     public generateMipmaps = true,

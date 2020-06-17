@@ -55,7 +55,7 @@ async function test(): Promise<void> {
   canvasFramebuffer.clear(Attachments.Default, depthClear);
   canvasFramebuffer.render(rootNode, camera);
 
-  const texImage2D = new TexImage2D(context, texture.image);
+  const texImage2D = new TexImage2D(context, texture);
   console.log(texImage2D);
 
   const boxBufferGeometry = new BufferGeometry(context, mesh.geometry);

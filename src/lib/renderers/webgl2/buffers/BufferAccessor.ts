@@ -9,6 +9,7 @@
 import { Attribute } from "../../../geometry/Attribute";
 import { RenderingContext } from "../RenderingContext";
 import { Buffer } from "./Buffer";
+import { BufferTarget } from "./BufferTarget";
 import { ComponentType } from "./ComponentType";
 
 export class BufferAccessor {
@@ -21,10 +22,15 @@ export class BufferAccessor {
     public byteOffset: number,
   ) {}
 
-  static FromAttribute(context: RenderingContext, attribute: Attribute): BufferAccessor {
+  static FromAttribute(
+    context: RenderingContext,
+    attribute: Attribute,
+    bufferTarget: BufferTarget | undefined = undefined,
+  ): BufferAccessor {
     const attributeData = attribute.attributeData;
 
-    const buffer = new Buffer(context, attributeData.arrayBuffer, attributeData.target);
+    const target = bufferTarget !== undefined ? bufferTarget : attributeData.target;
+    const buffer = new Buffer(context, attributeData.arrayBuffer, target);
     const bufferAccessor = new BufferAccessor(
       buffer,
       attribute.componentType,

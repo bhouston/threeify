@@ -6,8 +6,8 @@
 // * @bhouston
 //
 
+import { Vector2 } from "lib/math/Vector2";
 import { IDisposable } from "../../../core/types";
-import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage, Texture } from "../../../textures/Texture";
 import { Pool } from "../../Pool";
 import { RenderingContext } from "../RenderingContext";
@@ -40,16 +40,16 @@ export enum TextureSourceType {
 export class TexImage2D implements IDisposable {
   disposed = false;
   glTexture: WebGLTexture;
+  dataType: DataType;
+  pixelFormat: PixelFormat;
+  size: Vector2;
 
   constructor(
     public context: RenderingContext,
-    public image: ArrayBufferImage | HTMLImageElement,
+    public texture: Texture,
     public target: TextureTarget = TextureTarget.Texture2D,
     public level = 0,
     public internalFormat: PixelFormat = PixelFormat.RGBA,
-    public size: Vector2 = new Vector2(0, 0),
-    public pixelFormat: PixelFormat = PixelFormat.RGBA,
-    public dataType: DataType = DataType.UnsignedByte,
     public texParameters: TexParameters = new TexParameters(),
   ) {
     const gl = this.context.gl;
@@ -63,8 +63,12 @@ export class TexImage2D implements IDisposable {
       this.glTexture = glTexture;
     }
 
+    this.dataType = texture.dataType;
+    this.pixelFormat = texture.pixelFormat;
+    this.size = texture.size;
+
     gl.bindTexture(this.target, this.glTexture);
-    if (this.image instanceof ArrayBufferImage) {
+    if (texture.image instanceof ArrayBufferImage) {
       gl.texImage2D(
         this.target,
         this.level,
@@ -72,12 +76,12 @@ export class TexImage2D implements IDisposable {
         this.size.width,
         this.size.height,
         0,
-        this.internalFormat,
+        this.pixelFormat,
         this.dataType,
-        new Uint8Array(this.image.data),
+        new Uint8Array(texture.image.data),
         0,
       );
-    } else if (this.image instanceof HTMLImageElement) {
+    } else if (texture.image instanceof HTMLImageElement) {
       gl.texImage2D(
         this.target,
         this.level,
@@ -85,9 +89,9 @@ export class TexImage2D implements IDisposable {
         this.size.width,
         this.size.height,
         0,
-        this.internalFormat,
+        this.pixelFormat,
         this.dataType,
-        this.image,
+        texture.image,
       );
     }
 
@@ -100,6 +104,8 @@ export class TexImage2D implements IDisposable {
 
     gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, texParameters.magFilter);
     gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, texParameters.minFilter);
+
+    gl.bindTexture(this.target, null);
 
     // gl.texParameteri(this.target, gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT, texParameters.anisotropicLevels);
   }
@@ -116,7 +122,7 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
   constructor(context: RenderingContext) {
     super(context, (context: RenderingContext, texture: Texture, texImage2D: TexImage2D | undefined) => {
       if (texImage2D === undefined) {
-        texImage2D = new TexImage2D(context, texture.image);
+        texImage2D = new TexImage2D(context, texture);
       }
       // TODO: Create a new image here.
       // texImage2D.update(texture);

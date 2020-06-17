@@ -62,7 +62,10 @@ export abstract class VirtualFramebuffer implements IDisposable {
     // draw
     const gl = this.context.gl;
     if (bufferGeometry.indices !== undefined) {
-      throw new Error("not implemented");
+      // console.log(
+      //  `gl.drawElements(${bufferGeometry.primitive}, ${bufferGeometry.count}, ${bufferGeometry.indices.componentType}//, 0)`,
+      // );
+      gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
     } else {
       gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
     }

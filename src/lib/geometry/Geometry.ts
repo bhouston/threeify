@@ -31,8 +31,4 @@ export class Geometry implements IVersionable, IDisposable {
       this.dirty();
     }
   }
-
-  setIndices(indices: Attribute): void {
-    this.indices = indices;
-  }
 }
