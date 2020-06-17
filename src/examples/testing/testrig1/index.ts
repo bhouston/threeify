@@ -58,7 +58,7 @@ async function test(): Promise<void> {
   const texImage2D = new TexImage2D(context, texture.image);
   console.log(texImage2D);
 
-  const boxBufferGeometry = BufferGeometry.FromAttributeGeometry(context, mesh.geometry);
+  const boxBufferGeometry = new BufferGeometry(context, mesh.geometry);
   console.log(boxBufferGeometry);
 
   // source code definition of material

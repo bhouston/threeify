@@ -1,5 +1,5 @@
 import { IDisposable } from "../../../core/types";
-import { Attribute } from "../../../geometry/Attribute";
+import { AttributeData } from "../../../geometry/AttributeData";
 import { Pool } from "../../Pool";
 import { RenderingContext } from "../RenderingContext";
 import { BufferTarget } from "./BufferTarget";
@@ -58,9 +58,9 @@ export class Buffer implements IDisposable {
   }
 }
 
-export class BufferPool extends Pool<Attribute, Buffer> {
+export class BufferPool extends Pool<AttributeData, Buffer> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, attribute: Attribute, buffer: Buffer | undefined) => {
+    super(context, (context: RenderingContext, attribute: AttributeData, buffer: Buffer | undefined) => {
       if (buffer === undefined) {
         return new Buffer(context, attribute.arrayBuffer, attribute.target);
       }

@@ -6,35 +6,41 @@
 // * @bhouston
 //
 
+import { IDisposable } from "lib/core/types";
 import { Dictionary } from "../../../core/Dictionary";
 import { Geometry } from "../../../geometry/Geometry";
 import { RenderingContext } from "../RenderingContext";
 import { BufferAccessor } from "./BufferAccessor";
 import { PrimitiveType } from "./PrimitiveType";
 
-export class BufferGeometry {
+export class BufferGeometry implements IDisposable {
+  disposed = false;
   bufferAccessors = new Dictionary<string, BufferAccessor>();
   indices: BufferAccessor | undefined = undefined;
   primitive: PrimitiveType = PrimitiveType.Triangles;
   count = -1;
 
-  static FromAttributeGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
-    const bufferGeometry = new BufferGeometry();
+  constructor(context: RenderingContext, geometry: Geometry) {
     if (geometry.indices !== undefined) {
-      bufferGeometry.setIndices(BufferAccessor.FromAttributeAccessor(context, geometry.indices));
-      bufferGeometry.count = geometry.indices.count;
+      this.setIndices(BufferAccessor.FromAttribute(context, geometry.indices));
+      this.count = geometry.indices.count;
     }
 
-    geometry.attributeAccessors.forEach((attributeAccessor, name) => {
-      bufferGeometry.bufferAccessors.set(name, BufferAccessor.FromAttributeAccessor(context, attributeAccessor));
-      if (bufferGeometry.count === -1) {
-        bufferGeometry.count = attributeAccessor.count;
+    geometry.attributes.forEach((attribute, name) => {
+      this.bufferAccessors.set(name, BufferAccessor.FromAttribute(context, attribute));
+      if (this.count === -1) {
+        this.count = attribute.count;
       }
     });
 
-    bufferGeometry.primitive = geometry.primitive;
+    this.primitive = geometry.primitive;
+  }
 
-    return bufferGeometry;
+  dispose(): void {
+    console.warn("This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.");
+    this.bufferAccessors.forEach((bufferAccessor) => {
+      bufferAccessor.buffer.dispose();
+    });
   }
 
   setIndices(indices: BufferAccessor): void {
