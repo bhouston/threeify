@@ -43,7 +43,7 @@ export class ProgramAttribute {
     const gl = this.program.context.gl;
     gl.enableVertexAttribArray(this.glLocation);
     // Bind the position buffer.
-    gl.bindBuffer(gl.ARRAY_BUFFER, bufferAccessor.buffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, bufferAccessor.buffer.glBuffer);
 
     // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
     gl.vertexAttribPointer(
