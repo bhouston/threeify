@@ -18,8 +18,7 @@ async function init(): Promise<null> {
 
   const bufferGeometry = new BufferGeometry(context, geometry);
   const program = new Program(context, material);
-  const texImage2D = new TexImage2D(context, texture);
-  const uniforms = { map: texImage2D };
+  const uniforms = { map: new TexImage2D(context, texture) };
 
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 

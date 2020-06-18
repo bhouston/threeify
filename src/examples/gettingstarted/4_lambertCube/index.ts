@@ -19,25 +19,23 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   document.body.appendChild(canvasFramebuffer.canvas);
 
-  const bufferGeometry = new BufferGeometry(context, geometry);
   const program = new Program(context, material);
-  const texImage2D = new TexImage2D(context, texture);
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: new Matrix4().makeTranslation(new Vector3(0, 0, -1)),
     viewToScreen: new Matrix4().makePerspectiveProjection(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     viewLightPosition: new Vector3(0, 0, 0),
-    map: texImage2D,
+    map: new TexImage2D(context, texture),
   };
-
-  canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  const bufferGeometry = new BufferGeometry(context, geometry);
+  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   function animate(): void {
     requestAnimationFrame(animate);
 
     const now = Date.now();
     uniforms.localToWorld.makeRotationFromEuler(new Euler(now * 0.001, now * 0.0033, now * 0.00077));
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
+    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 
   animate();
