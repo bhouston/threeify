@@ -21,7 +21,6 @@ export function octahedron(radius = 1, detail = 1) {
 
 export function polyhedron(vertices: number[], indices: number[], radius = 1, detail = 0): Geometry {
   // default buffer data
-  console.log("radius", radius);
   const vertexBuffer: number[] = [];
   const uvBuffer: number[] = [];
 
@@ -69,7 +68,6 @@ export function polyhedron(vertices: number[], indices: number[], radius = 1, de
   }
 
   function subdivideFace(a: Vector3, b: Vector3, c: Vector3, detail: number): void {
-    console.log("subdivideFace", a, b, c, detail);
     const cols = Math.pow(2, detail);
 
     // we use this multidimensional array as a data structure for creating the subdivision
@@ -123,11 +121,8 @@ export function polyhedron(vertices: number[], indices: number[], radius = 1, de
       vertex.x = vertexBuffer[i + 0];
       vertex.y = vertexBuffer[i + 1];
       vertex.z = vertexBuffer[i + 2];
-      console.log("applyRadius b", JSON.stringify(vertex));
-      console.log("radius", radius);
 
       vertex.normalize().multiplyByScalar(radius);
-      console.log("applyRadius a", JSON.stringify(vertex));
 
       vertexBuffer[i + 0] = vertex.x;
       vertexBuffer[i + 1] = vertex.y;
@@ -183,7 +178,6 @@ export function polyhedron(vertices: number[], indices: number[], radius = 1, de
   }
 
   function pushVertex(vertex: Vector3): void {
-    console.log("pushVertex", vertex);
     vertexBuffer.push(vertex.x, vertex.y, vertex.z);
   }
 

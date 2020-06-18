@@ -52,7 +52,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   copy(v: Vector3): this {
     this.x = v.x;
     this.y = v.y;
-    this.z = v.x;
+    this.z = v.z;
 
     return this;
   }

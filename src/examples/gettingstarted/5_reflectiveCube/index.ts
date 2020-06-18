@@ -1,4 +1,4 @@
-import { tetrahedron } from "../../../lib/geometry/primitives/Octaehdron";
+import { icosahedron } from "../../../lib/geometry/primitives/Octaehdron";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
@@ -10,15 +10,12 @@ import { Program } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
 import { CubeTexture } from "../../../lib/textures/CubeTexture";
-import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = tetrahedron(0.35, 0);
-  console.log(geometry);
+  const geometry = icosahedron(0.75, 4);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
   const cubeTexture = new CubeTexture([
     await fetchImage("/assets/textures/cube/pisa/px.png"),
     await fetchImage("/assets/textures/cube/pisa/nx.png"),
@@ -37,8 +34,6 @@ async function init(): Promise<null> {
     localToWorld: new Matrix4(),
     worldToView: new Matrix4().makeTranslation(new Vector3(0, 0, -1)),
     viewToScreen: new Matrix4().makePerspectiveProjection(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
-    viewLightPosition: new Vector3(0, 0, 0),
-    map: new TexImage2D(context, texture),
     cubeMap: new TexImage2D(context, cubeTexture),
   };
   const bufferGeometry = new BufferGeometry(context, geometry);
@@ -48,7 +43,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    uniforms.localToWorld.makeRotationFromEuler(new Euler(now * 0.001, now * 0.0033, now * 0.00077));
+    uniforms.localToWorld.makeRotationFromEuler(new Euler(now * 0.0001, now * 0.00033, now * 0.000077));
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 
