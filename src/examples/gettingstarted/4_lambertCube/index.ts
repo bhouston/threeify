@@ -23,6 +23,7 @@ async function init(): Promise<null> {
   document.body.appendChild(canvasFramebuffer.canvas);
 
   const program = new Program(context, material);
+  const texImage2D = new TexImage2D(context, texture);
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: new Matrix4().makeTranslation(new Vector3(0, 0, -1)),

@@ -6,6 +6,6 @@ varying vec2 v_texCoord;
 void main() {
 
   v_texCoord = uv;
-  gl_Position = vec4( position.y, position.x, 0.5, 1.0 );
+  gl_Position = vec4( position.x, position.y, 0.5, 1.0 );
 
 }
