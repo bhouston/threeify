@@ -2,8 +2,9 @@ import { Float32Attribute, Uint32Attribute } from "../../../lib/geometry/Attribu
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Color } from "../../../lib/math/Color";
-import { Program, RenderingContext } from "../../../lib/renderers/webgl2";
 import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
+import { Program } from "../../../lib/renderers/webgl2/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 

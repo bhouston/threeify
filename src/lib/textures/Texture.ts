@@ -6,7 +6,6 @@
 //
 
 import { Vector2 } from "../math/Vector2";
-import { IPoolUser } from "../renderers/Pool";
 import { DataType } from "../renderers/webgl2/textures/DataType";
 import { PixelFormat } from "../renderers/webgl2/textures/PixelFormat";
 import { TextureFilter } from "../renderers/webgl2/textures/TextureFilter";
@@ -14,11 +13,13 @@ import { TextureWrap } from "../renderers/webgl2/textures/TextureWrap";
 import { ArrayBufferImage } from "./ArrayBufferImage";
 import { VirtualTexture } from "./VirtualTexture";
 
-export class Texture extends VirtualTexture implements IPoolUser {
+export type TextureImage = ArrayBufferImage | HTMLImageElement;
+
+export class Texture extends VirtualTexture {
   constructor(
-    public image: ArrayBufferImage | HTMLImageElement,
-    public wrapS: TextureWrap = TextureWrap.ClampToEdge,
-    public wrapT: TextureWrap = TextureWrap.ClampToEdge,
+    public image: TextureImage,
+    public wrapS = TextureWrap.ClampToEdge,
+    public wrapT = TextureWrap.ClampToEdge,
     level = 0,
     magFilter = TextureFilter.Linear,
     minFilter = TextureFilter.LinearMipmapLinear,

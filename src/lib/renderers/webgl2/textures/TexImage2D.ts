@@ -6,10 +6,11 @@
 // * @bhouston
 //
 
-import { Vector2 } from "lib/math/Vector2";
 import { IDisposable } from "../../../core/types";
+import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
-import { Texture } from "../../../textures/Texture";
+import { CubeTexture } from "../../../textures/CubeTexture";
+import { Texture, TextureImage } from "../../../textures/Texture";
 import { Pool } from "../../Pool";
 import { RenderingContext } from "../RenderingContext";
 import { DataType } from "./DataType";
@@ -21,6 +22,7 @@ export const GL = WebGLRenderingContext;
 
 export class TexImage2D implements IDisposable {
   disposed = false;
+  target: TextureTarget;
   glTexture: WebGLTexture;
   dataType: DataType;
   pixelFormat: PixelFormat;
@@ -28,8 +30,7 @@ export class TexImage2D implements IDisposable {
 
   constructor(
     public context: RenderingContext,
-    public texture: Texture,
-    public target: TextureTarget = TextureTarget.Texture2D,
+    public texture: Texture | CubeTexture,
     public level = 0,
     public internalFormat: PixelFormat = PixelFormat.RGBA,
     public texParameters: TexParameters = new TexParameters(),
@@ -49,32 +50,21 @@ export class TexImage2D implements IDisposable {
     this.pixelFormat = texture.pixelFormat;
     this.size = texture.size;
 
+    if (texture instanceof Texture) {
+      this.target = TextureTarget.Texture2D;
+    } else if (texture instanceof CubeTexture) {
+      this.target = TextureTarget.TextureCubeMap;
+    } else {
+      throw new Error("Unsupported target");
+    }
+
     gl.bindTexture(this.target, this.glTexture);
-    if (texture.image instanceof ArrayBufferImage) {
-      gl.texImage2D(
-        this.target,
-        this.level,
-        this.internalFormat,
-        this.size.width,
-        this.size.height,
-        0,
-        this.pixelFormat,
-        this.dataType,
-        new Uint8Array(texture.image.data),
-        0,
-      );
-    } else if (texture.image instanceof HTMLImageElement) {
-      gl.texImage2D(
-        this.target,
-        this.level,
-        this.internalFormat,
-        this.size.width,
-        this.size.height,
-        0,
-        this.pixelFormat,
-        this.dataType,
-        texture.image,
-      );
+    if (texture instanceof Texture) {
+      this.loadImage(texture.image);
+    } else if (texture instanceof CubeTexture) {
+      texture.images.forEach((image: TextureImage, index: number) => {
+        this.loadImage(image, TextureTarget.CubeMapPositiveX + index);
+      });
     }
 
     if (texParameters.generateMipmaps) {
@@ -90,6 +80,38 @@ export class TexImage2D implements IDisposable {
     gl.bindTexture(this.target, null);
 
     // gl.texParameteri(this.target, gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT, texParameters.anisotropicLevels);
+  }
+
+  private loadImage(image: TextureImage, target: TextureTarget | undefined = undefined): void {
+    const gl = this.context.gl;
+    if (image instanceof ArrayBufferImage) {
+      gl.texImage2D(
+        target ?? this.target,
+        this.level,
+        this.internalFormat,
+        this.size.width,
+        this.size.height,
+        0,
+        this.pixelFormat,
+        this.dataType,
+        new Uint8Array(image.data),
+        0,
+      );
+    } else if (image instanceof HTMLImageElement) {
+      gl.texImage2D(
+        target ?? this.target,
+        this.level,
+        this.internalFormat,
+        this.size.width,
+        this.size.height,
+        0,
+        this.pixelFormat,
+        this.dataType,
+        image,
+      );
+    } else {
+      throw new Error("unsupported image type");
+    }
   }
 
   dispose(): void {
