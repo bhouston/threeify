@@ -8,6 +8,7 @@
 import { ICloneable, IEquatable } from "../../core/types";
 
 export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
+  // TODO: Should be intialized to default WebGL states
   constructor(
     public red = true,
     public green = true,

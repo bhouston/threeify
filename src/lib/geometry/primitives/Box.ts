@@ -26,7 +26,7 @@ export function box(
 
   // helper variables
 
-  const numberOfVertices = 0;
+  let numberOfVertices = 0;
 
   function buildPlane(
     u: number,
@@ -106,6 +106,7 @@ export function box(
         indices.push(b, c, d);
       }
     }
+    numberOfVertices += 4;
   }
 
   // build each side of the box geometry

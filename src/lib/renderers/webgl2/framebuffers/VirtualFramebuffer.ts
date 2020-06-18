@@ -5,17 +5,21 @@
 // * @bhouston
 //
 
-import { VertexArrayObject } from "..";
 import { IDisposable } from "../../../core/types";
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
+import { BlendState } from "../BlendState";
 import { BufferGeometry } from "../buffers/BufferGeometry";
 import { ClearState } from "../ClearState";
+import { DepthTestState } from "../DepthTestState";
+import { MaskState } from "../MaskState";
 import { Program } from "../programs/Program";
+import { UniformValueMap } from "../programs/ProgramUniform";
 import { RenderingContext } from "../RenderingContext";
 import { sizeOfDataType } from "../textures/DataType";
 import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { TexImage2D } from "../textures/TexImage2D";
+import { VertexArrayObject } from "../VertexArrayObject";
 import { AttachmentPoints } from "./AttachmentPoints";
 import { Attachments } from "./Attachments";
 
@@ -27,34 +31,35 @@ export class FramebufferAttachment {
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
-  #clearState: ClearState = new ClearState();
+  public clearState: ClearState | undefined = undefined;
+  public depthTestState: DepthTestState | undefined = undefined;
+  public blendState: BlendState | undefined = undefined;
+  public maskState: MaskState | undefined = undefined;
 
   constructor(public context: RenderingContext, public attachments: Array<FramebufferAttachment> = []) {}
-
-  get clearState(): ClearState {
-    return this.#clearState.clone();
-  }
-  set clearState(clearState: ClearState) {
-    this.#clearState = clearState;
-  }
 
   clear(
     attachmentFlags: Attachments = Attachments.Color | Attachments.Depth,
     clearState: ClearState | undefined = undefined,
   ): void {
-    if (clearState !== undefined) {
-      this.context.clearState = clearState;
-    } else {
-      this.context.clearState = this.clearState;
-    }
-
     this.context.framebuffer = this;
+    this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
     const gl = this.context.gl;
     gl.clear(attachmentFlags);
   }
 
-  renderBufferGeometry(program: Program, uniforms: any, bufferGeometry: BufferGeometry): void {
+  renderBufferGeometry(
+    program: Program,
+    uniforms: UniformValueMap,
+    bufferGeometry: BufferGeometry,
+    depthTestState: DepthTestState | undefined = undefined,
+    blendState: BlendState | undefined = undefined,
+    maskState: MaskState | undefined = undefined,
+  ): void {
     this.context.framebuffer = this;
+    this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
+    this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
+    this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
     this.context.program = program;
     this.context.program.setUniformValues(uniforms);
     this.context.program.setAttributeBuffers(bufferGeometry);
@@ -71,8 +76,18 @@ export abstract class VirtualFramebuffer implements IDisposable {
     }
   }
 
-  renderVertexArrayObject(program: Program, uniforms: any, vao: VertexArrayObject): void {
+  renderVertexArrayObject(
+    program: Program,
+    uniforms: UniformValueMap,
+    vao: VertexArrayObject,
+    depthTestState: DepthTestState | undefined = undefined,
+    blendState: BlendState | undefined = undefined,
+    maskState: MaskState | undefined = undefined,
+  ): void {
     this.context.framebuffer = this;
+    this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
+    this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
+    this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
     this.context.program = program;
     this.context.program.setUniformValues(uniforms);
     this.context.program.setAttributeBuffers(vao);
@@ -82,8 +97,17 @@ export abstract class VirtualFramebuffer implements IDisposable {
     gl.drawArrays(vao.primitive, vao.offset, vao.count);
   }
 
-  renderPass(program: Program, uniforms: any): void {
+  renderPass(
+    program: Program,
+    uniforms: UniformValueMap,
+    depthTestState: DepthTestState | undefined = undefined,
+    blendState: BlendState | undefined = undefined,
+    maskState: MaskState | undefined = undefined,
+  ): void {
     this.context.framebuffer = this;
+    this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
+    this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
+    this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
     this.context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
   }
 

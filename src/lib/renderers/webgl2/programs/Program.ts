@@ -15,7 +15,7 @@ import { VertexArrayObject } from "../VertexArrayObject";
 import { RenderingContext } from "./../RenderingContext";
 import { Shader } from "./../shaders/Shader";
 import { ProgramAttribute } from "./ProgramAttribute";
-import { ProgramUniform } from "./ProgramUniform";
+import { ProgramUniform, UniformValueMap } from "./ProgramUniform";
 import { numTextureUnits } from "./UniformType";
 
 export class Program implements IDisposable {
@@ -77,16 +77,16 @@ export class Program implements IDisposable {
     }
   }
 
-  setUniformValues(uniformValues: any, uniformNames: string[] | undefined = undefined): this {
+  setUniformValues(uniformValueMap: UniformValueMap, uniformNames: string[] | undefined = undefined): this {
     this.context.program = this;
     if (uniformNames === undefined) {
-      uniformNames = Object.keys(uniformValues) as string[];
+      uniformNames = Object.keys(uniformValueMap) as string[];
     }
     uniformNames.forEach((uniformName) => {
       // TODO replace this.uniforms with a map for faster access
       const uniform = this.uniforms.get(uniformName);
       if (uniform !== undefined) {
-        uniform.set(uniformValues[uniformName]);
+        uniform.set(uniformValueMap[uniformName]);
       }
     });
     return this;

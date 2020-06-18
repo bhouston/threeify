@@ -1,9 +1,9 @@
-import { ICloneable, ICopyable, IVersionable } from "../core/types";
+import { IVersionable } from "../core/types";
 import { Matrix3 } from "../math/Matrix3";
 import { Vector2 } from "../math/Vector2";
 import { Texture } from "./Texture";
 
-export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<TextureAccessor>, IVersionable {
+export class TextureAccessor implements IVersionable {
   version = 0;
   #uvTransform = new Matrix3();
   #uvTransformVersion = -1;
@@ -15,19 +15,6 @@ export class TextureAccessor implements ICloneable<TextureAccessor>, ICopyable<T
     public uvRotation = 0,
     public uvTranslation: Vector2 = new Vector2(),
   ) {}
-
-  clone(): TextureAccessor {
-    return new TextureAccessor(this.texture, this.uvIndex, this.uvScale, this.uvRotation, this.uvTranslation);
-  }
-
-  copy(ta: TextureAccessor): this {
-    this.texture = ta.texture;
-    this.uvIndex = ta.uvIndex;
-    this.uvScale = ta.uvScale;
-    this.uvTranslation = ta.uvTranslation;
-    this.uvRotation = ta.uvRotation;
-    return this;
-  }
 
   get uvTransform(): Matrix3 {
     if (this.#uvTransformVersion < this.version) {

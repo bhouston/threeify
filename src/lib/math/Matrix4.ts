@@ -6,7 +6,7 @@
 //
 
 import { hashFloatArray } from "../core/hash";
-import { Euler3, EulerOrder } from "./Euler3";
+import { Euler, EulerOrder } from "./Euler";
 import { IPrimitive } from "./IPrimitive";
 import { Quaternion } from "./Quaternion";
 import { Vector3 } from "./Vector3";
@@ -364,7 +364,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     return this;
   }
 
-  makeRotationFromEuler(euler: Euler3): this {
+  makeRotationFromEuler(euler: Euler): this {
     const te = this.elements;
 
     const x = euler.x,

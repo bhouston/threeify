@@ -8,34 +8,16 @@
 
 import { Vector2 } from "lib/math/Vector2";
 import { IDisposable } from "../../../core/types";
-import { ArrayBufferImage, Texture } from "../../../textures/Texture";
+import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
+import { Texture } from "../../../textures/Texture";
 import { Pool } from "../../Pool";
 import { RenderingContext } from "../RenderingContext";
 import { DataType } from "./DataType";
 import { PixelFormat } from "./PixelFormat";
 import { TexParameters } from "./TexParameters";
+import { TextureTarget } from "./TextureTarget";
 
-const GL = WebGLRenderingContext;
-
-// from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
-export enum TextureTarget {
-  Texture2D = GL.TEXTURE_2D, //  A two-dimensional texture.
-  CubeMapPositiveX = GL.TEXTURE_CUBE_MAP_POSITIVE_X, // Cube map sides...
-  CubeMapNegativeX = GL.TEXTURE_CUBE_MAP_NEGATIVE_X,
-  CubeMapPositiveY = GL.TEXTURE_CUBE_MAP_POSITIVE_Y,
-  CubeMapNegativeY = GL.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-  CubeMapPositiveZ = GL.TEXTURE_CUBE_MAP_POSITIVE_Z,
-  CubeMapNegativeZ = GL.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-}
-
-export enum TextureSourceType {
-  ArrayBufferView,
-  ImageDate,
-  HTMLImageElement,
-  HTMLCanvasElement,
-  HTMLVideoElement,
-  ImageBitmap,
-}
+export const GL = WebGLRenderingContext;
 
 export class TexImage2D implements IDisposable {
   disposed = false;

@@ -7,7 +7,7 @@
 
 import { generateUUID } from "../core/generateUuid";
 import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
-import { Euler3 } from "../math/Euler3";
+import { Euler } from "../math/Euler";
 import { Matrix4 } from "../math/Matrix4";
 import { Quaternion } from "../math/Quaternion";
 import { Vector3 } from "../math/Vector3";
@@ -21,7 +21,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   name = "";
   children: NodeCollection;
   position: Vector3 = new Vector3();
-  rotation: Euler3 = new Euler3();
+  rotation: Euler = new Euler();
   scale: Vector3 = new Vector3(1, 1, 1);
   visible = true;
 

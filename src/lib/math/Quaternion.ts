@@ -6,7 +6,7 @@
 //
 
 import { hashFloat4 } from "../core/hash";
-import { Euler3, EulerOrder } from "./Euler3";
+import { Euler, EulerOrder } from "./Euler";
 import { IPrimitive } from "./IPrimitive";
 import { Matrix4 } from "./Matrix4";
 import { Vector3 } from "./Vector3";
@@ -149,7 +149,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
     return this;
   }
 
-  setFromEuler(euler: Euler3): this {
+  setFromEuler(euler: Euler): this {
     const x = euler.x,
       y = euler.y,
       z = euler.z,
