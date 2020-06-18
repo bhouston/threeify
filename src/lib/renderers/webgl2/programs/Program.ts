@@ -5,7 +5,6 @@
 // * @bhouston
 //
 
-import { Dictionary } from "../../../core/Dictionary";
 import { IDisposable } from "../../../core/types";
 import { ShaderMaterial } from "../../../materials/ShaderMaterial";
 import { Pool } from "../../Pool";
@@ -23,8 +22,8 @@ export class Program implements IDisposable {
   vertexShader: Shader;
   fragmentShader: Shader;
   glProgram: WebGLProgram;
-  uniforms = new Dictionary<string, ProgramUniform>();
-  attributes = new Dictionary<string, ProgramAttribute>();
+  uniforms: { [key: string]: ProgramUniform | undefined } = {};
+  attributes: { [key: string]: ProgramAttribute | undefined } = {};
 
   constructor(public context: RenderingContext, shaderMaterial: ShaderMaterial) {
     this.vertexShader = new Shader(this.context, shaderMaterial.vertexShaderCode, ShaderType.Vertex);
@@ -67,28 +66,26 @@ export class Program implements IDisposable {
         uniform.textureUnit = textureUnitCount;
         textureUnitCount++;
       }
-      this.uniforms.set(uniform.name, uniform);
+      this.uniforms[uniform.name] = uniform;
     }
 
     const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
     for (let i = 0; i < numActiveAttributes; ++i) {
       const attribute = new ProgramAttribute(this, i);
-      this.attributes.set(attribute.name, attribute);
+      this.attributes[attribute.name] = attribute;
     }
   }
 
-  setUniformValues(uniformValueMap: UniformValueMap, uniformNames: string[] | undefined = undefined): this {
+  setUniformValues(uniformValueMap: UniformValueMap): this {
     this.context.program = this;
-    if (uniformNames === undefined) {
-      uniformNames = Object.keys(uniformValueMap) as string[];
-    }
-    uniformNames.forEach((uniformName) => {
+
+    for (const uniformName in uniformValueMap) {
       // TODO replace this.uniforms with a map for faster access
-      const uniform = this.uniforms.get(uniformName);
+      const uniform = this.uniforms[uniformName];
       if (uniform !== undefined) {
         uniform.set(uniformValueMap[uniformName]);
       }
-    });
+    }
     return this;
   }
 
@@ -98,12 +95,13 @@ export class Program implements IDisposable {
     const gl = this.context.gl;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
-      this.attributes.forEach((attribute, name) => {
-        const bufferAccessor = bufferGeometry.bufferAccessors.get(name);
-        if (bufferAccessor !== undefined) {
+      for (const name in this.attributes) {
+        const attribute = this.attributes[name];
+        const bufferAccessor = bufferGeometry.bufferAccessors[name];
+        if (attribute !== undefined && bufferAccessor !== undefined) {
           attribute.setBuffer(bufferAccessor);
         }
-      });
+      }
       if (bufferGeometry.indices !== undefined) {
         // bind the buffer containing the indices
         // console.log(

@@ -8,7 +8,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 const geometry = new Geometry();
-geometry.attributes.set("position", new Float32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2));
+geometry.attributes["position"] = new Float32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
 geometry.indices = new Uint32Attribute([0, 1, 2], 1);
 
 const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);

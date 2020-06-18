@@ -65,9 +65,9 @@ export function plane(width = 1, height = 1, widthSegments = 1, heightSegments =
 
   const geometry = new Geometry();
   geometry.indices = new Uint32Attribute(indices);
-  geometry.attributes.set("position", new Float32Attribute(vertices, 3));
-  geometry.attributes.set("normal", new Float32Attribute(normals, 3));
-  geometry.attributes.set("uv", new Float32Attribute(uvs, 2));
+  geometry.attributes["position"] = new Float32Attribute(vertices, 3);
+  geometry.attributes["normal"] = new Float32Attribute(normals, 3);
+  geometry.attributes["uv"] = new Float32Attribute(uvs, 2);
 
   return geometry;
 }
