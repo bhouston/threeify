@@ -132,6 +132,15 @@ export class ProgramUniform {
           return this;
         }
         break;
+      case UniformType.SamplerCube:
+      case UniformType.SamplerCubeShadow:
+        if (value instanceof TexImage2D) {
+          gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
+          gl.bindTexture(GL2.TEXTURE_CUBE_MAP, value.glTexture);
+          gl.uniform1i(this.glLocation, this.textureUnit);
+          return this;
+        }
+        break;
     }
     throw new Error(`unsupported uniform type: ${this.uniformType}`);
   }

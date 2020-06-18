@@ -6,7 +6,7 @@
 // * @bhouston
 //
 
-import { IDisposable } from "lib/core/types";
+import { IDisposable } from "../../../core/types";
 import { Geometry } from "../../../geometry/Geometry";
 import { RenderingContext } from "../RenderingContext";
 import { BufferAccessor } from "./BufferAccessor";

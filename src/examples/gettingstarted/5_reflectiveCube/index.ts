@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/Box";
+import { tetrahedron } from "../../../lib/geometry/primitives/Octaehdron";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
@@ -15,16 +15,17 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = box(0.75, 0.75, 0.75);
+  const geometry = tetrahedron(0.35, 0);
+  console.log(geometry);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
   const cubeTexture = new CubeTexture([
-    await fetchImage("/assets/textures/cube/pisa/px.jpg"),
-    await fetchImage("/assets/textures/cube/pisa/nx.jpg"),
-    await fetchImage("/assets/textures/cube/pisa/py.jpg"),
-    await fetchImage("/assets/textures/cube/pisa/ny.jpg"),
-    await fetchImage("/assets/textures/cube/pisa/pz.jpg"),
-    await fetchImage("/assets/textures/cube/pisa/nz.jpg"),
+    await fetchImage("/assets/textures/cube/pisa/px.png"),
+    await fetchImage("/assets/textures/cube/pisa/nx.png"),
+    await fetchImage("/assets/textures/cube/pisa/py.png"),
+    await fetchImage("/assets/textures/cube/pisa/ny.png"),
+    await fetchImage("/assets/textures/cube/pisa/pz.png"),
+    await fetchImage("/assets/textures/cube/pisa/nz.png"),
   ]);
 
   const context = new RenderingContext();

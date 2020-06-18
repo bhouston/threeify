@@ -37,6 +37,14 @@ export class Vector3 implements IPrimitive<Vector3> {
     return hashFloat3(this.x, this.y, this.z);
   }
 
+  set(x: number, y: number, z: number): this {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+
+    return this;
+  }
+
   clone(): Vector3 {
     return new Vector3().copy(this);
   }
@@ -73,9 +81,17 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
+  lerp(v: Vector3, alpha: number): this {
+    this.x += (v.x - this.x) * alpha;
+    this.y += (v.y - this.y) * alpha;
+    this.z += (v.z - this.z) * alpha;
+
+    return this;
+  }
+
   normalize(): this {
     const length = this.length();
-    return this.multiplyByScalar(length === 0 ? 1 : 0);
+    return this.multiplyByScalar(length === 0 ? 1 : 1 / length);
   }
 
   getComponent(index: number): number {
@@ -115,6 +131,21 @@ export class Vector3 implements IPrimitive<Vector3> {
 
   dot(v: Vector3): number {
     return this.x * v.x + this.y * v.y + this.z * v.z;
+  }
+
+  cross(v: Vector3): this {
+    const ax = this.x,
+      ay = this.y,
+      az = this.z;
+    const bx = v.x,
+      by = v.y,
+      bz = v.z;
+
+    this.x = ay * bz - az * by;
+    this.y = az * bx - ax * bz;
+    this.z = ax * by - ay * bx;
+
+    return this;
   }
 
   // TODO: think about moving this to a helper function -- it may allow for better code shaking...

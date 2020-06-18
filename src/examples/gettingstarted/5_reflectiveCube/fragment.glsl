@@ -2,6 +2,7 @@ precision highp float;
 
 uniform sampler2D map;
 uniform vec3 viewLightPosition;
+uniform samplerCube cubeMap;
 
 varying vec3 v_viewPosition;
 varying vec3 v_viewNormal;
@@ -13,7 +14,7 @@ void main() {
 
   vec3 directionToLight = normalize( viewLightPosition - v_viewPosition );
   float lambertianIntensity = dot( directionToLight, v_viewNormal );
-
-  gl_FragColor = vec4( albedo * lambertianIntensity, 1.0);
+  vec3 cubeIntensity = textureCube(cubeMap, normalize(v_viewNormal)).rgb;
+  gl_FragColor = vec4( cubeIntensity, 1.0);
 
 }
