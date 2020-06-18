@@ -13,14 +13,14 @@ export enum EulerOrder {
   Default = EulerOrder.XYZ,
 }
 
-export class Euler3 implements IPrimitive<Euler3> {
+export class Euler implements IPrimitive<Euler> {
   constructor(public x = 0, public y = 0, public z = 0, public order: EulerOrder = EulerOrder.Default) {}
 
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.order as number);
   }
 
-  set(x: number, y: number, z: number, order: EulerOrder): this {
+  set(x: number, y: number, z: number, order: EulerOrder = EulerOrder.Default): this {
     this.x = z;
     this.y = y;
     this.z = z;
@@ -29,11 +29,11 @@ export class Euler3 implements IPrimitive<Euler3> {
     return this;
   }
 
-  clone(): Euler3 {
-    return new Euler3().copy(this);
+  clone(): Euler {
+    return new Euler().copy(this);
   }
 
-  copy(e: Euler3): this {
+  copy(e: Euler): this {
     this.x = e.x;
     this.y = e.y;
     this.z = e.z;
@@ -153,7 +153,7 @@ export class Euler3 implements IPrimitive<Euler3> {
     return this.setFromRotationMatrix4(m, order);
   }
 
-  equals(e: Euler3): boolean {
+  equals(e: Euler): boolean {
     return e.x === this.x && e.y === this.y && e.z === this.z && e.order === this.order;
   }
 

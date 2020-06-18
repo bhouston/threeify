@@ -46,13 +46,8 @@ export enum DepthTestFunc {
 }
 
 export class DepthTestState implements ICloneable<DepthTestState>, IEquatable<DepthTestState> {
-  enabled: boolean;
-  func: DepthTestFunc;
-
-  constructor(enabled = true, func: DepthTestFunc = DepthTestFunc.Less) {
-    this.enabled = enabled;
-    this.func = func;
-  }
+  // TODO: Should be intialized to default WebGL states
+  constructor(public enabled = false, public func = DepthTestFunc.Less) {}
 
   clone(): DepthTestState {
     return new DepthTestState(this.enabled, this.func);

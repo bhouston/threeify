@@ -9,7 +9,8 @@ import { ICloneable, IEquatable } from "../../core/types";
 import { Color } from "../../math/Color";
 
 export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState> {
-  constructor(public color: Color = new Color(), public alpha = 0, public depth = 1, public stencil = 0) {}
+  // TODO: Should be intialized to default WebGL states
+  constructor(public color = new Color(1, 1, 1), public alpha = 0, public depth = 1, public stencil = 0) {}
 
   clone(): ClearState {
     return new ClearState(this.color, this.alpha, this.depth, this.stencil);
