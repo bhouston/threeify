@@ -91,13 +91,14 @@ export enum BlendFunc {
 }
 
 export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState> {
+  // TODO: Should be intialized to default WebGL states
   constructor(
-    public enabled = true,
-    public sourceRGBFactor: BlendFunc = BlendFunc.One,
-    public destRGBFactor: BlendFunc = BlendFunc.Zero,
-    public sourceAlphaFactor: BlendFunc = BlendFunc.One,
-    public destAlphaFactor: BlendFunc = BlendFunc.Zero,
-    public equation: BlendEquation = BlendEquation.Add,
+    public enabled = false,
+    public sourceRGBFactor = BlendFunc.One,
+    public destRGBFactor = BlendFunc.Zero,
+    public sourceAlphaFactor = BlendFunc.One,
+    public destAlphaFactor = BlendFunc.Zero,
+    public equation = BlendEquation.Add,
   ) {}
 
   clone(): BlendState {

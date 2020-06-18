@@ -5,17 +5,20 @@
 // * @bhouston
 //
 
-import { VertexArrayObject } from "..";
 import { IDisposable } from "../../../core/types";
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
+import { BlendState } from "../BlendState";
 import { BufferGeometry } from "../buffers/BufferGeometry";
 import { ClearState } from "../ClearState";
+import { DepthTestState } from "../DepthTestState";
+import { MaskState } from "../MaskState";
 import { Program } from "../programs/Program";
 import { RenderingContext } from "../RenderingContext";
 import { sizeOfDataType } from "../textures/DataType";
 import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { TexImage2D } from "../textures/TexImage2D";
+import { VertexArrayObject } from "../VertexArrayObject";
 import { AttachmentPoints } from "./AttachmentPoints";
 import { Attachments } from "./Attachments";
 
@@ -27,7 +30,10 @@ export class FramebufferAttachment {
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
-  #clearState: ClearState = new ClearState();
+  #clearState = new ClearState();
+  #depthTestState = new DepthTestState();
+  #blendState = new BlendState();
+  #maskState = new MaskState();
 
   constructor(public context: RenderingContext, public attachments: Array<FramebufferAttachment> = []) {}
 
@@ -38,6 +44,25 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.#clearState = clearState;
   }
 
+  get depthTestState(): DepthTestState {
+    return this.#depthTestState.clone();
+  }
+  set depthTestState(depthTestState: DepthTestState) {
+    this.#depthTestState = depthTestState;
+  }
+
+  get blendState(): BlendState {
+    return this.#blendState.clone();
+  }
+  set blendState(blendState: BlendState) {
+    this.#blendState = blendState;
+  }
+  get maskState(): MaskState {
+    return this.#maskState.clone();
+  }
+  set maskState(maskState: MaskState) {
+    this.#maskState = maskState;
+  }
   clear(
     attachmentFlags: Attachments = Attachments.Color | Attachments.Depth,
     clearState: ClearState | undefined = undefined,
@@ -55,6 +80,9 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   renderBufferGeometry(program: Program, uniforms: any, bufferGeometry: BufferGeometry): void {
     this.context.framebuffer = this;
+    this.context.blendState = this.#blendState;
+    this.context.depthTestState = this.#depthTestState;
+    this.context.maskState = this.#maskState;
     this.context.program = program;
     this.context.program.setUniformValues(uniforms);
     this.context.program.setAttributeBuffers(bufferGeometry);
