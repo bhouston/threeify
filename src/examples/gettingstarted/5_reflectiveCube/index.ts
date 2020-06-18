@@ -1,4 +1,4 @@
-import { icosahedron } from "../../../lib/geometry/primitives/Octaehdron";
+import { icosahedron } from "../../../lib/geometry/primitives/Polyhedrons";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
