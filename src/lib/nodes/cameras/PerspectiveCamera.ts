@@ -23,6 +23,6 @@ export class PerspectiveCamera extends Camera {
     const top = -height * 0.5;
     const bottom = -top + height;
 
-    return new Matrix4().makePerspectiveProjection(left, right, top, bottom, this.near, this.far);
+    return new Matrix4().makePerspective(left, right, top, bottom, this.near, this.far);
   }
 }

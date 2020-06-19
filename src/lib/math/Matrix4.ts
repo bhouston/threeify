@@ -66,6 +66,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     const te = this.elements;
     const me = m.elements;
 
+    // TODO: Replace with set(...)
     te[0] = me[0];
     te[1] = me[1];
     te[2] = me[2];
@@ -162,6 +163,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
       b43 = be[11],
       b44 = be[15];
 
+    // TODO: Replace with set(...)
     te[0] = a11 * b11 + a12 * b21 + a13 * b31 + a14 * b41;
     te[4] = a11 * b12 + a12 * b22 + a13 * b32 + a14 * b42;
     te[8] = a11 * b13 + a12 * b23 + a13 * b33 + a14 * b43;
@@ -271,6 +273,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
 
     const detInv = 1 / det;
 
+    // TODO: Replace with set(...)
     me[0] = t11 * detInv;
     me[1] =
       (n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44) *
@@ -377,6 +380,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     const e = Math.cos(z),
       f = Math.sin(z);
 
+    // TODO: Replace smart code that compacts all of this into one
     if (euler.order === EulerOrder.XYZ) {
       const ae = a * e,
         af = a * f,
@@ -537,6 +541,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
       sy = scale.y,
       sz = scale.z;
 
+    // TODO: Replace with set
     te[0] = (1 - (yy + zz)) * sx;
     te[1] = (xy + wz) * sx;
     te[2] = (xz - wy) * sx;
@@ -583,6 +588,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     const invSY = 1 / sy;
     const invSZ = 1 / sz;
 
+    // TODO: replace with me
     m.elements[0] *= invSX;
     m.elements[1] *= invSX;
     m.elements[2] *= invSX;
@@ -605,7 +611,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
   }
 
   // TODO: Replace with a Box2
-  makePerspectiveProjection(left: number, right: number, top: number, bottom: number, near: number, far: number): this {
+  makePerspective(left: number, right: number, top: number, bottom: number, near: number, far: number): this {
     const te = this.elements;
     const x = (2 * near) / (right - left);
     const y = (2 * near) / (top - bottom);
@@ -615,6 +621,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     const c = -(far + near) / (far - near);
     const d = (-2 * far * near) / (far - near);
 
+    // TODO: Replace with set(...)
     te[0] = x;
     te[4] = 0;
     te[8] = a;
@@ -636,14 +643,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
   }
 
   // TODO: Replace with a Box3?
-  makeOrthographicProjection(
-    left: number,
-    right: number,
-    top: number,
-    bottom: number,
-    near: number,
-    far: number,
-  ): this {
+  makeOrthographic(left: number, right: number, top: number, bottom: number, near: number, far: number): this {
     const te = this.elements;
     const w = 1.0 / (right - left);
     const h = 1.0 / (top - bottom);
@@ -653,6 +653,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     const y = (top + bottom) * h;
     const z = (far + near) * p;
 
+    // TODO: Replace with set(...)
     te[0] = 2 * w;
     te[4] = 0;
     te[8] = 0;

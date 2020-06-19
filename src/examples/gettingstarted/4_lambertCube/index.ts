@@ -27,7 +27,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: new Matrix4().makeTranslation(new Vector3(0, 0, -1)),
-    viewToScreen: new Matrix4().makePerspectiveProjection(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
+    viewToScreen: new Matrix4().makePerspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     viewLightPosition: new Vector3(0, 0, 0),
     map: new TexImage2D(context, texture),
   };

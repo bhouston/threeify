@@ -29,6 +29,6 @@ export class OrthographicCamera extends Camera {
     const top = -this.height * 0.5 + this.center.y;
     const bottom = top + this.height;
 
-    return new Matrix4().makeOrthographicProjection(left, right, top, bottom, this.near, this.far);
+    return new Matrix4().makeOrthographic(left, right, top, bottom, this.near, this.far);
   }
 }

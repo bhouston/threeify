@@ -14,7 +14,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = icosahedron(0.75, 4);
+  const geometry = icosahedron(0.75, 3);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const cubeTexture = new CubeTexture([
     await fetchImage("/assets/textures/cube/pisa/px.png"),
@@ -33,7 +33,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: new Matrix4().makeTranslation(new Vector3(0, 0, -1)),
-    viewToScreen: new Matrix4().makePerspectiveProjection(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
+    viewToScreen: new Matrix4().makePerspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     cubeMap: new TexImage2D(context, cubeTexture),
   };
   const bufferGeometry = new BufferGeometry(context, geometry);
