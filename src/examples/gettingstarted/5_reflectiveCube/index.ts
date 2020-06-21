@@ -3,6 +3,11 @@ import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
+import {
+  makeMatrix4Perspective,
+  makeMatrix4RotationFromEuler,
+  makeMatrix4Translation,
+} from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl2/DepthTestState";
@@ -32,8 +37,8 @@ async function init(): Promise<null> {
   const program = new Program(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
-    worldToView: new Matrix4().makeTranslation(new Vector3(0, 0, -1)),
-    viewToScreen: new Matrix4().makePerspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
+    worldToView: makeMatrix4Translation(new Matrix4(), new Vector3(0, 0, -1)),
+    viewToScreen: makeMatrix4Perspective(new Matrix4(), -0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     cubeMap: new TexImage2D(context, cubeTexture),
   };
   const bufferGeometry = new BufferGeometry(context, geometry);
@@ -43,7 +48,10 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    uniforms.localToWorld.makeRotationFromEuler(new Euler(now * 0.0001, now * 0.00033, now * 0.000077));
+    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+      uniforms.localToWorld,
+      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
+    );
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 

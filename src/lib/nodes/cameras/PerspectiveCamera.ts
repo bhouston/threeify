@@ -6,6 +6,7 @@
 //
 
 import { Matrix4 } from "../../math/Matrix4";
+import { makeMatrix4Perspective } from "../../math/Matrix4.Functions";
 import { Camera } from "./Camera";
 
 export class PerspectiveCamera extends Camera {
@@ -23,6 +24,6 @@ export class PerspectiveCamera extends Camera {
     const top = -height * 0.5;
     const bottom = -top + height;
 
-    return new Matrix4().makePerspective(left, right, top, bottom, this.near, this.far);
+    return makeMatrix4Perspective(new Matrix4(), left, right, top, bottom, this.near, this.far);
   }
 }

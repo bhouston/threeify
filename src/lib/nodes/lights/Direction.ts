@@ -1,5 +1,7 @@
 import { Euler } from "../../math/Euler";
+import { makeEulerFromRotationMatrix4 } from "../../math/Euler.Functions";
 import { Matrix4 } from "../../math/Matrix4";
+import { makeMatrix4RotationFromEuler } from "../../math/Matrix4.Functions";
 import { Vector3 } from "../../math/Vector3";
 
 export function negativeZDirectionToEuler(d: Vector3): Euler {
@@ -36,12 +38,12 @@ export function negativeZDirectionToEuler(d: Vector3): Euler {
   te[11] = 0;
   te[15] = 1;
 
-  return new Euler().setFromRotationMatrix4(m);
+  return makeEulerFromRotationMatrix4(new Euler(), m);
 }
 
 export function eulerToNegativeZDirection(e: Euler): Vector3 {
   console.warn("This has never been tested.");
-  const m = new Matrix4().makeRotationFromEuler(e);
+  const m = makeMatrix4RotationFromEuler(new Matrix4(), e);
   const te = m.elements;
   return new Vector3(te[2], te[6], te[10]);
 }
