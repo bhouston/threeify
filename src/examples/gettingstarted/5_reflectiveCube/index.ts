@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/Box";
+import { icosahedron } from "../../../lib/geometry/primitives/Polyhedrons";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
@@ -14,14 +14,21 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl2/Dep
 import { Program } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
-import { Texture } from "../../../lib/textures/Texture";
+import { CubeTexture } from "../../../lib/textures/CubeTexture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = box(0.75, 0.75, 0.75);
+  const geometry = icosahedron(0.75, 3);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
+  const cubeTexture = new CubeTexture([
+    await fetchImage("/assets/textures/cube/pisa/px.png"),
+    await fetchImage("/assets/textures/cube/pisa/nx.png"),
+    await fetchImage("/assets/textures/cube/pisa/py.png"),
+    await fetchImage("/assets/textures/cube/pisa/ny.png"),
+    await fetchImage("/assets/textures/cube/pisa/pz.png"),
+    await fetchImage("/assets/textures/cube/pisa/nz.png"),
+  ]);
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
@@ -32,8 +39,7 @@ async function init(): Promise<null> {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Matrix4(), new Vector3(0, 0, -1)),
     viewToScreen: makeMatrix4Perspective(new Matrix4(), -0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
-    viewLightPosition: new Vector3(0, 0, 0),
-    map: new TexImage2D(context, texture),
+    cubeMap: new TexImage2D(context, cubeTexture),
   };
   const bufferGeometry = new BufferGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -44,7 +50,7 @@ async function init(): Promise<null> {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       uniforms.localToWorld,
-      new Euler(now * 0.001, now * 0.0033, now * 0.00077),
+      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
     );
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }

@@ -7,10 +7,10 @@
 
 import { hashFloatArray } from "../core/hash";
 import { IPrimitive } from "./IPrimitive";
-import { Matrix4 } from "./Matrix4";
-import { Vector2 } from "./Vector2";
-import { Vector3 } from "./Vector3";
 
+//
+// NOTE: This is a homogeneous matrix, it is not a 3x3 rotation only.
+//
 export class Matrix3 implements IPrimitive<Matrix3> {
   elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
@@ -208,40 +208,6 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     te[2] = a31 * b11 + a32 * b21 + a33 * b31;
     te[5] = a31 * b12 + a32 * b22 + a33 * b32;
     te[8] = a31 * b13 + a32 * b23 + a33 * b33;
-
-    return this;
-  }
-
-  makeTranslation2(t: Vector2): this {
-    this.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
-
-    return this;
-  }
-
-  makeRotation2FromAngle(angle: number): this {
-    const c = Math.cos(angle);
-    const s = Math.sin(angle);
-
-    this.set(c, -s, 0, s, c, 0, 0, 0, 1);
-
-    return this;
-  }
-
-  makeRotation3FromMatrix4(m: Matrix4): this {
-    const me = m.elements;
-
-    this.set(me[0], me[4], me[8], me[1], me[5], me[9], me[2], me[6], me[10]);
-
-    return this;
-  }
-
-  makeScale2(s: Vector2): this {
-    this.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1.0);
-
-    return this;
-  }
-  makeScale3(s: Vector3): this {
-    this.set(s.x, 0, 0, 0, s.y, 0, 0, 0, s.z);
 
     return this;
   }

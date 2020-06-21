@@ -9,6 +9,9 @@ import { UniformType } from "./UniformType";
 
 export const GL2 = WebGL2RenderingContext;
 
+export type UniformValue = number | Vector2 | Vector3 | Color | Matrix4 | TexImage2D;
+export type UniformValueMap = { [key: string]: UniformValue };
+
 export class ProgramUniform {
   context: RenderingContext;
   name: string;
@@ -44,67 +47,61 @@ export class ProgramUniform {
     }
   }
 
-  set(value: TexImage2D): ProgramUniform;
-  set(value: Matrix4): ProgramUniform;
-  set(value: Color): ProgramUniform;
-  set(value: Vector3): ProgramUniform;
-  set(value: Vector2): ProgramUniform;
-  set(value: number): ProgramUniform;
-  set(value: any): ProgramUniform {
+  set(value: UniformValue): ProgramUniform {
     const gl = this.context.gl;
     switch (this.uniformType) {
       // case UniformType.Bool:
       // case UniformType.BoolVec2:
       // case UniformType.BoolVec3:
       // case UniformType.BoolVec4:
-      case UniformType.Int: {
-        let n = value as number;
-        if (n !== this.valueHashCode) {
-          gl.uniform1i(this.glLocation, n);
-          n = this.valueHashCode;
+      case UniformType.Int:
+        if (typeof value === "number") {
+          if (value !== this.valueHashCode) {
+            gl.uniform1i(this.glLocation, value);
+            this.valueHashCode = value;
+          }
+          return this;
         }
-        return this;
-      }
+        break;
       // case UniformType.IntVec2:
       // case UniformType.IntVec3:
       // case UniformType.IntVec4:
-      case UniformType.Float: {
-        let n = value as number;
-        if (n !== this.valueHashCode) {
-          gl.uniform1f(this.glLocation, n);
-          n = this.valueHashCode;
-        }
-        return this;
-      }
-      case UniformType.FloatVec2: {
-        const v = value as Vector2;
-        const hashCode = v.getHashCode();
-        if (hashCode !== this.valueHashCode) {
-          gl.uniform2f(this.glLocation, v.x, v.y);
-          this.valueHashCode = hashCode;
-        }
-        return this;
-      }
-      case UniformType.FloatVec3: {
-        if (value instanceof Vector3) {
-          const v = value as Vector3;
-          const hashCode = v.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform3f(this.glLocation, v.x, v.y, v.z);
-            this.valueHashCode = hashCode;
+      case UniformType.Float:
+        if (typeof value === "number") {
+          if (value !== this.valueHashCode) {
+            gl.uniform1f(this.glLocation, value);
+            this.valueHashCode = value;
           }
           return this;
-        } else if (value instanceof Color) {
-          const c = value as Color;
-          const hashCode = c.getHashCode();
+        }
+        break;
+      case UniformType.FloatVec2:
+        if (value instanceof Vector2) {
+          const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
-            gl.uniform3f(this.glLocation, c.r, c.g, c.b);
+            gl.uniform2f(this.glLocation, value.x, value.y);
             this.valueHashCode = hashCode;
           }
           return this;
         }
         break;
-      }
+      case UniformType.FloatVec3:
+        if (value instanceof Vector3) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniform3f(this.glLocation, value.x, value.y, value.z);
+            this.valueHashCode = hashCode;
+          }
+          return this;
+        } else if (value instanceof Color) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniform3f(this.glLocation, value.r, value.g, value.b);
+            this.valueHashCode = hashCode;
+          }
+          return this;
+        }
+        break;
       // case UniformType.FloatVec4:
       // case UniformType.FloatMat2:
       // case UniformType.FloatMat2x3:
@@ -114,25 +111,36 @@ export class ProgramUniform {
       // case UniformType.FloatMat3x4:
       // case UniformType.FloatMat4x2:
       // case UniformType.FloatMat4x3:
-      case UniformType.FloatMat4: {
-        const m = value as Matrix4;
-        const hashCode = m.getHashCode();
-        if (hashCode !== this.valueHashCode) {
-          gl.uniformMatrix4fv(this.glLocation, false, m.elements);
-          this.valueHashCode = hashCode;
+      case UniformType.FloatMat4:
+        if (value instanceof Matrix4) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniformMatrix4fv(this.glLocation, false, value.elements);
+            this.valueHashCode = hashCode;
+          }
+          return this;
         }
-        return this;
-      }
+        break;
       case UniformType.Sampler2D:
       case UniformType.IntSampler2D:
       case UniformType.UnsignedIntSampler2D:
-      case UniformType.Sampler2DShadow: {
-        const t = value as TexImage2D;
-        gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
-        gl.bindTexture(GL2.TEXTURE_2D, t.glTexture);
-        gl.uniform1i(this.glLocation, this.textureUnit);
-        return this;
-      }
+      case UniformType.Sampler2DShadow:
+        if (value instanceof TexImage2D) {
+          gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
+          gl.bindTexture(GL2.TEXTURE_2D, value.glTexture);
+          gl.uniform1i(this.glLocation, this.textureUnit);
+          return this;
+        }
+        break;
+      case UniformType.SamplerCube:
+      case UniformType.SamplerCubeShadow:
+        if (value instanceof TexImage2D) {
+          gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
+          gl.bindTexture(GL2.TEXTURE_CUBE_MAP, value.glTexture);
+          gl.uniform1i(this.glLocation, this.textureUnit);
+          return this;
+        }
+        break;
     }
     throw new Error(`unsupported uniform type: ${this.uniformType}`);
   }

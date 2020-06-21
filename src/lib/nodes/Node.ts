@@ -7,9 +7,11 @@
 
 import { generateUUID } from "../core/generateUuid";
 import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
-import { Euler } from "../math/Euler3";
+import { Euler } from "../math/Euler";
 import { Matrix4 } from "../math/Matrix4";
+import { composeMatrix4 } from "../math/Matrix4.Functions";
 import { Quaternion } from "../math/Quaternion";
+import { makeQuaternionFromEuler } from "../math/Quaternion.Functions";
 import { Vector3 } from "../math/Vector3";
 import { NodeCollection } from "./NodeCollection";
 
@@ -51,7 +53,12 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 
   get localToParentTransform(): Matrix4 {
     if (this.#parentToLocalVersion !== this.version) {
-      this.#localToParent.compose(this.position, new Quaternion().setFromEuler(this.rotation), this.scale);
+      this.#localToParent = composeMatrix4(
+        this.#localToParent,
+        this.position,
+        makeQuaternionFromEuler(new Quaternion(), this.rotation),
+        this.scale,
+      );
       this.#parentToLocalVersion = this.version;
     }
     return this.#localToParent;

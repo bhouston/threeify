@@ -29,6 +29,13 @@ export class Vector2 implements IPrimitive<Vector2> {
     return hashFloat2(this.x, this.y);
   }
 
+  set(x: number, y: number): this {
+    this.x = x;
+    this.y = y;
+
+    return this;
+  }
+
   clone(): Vector2 {
     return new Vector2().copy(this);
   }
@@ -55,8 +62,8 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 
   multiplyByScalar(s: number): this {
-    this.x += s;
-    this.y += s;
+    this.x *= s;
+    this.y *= s;
 
     return this;
   }

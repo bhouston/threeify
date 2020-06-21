@@ -57,16 +57,6 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     return this;
   }
 
-  setFromPoints(points: Vector2[]): this {
-    this.makeEmpty();
-
-    points.forEach((point) => {
-      this.expandByPoint(point);
-    });
-
-    return this;
-  }
-
   clone(): Box2 {
     return new Box2().copy(this);
   }
@@ -90,30 +80,6 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     // volume can get positive with two negative axes
 
     return this.max.x < this.min.x || this.max.y < this.min.y;
-  }
-
-  expandByPoint(point: Vector2): this {
-    this.min.min(point);
-    this.max.max(point);
-
-    return this;
-  }
-
-  containsPoint(point: Vector2): boolean {
-    return point.x < this.min.x || point.x > this.max.x || point.y < this.min.y || point.y > this.max.y ? false : true;
-  }
-
-  containsBox(box: Box2): boolean {
-    return this.min.x <= box.min.x && box.max.x <= this.max.x && this.min.y <= box.min.y && box.max.y <= this.max.y;
-  }
-
-  clampPoint(point: Vector2): Vector2 {
-    return new Vector2().copy(point).clamp(this.min, this.max);
-  }
-
-  distanceToPoint(point: Vector2): number {
-    const clampedPoint = new Vector2().copy(point).clamp(this.min, this.max);
-    return clampedPoint.sub(point).length();
   }
 
   intersect(box: Box2): this {

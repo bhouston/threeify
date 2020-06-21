@@ -1,14 +1,15 @@
 import { Float32Attribute } from "../../../lib/geometry/Attribute";
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Program, RenderingContext } from "../../../lib/renderers/webgl2";
 import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
+import { Program } from "../../../lib/renderers/webgl2/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 const geometry = new Geometry();
-geometry.attributes.set("position", new Float32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2));
-geometry.attributes.set("color", new Float32Attribute([1, 0, 0, 0, 1, 0, 0, 0, 1], 3));
+geometry.attributes["position"] = new Float32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
+geometry.attributes["color"] = new Float32Attribute([1, 0, 0, 0, 1, 0, 0, 0, 1], 3);
 
 const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
 

@@ -1,4 +1,4 @@
-import { Euler, EulerOrder } from "./Euler3";
+import { Euler, EulerOrder } from "./Euler";
 
 test("Instancing", () => {
   const a = new Euler();

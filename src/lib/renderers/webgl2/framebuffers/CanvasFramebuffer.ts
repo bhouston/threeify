@@ -7,8 +7,12 @@
 
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
+import { BlendState } from "../BlendState";
 import { BufferGeometry } from "../buffers/BufferGeometry";
+import { DepthTestState } from "../DepthTestState";
+import { MaskState } from "../MaskState";
 import { Program } from "../programs/Program";
+import { UniformValueMap } from "../programs/ProgramUniform";
 import { RenderingContext } from "../RenderingContext";
 import { VertexArrayObject } from "../VertexArrayObject";
 import { VirtualFramebuffer } from "./VirtualFramebuffer";
@@ -24,19 +28,39 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   dispose(): void {}
 
-  renderVertexArrayObject(program: Program, uniforms: any, vao: VertexArrayObject): void {
+  renderVertexArrayObject(
+    program: Program,
+    uniforms: UniformValueMap,
+    vao: VertexArrayObject,
+    depthTestState: DepthTestState | undefined = undefined,
+    blendState: BlendState | undefined = undefined,
+    maskState: MaskState | undefined = undefined,
+  ): void {
     this.syncCanvas();
-    super.renderVertexArrayObject(program, uniforms, vao);
+    super.renderVertexArrayObject(program, uniforms, vao, depthTestState, blendState, maskState);
   }
 
-  renderBufferGeometry(program: Program, uniforms: any, bufferGeometry: BufferGeometry): void {
+  renderBufferGeometry(
+    program: Program,
+    uniforms: UniformValueMap,
+    bufferGeometry: BufferGeometry,
+    depthTestState: DepthTestState | undefined = undefined,
+    blendState: BlendState | undefined = undefined,
+    maskState: MaskState | undefined = undefined,
+  ): void {
     this.syncCanvas();
-    super.renderBufferGeometry(program, uniforms, bufferGeometry);
+    super.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState, blendState, maskState);
   }
 
-  renderPass(program: Program, uniforms: any): void {
+  renderPass(
+    program: Program,
+    uniforms: UniformValueMap,
+    depthTestState: DepthTestState | undefined = undefined,
+    blendState: BlendState | undefined = undefined,
+    maskState: MaskState | undefined = undefined,
+  ): void {
     this.syncCanvas();
-    super.renderPass(program, uniforms);
+    super.renderPass(program, uniforms, depthTestState, blendState, maskState);
   }
 
   render(node: Node, camera: Camera, clear = false): void {
