@@ -36,7 +36,7 @@ export class Attribute {
 export class Uint8Attribute extends Attribute {
   constructor(array: Uint8Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Uint8Array ? array : new Uint8Array(array)),
+      new AttributeData((array instanceof Uint8Array ? array : new Uint8Array(array)).buffer),
       componentsPerVertex,
       ComponentType.UnsignedByte,
       -1,
@@ -47,7 +47,7 @@ export class Uint8Attribute extends Attribute {
 export class Int16Attribute extends Attribute {
   constructor(array: Int16Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Int16Array ? array : new Int16Array(array)),
+      new AttributeData((array instanceof Int16Array ? array : new Int16Array(array)).buffer),
       componentsPerVertex,
       ComponentType.UnsignedShort,
       -1,
@@ -59,7 +59,7 @@ export class Int16Attribute extends Attribute {
 export class Uint32Attribute extends Attribute {
   constructor(array: Uint32Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Uint32Array ? array : new Uint32Array(array)),
+      new AttributeData((array instanceof Uint32Array ? array : new Uint32Array(array)).buffer),
       componentsPerVertex,
       ComponentType.UnsignedInt,
       -1,
@@ -70,7 +70,7 @@ export class Uint32Attribute extends Attribute {
 export class Int32Attribute extends Attribute {
   constructor(array: Int32Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Int32Array ? array : new Int32Array(array)),
+      new AttributeData((array instanceof Int32Array ? array : new Int32Array(array)).buffer),
       componentsPerVertex,
       ComponentType.Int,
       -1,
@@ -82,7 +82,7 @@ export class Int32Attribute extends Attribute {
 export class Float32Attribute extends Attribute {
   constructor(array: Float32Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Float32Array ? array : new Float32Array(array)),
+      new AttributeData((array instanceof Float32Array ? array : new Float32Array(array)).buffer),
       componentsPerVertex,
       ComponentType.Float,
       -1,

@@ -13,12 +13,22 @@ function copyBytesUsingStride(
 ): void {
   const destBytes = new Int8Array(dest);
   const sourceBytes = new Int8Array(source);
+  // console.log("destBytes", destBytes);
+  // console.log("sourceBytes", sourceBytes);
   const vertexCount = source.byteLength / bytesPerVertex;
   for (let v = 0; v < vertexCount; v++) {
     const sourceOffset = v * bytesPerVertex;
     const destOffset = v * byteStridePerVertex + attributeOffset;
-    console.log(sourceOffset, "->", destOffset, "length: ", bytesPerVertex);
+    // console.log(sourceOffset, "->", destOffset, "length: ", bytesPerVertex);
     for (let i = 0; i < bytesPerVertex; i++) {
+      /* console.log(
+        " destBytes[",
+        destOffset + i,
+        "] = sourceBytes[ ",
+        sourceOffset + i,
+        "]: ",
+        sourceBytes[sourceOffset + i],
+      );*/
       destBytes[destOffset + i] = sourceBytes[sourceOffset + i];
     }
   }
