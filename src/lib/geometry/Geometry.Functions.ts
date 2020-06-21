@@ -39,7 +39,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
   for (const name in geometry.attributes) {
     const attribute = geometry.attributes[name];
     if (attribute !== undefined) {
-      byteStridePerVertex += attribute.bytesPerVertex;
+      byteStridePerVertex += Math.max(attribute.bytesPerVertex, 4);
       vertexCount = attribute.count;
     }
   }
@@ -67,8 +67,9 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.componentType,
         byteStridePerVertex,
         byteOffset,
+        attribute.normalized,
       );
-      byteOffset += attribute.bytesPerVertex;
+      byteOffset += Math.max(attribute.bytesPerVertex, 4);
     }
   }
   return interleavedGeometry;

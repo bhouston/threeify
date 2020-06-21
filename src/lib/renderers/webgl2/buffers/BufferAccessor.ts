@@ -36,7 +36,7 @@ export function makeBufferAccessorFromAttribute(
     buffer,
     attribute.componentType,
     attribute.componentsPerVertex,
-    false,
+    attribute.normalized,
     attribute.vertexStride,
     attribute.byteOffset,
   );
