@@ -1,7 +1,6 @@
 import { Matrix4 } from "./Matrix4";
 import { Vector3 } from "./Vector3";
 
-// homogeneous coordinate projection
 export function transformPoint(m: Matrix4, v: Vector3): Vector3 {
   const x = v.x,
     y = v.y,
@@ -17,8 +16,6 @@ export function transformPoint(m: Matrix4, v: Vector3): Vector3 {
   return v;
 }
 
-// TODO: think about moving this to a helper function -- it may allow for better code shaking...
-// homogeneous coordinate projection
 export function transformNormal(m: Matrix4, v: Vector3): Vector3 {
   const x = v.x,
     y = v.y,

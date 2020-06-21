@@ -2,6 +2,7 @@ import { Float32Attribute, Uint32Attribute } from "../../../lib/geometry/Attribu
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Color } from "../../../lib/math/Color";
+import { makeColorFromHSL } from "../../../lib/math/Color.Functions";
 import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
 import { Program } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
@@ -26,7 +27,7 @@ function animate(): void {
   requestAnimationFrame(animate);
 
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
-  uniforms.color.setFromHSL(Date.now() * 0.001, 1.0, 0.5);
+  uniforms.color = makeColorFromHSL(uniforms.color, Date.now() * 0.001, 1.0, 0.5);
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 }
 

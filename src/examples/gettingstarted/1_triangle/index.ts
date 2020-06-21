@@ -10,6 +10,8 @@ import vertexSourceCode from "./vertex.glsl";
 const geometry = new Geometry();
 geometry.attributes["position"] = new Float32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
 geometry.attributes["color"] = new Float32Attribute([1, 0, 0, 0, 1, 0, 0, 0, 1], 3);
+// This doesn't work for some reason. -- It should.  -Ben June 21, 2020
+// geometry.attributes["color"] = new Uint8Attribute([255, 0, 0, 0, 255, 0, 0, 0, 255], 3);
 
 const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
 

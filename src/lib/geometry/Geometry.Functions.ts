@@ -3,6 +3,10 @@ import { Vector3 } from "../math/Vector3";
 import { Float32Attribute } from "./Attribute";
 import { Geometry } from "./Geometry";
 
+export function convertToInterleavedBuffer(geometry: Geometry): Geometry {
+  return geometry;
+}
+
 export function computeVertexNormals(geometry: Geometry): void {
   const indicesAttribute = geometry.indices;
   const attributes = geometry.attributes;

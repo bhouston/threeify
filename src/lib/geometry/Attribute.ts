@@ -32,6 +32,17 @@ export class Attribute {
 // TODO: Figure out how to replace these below with TypeScript templates
 // see here for ideas: https://www.typescriptlang.org/docs/handbook/advanced-types.html
 
+export class Uint8Attribute extends Attribute {
+  constructor(array: Uint8Array | number[], componentsPerVertex = 1) {
+    super(
+      new AttributeData(array instanceof Uint8Array ? array : new Uint8Array(array), 0, -1, 1 * componentsPerVertex),
+      0,
+      ComponentType.UnsignedByte,
+      componentsPerVertex,
+      -1,
+    );
+  }
+}
 export class Int16Attribute extends Attribute {
   constructor(array: Int16Array | number[], componentsPerVertex = 1) {
     super(

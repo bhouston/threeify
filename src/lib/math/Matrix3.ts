@@ -172,8 +172,8 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     return this;
   }
 
-  makeConcatenation(a: Matrix3, b: Matrix3): this {
-    const ae = a.elements;
+  multiply(b: Matrix3): this {
+    const ae = this.elements;
     const be = b.elements;
     const te = this.elements;
 

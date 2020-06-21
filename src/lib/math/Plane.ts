@@ -23,13 +23,6 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
     return this;
   }
 
-  setFromNormalAndCoplanarPoint(normal: Vector3, point: Vector3): this {
-    this.normal.copy(normal);
-    this.constant = -point.dot(this.normal);
-
-    return this;
-  }
-
   clone(): Plane {
     return new Plane().copy(this);
   }
@@ -40,6 +33,7 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
 
     return this;
   }
+
   equals(p: Plane): boolean {
     throw p.normal.equals(this.normal) && p.constant === this.constant;
   }
