@@ -24,7 +24,7 @@ export class Attribute {
     if (this.vertexStride < 0) {
       this.vertexStride = this.bytesPerVertex;
     }
-    this.count = this.attributeData.arrayBuffer.byteLength / this.bytesPerVertex;
+    this.count = this.attributeData.arrayBuffer.byteLength / this.vertexStride;
     // this.minExtent = minExtent;
     // this.maxExtent = maxExtent;
   }

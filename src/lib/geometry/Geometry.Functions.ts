@@ -17,12 +17,13 @@ function copyBytesUsingStride(
   for (let v = 0; v < vertexCount; v++) {
     const sourceOffset = v * bytesPerVertex;
     const destOffset = v * byteStridePerVertex + attributeOffset;
+    console.log(sourceOffset, "->", destOffset, "length: ", bytesPerVertex);
     for (let i = 0; i < bytesPerVertex; i++) {
       destBytes[destOffset + i] = sourceBytes[sourceOffset + i];
     }
   }
 }
-export function convertToInterleavedBuffer(geometry: Geometry): Geometry {
+export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
   let byteStridePerVertex = 0;
   let vertexCount = 0;
   for (const name in geometry.attributes) {
@@ -33,7 +34,7 @@ export function convertToInterleavedBuffer(geometry: Geometry): Geometry {
     }
   }
   const interleavedArray = new ArrayBuffer(byteStridePerVertex * vertexCount);
-  const interleavedData = new AttributeData(interleavedArray, 0, -1, byteStridePerVertex);
+  const interleavedData = new AttributeData(interleavedArray);
 
   const interleavedGeometry = new Geometry();
   interleavedGeometry.indices = geometry.indices;
@@ -52,15 +53,15 @@ export function convertToInterleavedBuffer(geometry: Geometry): Geometry {
 
       interleavedGeometry.attributes[name] = new Attribute(
         interleavedData,
-        byteOffset,
-        attribute.componentType,
         attribute.componentsPerVertex,
-        vertexCount,
+        attribute.componentType,
+        byteStridePerVertex,
+        byteOffset,
       );
       byteOffset += attribute.bytesPerVertex;
     }
   }
-  return geometry;
+  return interleavedGeometry;
 }
 
 export function computeVertexNormals(geometry: Geometry): void {
