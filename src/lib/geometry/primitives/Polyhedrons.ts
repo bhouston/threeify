@@ -7,7 +7,7 @@
 
 import { Vector2 } from "../../math/Vector2";
 import { Vector3 } from "../../math/Vector3";
-import { Float32Attribute } from "../Attribute";
+import { makeFloat32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 import { computeVertexNormals } from "../Geometry.Functions";
 
@@ -340,9 +340,9 @@ export function polyhedron(vertices: number[], indices: number[], radius = 1, de
   // build non-indexed geometry
 
   const geometry = new Geometry();
-  geometry.attributes["position"] = new Float32Attribute(vertexBuffer, 3);
-  geometry.attributes["normal"] = new Float32Attribute(vertexBuffer.slice(), 3);
-  geometry.attributes["uv"] = new Float32Attribute(uvBuffer, 2);
+  geometry.attributes["position"] = makeFloat32Attribute(vertexBuffer, 3);
+  geometry.attributes["normal"] = makeFloat32Attribute(vertexBuffer.slice(), 3);
+  geometry.attributes["uv"] = makeFloat32Attribute(uvBuffer, 2);
 
   computeVertexNormals(geometry);
 

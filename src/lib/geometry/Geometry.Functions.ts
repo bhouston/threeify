@@ -1,6 +1,6 @@
 import { Vector3Array } from "../math/arrays/Vector3Array";
 import { Vector3 } from "../math/Vector3";
-import { Attribute, Float32Attribute } from "./Attribute";
+import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
 import { Geometry } from "./Geometry";
 
@@ -85,7 +85,7 @@ export function computeVertexNormals(geometry: Geometry): void {
   }
   let normalAttribute = attributes["normal"];
   if (normalAttribute === undefined) {
-    normalAttribute = new Float32Attribute(new Float32Array(positionAttribute.count * 3), 3);
+    normalAttribute = makeFloat32Attribute(new Float32Array(positionAttribute.count * 3), 3);
     geometry.attributes["normal"] = normalAttribute;
   }
 
