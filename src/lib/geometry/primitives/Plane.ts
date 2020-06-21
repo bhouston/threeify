@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Float32Attribute, Uint32Attribute } from "../Attribute";
+import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 
 export function plane(width = 1, height = 1, widthSegments = 1, heightSegments = 1): Geometry {
@@ -64,10 +64,10 @@ export function plane(width = 1, height = 1, widthSegments = 1, heightSegments =
   // build geometry
 
   const geometry = new Geometry();
-  geometry.indices = new Uint32Attribute(indices);
-  geometry.attributes["position"] = new Float32Attribute(vertices, 3);
-  geometry.attributes["normal"] = new Float32Attribute(normals, 3);
-  geometry.attributes["uv"] = new Float32Attribute(uvs, 2);
+  geometry.indices = makeUint32Attribute(indices);
+  geometry.attributes["position"] = makeFloat32Attribute(vertices, 3);
+  geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
+  geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
 
   return geometry;
 }
