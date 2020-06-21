@@ -9,7 +9,7 @@
 import { IDisposable } from "../../../core/types";
 import { Geometry } from "../../../geometry/Geometry";
 import { RenderingContext } from "../RenderingContext";
-import { BufferAccessor } from "./BufferAccessor";
+import { BufferAccessor, makeBufferAccessorFromAttribute } from "./BufferAccessor";
 import { BufferTarget } from "./BufferTarget";
 import { PrimitiveType } from "./PrimitiveType";
 
@@ -22,14 +22,14 @@ export class BufferGeometry implements IDisposable {
 
   constructor(context: RenderingContext, geometry: Geometry) {
     if (geometry.indices !== undefined) {
-      this.indices = BufferAccessor.FromAttribute(context, geometry.indices, BufferTarget.ElementArray);
+      this.indices = makeBufferAccessorFromAttribute(context, geometry.indices, BufferTarget.ElementArray);
       this.count = geometry.indices.count;
     }
 
     for (const name in geometry.attributes) {
       const attribute = geometry.attributes[name];
       if (attribute !== undefined) {
-        this.bufferAccessors[name] = BufferAccessor.FromAttribute(context, attribute);
+        this.bufferAccessors[name] = makeBufferAccessorFromAttribute(context, attribute);
         if (this.count === -1) {
           this.count = attribute.count;
         }

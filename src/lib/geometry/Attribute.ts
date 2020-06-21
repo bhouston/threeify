@@ -10,20 +10,21 @@ import { AttributeData } from "./AttributeData";
 
 export class Attribute {
   count: number;
-  byteLength: number;
-  // minExtent: ComponentType;
-  // maxExtent: ComponentType;
+  bytesPerVertex: number;
 
   constructor(
     public attributeData: AttributeData,
-    public byteOffset: number,
-    public componentType: ComponentType,
     public componentsPerVertex: number,
-    count: number,
+    public componentType: ComponentType,
+    public vertexStride: number,
+    public byteOffset: number,
   ) {
     const bytesPerComponent = componentTypeSizeOf(this.componentType);
-    this.count = count < 0 ? attributeData.byteLength / (bytesPerComponent * this.componentsPerVertex) : count;
-    this.byteLength = bytesPerComponent * this.componentsPerVertex * this.count;
+    this.bytesPerVertex = bytesPerComponent * this.componentsPerVertex;
+    if (this.vertexStride < 0) {
+      this.vertexStride = this.bytesPerVertex;
+    }
+    this.count = this.attributeData.arrayBuffer.byteLength / this.vertexStride;
     // this.minExtent = minExtent;
     // this.maxExtent = maxExtent;
   }
@@ -32,14 +33,25 @@ export class Attribute {
 // TODO: Figure out how to replace these below with TypeScript templates
 // see here for ideas: https://www.typescriptlang.org/docs/handbook/advanced-types.html
 
+export class Uint8Attribute extends Attribute {
+  constructor(array: Uint8Array | number[], componentsPerVertex = 1) {
+    super(
+      new AttributeData((array instanceof Uint8Array ? array : new Uint8Array(array)).buffer),
+      componentsPerVertex,
+      ComponentType.UnsignedByte,
+      -1,
+      0,
+    );
+  }
+}
 export class Int16Attribute extends Attribute {
   constructor(array: Int16Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Int16Array ? array : new Int16Array(array), 0, -1, 2 * componentsPerVertex),
-      0,
-      ComponentType.Int,
+      new AttributeData((array instanceof Int16Array ? array : new Int16Array(array)).buffer),
       componentsPerVertex,
+      ComponentType.UnsignedShort,
       -1,
+      0,
     );
   }
 }
@@ -47,22 +59,22 @@ export class Int16Attribute extends Attribute {
 export class Uint32Attribute extends Attribute {
   constructor(array: Uint32Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Uint32Array ? array : new Uint32Array(array), 0, -1, 4 * componentsPerVertex),
-      0,
-      ComponentType.UnsignedInt,
+      new AttributeData((array instanceof Uint32Array ? array : new Uint32Array(array)).buffer),
       componentsPerVertex,
+      ComponentType.UnsignedInt,
       -1,
+      0,
     );
   }
 }
 export class Int32Attribute extends Attribute {
   constructor(array: Int32Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(array instanceof Int32Array ? array : new Int32Array(array), 0, -1, 4 * componentsPerVertex),
-      0,
-      ComponentType.Int,
+      new AttributeData((array instanceof Int32Array ? array : new Int32Array(array)).buffer),
       componentsPerVertex,
+      ComponentType.Int,
       -1,
+      0,
     );
   }
 }
@@ -70,16 +82,11 @@ export class Int32Attribute extends Attribute {
 export class Float32Attribute extends Attribute {
   constructor(array: Float32Array | number[], componentsPerVertex = 1) {
     super(
-      new AttributeData(
-        array instanceof Float32Array ? array : new Float32Array(array),
-        0,
-        -1,
-        4 * componentsPerVertex,
-      ),
-      0,
-      ComponentType.Float,
+      new AttributeData((array instanceof Float32Array ? array : new Float32Array(array)).buffer),
       componentsPerVertex,
+      ComponentType.Float,
       -1,
+      0,
     );
   }
 }

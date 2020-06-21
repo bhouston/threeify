@@ -3,6 +3,7 @@ import { fetchImage } from "../../../lib/io/loaders/Image";
 import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Color } from "../../../lib/math/Color";
+import { makeColorFromHex } from "../../../lib/math/Color.Functions";
 import { PerspectiveCamera } from "../../../lib/nodes/cameras/PerspectiveCamera";
 import { PointLight } from "../../../lib/nodes/lights/PointLight";
 import { Mesh } from "../../../lib/nodes/Mesh";
@@ -32,7 +33,7 @@ async function test(): Promise<void> {
 
   // create material
   const pbrMaterial = new PhysicalMaterial();
-  pbrMaterial.albedo.setFromHex(0x808080);
+  pbrMaterial.albedo = makeColorFromHex(new Color(), 0x808080);
   pbrMaterial.albedoMap = new TextureAccessor(texture);
 
   // create scene graph

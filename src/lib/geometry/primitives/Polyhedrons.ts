@@ -9,7 +9,7 @@ import { Vector2 } from "../../math/Vector2";
 import { Vector3 } from "../../math/Vector3";
 import { Float32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
-import { computeVertexNormals } from "../Normals";
+import { computeVertexNormals } from "../Geometry.Functions";
 
 export function tetrahedron(radius = 1, detail = 0): Geometry {
   const vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];
