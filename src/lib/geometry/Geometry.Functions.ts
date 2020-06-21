@@ -1,9 +1,65 @@
 import { Vector3Array } from "../math/arrays/Vector3Array";
 import { Vector3 } from "../math/Vector3";
-import { Float32Attribute } from "./Attribute";
+import { Attribute, Float32Attribute } from "./Attribute";
+import { AttributeData } from "./AttributeData";
 import { Geometry } from "./Geometry";
 
+function copyBytesUsingStride(
+  dest: ArrayBuffer,
+  source: ArrayBuffer,
+  bytesPerVertex: number,
+  byteStridePerVertex: number,
+  attributeOffset: number,
+): void {
+  const destBytes = new Int8Array(dest);
+  const sourceBytes = new Int8Array(source);
+  const vertexCount = source.byteLength / bytesPerVertex;
+  for (let v = 0; v < vertexCount; v++) {
+    const sourceOffset = v * bytesPerVertex;
+    const destOffset = v * byteStridePerVertex + attributeOffset;
+    for (let i = 0; i < bytesPerVertex; i++) {
+      destBytes[destOffset + i] = sourceBytes[sourceOffset + i];
+    }
+  }
+}
 export function convertToInterleavedBuffer(geometry: Geometry): Geometry {
+  let byteStridePerVertex = 0;
+  let vertexCount = 0;
+  for (const name in geometry.attributes) {
+    const attribute = geometry.attributes[name];
+    if (attribute !== undefined) {
+      byteStridePerVertex += attribute.bytesPerVertex;
+      vertexCount = attribute.count;
+    }
+  }
+  const interleavedArray = new ArrayBuffer(byteStridePerVertex * vertexCount);
+  const interleavedData = new AttributeData(interleavedArray, 0, -1, byteStridePerVertex);
+
+  const interleavedGeometry = new Geometry();
+  interleavedGeometry.indices = geometry.indices;
+
+  let byteOffset = 0;
+  for (const name in geometry.attributes) {
+    const attribute = geometry.attributes[name];
+    if (attribute !== undefined) {
+      copyBytesUsingStride(
+        interleavedArray,
+        attribute.attributeData.arrayBuffer,
+        attribute.bytesPerVertex,
+        byteStridePerVertex,
+        byteOffset,
+      );
+
+      interleavedGeometry.attributes[name] = new Attribute(
+        interleavedData,
+        byteOffset,
+        attribute.componentType,
+        attribute.componentsPerVertex,
+        vertexCount,
+      );
+      byteOffset += attribute.bytesPerVertex;
+    }
+  }
   return geometry;
 }
 
