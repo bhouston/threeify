@@ -5,13 +5,10 @@
 // * @bhouston
 //
 
-import { generateUUID } from "../core/generateUuid";
-import { IIdentifiable } from "../core/types";
 import { ComponentType, componentTypeSizeOf } from "../renderers/webgl2/buffers/ComponentType";
 import { AttributeData } from "./AttributeData";
 
-export class Attribute implements IIdentifiable {
-  uuid: string = generateUUID();
+export class Attribute {
   count: number;
   bytesPerVertex: number;
   bytesPerComponent: number;
