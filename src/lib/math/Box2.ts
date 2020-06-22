@@ -9,17 +9,7 @@ import { ICloneable, IEquatable, IHashable } from "../core/types";
 import { Vector2 } from "./Vector2";
 
 export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
-  min: Vector2 = new Vector2(+Infinity, +Infinity);
-  max: Vector2 = new Vector2(-Infinity, -Infinity);
-
-  constructor(min: Vector2 | undefined = undefined, max: Vector2 | undefined = undefined) {
-    if (min !== undefined) {
-      this.min.copy(min);
-    }
-    if (max !== undefined) {
-      this.max.copy(max);
-    }
-  }
+  constructor(public min = new Vector2(+Infinity, +Infinity), public max = new Vector2(+Infinity, +Infinity)) {}
 
   get x(): number {
     return this.min.x;

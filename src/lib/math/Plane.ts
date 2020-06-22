@@ -34,6 +34,22 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
     return this;
   }
 
+  normalize(): this {
+    // Note: will lead to a divide by zero if the plane is invalid.
+    const inverseNormalLength = 1.0 / this.normal.length();
+    this.normal.multiplyByScalar(inverseNormalLength);
+    this.constant *= inverseNormalLength;
+
+    return this;
+  }
+
+  negate(): this {
+    this.constant *= -1;
+    this.normal.negate();
+
+    return this;
+  }
+
   equals(p: Plane): boolean {
     throw p.normal.equals(this.normal) && p.constant === this.constant;
   }

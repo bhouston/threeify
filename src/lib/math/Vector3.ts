@@ -64,6 +64,14 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
+  addScalar(s: number): this {
+    this.x += s;
+    this.y += s;
+    this.z += s;
+
+    return this;
+  }
+
   sub(v: Vector3): this {
     this.x -= v.x;
     this.y -= v.y;
@@ -76,6 +84,14 @@ export class Vector3 implements IPrimitive<Vector3> {
     this.x *= s;
     this.y *= s;
     this.z *= s;
+
+    return this;
+  }
+
+  negate(): this {
+    this.x *= -1;
+    this.y *= -1;
+    this.z *= -1;
 
     return this;
   }
@@ -149,6 +165,43 @@ export class Vector3 implements IPrimitive<Vector3> {
 
   length(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+  }
+
+  distanceToSquared(v: Vector3): number {
+    const dx = this.x - v.x;
+    const dy = this.y - v.y;
+    const dz = this.z - v.z;
+    return dx * dx + dy * dy + dz * dz;
+  }
+
+  distanceTo(v: Vector3): number {
+    return Math.sqrt(this.distanceToSquared(v));
+  }
+
+  min(v: Vector3): this {
+    this.x = Math.min(this.x, v.x);
+    this.y = Math.min(this.y, v.y);
+    this.z = Math.min(this.z, v.z);
+
+    return this;
+  }
+
+  max(v: Vector3): this {
+    this.x = Math.max(this.x, v.x);
+    this.y = Math.max(this.y, v.y);
+    this.z = Math.max(this.z, v.z);
+
+    return this;
+  }
+
+  clamp(min: Vector3, max: Vector3): this {
+    // assumes min < max, componentwise
+
+    this.x = Math.max(min.x, Math.min(max.x, this.x));
+    this.y = Math.max(min.y, Math.min(max.y, this.y));
+    this.z = Math.max(min.z, Math.min(max.z, this.z));
+
+    return this;
   }
 
   equals(v: Vector3): boolean {
