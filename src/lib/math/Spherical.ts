@@ -5,8 +5,15 @@
 // * @bhouston
 //
 
-export class Spherical {
+import { hashFloat3 } from "../core/hash";
+import { ICloneable, IEquatable, IHashable } from "../core/types";
+
+export class Spherical implements ICloneable<Spherical>, IEquatable<Spherical>, IHashable {
   constructor(public radius = 1.0, public phi = 0.0, public theta = 0.0) {}
+
+  getHashCode(): number {
+    return hashFloat3(this.radius, this.phi, this.theta);
+  }
 
   set(radius: number, phi: number, theta: number): this {
     this.radius = radius;
@@ -20,10 +27,10 @@ export class Spherical {
     return new Spherical().copy(this);
   }
 
-  copy(other: Spherical): this {
-    this.radius = other.radius;
-    this.phi = other.phi;
-    this.theta = other.theta;
+  copy(s: Spherical): this {
+    this.radius = s.radius;
+    this.phi = s.phi;
+    this.theta = s.theta;
 
     return this;
   }
@@ -34,5 +41,9 @@ export class Spherical {
     this.phi = Math.max(EPS, Math.min(Math.PI - EPS, this.phi));
 
     return this;
+  }
+
+  equals(s: Spherical): boolean {
+    return s.radius === this.radius && s.phi === this.phi && s.theta === this.theta;
   }
 }

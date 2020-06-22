@@ -1,82 +1,68 @@
 import { Box3 } from "./Box3";
+import { makeBox3FromPoints } from "./Box3.Functions";
+import { Matrix4 } from "./Matrix4";
+import { getMaxScaleOnAxis } from "./Matrix4.Functions";
 import { Sphere } from "./Sphere";
 import { Vector3 } from "./Vector3";
+import { transformPoint } from "./Vector3Matrix4.Functions";
 
+// TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
+export function makeSphereThatContainsBox(sphere: Sphere, box: Box3): Sphere {
+  box.getCenter(sphere.center);
+  sphere.radius = box.min.distanceTo(box.max) * 0.5;
+  return sphere;
+}
 
-  export function makeSphereFromPoints(sphere: Sphere, points: Vector3[], optionalCenter: Vector3 | undefined): Sphere {
-    var center = sphere.center;
+export function makeSphereFromPoints(
+  points: Vector3[],
+  optionalCenter: Vector3 | undefined,
+  result = new Sphere(),
+): Sphere {
+  if (optionalCenter !== undefined) {
+    result.center.copy(optionalCenter);
+  } else {
+    makeBox3FromPoints(new Box3(), points).getCenter(result.center);
+  }
+  let maxRadiusSq = 0;
+  for (let i = 0, il = points.length; i < il; i++) {
+    maxRadiusSq = Math.max(maxRadiusSq, result.center.distanceToSquared(points[i]));
+  }
+  result.radius = Math.sqrt(maxRadiusSq);
 
-    if (optionalCenter !== undefined) {
-      center.copy(optionalCenter);
-    } else {
-      makeBoxFromPoints( new Box3(), points).getCenter(center);
-    }
+  return result;
+}
 
-    var maxRadiusSq = 0;
+export function sphereContainsPoint(sphere: Sphere, point: Vector3): boolean {
+  return point.distanceToSquared(sphere.center) <= sphere.radius * sphere.radius;
+}
 
-    for (var i = 0, il = points.length; i < il; i++) {
-      maxRadiusSq = Math.max(maxRadiusSq, center.distanceToSquared(points[i]));
-    }
+export function sphereDistanceToPoint(sphere: Sphere, point: Vector3): number {
+  return point.distanceTo(sphere.center) - sphere.radius;
+}
 
-    sphere.radius = Math.sqrt(maxRadiusSq);
+export function clampPointToSphere(sphere: Sphere, point: Vector3): Vector3 {
+  const deltaLengthSq = sphere.center.distanceToSquared(point);
 
-    return sphere;
+  if (deltaLengthSq > sphere.radius * sphere.radius) {
+    point.sub(sphere.center).normalize();
+    point.multiplyByScalar(sphere.radius).add(sphere.center);
   }
 
+  return point;
+}
 
-  containsPoint(point: Vector3 ): boolean {
-    return point.distanceToSquared(this.center) <= this.radius * this.radius;
-  }
+export function transformSphere(matrix: Matrix4, sphere: Sphere): Sphere {
+  transformPoint(matrix, sphere.center);
+  sphere.radius *= getMaxScaleOnAxis(matrix);
+  return sphere;
+}
 
-  distanceToPoint(point: Vector3): boolean {
-    return point.distanceTo(this.center) - this.radius;
-  }
+export function translateSphere(sphere: Sphere, offset: Vector3): Sphere {
+  sphere.center.add(offset);
+  return sphere;
+}
 
-  clampPoint: function (point, target) {
-    var deltaLengthSq = this.center.distanceToSquared(point);
-
-    if (target === undefined) {
-      console.warn("THREE.Sphere: .clampPoint() target is now required");
-      target = new Vector3();
-    }
-
-    target.copy(point);
-
-    if (deltaLengthSq > this.radius * this.radius) {
-      target.sub(this.center).normalize();
-      target.multiplyScalar(this.radius).add(this.center);
-    }
-
-    return target;
-  },
-
-  getBoundingBox: function (target) {
-    if (target === undefined) {
-      console.warn("THREE.Sphere: .getBoundingBox() target is now required");
-      target = new Box3();
-    }
-
-    if (this.isEmpty()) {
-      // Empty sphere produces empty bounding box
-      target.makeEmpty();
-      return target;
-    }
-
-    target.set(this.center, this.center);
-    target.expandByScalar(this.radius);
-
-    return target;
-  },
-
-  applyMatrix4: function (matrix) {
-    this.center.applyMatrix4(matrix);
-    this.radius = this.radius * matrix.getMaxScaleOnAxis();
-
-    return this;
-  },
-
-  translate: function (offset) {
-    this.center.add(offset);
-
-    return this;
-  },
+export function scaleSphere(sphere: Sphere, scale: number): Sphere {
+  sphere.radius *= scale;
+  return sphere;
+}

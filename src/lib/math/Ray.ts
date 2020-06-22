@@ -26,9 +26,9 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
     return new Ray().copy(this);
   }
 
-  copy(ray: Ray): this {
-    this.origin.copy(ray.origin);
-    this.direction.copy(ray.direction);
+  copy(r: Ray): this {
+    this.origin.copy(r.origin);
+    this.direction.copy(r.direction);
 
     return this;
   }
@@ -43,7 +43,7 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
     return this;
   }
 
-  equals(ray: Ray): boolean {
-    return ray.origin.equals(this.origin) && ray.direction.equals(this.direction);
+  equals(r: Ray): boolean {
+    return r.origin.equals(this.origin) && r.direction.equals(this.direction);
   }
 }

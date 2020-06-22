@@ -164,7 +164,11 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    return Math.sqrt(this.lengthSquared());
+  }
+
+  lengthSquared(): number {
+    return this.x * this.x + this.y * this.y + this.z * this.z;
   }
 
   distanceToSquared(v: Vector3): number {

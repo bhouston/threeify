@@ -5,15 +5,18 @@
 // * @bhouston
 //
 
+import { hashFloat2 } from "../core/hash";
 import { ICloneable, IEquatable, IHashable } from "../core/types";
 import { Vector3 } from "./Vector3";
 
 export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
-  constructor(public min = new Vector3(+Infinity, +Infinity, +Infinity), public max = new Vector3(+Infinity, +Infinity, +Infinity)) {
-  }
+  constructor(
+    public min = new Vector3(+Infinity, +Infinity, +Infinity),
+    public max = new Vector3(+Infinity, +Infinity, +Infinity),
+  ) {}
 
   getHashCode(): number {
-    return (this.min.getHashCode() * 397) ^ (this.max.getHashCode() | 0);
+    return hashFloat2(this.min.getHashCode(), this.max.getHashCode());
   }
 
   set(min: Vector3, max: Vector3): this {
@@ -32,6 +35,10 @@ export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
     this.max.copy(box.max);
 
     return this;
+  }
+
+  getCenter(v: Vector3): Vector3 {
+    return v.set((this.min.x + this.max.x) * 0.5, (this.min.y + this.max.y) * 0.5, (this.min.z + this.max.z) * 0.5);
   }
 
   makeEmpty(): this {
@@ -53,21 +60,21 @@ export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
     this.max.max(point);
 
     return this;
-  },
+  }
 
   expandByVector(vector: Vector3): this {
     this.min.sub(vector);
     this.max.add(vector);
 
     return this;
-  },
+  }
 
   expandByScalar(scalar: number): this {
     this.min.addScalar(-scalar);
     this.max.addScalar(scalar);
 
     return this;
-  },
+  }
 
   intersect(box: Box3): this {
     this.min.max(box.min);

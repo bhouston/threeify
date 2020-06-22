@@ -123,7 +123,11 @@ export class Vector4 implements IPrimitive<Vector4> {
   }
 
   length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+    return Math.sqrt(this.lengthSquared());
+  }
+
+  lengthSquared(): number {
+    return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
   }
 
   equals(v: Vector4): boolean {

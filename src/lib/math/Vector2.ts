@@ -122,7 +122,11 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 
   length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+    return Math.sqrt(this.lengthSquared());
+  }
+
+  lengthSquared(): number {
+    return this.x * this.x + this.y * this.y;
   }
 
   min(v: Vector2): this {
