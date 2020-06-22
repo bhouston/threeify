@@ -28,7 +28,9 @@
     "watch": "tsc --watch & tgt -i ./src -o ./dist -w",
     "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@webgpu/glslang": "^0.0.15"
+  },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",

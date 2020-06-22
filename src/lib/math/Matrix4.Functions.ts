@@ -184,6 +184,16 @@ export function makeMatrix4Shear(m: Matrix4, x: number, y: number, z: number): M
   return m.set(1, y, z, 0, x, 1, z, 0, x, y, 1, 0, 0, 0, 0, 1);
 }
 
+export function getMaxScaleOnAxis(m: Matrix4): number {
+  const te = m.elements;
+
+  const scaleXSq = te[0] * te[0] + te[1] * te[1] + te[2] * te[2];
+  const scaleYSq = te[4] * te[4] + te[5] * te[5] + te[6] * te[6];
+  const scaleZSq = te[8] * te[8] + te[9] * te[9] + te[10] * te[10];
+
+  return Math.sqrt(Math.max(scaleXSq, scaleYSq, scaleZSq));
+}
+
 export function composeMatrix4(m: Matrix4, position: Vector3, rotation: Quaternion, scale: Vector3): Matrix4 {
   const x = rotation.x,
     y = rotation.y,

@@ -5,21 +5,12 @@
 // * @bhouston
 //
 
+import { hashFloat2 } from "../core/hash";
 import { ICloneable, IEquatable, IHashable } from "../core/types";
 import { Vector2 } from "./Vector2";
 
 export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
-  min: Vector2 = new Vector2(+Infinity, +Infinity);
-  max: Vector2 = new Vector2(-Infinity, -Infinity);
-
-  constructor(min: Vector2 | undefined = undefined, max: Vector2 | undefined = undefined) {
-    if (min !== undefined) {
-      this.min.copy(min);
-    }
-    if (max !== undefined) {
-      this.max.copy(max);
-    }
-  }
+  constructor(public min = new Vector2(+Infinity, +Infinity), public max = new Vector2(+Infinity, +Infinity)) {}
 
   get x(): number {
     return this.min.x;
@@ -47,7 +38,7 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   }
 
   getHashCode(): number {
-    return (this.min.getHashCode() * 397) ^ (this.max.getHashCode() | 0);
+    return hashFloat2(this.min.getHashCode(), this.max.getHashCode());
   }
 
   set(min: Vector2, max: Vector2): this {
@@ -68,6 +59,10 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     return this;
   }
 
+  getCenter(v: Vector2): Vector2 {
+    return v.set((this.min.x + this.max.x) * 0.5, (this.min.y + this.max.y) * 0.5);
+  }
+
   makeEmpty(): this {
     this.min.x = this.min.y = +Infinity;
     this.max.x = this.max.y = -Infinity;
@@ -80,13 +75,6 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     // volume can get positive with two negative axes
 
     return this.max.x < this.min.x || this.max.y < this.min.y;
-  }
-
-  intersect(box: Box2): this {
-    this.min.max(box.min);
-    this.max.min(box.max);
-
-    return this;
   }
 
   union(box: Box2): this {

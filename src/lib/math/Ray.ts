@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { hashFloat2 } from "../core/hash";
 import { ICloneable, IEquatable, IHashable } from "../core/types";
 import { Vector3 } from "./Vector3";
 
@@ -12,7 +13,7 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
   constructor(public origin = new Vector3(), public direction = new Vector3(0, 0, -1)) {}
 
   getHashCode(): number {
-    return (this.origin.getHashCode() * 397) ^ (this.direction.getHashCode() | 0);
+    return hashFloat2(this.origin.getHashCode(), this.direction.getHashCode());
   }
 
   set(origin: Vector3, direction: Vector3): this {
@@ -26,9 +27,9 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
     return new Ray().copy(this);
   }
 
-  copy(ray: Ray): this {
-    this.origin.copy(ray.origin);
-    this.direction.copy(ray.direction);
+  copy(r: Ray): this {
+    this.origin.copy(r.origin);
+    this.direction.copy(r.direction);
 
     return this;
   }
@@ -43,7 +44,7 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
     return this;
   }
 
-  equals(ray: Ray): boolean {
-    return ray.origin.equals(this.origin) && ray.direction.equals(this.direction);
+  equals(r: Ray): boolean {
+    return r.origin.equals(this.origin) && r.direction.equals(this.direction);
   }
 }

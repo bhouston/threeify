@@ -54,6 +54,13 @@ export class Vector2 implements IPrimitive<Vector2> {
     return this;
   }
 
+  addScalar(s: number): this {
+    this.x += s;
+    this.y += s;
+
+    return this;
+  }
+
   sub(v: Vector2): this {
     this.x -= v.x;
     this.y -= v.y;
@@ -64,6 +71,13 @@ export class Vector2 implements IPrimitive<Vector2> {
   multiplyByScalar(s: number): this {
     this.x *= s;
     this.y *= s;
+
+    return this;
+  }
+
+  negate(): this {
+    this.x *= -1;
+    this.y *= -1;
 
     return this;
   }
@@ -108,7 +122,11 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 
   length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+    return Math.sqrt(this.lengthSquared());
+  }
+
+  lengthSquared(): number {
+    return this.x * this.x + this.y * this.y;
   }
 
   min(v: Vector2): this {
