@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { hashFloat2 } from "../core/hash";
 import { ICloneable, IEquatable, IHashable } from "../core/types";
 import { Vector3 } from "./Vector3";
 
@@ -12,7 +13,7 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
   constructor(public origin = new Vector3(), public direction = new Vector3(0, 0, -1)) {}
 
   getHashCode(): number {
-    return (this.origin.getHashCode() * 397) ^ (this.direction.getHashCode() | 0);
+    return hashFloat2(this.origin.getHashCode(), this.direction.getHashCode());
   }
 
   set(origin: Vector3, direction: Vector3): this {

@@ -37,8 +37,12 @@ export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
     return this;
   }
 
-  getCenter(v: Vector3): Vector3 {
-    return v.set((this.min.x + this.max.x) * 0.5, (this.min.y + this.max.y) * 0.5, (this.min.z + this.max.z) * 0.5);
+  getCenter(result = new Vector3()): Vector3 {
+    return result.set(
+      (this.min.x + this.max.x) * 0.5,
+      (this.min.y + this.max.y) * 0.5,
+      (this.min.z + this.max.z) * 0.5,
+    );
   }
 
   makeEmpty(): this {

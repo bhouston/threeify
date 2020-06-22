@@ -7,10 +7,10 @@ import { Vector3 } from "./Vector3";
 import { transformPoint } from "./Vector3Matrix4.Functions";
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
-export function makeSphereThatContainsBox(sphere: Sphere, box: Box3): Sphere {
-  box.getCenter(sphere.center);
-  sphere.radius = box.min.distanceTo(box.max) * 0.5;
-  return sphere;
+export function makeBoundingSphereFromBox(box: Box3, result = new Sphere()): Sphere {
+  box.getCenter(result.center);
+  result.radius = box.min.distanceTo(box.max) * 0.5;
+  return result;
 }
 
 export function makeSphereFromPoints(
@@ -21,7 +21,7 @@ export function makeSphereFromPoints(
   if (optionalCenter !== undefined) {
     result.center.copy(optionalCenter);
   } else {
-    makeBox3FromPoints(new Box3(), points).getCenter(result.center);
+    makeBox3FromPoints(points).getCenter(result.center);
   }
   let maxRadiusSq = 0;
   for (let i = 0, il = points.length; i < il; i++) {
@@ -51,18 +51,20 @@ export function clampPointToSphere(sphere: Sphere, point: Vector3): Vector3 {
   return point;
 }
 
-export function transformSphere(matrix: Matrix4, sphere: Sphere): Sphere {
-  transformPoint(matrix, sphere.center);
-  sphere.radius *= getMaxScaleOnAxis(matrix);
-  return sphere;
+export function transformSphere(s: Sphere, m: Matrix4, result = new Sphere()): Sphere {
+  transformPoint(s.center, m, result.center);
+  result.radius = s.radius * getMaxScaleOnAxis(m);
+  return result;
 }
 
-export function translateSphere(sphere: Sphere, offset: Vector3): Sphere {
-  sphere.center.add(offset);
-  return sphere;
+export function translateSphere(s: Sphere, offset: Vector3, result = new Sphere()): Sphere {
+  result.copy(s);
+  result.center.add(offset);
+  return result;
 }
 
-export function scaleSphere(sphere: Sphere, scale: number): Sphere {
-  sphere.radius *= scale;
-  return sphere;
+export function scaleSphere(s: Sphere, scale: number, result = new Sphere()): Sphere {
+  result.copy(s);
+  result.radius *= scale;
+  return result;
 }

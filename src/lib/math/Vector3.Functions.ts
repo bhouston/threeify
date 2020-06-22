@@ -13,7 +13,7 @@ export function makeVector3FromDelta(a: Vector3, b: Vector3, result = new Vector
 
 // static/instance method to calculate barycentric coordinates
 // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-export function pointToBarycoords(a: Vector3, b: Vector3, c: Vector3, point: Vector3, result = new Vector3()): Vector3 {
+export function pointToBaryCoords(a: Vector3, b: Vector3, c: Vector3, point: Vector3, result = new Vector3()): Vector3 {
   const v0 = makeVector3FromDelta(c, b);
   const v1 = makeVector3FromDelta(b, a);
   const v2 = makeVector3FromDelta(point, a);
@@ -41,15 +41,15 @@ export function pointToBarycoords(a: Vector3, b: Vector3, c: Vector3, point: Vec
   return result.set(1 - u - v, v, u);
 }
 
-export function makeVector3FromBarycoordWeights(
-  baryCoord: Vector3,
+export function makeVector3FromBaryCoordWeights(
+  BaryCoord: Vector3,
   a: Vector3,
   b: Vector3,
   c: Vector3,
   result = new Vector3(),
 ): Vector3 {
-  result.x = a.x * baryCoord.x + b.x * baryCoord.y + c.x * baryCoord.z;
-  result.y = a.y * baryCoord.x + b.y * baryCoord.y + c.y * baryCoord.z;
-  result.z = a.z * baryCoord.x + b.z * baryCoord.y + c.z * baryCoord.z;
+  result.x = a.x * BaryCoord.x + b.x * BaryCoord.y + c.x * BaryCoord.z;
+  result.y = a.y * BaryCoord.x + b.y * BaryCoord.y + c.y * BaryCoord.z;
+  result.z = a.z * BaryCoord.x + b.z * BaryCoord.y + c.z * BaryCoord.z;
   return result;
 }

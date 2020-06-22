@@ -136,7 +136,7 @@ export function makeQuaternionFromAxisAngle(q: Quaternion, axis: Vector3, angle:
   return q;
 }
 
-export function makeQuaternionFromBarycoordWeights(
+export function makeQuaternionFromBaryCoordWeights(
   baryCoord: Vector3,
   a: Quaternion,
   b: Quaternion,
