@@ -32,9 +32,9 @@ export class Attribute {
   }
 }
 
+// TODO: Could one have these also take a number?  And it would allocate the array?
 // TODO: Figure out how to replace these below with TypeScript templates
 // see here for ideas: https://www.typescriptlang.org/docs/handbook/advanced-types.html
-
 export function makeUint8Attribute(
   array: Uint8Array | number[],
   componentsPerVertex = 1,
@@ -49,6 +49,7 @@ export function makeUint8Attribute(
     normalized,
   );
 }
+
 export function makeInt16Attribute(
   array: Int16Array | number[],
   componentsPerVertex = 1,

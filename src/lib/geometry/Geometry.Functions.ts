@@ -1,4 +1,4 @@
-import { Vector3Array } from "../math/arrays/Vector3Array";
+import { Vector3Array } from "../math/arrays/PrimitiveArray";
 import { Vector3 } from "../math/Vector3";
 import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
@@ -13,26 +13,16 @@ function copyBytesUsingStride(
 ): void {
   const destBytes = new Int8Array(dest);
   const sourceBytes = new Int8Array(source);
-  // console.log("destBytes", destBytes);
-  // console.log("sourceBytes", sourceBytes);
   const vertexCount = source.byteLength / bytesPerVertex;
   for (let v = 0; v < vertexCount; v++) {
     const sourceOffset = v * bytesPerVertex;
     const destOffset = v * byteStridePerVertex + attributeOffset;
-    // console.log(sourceOffset, "->", destOffset, "length: ", bytesPerVertex);
     for (let i = 0; i < bytesPerVertex; i++) {
-      /* console.log(
-        " destBytes[",
-        destOffset + i,
-        "] = sourceBytes[ ",
-        sourceOffset + i,
-        "]: ",
-        sourceBytes[sourceOffset + i],
-      );*/
       destBytes[destOffset + i] = sourceBytes[sourceOffset + i];
     }
   }
 }
+
 export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
   let byteStridePerVertex = 0;
   let vertexCount = 0;
@@ -91,8 +81,8 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   // reset existing normals to zero
 
-  const positions = new Vector3Array(positionAttribute.attributeData.arrayBuffer);
-  const normals = new Vector3Array(normalAttribute.attributeData.arrayBuffer);
+  const positions = new Vector3Array(positionAttribute);
+  const normals = new Vector3Array(normalAttribute);
 
   for (let i = 0, il = normals.count; i < il; i++) {
     normals.set(i, new Vector3());
