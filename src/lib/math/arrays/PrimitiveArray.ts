@@ -83,26 +83,25 @@ export class Vector3Array extends PrimitiveArray<Vector3> {
   }
 }
 
-export class ColorArray extends PrimitiveArray<Color> {
-  constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
-    super(dataArray, 12, byteStride, byteOffset);
-  }
+export function makeVector2Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector2Array {
+  return new Vector2Array(dataArray, byteStride, byteOffset);
 }
-
-export class QuaternionArray extends PrimitiveArray<Quaternion> {
-  constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
-    super(dataArray, 16, byteStride, byteOffset);
-  }
+export function makeVector3Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector3Array {
+  return new Vector3Array(dataArray, byteStride, byteOffset);
 }
-
-export class Matrix3Array extends PrimitiveArray<Matrix3> {
-  constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
-    super(dataArray, 36, byteStride, byteOffset);
-  }
+export function makeColorArray(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveArray<Color> {
+  return new PrimitiveArray<Color>(dataArray, 12, byteStride, byteOffset);
 }
-
-export class Matrix4Array extends PrimitiveArray<Matrix4> {
-  constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
-    super(dataArray, 64, byteStride, byteOffset);
-  }
+export function makeQuaternionArray(
+  dataArray: DataArray,
+  byteStride = -1,
+  byteOffset = -1,
+): PrimitiveArray<Quaternion> {
+  return new PrimitiveArray<Quaternion>(dataArray, 16, byteStride, byteOffset);
+}
+export function makeMatrix3Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveArray<Matrix3> {
+  return new PrimitiveArray<Matrix3>(dataArray, 36, byteStride, byteOffset);
+}
+export function makeMatrix4Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveArray<Matrix4> {
+  return new PrimitiveArray<Matrix4>(dataArray, 64, byteStride, byteOffset);
 }

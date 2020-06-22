@@ -1,4 +1,4 @@
-import { Vector3Array } from "../math/arrays/PrimitiveArray";
+import { makeVector3Array } from "../math/arrays/PrimitiveArray";
 import { Vector3 } from "../math/Vector3";
 import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
@@ -81,8 +81,8 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   // reset existing normals to zero
 
-  const positions = new Vector3Array(positionAttribute);
-  const normals = new Vector3Array(normalAttribute);
+  const positions = makeVector3Array(positionAttribute);
+  const normals = makeVector3Array(normalAttribute);
 
   for (let i = 0, il = normals.count; i < il; i++) {
     normals.set(i, new Vector3());
@@ -98,8 +98,6 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   if (indicesAttribute !== undefined) {
     const indices = new Uint32Array(indicesAttribute.attributeData.arrayBuffer);
-
-    const v = new Vector3();
 
     for (let i = 0, il = indices.length; i < il; i += 3) {
       const vA = indices[i + 0];
@@ -120,7 +118,6 @@ export function computeVertexNormals(geometry: Geometry): void {
     }
   } else {
     // non-indexed elements (unconnected triangle soup)
-    const v = new Vector3();
 
     for (let i = 0, il = positions.count; i < il; i += 3) {
       positions.get(i, pA);
