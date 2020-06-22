@@ -13,7 +13,12 @@ export class Shader implements IDisposable {
   disposed = false;
   glShader: WebGLShader;
 
-  constructor(public context: RenderingContext, public sourceCode: string, public shaderType: ShaderType) {
+  constructor(
+    public context: RenderingContext,
+    public sourceCode: string,
+    public shaderType: ShaderType,
+    public glslVersion = 300,
+  ) {
     const gl = this.context.gl;
 
     // Create the shader object
@@ -24,6 +29,10 @@ export class Shader implements IDisposable {
       }
 
       this.glShader = glShader;
+    }
+
+    if (glslVersion === 300) {
+      sourceCode = "#version 300 es\n" + sourceCode;
     }
 
     // Set the shader source code.

@@ -11,7 +11,7 @@ const geometry = new Geometry();
 geometry.attributes["position"] = makeFloat32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
 geometry.attributes["color"] = makeUint8Attribute([255, 0, 0, 0, 255, 0, 0, 0, 255], 3, true);
 
-const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode, 300);
 
 const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;

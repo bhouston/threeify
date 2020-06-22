@@ -26,8 +26,18 @@ export class Program implements IDisposable {
   attributes: { [key: string]: ProgramAttribute | undefined } = {};
 
   constructor(public context: RenderingContext, shaderMaterial: ShaderMaterial) {
-    this.vertexShader = new Shader(this.context, shaderMaterial.vertexShaderCode, ShaderType.Vertex);
-    this.fragmentShader = new Shader(this.context, shaderMaterial.fragmentShaderCode, ShaderType.Fragment);
+    this.vertexShader = new Shader(
+      this.context,
+      shaderMaterial.vertexShaderCode,
+      ShaderType.Vertex,
+      shaderMaterial.glslVersion,
+    );
+    this.fragmentShader = new Shader(
+      this.context,
+      shaderMaterial.fragmentShaderCode,
+      ShaderType.Fragment,
+      shaderMaterial.glslVersion,
+    );
 
     const gl = this.context.gl;
 

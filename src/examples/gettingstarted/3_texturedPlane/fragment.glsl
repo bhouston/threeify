@@ -1,11 +1,13 @@
 precision highp float;
 
+in vec2 v_texCoord;
+
 uniform sampler2D map;
 
-varying vec2 v_texCoord;
+out vec4 fragColor;
 
 void main() {
 
-  gl_FragColor = texture2D(map, v_texCoord);
+  fragColor = texture(map, v_texCoord);
 
 }
