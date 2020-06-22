@@ -9,7 +9,7 @@ import { Vector3 } from "../Vector3";
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
 
-export class PrimitiveArray<P extends IArrayable> {
+export class PrimitiveView<P extends IArrayable> {
   readonly floatArray: Float32Array;
   readonly count: number;
 
@@ -59,7 +59,7 @@ export class PrimitiveArray<P extends IArrayable> {
   }
 }
 
-export class Vector2Array extends PrimitiveArray<Vector2> {
+export class Vector2View extends PrimitiveView<Vector2> {
   readonly tempPrimitive = new Vector2();
 
   constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
@@ -71,7 +71,7 @@ export class Vector2Array extends PrimitiveArray<Vector2> {
   }
 }
 
-export class Vector3Array extends PrimitiveArray<Vector3> {
+export class Vector3View extends PrimitiveView<Vector3> {
   readonly tempPrimitive = new Vector3();
 
   constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
@@ -83,25 +83,21 @@ export class Vector3Array extends PrimitiveArray<Vector3> {
   }
 }
 
-export function makeVector2Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector2Array {
-  return new Vector2Array(dataArray, byteStride, byteOffset);
+export function makeVector2View(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector2View {
+  return new Vector2View(dataArray, byteStride, byteOffset);
 }
-export function makeVector3Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector3Array {
-  return new Vector3Array(dataArray, byteStride, byteOffset);
+export function makeVector3View(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector3View {
+  return new Vector3View(dataArray, byteStride, byteOffset);
 }
-export function makeColorArray(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveArray<Color> {
-  return new PrimitiveArray<Color>(dataArray, 12, byteStride, byteOffset);
+export function makeColorView(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Color> {
+  return new PrimitiveView<Color>(dataArray, 12, byteStride, byteOffset);
 }
-export function makeQuaternionArray(
-  dataArray: DataArray,
-  byteStride = -1,
-  byteOffset = -1,
-): PrimitiveArray<Quaternion> {
-  return new PrimitiveArray<Quaternion>(dataArray, 16, byteStride, byteOffset);
+export function makeQuaternionView(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Quaternion> {
+  return new PrimitiveView<Quaternion>(dataArray, 16, byteStride, byteOffset);
 }
-export function makeMatrix3Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveArray<Matrix3> {
-  return new PrimitiveArray<Matrix3>(dataArray, 36, byteStride, byteOffset);
+export function makeMatrix3View(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Matrix3> {
+  return new PrimitiveView<Matrix3>(dataArray, 36, byteStride, byteOffset);
 }
-export function makeMatrix4Array(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveArray<Matrix4> {
-  return new PrimitiveArray<Matrix4>(dataArray, 64, byteStride, byteOffset);
+export function makeMatrix4View(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Matrix4> {
+  return new PrimitiveView<Matrix4>(dataArray, 64, byteStride, byteOffset);
 }

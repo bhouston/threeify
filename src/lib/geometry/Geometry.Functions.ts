@@ -1,4 +1,4 @@
-import { makeVector3Array } from "../math/arrays/PrimitiveArray";
+import { makeVector3View } from "../math/arrays/PrimitiveView";
 import { Vector3 } from "../math/Vector3";
 import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
@@ -81,8 +81,8 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   // reset existing normals to zero
 
-  const positions = makeVector3Array(positionAttribute);
-  const normals = makeVector3Array(normalAttribute);
+  const positions = makeVector3View(positionAttribute);
+  const normals = makeVector3View(normalAttribute);
 
   for (let i = 0, il = normals.count; i < il; i++) {
     normals.set(i, new Vector3());
