@@ -48,8 +48,18 @@ export class Shader implements IDisposable {
     if (!success) {
       // Something went wrong during compilation; get the error
       const infoLog = gl.getShaderInfoLog(this.glShader);
-      throw new Error(`could not compile shader: ${infoLog}`);
+      const errorMessage = `could not compile shader: ${infoLog}`;
+      console.error(errorMessage, sourceCode);
+      throw new Error(errorMessage);
     }
+  }
+
+  get translatedSourceCode(): string {
+    const ds = this.context.glxo.WEBGL_debug_shaders;
+    if (ds !== null) {
+      return ds.getTranslatedShaderSource(this.glShader);
+    }
+    return "";
   }
 
   dispose(): void {
