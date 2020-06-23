@@ -40,9 +40,8 @@ export class Shader implements IDisposable {
       prefix.push("#extension GL_EXT_shader_texture_lod : enable");
       prefix.push("#extension GL_OES_standard_derivatives : enable");
     }
-
     const combinedSourceCode = prefix.join("\n") + "\n" + sourceCode;
-    console.log("combinedSourceCode:\n", combinedSourceCode);
+
     // Set the shader source code.
     gl.shaderSource(this.glShader, combinedSourceCode);
 
