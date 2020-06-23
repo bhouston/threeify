@@ -13,7 +13,7 @@ import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buf
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
@@ -33,7 +33,7 @@ async function init(): Promise<null> {
     worldToView: makeMatrix4Translation(new Matrix4(), new Vector3(0, 0, -1)),
     viewToScreen: makeMatrix4Perspective(new Matrix4(), -0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     viewLightPosition: new Vector3(0, 0, 0),
-    map: new TexImage2D(context, texture),
+    map: makeTexImage2DFromTexture(context, texture),
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);

@@ -16,7 +16,7 @@ import { Attachments } from "../../../lib/renderers/webgl/framebuffers/Attachmen
 import { MaskState } from "../../../lib/renderers/webgl/MaskState";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { VertexArrayObject } from "../../../lib/renderers/webgl/VertexArrayObject";
 import debug_fragment from "../../../lib/shaders/materials/pbr/fragment.glsl";
 import debug_vertex from "../../../lib/shaders/materials/pbr/vertex.glsl";
@@ -55,7 +55,7 @@ async function test(): Promise<void> {
   canvasFramebuffer.clear(Attachments.Default, depthClear);
   canvasFramebuffer.render(rootNode, camera);
 
-  const texImage2D = new TexImage2D(context, texture);
+  const texImage2D = makeTexImage2DFromTexture(context, texture);
   console.log(texImage2D);
 
   const boxBufferGeometry = makeBufferGeometryFromGeometry(context, mesh.geometry);
