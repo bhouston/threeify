@@ -23,15 +23,15 @@ export class TexImage2D implements IDisposable {
   disposed = false;
   target: TextureTarget;
   glTexture: WebGLTexture;
-  dataType: DataType;
-  pixelFormat: PixelFormat;
-  size: Vector2;
 
   constructor(
     public context: RenderingContext,
-    public texture: Texture | CubeTexture,
+    public images: TextureImage[],
+    public size: Vector2,
     public level = 0,
     public internalFormat: PixelFormat = PixelFormat.RGBA,
+    public dataType: DataType = DataType.UnsignedByte,
+    public pixelFormat: PixelFormat = PixelFormat.RGBA,
     public texParameters: TexParameters = new TexParameters(),
   ) {
     const gl = this.context.gl;
@@ -45,25 +45,23 @@ export class TexImage2D implements IDisposable {
       this.glTexture = glTexture;
     }
 
-    this.dataType = texture.dataType;
-    this.pixelFormat = texture.pixelFormat;
-    this.size = texture.size;
-
-    if (texture instanceof Texture) {
+    if (images.length === 1) {
       this.target = TextureTarget.Texture2D;
-    } else if (texture instanceof CubeTexture) {
+    } else if (images.length === 6) {
       this.target = TextureTarget.TextureCubeMap;
     } else {
-      throw new Error("Unsupported target");
+      throw new Error("Unsupported number of images");
     }
 
     gl.bindTexture(this.target, this.glTexture);
-    if (texture instanceof Texture) {
-      this.loadImage(texture.image);
-    } else if (texture instanceof CubeTexture) {
-      texture.images.forEach((image: TextureImage, index: number) => {
+    if (images.length === 1) {
+      this.loadImage(images[0]);
+    } else if (images.length === 6) {
+      images.forEach((image: TextureImage, index: number) => {
         this.loadImage(image, TextureTarget.CubeMapPositiveX + index);
       });
+    } else {
+      throw new Error("Unsupported number of images");
     }
 
     if (texParameters.generateMipmaps) {
@@ -110,11 +108,49 @@ export class TexImage2D implements IDisposable {
   }
 }
 
+export function makeTexImage2DFromTexture(
+  context: RenderingContext,
+  texture: Texture,
+  level = 0,
+  internalFormat: PixelFormat = PixelFormat.RGBA,
+  texParameters = new TexParameters(),
+): TexImage2D {
+  return new TexImage2D(
+    context,
+    [texture.image],
+    texture.size,
+    level,
+    texture.pixelFormat,
+    texture.dataType,
+    internalFormat,
+    texParameters,
+  );
+}
+
+export function makeTexImage2DFromCubeTexture(
+  context: RenderingContext,
+  texture: CubeTexture,
+  level = 0,
+  internalFormat: PixelFormat = PixelFormat.RGBA,
+  texParameters = new TexParameters(),
+): TexImage2D {
+  return new TexImage2D(
+    context,
+    texture.images,
+    texture.size,
+    level,
+    texture.pixelFormat,
+    texture.dataType,
+    internalFormat,
+    texParameters,
+  );
+}
+
 export class TexImage2DPool extends Pool<Texture, TexImage2D> {
   constructor(context: RenderingContext) {
     super(context, (context: RenderingContext, texture: Texture, texImage2D: TexImage2D | undefined) => {
       if (texImage2D === undefined) {
-        texImage2D = new TexImage2D(context, texture);
+        texImage2D = makeTexImage2DFromTexture(context, texture);
       }
       // TODO: Create a new image here.
       // texImage2D.update(texture);

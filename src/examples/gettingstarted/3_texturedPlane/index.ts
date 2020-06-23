@@ -4,7 +4,7 @@ import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
@@ -20,7 +20,7 @@ async function init(): Promise<null> {
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const program = makeProgramFromShaderMaterial(context, material);
-  const uniforms = { map: new TexImage2D(context, texture) };
+  const uniforms = { map: makeTexImage2DFromTexture(context, texture) };
 
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
