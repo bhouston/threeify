@@ -7,8 +7,7 @@
 
 import { ICloneable, IEquatable } from "../../core/types";
 import { Blending } from "../../materials/Blending";
-
-const GL = WebGLRenderingContext;
+import { GL } from "./GL";
 
 export enum BlendEquation {
   /**

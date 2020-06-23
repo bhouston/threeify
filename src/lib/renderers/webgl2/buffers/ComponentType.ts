@@ -5,8 +5,7 @@
 // * @bhouston
 //
 
-const GL = WebGLRenderingContext;
-const GL2 = WebGL2RenderingContext;
+import { GL } from "../GL";
 
 export enum ComponentType {
   /**
@@ -40,7 +39,7 @@ export enum ComponentType {
   /**
    * 16-bit IEEE floating point number
    */
-  HalfFloat = GL2.HALF_FLOAT,
+  // HalfFloat = GL2.HALF_FLOAT,
 }
 
 export function componentTypeSizeOf(componentType: ComponentType): number {
@@ -48,7 +47,7 @@ export function componentTypeSizeOf(componentType: ComponentType): number {
     case ComponentType.Byte:
     case ComponentType.UnsignedByte:
       return 1;
-    case ComponentType.HalfFloat:
+    // case ComponentType.HalfFloat:
     case ComponentType.Short:
     case ComponentType.UnsignedShort:
       return 2;

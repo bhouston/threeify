@@ -5,8 +5,7 @@
 // * @bhouston
 //
 
-const GL = WebGLRenderingContext;
-const GL2 = WebGL2RenderingContext;
+import { GL } from "../GL";
 
 export enum BufferTarget {
   /**
@@ -21,25 +20,25 @@ export enum BufferTarget {
   /**
    * Buffer for copying from one buffer object to another.
    */
-  CopyRead = GL2.COPY_READ_BUFFER,
+  // CopyRead = GL2.COPY_READ_BUFFER,
   /**
    * Buffer for copying from one buffer object to another.
    */
-  CopyWrite = GL2.COPY_WRITE_BUFFER,
+  // CopyWrite = GL2.COPY_WRITE_BUFFER,
   /**
    * Buffer for transform feedback operations.
    */
-  TransformFeedback = GL2.TRANSFORM_FEEDBACK_BUFFER,
+  // TransformFeedback = GL2.TRANSFORM_FEEDBACK_BUFFER,
   /**
    * Buffer used for storing uniform blocks.
    */
-  Uniform = GL2.UNIFORM_BUFFER,
+  // Uniform = GL2.UNIFORM_BUFFER,
   /**
    * Buffer used for pixel transfer operations.
    */
-  PixelPack = GL2.PIXEL_PACK_BUFFER,
+  // PixelPack = GL2.PIXEL_PACK_BUFFER,
   /**
    * Buffer used for pixel transfer operations.
    */
-  PixelUnpack = GL2.PIXEL_UNPACK_BUFFER,
+  // PixelUnpack = GL2.PIXEL_UNPACK_BUFFER,
 }

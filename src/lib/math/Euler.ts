@@ -32,29 +32,24 @@ export class Euler implements IPrimitive<Euler> {
   }
 
   copy(e: Euler): this {
-    this.x = e.x;
-    this.y = e.y;
-    this.z = e.z;
-    this.order = e.order;
-
-    return this;
+    return this.set(e.x, e.y, e.z, e.order);
   }
 
   equals(e: Euler): boolean {
     return e.x === this.x && e.y === this.y && e.z === this.z && e.order === this.order;
   }
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
-    this.x = floatArray[offset + 0];
-    this.y = floatArray[offset + 1];
-    this.z = floatArray[offset + 2];
-    this.order = floatArray[offset + 3] as EulerOrder;
+  setFromArray(array: Float32Array, offset: number): void {
+    this.x = array[offset + 0];
+    this.y = array[offset + 1];
+    this.z = array[offset + 2];
+    this.order = array[offset + 3] as EulerOrder;
   }
 
-  toArray(floatArray: Float32Array, offset: number): void {
-    floatArray[offset + 0] = this.x;
-    floatArray[offset + 1] = this.y;
-    floatArray[offset + 2] = this.z;
-    floatArray[offset + 3] = this.order as number;
+  toArray(array: Float32Array, offset: number): void {
+    array[offset + 0] = this.x;
+    array[offset + 1] = this.y;
+    array[offset + 2] = this.z;
+    array[offset + 3] = this.order as number;
   }
 }

@@ -6,8 +6,7 @@
 //
 
 import { ICloneable, IEquatable } from "../../core/types";
-
-const GL = WebGLRenderingContext;
+import { GL } from "./GL";
 
 export enum DepthTestFunc {
   /**

@@ -6,6 +6,7 @@
 //
 
 import { hashFloat2 } from "../core/hash";
+import { clamp } from "./Functions";
 import { IPrimitive } from "./IPrimitive";
 
 export class Vector2 implements IPrimitive<Vector2> {
@@ -41,10 +42,7 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 
   copy(v: Vector2): this {
-    this.x = v.x;
-    this.y = v.y;
-
-    return this;
+    return this.set(v.x, v.y);
   }
 
   add(v: Vector2): this {
@@ -88,33 +86,25 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 
   getComponent(index: number): number {
-    switch (index) {
-      case 0:
-        return this.x;
-      case 1:
-        return this.y;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      return this.x;
+    } else if (index === 1) {
+      return this.y;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
   }
 
   setComponent(index: number, value: number): this {
-    switch (index) {
-      case 0:
-        this.x = value;
-        break;
-      case 1:
-        this.y = value;
-        break;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      this.x = value;
+    } else if (index === 1) {
+      this.y = value;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
 
     return this;
-  }
-
-  numComponents(): 2 {
-    return 2;
   }
 
   dot(v: Vector2): number {
@@ -144,10 +134,8 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 
   clamp(min: Vector2, max: Vector2): this {
-    // assumes min < max, componentwise
-
-    this.x = Math.max(min.x, Math.min(max.x, this.x));
-    this.y = Math.max(min.y, Math.min(max.y, this.y));
+    this.x = clamp(this.x, min.x, max.x);
+    this.y = clamp(this.y, min.y, max.y);
 
     return this;
   }
@@ -156,13 +144,13 @@ export class Vector2 implements IPrimitive<Vector2> {
     return v.x === this.x && v.y === this.y;
   }
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
-    this.x = floatArray[offset + 0];
-    this.y = floatArray[offset + 1];
+  setFromArray(array: Float32Array, offset: number): void {
+    this.x = array[offset + 0];
+    this.y = array[offset + 1];
   }
 
-  toArray(floatArray: Float32Array, offset: number): void {
-    floatArray[offset + 0] = this.x;
-    floatArray[offset + 1] = this.y;
+  toArray(array: Float32Array, offset: number): void {
+    array[offset + 0] = this.x;
+    array[offset + 1] = this.y;
   }
 }

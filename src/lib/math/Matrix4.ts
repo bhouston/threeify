@@ -60,28 +60,25 @@ export class Matrix4 implements IPrimitive<Matrix4> {
   }
 
   copy(m: Matrix4): this {
-    const te = this.elements;
     const me = m.elements;
-
-    // TODO: Replace with set(...)
-    te[0] = me[0];
-    te[1] = me[1];
-    te[2] = me[2];
-    te[3] = me[3];
-    te[4] = me[4];
-    te[5] = me[5];
-    te[6] = me[6];
-    te[7] = me[7];
-    te[8] = me[8];
-    te[9] = me[9];
-    te[10] = me[10];
-    te[11] = me[11];
-    te[12] = me[12];
-    te[13] = me[13];
-    te[14] = me[14];
-    te[15] = me[15];
-
-    return this;
+    return this.set(
+      me[0],
+      me[4],
+      me[8],
+      me[12],
+      me[1],
+      me[5],
+      me[9],
+      me[13],
+      me[2],
+      me[6],
+      me[10],
+      me[14],
+      me[3],
+      me[7],
+      me[11],
+      me[15],
+    );
   }
 
   getComponent(index: number): number {
@@ -92,10 +89,6 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     this.elements[index] = value;
 
     return this;
-  }
-
-  numComponents(): 16 {
-    return 16;
   }
 
   multiplyByScalar(s: number): this {
@@ -319,9 +312,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
   }
 
   makeIdentity(): this {
-    this.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-
-    return this;
+    return this.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   }
 
   equals(m: Matrix4): boolean {
@@ -334,15 +325,15 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     return true;
   }
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
+  setFromArray(array: Float32Array, offset: number): void {
     for (let i = 0; i < this.elements.length; i++) {
-      this.elements[i] = floatArray[offset + i];
+      this.elements[i] = array[offset + i];
     }
   }
 
-  toArray(floatArray: Float32Array, offset: number): void {
+  toArray(array: Float32Array, offset: number): void {
     for (let i = 0; i < this.elements.length; i++) {
-      floatArray[offset + i] = this.elements[i];
+      array[offset + i] = this.elements[i];
     }
   }
 }

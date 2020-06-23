@@ -1,4 +1,4 @@
-const GL = WebGLRenderingContext;
+import { GL } from "../GL";
 
 export enum Attachments {
   Color = GL.COLOR_BUFFER_BIT,

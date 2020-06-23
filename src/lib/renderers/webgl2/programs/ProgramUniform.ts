@@ -2,12 +2,11 @@ import { Color } from "../../../math/Color";
 import { Matrix4 } from "../../../math/Matrix4";
 import { Vector2 } from "../../../math/Vector2";
 import { Vector3 } from "../../../math/Vector3";
+import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { TexImage2D } from "../textures/TexImage2D";
 import { Program } from "./Program";
 import { UniformType } from "./UniformType";
-
-export const GL2 = WebGL2RenderingContext;
 
 export type UniformValue = number | Vector2 | Vector3 | Color | Matrix4 | TexImage2D;
 export type UniformValueMap = { [key: string]: UniformValue };
@@ -122,21 +121,21 @@ export class ProgramUniform {
         }
         break;
       case UniformType.Sampler2D:
-      case UniformType.IntSampler2D:
-      case UniformType.UnsignedIntSampler2D:
-      case UniformType.Sampler2DShadow:
+        // case UniformType.IntSampler2D:
+        // case UniformType.UnsignedIntSampler2D:
+        // case UniformType.Sampler2DShadow:
         if (value instanceof TexImage2D) {
-          gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
-          gl.bindTexture(GL2.TEXTURE_2D, value.glTexture);
+          gl.activeTexture(GL.TEXTURE0 + this.textureUnit);
+          gl.bindTexture(GL.TEXTURE_2D, value.glTexture);
           gl.uniform1i(this.glLocation, this.textureUnit);
           return this;
         }
         break;
       case UniformType.SamplerCube:
-      case UniformType.SamplerCubeShadow:
+        // case UniformType.SamplerCubeShadow:
         if (value instanceof TexImage2D) {
-          gl.activeTexture(GL2.TEXTURE0 + this.textureUnit);
-          gl.bindTexture(GL2.TEXTURE_CUBE_MAP, value.glTexture);
+          gl.activeTexture(GL.TEXTURE0 + this.textureUnit);
+          gl.bindTexture(GL.TEXTURE_CUBE_MAP, value.glTexture);
           gl.uniform1i(this.glLocation, this.textureUnit);
           return this;
         }
