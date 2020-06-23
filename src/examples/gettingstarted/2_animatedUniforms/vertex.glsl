@@ -1,4 +1,4 @@
-in vec2 position;
+attribute vec2 position;
 
 uniform float scale;
 

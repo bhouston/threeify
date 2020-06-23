@@ -1,8 +1,8 @@
 import { generateUUID } from "../core/generateUuid";
 import { Vector2 } from "../math/Vector2";
-import { DataType } from "../renderers/webgl2/textures/DataType";
-import { PixelFormat } from "../renderers/webgl2/textures/PixelFormat";
-import { TextureFilter } from "../renderers/webgl2/textures/TextureFilter";
+import { DataType } from "../renderers/webgl/textures/DataType";
+import { PixelFormat } from "../renderers/webgl/textures/PixelFormat";
+import { TextureFilter } from "../renderers/webgl/textures/TextureFilter";
 
 export class VirtualTexture {
   disposed = false;

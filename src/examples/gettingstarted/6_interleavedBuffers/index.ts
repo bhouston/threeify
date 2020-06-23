@@ -2,9 +2,9 @@ import { makeFloat32Attribute, makeUint8Attribute } from "../../../lib/geometry/
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { convertToInterleavedGeometry } from "../../../lib/geometry/Geometry.Functions";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 

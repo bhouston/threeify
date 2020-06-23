@@ -19,11 +19,11 @@ export class VertexArrayObject {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 
-    const gl = this.program.context.gl;
+    const glx = this.program.context.glx.OES_vertex_array_object;
 
     {
       // Create a vertex array object (attribute state)
-      const vao = gl.createVertexArray();
+      const vao = glx.createVertexArrayOES();
       if (vao === null) {
         throw new Error("createVertexArray failed");
       }
@@ -31,7 +31,7 @@ export class VertexArrayObject {
     }
 
     // and make it the one we're currently working with
-    gl.bindVertexArray(this.glVertexArrayObject);
+    glx.bindVertexArrayOES(this.glVertexArrayObject);
 
     program.setAttributeBuffers(bufferGeometry);
   }

@@ -1,9 +1,9 @@
 import { makeFloat32Attribute, makeUint8Attribute } from "../../../lib/geometry/Attribute";
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
@@ -11,7 +11,7 @@ const geometry = new Geometry();
 geometry.attributes["position"] = makeFloat32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
 geometry.attributes["color"] = makeUint8Attribute([255, 0, 0, 0, 255, 0, 0, 0, 255], 3, true);
 
-const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode, 300);
+const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
 
 const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;

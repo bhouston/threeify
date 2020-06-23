@@ -1,7 +1,7 @@
-in vec2 position;
-in vec3 color;
+attribute vec2 position;
+attribute vec3 color;
 
-out vec3 v_color;
+varying vec3 v_color;
 
 void main() {
 

@@ -15,7 +15,7 @@ export class ShaderMaterial implements IIdentifiable, IVersionable, IDisposable,
   disposed = false;
   name = "";
 
-  constructor(public vertexShaderCode: string, public fragmentShaderCode: string, public glslVersion = 300) {}
+  constructor(public vertexShaderCode: string, public fragmentShaderCode: string, public glslVersion = 200) {}
 
   dirty(): void {
     this.version++;
