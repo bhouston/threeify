@@ -5,7 +5,7 @@ import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
-  makeMatrix4Perspective,
+  makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
@@ -40,8 +40,9 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
-    roughnessFactor: 0,
+    viewToScreen: makeMatrix4PerspectiveFov(60, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    perceptualRoughness: 0,
+    mipCount: cubeTexture.mipCount,
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -55,7 +56,7 @@ async function init(): Promise<null> {
       new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld,
     );
-    uniforms.roughnessFactor = Math.sin(now * 0.0001) * 0.5 + 0.5;
+    uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 

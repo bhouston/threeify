@@ -21,6 +21,13 @@ export class VirtualTexture {
     public anisotropicLevels = 1,
   ) {}
 
+  get mipCount(): number {
+    if (!this.generateMipmaps) {
+      return 1;
+    }
+    return Math.floor(Math.log2(Math.max(this.size.width, this.size.height)));
+  }
+
   dirty(): void {
     this.version++;
   }
