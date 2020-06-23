@@ -6,7 +6,7 @@
 //
 
 import { Matrix4 } from "../../math/Matrix4";
-import { makeMatrix4Perspective } from "../../math/Matrix4.Functions";
+import { makeMatrix4PerspectiveFov } from "../../math/Matrix4.Functions";
 import { Camera } from "./Camera";
 
 export class PerspectiveCamera extends Camera {
@@ -14,16 +14,14 @@ export class PerspectiveCamera extends Camera {
     super();
   }
 
-  getProjection(viewAspectRatio = 1.0): Matrix4 {
-    const height = (2.0 * this.near * Math.tan((this.verticalFov * Math.PI) / 180.0)) / this.zoom;
-    const width = height * this.pixelAspectRatio * viewAspectRatio;
-
-    const left = -width * 0.5;
-    const right = left + width;
-
-    const top = -height * 0.5;
-    const bottom = -top + height;
-
-    return makeMatrix4Perspective(new Matrix4(), left, right, top, bottom, this.near, this.far);
+  getProjection(viewAspectRatio = 1.0, result = new Matrix4()): Matrix4 {
+    return makeMatrix4PerspectiveFov(
+      this.verticalFov,
+      this.near,
+      this.far,
+      this.zoom,
+      this.pixelAspectRatio * viewAspectRatio,
+      result,
+    );
   }
 }

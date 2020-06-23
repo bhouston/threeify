@@ -15,6 +15,15 @@ export class Quaternion implements IPrimitive<Quaternion> {
     return hashFloat4(this.x, this.y, this.z, this.w);
   }
 
+  set(x: number, y: number, z: number, w: number): this {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+
+    return this;
+  }
+
   clone(): Quaternion {
     return new Quaternion().copy(this);
   }
@@ -80,10 +89,6 @@ export class Quaternion implements IPrimitive<Quaternion> {
     }
 
     return this;
-  }
-
-  numComponents(): 4 {
-    return 4;
   }
 
   multiply(q: Quaternion): this {

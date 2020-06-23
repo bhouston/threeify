@@ -2,6 +2,7 @@ import { Euler, EulerOrder } from "./Euler";
 import { Matrix4 } from "./Matrix4";
 import { Quaternion } from "./Quaternion";
 import { makeQuaternionFromRotationMatrix4 } from "./Quaternion.Functions";
+import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
 
 export function makeMatrix4Concatenation(a: Matrix4, b: Matrix4, result = new Matrix4()): Matrix4 {
@@ -203,11 +204,11 @@ export function makeMatrix4Inverse(m: Matrix4, result = new Matrix4()): Matrix4 
   return result;
 }
 
-export function makeMatrix4Translation(m: Matrix4, t: Vector3): Matrix4 {
-  return m.set(1, 0, 0, t.x, 0, 1, 0, t.y, 0, 0, 1, t.z, 0, 0, 0, 1);
+export function makeMatrix4Translation(t: Vector3, result = new Matrix4()): Matrix4 {
+  return result.set(1, 0, 0, t.x, 0, 1, 0, t.y, 0, 0, 1, t.z, 0, 0, 0, 1);
 }
 
-export function makeMatrix4RotationFromAngleAxis(m: Matrix4, axis: Vector3, angle: number): Matrix4 {
+export function makeMatrix4RotationFromAngleAxis(axis: Vector3, angle: number, result = new Matrix4()): Matrix4 {
   // Based on http://www.gamedev.net/reference/articles/article1199.asp
 
   const c = Math.cos(angle);
@@ -219,7 +220,7 @@ export function makeMatrix4RotationFromAngleAxis(m: Matrix4, axis: Vector3, angl
   const tx = t * x,
     ty = t * y;
 
-  return m.set(
+  return result.set(
     tx * x + c,
     tx * y - s * z,
     tx * z + s * y,
@@ -239,8 +240,8 @@ export function makeMatrix4RotationFromAngleAxis(m: Matrix4, axis: Vector3, angl
   );
 }
 
-export function makeMatrix4RotationFromEuler(m: Matrix4, euler: Euler): Matrix4 {
-  const te = m.elements;
+export function makeMatrix4RotationFromEuler(euler: Euler, result = new Matrix4()): Matrix4 {
+  const te = result.elements;
 
   const x = euler.x,
     y = euler.y,
@@ -368,19 +369,19 @@ export function makeMatrix4RotationFromEuler(m: Matrix4, euler: Euler): Matrix4 
   te[14] = 0;
   te[15] = 1;
 
-  return m;
+  return result;
 }
 
-export function makeMatrix4RotationFromQuaternion(m: Matrix4, q: Quaternion): Matrix4 {
-  return composeMatrix4(m, new Vector3(), q, new Vector3(1, 1, 1));
+export function makeMatrix4RotationFromQuaternion(q: Quaternion, result = new Matrix4()): Matrix4 {
+  return composeMatrix4(new Vector3(), q, new Vector3(1, 1, 1), result);
 }
 
-export function makeMatrix4Scale(m: Matrix4, s: Vector3): Matrix4 {
-  return m.set(s.x, 0, 0, 0, 0, s.y, 0, 0, 0, 0, s.z, 0, 0, 0, 0, 1);
+export function makeMatrix4Scale(s: Vector3, result = new Matrix4()): Matrix4 {
+  return result.set(s.x, 0, 0, 0, 0, s.y, 0, 0, 0, 0, s.z, 0, 0, 0, 0, 1);
 }
 
-export function makeMatrix4Shear(m: Matrix4, x: number, y: number, z: number): Matrix4 {
-  return m.set(1, y, z, 0, x, 1, z, 0, x, y, 1, 0, 0, 0, 0, 1);
+export function makeMatrix4Shear(x: number, y: number, z: number, result = new Matrix4()): Matrix4 {
+  return result.set(1, y, z, 0, x, 1, z, 0, x, y, 1, 0, 0, 0, 0, 1);
 }
 
 export function getMaxScaleOnAxis(m: Matrix4): number {
@@ -393,7 +394,12 @@ export function getMaxScaleOnAxis(m: Matrix4): number {
   return Math.sqrt(Math.max(scaleXSq, scaleYSq, scaleZSq));
 }
 
-export function composeMatrix4(m: Matrix4, position: Vector3, rotation: Quaternion, scale: Vector3): Matrix4 {
+export function composeMatrix4(
+  position: Vector3,
+  rotation: Quaternion,
+  scale: Vector3,
+  result = new Matrix4(),
+): Matrix4 {
   const x = rotation.x,
     y = rotation.y,
     z = rotation.z,
@@ -415,7 +421,7 @@ export function composeMatrix4(m: Matrix4, position: Vector3, rotation: Quaterni
     sy = scale.y,
     sz = scale.z;
 
-  return m.set(
+  return result.set(
     // TODO: Replace with set
     (1 - (yy + zz)) * sx,
     (xy - wz) * sy,
@@ -472,7 +478,7 @@ export function decomposeMatrix4(m: Matrix4, position: Vector3, rotation: Quater
   m2.elements[9] *= invSZ;
   m2.elements[10] *= invSZ;
 
-  makeQuaternionFromRotationMatrix4(rotation, m);
+  makeQuaternionFromRotationMatrix4(m2, rotation);
 
   scale.x = sx;
   scale.y = sy;
@@ -483,13 +489,13 @@ export function decomposeMatrix4(m: Matrix4, position: Vector3, rotation: Quater
 
 // TODO: Replace with a Box2
 export function makeMatrix4Perspective(
-  m: Matrix4,
   left: number,
   right: number,
   top: number,
   bottom: number,
   near: number,
   far: number,
+  result = new Matrix4(),
 ): Matrix4 {
   const x = (2 * near) / (right - left);
   const y = (2 * near) / (top - bottom);
@@ -499,18 +505,40 @@ export function makeMatrix4Perspective(
   const c = -(far + near) / (far - near);
   const d = (-2 * far * near) / (far - near);
 
-  return m.set(x, 0, a, 0, 0, y, b, 0, 0, 0, c, d, 0, 0, -1, 0);
+  return result.set(x, 0, a, 0, 0, y, b, 0, 0, 0, c, d, 0, 0, -1, 0);
+}
+
+export function makeMatrix4PerspectiveFov(
+  verticalFov: number,
+  near: number,
+  far: number,
+  zoom: number,
+  aspectRatio: number,
+  result = new Matrix4(),
+): Matrix4 {
+  const height = (2.0 * near * Math.tan((verticalFov * Math.PI) / 180.0)) / zoom;
+  const width = height * aspectRatio;
+
+  // NOTE: OpenGL screen coordinates are -bottomt to +top, -left to +right.
+
+  const right = width * 0.5;
+  const left = right - width;
+
+  const top = height * 0.5;
+  const bottom = top - height;
+
+  return makeMatrix4Perspective(left, right, top, bottom, near, far, result);
 }
 
 // TODO: Replace with a Box3?
 export function makeMatrix4Orthographic(
-  m: Matrix4,
   left: number,
   right: number,
   top: number,
   bottom: number,
   near: number,
   far: number,
+  result = new Matrix4(),
 ): Matrix4 {
   const w = 1.0 / (right - left);
   const h = 1.0 / (top - bottom);
@@ -520,5 +548,25 @@ export function makeMatrix4Orthographic(
   const y = (top + bottom) * h;
   const z = (far + near) * p;
 
-  return m.set(2 * w, 0, 0, -x, 0, 2 * h, 0, -y, 0, 0, -2 * p, -z, 0, 0, 0, 1);
+  return result.set(2 * w, 0, 0, -x, 0, 2 * h, 0, -y, 0, 0, -2 * p, -z, 0, 0, 0, 1);
+}
+
+export function makeMatrix4OrthographicSimple(
+  height: number,
+  center: Vector2,
+  near: number,
+  far: number,
+  zoom: number,
+  aspectRatio = 1.0,
+  result = new Matrix4(),
+): Matrix4 {
+  const width = (height * aspectRatio) / zoom;
+
+  const left = -width * 0.5 + center.x;
+  const right = left + width;
+
+  const top = -height * 0.5 + center.y;
+  const bottom = top + height;
+
+  return makeMatrix4Orthographic(left, right, top, bottom, near, far, result);
 }

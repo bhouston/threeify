@@ -42,14 +42,16 @@ export function pointToBaryCoords(a: Vector3, b: Vector3, c: Vector3, point: Vec
 }
 
 export function makeVector3FromBaryCoordWeights(
-  BaryCoord: Vector3,
+  baryCoord: Vector3,
   a: Vector3,
   b: Vector3,
   c: Vector3,
   result = new Vector3(),
 ): Vector3 {
-  result.x = a.x * BaryCoord.x + b.x * BaryCoord.y + c.x * BaryCoord.z;
-  result.y = a.y * BaryCoord.x + b.y * BaryCoord.y + c.y * BaryCoord.z;
-  result.z = a.z * BaryCoord.x + b.z * BaryCoord.y + c.z * BaryCoord.z;
-  return result;
+  const v = baryCoord;
+  return result.set(
+    a.x * v.x + b.x * v.y + c.x * v.z,
+    a.y * v.x + b.y * v.y + c.y * v.z,
+    a.z * v.x + b.z * v.y + c.z * v.z,
+  );
 }

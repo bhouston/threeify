@@ -3,7 +3,7 @@ import { Matrix4 } from "./Matrix4";
 import { Quaternion } from "./Quaternion";
 import { Vector3 } from "./Vector3";
 
-export function makeQuaternionFromEuler(q: Quaternion, e: Euler): Quaternion {
+export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Quaternion {
   const x = e.x,
     y = e.y,
     z = e.z,
@@ -22,52 +22,59 @@ export function makeQuaternionFromEuler(q: Quaternion, e: Euler): Quaternion {
 
   switch (order) {
     case EulerOrder.XYZ:
-      q.x = s1 * c2 * c3 + c1 * s2 * s3;
-      q.y = c1 * s2 * c3 - s1 * c2 * s3;
-      q.z = c1 * c2 * s3 + s1 * s2 * c3;
-      q.w = c1 * c2 * c3 - s1 * s2 * s3;
-      break;
+      return result.set(
+        s1 * c2 * c3 + c1 * s2 * s3,
+        c1 * s2 * c3 - s1 * c2 * s3,
+        c1 * c2 * s3 + s1 * s2 * c3,
+        c1 * c2 * c3 - s1 * s2 * s3,
+      );
 
     case EulerOrder.YXZ:
-      q.x = s1 * c2 * c3 + c1 * s2 * s3;
-      q.y = c1 * s2 * c3 - s1 * c2 * s3;
-      q.z = c1 * c2 * s3 - s1 * s2 * c3;
-      q.w = c1 * c2 * c3 + s1 * s2 * s3;
-      break;
+      return result.set(
+        s1 * c2 * c3 + c1 * s2 * s3,
+        c1 * s2 * c3 - s1 * c2 * s3,
+        c1 * c2 * s3 - s1 * s2 * c3,
+        c1 * c2 * c3 + s1 * s2 * s3,
+      );
 
     case EulerOrder.ZXY:
-      q.x = s1 * c2 * c3 - c1 * s2 * s3;
-      q.y = c1 * s2 * c3 + s1 * c2 * s3;
-      q.z = c1 * c2 * s3 + s1 * s2 * c3;
-      q.w = c1 * c2 * c3 - s1 * s2 * s3;
-      break;
+      return result.set(
+        s1 * c2 * c3 - c1 * s2 * s3,
+        c1 * s2 * c3 + s1 * c2 * s3,
+        c1 * c2 * s3 + s1 * s2 * c3,
+        c1 * c2 * c3 - s1 * s2 * s3,
+      );
 
     case EulerOrder.ZYX:
-      q.x = s1 * c2 * c3 - c1 * s2 * s3;
-      q.y = c1 * s2 * c3 + s1 * c2 * s3;
-      q.z = c1 * c2 * s3 - s1 * s2 * c3;
-      q.w = c1 * c2 * c3 + s1 * s2 * s3;
-      break;
+      return result.set(
+        s1 * c2 * c3 - c1 * s2 * s3,
+        c1 * s2 * c3 + s1 * c2 * s3,
+        c1 * c2 * s3 - s1 * s2 * c3,
+        c1 * c2 * c3 + s1 * s2 * s3,
+      );
 
     case EulerOrder.YZX:
-      q.x = s1 * c2 * c3 + c1 * s2 * s3;
-      q.y = c1 * s2 * c3 + s1 * c2 * s3;
-      q.z = c1 * c2 * s3 - s1 * s2 * c3;
-      q.w = c1 * c2 * c3 - s1 * s2 * s3;
-      break;
+      return result.set(
+        s1 * c2 * c3 + c1 * s2 * s3,
+        c1 * s2 * c3 + s1 * c2 * s3,
+        c1 * c2 * s3 - s1 * s2 * c3,
+        c1 * c2 * c3 - s1 * s2 * s3,
+      );
 
     case EulerOrder.XZY:
-      q.x = s1 * c2 * c3 - c1 * s2 * s3;
-      q.y = c1 * s2 * c3 - s1 * c2 * s3;
-      q.z = c1 * c2 * s3 + s1 * s2 * c3;
-      q.w = c1 * c2 * c3 + s1 * s2 * s3;
-      break;
-  }
+      return result.set(
+        s1 * c2 * c3 - c1 * s2 * s3,
+        c1 * s2 * c3 - s1 * c2 * s3,
+        c1 * c2 * s3 + s1 * s2 * c3,
+        c1 * c2 * c3 + s1 * s2 * s3,
+      );
 
-  return q;
+    default:
+      throw new Error("unsupported euler order");
+  }
 }
 
-export function makeQuaternionFromRotationMatrix4(q: Quaternion, m: Matrix4): Quaternion {
+export function makeQuaternionFromRotationMatrix4(m: Matrix4, result = new Quaternion()): Quaternion {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
@@ -85,42 +92,29 @@ export function makeQuaternionFromRotationMatrix4(q: Quaternion, m: Matrix4): Qu
     m32 = te[6],
     m33 = te[10],
     trace = m11 + m22 + m33;
-  let s;
 
   if (trace > 0) {
-    s = 0.5 / Math.sqrt(trace + 1.0);
+    const s = 0.5 / Math.sqrt(trace + 1.0);
 
-    q.w = 0.25 / s;
-    q.x = (m32 - m23) * s;
-    q.y = (m13 - m31) * s;
-    q.z = (m21 - m12) * s;
-  } else if (m11 > m22 && m11 > m33) {
-    s = 2.0 * Math.sqrt(1.0 + m11 - m22 - m33);
+    return result.set((m32 - m23) * s, (m13 - m31) * s, (m21 - m12) * s, 0.25 / s);
+  }
+  if (m11 > m22 && m11 > m33) {
+    const s = 2.0 * Math.sqrt(1.0 + m11 - m22 - m33);
 
-    q.w = (m32 - m23) / s;
-    q.x = 0.25 * s;
-    q.y = (m12 + m21) / s;
-    q.z = (m13 + m31) / s;
-  } else if (m22 > m33) {
-    s = 2.0 * Math.sqrt(1.0 + m22 - m11 - m33);
+    return result.set(0.25 * s, (m12 + m21) / s, (m13 + m31) / s, (m32 - m23) / s);
+  }
+  if (m22 > m33) {
+    const s = 2.0 * Math.sqrt(1.0 + m22 - m11 - m33);
 
-    q.w = (m13 - m31) / s;
-    q.x = (m12 + m21) / s;
-    q.y = 0.25 * s;
-    q.z = (m23 + m32) / s;
-  } else {
-    s = 2.0 * Math.sqrt(1.0 + m33 - m11 - m22);
-
-    q.w = (m21 - m12) / s;
-    q.x = (m13 + m31) / s;
-    q.y = (m23 + m32) / s;
-    q.z = 0.25 * s;
+    return result.set((m12 + m21) / s, 0.25 * s, (m23 + m32) / s, (m13 - m31) / s);
   }
 
-  return q;
+  const s = 2.0 * Math.sqrt(1.0 + m33 - m11 - m22);
+
+  return result.set((m13 + m31) / s, (m23 + m32) / s, 0.25 * s, (m21 - m12) / s);
 }
 
-export function makeQuaternionFromAxisAngle(q: Quaternion, axis: Vector3, angle: number): Quaternion {
+export function makeQuaternionFromAxisAngle(axis: Vector3, angle: number, result = new Quaternion()): Quaternion {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
 
   // assumes axis is normalized
@@ -128,12 +122,7 @@ export function makeQuaternionFromAxisAngle(q: Quaternion, axis: Vector3, angle:
   const halfAngle = angle / 2,
     s = Math.sin(halfAngle);
 
-  q.x = axis.x * s;
-  q.y = axis.y * s;
-  q.z = axis.z * s;
-  q.w = Math.cos(halfAngle);
-
-  return q;
+  return result.set(axis.x * s, axis.y * s, axis.z * s, Math.cos(halfAngle));
 }
 
 export function makeQuaternionFromBaryCoordWeights(
@@ -143,9 +132,11 @@ export function makeQuaternionFromBaryCoordWeights(
   c: Quaternion,
   result = new Quaternion(),
 ): Quaternion {
-  result.x = a.x * baryCoord.x + b.x * baryCoord.y + c.x * baryCoord.z;
-  result.y = a.y * baryCoord.x + b.y * baryCoord.y + c.y * baryCoord.z;
-  result.z = a.z * baryCoord.x + b.z * baryCoord.y + c.z * baryCoord.z;
-  result.w = a.w * baryCoord.x + b.w * baryCoord.y + c.w * baryCoord.z;
-  return result;
+  const v = baryCoord;
+  return result.set(
+    a.x * v.x + b.x * v.y + c.x * v.z,
+    a.y * v.x + b.y * v.y + c.y * v.z,
+    a.z * v.x + b.z * v.y + c.z * v.z,
+    a.w * v.x + b.w * v.y + c.w * v.z,
+  );
 }

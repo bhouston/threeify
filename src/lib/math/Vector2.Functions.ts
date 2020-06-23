@@ -2,13 +2,12 @@ import { Vector2 } from "./Vector2";
 import { Vector3 } from "./Vector3";
 
 export function makeVector2FromBaryCoordWeights(
-  BaryCoord: Vector3,
+  baryCoord: Vector3,
   a: Vector2,
   b: Vector2,
   c: Vector2,
   result = new Vector2(),
 ): Vector2 {
-  result.x = a.x * BaryCoord.x + b.x * BaryCoord.y + c.x * BaryCoord.z;
-  result.y = a.y * BaryCoord.x + b.y * BaryCoord.y + c.y * BaryCoord.z;
-  return result;
+  const v = baryCoord;
+  return result.set(a.x * v.x + b.x * v.y + c.x * v.z, a.y * v.x + b.y * v.y + c.y * v.z);
 }

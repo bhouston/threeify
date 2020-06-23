@@ -75,10 +75,6 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     return this;
   }
 
-  numComponents(): 9 {
-    return 9;
-  }
-
   multiplyByScalar(s: number): this {
     const te = this.elements;
 

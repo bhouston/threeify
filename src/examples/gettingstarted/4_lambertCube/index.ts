@@ -31,8 +31,8 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Matrix4(), new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4Perspective(new Matrix4(), -0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
+    viewToScreen: makeMatrix4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     viewLightPosition: new Vector3(0, 0, 0),
     map: makeTexImage2DFromTexture(context, texture),
   };
@@ -44,8 +44,8 @@ async function init(): Promise<null> {
 
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      uniforms.localToWorld,
       new Euler(now * 0.001, now * 0.0033, now * 0.00077),
+      uniforms.localToWorld,
     );
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }

@@ -1,35 +1,28 @@
-import { convertToInterleavedGeometry } from "../../../lib/geometry/Geometry.Functions";
-import { icosahedron } from "../../../lib/geometry/primitives/Polyhedrons";
+import { box } from "../../../lib/geometry/primitives/Box";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
-  makeMatrix4Perspective,
+  makeMatrix4OrthographicSimple,
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
+import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { CubeTexture } from "../../../lib/textures/CubeTexture";
+import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = convertToInterleavedGeometry(icosahedron(0.75, 3));
+  const geometry = box(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const cubeTexture = new CubeTexture([
-    await fetchImage("/assets/textures/cube/pisa/px.png"),
-    await fetchImage("/assets/textures/cube/pisa/nx.png"),
-    await fetchImage("/assets/textures/cube/pisa/py.png"),
-    await fetchImage("/assets/textures/cube/pisa/ny.png"),
-    await fetchImage("/assets/textures/cube/pisa/pz.png"),
-    await fetchImage("/assets/textures/cube/pisa/nz.png"),
-  ]);
+  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
@@ -40,9 +33,9 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
-    roughnessFactor: 0,
-    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
+    viewToScreen: makeMatrix4OrthographicSimple(1.5, new Vector2(), 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewLightPosition: new Vector3(0, 0, 0),
+    map: makeTexImage2DFromTexture(context, texture),
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -52,10 +45,9 @@ async function init(): Promise<null> {
 
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
+      new Euler(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld,
     );
-    uniforms.roughnessFactor = Math.sin(now * 0.0001) * 0.5 + 0.5;
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 
