@@ -17,3 +17,5 @@ src/lib/renderers/webgl2/webgl2_fundamentals.js
 
 examples/gettingstarted/threejs_gettingstarted.js
 src/learning_ts.ts
+bundle*.js
+bundle*.js.zip

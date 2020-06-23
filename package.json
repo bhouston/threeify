@@ -29,7 +29,8 @@
     "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
   },
   "dependencies": {
-    "@webgpu/glslang": "^0.0.15"
+    "@webgpu/glslang": "^0.0.15",
+    "terser": "^4.8.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -51,6 +52,7 @@
     "eslint-plugin-prettier": "^3.1.3",
     "jest": "^26.0.1",
     "prettier": "^2.0.5",
+    "rollup": "^2.18.0",
     "semantic-release": "^17.0.8",
     "threeify-glsl-transpiler": "0.1.2",
     "ts-jest": "^26.1.0",
