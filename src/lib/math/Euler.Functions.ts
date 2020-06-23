@@ -4,7 +4,11 @@ import { Matrix4 } from "./Matrix4";
 import { makeMatrix4RotationFromQuaternion } from "./Matrix4.Functions";
 import { Quaternion } from "./Quaternion";
 
-export function makeEulerFromRotationMatrix4(e: Euler, m: Matrix4, order: EulerOrder = EulerOrder.Default): Euler {
+export function makeEulerFromRotationMatrix4(
+  m: Matrix4,
+  order: EulerOrder = EulerOrder.Default,
+  result = new Euler(),
+): Euler {
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
   const te = m.elements;
@@ -102,11 +106,10 @@ export function makeEulerFromRotationMatrix4(e: Euler, m: Matrix4, order: EulerO
       break;
   }
 
-  return e.set(x, y, z, order);
+  return result.set(x, y, z, order);
 }
 
-export function makeEulerFromQuaternion(e: Euler, q: Quaternion, order: EulerOrder): Euler {
-  const m = makeMatrix4RotationFromQuaternion(new Matrix4(), q);
-
-  return makeEulerFromRotationMatrix4(e, m, order);
+export function makeEulerFromQuaternion(q: Quaternion, order: EulerOrder, result = new Euler()): Euler {
+  const m = makeMatrix4RotationFromQuaternion(q);
+  return makeEulerFromRotationMatrix4(m, order, result);
 }
