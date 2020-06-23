@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { Vector2 } from "../../../math/Vector2";
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
 import { BlendState } from "../BlendState";
@@ -18,11 +19,16 @@ import { VertexArrayObject } from "../VertexArrayObject";
 import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
 export class CanvasFramebuffer extends VirtualFramebuffer {
+  public readonly canvas: HTMLCanvasElement | OffscreenCanvas;
   devicePixelRatio = 1.0;
 
-  constructor(context: RenderingContext, public readonly canvas: HTMLCanvasElement) {
+  constructor(context: RenderingContext) {
     super(context);
-    // TODO: add listening to the canvas and resize the canvas width/height?
+    this.canvas = context.gl.canvas;
+  }
+
+  get size(): Vector2 {
+    return new Vector2(this.context.gl.drawingBufferWidth, this.context.gl.drawingBufferHeight);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -36,7 +42,6 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
   ): void {
-    this.syncCanvas();
     super.renderVertexArrayObject(program, uniforms, vao, depthTestState, blendState, maskState);
   }
 
@@ -48,7 +53,6 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
   ): void {
-    this.syncCanvas();
     super.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState, blendState, maskState);
   }
 
@@ -59,18 +63,10 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
   ): void {
-    this.syncCanvas();
     super.renderPass(program, uniforms, depthTestState, blendState, maskState);
   }
 
   render(node: Node, camera: Camera, clear = false): void {
-    this.syncCanvas();
     super.render(node, camera, clear);
-  }
-
-  private syncCanvas(): void {
-    // ...then set the internal size to match
-    this.canvas.width = Math.round(this.canvas.offsetWidth / this.devicePixelRatio);
-    this.canvas.height = Math.round(this.canvas.offsetHeight / this.devicePixelRatio);
   }
 }

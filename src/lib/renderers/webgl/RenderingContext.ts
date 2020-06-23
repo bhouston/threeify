@@ -11,7 +11,8 @@ import { Node } from "../../nodes/Node";
 import { BlendState } from "./BlendState";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
-import { WebGLRenderContextExtensions } from "./Extensions";
+import { Extensions } from "./extensions/Extensions";
+import { OptionalExtensions } from "./extensions/OptionalExtensions";
 import { CanvasFramebuffer } from "./framebuffers/CanvasFramebuffer";
 import { Framebuffer } from "./framebuffers/Framebuffer";
 import { VirtualFramebuffer } from "./framebuffers/VirtualFramebuffer";
@@ -21,7 +22,8 @@ import { Program } from "./programs/Program";
 
 export class RenderingContext {
   readonly gl: WebGLRenderingContext;
-  readonly glx: WebGLRenderContextExtensions;
+  readonly glx: Extensions;
+  readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
   // readonly texImage2DPool: TexImage2DPool;
   // readonly programPool: ProgramPool;
@@ -36,8 +38,8 @@ export class RenderingContext {
   #clearState: ClearState = new ClearState();
   #maskState: MaskState = new MaskState();
 
-  constructor(canvas: HTMLCanvasElement | undefined = undefined) {
-    if (canvas === undefined) {
+  constructor(canvas: HTMLCanvasElement | null = null) {
+    if (canvas === null) {
       canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas") as HTMLCanvasElement;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -50,12 +52,12 @@ export class RenderingContext {
       if (gl === null) {
         throw new Error("webgl not supported");
       }
-
       this.gl = gl;
     }
-    this.glx = new WebGLRenderContextExtensions(this.gl);
+    this.glx = new Extensions(this.gl);
+    this.glxo = new OptionalExtensions(this.gl);
 
-    this.canvasFramebuffer = new CanvasFramebuffer(this, canvas);
+    this.canvasFramebuffer = new CanvasFramebuffer(this);
     // this.texImage2DPool = new TexImage2DPool(this);
     // this.programPool = new ProgramPool(this);
     // this.bufferPool = new BufferPool(this);

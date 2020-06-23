@@ -6,6 +6,7 @@
 //
 
 import { IDisposable } from "../../../core/types";
+import { Vector2 } from "../../../math/Vector2";
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
 import { BlendState } from "../BlendState";
@@ -38,6 +39,8 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   constructor(public context: RenderingContext, public attachments: Array<FramebufferAttachment> = []) {}
 
+  abstract get size(): Vector2;
+
   clear(
     attachmentFlags: Attachments = Attachments.Color | Attachments.Depth,
     clearState: ClearState | undefined = undefined,
@@ -67,9 +70,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
     // draw
     const gl = this.context.gl;
     if (bufferGeometry.indices !== undefined) {
-      // console.log(
-      //  `gl.drawElements(${bufferGeometry.primitive}, ${bufferGeometry.count}, ${bufferGeometry.indices.componentType}//, 0)`,
-      // );
       gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
     } else {
       gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
