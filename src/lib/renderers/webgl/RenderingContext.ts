@@ -62,13 +62,6 @@ export class RenderingContext {
     this.#framebuffer = this.canvasFramebuffer;
   }
 
-  private getRequiredExtension(name: string): any {
-    const result = this.gl.getExtension(name);
-    if (result === null) {
-      throw new Error(`required webgl extension ${name} is not supported`);
-      return result;
-    }
-  }
   set program(program: Program | undefined) {
     if (this.#program !== program) {
       if (program !== undefined) {

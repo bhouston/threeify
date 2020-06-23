@@ -5,11 +5,13 @@
 // * @bhouston
 //
 
+import { IDisposable } from "../../core/types";
 import { BufferGeometry } from "./buffers/BufferGeometry";
 import { PrimitiveType } from "./buffers/PrimitiveType";
 import { Program } from "./programs/Program";
 
-export class VertexArrayObject {
+export class VertexArrayObject implements IDisposable {
+  disposed = false;
   glVertexArrayObject: WebGLVertexArrayObject;
   primitive: PrimitiveType = PrimitiveType.Triangles;
   offset = 0;
@@ -19,11 +21,11 @@ export class VertexArrayObject {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 
-    const glx = this.program.context.glx.OES_vertex_array_object;
+    const glxVAO = this.program.context.glx.OES_vertex_array_object;
 
     {
       // Create a vertex array object (attribute state)
-      const vao = glx.createVertexArrayOES();
+      const vao = glxVAO.createVertexArrayOES();
       if (vao === null) {
         throw new Error("createVertexArray failed");
       }
@@ -31,8 +33,16 @@ export class VertexArrayObject {
     }
 
     // and make it the one we're currently working with
-    glx.bindVertexArrayOES(this.glVertexArrayObject);
+    glxVAO.bindVertexArrayOES(this.glVertexArrayObject);
 
     program.setAttributeBuffers(bufferGeometry);
+  }
+
+  dispose(): void {
+    if (!this.disposed) {
+      const glxVAO = this.program.context.glx.OES_vertex_array_object;
+      glxVAO.deleteVertexArrayOES(this.glVertexArrayObject);
+      this.disposed = true;
+    }
   }
 }

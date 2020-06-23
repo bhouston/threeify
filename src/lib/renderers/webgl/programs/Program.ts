@@ -97,7 +97,7 @@ export class Program implements IDisposable {
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
     const gl = this.context.gl;
-    const glx = this.context.glx.OES_vertex_array_object;
+    const glxVAO = this.context.glx.OES_vertex_array_object;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
       for (const name in this.attributes) {
@@ -112,7 +112,7 @@ export class Program implements IDisposable {
       }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
-      glx.bindVertexArrayOES(vao.glVertexArrayObject);
+      glxVAO.bindVertexArrayOES(vao.glVertexArrayObject);
     } else {
       throw new Error("not implemented");
     }
