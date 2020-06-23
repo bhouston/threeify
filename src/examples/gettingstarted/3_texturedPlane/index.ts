@@ -23,7 +23,6 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = { map: makeTexImage2DFromTexture(context, texture) };
 
-  console.log(context);
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
   return null;
