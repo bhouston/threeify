@@ -74,9 +74,10 @@ export class TexImage2D implements IDisposable {
     gl.texParameteri(this.target, GL.TEXTURE_MAG_FILTER, texParameters.magFilter);
     gl.texParameteri(this.target, GL.TEXTURE_MIN_FILTER, texParameters.minFilter);
 
-    if (this.target === TextureTarget.Texture2D) {
+    if (texParameters.anisotropyLevels > 1) {
       const tfa = this.context.glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
+        // TODO: Cache this at some point for speed improvements
         const maxAllowableAnisotropy = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
         gl.texParameterf(
           this.target,
