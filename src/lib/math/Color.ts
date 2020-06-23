@@ -18,13 +18,15 @@ export class Color implements IPrimitive<Color> {
   clone(): Color {
     return new Color().copy(this);
   }
+  set(r: number, g: number, b: number): this {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    return this;
+  }
 
   copy(c: Color): this {
-    this.r = c.r;
-    this.g = c.g;
-    this.b = c.b;
-
-    return this;
+    return this.set(c.r, c.g, c.b);
   }
 
   add(c: Color): this {
@@ -44,31 +46,26 @@ export class Color implements IPrimitive<Color> {
   }
 
   getComponent(index: number): number {
-    switch (index) {
-      case 0:
-        return this.r;
-      case 1:
-        return this.g;
-      case 2:
-        return this.b;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      return this.r;
+    } else if (index === 1) {
+      return this.g;
+    } else if (index === 2) {
+      return this.b;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
   }
 
   setComponent(index: number, value: number): this {
-    switch (index) {
-      case 0:
-        this.r = value;
-        break;
-      case 1:
-        this.g = value;
-        break;
-      case 2:
-        this.b = value;
-        break;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      this.r = value;
+    } else if (index === 1) {
+      this.g = value;
+    } else if (index === 2) {
+      this.b = value;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
 
     return this;
@@ -86,15 +83,15 @@ export class Color implements IPrimitive<Color> {
     return c.r === this.r && c.g === this.g && c.b === this.b;
   }
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
-    this.r = floatArray[offset + 0];
-    this.g = floatArray[offset + 1];
-    this.b = floatArray[offset + 2];
+  setFromArray(array: Float32Array, offset: number): void {
+    this.r = array[offset + 0];
+    this.g = array[offset + 1];
+    this.b = array[offset + 2];
   }
 
-  toArray(floatArray: Float32Array, offset: number): void {
-    floatArray[offset + 0] = this.r;
-    floatArray[offset + 1] = this.g;
-    floatArray[offset + 2] = this.b;
+  toArray(array: Float32Array, offset: number): void {
+    array[offset + 0] = this.r;
+    array[offset + 1] = this.g;
+    array[offset + 2] = this.b;
   }
 }

@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-const GL = WebGLRenderingContext;
+import { GL } from "../GL";
 
 export enum TextureWrap {
   MirroredRepeat = GL.MIRRORED_REPEAT,

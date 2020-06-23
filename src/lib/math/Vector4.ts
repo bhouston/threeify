@@ -29,12 +29,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   }
 
   copy(v: Vector4): this {
-    this.x = v.x;
-    this.y = v.y;
-    this.z = v.z;
-    this.w = v.w;
-
-    return this;
+    return this.set(v.x, v.y, v.z, v.w);
   }
 
   add(v: Vector4): this {
@@ -79,43 +74,33 @@ export class Vector4 implements IPrimitive<Vector4> {
   }
 
   getComponent(index: number): number {
-    switch (index) {
-      case 0:
-        return this.x;
-      case 1:
-        return this.y;
-      case 2:
-        return this.z;
-      case 3:
-        return this.w;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      return this.x;
+    } else if (index === 1) {
+      return this.y;
+    } else if (index === 2) {
+      return this.z;
+    } else if (index === 3) {
+      return this.w;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
   }
 
   setComponent(index: number, value: number): this {
-    switch (index) {
-      case 0:
-        this.x = value;
-        break;
-      case 1:
-        this.y = value;
-        break;
-      case 2:
-        this.z = value;
-        break;
-      case 3:
-        this.w = value;
-        break;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      this.x = value;
+    } else if (index === 1) {
+      this.y = value;
+    } else if (index === 2) {
+      this.z = value;
+    } else if (index === 3) {
+      this.w = value;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
 
     return this;
-  }
-
-  numComponents(): 4 {
-    return 4;
   }
 
   dot(v: Vector4): number {
@@ -134,17 +119,17 @@ export class Vector4 implements IPrimitive<Vector4> {
     return v.x === this.x && v.y === this.y && v.z === this.z && v.w === this.w;
   }
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
-    this.x = floatArray[offset + 0];
-    this.y = floatArray[offset + 1];
-    this.z = floatArray[offset + 2];
-    this.w = floatArray[offset + 3];
+  setFromArray(array: Float32Array, offset: number): void {
+    this.x = array[offset + 0];
+    this.y = array[offset + 1];
+    this.z = array[offset + 2];
+    this.w = array[offset + 3];
   }
 
-  toArray(floatArray: Float32Array, offset: number): void {
-    floatArray[offset + 0] = this.x;
-    floatArray[offset + 1] = this.y;
-    floatArray[offset + 2] = this.z;
-    floatArray[offset + 3] = this.w;
+  toArray(array: Float32Array, offset: number): void {
+    array[offset + 0] = this.x;
+    array[offset + 1] = this.y;
+    array[offset + 2] = this.z;
+    array[offset + 3] = this.w;
   }
 }

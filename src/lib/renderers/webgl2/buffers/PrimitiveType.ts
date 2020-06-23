@@ -1,4 +1,4 @@
-const GL = WebGLRenderingContext;
+import { GL } from "../GL";
 
 export enum PrimitiveType {
   Points = GL.POINTS,

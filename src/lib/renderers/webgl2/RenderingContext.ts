@@ -9,24 +9,21 @@ import { Box2 } from "../../math/Box2";
 import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
 import { BlendState } from "./BlendState";
-import { BufferPool } from "./buffers/Buffer";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
 import { CanvasFramebuffer } from "./framebuffers/CanvasFramebuffer";
 import { Framebuffer } from "./framebuffers/Framebuffer";
 import { VirtualFramebuffer } from "./framebuffers/VirtualFramebuffer";
+import { GL } from "./GL";
 import { MaskState } from "./MaskState";
-import { Program, ProgramPool } from "./programs/Program";
-import { TexImage2DPool } from "./textures/TexImage2D";
-
-const GL = WebGLRenderingContext;
+import { Program } from "./programs/Program";
 
 export class RenderingContext {
   readonly gl: WebGL2RenderingContext;
   readonly canvasFramebuffer: CanvasFramebuffer;
-  readonly texImage2DPool: TexImage2DPool;
-  readonly programPool: ProgramPool;
-  readonly bufferPool: BufferPool;
+  // readonly texImage2DPool: TexImage2DPool;
+  // readonly programPool: ProgramPool;
+  // readonly bufferPool: BufferPool;
 
   #program: Program | undefined = undefined;
   #framebuffer: VirtualFramebuffer;
@@ -55,9 +52,9 @@ export class RenderingContext {
       this.gl = gl;
     }
     this.canvasFramebuffer = new CanvasFramebuffer(this, canvas);
-    this.texImage2DPool = new TexImage2DPool(this);
-    this.programPool = new ProgramPool(this);
-    this.bufferPool = new BufferPool(this);
+    // this.texImage2DPool = new TexImage2DPool(this);
+    // this.programPool = new ProgramPool(this);
+    // this.bufferPool = new BufferPool(this);
     this.#framebuffer = this.canvasFramebuffer;
   }
 
@@ -78,9 +75,9 @@ export class RenderingContext {
   set framebuffer(framebuffer: VirtualFramebuffer) {
     if (this.#framebuffer !== framebuffer) {
       if (framebuffer instanceof CanvasFramebuffer) {
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        this.gl.bindFramebuffer(GL.FRAMEBUFFER, null);
       } else if (framebuffer instanceof Framebuffer) {
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, framebuffer.glFramebuffer);
+        this.gl.bindFramebuffer(GL.FRAMEBUFFER, framebuffer.glFramebuffer);
       }
       this.#framebuffer = framebuffer;
     }

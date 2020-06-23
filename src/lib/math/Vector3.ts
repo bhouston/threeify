@@ -6,6 +6,7 @@
 //
 
 import { hashFloat3 } from "../core/hash";
+import { clamp } from "./Functions";
 import { IPrimitive } from "./IPrimitive";
 
 export class Vector3 implements IPrimitive<Vector3> {
@@ -49,11 +50,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   copy(v: Vector3): this {
-    this.x = v.x;
-    this.y = v.y;
-    this.z = v.z;
-
-    return this;
+    return this.set(v.x, v.y, v.z);
   }
 
   add(v: Vector3): this {
@@ -110,38 +107,29 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   getComponent(index: number): number {
-    switch (index) {
-      case 0:
-        return this.x;
-      case 1:
-        return this.y;
-      case 2:
-        return this.z;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      return this.x;
+    } else if (index === 1) {
+      return this.y;
+    } else if (index === 2) {
+      return this.z;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
   }
 
   setComponent(index: number, value: number): this {
-    switch (index) {
-      case 0:
-        this.x = value;
-        break;
-      case 1:
-        this.y = value;
-        break;
-      case 2:
-        this.z = value;
-        break;
-      default:
-        throw new Error(`index of our range: ${index}`);
+    if (index === 0) {
+      this.x = value;
+    } else if (index === 1) {
+      this.y = value;
+    } else if (index === 2) {
+      this.z = value;
+    } else {
+      throw new Error(`index of our range: ${index}`);
     }
 
     return this;
-  }
-
-  numComponents(): 3 {
-    return 3;
   }
 
   dot(v: Vector3): number {
@@ -199,11 +187,9 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   clamp(min: Vector3, max: Vector3): this {
-    // assumes min < max, componentwise
-
-    this.x = Math.max(min.x, Math.min(max.x, this.x));
-    this.y = Math.max(min.y, Math.min(max.y, this.y));
-    this.z = Math.max(min.z, Math.min(max.z, this.z));
+    this.x = clamp(this.x, min.x, max.x);
+    this.y = clamp(this.y, min.y, max.y);
+    this.z = clamp(this.z, min.z, max.z);
 
     return this;
   }
@@ -212,15 +198,15 @@ export class Vector3 implements IPrimitive<Vector3> {
     return v.x === this.x && v.y === this.y && v.z === this.z;
   }
 
-  setFromArray(floatArray: Float32Array, offset: number): void {
-    this.x = floatArray[offset + 0];
-    this.y = floatArray[offset + 1];
-    this.z = floatArray[offset + 2];
+  setFromArray(array: Float32Array, offset: number): void {
+    this.x = array[offset + 0];
+    this.y = array[offset + 1];
+    this.z = array[offset + 2];
   }
 
-  toArray(floatArray: Float32Array, offset: number): void {
-    floatArray[offset + 0] = this.x;
-    floatArray[offset + 1] = this.y;
-    floatArray[offset + 2] = this.z;
+  toArray(array: Float32Array, offset: number): void {
+    array[offset + 0] = this.x;
+    array[offset + 1] = this.y;
+    array[offset + 2] = this.z;
   }
 }

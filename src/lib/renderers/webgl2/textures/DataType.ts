@@ -5,18 +5,17 @@
 // * @bhouston
 //
 
-const GL = WebGLRenderingContext;
-const GL2 = WebGL2RenderingContext;
+import { GL } from "../GL";
 
 // from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
 export enum DataType {
-  Byte = GL2.BYTE,
+  Byte = GL.BYTE,
   UnsignedByte = GL.UNSIGNED_BYTE,
-  Short = GL2.SHORT,
+  Short = GL.SHORT,
   UnsignedShort = GL.UNSIGNED_SHORT,
-  Int = GL2.INT,
+  Int = GL.INT,
   UnsignedInt = GL.UNSIGNED_INT,
-  HalfFloat = GL2.HALF_FLOAT,
+  // HalfFloat = GL.HALF_FLOAT,
   Float = GL.FLOAT,
 }
 
@@ -27,7 +26,7 @@ export function sizeOfDataType(dataType: DataType): number {
       return 1;
     case DataType.Short:
     case DataType.UnsignedShort:
-    case DataType.HalfFloat:
+      // case DataType.HalfFloat:
       return 2;
     case DataType.Int:
     case DataType.UnsignedInt:

@@ -1,4 +1,4 @@
-const GL = WebGLRenderingContext;
+import { GL } from "../GL";
 
 export enum AttachmentPoints {
   Color0 = GL.COLOR_ATTACHMENT0,

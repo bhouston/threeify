@@ -12,13 +12,12 @@ import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
 import { CubeTexture } from "../../../textures/CubeTexture";
 import { Texture, TextureImage } from "../../../textures/Texture";
 import { Pool } from "../../Pool";
+import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { DataType } from "./DataType";
 import { PixelFormat } from "./PixelFormat";
 import { TexParameters } from "./TexParameters";
 import { TextureTarget } from "./TextureTarget";
-
-export const GL = WebGLRenderingContext;
 
 export class TexImage2D implements IDisposable {
   disposed = false;
@@ -71,11 +70,11 @@ export class TexImage2D implements IDisposable {
       gl.generateMipmap(this.target);
     }
 
-    gl.texParameteri(this.target, gl.TEXTURE_WRAP_S, texParameters.wrapS);
-    gl.texParameteri(this.target, gl.TEXTURE_WRAP_T, texParameters.wrapS);
+    gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
+    gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
 
-    gl.texParameteri(this.target, gl.TEXTURE_MAG_FILTER, texParameters.magFilter);
-    gl.texParameteri(this.target, gl.TEXTURE_MIN_FILTER, texParameters.minFilter);
+    gl.texParameteri(this.target, GL.TEXTURE_MAG_FILTER, texParameters.magFilter);
+    gl.texParameteri(this.target, GL.TEXTURE_MIN_FILTER, texParameters.minFilter);
 
     gl.bindTexture(this.target, null);
 
