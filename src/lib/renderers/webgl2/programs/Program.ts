@@ -25,19 +25,14 @@ export class Program implements IDisposable {
   uniforms: { [key: string]: ProgramUniform | undefined } = {};
   attributes: { [key: string]: ProgramAttribute | undefined } = {};
 
-  constructor(public context: RenderingContext, shaderMaterial: ShaderMaterial) {
-    this.vertexShader = new Shader(
-      this.context,
-      shaderMaterial.vertexShaderCode,
-      ShaderType.Vertex,
-      shaderMaterial.glslVersion,
-    );
-    this.fragmentShader = new Shader(
-      this.context,
-      shaderMaterial.fragmentShaderCode,
-      ShaderType.Fragment,
-      shaderMaterial.glslVersion,
-    );
+  constructor(
+    public context: RenderingContext,
+    vertexShaderCode: string,
+    fragmentShaderCode: string,
+    glslVersion: number,
+  ) {
+    this.vertexShader = new Shader(this.context, vertexShaderCode, ShaderType.Vertex, glslVersion);
+    this.fragmentShader = new Shader(this.context, fragmentShaderCode, ShaderType.Fragment, glslVersion);
 
     const gl = this.context.gl;
 
@@ -90,7 +85,6 @@ export class Program implements IDisposable {
     this.context.program = this;
 
     for (const uniformName in uniformValueMap) {
-      // TODO replace this.uniforms with a map for faster access
       const uniform = this.uniforms[uniformName];
       if (uniform !== undefined) {
         uniform.set(uniformValueMap[uniformName]);
@@ -113,11 +107,6 @@ export class Program implements IDisposable {
         }
       }
       if (bufferGeometry.indices !== undefined) {
-        // bind the buffer containing the indices
-        // console.log(
-        //  `gl.bindBuffer(${bufferGeometry.indices.buffer.target}, ${bufferGeometry.indices.buffer.glBuffer})`,
-        // );
-
         gl.bindBuffer(bufferGeometry.indices.buffer.target, bufferGeometry.indices.buffer.glBuffer);
       }
     } else if (buffers instanceof VertexArrayObject) {
@@ -134,11 +123,19 @@ export class Program implements IDisposable {
     if (!this.disposed) {
       this.vertexShader.dispose();
       this.fragmentShader.dispose();
-
       this.context.gl.deleteProgram(this.glProgram);
       this.disposed = true;
     }
   }
+}
+
+export function makeProgramFromShaderMaterial(context: RenderingContext, shaderMaterial: ShaderMaterial): Program {
+  return new Program(
+    context,
+    shaderMaterial.vertexShaderCode,
+    shaderMaterial.fragmentShaderCode,
+    shaderMaterial.glslVersion,
+  );
 }
 
 export class ProgramPool extends Pool<ShaderMaterial, Program> {
@@ -147,7 +144,7 @@ export class ProgramPool extends Pool<ShaderMaterial, Program> {
       if (program !== undefined) {
         program.dispose();
       }
-      return new Program(context, shaderCodeMaterial);
+      return makeProgramFromShaderMaterial(context, shaderCodeMaterial);
     });
   }
 }

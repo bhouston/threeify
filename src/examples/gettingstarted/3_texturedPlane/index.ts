@@ -1,8 +1,8 @@
 import { plane } from "../../../lib/geometry/primitives/Plane";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { Program } from "../../../lib/renderers/webgl2/programs/Program";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
@@ -18,8 +18,8 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   document.body.appendChild(canvasFramebuffer.canvas);
 
-  const bufferGeometry = new BufferGeometry(context, geometry);
-  const program = new Program(context, material);
+  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = { map: new TexImage2D(context, texture) };
 
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);

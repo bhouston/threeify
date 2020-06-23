@@ -9,9 +9,9 @@ import {
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
-import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl2/DepthTestState";
-import { Program } from "../../../lib/renderers/webgl2/programs/Program";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
@@ -27,7 +27,7 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   document.body.appendChild(canvasFramebuffer.canvas);
 
-  const program = new Program(context, material);
+  const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Matrix4(), new Vector3(0, 0, -1)),
@@ -35,7 +35,7 @@ async function init(): Promise<null> {
     viewLightPosition: new Vector3(0, 0, 0),
     map: new TexImage2D(context, texture),
   };
-  const bufferGeometry = new BufferGeometry(context, geometry);
+  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   function animate(): void {
