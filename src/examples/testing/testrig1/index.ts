@@ -9,12 +9,12 @@ import { PointLight } from "../../../lib/nodes/lights/PointLight";
 import { Mesh } from "../../../lib/nodes/Mesh";
 import { Node } from "../../../lib/nodes/Node";
 import { BlendState } from "../../../lib/renderers/webgl2/BlendState";
-import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl2/ClearState";
 import { DepthTestState } from "../../../lib/renderers/webgl2/DepthTestState";
 import { Attachments } from "../../../lib/renderers/webgl2/framebuffers/Attachments";
 import { MaskState } from "../../../lib/renderers/webgl2/MaskState";
-import { Program } from "../../../lib/renderers/webgl2/programs/Program";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
 import { VertexArrayObject } from "../../../lib/renderers/webgl2/VertexArrayObject";
@@ -58,13 +58,13 @@ async function test(): Promise<void> {
   const texImage2D = new TexImage2D(context, texture);
   console.log(texImage2D);
 
-  const boxBufferGeometry = new BufferGeometry(context, mesh.geometry);
+  const boxBufferGeometry = makeBufferGeometryFromGeometry(context, mesh.geometry);
   console.log(boxBufferGeometry);
 
   // source code definition of material
   const shaderCodeMaterial = new ShaderMaterial(debug_vertex, debug_fragment);
   console.log(shaderCodeMaterial);
-  const program = new Program(context, shaderCodeMaterial);
+  const program = makeProgramFromShaderMaterial(context, shaderCodeMaterial);
   console.log(program);
 
   // using uniform set structures

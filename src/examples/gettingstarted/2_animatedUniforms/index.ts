@@ -3,8 +3,8 @@ import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Color } from "../../../lib/math/Color";
 import { makeColorFromHSL } from "../../../lib/math/Color.Functions";
-import { BufferGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { Program } from "../../../lib/renderers/webgl2/programs/Program";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
@@ -19,8 +19,8 @@ const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;
 document.body.appendChild(canvasFramebuffer.canvas);
 
-const bufferGeometry = new BufferGeometry(context, geometry);
-const program = new Program(context, material);
+const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+const program = makeProgramFromShaderMaterial(context, material);
 const uniforms = { scale: 1.0, color: new Color() };
 
 function animate(): void {
