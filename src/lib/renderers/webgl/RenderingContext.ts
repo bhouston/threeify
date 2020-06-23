@@ -25,6 +25,8 @@ export class RenderingContext {
   readonly glx: Extensions;
   readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
+  readonly debugVendor: string;
+  readonly debugRenderer: string;
   // readonly texImage2DPool: TexImage2DPool;
   // readonly programPool: ProgramPool;
   // readonly bufferPool: BufferPool;
@@ -56,6 +58,10 @@ export class RenderingContext {
     }
     this.glx = new Extensions(this.gl);
     this.glxo = new OptionalExtensions(this.gl);
+
+    const dri = this.glxo.WEBGL_debug_renderer_info;
+    this.debugVendor = dri !== null ? this.gl.getParameter(dri.UNMASKED_VENDOR_WEBGL) : "";
+    this.debugRenderer = dri !== null ? this.gl.getParameter(dri.UNMASKED_RENDERER_WEBGL) : "";
 
     this.canvasFramebuffer = new CanvasFramebuffer(this);
     // this.texImage2DPool = new TexImage2DPool(this);
