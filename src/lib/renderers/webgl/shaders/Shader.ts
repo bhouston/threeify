@@ -32,12 +32,19 @@ export class Shader implements IDisposable {
       this.glShader = glShader;
     }
 
+    const prefix = [];
     if (glslVersion === 300) {
-      sourceCode = "#version 300 es\n" + sourceCode;
+      prefix.push("#version 300 es");
+    }
+    if (shaderType === ShaderType.Fragment) {
+      prefix.push("#extension GL_EXT_shader_texture_lod : enable");
+      prefix.push("#extension GL_OES_standard_derivatives : enable");
     }
 
+    const combinedSourceCode = prefix.join("\n") + "\n" + sourceCode;
+    console.log("combinedSourceCode:\n", combinedSourceCode);
     // Set the shader source code.
-    gl.shaderSource(this.glShader, sourceCode);
+    gl.shaderSource(this.glShader, combinedSourceCode);
 
     // Compile the shader
     gl.compileShader(this.glShader);

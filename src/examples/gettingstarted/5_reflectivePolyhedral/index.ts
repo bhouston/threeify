@@ -39,8 +39,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    // viewToScreen: makeMatrix4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
-    viewToScreen: makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4PerspectiveFov(60, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
