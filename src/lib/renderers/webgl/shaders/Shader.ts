@@ -6,6 +6,7 @@
 //
 
 import { IDisposable } from "../../../core/types";
+import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { ShaderType } from "./ShaderType";
 
@@ -42,7 +43,7 @@ export class Shader implements IDisposable {
     gl.compileShader(this.glShader);
 
     // Check if it compiled
-    const success = gl.getShaderParameter(this.glShader, gl.COMPILE_STATUS);
+    const success = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!success) {
       // Something went wrong during compilation; get the error

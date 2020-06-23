@@ -32,8 +32,9 @@ async function init(): Promise<null> {
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
-  document.body.appendChild(canvasFramebuffer.canvas);
-
+  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
+    document.body.appendChild(canvasFramebuffer.canvas);
+  }
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),

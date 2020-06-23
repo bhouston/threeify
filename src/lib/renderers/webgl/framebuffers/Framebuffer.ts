@@ -5,11 +5,14 @@
 // * @bhouston
 //
 
+import { Vector2 } from "../../../math/Vector2";
+import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { FramebufferAttachment, VirtualFramebuffer } from "./VirtualFramebuffer";
 
 export class Framebuffer extends VirtualFramebuffer {
-  glFramebuffer: WebGLFramebuffer;
+  readonly glFramebuffer: WebGLFramebuffer;
+  readonly #size: Vector2 = new Vector2();
 
   constructor(context: RenderingContext, attachments: Array<FramebufferAttachment> = []) {
     super(context, attachments);
@@ -26,8 +29,13 @@ export class Framebuffer extends VirtualFramebuffer {
     }
 
     attachments.forEach((attachment) => {
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, attachment.attachmentPoint, gl.TEXTURE_2D, attachment.texImage2D, 0);
+      gl.framebufferTexture2D(GL.FRAMEBUFFER, attachment.attachmentPoint, GL.TEXTURE_2D, attachment.texImage2D, 0);
+      this.size.copy(attachment.texImage2D.size);
     });
+  }
+
+  get size(): Vector2 {
+    return this.#size;
   }
 
   dispose(): void {

@@ -20,7 +20,9 @@ scene.children.add(mesh);
 
 const context = new RenderingContext();
 const canvasFramebuffer = context.canvasFramebuffer;
-document.body.appendChild(canvasFramebuffer.canvas);
+if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
+  document.body.appendChild(canvasFramebuffer.canvas);
+}
 
 function animate(): void {
   requestAnimationFrame(animate);

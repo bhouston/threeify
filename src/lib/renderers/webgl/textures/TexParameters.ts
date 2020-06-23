@@ -7,5 +7,5 @@ export class TexParameters {
   wrapT: TextureWrap = TextureWrap.Repeat;
   magFilter: TextureFilter = TextureFilter.Linear;
   minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
-  anisotropicLevels = 1;
+  anisotropyLevels = 1;
 }
