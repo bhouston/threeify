@@ -9,10 +9,10 @@ import { IDisposable } from "../../../core/types";
 import { ShaderMaterial } from "../../../materials/ShaderMaterial";
 import { Pool } from "../../Pool";
 import { BufferGeometry } from "../buffers/BufferGeometry";
+import { RenderingContext } from "../RenderingContext";
+import { Shader } from "../shaders/Shader";
 import { ShaderType } from "../shaders/ShaderType";
 import { VertexArrayObject } from "../VertexArrayObject";
-import { RenderingContext } from "./../RenderingContext";
-import { Shader } from "./../shaders/Shader";
 import { ProgramAttribute } from "./ProgramAttribute";
 import { ProgramUniform, UniformValueMap } from "./ProgramUniform";
 import { numTextureUnits } from "./UniformType";
@@ -97,6 +97,7 @@ export class Program implements IDisposable {
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
     const gl = this.context.gl;
+    const glx = this.context.glx.OES_vertex_array_object;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
       for (const name in this.attributes) {
@@ -111,7 +112,7 @@ export class Program implements IDisposable {
       }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
-      gl.bindVertexArray(vao.glVertexArrayObject);
+      glx.bindVertexArrayOES(vao.glVertexArrayObject);
     } else {
       throw new Error("not implemented");
     }

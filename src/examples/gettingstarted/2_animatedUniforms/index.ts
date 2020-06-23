@@ -3,9 +3,9 @@ import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Color } from "../../../lib/math/Color";
 import { makeColorFromHSL } from "../../../lib/math/Color.Functions";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 

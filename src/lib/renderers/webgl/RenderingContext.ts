@@ -11,6 +11,7 @@ import { Node } from "../../nodes/Node";
 import { BlendState } from "./BlendState";
 import { ClearState } from "./ClearState";
 import { DepthTestState } from "./DepthTestState";
+import { WebGLRenderContextExtensions } from "./Extensions";
 import { CanvasFramebuffer } from "./framebuffers/CanvasFramebuffer";
 import { Framebuffer } from "./framebuffers/Framebuffer";
 import { VirtualFramebuffer } from "./framebuffers/VirtualFramebuffer";
@@ -19,7 +20,8 @@ import { MaskState } from "./MaskState";
 import { Program } from "./programs/Program";
 
 export class RenderingContext {
-  readonly gl: WebGL2RenderingContext;
+  readonly gl: WebGLRenderingContext;
+  readonly glx: WebGLRenderContextExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
   // readonly texImage2DPool: TexImage2DPool;
   // readonly programPool: ProgramPool;
@@ -44,13 +46,15 @@ export class RenderingContext {
       canvas.style.height = "100%";
     }
     {
-      const gl = canvas.getContext("webgl2");
+      const gl = canvas.getContext("webgl");
       if (gl === null) {
-        throw new Error("webgl2 not supported");
+        throw new Error("webgl not supported");
       }
 
       this.gl = gl;
     }
+    this.glx = new WebGLRenderContextExtensions(this.gl);
+
     this.canvasFramebuffer = new CanvasFramebuffer(this, canvas);
     // this.texImage2DPool = new TexImage2DPool(this);
     // this.programPool = new ProgramPool(this);
@@ -58,6 +62,13 @@ export class RenderingContext {
     this.#framebuffer = this.canvasFramebuffer;
   }
 
+  private getRequiredExtension(name: string): any {
+    const result = this.gl.getExtension(name);
+    if (result === null) {
+      throw new Error(`required webgl extension ${name} is not supported`);
+      return result;
+    }
+  }
   set program(program: Program | undefined) {
     if (this.#program !== program) {
       if (program !== undefined) {

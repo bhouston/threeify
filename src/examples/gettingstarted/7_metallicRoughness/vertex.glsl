@@ -1,12 +1,12 @@
-in vec3 position;
-in vec3 normal;
+attribute vec3 position;
+attribute vec3 normal;
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
 uniform mat4 viewToScreen;
 
-out vec3 v_viewPosition;
-out vec3 v_viewNormal;
+varying vec3 v_viewPosition;
+varying vec3 v_viewNormal;
 
 void main() {
 

@@ -9,11 +9,11 @@ import {
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl2/DepthTestState";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
-import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
+import { TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";

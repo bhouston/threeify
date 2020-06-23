@@ -81,6 +81,13 @@ export class TexImage2D implements IDisposable {
     // gl.texParameteri(this.target, gl.MAX_TEXTURE_MAX_ANISOTROPY_EXT, texParameters.anisotropicLevels);
   }
 
+  dispose(): void {
+    if (!this.disposed) {
+      this.context.gl.deleteTexture(this.glTexture);
+      this.disposed = true;
+    }
+  }
+
   private loadImage(image: TextureImage, target: TextureTarget | undefined = undefined): void {
     const gl = this.context.gl;
     if (image instanceof ArrayBufferImage) {
@@ -94,29 +101,11 @@ export class TexImage2D implements IDisposable {
         this.pixelFormat,
         this.dataType,
         new Uint8Array(image.data),
-        0,
       );
     } else if (image instanceof HTMLImageElement) {
-      gl.texImage2D(
-        target ?? this.target,
-        this.level,
-        this.internalFormat,
-        this.size.width,
-        this.size.height,
-        0,
-        this.pixelFormat,
-        this.dataType,
-        image,
-      );
+      gl.texImage2D(target ?? this.target, this.level, this.internalFormat, this.pixelFormat, this.dataType, image);
     } else {
       throw new Error("unsupported image type");
-    }
-  }
-
-  dispose(): void {
-    if (!this.disposed) {
-      this.context.gl.deleteTexture(this.glTexture);
-      this.disposed = true;
     }
   }
 }

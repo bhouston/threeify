@@ -4,7 +4,7 @@ import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";
 import { PerspectiveCamera } from "../../../lib/nodes/cameras/PerspectiveCamera";
 import { Mesh } from "../../../lib/nodes/Mesh";
 import { Node } from "../../../lib/nodes/Node";
-import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
+import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 
 const camera = new PerspectiveCamera(70, 0.01, 10);
 camera.position.x = 1;

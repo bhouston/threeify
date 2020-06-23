@@ -1,10 +1,10 @@
 import { plane } from "../../../lib/geometry/primitives/Plane";
 import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl2/buffers/BufferGeometry";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl2/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl2/RenderingContext";
-import { TexImage2D } from "../../../lib/renderers/webgl2/textures/TexImage2D";
+import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
+import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
+import { TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
