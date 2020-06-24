@@ -1,5 +1,4 @@
 import { box } from "../../../lib/geometry/primitives/Box";
-import { fetchImage } from "../../../lib/io/loaders/Image";
 import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Color } from "../../../lib/math/Color";
@@ -20,6 +19,7 @@ import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures
 import { VertexArrayObject } from "../../../lib/renderers/webgl/VertexArrayObject";
 import debug_fragment from "../../../lib/shaders/materials/pbr/fragment.glsl";
 import debug_vertex from "../../../lib/shaders/materials/pbr/vertex.glsl";
+import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import { TextureAccessor } from "../../../lib/textures/TextureAccessor";
 

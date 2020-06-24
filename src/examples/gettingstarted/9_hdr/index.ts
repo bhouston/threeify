@@ -15,7 +15,7 @@ import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/prog
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { CubeTexture } from "../../../lib/textures/CubeTexture";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
+import { fetchHDR } from "../../../lib/textures/loaders/HDR";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
@@ -23,12 +23,12 @@ async function init(): Promise<null> {
   const geometry = convertToInterleavedGeometry(icosahedron(0.75, 3));
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const cubeTexture = new CubeTexture([
-    await fetchImage("/assets/textures/cube/pisa/px.png"),
-    await fetchImage("/assets/textures/cube/pisa/nx.png"),
-    await fetchImage("/assets/textures/cube/pisa/py.png"),
-    await fetchImage("/assets/textures/cube/pisa/ny.png"),
-    await fetchImage("/assets/textures/cube/pisa/pz.png"),
-    await fetchImage("/assets/textures/cube/pisa/nz.png"),
+    await fetchHDR("/assets/textures/cube/pisaHDR/px.hdr"),
+    await fetchHDR("/assets/textures/cube/pisaHDR/nx.hdr"),
+    await fetchHDR("/assets/textures/cube/pisaHDR/py.hdr"),
+    await fetchHDR("/assets/textures/cube/pisaHDR/ny.hdr"),
+    await fetchHDR("/assets/textures/cube/pisaHDR/pz.hdr"),
+    await fetchHDR("/assets/textures/cube/pisaHDR/nz.hdr"),
   ]);
 
   const context = new RenderingContext();
