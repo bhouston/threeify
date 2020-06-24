@@ -46,14 +46,22 @@ async function init(): Promise<null> {
     AttachmentPoint.Color0,
     DataType.UnsignedByte,
   );
-  const framebuffer = new Framebuffer(context, [new FramebufferAttachment(AttachmentPoint.Color0, colorRenderTexture)]);
+  const depthRenderTexture = makeFramebufferAttachmentTexImage2D(
+    context,
+    new Vector2(1024, 1024),
+    AttachmentPoint.Depth,
+  );
+  const framebuffer = new Framebuffer(context, [
+    new FramebufferAttachment(AttachmentPoint.Color0, colorRenderTexture),
+    new FramebufferAttachment(AttachmentPoint.Depth, depthRenderTexture),
+  ]);
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4OrthographicSimple(1.5, new Vector2(), 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4OrthographicSimple(1.5, new Vector2(), 0.1, 2.0, 1.0, canvasFramebuffer.aspectRatio),
     viewLightPosition: new Vector3(0, 0, 0),
     map: uvTestTexture,
   };
@@ -74,7 +82,7 @@ async function init(): Promise<null> {
     framebuffer.clear(AttachmentBits.All, whiteClearState);
     framebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
-    uniforms.map = colorRenderTexture;
+    uniforms.map = depthRenderTexture;
     canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
