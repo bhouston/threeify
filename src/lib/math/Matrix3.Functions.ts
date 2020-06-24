@@ -17,7 +17,7 @@ export function matrix3Determinant(m: Matrix3): number {
   return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
 }
 
-export function makeMatrix3Transpose(m: Matrix3, result: Matrix3 = new Matrix3()): Matrix3 {
+export function makeMatrix3Transpose(m: Matrix3, result = new Matrix3()): Matrix3 {
   let tmp;
   const me = result.copy(m).elements;
 
@@ -35,7 +35,7 @@ export function makeMatrix3Transpose(m: Matrix3, result: Matrix3 = new Matrix3()
   return result;
 }
 
-export function makeMatrix3Inverse(m: Matrix3, result: Matrix3 = new Matrix3()): Matrix3 {
+export function makeMatrix3Inverse(m: Matrix3, result = new Matrix3()): Matrix3 {
   const e = m.elements;
 
   const n11 = e[0],
@@ -76,17 +76,17 @@ export function makeMatrix3Inverse(m: Matrix3, result: Matrix3 = new Matrix3()):
   return result;
 }
 
-export function makeMatrix3Translation(m: Matrix3, t: Vector2): Matrix3 {
-  return m.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
+export function makeMatrix3Translation(t: Vector2, result = new Matrix3()): Matrix3 {
+  return result.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
 }
 
-export function makeMatrix3RotationFromAngle(m: Matrix3, angle: number): Matrix3 {
+export function makeMatrix3RotationFromAngle(angle: number, result = new Matrix3()): Matrix3 {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
 
-  return m.set(c, -s, 0, s, c, 0, 0, 0, 1);
+  return result.set(c, -s, 0, s, c, 0, 0, 0, 1);
 }
 
-export function makeMatrix3Scale(m: Matrix3, s: Vector2): Matrix3 {
-  return m.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1.0);
+export function makeMatrix3Scale(s: Vector2, result = new Matrix3()): Matrix3 {
+  return result.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1.0);
 }

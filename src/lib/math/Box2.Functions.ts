@@ -1,17 +1,17 @@
 import { Box2 } from "./Box2";
 import { Vector2 } from "./Vector2";
 
-export function makeBox2FromVector2s(b: Box2, points: Vector2[]): Box2 {
-  b.makeEmpty();
+export function makeBox2FromPoints(points: Vector2[], result = new Box2()): Box2 {
+  result.makeEmpty();
 
   points.forEach((point) => {
-    expandBox2ByVector2(b, point);
+    expandBox2ByPoint(result, point);
   });
 
-  return b;
+  return result;
 }
 
-export function expandBox2ByVector2(b: Box2, point: Vector2): Box2 {
+export function expandBox2ByPoint(b: Box2, point: Vector2): Box2 {
   b.min.min(point);
   b.max.max(point);
 

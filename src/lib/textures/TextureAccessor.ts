@@ -19,9 +19,9 @@ export class TextureAccessor implements IVersionable {
 
   get uvTransform(): Matrix3 {
     if (this.#uvTransformVersion < this.version) {
-      this.#uvTransform = makeMatrix3Translation(this.#uvTransform, this.uvTranslation);
-      this.#uvTransform.multiply(makeMatrix3RotationFromAngle(new Matrix3(), this.uvRotation));
-      this.#uvTransform.multiply(makeMatrix3Scale(new Matrix3(), this.uvScale));
+      this.#uvTransform = makeMatrix3Translation(this.uvTranslation, this.#uvTransform);
+      this.#uvTransform.multiply(makeMatrix3RotationFromAngle(this.uvRotation));
+      this.#uvTransform.multiply(makeMatrix3Scale(this.uvScale));
       this.#uvTransformVersion = this.version;
     }
     return this.#uvTransform;

@@ -28,8 +28,16 @@ export class Framebuffer extends VirtualFramebuffer {
       this.glFramebuffer = glFramebuffer;
     }
 
+    gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
+
     attachments.forEach((attachment) => {
-      gl.framebufferTexture2D(GL.FRAMEBUFFER, attachment.attachmentPoint, GL.TEXTURE_2D, attachment.texImage2D, 0);
+      gl.framebufferTexture2D(
+        GL.FRAMEBUFFER,
+        attachment.attachmentPoint,
+        attachment.texImage2D.target,
+        attachment.texImage2D.glTexture,
+        0,
+      );
       this.size.copy(attachment.texImage2D.size);
     });
   }

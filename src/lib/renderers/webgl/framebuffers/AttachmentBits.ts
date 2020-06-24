@@ -1,6 +1,7 @@
 import { GL } from "../GL";
 
-export enum Attachments {
+export enum AttachmentBits {
+  None = 0,
   Color = GL.COLOR_BUFFER_BIT,
   Depth = GL.DEPTH_BUFFER_BIT,
   Stencil = GL.STENCIL_BUFFER_BIT,

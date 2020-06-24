@@ -154,3 +154,5 @@ export class Vector2 implements IPrimitive<Vector2> {
     array[offset + 1] = this.y;
   }
 }
+
+export type Size2 = Vector2;

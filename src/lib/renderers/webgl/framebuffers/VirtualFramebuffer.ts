@@ -6,6 +6,7 @@
 //
 
 import { IDisposable } from "../../../core/types";
+import { Box2 } from "../../../math/Box2";
 import { Vector2 } from "../../../math/Vector2";
 import { Camera } from "../../../nodes/cameras/Camera";
 import { Node } from "../../../nodes/Node";
@@ -21,8 +22,8 @@ import { sizeOfDataType } from "../textures/DataType";
 import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { TexImage2D } from "../textures/TexImage2D";
 import { VertexArrayObject } from "../VertexArrayObject";
+import { AttachmentBits } from "./AttachmentBits";
 import { AttachmentPoints } from "./AttachmentPoints";
-import { Attachments } from "./Attachments";
 
 const GL = WebGLRenderingContext;
 
@@ -36,19 +37,20 @@ export abstract class VirtualFramebuffer implements IDisposable {
   public depthTestState: DepthTestState | undefined = undefined;
   public blendState: BlendState | undefined = undefined;
   public maskState: MaskState | undefined = undefined;
+  public viewport: Box2 | undefined = undefined;
 
   constructor(public context: RenderingContext, public attachments: Array<FramebufferAttachment> = []) {}
 
   abstract get size(): Vector2;
 
   clear(
-    attachmentFlags: Attachments = Attachments.Color | Attachments.Depth,
+    attachmentBits: AttachmentBits = AttachmentBits.Color | AttachmentBits.Depth,
     clearState: ClearState | undefined = undefined,
   ): void {
     this.context.framebuffer = this;
     this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
     const gl = this.context.gl;
-    gl.clear(attachmentFlags);
+    gl.clear(attachmentBits);
   }
 
   renderBufferGeometry(
@@ -69,6 +71,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
     // draw
     const gl = this.context.gl;
+    this.context.viewport = new Box2(new Vector2(), this.size);
     if (bufferGeometry.indices !== undefined) {
       gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
     } else {

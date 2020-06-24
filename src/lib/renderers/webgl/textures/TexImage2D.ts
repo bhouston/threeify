@@ -21,7 +21,6 @@ import { TextureTarget } from "./TextureTarget";
 
 export class TexImage2D implements IDisposable {
   disposed = false;
-  target: TextureTarget;
   glTexture: WebGLTexture;
 
   constructor(
@@ -29,13 +28,13 @@ export class TexImage2D implements IDisposable {
     public images: TextureImage[],
     public size: Vector2,
     public level = 0,
-    public internalFormat: PixelFormat = PixelFormat.RGBA,
-    public dataType: DataType = DataType.UnsignedByte,
-    public pixelFormat: PixelFormat = PixelFormat.RGBA,
-    public texParameters: TexParameters = new TexParameters(),
+    public internalFormat = PixelFormat.RGBA,
+    public dataType = DataType.UnsignedByte,
+    public pixelFormat = PixelFormat.RGBA,
+    public target = TextureTarget.Texture2D,
+    public texParameters = new TexParameters(),
   ) {
     const gl = this.context.gl;
-
     // Create a texture.
     {
       const glTexture = gl.createTexture();
@@ -45,16 +44,21 @@ export class TexImage2D implements IDisposable {
       this.glTexture = glTexture;
     }
 
-    if (images.length === 1) {
-      this.target = TextureTarget.Texture2D;
-    } else if (images.length === 6) {
-      this.target = TextureTarget.TextureCubeMap;
-    } else {
-      throw new Error("Unsupported number of images");
-    }
-
+    console.log(this.target, this.glTexture);
     gl.bindTexture(this.target, this.glTexture);
-    if (images.length === 1) {
+    if (images.length === 0) {
+      gl.texImage2D(
+        this.target,
+        this.level,
+        this.internalFormat,
+        this.size.width,
+        this.size.height,
+        0,
+        this.pixelFormat,
+        this.dataType,
+        null,
+      );
+    } else if (images.length === 1) {
       this.loadImage(images[0]);
     } else if (images.length === 6) {
       images.forEach((image: TextureImage, index: number) => {
@@ -124,7 +128,6 @@ export function makeTexImage2DFromTexture(
   texture: Texture,
   level = 0,
   internalFormat: PixelFormat = PixelFormat.RGBA,
-  texParameters = new TexParameters(),
 ): TexImage2D {
   return new TexImage2D(
     context,
@@ -134,7 +137,7 @@ export function makeTexImage2DFromTexture(
     texture.pixelFormat,
     texture.dataType,
     internalFormat,
-    texParameters,
+    TextureTarget.Texture2D,
   );
 }
 
@@ -153,7 +156,7 @@ export function makeTexImage2DFromCubeTexture(
     texture.pixelFormat,
     texture.dataType,
     internalFormat,
-    texParameters,
+    TextureTarget.TextureCubeMap,
   );
 }
 

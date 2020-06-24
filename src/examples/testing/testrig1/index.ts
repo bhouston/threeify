@@ -11,7 +11,7 @@ import { BlendState } from "../../../lib/renderers/webgl/BlendState";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { Attachments } from "../../../lib/renderers/webgl/framebuffers/Attachments";
+import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { MaskState } from "../../../lib/renderers/webgl/MaskState";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
@@ -33,7 +33,7 @@ async function test(): Promise<void> {
 
   // create material
   const pbrMaterial = new PhysicalMaterial();
-  pbrMaterial.albedo = makeColor3FromHex(new Vector3(), 0x808080);
+  pbrMaterial.albedo = makeColor3FromHex(0x808080);
   pbrMaterial.albedoMap = new TextureAccessor(texture);
 
   // create scene graph
@@ -52,7 +52,7 @@ async function test(): Promise<void> {
   // render to the screen
   const canvasFramebuffer = context.canvasFramebuffer;
   const depthClear = new ClearState(new Vector3(0, 0, 0), 0);
-  canvasFramebuffer.clear(Attachments.Default, depthClear);
+  canvasFramebuffer.clear(AttachmentBits.All, depthClear);
   canvasFramebuffer.render(rootNode, camera);
 
   const texImage2D = makeTexImage2DFromTexture(context, texture);

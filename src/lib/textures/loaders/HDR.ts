@@ -59,12 +59,6 @@ function fgets(buffer: Buffer, lineLimit = 0, consume = true): string | undefine
   }
 
   if (-1 < i) {
-    /* for (i=l-1; i>=0; i--) {
-						byteCode = m.charCodeAt(i);
-						if (byteCode > 0x7f && byteCode <= 0x7ff) byteLen++;
-						else if (byteCode > 0x7ff && byteCode <= 0xffff) byteLen += 2;
-						if (byteCode >= 0xDC00 && byteCode <= 0xDFFF) i--; //trail surrogate
-					}*/
     if (false !== consume) {
       buffer.position += len + i + 1;
     }
@@ -75,15 +69,15 @@ function fgets(buffer: Buffer, lineLimit = 0, consume = true): string | undefine
 }
 
 class Header {
-  valid = 0 /* indicate which fields are valid */;
-  string = "" /* the actual header string */;
-  comments = "" /* comments found in header */;
-  programtype = "RGBE" /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */;
-  format = "" /* RGBE format, default 32-bit_rle_rgbe */;
-  gamma = 1.0 /* image has already been gamma corrected with given gamma. defaults to 1.0 (no correction) */;
-  exposure = 1.0 /* a value of 1.0 in an image corresponds to <exposure> watts/steradian/m^2. defaults to 1.0 */;
+  valid = 0; /* indicate which fields are valid */
+  string = ""; /* the actual header string */
+  comments = ""; /* comments found in header */
+  programtype = "RGBE"; /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */
+  format = ""; /* RGBE format, default 32-bit_rle_rgbe */
+  gamma = 1.0; /* image has already been gamma corrected with given gamma. defaults to 1.0 (no correction) */
+  exposure = 1.0; /* a value of 1.0 in an image corresponds to <exposure> watts/steradian/m^2. defaults to 1.0 */
   width = 0;
-  height = 0 /* image dimensions, width/height */;
+  height = 0; /* image dimensions, width/height */
 }
 
 /* minimal header reading.  modify if you want to parse more information */

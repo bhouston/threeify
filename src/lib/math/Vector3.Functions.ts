@@ -1,4 +1,4 @@
-import { Color3, Vector3 } from "./Vector3";
+import { Vector3 } from "./Vector3";
 
 export function crossFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3, result = new Vector3()): Vector3 {
   // TODO: replace with just number math, no classes?  Or just use temporary Vector3 objects
@@ -56,14 +56,9 @@ export function makeVector3FromBaryCoordWeights(
   );
 }
 
-export function makeColor3FromHex(c: Color3, hex: number): Color3 {
+export function makeColor3FromHex(hex: number, result = new Vector3()): Vector3 {
   hex = Math.floor(hex);
-
-  c.r = ((hex >> 16) & 255) / 255;
-  c.g = ((hex >> 8) & 255) / 255;
-  c.b = (hex & 255) / 255;
-
-  return c;
+  return result.set(((hex >> 16) & 255) / 255, ((hex >> 8) & 255) / 255, (hex & 255) / 255);
 }
 
 function hue2rgb(p: number, q: number, t: number): number {
@@ -86,22 +81,18 @@ function hue2rgb(p: number, q: number, t: number): number {
   return p;
 }
 
-export function makeColor3FromHSL(c: Color3, h: number, s: number, l: number): Color3 {
+export function makeColor3FromHSL(h: number, s: number, l: number, result = new Vector3()): Vector3 {
   // h,s,l ranges are in 0.0 - 1.0
   h = ((h % 1.0) + 1.0) % 1.0; // euclidean modulo
   s = Math.min(Math.max(s, 0.0), 1.0);
   l = Math.min(Math.max(l, 0.0), 1.0);
 
   if (s === 0) {
-    c.r = c.g = c.b = l;
-  } else {
-    const p = l <= 0.5 ? l * (1.0 + s) : l + s - l * s;
-    const q = 2.0 * l - p;
-
-    c.r = hue2rgb(q, p, h + 1.0 / 3.0);
-    c.g = hue2rgb(q, p, h);
-    c.b = hue2rgb(q, p, h - 1.0 / 3.0);
+    return result.set(1, 1, 1);
   }
 
-  return c;
+  const p = l <= 0.5 ? l * (1.0 + s) : l + s - l * s;
+  const q = 2.0 * l - p;
+
+  return result.set(hue2rgb(q, p, h + 1.0 / 3.0), hue2rgb(q, p, h), hue2rgb(q, p, h - 1.0 / 3.0));
 }
