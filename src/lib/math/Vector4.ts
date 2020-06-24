@@ -11,6 +11,34 @@ import { IPrimitive } from "./IPrimitive";
 export class Vector4 implements IPrimitive<Vector4> {
   constructor(public x = 0, public y = 0, public z = 0, public w = 0) {}
 
+  get r(): number {
+    return this.x;
+  }
+  set r(r: number) {
+    this.x = r;
+  }
+
+  get g(): number {
+    return this.y;
+  }
+  set g(g: number) {
+    this.y = g;
+  }
+
+  get b(): number {
+    return this.z;
+  }
+  set b(b: number) {
+    this.z = b;
+  }
+
+  get a(): number {
+    return this.w;
+  }
+  set a(a: number) {
+    this.w = a;
+  }
+
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.w);
   }
@@ -133,3 +161,5 @@ export class Vector4 implements IPrimitive<Vector4> {
     array[offset + 3] = this.w;
   }
 }
+
+export type Color4 = Vector4;

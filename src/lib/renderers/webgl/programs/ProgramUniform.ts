@@ -1,4 +1,3 @@
-import { Color } from "../../../math/Color";
 import { Matrix4 } from "../../../math/Matrix4";
 import { Vector2 } from "../../../math/Vector2";
 import { Vector3 } from "../../../math/Vector3";
@@ -8,7 +7,7 @@ import { TexImage2D } from "../textures/TexImage2D";
 import { Program } from "./Program";
 import { UniformType } from "./UniformType";
 
-export type UniformValue = number | Vector2 | Vector3 | Color | Matrix4 | TexImage2D;
+export type UniformValue = number | Vector2 | Vector3 | Matrix4 | TexImage2D;
 export type UniformValueMap = { [key: string]: UniformValue };
 
 export class ProgramUniform {
@@ -89,13 +88,6 @@ export class ProgramUniform {
           const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
             gl.uniform3f(this.glLocation, value.x, value.y, value.z);
-            this.valueHashCode = hashCode;
-          }
-          return this;
-        } else if (value instanceof Color) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform3f(this.glLocation, value.r, value.g, value.b);
             this.valueHashCode = hashCode;
           }
           return this;

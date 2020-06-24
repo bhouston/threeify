@@ -8,7 +8,6 @@
 // * @bhouston
 //
 
-import { Color } from "../../math/Color";
 import { Vector3 } from "../../math/Vector3";
 import { eulerToNegativeZDirection, negativeZDirectionToEuler } from "./Direction";
 import { Light } from "./Light";
@@ -27,7 +26,7 @@ export class DirectionalLight extends Light {
    * @param color - RGB value for light's color in linear space.
    * @param intensity - Illuminance in lux (lm/m2).
    */
-  constructor(color: Color = new Color(1, 1, 1), intensity = 1.0) {
+  constructor(color: Vector3 = new Vector3(1, 1, 1), intensity = 1.0) {
     super(LightType.Directional, color, intensity);
   }
 

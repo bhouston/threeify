@@ -8,7 +8,6 @@
 // * @bhouston
 //
 
-import { Color } from "../../math/Color";
 import { Vector3 } from "../../math/Vector3";
 import { eulerToNegativeZDirection, negativeZDirectionToEuler } from "./Direction";
 import { Light } from "./Light";
@@ -35,7 +34,7 @@ export class SpotLight extends Light {
    * Must be greater than innerConeAngle and less than or equal to PI / 2.0.
    */
   constructor(
-    color: Color = new Color(1, 1, 1),
+    color: Vector3 = new Vector3(1, 1, 1),
     intensity = 1.0,
     public range = -1,
     public innerConeAngle = 0,

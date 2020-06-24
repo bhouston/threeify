@@ -33,6 +33,27 @@ export class Vector3 implements IPrimitive<Vector3> {
     this.z = depth;
   }
 
+  get r(): number {
+    return this.x;
+  }
+  set r(r: number) {
+    this.x = r;
+  }
+
+  get g(): number {
+    return this.y;
+  }
+  set g(g: number) {
+    this.y = g;
+  }
+
+  get b(): number {
+    return this.z;
+  }
+  set b(b: number) {
+    this.z = b;
+  }
+
   getHashCode(): number {
     return hashFloat3(this.x, this.y, this.z);
   }
@@ -210,3 +231,5 @@ export class Vector3 implements IPrimitive<Vector3> {
     array[offset + 2] = this.z;
   }
 }
+
+export type Color3 = Vector3;

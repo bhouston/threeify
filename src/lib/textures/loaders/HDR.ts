@@ -5,6 +5,8 @@
 //
 //
 
+import { floatsToNormalizedBytes, normalizedByteToFloats } from "../../math/arrays/Conversions";
+import { linearToRgbdArray, rgbeToLinearArray } from "../../math/Vector4.Functions";
 import { DataType } from "../../renderers/webgl/textures/DataType";
 import { ArrayBufferImage } from "../ArrayBufferImage";
 import { PixelEncoding } from "../PixelEncoding";
@@ -25,7 +27,13 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
   const buffer = new Buffer(new Uint8Array(arrayBuffer), 0);
   const header = readHeader(buffer);
   const pixelData = readRLEPixelData(buffer.data.subarray(buffer.position), header.width, header.height);
-  return new ArrayBufferImage(pixelData, header.width, header.height, DataType.UnsignedByte, PixelEncoding.RGBE);
+  return new ArrayBufferImage(
+    floatsToNormalizedBytes(linearToRgbdArray(rgbeToLinearArray(normalizedByteToFloats(pixelData)), 16)),
+    header.width,
+    header.height,
+    DataType.UnsignedByte,
+    PixelEncoding.RGBE,
+  );
 }
 
 function stringFromCharCodes(unicode: Uint16Array): string {
@@ -144,11 +152,11 @@ function readHeader(buffer: Buffer): Header {
     }
   }
 
-  if ((header.valid & RGBE_VALID_FORMAT) !== 0) {
+  if ((header.valid & RGBE_VALID_FORMAT) === 0) {
     throw new Error("hrd: missing format specifier");
   }
 
-  if ((header.valid & RGBE_VALID_DIMENSIONS) !== 0) {
+  if ((header.valid & RGBE_VALID_DIMENSIONS) === 0) {
     throw new Error("hdr: missing image size specifier");
   }
 
