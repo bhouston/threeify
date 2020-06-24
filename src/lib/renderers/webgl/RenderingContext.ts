@@ -115,7 +115,7 @@ export class RenderingContext {
   }
   set viewport(v: Box2) {
     if (!this.#viewport.equals(v)) {
-      this.gl.scissor(v.x, v.y, v.width, v.height);
+      this.gl.viewport(v.x, v.y, v.width, v.height);
       this.#viewport.copy(v);
     }
   }

@@ -28,7 +28,7 @@ function animate(): void {
   requestAnimationFrame(animate);
 
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
-  uniforms.color = makeColor3FromHSL(uniforms.color, Date.now() * 0.001, 1.0, 0.5);
+  uniforms.color = makeColor3FromHSL(Date.now() * 0.001, 1.0, 0.5, uniforms.color);
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 }
 

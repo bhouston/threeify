@@ -161,5 +161,3 @@ export class Vector4 implements IPrimitive<Vector4> {
     array[offset + 3] = this.w;
   }
 }
-
-export type Color4 = Vector4;

@@ -231,5 +231,3 @@ export class Vector3 implements IPrimitive<Vector3> {
     array[offset + 2] = this.z;
   }
 }
-
-export type Color3 = Vector3;
