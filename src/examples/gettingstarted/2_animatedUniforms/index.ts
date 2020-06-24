@@ -1,8 +1,8 @@
 import { makeFloat32Attribute, makeUint32Attribute } from "../../../lib/geometry/Attribute";
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Color } from "../../../lib/math/Color";
-import { makeColorFromHSL } from "../../../lib/math/Color.Functions";
+import { Vector3 } from "../../../lib/math/Vector3";
+import { makeColor3FromHSL } from "../../../lib/math/Vector3.Functions";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
@@ -22,13 +22,13 @@ if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
 }
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
-const uniforms = { scale: 1.0, color: new Color() };
+const uniforms = { scale: 1.0, color: new Vector3() };
 
 function animate(): void {
   requestAnimationFrame(animate);
 
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
-  uniforms.color = makeColorFromHSL(uniforms.color, Date.now() * 0.001, 1.0, 0.5);
+  uniforms.color = makeColor3FromHSL(uniforms.color, Date.now() * 0.001, 1.0, 0.5);
   canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 }
 

@@ -1,9 +1,8 @@
 import { box } from "../../../lib/geometry/primitives/Box";
-import { fetchImage } from "../../../lib/io/loaders/Image";
 import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Color } from "../../../lib/math/Color";
-import { makeColorFromHex } from "../../../lib/math/Color.Functions";
+import { Vector3 } from "../../../lib/math/Vector3";
+import { makeColor3FromHex } from "../../../lib/math/Vector3.Functions";
 import { PerspectiveCamera } from "../../../lib/nodes/cameras/PerspectiveCamera";
 import { PointLight } from "../../../lib/nodes/lights/PointLight";
 import { Mesh } from "../../../lib/nodes/Mesh";
@@ -20,6 +19,7 @@ import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures
 import { VertexArrayObject } from "../../../lib/renderers/webgl/VertexArrayObject";
 import debug_fragment from "../../../lib/shaders/materials/pbr/fragment.glsl";
 import debug_vertex from "../../../lib/shaders/materials/pbr/vertex.glsl";
+import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import { TextureAccessor } from "../../../lib/textures/TextureAccessor";
 
@@ -33,7 +33,7 @@ async function test(): Promise<void> {
 
   // create material
   const pbrMaterial = new PhysicalMaterial();
-  pbrMaterial.albedo = makeColorFromHex(new Color(), 0x808080);
+  pbrMaterial.albedo = makeColor3FromHex(new Vector3(), 0x808080);
   pbrMaterial.albedoMap = new TextureAccessor(texture);
 
   // create scene graph
@@ -51,7 +51,7 @@ async function test(): Promise<void> {
 
   // render to the screen
   const canvasFramebuffer = context.canvasFramebuffer;
-  const depthClear = new ClearState(new Color(0, 0, 0), 0);
+  const depthClear = new ClearState(new Vector3(0, 0, 0), 0);
   canvasFramebuffer.clear(Attachments.Default, depthClear);
   canvasFramebuffer.render(rootNode, camera);
 
@@ -69,7 +69,7 @@ async function test(): Promise<void> {
 
   // using uniform set structures
   const materialUniforms = {
-    albedo: new Color(1, 0.5, 0.5),
+    albedo: new Vector3(1, 0.5, 0.5),
     albedoUvIndex: 0,
     albedoMap: texImage2D,
   };

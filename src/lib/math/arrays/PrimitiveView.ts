@@ -1,6 +1,5 @@
 import { IArrayable } from "../../core/types";
 import { Attribute } from "../../geometry/Attribute";
-import { Color } from "../Color";
 import { Matrix3 } from "../Matrix3";
 import { Matrix4 } from "../Matrix4";
 import { Quaternion } from "../Quaternion";
@@ -88,9 +87,6 @@ export function makeVector2View(dataArray: DataArray, byteStride = -1, byteOffse
 }
 export function makeVector3View(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector3View {
   return new Vector3View(dataArray, byteStride, byteOffset);
-}
-export function makeColorView(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Color> {
-  return new PrimitiveView<Color>(dataArray, 12, byteStride, byteOffset);
 }
 export function makeQuaternionView(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Quaternion> {
   return new PrimitiveView<Quaternion>(dataArray, 16, byteStride, byteOffset);

@@ -1,4 +1,3 @@
-import { Color } from "../math/Color";
 import { Vector3 } from "../math/Vector3";
 import { DirectionalLight } from "../nodes/lights/DirectionalLight";
 import { Light } from "../nodes/lights/Light";
@@ -10,7 +9,7 @@ export class PunctualLightUniforms {
   numLights = 0;
   lightTypes: number[] = [];
   lightPositions: Vector3[] = [];
-  lightColors: Color[] = [];
+  lightColors: Vector3[] = [];
   lightDirections: Vector3[] = [];
   lightRanges: number[] = [];
   lightInnerConeCos: number[] = [];

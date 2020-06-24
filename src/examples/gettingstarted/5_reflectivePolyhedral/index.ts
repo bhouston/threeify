@@ -1,5 +1,4 @@
 import { icosahedron } from "../../../lib/geometry/primitives/Polyhedrons";
-import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -15,6 +14,7 @@ import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/prog
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { CubeTexture } from "../../../lib/textures/CubeTexture";
+import { fetchImage } from "../../../lib/textures/loaders/Image";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 

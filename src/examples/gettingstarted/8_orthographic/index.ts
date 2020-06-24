@@ -1,5 +1,4 @@
 import { box } from "../../../lib/geometry/primitives/Box";
-import { fetchImage } from "../../../lib/io/loaders/Image";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -15,6 +14,7 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
