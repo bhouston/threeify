@@ -69,7 +69,6 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  const blackClearState = new ClearState(new Vector3(), 1.0);
   const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
 
   function animate(): void {
