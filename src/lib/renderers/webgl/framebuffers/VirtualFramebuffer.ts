@@ -23,7 +23,7 @@ import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { TexImage2D } from "../textures/TexImage2D";
 import { VertexArrayObject } from "../VertexArrayObject";
 import { AttachmentBits } from "./AttachmentBits";
-import { AttachmentPoints } from "./AttachmentPoints";
+import { AttachmentPoint } from "./AttachmentPoint";
 
 const GL = WebGLRenderingContext;
 
@@ -123,7 +123,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
   }
 
   readPixels(pixelBuffer: ArrayBufferView): ArrayBufferView {
-    const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoints.Color0);
+    const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoint.Color0);
     if (attachment === undefined) {
       throw new Error("can not find Color0 attachment");
     }
