@@ -12,17 +12,12 @@ import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { makeColorAttachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
 import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
-import { AttachmentPoint } from "../../../lib/renderers/webgl/framebuffers/AttachmentPoint";
 import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
-import { FramebufferAttachment } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { DataType } from "../../../lib/renderers/webgl/textures/DataType";
-import {
-  makeFramebufferAttachmentTexImage2D,
-  makeTexImage2DFromTexture,
-} from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
@@ -40,13 +35,8 @@ async function init(): Promise<null> {
     document.body.appendChild(canvas);
   }
 
-  const colorRenderTexture = makeFramebufferAttachmentTexImage2D(
-    context,
-    new Vector2(1024, 1024),
-    AttachmentPoint.Color0,
-    DataType.UnsignedByte,
-  );
-  const framebuffer = new Framebuffer(context, [new FramebufferAttachment(AttachmentPoint.Color0, colorRenderTexture)]);
+  const colorAttachment = makeColorAttachment(context, new Vector2(1024, 1024), 0);
+  const framebuffer = new Framebuffer(context, [colorAttachment]);
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
@@ -74,7 +64,7 @@ async function init(): Promise<null> {
     framebuffer.clear(AttachmentBits.All, whiteClearState);
     framebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
-    uniforms.map = colorRenderTexture;
+    uniforms.map = colorAttachment.texImage2D;
     canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }

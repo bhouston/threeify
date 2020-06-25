@@ -12,13 +12,11 @@ import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
 import { CubeTexture } from "../../../textures/CubeTexture";
 import { Texture, TextureImage } from "../../../textures/Texture";
 import { Pool } from "../../Pool";
-import { AttachmentPoint } from "../framebuffers/AttachmentPoint";
 import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { DataType } from "./DataType";
 import { PixelFormat } from "./PixelFormat";
 import { TexParameters } from "./TexParameters";
-import { TextureFilter } from "./TextureFilter";
 import { TextureTarget } from "./TextureTarget";
 
 export class TexImage2D implements IDisposable {
@@ -185,49 +183,4 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
       return texImage2D;
     });
   }
-}
-
-export function makeFramebufferAttachmentTexImage2D(
-  context: RenderingContext,
-  size: Vector2,
-  attachmentPoint: AttachmentPoint,
-  dataType: DataType | undefined = undefined,
-): TexImage2D {
-  if (attachmentPoint === AttachmentPoint.Color0) {
-    const texParams = new TexParameters();
-    texParams.generateMipmaps = false;
-    texParams.magFilter = TextureFilter.Linear;
-    texParams.minFilter = TextureFilter.Linear;
-    return new TexImage2D(
-      context,
-      [],
-      size,
-      0,
-      PixelFormat.RGBA,
-      dataType ?? DataType.UnsignedByte,
-      PixelFormat.RGBA,
-      TextureTarget.Texture2D,
-      texParams,
-    );
-  }
-  if (attachmentPoint === AttachmentPoint.Depth) {
-    const texParams = new TexParameters();
-    texParams.generateMipmaps = false;
-    texParams.magFilter = TextureFilter.Nearest;
-    texParams.minFilter = TextureFilter.Nearest;
-    return new TexImage2D(
-      context,
-      [],
-      size,
-      0,
-      PixelFormat.DepthComponent,
-      DataType.UnsignedShort, // context.glx.WEBGL_depth_texture.UNSIGNED_INT_24_8_WEBGL as DataType,
-      PixelFormat.DepthComponent,
-      TextureTarget.Texture2D,
-      texParams,
-    );
-
-    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, 512, 512, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null);
-  }
-  throw new Error("unsupported attachment point");
 }

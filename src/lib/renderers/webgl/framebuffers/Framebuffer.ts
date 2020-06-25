@@ -8,13 +8,14 @@
 import { Vector2 } from "../../../math/Vector2";
 import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
-import { FramebufferAttachment, VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Attachment } from "./Attachment";
+import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
 export class Framebuffer extends VirtualFramebuffer {
   readonly glFramebuffer: WebGLFramebuffer;
   readonly #size: Vector2 = new Vector2();
 
-  constructor(context: RenderingContext, attachments: Array<FramebufferAttachment> = []) {
+  constructor(context: RenderingContext, attachments: Array<Attachment> = []) {
     super(context, attachments);
 
     const gl = this.context.gl;
