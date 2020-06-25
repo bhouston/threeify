@@ -43,6 +43,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     attachmentBits: AttachmentBits = AttachmentBits.Color | AttachmentBits.Depth,
     clearState: ClearState | undefined = undefined,
   ): void {
+    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
     const gl = this.context.gl;
@@ -57,6 +58,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
   ): void {
+    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
     this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
@@ -83,6 +85,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
   ): void {
+    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
     this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
@@ -103,6 +106,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
   ): void {
+    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
     this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
@@ -111,6 +115,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
   }
 
   render(node: Node, camera: Camera, clear = false): void {
+    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     if (clear) {
       this.clear();
@@ -132,6 +137,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     }
 
     const oldFramebuffer = this.context.framebuffer;
+    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     try {
       const status = this.context.gl.checkFramebufferStatus(GL.FRAMEBUFFER);

@@ -8,7 +8,8 @@
 import { Vector2 } from "../../../math/Vector2";
 import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
-import { Attachment } from "./Attachment";
+import { Attachment, makeColorAttachment, makeDepthAttachment } from "./Attachment";
+import { AttachmentPoint } from "./AttachmentPoint";
 import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
 export class Framebuffer extends VirtualFramebuffer {
@@ -54,4 +55,27 @@ export class Framebuffer extends VirtualFramebuffer {
       this.disposed = true;
     }
   }
+}
+
+export function makeFramebufferFromAttachmentPoints(
+  context: RenderingContext,
+  size: Vector2,
+  attachmentPoints: AttachmentPoint[],
+): Framebuffer {
+  const attachments: Attachment[] = [];
+  let colorOffset = 0;
+  attachmentPoints.forEach((attachmentPoint) => {
+    switch (attachmentPoint) {
+      case AttachmentPoint.Color0:
+        attachments.push(makeColorAttachment(context, size, colorOffset));
+        colorOffset++;
+        return;
+      case AttachmentPoint.Depth:
+        attachments.push(makeDepthAttachment(context, size));
+        return;
+      default:
+        throw new Error("unsupported attachment point");
+    }
+  });
+  return new Framebuffer(context, attachments);
 }
