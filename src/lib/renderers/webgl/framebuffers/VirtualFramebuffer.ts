@@ -20,16 +20,12 @@ import { UniformValueMap } from "../programs/ProgramUniform";
 import { RenderingContext } from "../RenderingContext";
 import { sizeOfDataType } from "../textures/DataType";
 import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
-import { TexImage2D } from "../textures/TexImage2D";
 import { VertexArrayObject } from "../VertexArrayObject";
+import { Attachment } from "./Attachment";
 import { AttachmentBits } from "./AttachmentBits";
 import { AttachmentPoint } from "./AttachmentPoint";
 
 const GL = WebGLRenderingContext;
-
-export class FramebufferAttachment {
-  constructor(public attachmentPoint: number, public texImage2D: TexImage2D) {}
-}
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
@@ -39,7 +35,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
   public maskState: MaskState | undefined = undefined;
   public viewport: Box2 | undefined = undefined;
 
-  constructor(public context: RenderingContext, public attachments: Array<FramebufferAttachment> = []) {}
+  constructor(public context: RenderingContext, public attachments: Array<Attachment> = []) {}
 
   abstract get size(): Vector2;
 
