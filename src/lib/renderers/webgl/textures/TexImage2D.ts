@@ -44,21 +44,8 @@ export class TexImage2D implements IDisposable {
       this.glTexture = glTexture;
     }
 
-    console.log(this.target, this.glTexture);
     gl.bindTexture(this.target, this.glTexture);
     if (images.length === 0) {
-      console.log(
-        "texImage2D",
-        this.target,
-        this.level,
-        this.internalFormat,
-        this.size.width,
-        this.size.height,
-        0,
-        this.pixelFormat,
-        this.dataType,
-        null,
-      );
       gl.texImage2D(
         this.target,
         this.level,

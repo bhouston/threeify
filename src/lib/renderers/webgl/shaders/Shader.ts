@@ -13,6 +13,7 @@ import { ShaderType } from "./ShaderType";
 export class Shader implements IDisposable {
   disposed = false;
   glShader: WebGLShader;
+  #validated = false;
 
   constructor(
     public context: RenderingContext,
@@ -48,16 +49,7 @@ export class Shader implements IDisposable {
     // Compile the shader
     gl.compileShader(this.glShader);
 
-    // Check if it compiled
-    const success = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!success) {
-      // Something went wrong during compilation; get the error
-      const infoLog = gl.getShaderInfoLog(this.glShader);
-      const errorMessage = `could not compile shader: ${infoLog}`;
-      console.error(errorMessage, sourceCode);
-      throw new Error(errorMessage);
-    }
+    // NOTE: purposely not checking if this compiled.
   }
 
   get translatedSourceCode(): string {
@@ -66,6 +58,25 @@ export class Shader implements IDisposable {
       return ds.getTranslatedShaderSource(this.glShader);
     }
     return "";
+  }
+
+  validate(): void {
+    if (this.#validated) {
+      return;
+    }
+    // This is only done if necessary and delayed per best practices here:
+    // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
+    const gl = this.context.gl;
+    // Check if it compiled
+    const compileStatus = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (!compileStatus) {
+      // Something went wrong during compilation; get the error
+      const infoLog = gl.getShaderInfoLog(this.glShader);
+      const errorMessage = `could not compile shader: ${infoLog}`;
+      throw new Error(errorMessage);
+    }
+    this.#validated = true;
   }
 
   dispose(): void {

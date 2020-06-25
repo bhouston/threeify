@@ -18,6 +18,7 @@ import { Framebuffer } from "./framebuffers/Framebuffer";
 import { VirtualFramebuffer } from "./framebuffers/VirtualFramebuffer";
 import { GL } from "./GL";
 import { MaskState } from "./MaskState";
+import { getParameterAsString } from "./Parameters";
 import { Program } from "./programs/Program";
 
 export class RenderingContext {
@@ -25,8 +26,7 @@ export class RenderingContext {
   readonly glx: Extensions;
   readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
-  readonly debugVendor: string;
-  readonly debugRenderer: string;
+
   // readonly texImage2DPool: TexImage2DPool;
   // readonly programPool: ProgramPool;
   // readonly bufferPool: BufferPool;
@@ -59,10 +59,6 @@ export class RenderingContext {
     this.glx = new Extensions(this.gl);
     this.glxo = new OptionalExtensions(this.gl);
 
-    const dri = this.glxo.WEBGL_debug_renderer_info;
-    this.debugVendor = dri !== null ? this.gl.getParameter(dri.UNMASKED_VENDOR_WEBGL) : "";
-    this.debugRenderer = dri !== null ? this.gl.getParameter(dri.UNMASKED_RENDERER_WEBGL) : "";
-
     this.canvasFramebuffer = new CanvasFramebuffer(this);
     // this.texImage2DPool = new TexImage2DPool(this);
     // this.programPool = new ProgramPool(this);
@@ -70,9 +66,22 @@ export class RenderingContext {
     this.#framebuffer = this.canvasFramebuffer;
   }
 
+  get debugVendor(): string {
+    // Note: this is a big performance hit to call, this only return if asked
+    const dri = this.glxo.WEBGL_debug_renderer_info;
+    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL) : "";
+  }
+
+  get debugRenderer(): string {
+    // Note: this is a big performance hit to call, this only return if asked
+    const dri = this.glxo.WEBGL_debug_renderer_info;
+    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL) : "";
+  }
+
   set program(program: Program | undefined) {
     if (this.#program !== program) {
       if (program !== undefined) {
+        program.validate();
         this.gl.useProgram(program.glProgram);
       } else {
         this.gl.useProgram(null);
