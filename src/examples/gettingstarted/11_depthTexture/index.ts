@@ -24,10 +24,6 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = box(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
-
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
   const canvas = canvasFramebuffer.canvas;
@@ -35,12 +31,11 @@ async function init(): Promise<null> {
     document.body.appendChild(canvas);
   }
 
-  const framebufferSize = new Vector2(1024, 1024);
-  const colorAttachment = makeColorAttachment(context, framebufferSize, 0);
-  const depthAttachment = makeDepthAttachment(context, framebufferSize);
-  const framebuffer = new Framebuffer(context, [colorAttachment, depthAttachment]);
-
+  const geometry = box(0.75, 0.75, 0.75);
+  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const program = makeProgramFromShaderMaterial(context, material);
+
+  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
   const uniforms = {
     localToWorld: new Matrix4(),
@@ -52,6 +47,11 @@ async function init(): Promise<null> {
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
   const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+
+  const framebufferSize = new Vector2(1024, 1024);
+  const colorAttachment = makeColorAttachment(context, framebufferSize, 0);
+  const depthAttachment = makeDepthAttachment(context, framebufferSize);
+  const framebuffer = new Framebuffer(context, [colorAttachment, depthAttachment]);
 
   function animate(): void {
     requestAnimationFrame(animate);

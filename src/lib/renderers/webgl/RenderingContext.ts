@@ -81,6 +81,7 @@ export class RenderingContext {
   set program(program: Program | undefined) {
     if (this.#program !== program) {
       if (program !== undefined) {
+        program.validate();
         this.gl.useProgram(program.glProgram);
       } else {
         this.gl.useProgram(null);

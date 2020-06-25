@@ -17,13 +17,19 @@ import { ProgramAttribute } from "./ProgramAttribute";
 import { ProgramUniform, UniformValueMap } from "./ProgramUniform";
 import { numTextureUnits } from "./UniformType";
 
+export type UniformMap = { [key: string]: ProgramUniform | undefined };
+export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
+
 export class Program implements IDisposable {
   disposed = false;
   vertexShader: Shader;
   fragmentShader: Shader;
   glProgram: WebGLProgram;
-  uniforms: { [key: string]: ProgramUniform | undefined } = {};
-  attributes: { [key: string]: ProgramAttribute | undefined } = {};
+  #validated = false;
+  #uniformsInitialized = false;
+  #uniforms: UniformMap = {};
+  #attributesInitialized = false;
+  #attributes: AttributeMap = {};
 
   constructor(
     public context: RenderingContext,
@@ -53,32 +59,70 @@ export class Program implements IDisposable {
     // link the program.
     gl.linkProgram(this.glProgram);
 
+    // NOTE: purposely not checking here if it compiled.
+  }
+
+  // TODO: Convert this to a promise with a setTimeout(0) until the completion status is true
+  validate(): boolean {
+    if (this.#validated) {
+      return true;
+    }
+
+    // This is only done if necessary and delayed per best practices here:
+    // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
+
+    const gl = this.context.gl;
     // Check if it linked.
-    const success = gl.getProgramParameter(this.glProgram, gl.LINK_STATUS);
+    const psc = this.context.glxo.KHR_parallel_shader_compile;
+    if (psc !== null) {
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+      if (!gl.getProgramParameter(this.glProgram, psc.COMPLETION_STATUS_KHR)) {
+        return false;
+      }
+    }
+
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!success) {
+    if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {
+      this.vertexShader.validate();
+      this.fragmentShader.validate();
       // something went wrong with the link
       const infoLog = gl.getProgramInfoLog(this.glProgram);
+      console.error(infoLog);
       throw new Error(`program filed to link: ${infoLog}`);
     }
+    this.#validated = true;
+    return true;
+  }
 
-    let textureUnitCount = 0;
+  get uniforms(): UniformMap {
+    if (!this.#uniformsInitialized) {
+      let textureUnitCount = 0;
+      const gl = this.context.gl;
 
-    const numActiveUniforms = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS);
-    for (let i = 0; i < numActiveUniforms; ++i) {
-      const uniform = new ProgramUniform(this, i);
-      if (numTextureUnits(uniform.uniformType) > 0) {
-        uniform.textureUnit = textureUnitCount;
-        textureUnitCount++;
+      const numActiveUniforms = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS);
+      for (let i = 0; i < numActiveUniforms; ++i) {
+        const uniform = new ProgramUniform(this, i);
+        if (numTextureUnits(uniform.uniformType) > 0) {
+          uniform.textureUnit = textureUnitCount;
+          textureUnitCount++;
+        }
+        this.#uniforms[uniform.name] = uniform;
       }
-      this.uniforms[uniform.name] = uniform;
+      this.#uniformsInitialized = true;
     }
-
-    const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
-    for (let i = 0; i < numActiveAttributes; ++i) {
-      const attribute = new ProgramAttribute(this, i);
-      this.attributes[attribute.name] = attribute;
+    return this.#uniforms;
+  }
+  get attributes(): AttributeMap {
+    if (!this.#attributesInitialized) {
+      const gl = this.context.gl;
+      const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
+      for (let i = 0; i < numActiveAttributes; ++i) {
+        const attribute = new ProgramAttribute(this, i);
+        this.#attributes[attribute.name] = attribute;
+      }
+      this.#attributesInitialized = true;
     }
+    return this.#attributes;
   }
 
   setUniformValues(uniformValueMap: UniformValueMap): this {
