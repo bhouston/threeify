@@ -7,10 +7,10 @@ for (let i = 0; i < 256; i++) {
 export function generateUUID(): string {
   // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
 
-  const d0 = (Math.random() * 0xffffffff) | 0;
-  const d1 = (Math.random() * 0xffffffff) | 0;
-  const d2 = (Math.random() * 0xffffffff) | 0;
-  const d3 = (Math.random() * 0xffffffff) | 0;
+  const d0 = (Math.random() * 0x100000000) | 0;
+  const d1 = (Math.random() * 0x100000000) | 0;
+  const d2 = (Math.random() * 0x100000000) | 0;
+  const d3 = (Math.random() * 0x100000000) | 0;
   const uuid =
     _lut[d0 & 0xff] +
     _lut[(d0 >> 8) & 0xff] +
