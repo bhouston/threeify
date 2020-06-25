@@ -72,7 +72,7 @@ class Header {
   valid = 0; /* indicate which fields are valid */
   string = ""; /* the actual header string */
   comments = ""; /* comments found in header */
-  programtype = "RGBE"; /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */
+  programType = "RGBE"; /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */
   format = ""; /* RGBE format, default 32-bit_rle_rgbe */
   gamma = 1.0; /* image has already been gamma corrected with given gamma. defaults to 1.0 (no correction) */
   exposure = 1.0; /* a value of 1.0 in an image corresponds to <exposure> watts/steradian/m^2. defaults to 1.0 */
@@ -86,14 +86,13 @@ function readHeader(buffer: Buffer): Header {
   const RGBE_VALID_FORMAT = 2;
   const RGBE_VALID_DIMENSIONS = 4;
 
-  let line,
-    match,
-    // regexes to parse header info fields
-    magic_token_re = /^#\?(\S+)$/,
-    gamma_re = /^\s*GAMMA\s*=\s*(\d+(\.\d+)?)\s*$/,
-    exposure_re = /^\s*EXPOSURE\s*=\s*(\d+(\.\d+)?)\s*$/,
-    format_re = /^\s*FORMAT=(\S+)\s*$/,
-    dimensions_re = /^\s*\-Y\s+(\d+)\s+\+X\s+(\d+)\s*$/;
+  let line, match;
+  // regexes to parse header info fields
+  const magicTokenRegex = /^#\?(\S+)$/;
+  const gammaRegex = /^\s*GAMMA\s*=\s*(\d+(\.\d+)?)\s*$/;
+  const exposureRegex = /^\s*EXPOSURE\s*=\s*(\d+(\.\d+)?)\s*$/;
+  const formatRegex = /^\s*FORMAT=(\S+)\s*$/;
+  const dimensionsRegex = /^\s*\-Y\s+(\d+)\s+\+X\s+(\d+)\s*$/;
   // RGBE format header struct
   const header = new Header();
 
@@ -102,12 +101,12 @@ function readHeader(buffer: Buffer): Header {
   }
 
   /* if you want to require the magic token then uncomment the next line */
-  if ((match = line.match(magic_token_re)) === null) {
+  if ((match = line.match(magicTokenRegex)) === null) {
     throw new Error("hrd: bad initial token");
   }
 
   header.valid |= RGBE_VALID_PROGRAMTYPE;
-  header.programtype = match[1];
+  header.programType = match[1];
   header.string += line + "\n";
 
   while (true) {
@@ -122,20 +121,20 @@ function readHeader(buffer: Buffer): Header {
       continue; // comment line
     }
 
-    if ((match = line.match(gamma_re)) !== null) {
+    if ((match = line.match(gammaRegex)) !== null) {
       header.gamma = parseFloat(match[1]);
     }
 
-    if ((match = line.match(exposure_re)) !== null) {
+    if ((match = line.match(exposureRegex)) !== null) {
       header.exposure = parseFloat(match[1]);
     }
 
-    if ((match = line.match(format_re)) !== null) {
+    if ((match = line.match(formatRegex)) !== null) {
       header.valid |= RGBE_VALID_FORMAT;
       header.format = match[1]; // '32-bit_rle_rgbe';
     }
 
-    if ((match = line.match(dimensions_re)) !== null) {
+    if ((match = line.match(dimensionsRegex)) !== null) {
       header.valid |= RGBE_VALID_DIMENSIONS;
       header.height = parseInt(match[1], 10);
       header.width = parseInt(match[2], 10);

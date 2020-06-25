@@ -20,6 +20,7 @@ import { GL } from "./GL";
 import { MaskState } from "./MaskState";
 import { getParameterAsString } from "./Parameters";
 import { Program } from "./programs/Program";
+import { UniformValueMap } from "./programs/ProgramUniform";
 
 export class RenderingContext {
   readonly gl: WebGLRenderingContext;
@@ -185,7 +186,7 @@ export class RenderingContext {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderPass(program: Program, uniforms: any): void {
+  renderPass(program: Program, uniforms: UniformValueMap): void {
     throw new Error("not implemented");
   }
 

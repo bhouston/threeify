@@ -1,5 +1,5 @@
 //
-// based on Color from Three.js
+// based on Box2 from Three.js
 //
 // Authors:
 // * @bhouston
