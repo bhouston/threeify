@@ -145,7 +145,6 @@ export function makeTexImage2DFromCubeTexture(
   texture: CubeTexture,
   level = 0,
   internalFormat: PixelFormat = PixelFormat.RGBA,
-  texParameters = new TexParameters(),
 ): TexImage2D {
   return new TexImage2D(
     context,
