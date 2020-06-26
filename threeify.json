@@ -1,0 +1,11 @@
+{
+  "glsl": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "includeDirs": ["lib/shaders/includes"],
+    "extensions": ["glsl", "frag", "vert"],
+    "minify": true,
+    "allowJSIncludes": true,
+    "verboseLevel": 0
+  }
+}
