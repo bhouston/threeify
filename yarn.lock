@@ -9302,15 +9302,14 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-threeify-glsl-transpiler@0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/threeify-glsl-transpiler/-/threeify-glsl-transpiler-0.1.2.tgz#f34ad4361de058d31b69c13db3baa05eec63ce2a"
-  integrity sha512-uZ3MT5wtwoPucF5ZAKY4Mb6ie/VeRvHtKxIbweaFBY4QaKmFs+M/sqt9bVyQZ/pUqpkRq2ZF1diBKUBuZqMnkA==
+threeify-glsl-transpiler@1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/threeify-glsl-transpiler/-/threeify-glsl-transpiler-1.1.7.tgz#ef6b216ae9382d55fc569ef27c0f518d7d6549cb"
+  integrity sha512-iw63kzFoibjx9ErChaDq8XAXyEsTy2h66PKGfARycG/sK6WXCZj2jB015laKWcoH1ri8yPcXShoTnVkWqTp20Q==
   dependencies:
     commander "^5.1.0"
     glob "^7.1.6"
     make-dir "^3.1.0"
-    prettier "^2.0.5"
     watch "^1.0.2"
 
 throat@^5.0.0:

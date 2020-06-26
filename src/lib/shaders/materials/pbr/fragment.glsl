@@ -40,7 +40,7 @@ uniform sampler2D u_charlieLUT;
 uniform int umaterialOutputs;  // MaterialOutputs
 
 #pragma include <materials/material_outputs>
-#pragma include <brdfs/brdf_ggx_specular>
+#pragma include <brdfs/old/brdf_specular_ggx>
 
 void main() {
 

@@ -12,7 +12,7 @@ import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { makeColorAttachment, makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
+import { makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
 import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
@@ -49,9 +49,8 @@ async function init(): Promise<null> {
   const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
 
   const framebufferSize = new Vector2(1024, 1024);
-  const colorAttachment = makeColorAttachment(context, framebufferSize, 0);
   const depthAttachment = makeDepthAttachment(context, framebufferSize);
-  const framebuffer = new Framebuffer(context, [colorAttachment, depthAttachment]);
+  const framebuffer = new Framebuffer(context, [depthAttachment]);
 
   function animate(): void {
     requestAnimationFrame(animate);

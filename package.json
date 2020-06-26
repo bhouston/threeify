@@ -11,21 +11,20 @@
   "homepage": "http://threeify.org",
   "author": "threeify authors",
   "bugs": {
-    "url": "https://github.com/bhouston/threeify/issues"
+    "url": "https://github.com/threeify/threeify/issues"
   },
   "license": "ISC",
   "main": "index.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bhouston/threeify"
+    "url": "https://github.com/threeify/threeify"
   },
   "scripts": {
-    "build": "tsc",
-    "build-glsl": "tgt -i ./src -o ./dist",
+    "build": "tgt & tsc",
     "dev": "npm run watch & npm start",
     "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
-    "watch": "tsc --watch & tgt -i ./src -o ./dist -w",
+    "watch": "tsc --watch & tgt --watch",
     "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
   },
   "dependencies": {
@@ -54,7 +53,7 @@
     "prettier": "^2.0.5",
     "rollup": "^2.18.0",
     "semantic-release": "^17.0.8",
-    "threeify-glsl-transpiler": "0.1.2",
+    "threeify-glsl-transpiler": "1.1.7",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.3"
   },

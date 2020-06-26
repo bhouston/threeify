@@ -2,12 +2,6 @@
   "folders": [
     {
       "path": "./"
-    },
-    {
-      "path": "../threeify-glsl-transpiler"
-    },
-    {
-      "path": "../three.js"
     }
   ],
   "extensions": {

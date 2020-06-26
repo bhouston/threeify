@@ -12,4 +12,3 @@ vec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {
 	return ( 1.0 - specularColor ) * fresnel + specularColor;
 
 } // validated
-

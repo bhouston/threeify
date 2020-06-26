@@ -1,4 +1,4 @@
-#pragma include "../uv/uv_selector"
+#pragma include "../uvs/uv_selector"
 
 // TODO: add other types of material inputs, float, vec2.
 
