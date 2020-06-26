@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/threeify/threeify/compare/v1.2.0...v1.3.0) (2020-06-26)
+
+
+### Features
+
+* lambert example (uvs stretched on polyhedron) ([51d6d0e](https://github.com/threeify/threeify/commit/51d6d0e2766eb70e42e8489e2a1e24d5482faa59))
+
 # [1.2.0](https://github.com/threeify/threeify/compare/v1.1.1...v1.2.0) (2020-06-26)
 
 
