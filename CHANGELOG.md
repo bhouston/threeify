@@ -1,3 +1,43 @@
+# [1.2.0](https://github.com/threeify/threeify/compare/v1.1.1...v1.2.0) (2020-06-26)
+
+
+### Bug Fixes
+
+* restored example1 triangles index.ts file ([e7a420e](https://github.com/threeify/threeify/commit/e7a420ec758d087c8d8e0a68d37b99c4bf52fff0))
+* update directories in examples. ([d928c8c](https://github.com/threeify/threeify/commit/d928c8c0d1fdf46da3996ecf069be22199a1bd69))
+* **ci:** fix broken release action ([c304902](https://github.com/threeify/threeify/commit/c304902d15b6c894db9d9f3d30c74e03cc99f38d))
+* **ci:** fix checking master on master ([8ed115c](https://github.com/threeify/threeify/commit/8ed115cc9d3aaa3d49e6d19f182d634121c40e65))
+* **eslint:** ignore JS example ([a4735fe](https://github.com/threeify/threeify/commit/a4735fe6a0e1dcc9622770733970f2735e023c9c))
+* **eslint:** resolve tsconfig paths ([315d3b3](https://github.com/threeify/threeify/commit/315d3b3b6389fc9a275e3671cdca22618f1c3f0f))
+
+
+### Features
+
+* add debug renderer info support ([c22865a](https://github.com/threeify/threeify/commit/c22865ae21d200d9ba9d08b9a222a75cdc4ef429))
+* add Plane and Ray math primitives ([4f15436](https://github.com/threeify/threeify/commit/4f15436ec4dad8552858232b135d77fd911b3a1a))
+* Add Plane geometry creator. ([46c88ee](https://github.com/threeify/threeify/commit/46c88ee3a6439f23d530c396afeeebd4d1abc244))
+* add stride support to PrimitiveArray ([25d54bc](https://github.com/threeify/threeify/commit/25d54bce793905b2ac63be14732c9203b4b0613e))
+* add support for 'WEBGL_debug_shaders' extension ([286f21b](https://github.com/threeify/threeify/commit/286f21ba313a4c9f8991698c77643fc001cf74a8))
+* add support for optional anisotropy mipmaps ([5588055](https://github.com/threeify/threeify/commit/5588055215f6ba677d70461a37c4d2dbefdf9127))
+* depth texture example ([f85573e](https://github.com/threeify/threeify/commit/f85573e5177b1d0f0dcea37b15ddf8979b2a6450))
+* encodings work well ([5fcc413](https://github.com/threeify/threeify/commit/5fcc4134d1af726ab4a7e5c2cde4bdb9632134f0))
+* example [#1](https://github.com/threeify/threeify/issues/1) - basic triangle. ([705ab3d](https://github.com/threeify/threeify/commit/705ab3d2515a226ce86a119406266f061ba0f66f))
+* example 3, textured & indexed plane. ([ae9660a](https://github.com/threeify/threeify/commit/ae9660a19df3eb9cb40883bcf2a16bda0c512103))
+* example 4 lambert cube ([c6269d1](https://github.com/threeify/threeify/commit/c6269d14775441d16e3de850f14c44237d9285ff))
+* go back to WebGL1 with guarrenteed extensions. :( ([4b21a2e](https://github.com/threeify/threeify/commit/4b21a2e3e6944dd140693217f3a63abba558328e))
+* HDR loader WIP ([73f2581](https://github.com/threeify/threeify/commit/73f25816e3d510cbbdd42719a32ae9e009a9c26b))
+* integration test support via ts-jest ([b9cadb7](https://github.com/threeify/threeify/commit/b9cadb780ee24043c5194f7906eb01ab38ec1f8b)), closes [#10](https://github.com/threeify/threeify/issues/10)
+* interleaved buffers example (not yet working) ([f4c8620](https://github.com/threeify/threeify/commit/f4c862057d85cef80b7084b44ad5f764d37ad403))
+* optimize math class size and dependencies ([ca74267](https://github.com/threeify/threeify/commit/ca74267e9d8e4ce2fbb8c1bfec18ec28bb6ff976))
+* orthographic example, fix perspective camera sign bug, improve uniformity of maker-functions. ([fc62362](https://github.com/threeify/threeify/commit/fc62362c185f36095461de20122ffb386ebc0edb))
+* render to texture example ([0f7b79d](https://github.com/threeify/threeify/commit/0f7b79d35036402b5dea0ff4a1946c4ca0469385))
+* roughness example works ([0132ba9](https://github.com/threeify/threeify/commit/0132ba97284b79d7b8c2f789c77448db070e3c3b))
+* second example, animated uniforms ([077d33e](https://github.com/threeify/threeify/commit/077d33ea9082682d84ad9657f131923bbacb09a2))
+* simplify framebuffer attachment creation ([515ebbe](https://github.com/threeify/threeify/commit/515ebbe5c2e78910502178251b9f8e29afab9ade))
+* tetrahedral, octahedron, isocahedron, dodecahedron, PrimitiveArray ([9c86560](https://github.com/threeify/threeify/commit/9c86560fa9da547329af1e5f3c0e59e67cd4f910))
+* upgrade shaders to es 300 (WebGL2 only) ([62e7da7](https://github.com/threeify/threeify/commit/62e7da7a107b84dd7fdf904d275800b7585b4409))
+* use module facades in examples ([bd565fb](https://github.com/threeify/threeify/commit/bd565fb286231ff8ea100acf9069015f00b85226))
+
 ## [1.1.1](https://github.com/bhouston/threeify/compare/v1.1.0...v1.1.1) (2020-06-13)
 
 
