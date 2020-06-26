@@ -61,7 +61,7 @@ export class Shader implements IDisposable {
   }
 
   validate(): void {
-    if (this.#validated) {
+    if (this.#validated || this.disposed) {
       return;
     }
     // This is only done if necessary and delayed per best practices here:
@@ -74,6 +74,8 @@ export class Shader implements IDisposable {
       // Something went wrong during compilation; get the error
       const infoLog = gl.getShaderInfoLog(this.glShader);
       const errorMessage = `could not compile shader: ${infoLog}`;
+      console.log(this.sourceCode);
+      this.disposed = true;
       throw new Error(errorMessage);
     }
     this.#validated = true;
