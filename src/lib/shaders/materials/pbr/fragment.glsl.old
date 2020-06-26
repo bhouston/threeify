@@ -25,7 +25,7 @@ uniform MaterialInputV3 u_subsurface;
 uniform MaterialInputV3 u_subsurfaceThickness;
 
 // punctual lights
-#pragma include <lights/punctual_light>
+#pragma include <lighting/punctual>
 uniform PunctualLight u_PunctualLights[LIGHT_COUNT];
 
 // image-based lights

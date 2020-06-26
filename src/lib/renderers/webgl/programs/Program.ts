@@ -64,7 +64,7 @@ export class Program implements IDisposable {
 
   // TODO: Convert this to a promise with a setTimeout(0) until the completion status is true
   validate(): boolean {
-    if (this.#validated) {
+    if (this.#validated || this.disposed) {
       return true;
     }
 
@@ -88,6 +88,9 @@ export class Program implements IDisposable {
       // something went wrong with the link
       const infoLog = gl.getProgramInfoLog(this.glProgram);
       console.error(infoLog);
+      this.vertexShader.dispose();
+      this.fragmentShader.dispose();
+      this.disposed = true;
       throw new Error(`program filed to link: ${infoLog}`);
     }
     this.#validated = true;
