@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/threeify/threeify/compare/v1.3.0...v1.4.0) (2020-06-28)
+
+
+### Features
+
+* Add glsl sturts Surface, PunctualLight, DirectIllumination ([ae48d7e](https://github.com/threeify/threeify/commit/ae48d7e0d9f55e0e155975b16320a57b95e74a69))
+* add support for sRGB output,. ([fa9a0c1](https://github.com/threeify/threeify/commit/fa9a0c1929a5cb7d893fea26e565d7f3c92afa2f))
+* specular BRDF works. ([51cfeac](https://github.com/threeify/threeify/commit/51cfeac29b9d2e91acf207ceb6a4490df7c5ddaf))
+
 # [1.3.0](https://github.com/threeify/threeify/compare/v1.2.0...v1.3.0) (2020-06-26)
 
 
