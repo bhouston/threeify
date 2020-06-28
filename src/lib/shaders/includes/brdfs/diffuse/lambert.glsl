@@ -1,12 +1,20 @@
 #pragma once
+#pragma once
 #pragma include <math/math>
+#pragma include <brdfs/common>
 
 // three.js
-vec3 BRDF_Diffuse_Lambert( const in vec3 diffuseColor ) {
+vec3 BRDF_Diffuse_Lambert(
+  const in DirectIllumination directIllumination,
+  const in Surface surface,
+  const in vec3 albedo ) {
 
-	return RECIPROCAL_PI * diffuseColor;
+  float dotNL = clamp( dot( directIllumination.lightDirection, surface.normal ), 0.0, 1.0 );
+
+	return dotNL * directIllumination.color * albedo * RECIPROCAL_PI;
 
 } // validated
+
 
 /*
 // From glTF reference viewer

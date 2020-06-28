@@ -10,6 +10,17 @@ import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { ShaderType } from "./ShaderType";
 
+function insertLineNumbers(sourceCode: string): string {
+  const inputLines = sourceCode.split("\n");
+  const outputLines = ["\n"];
+  const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
+  for (let l = 0; l < inputLines.length; l++) {
+    const lAsString = `000000${l}`.slice(-maxLineCharacters-1);
+    outputLines.push(`${lAsString}: ${inputLines[l]}`);
+  }
+  return outputLines.join("\n");
+}
+
 export class Shader implements IDisposable {
   disposed = false;
   glShader: WebGLShader;
@@ -73,8 +84,9 @@ export class Shader implements IDisposable {
     if (!compileStatus) {
       // Something went wrong during compilation; get the error
       const infoLog = gl.getShaderInfoLog(this.glShader);
-      const errorMessage = `could not compile shader: ${infoLog}`;
-      console.log(this.sourceCode);
+      const errorMessage = `could not compile shader:\n${infoLog}`;
+      console.error(errorMessage);
+      console.error(insertLineNumbers(this.sourceCode));
       this.disposed = true;
       throw new Error(errorMessage);
     }

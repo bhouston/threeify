@@ -4,7 +4,7 @@
     "outDir": "./dist",
     "includeDirs": ["lib/shaders/includes"],
     "extensions": ["glsl", "frag", "vert"],
-    "minify": true,
+    "minify": false,
     "allowJSIncludes": true,
     "verboseLevel": 0
   }
