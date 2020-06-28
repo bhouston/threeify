@@ -11,9 +11,10 @@ uniform float pointLightRange;
 uniform vec3 albedoModulator;
 uniform sampler2D albedoMap;
 
-#pragma include <brdfs/diffuse/lambert.glsl>
-#pragma include <brdfs/common.glsl>
-#pragma include <lighting/punctual.glsl>
+#pragma include <brdfs/common>
+#pragma include <lighting/punctual>
+#pragma include <brdfs/diffuse/lambert>
+#pragma include <color/spaces/srgb>
 
 void main() {
 
@@ -35,12 +36,10 @@ void main() {
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
-  vec3 outputColor = vec3(0.0);
+ vec3 outputColor = vec3(0.0);
   outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
 
-  vec3 gammaCorrectedOutputColor = pow( outputColor, vec3( 0.5 ) );
-
-  gl_FragColor.rgb = gammaCorrectedOutputColor;
+  gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.0;
 
 }

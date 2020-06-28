@@ -34,7 +34,7 @@ async function init(): Promise<null> {
     // vertices
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(75, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4PerspectiveFov(65, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
     pointLightViewPosition: new Vector3(1, 0, -0.5),
