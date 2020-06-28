@@ -8,8 +8,5 @@ struct DirectIllumination {
 struct Surface {
 	vec3 position;
 	vec3 normal;
-};
-
-struct View {
   vec3 viewDirection;
 };

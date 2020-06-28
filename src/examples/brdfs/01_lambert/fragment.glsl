@@ -35,10 +35,12 @@ void main() {
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
-  float dotNL = clamp( dot( -directIllumination.incidentDirection, surface.normal ), 0.0, 1.0 );
+  vec3 outputColor = vec3(0.0);
+  outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
 
-  gl_FragColor.rgb = dotNL * directIllumination.color * BRDF_Diffuse_Lambert( albedo );
-  gl_FragColor.rgb = pow( gl_FragColor.rgb, vec3( 0.5 ) );
+  vec3 gammaCorrectedOutputColor = pow( outputColor, vec3( 0.5 ) );
+
+  gl_FragColor.rgb = gammaCorrectedOutputColor;
   gl_FragColor.a = 1.0;
 
 }

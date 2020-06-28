@@ -5,20 +5,18 @@
 #pragma include "d_ggx"
 
 // GGX Distribution, Schlick Fresnel, GGX-Smith Visibility
-vec3 BRDF_Specular_GGX( const in IncidentLight incidentLight, const in vec3 viewDir, const in vec3 normal, const in vec3 specularColor, const in float roughness ) {
-	float alpha = pow2( roughness ); // UE4's roughness
+vec3 BRDF_Specular_GGX( const in incidentDirection, const in Surface surface, const in vec3 specularColor, const in float specularRoughness ) {
+	float alpha = pow2( specularRoughness ); // UE4's roughness
 
-	vec3 halfDir = normalize( incidentLight.direction + viewDir );
+	vec3 halfDirection = normalize( incidentDirection + surface.viewDirection );
 
-	float dotNL = saturate( dot( normal, incidentLight.direction ) );
-	float dotNV = saturate( dot( normal, viewDir ) );
-	float dotNH = saturate( dot( normal, halfDir ) );
-	float dotLH = saturate( dot( incidentLight.direction, halfDir ) );
+	float dotNL = saturate( -dot( surface.normal, incidentDirection ) );
+	float dotNV = saturate( dot( surface.normal, viewDirection ) );
+	float dotNH = saturate( dot( surface.normal, halfDirection ) );
+	float dotLH = saturate( -dot( directIllumination, halfDirection ) );
 
 	vec3 F = F_Schlick( specularColor, dotLH );
-
 	float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );
-
 	float D = D_GGX( alpha, dotNH );
 
 	return F * ( G * D );
