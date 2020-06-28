@@ -5,23 +5,25 @@
 #pragma include "d_ggx"
 
 // GGX Distribution, Schlick Fresnel, GGX-Smith Visibility
-vec3 BRDF_Specular_GGX( const in incidentDirection, const in Surface surface, const in vec3 specularColor, const in float specularRoughness ) {
+vec3 BRDF_Specular_GGX( const in DirectIllumination directIllumination, const in Surface surface, const in vec3 specularColor, const in float specularRoughness ) {
 	float alpha = pow2( specularRoughness ); // UE4's roughness
 
-	vec3 halfDirection = normalize( incidentDirection + surface.viewDirection );
+	vec3 halfDirection = normalize( directIllumination.lightDirection + surface.viewDirection );
 
-	float dotNL = saturate( -dot( surface.normal, incidentDirection ) );
-	float dotNV = saturate( dot( surface.normal, viewDirection ) );
+	float dotNL = saturate( dot( surface.normal, directIllumination.lightDirection ) );
+	float dotNV = saturate( dot( surface.normal, surface.viewDirection ) );
 	float dotNH = saturate( dot( surface.normal, halfDirection ) );
-	float dotLH = saturate( -dot( directIllumination, halfDirection ) );
+	float dotLH = saturate( dot( directIllumination.lightDirection, halfDirection ) );
 
 	vec3 F = F_Schlick( specularColor, dotLH );
 	float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );
 	float D = D_GGX( alpha, dotNH );
 
-	return F * ( G * D );
+	return directIllumination.color * F * ( G * D );
+
 } // validated
 
+/*
 // Analytical approximation of the DFG LUT, one half of the
 // split-sum approximation used in indirect specular lighting.
 // via 'environmentBRDF' from "Physically Based Shading on Mobile"
@@ -44,11 +46,10 @@ vec3 BRDF_Specular_GGX_Environment( const in vec3 viewDir, const in vec3 normal,
 // Fdez-Agüera's "Multiple-Scattering Microfacet Model for Real-Time Image Based Lighting"
 // Approximates multiscattering in order to preserve energy.
 // http://www.jcgt.org/published/0008/01/03/
-void BRDF_Specular_GGX_Multiscattering_Environment( const in GeometricContext geometry, const in vec3 specularColor, const in float roughness, inout vec3 singleScatter, inout vec3 multiScatter ) {
+void BRDF_Specular_GGX_Multiscattering_Environment( const in Surface surface, const in vec3 specularColor, const in float specularRoughness, inout vec3 singleScatter, inout vec3 multiScatter ) {
 
-	float dotNV = saturate( dot( geometry.normal, geometry.viewDir ) );
-
-	vec3 F = F_Schlick_RoughnessDependent( specularColor, dotNV, roughness );
+	float dotNV = saturate( dot( surface.normal, surface.viewDirection ) );
+	vec3 F = F_Schlick_RoughnessDependent( specularColor, dotNV, specularRoughness );
 	vec2 brdf = integrateSpecularBRDF( dotNV, roughness );
 	vec3 FssEss = F * brdf.x + brdf.y;
 
@@ -62,3 +63,4 @@ void BRDF_Specular_GGX_Multiscattering_Environment( const in GeometricContext ge
 	multiScatter += Fms * Ems;
 
 }
+*/

@@ -15,7 +15,7 @@ function insertLineNumbers(sourceCode: string): string {
   const outputLines = ["\n"];
   const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
   for (let l = 0; l < inputLines.length; l++) {
-    const lAsString = `000000${l}`.slice(-maxLineCharacters);
+    const lAsString = `000000${l}`.slice(-maxLineCharacters-1);
     outputLines.push(`${lAsString}: ${inputLines[l]}`);
   }
   return outputLines.join("\n");

@@ -50,9 +50,9 @@ float getSpotAttenuation(vec3 pointToLight, vec3 spotDirection, float outerConeC
 
 void pointLightToDirectIllumination( in Surface surface, in PunctualLight punctualLight, out DirectIllumination directIllumination ) {
 
-  vec3 lightToSurface = surface.position - punctualLight.position;
-  float lightAttenuation = getRangeAttenuation( length( lightToSurface ), punctualLight.range );
+  vec3 surfaceToLight = punctualLight.position - surface.position;
+  float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
 
   directIllumination.color = punctualLight.color * lightAttenuation;
-  directIllumination.incidentDirection = normalize( lightToSurface );
+  directIllumination.lightDirection = normalize( surfaceToLight );
 }

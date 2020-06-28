@@ -8,18 +8,17 @@ uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightColor;
 uniform float pointLightRange;
 
-uniform vec3 albedoModulator;
+uniform vec3      albedoModulator;
 uniform sampler2D albedoMap;
-uniform vec3 specularModulator;
+uniform vec3      specularModulator;
 uniform sampler2D specularMap;
-uniform float specularRoughnessModulator;
+uniform float     specularRoughnessModulator;
 uniform sampler2D specularRoughnessMap;
 
 #pragma include <brdfs/common>
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
-#pragma include "test"
 
 void main() {
 
@@ -39,13 +38,14 @@ void main() {
   Surface surface;
   surface.position = v_viewSurfacePosition;
   surface.normal = v_viewSurfaceNormal;
+  surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
   vec3 outputColor = vec3(0.0);
   outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
-  outputColor += BRDF_Specular_GGX( directIllumination, surface, vec3(1.0), specular, specularRoughness );
+  outputColor += BRDF_Specular_GGX( directIllumination, surface, specular, specularRoughness );
 
   vec3 gammaCorrectedOutputColor = pow( outputColor, vec3( 0.5 ) );
 

@@ -9,7 +9,7 @@ vec3 BRDF_Diffuse_Lambert(
   const in Surface surface,
   const in vec3 albedo ) {
 
-  float dotNL = clamp( dot( -directIllumination.incidentDirection, surface.normal ), 0.0, 1.0 );
+  float dotNL = clamp( dot( directIllumination.lightDirection, surface.normal ), 0.0, 1.0 );
 
 	return dotNL * directIllumination.color * albedo * RECIPROCAL_PI;
 

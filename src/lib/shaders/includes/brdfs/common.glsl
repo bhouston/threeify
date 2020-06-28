@@ -2,7 +2,7 @@
 
 struct DirectIllumination {
 	vec3 color;
-	vec3 incidentDirection;
+	vec3 lightDirection;
 };
 
 struct Surface {

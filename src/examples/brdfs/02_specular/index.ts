@@ -28,6 +28,7 @@ async function init(): Promise<null> {
   if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
     document.body.appendChild(canvasFramebuffer.canvas);
   }
+  const map = makeTexImage2DFromTexture(context, texture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -42,7 +43,11 @@ async function init(): Promise<null> {
 
     // materials
     albedoModulator: new Vector3(1, 1, 1),
-    albedoMap: makeTexImage2DFromTexture(context, texture),
+    albedoMap: map,
+    specularModulator: new Vector3(1, 1, 1),
+    specularMap: map,
+    specularRoughnessModulator: 1.0,
+    specularRoughness: map,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
