@@ -1,5 +1,7 @@
 // Source:
 // https://github.com/KhronosGroup/glTF-Sample-Viewer/blob/master/src/shaders/punctual.glsl
+#pragma once
+#pragma include <brdfs/common>
 
 // lights
 // KHR_lights_punctual extension.
@@ -44,4 +46,13 @@ float getSpotAttenuation(vec3 pointToLight, vec3 spotDirection, float outerConeC
         return 1.0;
     }
     return 0.0;
+}
+
+void pointLightToDirectIllumination( in Surface surface, in PunctualLight punctualLight, out DirectIllumination directIllumination ) {
+
+  vec3 lightToSurface = surface.position - punctualLight.position;
+  float lightAttenuation = getRangeAttenuation( length( lightToSurface ), punctualLight.range );
+
+  directIllumination.color = punctualLight.color * lightAttenuation;
+  directIllumination.incidentDirection = normalize( lightToSurface );
 }
