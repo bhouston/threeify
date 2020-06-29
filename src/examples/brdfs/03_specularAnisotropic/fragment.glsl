@@ -15,14 +15,15 @@ uniform sampler2D specularAnisotropicFlowMap;
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
+#pragma include <brdfs/specular/anisotropy>
 #pragma include <color/spaces/srgb>
 
 void main() {
 
   vec3 albedo = vec3( 1.0 );
   vec3 specular = vec3( 1.0 );
-  float specularRoughness = 0.25;
-  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * texture2D( specularAnisotropicFlowMap, v_uv0 ).rg * 2.0 - vec2(1.0);
+  float specularRoughness = 0.5;
+  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * decodeAnisotropyFlowMap( texture2D( specularAnisotropicFlowMap, v_uv0 ) );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
