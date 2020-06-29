@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/threeify/threeify/compare/v1.7.0...v1.8.0) (2020-06-29)
+
+
+### Bug Fixes
+
+* correct method for rotating tangent frame. ([8fa1145](https://github.com/threeify/threeify/commit/8fa1145ab0832c3e37bf4cf29dce47df666b362f))
+
+
+### Features
+
+* antialiasing rendering by default. ([648a78e](https://github.com/threeify/threeify/commit/648a78e7ac0b76f3000f62f79ed976dc791c352d))
+* premultiplied alpha by default. ([7493b59](https://github.com/threeify/threeify/commit/7493b598c787e542bd4484a443eb1320d7a96aa3))
+
 # [1.7.0](https://github.com/threeify/threeify/compare/v1.6.0...v1.7.0) (2020-06-29)
 
 
