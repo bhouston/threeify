@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/threeify/threeify/compare/v1.4.0...v1.5.0) (2020-06-29)
+
+
+### Bug Fixes
+
+* make anisotropic filtering actually work (ordering error) ([8c21b5d](https://github.com/threeify/threeify/commit/8c21b5d7d04a930db8d05ce6c06a2fcd6612d025))
+
+
+### Features
+
+* anisotropic specular example (via bent normals per filament) ([43366eb](https://github.com/threeify/threeify/commit/43366ebb89557eb9a53bc84a566635e057c7f628))
+* derived tangent, bitangent frames ([ac6ca1b](https://github.com/threeify/threeify/commit/ac6ca1b396fe425a43398f2e27742994f4f716c6))
+
 # [1.4.0](https://github.com/threeify/threeify/compare/v1.3.0...v1.4.0) (2020-06-28)
 
 
