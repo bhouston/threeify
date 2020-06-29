@@ -1,3 +1,11 @@
+# [1.7.0](https://github.com/threeify/threeify/compare/v1.6.0...v1.7.0) (2020-06-29)
+
+
+### Features
+
+* add cylinder geometry factory ([0cebfde](https://github.com/threeify/threeify/commit/0cebfdefe9b9c899833b81d7bf69a8fbfbbd283b))
+* improved anisotropic specular highlight example ([4abdc61](https://github.com/threeify/threeify/commit/4abdc614e338f0efb114b5d438474a443adbb1ab))
+
 # [1.6.0](https://github.com/threeify/threeify/compare/v1.5.0...v1.6.0) (2020-06-29)
 
 
