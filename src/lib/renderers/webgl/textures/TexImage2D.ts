@@ -67,10 +67,6 @@ export class TexImage2D implements IDisposable {
       throw new Error("Unsupported number of images");
     }
 
-    if (texParameters.generateMipmaps) {
-      gl.generateMipmap(this.target);
-    }
-
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
 
@@ -88,6 +84,10 @@ export class TexImage2D implements IDisposable {
           Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy),
         );
       }
+    }
+
+    if (texParameters.generateMipmaps) {
+      gl.generateMipmap(this.target);
     }
 
     gl.bindTexture(this.target, null);

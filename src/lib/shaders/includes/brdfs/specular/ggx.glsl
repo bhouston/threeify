@@ -64,3 +64,11 @@ void BRDF_Specular_GGX_Multiscattering_Environment( const in Surface surface, co
 
 }
 */
+
+// based on filament
+void specularAnisotropicBentNormal( inout Surface surface, const float anisotropyLocal, const float roughnessFactor) {
+  vec3  anisotropyDirection = anisotropyLocal >= 0.0 ? surface.tangent : surface.bitangent;
+  vec3  anisotropicTangent  = cross(anisotropyDirection, surface.viewDirection);
+  vec3  anisotropicNormal   = cross(anisotropicTangent, anisotropyDirection);
+  surface.normal = normalize(mix(surface.normal, anisotropicNormal, anisotropyLocal));
+}

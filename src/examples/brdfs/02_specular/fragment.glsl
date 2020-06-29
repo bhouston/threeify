@@ -33,13 +33,9 @@ void main() {
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   PunctualLight punctualLight;
-  punctualLight.type = LightType_Point;
   punctualLight.position = pointLightViewPosition;
   punctualLight.color = pointLightColor;
-  punctualLight.direction = vec3(0.0);
   punctualLight.range = pointLightRange;
-  punctualLight.innerConeCos = 0.0;
-  punctualLight.outerConeCos = 0.0;
 
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );

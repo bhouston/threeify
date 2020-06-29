@@ -13,6 +13,9 @@ mat3 tangentToLocalTransform( vec3 tangent, vec3 bitangent, vec3 normal ) {
 //vec3 normalDelta = rgbToNormal( texture2D( normalMap, uv( normalUvIndex ) ).xyz ); // overrides both flatShading and attribute normals
 
 
+vec3 getApproximateSurfaceNormal( vec3 position ) {
+  return normalize(cross(dFdx(v_Position), dFdy(v_Position)));
+}
 //
 // Source:
 //   https://github.com/KhronosGroup/glTF-Sample-Viewer/blob/master/src/shaders/pbr.frag
