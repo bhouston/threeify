@@ -1,4 +1,4 @@
-import { icosahedron } from "../../../lib/geometry/primitives/Polyhedrons";
+import { disk } from "../../../lib/geometry/primitives/disk";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -17,10 +17,9 @@ import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
-import { plane } from "../../../lib/geometry/primitives/Plane";
 
 async function init(): Promise<null> {
-  const geometry = plane(1, 1, 1, 1);
+  const geometry = disk(0.5, 64);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const anisotropicFlowTexture = new Texture(await fetchImage("/assets/textures/anisotropic/radialLarge.jpg"));
   const roughnessTexture = new Texture(await fetchImage("/assets/textures/anisotropic/radialGrooves.png"));
@@ -61,7 +60,7 @@ async function init(): Promise<null> {
       new Euler(now * 0.00006, now * 0.0002, now * 0.00004, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-      uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0.3, 0.5);
+    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0.3, 0.5);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 

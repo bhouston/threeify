@@ -1,5 +1,5 @@
 import { convertToInterleavedGeometry } from "../../../lib/geometry/Geometry.Functions";
-import { icosahedron } from "../../../lib/geometry/primitives/Polyhedrons";
+import { icosahedron } from "../../../lib/geometry/primitives/polyhedrons";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
