@@ -67,10 +67,6 @@ export class TexImage2D implements IDisposable {
       throw new Error("Unsupported number of images");
     }
 
-    if (texParameters.generateMipmaps) {
-      gl.generateMipmap(this.target);
-    }
-
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
 
@@ -80,6 +76,7 @@ export class TexImage2D implements IDisposable {
     if (texParameters.anisotropyLevels > 1) {
       const tfa = this.context.glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
+        console.log( 'generating anisotropic mipmaps');
         // TODO: Cache this at some point for speed improvements
         const maxAllowableAnisotropy = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
         gl.texParameterf(
@@ -88,6 +85,11 @@ export class TexImage2D implements IDisposable {
           Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy),
         );
       }
+    }
+
+    if (texParameters.generateMipmaps) {
+      console.log( 'generating mipmaps');
+      gl.generateMipmap(this.target);
     }
 
     gl.bindTexture(this.target, null);
