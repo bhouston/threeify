@@ -55,6 +55,7 @@ export class RenderingContext {
     options.alpha = true;
     options.antialias = true;
     options.depth = true;
+    options.premultipliedAlpha = true;
     options.stencil = true;
     {
       const gl = canvas.getContext("webgl", options);
