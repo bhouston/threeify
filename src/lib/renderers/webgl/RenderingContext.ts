@@ -50,8 +50,14 @@ export class RenderingContext {
       canvas.style.width = "100%";
       canvas.style.height = "100%";
     }
+
+    const options: WebGLContextAttributes = {};
+    options.alpha = true;
+    options.antialias = true;
+    options.depth = true;
+    options.stencil = true;
     {
-      const gl = canvas.getContext("webgl");
+      const gl = canvas.getContext("webgl", options);
       if (gl === null) {
         throw new Error("webgl not supported");
       }
