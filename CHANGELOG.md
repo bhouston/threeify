@@ -1,3 +1,11 @@
+# [1.6.0](https://github.com/threeify/threeify/compare/v1.5.0...v1.6.0) (2020-06-29)
+
+
+### Features
+
+*  primitive factories source files are now lower case. ([737e8aa](https://github.com/threeify/threeify/commit/737e8aa68538d1fcbde1dc56d71ed366112c86b0))
+* add disk primitive ([dfef3aa](https://github.com/threeify/threeify/commit/dfef3aad09e711102e4f82bacb73720ce8bed6dd))
+
 # [1.5.0](https://github.com/threeify/threeify/compare/v1.4.0...v1.5.0) (2020-06-29)
 
 
