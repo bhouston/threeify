@@ -8,8 +8,6 @@ uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightColor;
 uniform float pointLightRange;
 
-uniform float     specularRoughnessModulator;
-uniform sampler2D specularRoughnessMap;
 uniform float     specularAnisotropicFlowModulator;
 uniform sampler2D specularAnisotropicFlowMap;
 
@@ -21,10 +19,10 @@ uniform sampler2D specularAnisotropicFlowMap;
 
 void main() {
 
-  vec3 albedo = vec3( 1.0 );
-  vec3 specular = vec3( 1.0 );
-  float specularRoughness = specularRoughnessModulator * texture2D( specularRoughnessMap, v_uv0 ).r;
-  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * texture2D( specularAnisotropicFlowMap, v_uv0 ).gr * 2.0 - vec2(1.0);
+  vec3 albedo = vec3( 0.4, 0.3, 1.0 );
+  vec3 specular = vec3( 1.0, 0.0, 0.0 );
+  float specularRoughness = 0.25;
+  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * texture2D( specularAnisotropicFlowMap, v_uv0 ).rg * 2.0 - vec2(1.0);
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
