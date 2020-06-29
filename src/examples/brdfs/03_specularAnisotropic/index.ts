@@ -61,7 +61,6 @@ async function init(): Promise<null> {
       uniforms.localToWorld,
     );
     uniforms.specularAnisotropicFlowMap = Math.floor(now / 5000) % 2 === 0 ? anisotropicFlow1Map : anisotropicFlow2Map;
-    // uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0.3, 0.5);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 

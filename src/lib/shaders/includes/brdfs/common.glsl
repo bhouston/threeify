@@ -31,8 +31,8 @@ void computeTangentFrame( inout Surface surface, vec2 tangentSpaceUv )
 
   // NOTE: in the original code the ng term was saved, why?  It is the non normal map modulated normal.  Why is this needed?
   surface.normal = n;
-  surface.tangent = t;
-  surface.bitangent = b;
+  surface.tangent = -b;
+  surface.bitangent = t;
 }
 
 void rotateTangentFrame( inout Surface surface, vec2 anisotropicDirection ) {

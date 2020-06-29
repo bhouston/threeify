@@ -31,7 +31,6 @@ void main() {
 
   computeTangentFrame( surface, v_uv0 );
   rotateTangentFrame( surface, normalize( specularAnisotropicFlow ) );
-  rotateTangentFrame( surface, normalize( vec2(0.0, 1.0) ) );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
