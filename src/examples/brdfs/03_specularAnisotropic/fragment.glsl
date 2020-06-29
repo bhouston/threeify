@@ -19,8 +19,8 @@ uniform sampler2D specularAnisotropicFlowMap;
 
 void main() {
 
-  vec3 albedo = vec3( 0.4, 0.3, 1.0 );
-  vec3 specular = vec3( 1.0, 0.0, 0.0 );
+  vec3 albedo = vec3( 1.0 );
+  vec3 specular = vec3( 1.0 );
   float specularRoughness = 0.25;
   vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * texture2D( specularAnisotropicFlowMap, v_uv0 ).rg * 2.0 - vec2(1.0);
 
@@ -31,6 +31,7 @@ void main() {
 
   computeTangentFrame( surface, v_uv0 );
   rotateTangentFrame( surface, normalize( specularAnisotropicFlow ) );
+  rotateTangentFrame( surface, normalize( vec2(0.0, 1.0) ) );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;

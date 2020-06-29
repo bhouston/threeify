@@ -41,8 +41,8 @@ async function init(): Promise<null> {
     viewToScreen: makeMatrix4PerspectiveFov(35, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
-    pointLightViewPosition: new Vector3(0.5, 0, -0.5),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(0.3),
+    pointLightViewPosition: new Vector3(0.0, 0, 0.0),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(0.7),
     pointLightRange: 6.0,
 
     // materials
@@ -57,7 +57,7 @@ async function init(): Promise<null> {
 
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(-0.3 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
+      new Euler(Math.cos(now * 0.0) * 0.7 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
       uniforms.localToWorld,
     );
     uniforms.specularAnisotropicFlowMap = Math.floor(now / 5000) % 2 === 0 ? anisotropicFlow1Map : anisotropicFlow2Map;
