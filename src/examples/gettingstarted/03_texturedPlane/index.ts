@@ -1,4 +1,4 @@
-import { plane } from "../../../lib/geometry/primitives/Plane";
+import { plane } from "../../../lib/geometry/primitives/plane";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";

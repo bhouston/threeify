@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/Box";
+import { box } from "../../../lib/geometry/primitives/box";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";

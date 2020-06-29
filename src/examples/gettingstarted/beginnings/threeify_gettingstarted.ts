@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/Box";
+import { box } from "../../../lib/geometry/primitives/box";
 import { MaterialOutputs } from "../../../lib/materials/MaterialOutputs";
 import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";
 import { PerspectiveCamera } from "../../../lib/nodes/cameras/PerspectiveCamera";

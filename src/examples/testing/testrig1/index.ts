@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/Box";
+import { box } from "../../../lib/geometry/primitives/box";
 import { PhysicalMaterial } from "../../../lib/materials/PhysicalMaterial";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Vector3 } from "../../../lib/math/Vector3";
