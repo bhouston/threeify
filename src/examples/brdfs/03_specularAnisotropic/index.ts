@@ -17,24 +17,27 @@ import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
+import { plane } from "../../../lib/geometry/primitives/Plane";
 
 async function init(): Promise<null> {
-  const geometry = icosahedron(0.75, 5);
+  const geometry = plane(1, 1, 1, 1);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const texture = new Texture(await fetchImage("/assets/textures/planets/jupiter_2k.jpg"));
+  const anisotropicFlowTexture = new Texture(await fetchImage("/assets/textures/anisotropic/radialLarge.jpg"));
+  const roughnessTexture = new Texture(await fetchImage("/assets/textures/anisotropic/radialGrooves.png"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
   if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
     document.body.appendChild(canvasFramebuffer.canvas);
   }
-  const map = makeTexImage2DFromTexture(context, texture);
+  const anisotropicFlowMap = makeTexImage2DFromTexture(context, anisotropicFlowTexture);
+  const roughnessMap = makeTexImage2DFromTexture(context, roughnessTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(65, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
     pointLightViewPosition: new Vector3(1, 0, -0.5),
@@ -42,12 +45,10 @@ async function init(): Promise<null> {
     pointLightRange: 6.0,
 
     // materials
-    albedoModulator: new Vector3(1, 1, 1),
-    albedoMap: map,
-    specularModulator: new Vector3(1, 1, 1),
-    specularMap: map,
     specularRoughnessModulator: 1.0,
-    specularRoughnessMap: map,
+    specularRoughnessMap: roughnessMap,
+    specularAnisotropicFlowModulator: 1.0,
+    specularAnisotropicFlowMap: anisotropicFlowMap,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -60,7 +61,7 @@ async function init(): Promise<null> {
       new Euler(now * 0.00006, now * 0.0002, now * 0.00004, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0, 0.5);
+      uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0.3, 0.5);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 
