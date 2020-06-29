@@ -1,4 +1,4 @@
-import { disk } from "../../../lib/geometry/primitives/disk";
+import { cylinder } from "../../../lib/geometry/primitives/cylinder";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -19,7 +19,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = disk(0.5, 64);
+  const geometry = cylinder(0.5, 1.0, 64);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const anisotropicFlowTexture = new Texture(await fetchImage("/assets/textures/anisotropic/radialLarge.jpg"));
   const roughnessTexture = new Texture(await fetchImage("/assets/textures/anisotropic/radialGrooves.png"));
