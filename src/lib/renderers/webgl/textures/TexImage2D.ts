@@ -76,7 +76,6 @@ export class TexImage2D implements IDisposable {
     if (texParameters.anisotropyLevels > 1) {
       const tfa = this.context.glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
-        console.log( 'generating anisotropic mipmaps');
         // TODO: Cache this at some point for speed improvements
         const maxAllowableAnisotropy = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
         gl.texParameterf(
@@ -88,7 +87,6 @@ export class TexImage2D implements IDisposable {
     }
 
     if (texParameters.generateMipmaps) {
-      console.log( 'generating mipmaps');
       gl.generateMipmap(this.target);
     }
 
