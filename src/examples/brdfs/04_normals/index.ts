@@ -1,4 +1,4 @@
-import { disk } from "../../../lib/geometry/primitives/disk";
+import { icosahedron } from "../../../lib/geometry/primitives/polyhedrons";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -7,6 +7,7 @@ import {
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
+import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
@@ -19,35 +20,31 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = disk(0.5, 64);
+  const geometry = icosahedron(0.75, 5);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const anisotropicFlow1Texture = new Texture(
-    await fetchImage("/assets/textures/anisotropic/radialSmallOverlapping.jpg"),
-  );
-  const anisotropicFlow2Texture = new Texture(await fetchImage("/assets/textures/anisotropic/radialLarge.jpg"));
+  const normalsTexture = new Texture(await fetchImage("/assets/textures/golfball/normals.jpg"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
   if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
     document.body.appendChild(canvasFramebuffer.canvas);
   }
-  const anisotropicFlow1Map = makeTexImage2DFromTexture(context, anisotropicFlow1Texture);
-  const anisotropicFlow2Map = makeTexImage2DFromTexture(context, anisotropicFlow2Texture);
+  const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(35, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4PerspectiveFov(65, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(0.7),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(2.9),
     pointLightRange: 6.0,
 
     // materials
-    specularAnisotropicFlowModulator: 1.0,
-    specularAnisotropicFlowMap: anisotropicFlow1Map,
+    normalModulator: new Vector2(1, 1),
+    normalMap: normalsMap,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -55,10 +52,10 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(Math.cos(now * 0.0) * 0.7 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
+      new Euler(Math.PI * Math.cos( now * 0.00034), -now * 0.0006, 0, EulerOrder.YXZ),
       uniforms.localToWorld,
     );
-    uniforms.specularAnisotropicFlowMap = Math.floor(now / 5000) % 2 === 0 ? anisotropicFlow1Map : anisotropicFlow2Map;
+    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0, 1.5);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
