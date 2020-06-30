@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/threeify/threeify/compare/v1.8.0...v1.9.0) (2020-06-30)
+
+
+### Features
+
+* normal map example. ([b3009b8](https://github.com/threeify/threeify/commit/b3009b8110fd9848952a3c917229221f1ad4c53d))
+
 # [1.8.0](https://github.com/threeify/threeify/compare/v1.7.0...v1.8.0) (2020-06-29)
 
 
