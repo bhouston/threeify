@@ -19,7 +19,7 @@ vec3 BRDF_Specular_GGX( const in DirectIllumination directIllumination, const in
 	float G = G_GGX_SmithCorrelated( alpha, dotNL, dotNV );
 	float D = D_GGX( alpha, dotNH );
 
-	return directIllumination.color * F * ( G * D );
+	return directIllumination.color * dotNL * F * ( G * D );
 
 } // validated
 
