@@ -53,8 +53,6 @@ async function init(): Promise<null> {
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   function animate(): void {
-    requestAnimationFrame(animate);
-
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.00006, now * 0.0002, now * 0.00004, EulerOrder.XZY),
@@ -62,6 +60,8 @@ async function init(): Promise<null> {
     );
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0, 0.5);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+
+    requestAnimationFrame(animate);
   }
 
   animate();

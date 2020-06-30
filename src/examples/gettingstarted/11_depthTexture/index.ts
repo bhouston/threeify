@@ -53,8 +53,6 @@ async function init(): Promise<null> {
   const framebuffer = new Framebuffer(context, [depthAttachment]);
 
   function animate(): void {
-    requestAnimationFrame(animate);
-
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.001, now * 0.0033, now * 0.00077),
@@ -68,6 +66,8 @@ async function init(): Promise<null> {
     uniforms.map = depthAttachment.texImage2D;
     canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+
+    requestAnimationFrame(animate);
   }
 
   animate();

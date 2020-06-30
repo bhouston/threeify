@@ -41,14 +41,14 @@ async function init(): Promise<null> {
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   function animate(): void {
-    requestAnimationFrame(animate);
-
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld,
     );
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+
+    requestAnimationFrame(animate);
   }
 
   animate();
