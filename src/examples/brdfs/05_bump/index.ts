@@ -41,8 +41,8 @@ async function init(): Promise<null> {
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
-    pointLightViewPosition: new Vector3(0.0, 0, 3.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(30.0),
+    pointLightViewPosition: new Vector3(2.0, 0, 3.0),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(10.0),
     pointLightRange: 12.0,
 
     // materials
@@ -57,10 +57,10 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
+      new Euler(0, 0, now * 0.00021, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
+    // uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.cos(now * 0.002) * 2.0, 0.5);
     canvasFramebuffer.clear(AttachmentBits.All, blackClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 

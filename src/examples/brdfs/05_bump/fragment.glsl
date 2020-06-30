@@ -24,7 +24,6 @@ void main() {
   vec3 albedo = texture2D( albedoMap, v_uv0 ).rgb;
   vec3 specular = vec3(1.0);
   float specularRoughness = texture2D( specularRoughnessMap, v_uv0 ).r;
-  vec3 normal = bumpMapToNormal( bumpMap, v_uv0, 1.0 );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
@@ -32,7 +31,7 @@ void main() {
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   uvToTangentFrame( surface, v_uv0 );
-  perturbSurfaceNormal_TangentSpace( surface, normal );
+  perturbSurfaceNormal_BumpMap( surface, bumpMap, v_uv0, 0.001 );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
