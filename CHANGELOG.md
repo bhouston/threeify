@@ -1,3 +1,11 @@
+# [1.10.0](https://github.com/threeify/threeify/compare/v1.9.0...v1.10.0) (2020-06-30)
+
+
+### Features
+
+* add ambient BRDF ([49ac01a](https://github.com/threeify/threeify/commit/49ac01a8fad259e462a539d786cc76fceb62d875))
+* move shader_lod extension to an optional extension ([3790130](https://github.com/threeify/threeify/commit/3790130622860c2480d93086460e2b56e1497bcf))
+
 # [1.9.0](https://github.com/threeify/threeify/compare/v1.8.0...v1.9.0) (2020-06-30)
 
 
