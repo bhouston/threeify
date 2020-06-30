@@ -30,7 +30,7 @@ void main() {
   surface.normal = normalize( v_viewSurfaceNormal );
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
-  computeTangentFrame( surface, v_uv0 );
+  uvToTangentFrame( surface, v_uv0 );
   rotateTangentFrame( surface, normalize( specularAnisotropicFlow ) );
 
   PunctualLight punctualLight;
@@ -41,10 +41,10 @@ void main() {
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
+  specularAnisotropicBentNormal( surface, length( specularAnisotropicFlow ), specularRoughness );
+
   vec3 outputColor = vec3(0.0);
   outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
-
-  specularAnisotropicBentNormal( surface, length( specularAnisotropicFlow ), specularRoughness );
   outputColor += BRDF_Specular_GGX( directIllumination, surface, specular, specularRoughness );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
