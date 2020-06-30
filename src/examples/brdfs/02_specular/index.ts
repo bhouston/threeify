@@ -9,7 +9,9 @@ import {
 } from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -33,12 +35,12 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(65, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
     pointLightViewPosition: new Vector3(1, 0, -0.5),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(1.4),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(20.0),
     pointLightRange: 6.0,
 
     // materials
@@ -51,14 +53,16 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1.0);
 
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.00006, now * 0.0002, now * 0.00004, EulerOrder.XZY),
+      new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 2.0, 0, 0.5);
+    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
+    canvasFramebuffer.clear(AttachmentBits.All, blackClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
