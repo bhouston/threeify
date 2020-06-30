@@ -15,7 +15,7 @@ function insertLineNumbers(sourceCode: string): string {
   const outputLines = ["\n"];
   const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
   for (let l = 0; l < inputLines.length; l++) {
-    const lAsString = `000000${l}`.slice(-maxLineCharacters-1);
+    const lAsString = `000000${l}`.slice(-maxLineCharacters - 1);
     outputLines.push(`${lAsString}: ${inputLines[l]}`);
   }
   return outputLines.join("\n");
@@ -49,7 +49,10 @@ export class Shader implements IDisposable {
       prefix.push("#version 300 es");
     }
     if (shaderType === ShaderType.Fragment) {
-      prefix.push("#extension GL_EXT_shader_texture_lod : enable");
+      const glxo = context.glxo;
+      if (glxo.EXT_shader_texture_lod !== null) {
+        prefix.push("#extension GL_EXT_shader_texture_lod : enable");
+      }
       prefix.push("#extension GL_OES_standard_derivatives : enable");
     }
     const combinedSourceCode = prefix.join("\n") + "\n" + sourceCode;

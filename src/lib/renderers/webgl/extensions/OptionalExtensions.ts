@@ -10,6 +10,7 @@ export class KHR_parallel_shader_compile {
 /* eslint-disable @typescript-eslint/naming-convention */
 export class OptionalExtensions {
   // EXT_frag_depth: EXT_frag_depth | null;
+  EXT_shader_texture_lod: EXT_shader_texture_lod | null;
   // EXT_sRGB: EXT_sRGB | null;
   EXT_texture_filter_anisotropic: EXT_texture_filter_anisotropic | null;
   KHR_parallel_shader_compile: KHR_parallel_shader_compile | null;
@@ -27,6 +28,7 @@ export class OptionalExtensions {
 
   constructor(gl: WebGLRenderingContext) {
     // this.EXT_frag_depth = gl.getExtension("EXT_frag_depth");
+    this.EXT_shader_texture_lod = gl.getExtension("EXT_shader_texture_lod");
     // this.EXT_sRGB = gl.getExtension("EXT_sRGB");
     this.EXT_texture_filter_anisotropic = gl.getExtension("EXT_texture_filter_anisotropic");
     this.KHR_parallel_shader_compile =
