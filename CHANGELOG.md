@@ -1,3 +1,11 @@
+# [1.11.0](https://github.com/threeify/threeify/compare/v1.10.0...v1.11.0) (2020-06-30)
+
+
+### Features
+
+* add bump map example ([deeebe2](https://github.com/threeify/threeify/commit/deeebe2d7c32333f93805186d804e4f2b19b9ee8))
+* add fast bumpToNormal glsl derivation ([9b03dd2](https://github.com/threeify/threeify/commit/9b03dd21ddbe14fe35e2315ba3860da5c04527a8))
+
 # [1.10.0](https://github.com/threeify/threeify/compare/v1.9.0...v1.10.0) (2020-06-30)
 
 
