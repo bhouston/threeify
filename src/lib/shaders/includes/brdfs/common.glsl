@@ -13,47 +13,41 @@ struct Surface {
   vec3 viewDirection;
 };
 
+mat3 surfaceToNormalMatrix( in Surface surface ) {
+  return mat3(surface.tangent, surface.bitangent, surface.normal);
+}
 // Get normal, tangent and bitangent vectors.
 // based on the glTF reference viewer
-void computeTangentFrame( inout Surface surface, vec2 tangentSpaceUv ) {
+void uvToTangentFrame( inout Surface surface, in vec2 uv ) {
+  vec3 tempTangent = dFdx( uv.y ) * dFdy(surface.position) - dFdy( uv.y ) * dFdx(surface.position);
 
-  vec3 t_ = dFdx( tangentSpaceUv.y ) * dFdy(surface.position) - dFdy( tangentSpaceUv.y ) * dFdx(surface.position);
-
-  vec3 n, t, b, ng;
-  ng = normalize(surface.normal);
-
-  t = normalize(t_ - ng * dot(ng, t_));
-  b = cross(ng, t);
-
-  // NOTE: in the original code the ng term was saved, why?  It is the non normal map modulated normal.  Why is this needed?
-  surface.normal = ng;
-  surface.tangent = b;
-  surface.bitangent = -t;
+  surface.normal = normalize(surface.normal);
+  surface.bitangent = -normalize(tempTangent - surface.normal * dot(surface.normal, tempTangent));
+  surface.tangent = -cross(surface.normal, surface.bitangent);
 }
 
-void rotateTangentFrame( inout Surface surface, vec2 anisotropicDirection ) {
+void rotateTangentFrame( inout Surface surface, in vec2 anisotropicDirection ) {
   // Due to anisoptry, the tangent can be further rotated around the geometric normal.
   // NOTE: The null anisotropic direction value is (1, 0, 0)
-  mat3 tangentFrame = mat3(surface.tangent, surface.bitangent, surface.normal);
-  surface.tangent = tangentFrame * vec3( anisotropicDirection, 0.0 );
-  surface.bitangent = tangentFrame * vec3( anisotropicDirection.y, -anisotropicDirection.x, 0.0 );
+  mat3 normalMatrix = surfaceToNormalMatrix( surface );
+  surface.tangent = normalMatrix * vec3( anisotropicDirection, 0.0 );
+  surface.bitangent = normalMatrix * vec3( anisotropicDirection.y, -anisotropicDirection.x, 0.0 );
 }
 
 // this should be done after rotating the tangent frame
-void perturbSurfaceNormal_ObjectSpace( inout Surface surface, vec3 normal ) {
-
+void perturbSurfaceNormal_ObjectSpace( inout Surface surface, in vec3 normal ) {
   // NOTE: it appears that if you distort the normal via a normal map you do not have to change tangent or bitangent.
   // It appears that you can do that normal moduluation after this tangent frame construction
-  surface.normal = mat3(surface.tangent, surface.bitangent, surface.normal) * normalize(normal);
-
+  mat3 normalMatrix = surfaceToNormalMatrix( surface );
+  surface.normal = normalMatrix * normalize(normal);
 }
-// this should be done after rotating the tangent frame
-void perturbSurfaceNormal_TangentSpace( inout Surface surface, vec3 normal ) {
 
+// this should be done after rotating the tangent frame
+void perturbSurfaceNormal_TangentSpace( inout Surface surface, in vec3 normal ) {
   // NOTE: it appears that if you distort the normal via a normal map you do not have to change tangent or bitangent.
   // It appears that you can do that normal moduluation after this tangent frame construction
-  surface.normal = normalize( mat3(surface.tangent, surface.bitangent, surface.normal) * normal);
-
+  mat3 normalMatrix = surfaceToNormalMatrix( surface );
+  surface.normal = normalMatrix * normalize( normal );
 }
 // this likely should be done after perturbing and rotating.
 void alignSurfaceWithViewDirection( inout Surface surface ) {
@@ -64,4 +58,16 @@ void alignSurfaceWithViewDirection( inout Surface surface ) {
   surface.bitangent *= facing;
   surface.normal *= facing;
 
+}
+
+vec3 bumpMapToNormal( in sampler2D bumpMap, in vec2 uv, in float bumpScale ) {
+
+	float B = texture2D( bumpMap, uv ).x;
+	vec2 gradB = vec2(
+      texture2D( bumpMap, uv + dFdx( uv ) ).x,
+		  texture2D( bumpMap, uv + dFdy( uv ) ).x ) - B;
+
+  gradB *= bumpScale;
+
+	return vec3( gradB.x, gradB.y, 1.0 - length( gradB ) );
 }

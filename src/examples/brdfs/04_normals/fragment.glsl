@@ -31,7 +31,7 @@ void main() {
   surface.normal = normalize( v_viewSurfaceNormal );
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
-  computeTangentFrame( surface, v_uv0 );
+  uvToTangentFrame( surface, v_uv0 );
   perturbSurfaceNormal_TangentSpace( surface, normal );
 
   PunctualLight punctualLight;
