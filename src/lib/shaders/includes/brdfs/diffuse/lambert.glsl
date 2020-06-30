@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #pragma include <math/math>
 #pragma include <brdfs/common>
 
