@@ -24,6 +24,8 @@ void main() {
   vec3 albedo = vec3(1.0,1.0,1.0);
   vec3 specular = vec3(1.0);
   float specularRoughness = 0.25;
+  vec3 F0 = ( specular * specular ) * 0.16;
+
   vec3 normal = vec3( normalModulator, 1.0 ) * ( texture2D( normalMap, v_uv0 ).grb * 2.0 - 1.0 );
 
   Surface surface;
@@ -45,7 +47,7 @@ void main() {
   vec3 outputColor = vec3(0.0);
   outputColor += BRDF_Ambient_Basic( ambient, albedo );
   outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
-  outputColor += BRDF_Specular_GGX( directIllumination, surface, specular, specularRoughness );
+  outputColor += BRDF_Specular_GGX( directIllumination, surface, F0, specularRoughness );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.0;

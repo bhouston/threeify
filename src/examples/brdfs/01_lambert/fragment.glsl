@@ -18,7 +18,7 @@ uniform sampler2D albedoMap;
 
 void main() {
 
-  vec3 albedo = albedoModulator * texture2D( albedoMap, v_uv0 ).rgb;
+  vec3 albedo = albedoModulator * sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
 
   PunctualLight punctualLight;
   punctualLight.type = LightType_Point;
