@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/threeify/threeify/compare/v1.11.0...v1.12.0) (2020-07-02)
+
+
+### Bug Fixes
+
+* make bump mapping work properly with screenspace gradients. ([a95da3e](https://github.com/threeify/threeify/commit/a95da3e532c88ed2f68122c80fc09cff0057c1c3))
+
+
+### Features
+
+* enable natural world space bump map scaling. ([1172b11](https://github.com/threeify/threeify/commit/1172b115e9cc52a41ba4744837cbff0ccaed67b0))
+
 # [1.11.0](https://github.com/threeify/threeify/compare/v1.10.0...v1.11.0) (2020-06-30)
 
 
