@@ -60,14 +60,26 @@ void alignSurfaceWithViewDirection( inout Surface surface ) {
 
 }
 
-vec3 bumpMapToNormal( in sampler2D bumpMap, in vec2 uv, in float bumpScale ) {
+void perturbSurfaceNormal_BumpMap( inout Surface surface, in sampler2D bumpMap, in vec2 bumpUv, in float bumpScale ) {
+	vec2 gradBump = vec2(
+      texture2D( bumpMap, bumpUv + dFdx( bumpUv ) ).x,
+		  texture2D( bumpMap, bumpUv + dFdy( bumpUv ) ).x );
+  gradBump -= texture2D( bumpMap, bumpUv ).x;
+  gradBump *= bumpScale;
 
-	float B = texture2D( bumpMap, uv ).x;
-	vec2 gradB = vec2(
-      texture2D( bumpMap, uv + dFdx( uv ) ).x,
-		  texture2D( bumpMap, uv + dFdy( uv ) ).x ) - B;
+  vec3 dPdx = dFdx( surface.position );
+  vec3 dPdy = dFdy( surface.position );
 
-  gradB *= bumpScale;
+  gradBump *= vec2( length( dPdx ), length( dPdy ) );
 
-	return vec3( gradB.x, gradB.y, 1.0 - length( gradB ) );
+  vec3 R1 = cross( dPdy, surface.normal );
+  vec3 R2 = cross( surface.normal, dPdx );
+
+  float fDet = dot( dPdx, R1 );
+
+  fDet *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+
+  vec3 vGrad = sign( fDet ) * ( gradBump.x * R1 + gradBump.y * R2 );
+  surface.normal = normalize( abs( fDet ) * surface.normal - vGrad );
+
 }

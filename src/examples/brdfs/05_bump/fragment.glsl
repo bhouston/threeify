@@ -21,18 +21,17 @@ uniform sampler2D specularRoughnessMap;
 
 void main() {
 
-  vec3 albedo = texture2D( albedoMap, v_uv0 ).rgb;
+  vec3 albedo = sRGBToLinear( texture2D( albedoMap, v_uv0 * 0.5 ).rgb );
   vec3 specular = vec3(1.0);
-  float specularRoughness = texture2D( specularRoughnessMap, v_uv0 ).r;
-  vec3 normal = bumpMapToNormal( bumpMap, v_uv0, 1.0 );
+  float specularRoughness = texture2D( specularRoughnessMap, v_uv0 * 0.5 ).r;
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
   surface.normal = normalize( v_viewSurfaceNormal );
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
-  uvToTangentFrame( surface, v_uv0 );
-  perturbSurfaceNormal_TangentSpace( surface, normal );
+  uvToTangentFrame( surface, v_uv0 * 0.5 );
+	perturbSurfaceNormal_BumpMap( surface, bumpMap, v_uv0 * 0.5, 4.0 );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
