@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/threeify/threeify/compare/v1.13.0...v1.14.0) (2020-07-02)
+
+
+### Features
+
+* example bundler + minifier + brotli compressor script ([7d56798](https://github.com/threeify/threeify/commit/7d56798ac2c6df7ede2299920f2684630d57c9a7))
+
 # [1.13.0](https://github.com/threeify/threeify/compare/v1.12.0...v1.13.0) (2020-07-02)
 
 
