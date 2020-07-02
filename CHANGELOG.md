@@ -1,3 +1,15 @@
+# [1.13.0](https://github.com/threeify/threeify/compare/v1.12.0...v1.13.0) (2020-07-02)
+
+
+### Bug Fixes
+
+* sRGB decoding of albedo textures. ([4ae4e29](https://github.com/threeify/threeify/commit/4ae4e2936486440319b1ae82ad11529f09b2894e))
+
+
+### Features
+
+* adopt F0 nomiclature for clarify ([b2d1b3c](https://github.com/threeify/threeify/commit/b2d1b3c96242d5083e97b5d8ef81ade18bbb3a4f))
+
 # [1.12.0](https://github.com/threeify/threeify/compare/v1.11.0...v1.12.0) (2020-07-02)
 
 
