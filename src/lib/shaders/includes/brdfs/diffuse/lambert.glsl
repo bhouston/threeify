@@ -4,13 +4,9 @@
 
 // three.js
 vec3 BRDF_Diffuse_Lambert(
-  const in DirectIllumination directIllumination,
-  const in Surface surface,
   const in vec3 albedo ) {
 
-  float dotNL = saturate( dot( directIllumination.lightDirection, surface.normal ) );
-
-	return dotNL * directIllumination.color * albedo * RECIPROCAL_PI;
+	return albedo * RECIPROCAL_PI;
 
 } // validated
 

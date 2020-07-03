@@ -20,19 +20,20 @@ uniform sampler2D specularRoughnessMap;
 #pragma include <color/spaces/srgb>
 
 void main() {
-  vec2 uv = v_uv0 * 0.5;
-  vec3 albedo = sRGBToLinear( texture2D( albedoMap, uv ).rgb );
+
+  vec3 ambient = vec3(0.0);
+  vec3 albedo = sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
   vec3 specular = vec3(1.0);
-  float specularRoughness = texture2D( specularRoughnessMap, uv ).r;
-  vec3 F0 = ( specular * specular ) * 0.16;
+  float specularRoughness = texture2D( specularRoughnessMap, v_uv0 ).r;
+  vec3 specularF0 = ( specular * specular ) * 0.16;
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
   surface.normal = normalize( v_viewSurfaceNormal );
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
-  uvToTangentFrame( surface, uv );
-	perturbSurfaceNormal_BumpMap( surface, bumpMap, uv, 4.0 );
+  uvToTangentFrame( surface, v_uv0 );
+	perturbSurfaceNormal_BumpMap( surface, bumpMap, v_uv0, 4.0 );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -42,9 +43,12 @@ void main() {
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
+  vec3 lightDirection = directIllumination.lightDirection;
+  vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
+
   vec3 outputColor = vec3(0.0);
-  outputColor += BRDF_Specular_GGX( directIllumination, surface, F0, specularRoughness );
-  outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
+  outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
+  outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.0;
