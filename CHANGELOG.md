@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/threeify/threeify/compare/v1.14.0...v1.15.0) (2020-07-03)
+
+
+### Features
+
+* clear coat example (not yet energy conserving) ([61f95b6](https://github.com/threeify/threeify/commit/61f95b6c2283201d80805010f84ea921b0aed8d0))
+
 # [1.14.0](https://github.com/threeify/threeify/compare/v1.13.0...v1.14.0) (2020-07-02)
 
 
