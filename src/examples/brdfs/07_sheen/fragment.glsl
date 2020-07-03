@@ -8,26 +8,24 @@ uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightColor;
 uniform float pointLightRange;
 
-uniform sampler2D albedoMap;
-
-uniform sampler2D clearCoatBumpMap;
-
+uniform vec3 sheenColor;
+uniform float sheenIntensity;
+uniform float sheenRoughness;
 
 #pragma include <brdfs/common>
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
+#pragma include <brdfs/specular/sheen>
 #pragma include <color/spaces/srgb>
 
 void main() {
 
   vec3 ambient = vec3(0.0);
-  vec3 albedo = sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
+  vec3 albedo = vec3( 0.0, 0.0, 1.0 );
   vec3 specular = vec3(0.15);
-  float specularRoughness = 0.25;
-  vec3 clearCoatF0 = vec3( 1.0 );
-  float clearCoatRoughness = 0.1;
+  float specularRoughness = 0.5;
   vec3 specularF0 = ( specular * specular ) * 0.16;
 
   Surface surface;
@@ -36,9 +34,6 @@ void main() {
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   uvToTangentFrame( surface, v_uv0 );
-
-  Surface clearCoatSurface = surface;
-  perturbSurfaceNormal_BumpMap( clearCoatSurface, clearCoatBumpMap, v_uv0 * 1.0, 1.0 );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -52,8 +47,8 @@ void main() {
   vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
 
   vec3 outputColor = vec3(0.0);
-  outputColor += irradiance * BRDF_Specular_GGX( clearCoatSurface, lightDirection, clearCoatF0, clearCoatRoughness );
-  outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
+  outputColor += irradiance * BRDF_Specular_Sheen( surface, lightDirection, sheenColor, sheenIntensity, sheenRoughness );
+  outputColor += (1.0 - sheenIntensity ) * irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
   outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
