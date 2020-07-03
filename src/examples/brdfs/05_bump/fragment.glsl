@@ -43,8 +43,8 @@ void main() {
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
   vec3 outputColor = vec3(0.0);
-  outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
   outputColor += BRDF_Specular_GGX( directIllumination, surface, F0, specularRoughness );
+  outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.0;

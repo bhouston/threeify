@@ -64,15 +64,15 @@ void alignSurfaceWithViewDirection( inout Surface surface ) {
 // http://api.unrealengine.com/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace/mm_sfgrad_bump.pdf
 void perturbSurfaceNormal_BumpMap( inout Surface surface, in sampler2D bumpMap, in vec2 bumpUv, in float bumpScale ) {
 
-  vec3 dPdx = dFdx( surface.position );
-  vec3 dPdy = dFdy( surface.position );
+  vec3 dPdx = normalize( dFdx( surface.position ) );
+  vec3 dPdy = normalize( dFdy( surface.position ) );
 
   // screen space bump map gradient
 	vec2 gradBump = vec2(
       texture2D( bumpMap, bumpUv + dFdx( bumpUv ) ).x,
 		  texture2D( bumpMap, bumpUv + dFdy( bumpUv ) ).x ) -
       texture2D( bumpMap, bumpUv ).x;
-  gradBump *= vec2( length( dPdx ), length( dPdy ) ) * bumpScale; // scale in world space.
+  gradBump *= bumpScale; // scale in world space.
 
   // screen oriented orthogonal basis
   vec3 R1 = cross( dPdy, surface.normal );
