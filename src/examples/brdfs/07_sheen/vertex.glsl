@@ -12,7 +12,7 @@ varying vec2 v_uv0;
 
 void main() {
 
-  v_viewSurfaceNormal = normalize( ( worldToView * localToWorld * vec4( normalize( position ), 0.0 ) ).xyz );
+  v_viewSurfaceNormal = normalize( ( worldToView * localToWorld * vec4( normal, 0.0 ) ).xyz );
   v_viewSurfacePosition = ( worldToView * localToWorld * vec4( position, 1.0 ) ).xyz;
   v_uv0 = uv;
   gl_Position = viewToScreen * vec4( v_viewSurfacePosition, 1.0 );

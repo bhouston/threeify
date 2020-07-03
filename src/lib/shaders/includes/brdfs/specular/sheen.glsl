@@ -12,7 +12,7 @@ float D_Charlie(float sheenRoughness, float dotNH) {
   float invR = 1.0 / alphaG;
   float cos2h = dotNH * dotNH;
   float sin2h = 1.0 - cos2h;
-  return (2.0 + invR) * pow(sin2h, invR * 0.5) / (2.0 * M_PI);
+  return (2.0 + invR) * pow(sin2h, invR * 0.5) / (2.0 * PI);
 }
 
 float D_Ashikhmin(float dotNH, float alphaRoughness) {
@@ -22,7 +22,7 @@ float D_Ashikhmin(float dotNH, float alphaRoughness) {
   float sin2h = 1.0 - cos2h;
   float sin4h = sin2h * sin2h;
   float cot2 = -cos2h / (a2 * sin2h);
-  return 1.0 / (M_PI * (4.0 * a2 + 1.0) * sin4h) * (4.0 * exp(cot2) + sin4h);
+  return 1.0 / (PI * (4.0 * a2 + 1.0) * sin4h) * (4.0 * exp(cot2) + sin4h);
 }
 
 // https://github.com/google/filament/blob/master/shaders/src/brdf.fs#L136

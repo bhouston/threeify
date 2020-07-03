@@ -17,15 +17,11 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = (await fetchOBJ("/assets/models/cloth.obj"))[0];
-  console.log("geometry", geometry);
   transformGeometry(
     geometry,
     makeMatrix4Concatenation(
@@ -34,16 +30,12 @@ async function init(): Promise<null> {
     ),
   );
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
-  const scratchesTexture = new Texture(await fetchImage("/assets/textures/golfball/scratches.png"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
   if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
     document.body.appendChild(canvasFramebuffer.canvas);
   }
-  const albedoMap = makeTexImage2DFromTexture(context, texture);
-  const bumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -57,10 +49,9 @@ async function init(): Promise<null> {
     pointLightRange: 6.0,
 
     // materials
-    albedoMap: albedoMap,
-
-    clearCoatBumpModulator: 1.0,
-    clearCoatBumpMap: bumpMap,
+    sheenIntensity: 1.0,
+    sheenColor: new Vector3(0.3, 0.3, 1.0),
+    sheenRoughness: 0.5,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
