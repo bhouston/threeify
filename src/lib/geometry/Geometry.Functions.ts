@@ -1,5 +1,7 @@
 import { makeVector3View } from "../math/arrays/PrimitiveView";
+import { Matrix4 } from "../math/Matrix4";
 import { Vector3 } from "../math/Vector3";
+import { transformNormal, transformPoint } from "../math/Vector3Matrix4.Functions";
 import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
 import { Geometry } from "./Geometry";
@@ -137,5 +139,30 @@ export function computeVertexNormals(geometry: Geometry): void {
   const v = new Vector3();
   for (let i = 0, il = normals.count; i < il; i += 3) {
     normals.set(i, normals.get(i, v).normalize());
+  }
+}
+
+export function transformGeometry(geometry: Geometry, m: Matrix4): void {
+  const positionAttribute = geometry.attributes["position"];
+  if (positionAttribute === undefined) {
+    throw new Error("missing position attribute");
+  }
+  const positions = makeVector3View(positionAttribute);
+
+  const v = new Vector3();
+  for (let i = 0; i < positions.count; i++) {
+    positions.get(i, v);
+    transformPoint(v, m, v);
+    positions.set(i, v);
+  }
+
+  const normalAttribute = geometry.attributes["normal"];
+  if (normalAttribute !== undefined) {
+    const normals = makeVector3View(normalAttribute);
+    for (let i = 0; i < normals.count; i++) {
+      normals.get(i, v);
+      transformNormal(v, m, v);
+      normals.set(i, v);
+    }
   }
 }
