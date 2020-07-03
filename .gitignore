@@ -22,3 +22,4 @@ bundle*.js.zip
 bundle.terserjs.zip
 *.zip
 www
+output.txt
