@@ -18,6 +18,7 @@ uniform sampler2D albedoMap;
 
 void main() {
 
+  vec3 ambient = vec3(0.0);
   vec3 albedo = albedoModulator * sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
 
   PunctualLight punctualLight;
@@ -36,8 +37,11 @@ void main() {
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
- vec3 outputColor = vec3(0.0);
-  outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
+  vec3 lightDirection = directIllumination.lightDirection;
+  vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
+
+  vec3 outputColor = vec3(0.0);
+  outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.0;

@@ -48,11 +48,13 @@ void main() {
   DirectIllumination directIllumination;
   pointLightToDirectIllumination( surface, punctualLight, directIllumination );
 
+  vec3 lightDirection = directIllumination.lightDirection;
+  vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
+
   vec3 outputColor = vec3(0.0);
-  outputColor += BRDF_Specular_GGX( directIllumination, clearCoatSurface, clearCoatF0, clearCoatRoughness );
-  outputColor += BRDF_Specular_GGX( directIllumination, surface, specularF0, specularRoughness );
-  outputColor += BRDF_Diffuse_Lambert( directIllumination, surface, albedo );
-  outputColor += BRDF_Ambient_Basic( ambient, albedo );
+  outputColor += irradiance * BRDF_Specular_GGX( clearCoatSurface, lightDirection, clearCoatF0, clearCoatRoughness );
+  outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
+  outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.0;
