@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/threeify/threeify/compare/v1.15.0...v1.16.0) (2020-07-03)
+
+
+### Features
+
+* simplify BRDF to exclude incoming irradiance ([c06ea81](https://github.com/threeify/threeify/commit/c06ea81e519db46e1dc523383448feaa069c7c7e))
+
 # [1.15.0](https://github.com/threeify/threeify/compare/v1.14.0...v1.15.0) (2020-07-03)
 
 
