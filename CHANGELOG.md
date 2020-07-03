@@ -1,3 +1,11 @@
+# [1.17.0](https://github.com/threeify/threeify/compare/v1.16.0...v1.17.0) (2020-07-03)
+
+
+### Features
+
+* implement sheen brdf for direct lighting ([6fa7822](https://github.com/threeify/threeify/commit/6fa7822fad6f09b640afb4cb7e52786de70381bc))
+* simple obj loader. ([7fe03c1](https://github.com/threeify/threeify/commit/7fe03c176389e8085ad3e5c37eea91137680d572))
+
 # [1.16.0](https://github.com/threeify/threeify/compare/v1.15.0...v1.16.0) (2020-07-03)
 
 
