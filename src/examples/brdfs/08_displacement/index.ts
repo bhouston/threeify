@@ -30,7 +30,7 @@ async function init(): Promise<null> {
     geometry,
     makeMatrix4Concatenation(
       makeMatrix4Scale(new Vector3(0.06, 0.06, 0.06)),
-      makeMatrix4Translation(new Vector3(0, -172, -6)),
+      makeMatrix4Translation(new Vector3(0, -172, -4)),
     ),
   );
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
@@ -53,11 +53,12 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(30.0),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(40.0),
     pointLightRange: 12.0,
 
     // materials
     normalMap: normalMap,
+    normalScale: 1.0,
     displacementMap: displacementMap,
     displacementScale: 1.0,
   };
@@ -68,12 +69,15 @@ async function init(): Promise<null> {
 
   function animate(): void {
     const now = Date.now();
+
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.displacementScale = Math.cos(now * 0.0008) * 0.05 + 0.05;
+    uniforms.normalScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
+    uniforms.displacementScale = uniforms.normalScale * 0.1;
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
+
     canvasFramebuffer.clear(AttachmentBits.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 

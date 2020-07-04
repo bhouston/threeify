@@ -1,15 +1,11 @@
 #pragma once
 
-vec3 transformPosition( in vec3 p, in mat4 m ) {
+vec3 transformPosition( in mat4 m, in vec3 p ) {
     return ( m * vec4( p, 1. ) ).xyz;
 }
 
-vec3 transformDirection( in vec3 d, in mat4 m ) {
-	return normalize( ( m * vec4( dir, 0. ) ).xyz );
-}
-
-vec3 transformDirection( in vec3 dir, in mat4 matrix ) {
-	return normalize( ( matrix * vec4( dir, 0. ) ).xyz );
+vec3 transformDirection( in mat4 m, in vec3 d ) {
+	return normalize( ( m * vec4( d, 0. ) ).xyz );
 }
 
 vec3 inverseTransformDirection( in vec3 dir, in mat4 matrix ) {

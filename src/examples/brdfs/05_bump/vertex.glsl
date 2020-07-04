@@ -10,11 +10,15 @@ varying vec3 v_viewSurfacePosition;
 varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
+#pragma include <math/matrix4>
+
 void main() {
 
-  v_viewSurfaceNormal = normalize( ( worldToView * localToWorld * vec4( normalize( position ), 0. ) ).xyz );
-  v_viewSurfacePosition = ( worldToView * localToWorld * vec4( position, 1. ) ).xyz;
+  mat4 localToView = worldToView * localToWorld;
+  v_viewSurfaceNormal = transformDirection( localToView, normalize( position ) );
+  v_viewSurfacePosition = transformPosition( localToView, position );
   v_uv0 = uv * 0.5;
+
   gl_Position = viewToScreen * vec4( v_viewSurfacePosition, 1. );
 
 }
