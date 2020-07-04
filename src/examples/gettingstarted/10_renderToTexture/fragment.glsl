@@ -13,6 +13,6 @@ void main() {
   vec3 directionToLight = normalize( viewLightPosition - v_viewPosition );
   float lambertianIntensity = dot( directionToLight, v_viewNormal );
 
-  gl_FragColor = vec4( albedo * lambertianIntensity, 1.0 );
+  gl_FragColor = vec4( albedo * lambertianIntensity, 1. );
 
 }

@@ -7,8 +7,8 @@
 #define RECIPROCAL_PI2 0.15915494309189535
 #define EPSILON 1e-6
 
-#define saturate(a) clamp( a, 0.0, 1.0 )
-#define whiteComplement(a) ( 1.0 - saturate( a ) )
+#define saturate(a) clamp( a, 0., 1. )
+#define whiteComplement(a) ( 1. - saturate( a ) )
 
 float pow2( const in float x ) { return x*x; }
 float pow3( const in float x ) { return x*x*x; }

@@ -30,8 +30,8 @@ void rotateTangentFrame( inout Surface surface, in vec2 anisotropicDirection ) {
   // Due to anisoptry, the tangent can be further rotated around the geometric normal.
   // NOTE: The null anisotropic direction value is (1, 0, 0)
   mat3 normalMatrix = surfaceToNormalMatrix( surface );
-  surface.tangent = normalMatrix * vec3( anisotropicDirection, 0.0 );
-  surface.bitangent = normalMatrix * vec3( anisotropicDirection.y, -anisotropicDirection.x, 0.0 );
+  surface.tangent = normalMatrix * vec3( anisotropicDirection, 0. );
+  surface.bitangent = normalMatrix * vec3( anisotropicDirection.y, -anisotropicDirection.x, 0. );
 }
 
 // this should be done after rotating the tangent frame
@@ -53,7 +53,7 @@ void perturbSurfaceNormal_TangentSpace( inout Surface surface, in vec3 normal ) 
 void alignSurfaceWithViewDirection( inout Surface surface ) {
 
   // For a back-facing surface, the tangential basis vectors are negated.
-  float facing = step(0.0, dot(surface.viewDirection, surface.normal)) * 2.0 - 1.0;
+  float facing = step(0., dot(surface.viewDirection, surface.normal)) * 2.0 - 1.;
   surface.tangent *= facing;
   surface.bitangent *= facing;
   surface.normal *= facing;
@@ -80,7 +80,7 @@ void perturbSurfaceNormal_BumpMap( inout Surface surface, in sampler2D bumpMap, 
 
   float fDet = dot( dPdx, R1 );
 
-  fDet *= ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+  fDet *= ( float( gl_FrontFacing ) * 2.0 - 1. );
 
   vec3 vGrad = sign( fDet ) * ( gradBump.x * R1 + gradBump.y * R2 );
   surface.normal = normalize( abs( fDet ) * surface.normal - vGrad );

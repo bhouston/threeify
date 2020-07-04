@@ -4,7 +4,7 @@ vec3 F_Schlick_RoughnessDependent( const in vec3 F0, const in float dotNV, const
 
 	// See F_Schlick
 	float fresnel = exp2( ( -5.55473 * dotNV - 6.98316 ) * dotNV );
-	vec3 Fr = max( vec3( 1.0 - roughness ), F0 ) - F0;
+	vec3 Fr = max( vec3( 1. - roughness ), F0 ) - F0;
 
 	return Fr * fresnel + F0;
 

@@ -2,7 +2,7 @@
 #pragma include <math/math>
 
 vec4 rgbeToLinear( in vec4 value ) {
-	return vec4( value.rgb * exp2( value.a * 255.0 - 128.0 ), 1.0 );
+	return vec4( value.rgb * exp2( value.a * 255.0 - 128.0 ), 1. );
 }
 
 vec4 linearToRGBE( in vec4 value ) {

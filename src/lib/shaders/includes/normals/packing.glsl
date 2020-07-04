@@ -5,5 +5,5 @@ vec3 normalToRgb( const in vec3 normal ) {
 }
 
 vec3 rgbToNormal( const in vec3 rgb ) {
-	return 2.0 * rgb.xyz - 1.0;
+	return 2.0 * rgb.xyz - 1.;
 }

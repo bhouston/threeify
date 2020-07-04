@@ -25,12 +25,12 @@ const int LightType_Spot = 2;
 // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_lights_punctual/README.md#range-property
 float getRangeAttenuation(float distanceToLightSource, float maxRange)
 {
-    if (maxRange <= 0.0)
+    if (maxRange <= 0.)
     {
         // negative range means unlimited
-        return 1.0;
+        return 1.;
     }
-    return max(min(1.0 - pow(distanceToLightSource / maxRange, 4.0), 1.0), 0.0) / pow(distanceToLightSource, 2.0);
+    return max(min(1. - pow(distanceToLightSource / maxRange, 4.0), 1.), 0.) / pow(distanceToLightSource, 2.0);
 }
 
 // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_lights_punctual/README.md#inner-and-outer-cone-angles
@@ -43,9 +43,9 @@ float getSpotAttenuation(vec3 pointToLight, vec3 spotDirection, float outerConeC
         {
             return smoothstep(outerConeCos, innerConeCos, actualCos);
         }
-        return 1.0;
+        return 1.;
     }
-    return 0.0;
+    return 0.;
 }
 
 void pointLightToDirectIllumination( in Surface surface, in PunctualLight punctualLight, out DirectIllumination directIllumination ) {

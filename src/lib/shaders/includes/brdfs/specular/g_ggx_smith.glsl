@@ -11,9 +11,9 @@ float G_GGX_Smith( const in float alpha, const in float dotNL, const in float do
 
 	float a2 = pow2( alpha );
 
-	float gl = dotNL + sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNL ) );
-	float gv = dotNV + sqrt( a2 + ( 1.0 - a2 ) * pow2( dotNV ) );
+	float gl = dotNL + sqrt( a2 + ( 1. - a2 ) * pow2( dotNL ) );
+	float gv = dotNV + sqrt( a2 + ( 1. - a2 ) * pow2( dotNV ) );
 
-	return 1.0 / ( gl * gv );
+	return 1. / ( gl * gv );
 
 } // validate

@@ -23,7 +23,7 @@ uniform sampler2D specularRoughnessMap;
 
 void main() {
 
-  vec3 ambient = vec3( 0.0 );
+  vec3 ambient = vec3( 0. );
   vec3 albedo = albedoModulator * sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
   vec3 specular = specularModulator * vec3( length( texture2D( specularMap, v_uv0 ).rgb ) );
   float specularRoughness = specularRoughnessModulator * sRGBToLinear( texture2D( specularRoughnessMap, v_uv0 ).rgb ).r;
@@ -45,11 +45,11 @@ void main() {
   vec3 lightDirection = directIllumination.lightDirection;
   vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
 
-  vec3 outputColor = vec3(0.0);
+  vec3 outputColor = vec3(0.);
   outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
   outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
-  gl_FragColor.a = 1.0;
+  gl_FragColor.a = 1.;
 
 }

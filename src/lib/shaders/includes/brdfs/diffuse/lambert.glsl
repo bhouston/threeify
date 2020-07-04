@@ -17,7 +17,7 @@ vec3 BRDF_Diffuse_Lambert(
 vec3 BRDF_lambertian(vec3 f0, vec3 f90, vec3 diffuseColor, float VdotH)
 {
     // see https://seblagarde.wordpress.com/2012/01/08/pi-or-not-to-pi-in-game-lighting-equation/
-    return (1.0 - F_Schlick(f0, f90, VdotH)) * (diffuseColor / M_PI);
+    return (1. - F_Schlick(f0, f90, VdotH)) * (diffuseColor / M_PI);
 }
 
 */
