@@ -27,7 +27,7 @@ void main() {
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0( specular );
 
-  vec3 normal = vec3( normalModulator, 1. ) * rgbToNormal( texture2D( normalMap, v_uv0 ).grb );
+  vec3 normal = vec3( normalModulator, 1. ) * rgbToNormal( texture2D( normalMap, v_uv0 ).rgb );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;

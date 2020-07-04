@@ -10,6 +10,7 @@ import {
   makeMatrix4Scale,
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
+import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
@@ -58,7 +59,7 @@ async function init(): Promise<null> {
 
     // materials
     normalMap: normalMap,
-    normalScale: 1.0,
+    normalScale: new Vector2(1.0, -1.0),
     displacementMap: displacementMap,
     displacementScale: 1.0,
   };
@@ -74,8 +75,10 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.normalScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
-    uniforms.displacementScale = uniforms.normalScale * 0.1;
+
+    const effectScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
+    uniforms.normalScale = new Vector2(1.0, -1.0).multiplyByScalar(effectScale);
+    uniforms.displacementScale = effectScale * 0.1;
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
 
     canvasFramebuffer.clear(AttachmentBits.All);

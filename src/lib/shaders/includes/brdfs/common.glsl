@@ -26,8 +26,8 @@ void uvToTangentFrame( inout Surface surface, in vec2 uv ) {
   vec3 tempTangent = dFdx( uv.y ) * dFdy(surface.position) - dFdy( uv.y ) * dFdx(surface.position);
 
   surface.normal = normalize(surface.normal);
-  surface.bitangent = -normalize(tempTangent - surface.normal * dot(surface.normal, tempTangent));
-  surface.tangent = -cross(surface.normal, surface.bitangent);
+  surface.tangent = normalize(tempTangent - surface.normal * dot(surface.normal, tempTangent));
+  surface.bitangent = cross(surface.normal, surface.bitangent);
 }
 
 void rotateTangentFrame( inout Surface surface, in vec2 anisotropicDirection ) {
