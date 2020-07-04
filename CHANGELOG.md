@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/threeify/threeify/compare/v1.18.0...v1.19.0) (2020-07-04)
+
+
+### Features
+
+* remove dead code from shaders so debugging is easy ([dc527bf](https://github.com/threeify/threeify/commit/dc527bf898042b0f468169019d58af28f8ced206))
+
 # [1.18.0](https://github.com/threeify/threeify/compare/v1.17.0...v1.18.0) (2020-07-04)
 
 
