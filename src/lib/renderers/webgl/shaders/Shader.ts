@@ -21,10 +21,65 @@ function insertLineNumbers(sourceCode: string): string {
   return outputLines.join("\n");
 }
 
+// This reduces the code bulk when debugging shaders
+function removeDeadCode(sourceCode: string): string {
+  const defineRegexp = /^#define +([\w\d_]+)/;
+  const undefRegexp = /^#undef +([\w\d_]+)/;
+  const ifdefRegexp = /^#ifdef +([\w\d_]+)/;
+  const ifndefRegexp = /^#ifndef +([\w\d_]+)/;
+  const endifRegexp = /^#endif.* /;
+
+  // state management
+  let defines: string[] = [];
+  const ifdefLiveStack: boolean[] = [true];
+
+  const outputLines: string[] = [];
+  sourceCode.split("\n").forEach((line) => {
+    const isLive = ifdefLiveStack[ifdefLiveStack.length - 1];
+
+    if (isLive) {
+      const defineMatch = line.match(defineRegexp);
+      if (defineMatch !== null) {
+        defines.push(defineMatch[1]);
+      }
+      const undefMatch = line.match(undefRegexp);
+      if (undefMatch !== null) {
+        const indexOfDefine = defines.indexOf(undefMatch[1]);
+        if (indexOfDefine >= 0) {
+          defines = defines.splice(defines.indexOf(undefMatch[1]), 1);
+        }
+      }
+      const ifdefMatch = line.match(ifdefRegexp);
+      if (ifdefMatch !== null) {
+        ifdefLiveStack.push(defines.indexOf(ifdefMatch[1]) >= 0);
+        return;
+      }
+      const ifndefMatch = line.match(ifndefRegexp);
+      if (ifndefMatch !== null) {
+        ifdefLiveStack.push(defines.indexOf(ifndefMatch[1]) < 0);
+        return;
+      }
+    }
+    const endifMatch = line.match(endifRegexp);
+    if (endifMatch !== null) {
+      ifdefLiveStack.pop();
+      return;
+    }
+    if (isLive) {
+      outputLines.push(line);
+    }
+  });
+  return outputLines
+    .join("\n")
+    .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "")
+    .replace(/[\r\n]+/g, "\n");
+}
+
 export class Shader implements IDisposable {
   disposed = false;
   glShader: WebGLShader;
   #validated = false;
+  finalSourceCode: string;
 
   constructor(
     public context: RenderingContext,
@@ -57,8 +112,10 @@ export class Shader implements IDisposable {
     }
     const combinedSourceCode = prefix.join("\n") + "\n" + sourceCode;
 
+    this.finalSourceCode = removeDeadCode(combinedSourceCode);
+
     // Set the shader source code.
-    gl.shaderSource(this.glShader, combinedSourceCode);
+    gl.shaderSource(this.glShader, this.finalSourceCode);
 
     // Compile the shader
     gl.compileShader(this.glShader);
@@ -89,7 +146,7 @@ export class Shader implements IDisposable {
       const infoLog = gl.getShaderInfoLog(this.glShader);
       const errorMessage = `could not compile shader:\n${infoLog}`;
       console.error(errorMessage);
-      console.error(insertLineNumbers(this.sourceCode));
+      console.error(insertLineNumbers(this.finalSourceCode));
       this.disposed = true;
       throw new Error(errorMessage);
     }
