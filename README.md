@@ -94,3 +94,12 @@ docker-compose up -d
 #### Theia-IDE
 
 threeify supports the theia-ide so you can start coding immediately. theia-ide is available at http://localhost:3000. Perform step 3 and 4 in the theia-ide terminal.
+
+## Contributors
+
+This project exists thanks to all <a href="https://github.com/threeify/threeify/graphs/contributors">the people who contribute.</a>
+
+## License
+
+[ISC](https://github.com/threeify/threeify/blob/master/LICENSE.md)
+

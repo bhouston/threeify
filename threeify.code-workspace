@@ -56,6 +56,8 @@
       "slerp",
       "threeifydev",
       "transpiler",
+      "usemap",
+      "usemtl",
       "varyings",
       "webgl",
       "webgpu"
