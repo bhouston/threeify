@@ -13,6 +13,7 @@ import { Node } from "../../../nodes/Node";
 import { BlendState } from "../BlendState";
 import { BufferGeometry } from "../buffers/BufferGeometry";
 import { ClearState } from "../ClearState";
+import { CullingState } from "../CullingState";
 import { DepthTestState } from "../DepthTestState";
 import { MaskState } from "../MaskState";
 import { Program } from "../programs/Program";
@@ -29,6 +30,7 @@ const GL = WebGLRenderingContext;
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
+  public cullingState: CullingState | undefined = undefined;
   public clearState: ClearState | undefined = undefined;
   public depthTestState: DepthTestState | undefined = undefined;
   public blendState: BlendState | undefined = undefined;
@@ -57,12 +59,14 @@ export abstract class VirtualFramebuffer implements IDisposable {
     depthTestState: DepthTestState | undefined = undefined,
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
+    cullingState: CullingState | undefined = undefined,
   ): void {
     // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
     this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
     this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
+    this.context.cullingState = cullingState ?? this.cullingState ?? this.context.cullingState;
     this.context.program = program;
     this.context.program.setUniformValues(uniforms);
     this.context.program.setAttributeBuffers(bufferGeometry);
@@ -84,12 +88,14 @@ export abstract class VirtualFramebuffer implements IDisposable {
     depthTestState: DepthTestState | undefined = undefined,
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
+    cullingState: CullingState | undefined = undefined,
   ): void {
     // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
     this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
     this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
+    this.context.cullingState = cullingState ?? this.cullingState ?? this.context.cullingState;
     this.context.program = program;
     this.context.program.setUniformValues(uniforms);
     this.context.program.setAttributeBuffers(vao);
@@ -105,12 +111,14 @@ export abstract class VirtualFramebuffer implements IDisposable {
     depthTestState: DepthTestState | undefined = undefined,
     blendState: BlendState | undefined = undefined,
     maskState: MaskState | undefined = undefined,
+    cullingState: CullingState | undefined = undefined,
   ): void {
     // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
     this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
     this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
+    this.context.cullingState = cullingState ?? this.cullingState ?? this.context.cullingState;
     this.context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
   }
 

@@ -10,6 +10,7 @@ import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
 import { BlendState } from "./BlendState";
 import { ClearState } from "./ClearState";
+import { CullingState } from "./CullingState";
 import { DepthTestState } from "./DepthTestState";
 import { Extensions } from "./extensions/Extensions";
 import { OptionalExtensions } from "./extensions/OptionalExtensions";
@@ -40,6 +41,7 @@ export class RenderingContext {
   #blendState: BlendState = new BlendState();
   #clearState: ClearState = new ClearState();
   #maskState: MaskState = new MaskState();
+  #cullingState: CullingState = new CullingState();
 
   constructor(canvas: HTMLCanvasElement | null = null) {
     if (canvas === null) {
@@ -192,6 +194,21 @@ export class RenderingContext {
     }
   }
 
+  get cullingState(): CullingState {
+    return this.#cullingState.clone();
+  }
+  set cullingState(cs: CullingState) {
+    if (!this.#cullingState.equals(cs)) {
+      if (cs.enabled) {
+        this.gl.enable(GL.CULL_FACE);
+      } else {
+        this.gl.disable(GL.CULL_FACE);
+      }
+      this.gl.frontFace(cs.windingOrder);
+      this.gl.cullFace(cs.sides);
+      this.#cullingState.copy(cs);
+    }
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   renderPass(program: Program, uniforms: UniformValueMap): void {
     throw new Error("not implemented");
