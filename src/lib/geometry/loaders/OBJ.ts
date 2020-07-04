@@ -65,6 +65,7 @@ export function parseOBJ(text: string): Geometry[] {
     }
     const normalMatch = line.match(normalRegexp);
     if (normalMatch !== null) {
+      console.log(line, normalMatch);
       workingNormals.push(parseFloat(normalMatch[1]), parseFloat(normalMatch[2]), parseFloat(normalMatch[3]));
       return;
     }
@@ -76,7 +77,10 @@ export function parseOBJ(text: string): Geometry[] {
     const faceMatch = line.match(faceRegexp);
     if (faceMatch !== null) {
       const startVertex = positions.length / 3;
-      const numVertices = (faceMatch.length - 1) / 4;
+      let numVertices = 3;
+      if (faceMatch[13] !== undefined) {
+        numVertices++;
+      }
       let baseOffset = 2;
       for (let v = 0; v < numVertices; v++) {
         let positionsIndex = (parseInt(faceMatch[baseOffset + 0]) - 1) * 3;
@@ -88,7 +92,15 @@ export function parseOBJ(text: string): Geometry[] {
           workingPositions[positionsIndex + 1],
           workingPositions[positionsIndex + 2],
         );
-        const normalIndexToken = faceMatch[baseOffset + 1];
+        const uvIndexToken = faceMatch[baseOffset + 1];
+        if (uvIndexToken.length > 0) {
+          let uvIndex = (parseInt(uvIndexToken) - 1) * 2;
+          if (uvIndex < 0) {
+            uvIndex += workingUvs.length / 2;
+          }
+          uvs.push(workingUvs[uvIndex], workingUvs[uvIndex + 1]);
+        }
+        const normalIndexToken = faceMatch[baseOffset + 2];
         if (normalIndexToken.length > 0) {
           let normalIndex = (parseInt(normalIndexToken) - 1) * 3;
           if (normalIndex < 0) {
@@ -96,20 +108,12 @@ export function parseOBJ(text: string): Geometry[] {
           }
           normals.push(workingNormals[normalIndex], workingNormals[normalIndex + 1], workingNormals[normalIndex + 2]);
         }
-        const uvIndexToken = faceMatch[baseOffset + 2];
-        if (uvIndexToken.length > 0) {
-          let uvIndex = (parseInt(uvIndexToken) - 1) * 2;
-          if (uvIndex < 0) {
-            uvIndex += workingUvs.length / 2;
-          }
-          uvs.push(workingNormals[uvIndex], workingNormals[uvIndex + 1]);
-        }
         baseOffset += 4;
       }
       for (let i = 0; i < numVertices - 2; i++) {
         indices.push(startVertex);
-        indices.push(startVertex + i + 2);
         indices.push(startVertex + i + 1);
+        indices.push(startVertex + i + 2);
       }
     } else if (commentRegexp.test(line)) {
       // ignore comments
