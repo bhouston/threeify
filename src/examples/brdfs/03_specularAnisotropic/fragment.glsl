@@ -24,7 +24,7 @@ void main() {
   vec3 albedo = vec3( 1. );
   vec3 specular = vec3( 1. );
   float specularRoughness = 0.25;
-  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * decodeAnisotropyFlowMap( texture2D( specularAnisotropicFlowMap, v_uv0 ) );
+  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * decodeAnisotropyFlowMap( texture2D( specularAnisotropicFlowMap, v_uv0 ).rg );
   vec3 specularF0 = specularIntensityToF0( specular );
 
   Surface surface;
