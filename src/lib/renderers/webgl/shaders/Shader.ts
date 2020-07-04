@@ -31,11 +31,11 @@ function removeDeadCode(sourceCode: string): string {
 
   // state management
   let defines: string[] = [];
-  const ifdefLiveStack: boolean[] = [true];
+  const liveCodeStack: boolean[] = [true];
 
   const outputLines: string[] = [];
   sourceCode.split("\n").forEach((line) => {
-    const isLive = ifdefLiveStack[ifdefLiveStack.length - 1];
+    const isLive = liveCodeStack[liveCodeStack.length - 1];
 
     if (isLive) {
       const defineMatch = line.match(defineRegexp);
@@ -51,18 +51,18 @@ function removeDeadCode(sourceCode: string): string {
       }
       const ifdefMatch = line.match(ifdefRegexp);
       if (ifdefMatch !== null) {
-        ifdefLiveStack.push(defines.indexOf(ifdefMatch[1]) >= 0);
+        liveCodeStack.push(defines.indexOf(ifdefMatch[1]) >= 0);
         return;
       }
       const ifndefMatch = line.match(ifndefRegexp);
       if (ifndefMatch !== null) {
-        ifdefLiveStack.push(defines.indexOf(ifndefMatch[1]) < 0);
+        liveCodeStack.push(defines.indexOf(ifndefMatch[1]) < 0);
         return;
       }
     }
     const endifMatch = line.match(endifRegexp);
     if (endifMatch !== null) {
-      ifdefLiveStack.pop();
+      liveCodeStack.pop();
       return;
     }
     if (isLive) {
