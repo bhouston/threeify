@@ -56,11 +56,13 @@ async function init(): Promise<null> {
 
   function animate(): void {
     const now = Date.now();
+
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.cos(now * 0.002) * 2.0, 0.5);
+
     canvasFramebuffer.clear(AttachmentBits.All, blackClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 

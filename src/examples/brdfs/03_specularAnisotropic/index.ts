@@ -54,11 +54,13 @@ async function init(): Promise<null> {
 
   function animate(): void {
     const now = Date.now();
+
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(Math.cos(now * 0.0) * 0.7 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
       uniforms.localToWorld,
     );
     uniforms.specularAnisotropicFlowMap = Math.floor(now / 5000) % 2 === 0 ? anisotropicFlow1Map : anisotropicFlow2Map;
+
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
