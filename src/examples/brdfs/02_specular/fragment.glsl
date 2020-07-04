@@ -27,7 +27,7 @@ void main() {
   vec3 albedo = albedoModulator * sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
   vec3 specular = specularModulator * vec3( length( texture2D( specularMap, v_uv0 ).rgb ) );
   float specularRoughness = specularRoughnessModulator * sRGBToLinear( texture2D( specularRoughnessMap, v_uv0 ).rgb ).r;
-  vec3 specularF0 = ( specular * specular ) * 0.16;
+  vec3 specularF0 = specularIntensityToF0( specular );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;

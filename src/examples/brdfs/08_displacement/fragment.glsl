@@ -25,7 +25,7 @@ void main() {
   vec3 albedo = mix( vec3(0.2), vec3( 1., 0., 0. ), normalScale );
   vec3 specular = vec3(1.);
   float specularRoughness = 0.25;
-  vec3 specularF0 = ( specular * specular ) * 0.16;
+  vec3 specularF0 = specularIntensityToF0( specular );
   vec3 normal = rgbToNormal( texture2D( normalMap, vec2(1.0)-v_uv0 ).grb ) * vec3( 1., -1., 1. );
 
   Surface surface;

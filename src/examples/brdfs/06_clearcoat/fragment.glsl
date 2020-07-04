@@ -28,7 +28,7 @@ void main() {
   float specularRoughness = 0.25;
   vec3 clearCoatF0 = vec3( 1. );
   float clearCoatRoughness = 0.1;
-  vec3 specularF0 = ( specular * specular ) * 0.16;
+  vec3 specularF0 = specularIntensityToF0( specular );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;

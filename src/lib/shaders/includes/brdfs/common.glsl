@@ -13,6 +13,10 @@ struct Surface {
   vec3 viewDirection;
 };
 
+vec3 specularIntensityToF0( in vec3 specularIntensity ) {
+  return specularIntensity * specularIntensity * 0.16;
+}
+
 mat3 surfaceToNormalMatrix( in Surface surface ) {
   return mat3(surface.tangent, surface.bitangent, surface.normal);
 }

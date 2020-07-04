@@ -25,7 +25,7 @@ void main() {
   vec3 specular = vec3( 1. );
   float specularRoughness = 0.25;
   vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * decodeAnisotropyFlowMap( texture2D( specularAnisotropicFlowMap, v_uv0 ) );
-  vec3 specularF0 = ( specular * specular ) * 0.16;
+  vec3 specularF0 = specularIntensityToF0( specular );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;

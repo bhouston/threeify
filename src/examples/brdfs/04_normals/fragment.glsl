@@ -25,7 +25,7 @@ void main() {
   vec3 albedo = vec3(1.,1.,1.);
   vec3 specular = vec3(1.);
   float specularRoughness = 0.25;
-  vec3 specularF0 = ( specular * specular ) * 0.16;
+  vec3 specularF0 = specularIntensityToF0( specular );
 
   vec3 normal = vec3( normalModulator, 1. ) * rgbToNormal( texture2D( normalMap, v_uv0 ).grb );
 
