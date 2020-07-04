@@ -1,3 +1,18 @@
+# [1.20.0](https://github.com/threeify/threeify/compare/v1.19.0...v1.20.0) (2020-07-04)
+
+
+### Bug Fixes
+
+* fix bug with transform normal ([400e63b](https://github.com/threeify/threeify/commit/400e63b7dbe009471df19908840a43d8047be38a))
+* fix uv importing from obj ([3e9c63a](https://github.com/threeify/threeify/commit/3e9c63a3bfef18a1f9edcd0c26e37e3d3662ce0f))
+
+
+### Features
+
+* add cull state ([6eea327](https://github.com/threeify/threeify/commit/6eea327627a38988f2d1164935f22c54d8943aea))
+* add displacement example. ([b93a54f](https://github.com/threeify/threeify/commit/b93a54f4e3408cb0f17470ec18d0e34c2d740ec5))
+* add displacement support with example. ([f47f3a2](https://github.com/threeify/threeify/commit/f47f3a25129f21ecbf75dc2f696ac096bc5e36ae))
+
 # [1.19.0](https://github.com/threeify/threeify/compare/v1.18.0...v1.19.0) (2020-07-04)
 
 
