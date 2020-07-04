@@ -20,7 +20,6 @@ const sRegexp = /^s +(\d+)/;
 const matLibRegexp = /^mtllib +(.*)$/;
 const useMtlRegexp = /^usemtl +(.*)$/;
 const useMapRegexp = /^usemap +(.*)$/;
-const lineRegexp = /^(.*)$/gm;
 
 export function parseOBJ(text: string): Geometry[] {
   const geometries: Geometry[] = [];
@@ -58,26 +57,21 @@ export function parseOBJ(text: string): Geometry[] {
     workingUvs = [];
   }
 
-  const lines = text.match(lineRegexp);
-  if (lines === null) {
-    return [];
-  }
-  for (let l = 0; l < lines.length; l++) {
-    const line = lines[l];
+  text.split("\n").forEach(function parseLine(line: string) {
     const positionMatch = line.match(positionRegexp);
     if (positionMatch !== null) {
       workingPositions.push(parseFloat(positionMatch[1]), parseFloat(positionMatch[2]), parseFloat(positionMatch[3]));
-      continue;
+      return;
     }
     const normalMatch = line.match(normalRegexp);
     if (normalMatch !== null) {
       workingNormals.push(parseFloat(normalMatch[1]), parseFloat(normalMatch[2]), parseFloat(normalMatch[3]));
-      continue;
+      return;
     }
     const uvMatch = line.match(uvRegexp);
     if (uvMatch !== null) {
       workingUvs.push(parseFloat(uvMatch[1]), parseFloat(uvMatch[2]));
-      continue;
+      return;
     }
     const faceMatch = line.match(faceRegexp);
     if (faceMatch !== null) {
@@ -132,7 +126,7 @@ export function parseOBJ(text: string): Geometry[] {
     } else if (useMapRegexp.test(line)) {
       // not supported
     }
-  }
+  });
 
   commitObject();
 
