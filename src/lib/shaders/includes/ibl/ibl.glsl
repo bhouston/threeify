@@ -33,7 +33,7 @@ vec3 getIBLRadianceTransmission(vec3 n, vec3 v, float perceptualRoughness, float
 
     // Approximate double refraction by assuming a solid sphere beneath the point.
     vec3 r = refract(-v, n, 1. / ior);
-    vec3 m = 2.0 * dot(-n, r) * r + n;
+    vec3 m = 2. * dot(-n, r) * r + n;
     vec3 rr = -refract(-r, m, ior);
 
     vec4 specularSample = textureLod(u_GGXEnvSampler, rr, lod);

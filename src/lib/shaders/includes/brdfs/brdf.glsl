@@ -20,7 +20,7 @@ vec3 F_None(vec3 f0, vec3 f90, float VdotH)
 // Implementation of fresnel from [4], Equation 15
 vec3 F_Schlick(vec3 f0, vec3 f90, float VdotH)
 {
-    return f0 + (f90 - f0) * pow(clamp(1. - VdotH, 0., 1.), 5.0);
+    return f0 + (f90 - f0) * pow(clamp(1. - VdotH, 0., 1.), 5.);
 }
 
 vec3 F_CookTorrance(vec3 f0, vec3 f90, float VdotH)
@@ -29,7 +29,7 @@ vec3 F_CookTorrance(vec3 f0, vec3 f90, float VdotH)
     vec3 ior = (1. + f0_sqrt) / (1. - f0_sqrt);
     vec3 c = vec3(VdotH);
     vec3 g = sqrt(sq(ior) + c*c - 1.);
-    return 0.5 * pow(g-c, vec3(2.0)) / pow(g+c, vec3(2.0)) * (1. + pow(c*(g+c) - 1., vec3(2.0)) / pow(c*(g-c) + 1., vec3(2.0)));
+    return 0.5 * pow(g-c, vec3(2.)) / pow(g+c, vec3(2.)) * (1. + pow(c*(g+c) - 1., vec3(2.)) / pow(c*(g-c) + 1., vec3(2.)));
 }
 
 // Smith Joint GGX
@@ -67,7 +67,7 @@ float V_GGX_anisotropic(float NdotL, float NdotV, float BdotV, float TdotV, floa
 // Note: Google call it V_Ashikhmin and V_Neubelt
 float V_Ashikhmin(float NdotL, float NdotV)
 {
-    return clamp(1. / (4.0 * (NdotL + NdotV - NdotL * NdotV)),0.,1.);
+    return clamp(1. / (4. * (NdotL + NdotV - NdotL * NdotV)),0.,1.);
 }
 
 // https://github.com/google/filament/blob/master/shaders/src/brdf.fs#L131
@@ -106,7 +106,7 @@ float D_Ashikhmin(float NdotH, float alphaRoughness)
     float sin2h = 1. - cos2h;
     float sin4h = sin2h * sin2h;
     float cot2 = -cos2h / (a2 * sin2h);
-    return 1. / (M_PI * (4.0 * a2 + 1.) * sin4h) * (4.0 * exp(cot2) + sin4h);
+    return 1. / (M_PI * (4. * a2 + 1.) * sin4h) * (4. * exp(cot2) + sin4h);
 }
 
 //Sheen implementation-------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ float D_Charlie(float sheenRoughness, float NdotH)
     float invR = 1. / alphaG;
     float cos2h = NdotH * NdotH;
     float sin2h = 1. - cos2h;
-    return (2.0 + invR) * pow(sin2h, invR * 0.5) / (2.0 * M_PI);
+    return (2. + invR) * pow(sin2h, invR * 0.5) / (2. * M_PI);
 }
 
 //https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#acknowledgments AppendixB

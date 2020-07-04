@@ -33,7 +33,7 @@ void main() {
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   uvToTangentFrame( surface, v_uv0 );
-	perturbSurfaceNormal_BumpMap( surface, bumpMap, v_uv0, 4.0 );
+	perturbSurfaceNormal_BumpMap( surface, bumpMap, v_uv0, 4. );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;

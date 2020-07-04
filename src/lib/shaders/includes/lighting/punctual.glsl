@@ -30,7 +30,7 @@ float getRangeAttenuation(float distanceToLightSource, float maxRange)
         // negative range means unlimited
         return 1.;
     }
-    return max(min(1. - pow(distanceToLightSource / maxRange, 4.0), 1.), 0.) / pow(distanceToLightSource, 2.0);
+    return max(min(1. - pow(distanceToLightSource / maxRange, 4.), 1.), 0.) / pow(distanceToLightSource, 2.);
 }
 
 // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_lights_punctual/README.md#inner-and-outer-cone-angles

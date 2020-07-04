@@ -1,7 +1,7 @@
 #pragma once
 
 vec2 decodeAnisotropyFlowMap( vec4 value ) {
-  return value.rg * 2.0 - vec2(1.);
+  return value.rg * 2. - vec2(1.);
 }
 
 // based on filament

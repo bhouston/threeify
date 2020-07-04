@@ -10,6 +10,6 @@ float ambientOcclusion( float ao, float aoIntensity ) {
 // ref: https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
 float specularOcclusion( const in float dotNV, const in float ambientOcclusion, const in float roughness ) {
 
-	return saturate( pow( dotNV + ambientOcclusion, exp2( - 16.0 * roughness - 1. ) ) - 1. + ambientOcclusion );
+	return saturate( pow( dotNV + ambientOcclusion, exp2( - 16. * roughness - 1. ) ) - 1. + ambientOcclusion );
 
 }

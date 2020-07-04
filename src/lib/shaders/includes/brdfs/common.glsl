@@ -53,7 +53,7 @@ void perturbSurfaceNormal_TangentSpace( inout Surface surface, in vec3 normal ) 
 void alignSurfaceWithViewDirection( inout Surface surface ) {
 
   // For a back-facing surface, the tangential basis vectors are negated.
-  float facing = step(0., dot(surface.viewDirection, surface.normal)) * 2.0 - 1.;
+  float facing = step(0., dot(surface.viewDirection, surface.normal)) * 2. - 1.;
   surface.tangent *= facing;
   surface.bitangent *= facing;
   surface.normal *= facing;
@@ -80,7 +80,7 @@ void perturbSurfaceNormal_BumpMap( inout Surface surface, in sampler2D bumpMap, 
 
   float fDet = dot( dPdx, R1 );
 
-  fDet *= ( float( gl_FrontFacing ) * 2.0 - 1. );
+  fDet *= ( float( gl_FrontFacing ) * 2. - 1. );
 
   vec3 vGrad = sign( fDet ) * ( gradBump.x * R1 + gradBump.y * R2 );
   surface.normal = normalize( abs( fDet ) * surface.normal - vGrad );

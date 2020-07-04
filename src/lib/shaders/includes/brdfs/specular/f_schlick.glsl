@@ -3,7 +3,7 @@
 vec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {
 
 	// Original approximation by Christophe Schlick '94
-	// float fresnel = pow( 1. - dotLH, 5.0 );
+	// float fresnel = pow( 1. - dotLH, 5. );
 
 	// Optimized variant (presented by Epic at SIGGRAPH '13)
 	// https://cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
