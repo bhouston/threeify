@@ -65,7 +65,6 @@ export function parseOBJ(text: string): Geometry[] {
     }
     const normalMatch = line.match(normalRegexp);
     if (normalMatch !== null) {
-      console.log(line, normalMatch);
       workingNormals.push(parseFloat(normalMatch[1]), parseFloat(normalMatch[2]), parseFloat(normalMatch[3]));
       return;
     }
