@@ -40,7 +40,7 @@ void main() {
   vec3 lightDirection = directIllumination.lightDirection;
   vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
 
-  vec3 outputColor = vec3(0.);
+  vec3 outputColor;
   outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
