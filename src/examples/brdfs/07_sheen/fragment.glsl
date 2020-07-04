@@ -17,7 +17,7 @@ uniform float sheenRoughness;
 #pragma include <brdfs/ambient/basic>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
-#pragma include <brdfs/specular/sheen>
+#pragma include <brdfs/sheen/charlie>
 #pragma include <color/spaces/srgb>
 
 void main() {
@@ -47,7 +47,7 @@ void main() {
   vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
 
   vec3 outputColor = vec3(0.);
-  outputColor += irradiance * BRDF_Specular_Sheen( surface, lightDirection, sheenColor, sheenIntensity, sheenRoughness );
+  outputColor += irradiance * BRDF_Sheen_Charlie( surface, lightDirection, sheenColor, sheenIntensity, sheenRoughness );
   outputColor += (1. - sheenIntensity ) * irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
   outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
 
