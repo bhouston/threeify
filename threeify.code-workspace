@@ -50,6 +50,7 @@
       "framebuffer",
       "glsl",
       "highp",
+      "ifndef",
       "knisterpeter",
       "renderable",
       "slerp",

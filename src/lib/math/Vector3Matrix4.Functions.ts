@@ -22,9 +22,9 @@ export function transformNormal(v: Vector3, m: Matrix4, result = new Vector3()):
     z = v.z;
   const e = m.elements;
 
-  result.x = e[0] * x + e[4] * y + e[8] * z + e[12];
-  result.y = e[1] * x + e[5] * y + e[9] * z + e[13];
-  result.z = e[2] * x + e[6] * y + e[10] * z + e[14];
+  result.x = e[0] * x + e[4] * y + e[8] * z;
+  result.y = e[1] * x + e[5] * y + e[9] * z;
+  result.z = e[2] * x + e[6] * y + e[10] * z;
 
-  return result;
+  return result.normalize();
 }
