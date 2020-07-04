@@ -13,6 +13,7 @@ import {
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
+import { CullingState } from "../../../lib/renderers/webgl/CullingState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
@@ -34,6 +35,7 @@ async function init(): Promise<null> {
   );
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const displacementTexture = new Texture(await fetchImage("/assets/models/ninjaHead/displacement.jpg"));
+  const normalTexture = new Texture(await fetchImage("/assets/models/ninjaHead/normal.png"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
@@ -41,6 +43,7 @@ async function init(): Promise<null> {
     document.body.appendChild(canvasFramebuffer.canvas);
   }
   const displacementMap = makeTexImage2DFromTexture(context, displacementTexture);
+  const normalMap = makeTexImage2DFromTexture(context, normalTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -54,12 +57,14 @@ async function init(): Promise<null> {
     pointLightRange: 12.0,
 
     // materials
+    normalMap: normalMap,
     displacementMap: displacementMap,
     displacementScale: 1.0,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
@@ -67,10 +72,10 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.displacementScale = Math.cos(now * 0.0003) * 0.5 + 0.5;
+    uniforms.displacementScale = Math.cos(now * 0.0008) * 0.05 + 0.05;
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
-    canvasFramebuffer.clear(AttachmentBits.All, blackClearState);
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    canvasFramebuffer.clear(AttachmentBits.All);
+    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);
   }

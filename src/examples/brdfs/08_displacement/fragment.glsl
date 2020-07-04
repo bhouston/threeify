@@ -8,6 +8,8 @@ uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightColor;
 uniform float pointLightRange;
 
+uniform sampler2D normalMap;
+
 #pragma include <brdfs/common>
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
@@ -18,10 +20,11 @@ uniform float pointLightRange;
 void main() {
 
   vec3 ambient = vec3(0.);
-  vec3 albedo = vec3(1.,1.,1.);
+  vec3 albedo = vec3(1.,0.2,0.2);
   vec3 specular = vec3(1.);
   float specularRoughness = 0.25;
   vec3 specularF0 = ( specular * specular ) * 0.16;
+  vec3 normal = ( texture2D( normalMap, vec2(1.0)-v_uv0 ).grb * 2. - 1. ) * vec3( -1., -1., 1. );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
@@ -29,6 +32,7 @@ void main() {
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   uvToTangentFrame( surface, v_uv0 );
+  perturbSurfaceNormal_TangentSpace( surface, normal );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;

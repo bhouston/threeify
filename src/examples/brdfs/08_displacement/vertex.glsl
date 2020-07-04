@@ -15,9 +15,9 @@ varying vec2 v_uv0;
 
 void main() {
 
-  v_viewSurfaceNormal = normalize( ( worldToView * localToWorld * vec4( normalize( position ), 0. ) ).xyz );
+  v_viewSurfaceNormal = normalize( ( worldToView * localToWorld * vec4( normal, 0. ) ).xyz );
   v_viewSurfacePosition = ( worldToView * localToWorld * vec4( position, 1. ) ).xyz;
-  v_viewSurfacePosition += v_viewSurfaceNormal * texture2D( displacementMap, uv ).x * displacementScale;
+  v_viewSurfacePosition += v_viewSurfaceNormal * texture2D( displacementMap, vec2(1.0)- uv ).x * displacementScale;
 
   v_uv0 = uv;
   gl_Position = viewToScreen * vec4( v_viewSurfacePosition, 1. );
