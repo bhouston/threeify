@@ -1,0 +1,12 @@
+#pragma once
+
+float D_Ashikhmin(float dotNH, float roughness) {
+  // Ashikhmin 2007, "Distribution-based BRDFs"
+  float a2 = roughness * roughness;
+  float cos2h = dotNH * dotNH;
+  float sin2h = 1. - cos2h;
+  float sin4h = sin2h * sin2h;
+  float cot2 = -cos2h / (a2 * sin2h);
+  return 1. / (PI * (4. * a2 + 1.) * sin4h) * (4. * exp(cot2) + sin4h);
+}
+

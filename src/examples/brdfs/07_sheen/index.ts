@@ -63,6 +63,7 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
+    uniforms.sheenRoughness = Math.cos(now * 0.0003) * 0.5 + 0.5;
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
     canvasFramebuffer.clear(AttachmentBits.All, blackClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);

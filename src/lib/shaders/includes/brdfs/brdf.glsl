@@ -20,16 +20,16 @@ vec3 F_None(vec3 f0, vec3 f90, float VdotH)
 // Implementation of fresnel from [4], Equation 15
 vec3 F_Schlick(vec3 f0, vec3 f90, float VdotH)
 {
-    return f0 + (f90 - f0) * pow(clamp(1.0 - VdotH, 0.0, 1.0), 5.0);
+    return f0 + (f90 - f0) * pow(clamp(1. - VdotH, 0., 1.), 5.);
 }
 
 vec3 F_CookTorrance(vec3 f0, vec3 f90, float VdotH)
 {
     vec3 f0_sqrt = sqrt(f0);
-    vec3 ior = (1.0 + f0_sqrt) / (1.0 - f0_sqrt);
+    vec3 ior = (1. + f0_sqrt) / (1. - f0_sqrt);
     vec3 c = vec3(VdotH);
-    vec3 g = sqrt(sq(ior) + c*c - 1.0);
-    return 0.5 * pow(g-c, vec3(2.0)) / pow(g+c, vec3(2.0)) * (1.0 + pow(c*(g+c) - 1.0, vec3(2.0)) / pow(c*(g-c) + 1.0, vec3(2.0)));
+    vec3 g = sqrt(sq(ior) + c*c - 1.);
+    return 0.5 * pow(g-c, vec3(2.)) / pow(g+c, vec3(2.)) * (1. + pow(c*(g+c) - 1., vec3(2.)) / pow(c*(g-c) + 1., vec3(2.)));
 }
 
 // Smith Joint GGX
@@ -41,15 +41,15 @@ float V_GGX(float NdotL, float NdotV, float alphaRoughness)
 {
     float alphaRoughnessSq = alphaRoughness * alphaRoughness;
 
-    float GGXV = NdotL * sqrt(NdotV * NdotV * (1.0 - alphaRoughnessSq) + alphaRoughnessSq);
-    float GGXL = NdotV * sqrt(NdotL * NdotL * (1.0 - alphaRoughnessSq) + alphaRoughnessSq);
+    float GGXV = NdotL * sqrt(NdotV * NdotV * (1. - alphaRoughnessSq) + alphaRoughnessSq);
+    float GGXL = NdotV * sqrt(NdotL * NdotL * (1. - alphaRoughnessSq) + alphaRoughnessSq);
 
     float GGX = GGXV + GGXL;
-    if (GGX > 0.0)
+    if (GGX > 0.)
     {
         return 0.5 / GGX;
     }
-    return 0.0;
+    return 0.;
 }
 
 // Anisotropic GGX visibility function, with height correlation.
@@ -59,7 +59,7 @@ float V_GGX_anisotropic(float NdotL, float NdotV, float BdotV, float TdotV, floa
     float GGXV = NdotL * length(vec3(at * TdotV, ab * BdotV, NdotV));
     float GGXL = NdotV * length(vec3(at * TdotL, ab * BdotL, NdotL));
     float v = 0.5 / (GGXV + GGXL);
-    return clamp(v, 0.0, 1.0);
+    return clamp(v, 0., 1.);
 }
 
 // https://github.com/google/filament/blob/master/shaders/src/brdf.fs#L136
@@ -67,7 +67,7 @@ float V_GGX_anisotropic(float NdotL, float NdotV, float BdotV, float TdotV, floa
 // Note: Google call it V_Ashikhmin and V_Neubelt
 float V_Ashikhmin(float NdotL, float NdotV)
 {
-    return clamp(1.0 / (4.0 * (NdotL + NdotV - NdotL * NdotV)),0.0,1.0);
+    return clamp(1. / (4. * (NdotL + NdotV - NdotL * NdotV)),0.,1.);
 }
 
 // https://github.com/google/filament/blob/master/shaders/src/brdf.fs#L131
@@ -83,7 +83,7 @@ float V_Kelemen(float LdotH)
 float D_GGX(float NdotH, float alphaRoughness)
 {
     float alphaRoughnessSq = alphaRoughness * alphaRoughness;
-    float f = (NdotH * NdotH) * (alphaRoughnessSq - 1.0) + 1.0;
+    float f = (NdotH * NdotH) * (alphaRoughnessSq - 1.) + 1.;
     return alphaRoughnessSq / (M_PI * f * f);
 }
 
@@ -103,10 +103,10 @@ float D_Ashikhmin(float NdotH, float alphaRoughness)
     // Ashikhmin 2007, "Distribution-based BRDFs"
     float a2 = alphaRoughness * alphaRoughness;
     float cos2h = NdotH * NdotH;
-    float sin2h = 1.0 - cos2h;
+    float sin2h = 1. - cos2h;
     float sin4h = sin2h * sin2h;
     float cot2 = -cos2h / (a2 * sin2h);
-    return 1.0 / (M_PI * (4.0 * a2 + 1.0) * sin4h) * (4.0 * exp(cot2) + sin4h);
+    return 1. / (M_PI * (4. * a2 + 1.) * sin4h) * (4. * exp(cot2) + sin4h);
 }
 
 //Sheen implementation-------------------------------------------------------------------------------------
@@ -117,17 +117,17 @@ float D_Charlie(float sheenRoughness, float NdotH)
 {
     sheenRoughness = max(sheenRoughness, 0.000001); //clamp (0,1]
     float alphaG = sheenRoughness * sheenRoughness;
-    float invR = 1.0 / alphaG;
+    float invR = 1. / alphaG;
     float cos2h = NdotH * NdotH;
-    float sin2h = 1.0 - cos2h;
-    return (2.0 + invR) * pow(sin2h, invR * 0.5) / (2.0 * M_PI);
+    float sin2h = 1. - cos2h;
+    return (2. + invR) * pow(sin2h, invR * 0.5) / (2. * M_PI);
 }
 
 //https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#acknowledgments AppendixB
 vec3 BRDF_lambertian(vec3 f0, vec3 f90, vec3 diffuseColor, float VdotH)
 {
     // see https://seblagarde.wordpress.com/2012/01/08/pi-or-not-to-pi-in-game-lighting-equation/
-    return (1.0 - F_Schlick(f0, f90, VdotH)) * (diffuseColor / M_PI);
+    return (1. - F_Schlick(f0, f90, VdotH)) * (diffuseColor / M_PI);
 }
 
 //  https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#acknowledgments AppendixB
@@ -145,8 +145,8 @@ vec3 BRDF_specularAnisotropicGGX(vec3 f0, vec3 f90, float alphaRoughness, float 
 {
     // Roughness along tangent and bitangent.
     // Christopher Kulla and Alejandro Conty. 2017. Revisiting Physically Based Shading at Imageworks
-    float at = max(alphaRoughness * (1.0 + anisotropy), 0.00001);
-    float ab = max(alphaRoughness * (1.0 - anisotropy), 0.00001);
+    float at = max(alphaRoughness * (1. + anisotropy), 0.00001);
+    float ab = max(alphaRoughness * (1. - anisotropy), 0.00001);
 
     vec3 F = F_Schlick(f0, f90, VdotH);
     float V = V_GGX_anisotropic(NdotL, NdotV, BdotV, TdotV, TdotL, BdotL, anisotropy, at, ab);
