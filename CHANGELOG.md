@@ -1,3 +1,11 @@
+# [1.18.0](https://github.com/threeify/threeify/compare/v1.17.0...v1.18.0) (2020-07-04)
+
+
+### Features
+
+* ultra fast OBJ parser. ([eba0981](https://github.com/threeify/threeify/commit/eba0981f7e001943f3c96934d187806c9197558d))
+* upgrade sheen model from CharlieDAshihkminV to CharlieDV ([608b3a4](https://github.com/threeify/threeify/commit/608b3a4f1b5a17d5b5c0066d325db7121bead789))
+
 # [1.17.0](https://github.com/threeify/threeify/compare/v1.16.0...v1.17.0) (2020-07-03)
 
 
