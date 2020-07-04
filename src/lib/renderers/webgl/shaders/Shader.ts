@@ -46,7 +46,7 @@ function removeDeadCode(sourceCode: string): string {
       if (undefMatch !== null) {
         const indexOfDefine = defines.indexOf(undefMatch[1]);
         if (indexOfDefine >= 0) {
-          defines = defines.splice(defines.indexOf(undefMatch[1]), 1);
+          defines = defines.splice(indexOfDefine, 1);
         }
       }
       const ifdefMatch = line.match(ifdefRegexp);
