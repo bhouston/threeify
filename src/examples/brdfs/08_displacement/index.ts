@@ -58,6 +58,7 @@ async function init(): Promise<null> {
 
     // materials
     normalMap: normalMap,
+    normalScale: 1.0,
     displacementMap: displacementMap,
     displacementScale: 1.0,
   };
@@ -73,8 +74,9 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.displacementScale = Math.cos(now * 0.0008) * 0.05 + 0.05;
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 4.0, 0.5);
+    uniforms.normalScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
+    uniforms.displacementScale = uniforms.normalScale * 0.1;
+    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
 
     canvasFramebuffer.clear(AttachmentBits.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
