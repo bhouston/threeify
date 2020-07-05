@@ -9,7 +9,8 @@ uniform vec3 pointLightColor;
 uniform float pointLightRange;
 
 uniform sampler2D normalMap;
-uniform float normalScale;
+uniform vec2 normalScale;
+uniform float displacementScale;
 
 #pragma include <brdfs/common>
 #pragma include <lighting/punctual>
@@ -21,12 +22,11 @@ uniform float normalScale;
 
 void main() {
 
-  vec3 ambient = vec3(0.);
-  vec3 albedo = mix( vec3(0.2), vec3( 1., 0., 0. ), normalScale );
+  vec3 albedo = mix( vec3(0.2), vec3( 1., 0., 0. ), normalScale.y );
   vec3 specular = vec3(1.);
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0( specular );
-  vec3 normal = rgbToNormal( texture2D( normalMap, vec2(1.0)-v_uv0 ).grb ) * vec3( 1., -1., 1. );
+  vec3 normal = normalize( rgbToNormal( texture2D( normalMap, vec2(1.0)-v_uv0 ).rgb ) * vec3( normalScale, 1. ) );
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
@@ -34,24 +34,22 @@ void main() {
   surface.viewDirection = normalize( -v_viewSurfacePosition );
 
   uvToTangentFrame( surface, v_uv0 );
-  vec3 oldNormal = surface.normal;
   perturbSurfaceNormal_TangentSpace( surface, normal );
-  surface.normal = normalize( mix( oldNormal, surface.normal, normalScale ) );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
   punctualLight.color = pointLightColor;
   punctualLight.range = pointLightRange;
 
-  DirectIllumination directIllumination;
-  pointLightToDirectIllumination( surface, punctualLight, directIllumination );
+  DirectIrradiance directIrradiance;
+  pointLightToDirectIrradiance( surface, punctualLight, directIrradiance );
 
-  vec3 lightDirection = directIllumination.lightDirection;
-  vec3 irradiance = directIllumination.color * saturate( dot( surface.normal, lightDirection ) );
+  vec3 lightDirection = directIrradiance.lightDirection;
+  vec3 irradiance = directIrradiance.irradiance;
 
   vec3 outputColor;
   outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
-  outputColor += ( irradiance + ambient ) * BRDF_Diffuse_Lambert( albedo );
+  outputColor += irradiance * BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
   gl_FragColor.a = 1.;

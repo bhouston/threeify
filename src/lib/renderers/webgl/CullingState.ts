@@ -11,7 +11,7 @@ import { GL } from "./GL";
 // set: void gl.frontFace(mode);
 export enum WindingOrder {
   Clockwise = GL.CW,
-  CounterClockwise = GL.CW, // default
+  CounterClockwise = GL.CCW, // default
 }
 
 // set: void gl.cullFace(mode);

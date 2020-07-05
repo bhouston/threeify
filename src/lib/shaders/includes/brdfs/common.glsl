@@ -1,7 +1,7 @@
 #pragma once
 
-struct DirectIllumination {
-	vec3 color;
+struct DirectIrradiance {
+	vec3 irradiance;
 	vec3 lightDirection;
 };
 
@@ -20,22 +20,27 @@ vec3 specularIntensityToF0( in vec3 specularIntensity ) {
 mat3 surfaceToNormalMatrix( in Surface surface ) {
   return mat3(surface.tangent, surface.bitangent, surface.normal);
 }
+
+vec3 flatSurfaceNormal( vec3 position ) {
+  return normalize(cross(dFdx(position), dFdy(position)));
+}
+
 // Get normal, tangent and bitangent vectors.
 // based on the glTF reference viewer
 void uvToTangentFrame( inout Surface surface, in vec2 uv ) {
-  vec3 tempTangent = dFdx( uv.y ) * dFdy(surface.position) - dFdy( uv.y ) * dFdx(surface.position);
+  vec3 tempTangent = dFdy( uv.y ) * dFdx(surface.position) - dFdx( uv.y ) * dFdy(surface.position);
 
   surface.normal = normalize(surface.normal);
-  surface.bitangent = -normalize(tempTangent - surface.normal * dot(surface.normal, tempTangent));
-  surface.tangent = -cross(surface.normal, surface.bitangent);
+  surface.tangent = normalize(tempTangent - surface.normal * dot(surface.normal, tempTangent));
+  surface.bitangent = -cross(surface.normal, surface.tangent);
 }
 
 void rotateTangentFrame( inout Surface surface, in vec2 anisotropicDirection ) {
   // Due to anisoptry, the tangent can be further rotated around the geometric normal.
   // NOTE: The null anisotropic direction value is (1, 0, 0)
   mat3 normalMatrix = surfaceToNormalMatrix( surface );
-  surface.tangent = normalMatrix * vec3( anisotropicDirection, 0. );
-  surface.bitangent = normalMatrix * vec3( anisotropicDirection.y, -anisotropicDirection.x, 0. );
+  surface.tangent = normalMatrix * vec3( anisotropicDirection.yx, 0. );
+  surface.bitangent = normalMatrix * vec3( anisotropicDirection.x, -anisotropicDirection.y, 0. );
 }
 
 // this should be done after rotating the tangent frame

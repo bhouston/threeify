@@ -9,7 +9,10 @@ import {
 } from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { ClearState } from "../../../lib/renderers/webgl/ClearState";
+import { CullingState } from "../../../lib/renderers/webgl/CullingState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -43,25 +46,28 @@ async function init(): Promise<null> {
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
     pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(0.7),
-    pointLightRange: 6.0,
+    pointLightRange: 12.0,
 
     // materials
-    specularAnisotropicFlowModulator: 1.0,
+    specularAnisotropicScale: 1.0,
     specularAnisotropicFlowMap: anisotropicFlow1Map,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(Math.cos(now * 0.0) * 0.7 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
+      new Euler(-0.3 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
       uniforms.localToWorld,
     );
     uniforms.specularAnisotropicFlowMap = Math.floor(now / 5000) % 2 === 0 ? anisotropicFlow1Map : anisotropicFlow2Map;
 
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    canvasFramebuffer.clear(AttachmentBits.All);
+    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);
   }
