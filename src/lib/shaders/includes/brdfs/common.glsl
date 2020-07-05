@@ -1,7 +1,7 @@
 #pragma once
 
-struct DirectIllumination {
-	vec3 color;
+struct DirectIrradiance {
+	vec3 irradiance;
 	vec3 lightDirection;
 };
 

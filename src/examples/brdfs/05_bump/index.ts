@@ -10,6 +10,7 @@ import {
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
+import { CullingState } from "../../../lib/renderers/webgl/CullingState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
@@ -51,8 +52,9 @@ async function init(): Promise<null> {
     specularRoughnessMap: makeTexImage2DFromTexture(context, specularRoughnessTexture),
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
@@ -63,8 +65,8 @@ async function init(): Promise<null> {
     );
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.cos(now * 0.002) * 2.0, 0.5);
 
-    canvasFramebuffer.clear(AttachmentBits.All, blackClearState);
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    canvasFramebuffer.clear(AttachmentBits.All);
+    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);
   }
