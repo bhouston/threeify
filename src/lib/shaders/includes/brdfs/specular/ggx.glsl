@@ -23,6 +23,7 @@ vec3 BRDF_Specular_GGX( const in Surface surface, vec3 lightDirection, const in 
 
 } // validated
 
+/*
 //  https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#acknowledgments AppendixB
 vec3 BRDF_specularGGX_2(vec3 f0, vec3 f90, float alphaRoughness, float VdotH, float NdotL, float NdotV, float NdotH)
 {
@@ -32,3 +33,4 @@ vec3 BRDF_specularGGX_2(vec3 f0, vec3 f90, float alphaRoughness, float VdotH, fl
 
     return F * Vis * D;
 }
+*/
