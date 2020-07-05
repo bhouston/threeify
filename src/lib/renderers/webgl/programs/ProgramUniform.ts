@@ -133,6 +133,10 @@ export class ProgramUniform {
         }
         break;
     }
-    throw new Error(`unsupported uniform type: ${this.uniformType}`);
+    throw new Error(
+      `unsupported uniform type - value mismatch: ${UniformType[this.uniformType]}(${this.uniformType}) on '${
+        this.name
+      }'`,
+    );
   }
 }
