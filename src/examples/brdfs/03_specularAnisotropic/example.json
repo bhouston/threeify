@@ -1,0 +1,8 @@
+{
+  "slug": "brdf_specular_ggx_anisotropic",
+  "en": {
+    "name": "GGX Specular Anisotropic BRDF",
+    "description": "",
+    "keywords": [ "brdf", "specular", "ggx", "reflection", "anisotropic" ]
+  }
+}

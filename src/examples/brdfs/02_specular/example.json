@@ -1,0 +1,8 @@
+{
+  "slug": "brdf_specular_ggx",
+  "en": {
+    "name": "GGX Specular BRDF",
+    "description": "",
+    "keywords": [ "brdf", "specular", "ggx", "reflection" ]
+  }
+}

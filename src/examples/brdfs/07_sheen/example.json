@@ -1,0 +1,8 @@
+{
+  "slug": "brdf_sheen",
+  "en": {
+    "name": "Sheen BRDF",
+    "description": "",
+    "keywords": [ "brdf", "sheen", "fabric", "cloth" ]
+  }
+}
