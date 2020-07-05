@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/threeify/threeify/compare/v1.21.0...v1.22.0) (2020-07-05)
+
+
+### Features
+
+* improve error message when uniform mismatch ([5429f1f](https://github.com/threeify/threeify/commit/5429f1f61c3b1a410b22ba489673099ec17f46af))
+
 # [1.21.0](https://github.com/threeify/threeify/compare/v1.20.0...v1.21.0) (2020-07-05)
 
 
