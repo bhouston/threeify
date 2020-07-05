@@ -46,7 +46,7 @@ async function init(): Promise<null> {
     pointLightRange: 6.0,
 
     // materials
-    specularAnisotropicFlowModulator: 1.0,
+    specularAnisotropicScale: 1.0,
     specularAnisotropicFlowMap: anisotropicFlow1Map,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -56,7 +56,7 @@ async function init(): Promise<null> {
     const now = Date.now();
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(Math.cos(now * 0.0) * 0.7 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
+      new Euler(0.7 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
       uniforms.localToWorld,
     );
     uniforms.specularAnisotropicFlowMap = Math.floor(now / 5000) % 2 === 0 ? anisotropicFlow1Map : anisotropicFlow2Map;

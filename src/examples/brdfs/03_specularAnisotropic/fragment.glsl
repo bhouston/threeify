@@ -8,7 +8,7 @@ uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightColor;
 uniform float pointLightRange;
 
-uniform float     specularAnisotropicFlowModulator;
+uniform float     specularAnisotropicScale;
 uniform sampler2D specularAnisotropicFlowMap;
 
 #pragma include <brdfs/common>
@@ -23,8 +23,8 @@ void main() {
   vec3 ambient = vec3(0.);
   vec3 albedo = vec3( 1. );
   vec3 specular = vec3( 1. );
-  float specularRoughness = 0.25;
-  vec2 specularAnisotropicFlow = specularAnisotropicFlowModulator * decodeAnisotropyFlowMap( texture2D( specularAnisotropicFlowMap, v_uv0 ).rg );
+  float specularRoughness = 0.15;
+  vec2 specularAnisotropicFlow = specularAnisotropicScale * decodeDirection( texture2D( specularAnisotropicFlowMap, v_uv0 ).rg );
   vec3 specularF0 = specularIntensityToF0( specular );
 
   Surface surface;

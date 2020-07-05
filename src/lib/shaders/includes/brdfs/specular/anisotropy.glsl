@@ -1,6 +1,6 @@
 #pragma once
 
-vec2 decodeAnisotropyFlowMap( vec2 value ) {
+vec2 decodeDirection( vec2 value ) {
   return value * 2. - 1.;
 }
 
