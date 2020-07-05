@@ -27,6 +27,9 @@ const screenToLocalUnprojection = localToScreenProjection.clone().invert();
 this
 Calculated by `cloc src`:
 
-2020-06-04: files ???, blank 522, comment 208, code 2535
-2020-06-18: files 161, blank 1254, comment 874, code 5221
-2020-06-23: files 194, blank 1549, comment 1018, code 6820
+|    Date    | Files | Blank Lines | Comment Lines | Code Lines |
+| :--------: | ----: | ----------: | ------------: | ---------: |
+| 2020-06-04 |   ??? |         522 |           208 |       2535 |
+| 2020-06-18 |   161 |        1254 |           874 |       5221 |
+| 2020-06-23 |   194 |        1549 |          1018 |       6820 |
+| 2020-07-04 |   234 |        2027 |          1216 |       9200 |
