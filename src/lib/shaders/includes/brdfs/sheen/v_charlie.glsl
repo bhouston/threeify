@@ -20,8 +20,9 @@ float L(float x, float r) {
 // https://www.shadertoy.com/view/wl3SWs
 float V_Charlie(float roughness, float dotNL, float dotNV)
 {
-	float visV = dotNV < .5 ? exp(L(dotNV, roughness)) : exp(2. * L(.5, roughness) - L(1. - dotNV, roughness));
-	float visL = dotNL < .5 ? exp(L(dotNL, roughness)) : exp(2. * L(.5, roughness) - L(1. - dotNL, roughness));
+  float r = roughness;
+	float visV = dotNV < .5 ? exp(L(dotNV, r)) : exp(2. * L(.5, r) - L(1. - dotNV, r));
+	float visL = dotNL < .5 ? exp(L(dotNL, r)) : exp(2. * L(.5, r) - L(1. - dotNL, r));
 
 	return 1. / ((1. + visV + visL) * (4. * dotNV * dotNL));
 }
