@@ -1,3 +1,16 @@
+# [1.21.0](https://github.com/threeify/threeify/compare/v1.20.0...v1.21.0) (2020-07-05)
+
+
+### Bug Fixes
+
+* anisotropy and normal maps are now no longer rotated 90 degrees. ([1e49f5f](https://github.com/threeify/threeify/commit/1e49f5f35fb40d92e54a0fd30a4162fa2dc14709))
+* fix incorrect rotation of tangent frame ([838130e](https://github.com/threeify/threeify/commit/838130e43a6c497c7b701b9c6f1166469810fdf2))
+
+
+### Features
+
+* add opengl normal map plane - ensure correctly with easy case. ([511acaa](https://github.com/threeify/threeify/commit/511acaa905936bb4b8e694158ae74ee63aa100c0))
+
 # [1.20.0](https://github.com/threeify/threeify/compare/v1.19.0...v1.20.0) (2020-07-04)
 
 
