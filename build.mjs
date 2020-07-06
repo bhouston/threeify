@@ -56,7 +56,7 @@ async function main() {
   glob(distJSGlob, {}, function (er, inputFileNames) {
     inputFileNames.forEach(async (inputFileName) => {
       const inputDirectory = path.dirname(inputFileName);
-      const outputDirectory = inputDirectory.replace(rootDir, program.outDir);
+      const outputDirectory = inputDirectory.replace(rootDir, program.outDir + "/examples");
       const sourceDirectory = inputDirectory.replace(rootDir, sourceDir);
 
       const extension = path.extname(inputFileName);
@@ -108,15 +108,12 @@ async function main() {
     });
   });
 
+  const brotliExtensions = ['obj', 'hdr', 'mtl', 'ply', 'glTF', 'glb'];
   const assetsGlob = `${assetDir}/**/*.*`;
   glob(assetsGlob, {}, function (er, inputFileNames) {
     inputFileNames.forEach(async (inputFileName) => {
       const inputDirectory = path.dirname(inputFileName);
       const outputDirectory = inputDirectory.replace(assetDir, program.outDir + "/assets");
-
-      console.log( 'inputDirectory', inputDirectory);
-      console.log( 'assetDir', assetDir);
-      console.log( 'outputDirectory', outputDirectory);
 
       const extension = path.extname(inputFileName);
       const baseName = path.basename(inputFileName, extension);
@@ -130,7 +127,7 @@ async function main() {
       }
       fs.copyFileSync( inputFileName, outputFileName);
 
-      if( extension !== "br" ) {
+      if( brotliExtensions.indexOf( extension.slice( 1 ) ) >= 0 ) {
         const compressedFileName = outputFileName + ".br";
         if (fs.existsSync(compressedFileName)) {
           fs.unlinkSync(compressedFileName);
