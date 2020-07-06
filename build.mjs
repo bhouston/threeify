@@ -125,18 +125,19 @@ async function main() {
       if (!fs.existsSync(outputDirectory)) {
         makeDir.sync(outputDirectory);
       }
-      //if (fs.existsSync(outputFileName)) {
-      //  fs.unlinkSync(outputFileName);
-      //}
-      //fs.copyFileSync( inputFileName, outputFileName);
-
-      const compressedFileName = inputFileName + ".br";
-      if (fs.existsSync(compressedFileName)) {
-        fs.unlinkSync(compressedFileName);
+      if (fs.existsSync(outputFileName)) {
+        fs.unlinkSync(outputFileName);
       }
-      let compressedFileSize = undefined;
-      if (program.compress) {
-        await compress(inputFileName);
+      fs.copyFileSync( inputFileName, outputFileName);
+
+      if( extension !== "br" ) {
+        const compressedFileName = inputFileName + ".br";
+        if (fs.existsSync(compressedFileName)) {
+          fs.unlinkSync(compressedFileName);
+        }
+        if (program.compress) {
+          await compress(inputFileName);
+        }
       }
     });
   });
