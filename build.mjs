@@ -112,10 +112,11 @@ async function main() {
   glob(assetsGlob, {}, function (er, inputFileNames) {
     inputFileNames.forEach(async (inputFileName) => {
       const inputDirectory = path.dirname(inputFileName);
-      const outputDirectory = inputDirectory.replace(program.assetDir, program.outDir + "/assets");
+      const outputDirectory = inputDirectory.replace(assetDir, program.outDir + "/assets");
 
       console.log( 'inputDirectory', inputDirectory);
-  console.log( 'outputDirectory', outputDirectory);
+      console.log( 'assetDir', assetDir);
+      console.log( 'outputDirectory', outputDirectory);
 
       const extension = path.extname(inputFileName);
       const baseName = path.basename(inputFileName, extension);
@@ -124,10 +125,10 @@ async function main() {
       if (!fs.existsSync(outputDirectory)) {
         makeDir.sync(outputDirectory);
       }
-      if (fs.existsSync(outputFileName)) {
-        fs.unlinkSync(outputFileName);
-      }
-      fs.copyFileSync( inputFileName, outputFileName);
+      //if (fs.existsSync(outputFileName)) {
+      //  fs.unlinkSync(outputFileName);
+      //}
+      //fs.copyFileSync( inputFileName, outputFileName);
 
       const compressedFileName = inputFileName + ".br";
       if (fs.existsSync(compressedFileName)) {
