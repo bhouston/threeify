@@ -1,3 +1,12 @@
+# [1.23.0](https://github.com/threeify/threeify/compare/v1.22.0...v1.23.0) (2020-07-06)
+
+
+### Features
+
+* add descriptions to example.json files and complete coverage. ([f99e8fe](https://github.com/threeify/threeify/commit/f99e8fe02565bc159ce4daac2457805138ba8693))
+* auto-attach render context when one finds a  canvas element with id "threeify-framebuffer" ([a835ddf](https://github.com/threeify/threeify/commit/a835ddfce19470c50a9bee69b9d740e92e53be93))
+* json descriptions of examples with multi-lingual support ([4dc51e6](https://github.com/threeify/threeify/commit/4dc51e6c801805747e88961b60ee7d2c04826f2a))
+
 # [1.22.0](https://github.com/threeify/threeify/compare/v1.21.0...v1.22.0) (2020-07-05)
 
 
