@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Threeify - Example Loader</title>
+  </head>
+  <body>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      let scriptUrl = urlParams.get('scriptUrl');
+      const name = urlParams.get('name')
+      if( name !== null ) {
+        scriptUrl = `dist/examples/${name}/index.js`;
+      }
+      var script = document.createElement("script");
+      script.setAttribute("type", "module");
+      script.setAttribute("src", scriptUrl);
+      document.getElementsByTagName("head")[0].appendChild(script);
+    </script>
+  </body>
+</html>
