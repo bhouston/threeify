@@ -8,14 +8,15 @@ import process from "process";
 
 program
   .name("build")
-  .option("-r, --rootDir <dirpath>", "the root of the source directory tree")
-  .option("-s, --sourceDir <dirpath>", "the typescript source directory tree")
-  .option("-g, --glob <glob>", "the search within the source directory")
   .option("-o, --outDir <dirpath>", "the root of the output directory tree")
   .option("-m, --minify", "minify the code")
   .option("-c, --compress", "compress the code using brotli")
   .option("-v, --verboseLevel <level>", "higher numbers means more output", parseInt);
 program.parse(process.argv);
+
+const rootDir = "./dist";
+const sourceDir = "./src";
+const assetDir = "./assets";
 
 async function asyncCommandLine(commandLine) {
   return new Promise(function (resolve, reject) {
@@ -51,12 +52,12 @@ function fileSize( filePath) {
 
 async function main() {
   await transpile();
-  const globRegex = `${program.rootDir}/${program.glob}`;
-  glob(globRegex, {}, function (er, inputFileNames) {
+  const distJSGlob = `${rootDir}/**/index.js`;
+  glob(distJSGlob, {}, function (er, inputFileNames) {
     inputFileNames.forEach(async (inputFileName) => {
       const inputDirectory = path.dirname(inputFileName);
-      const outputDirectory = inputDirectory.replace(program.rootDir, program.outDir);
-      const sourceDirectory = inputDirectory.replace(program.rootDir, program.sourceDir);
+      const outputDirectory = inputDirectory.replace(rootDir, program.outDir);
+      const sourceDirectory = inputDirectory.replace(rootDir, sourceDir);
 
       const extension = path.extname(inputFileName);
       const baseName = path.basename(inputFileName, extension);
@@ -91,7 +92,7 @@ async function main() {
         compressedFileSize = fileSize( inputFileName + '.br');
       }
 
-      const sourceJson =  './' + path.join(  sourceDirectory, 'example.json');
+      const sourceJson =  './' + path.join( sourceDirectory, 'example.json');
       if( fs.existsSync( sourceJson ) ) {
        const outputJson = path.join( './' + outputDirectory, 'example.json');
        const json = JSON.parse( fs.readFileSync( sourceJson ) );
@@ -104,6 +105,38 @@ async function main() {
        }
        fs.writeFileSync( outputJson, JSON.stringify( json ) );
      }
+    });
+  });
+
+  const assetsGlob = `${assetDir}/**/*.*`;
+  glob(assetsGlob, {}, function (er, inputFileNames) {
+    inputFileNames.forEach(async (inputFileName) => {
+      const inputDirectory = path.dirname(inputFileName);
+      const outputDirectory = inputDirectory.replace(program.assetDir, program.outDir + "/assets");
+
+      console.log( 'inputDirectory', inputDirectory);
+  console.log( 'outputDirectory', outputDirectory);
+
+      const extension = path.extname(inputFileName);
+      const baseName = path.basename(inputFileName, extension);
+      const outputFileName = `${outputDirectory}/${baseName}${extension}`;
+
+      if (!fs.existsSync(outputDirectory)) {
+        makeDir.sync(outputDirectory);
+      }
+      if (fs.existsSync(outputFileName)) {
+        fs.unlinkSync(outputFileName);
+      }
+      fs.copyFileSync( inputFileName, outputFileName);
+
+      const compressedFileName = inputFileName + ".br";
+      if (fs.existsSync(compressedFileName)) {
+        fs.unlinkSync(compressedFileName);
+      }
+      let compressedFileSize = undefined;
+      if (program.compress) {
+        await compress(inputFileName);
+      }
     });
   });
 }
