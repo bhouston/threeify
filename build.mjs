@@ -9,6 +9,7 @@ import process from "process";
 program
   .name("build")
   .option("-r, --rootDir <dirpath>", "the root of the source directory tree")
+  .option("-s, --sourceDir <dirpath>", "the typescript source directory tree")
   .option("-g, --glob <glob>", "the search within the source directory")
   .option("-o, --outDir <dirpath>", "the root of the output directory tree")
   .option("-m, --minify", "minify the code")
@@ -44,40 +45,65 @@ async function transpile() {
   return asyncCommandLine(`yarn tgt ${program.minify ? "--minify" : ""}`);
 }
 
+function fileSize( filePath) {
+  return fs.statSync(filePath).size;
+}
+
 async function main() {
   await transpile();
   const globRegex = `${program.rootDir}/${program.glob}`;
-  glob(globRegex, {}, function (er, sourceFileNames) {
-    sourceFileNames.forEach(async (sourceFileName) => {
-      const sourceDirectory = path.dirname(sourceFileName);
-      const outputDirectory = sourceDirectory.replace(program.rootDir, program.outDir);
+  glob(globRegex, {}, function (er, inputFileNames) {
+    inputFileNames.forEach(async (inputFileName) => {
+      const inputDirectory = path.dirname(inputFileName);
+      const outputDirectory = inputDirectory.replace(program.rootDir, program.outDir);
+      const sourceDirectory = inputDirectory.replace(program.rootDir, program.sourceDir);
 
-      const sourceExtension = path.extname(sourceFileName);
-      const sourceBaseName = path.basename(sourceFileName, sourceExtension);
-      const bundledFileName = `${outputDirectory}/${sourceBaseName}.rollup${sourceExtension}`;
-      const minifiedFileName = `${outputDirectory}/${sourceBaseName}${sourceExtension}`;
+      const extension = path.extname(inputFileName);
+      const baseName = path.basename(inputFileName, extension);
+      const bundledFileName = `${outputDirectory}/${baseName}.rollup${extension}`;
+      const minifiedFileName = `${outputDirectory}/${baseName}${extension}`;
+
+
       //const outputFileName = `${outputDirectory}/${sourceBaseName}.${sourceExtension}`;
       if (!fs.existsSync(outputDirectory)) {
         makeDir.sync(outputDirectory);
       }
-      await bundle(sourceFileName, bundledFileName);
-      sourceFileName = bundledFileName;
-      if (program.minify) {
-        await minify(sourceFileName, minifiedFileName);
-        fs.unlinkSync(sourceFileName);
-        sourceFileName = minifiedFileName;
+     await bundle(inputFileName, bundledFileName);
+     const bundledFileSize = fileSize( bundledFileName);
+     inputFileName = bundledFileName;
+     let minifiedFileSize = undefined;
+     if (program.minify) {
+        await minify(inputFileName, minifiedFileName);
+        fs.unlinkSync(inputFileName);
+        inputFileName = minifiedFileName;
+        minifiedFileSize = fileSize( minifiedFileName);
       } else {
-        fs.renameSync(sourceFileName, minifiedFileName);
+        fs.renameSync(inputFileName, minifiedFileName);
       }
 
-      const compressedFileName = sourceFileName + ".br";
+      const compressedFileName = inputFileName + ".br";
       if (fs.existsSync(compressedFileName)) {
-        fs.unlinkSync(sourceFileName + ".br");
+        fs.unlinkSync(compressedFileName);
+      }
+      let compressedFileSize = undefined;
+      if (program.compress) {
+        await compress(inputFileName);
+        compressedFileSize = fileSize( inputFileName + '.br');
       }
 
-      if (program.compress) {
-        await compress(sourceFileName);
-      }
+      const sourceJson =  './' + path.join(  sourceDirectory, 'example.json');
+      if( fs.existsSync( sourceJson ) ) {
+       const outputJson = path.join( './' + outputDirectory, 'example.json');
+       const json = JSON.parse( fs.readFileSync( sourceJson ) );
+       json.bundleSize = bundledFileSize;
+       if( minifiedFileSize !== undefined ) {
+        json.minifiedSize = minifiedFileSize;
+       }
+       if( compressedFileSize ) {
+         json.compressedFileSize = compressedFileSize;
+       }
+       fs.writeFileSync( outputJson, JSON.stringify( json ) );
+     }
     });
   });
 }

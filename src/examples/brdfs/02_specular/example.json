@@ -2,7 +2,7 @@
   "slug": "brdf_specular_ggx",
   "en": {
     "name": "GGX Specular BRDF",
-    "description": "",
+    "description": "A test of the GGX specular BRDF layered on top of the Lambertian diffuse BRDF.",
     "keywords": [ "brdf", "specular", "ggx", "reflection" ]
   }
 }

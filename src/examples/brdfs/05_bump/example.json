@@ -1,8 +1,8 @@
 {
-  "slug": "microgeometry_bump",
+  "slug": "height_map_microgeometry",
   "en": {
-    "name": "Bump Map Microgeometry",
-    "description": "",
+    "name": "Height Map Microgeometry",
+    "description": "A height map is used to simulate microgeometry that is not represented in the mesh.  When the height map only affects lighting, but not geometry, it is called bump mapping.  This is a box sphere where the height map adds the brick shapes.",
     "keywords": [ "microgeometry", "bump", "map", "perturbation", "mapping" ]
   }
 }

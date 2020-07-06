@@ -2,7 +2,7 @@
   "slug": "brdf_clear_coat_specular",
   "en": {
     "name": "Clear Coat Specular BRDF",
-    "description": "",
+    "description": "A test of a clear coat GGX specular lobe BRDF with separate a distinct normal map layered on top of a standard GGX specular BRDF.",
     "keywords": [ "brdf", "specular", "clearcoat", "reflection" ]
   }
 }

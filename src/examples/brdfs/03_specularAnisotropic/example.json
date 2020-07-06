@@ -2,7 +2,7 @@
   "slug": "brdf_specular_ggx_anisotropic",
   "en": {
     "name": "GGX Specular Anisotropic BRDF",
-    "description": "",
+    "description": "A test of the GGX specular BRDF modified via a bend normal to simulate anisotropy layered on top of the Lambertian diffuse BRDF.  Anisotropy is specified via a flow map.",
     "keywords": [ "brdf", "specular", "ggx", "reflection", "anisotropic" ]
   }
 }
