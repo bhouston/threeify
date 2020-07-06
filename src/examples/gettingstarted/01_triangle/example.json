@@ -1,0 +1,8 @@
+{
+  "slug": "getting_started_drawing_geometry",
+  "en": {
+    "name": "Getting Started - Drawing Geometry",
+    "description": "A bare-bones test of drawing geometry directly.",
+    "keywords": [ "basics", "geometry", "direct" ]
+  }
+}

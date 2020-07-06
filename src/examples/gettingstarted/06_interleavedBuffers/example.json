@@ -1,0 +1,8 @@
+{
+  "slug": "getting_started_interleaved_geometry",
+  "en": {
+    "name": "Getting Started - Interleaved Geometry",
+    "description": "A test of interleaving and rendering arbitrary geometry.  Interleaved geometry can be more efficient for GPUs to render because all data for one vertex is collocated.",
+    "keywords": [ "basics", "geometry", "interleaved", "direct" ]
+  }
+}

@@ -24,7 +24,7 @@ void main() {
   v_uv0 = uv;
 
   float displacementAmount = texture2D( displacementMap, vec2(1.0)- uv ).x * displacementScale;
-  v_viewSurfacePosition = standardDisplacement( v_viewSurfacePosition, v_viewSurfaceNormal, displacementAmount );
+  v_viewSurfacePosition = displacePosition( v_viewSurfacePosition, v_viewSurfaceNormal, displacementAmount );
 
   gl_Position = viewToScreen * vec4( v_viewSurfacePosition, 1. );
 

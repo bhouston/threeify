@@ -9,17 +9,19 @@ export async function fetchOBJ(url: string): Promise<Geometry[]> {
   return parseOBJ(await response.text());
 }
 
-const commentRegexp = /^#(.*)$/;
-const objectRegexp = /^o +(.+)/;
-const groupRegexp = /^g +(.+)/;
-const positionRegexp = /^v +([\d.+-]+) +([\d.+-]+) +([\d.+-]+)/;
-const normalRegexp = /^vn +([\d.+-]+) +([\d.+-]+) +([\d.+-]+)/;
-const uvRegexp = /^vt +([\d.+-]+) +([\d.+-]+)/;
-const faceRegexp = /^f( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))?/;
-const sRegexp = /^s +(\d+)/;
-const matLibRegexp = /^mtllib +(.*)$/;
-const useMtlRegexp = /^usemtl +(.*)$/;
-const useMapRegexp = /^usemap +(.*)$/;
+const oRegexp = /^o +(.+)/;
+const gRegexp = /^g +(.+)/;
+const vRegexp = /^v +([\d.+-]+) +([\d.+-]+) +([\d.+-]+)/;
+const vnRegexp = /^vn +([\d.+-]+) +([\d.+-]+) +([\d.+-]+)/;
+const vtRegexp = /^vt +([\d.+-]+) +([\d.+-]+)/;
+const fRegexp = /^f( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))?/;
+
+// not yet supported
+// const commentRegexp = /^#(.*)$/;
+// const sRegexp = /^s +(\d+)/;
+// const matLibRegexp = /^mtllib +(.*)$/;
+// const useMtlRegexp = /^usemtl +(.*)$/;
+// const useMapRegexp = /^usemap +(.*)$/;
 
 export function parseOBJ(text: string): Geometry[] {
   const geometries: Geometry[] = [];
@@ -58,54 +60,50 @@ export function parseOBJ(text: string): Geometry[] {
   }
 
   text.split("\n").forEach(function parseLine(line: string) {
-    const positionMatch = line.match(positionRegexp);
-    if (positionMatch !== null) {
-      workingPositions.push(parseFloat(positionMatch[1]), parseFloat(positionMatch[2]), parseFloat(positionMatch[3]));
+    const vMatch = line.match(vRegexp);
+    if (vMatch !== null) {
+      workingPositions.push(parseFloat(vMatch[1]), parseFloat(vMatch[2]), parseFloat(vMatch[3]));
       return;
     }
-    const normalMatch = line.match(normalRegexp);
-    if (normalMatch !== null) {
-      workingNormals.push(parseFloat(normalMatch[1]), parseFloat(normalMatch[2]), parseFloat(normalMatch[3]));
+    const vnMatch = line.match(vnRegexp);
+    if (vnMatch !== null) {
+      workingNormals.push(parseFloat(vnMatch[1]), parseFloat(vnMatch[2]), parseFloat(vnMatch[3]));
       return;
     }
-    const uvMatch = line.match(uvRegexp);
-    if (uvMatch !== null) {
-      workingUvs.push(parseFloat(uvMatch[1]), parseFloat(uvMatch[2]));
+    const vtMatch = line.match(vtRegexp);
+    if (vtMatch !== null) {
+      workingUvs.push(parseFloat(vtMatch[1]), parseFloat(vtMatch[2]));
       return;
     }
-    const faceMatch = line.match(faceRegexp);
-    if (faceMatch !== null) {
+    const fMatch = line.match(fRegexp);
+    if (fMatch !== null) {
       const startVertex = positions.length / 3;
       let numVertices = 3;
-      if (faceMatch[13] !== undefined) {
+      if (fMatch[13] !== undefined) {
         numVertices++;
       }
       let baseOffset = 2;
       for (let v = 0; v < numVertices; v++) {
-        let positionsIndex = (parseInt(faceMatch[baseOffset + 0]) - 1) * 3;
-        if (positionsIndex < 0) {
-          positionsIndex += workingPositions.length / 3;
+        let pi = (parseInt(fMatch[baseOffset + 0]) - 1) * 3;
+        if (pi < 0) {
+          pi += workingPositions.length / 3;
         }
-        positions.push(
-          workingPositions[positionsIndex],
-          workingPositions[positionsIndex + 1],
-          workingPositions[positionsIndex + 2],
-        );
-        const uvIndexToken = faceMatch[baseOffset + 1];
+        positions.push(workingPositions[pi], workingPositions[pi + 1], workingPositions[pi + 2]);
+        const uvIndexToken = fMatch[baseOffset + 1];
         if (uvIndexToken.length > 0) {
-          let uvIndex = (parseInt(uvIndexToken) - 1) * 2;
-          if (uvIndex < 0) {
-            uvIndex += workingUvs.length / 2;
+          let uvi = (parseInt(uvIndexToken) - 1) * 2;
+          if (uvi < 0) {
+            uvi += workingUvs.length / 2;
           }
-          uvs.push(workingUvs[uvIndex], workingUvs[uvIndex + 1]);
+          uvs.push(workingUvs[uvi], workingUvs[uvi + 1]);
         }
-        const normalIndexToken = faceMatch[baseOffset + 2];
+        const normalIndexToken = fMatch[baseOffset + 2];
         if (normalIndexToken.length > 0) {
-          let normalIndex = (parseInt(normalIndexToken) - 1) * 3;
-          if (normalIndex < 0) {
-            normalIndex += workingNormals.length / 3;
+          let ni = (parseInt(normalIndexToken) - 1) * 3;
+          if (ni < 0) {
+            ni += workingNormals.length / 3;
           }
-          normals.push(workingNormals[normalIndex], workingNormals[normalIndex + 1], workingNormals[normalIndex + 2]);
+          normals.push(workingNormals[ni], workingNormals[ni + 1], workingNormals[ni + 2]);
         }
         baseOffset += 4;
       }
@@ -114,12 +112,12 @@ export function parseOBJ(text: string): Geometry[] {
         indices.push(startVertex + i + 1);
         indices.push(startVertex + i + 2);
       }
-    } else if (commentRegexp.test(line)) {
-      // ignore comments
-    } else if (objectRegexp.test(line)) {
+    } else if (oRegexp.test(line)) {
       commitObject();
-    } else if (groupRegexp.test(line)) {
+    } else if (gRegexp.test(line)) {
       commitGroup();
+    } /* else if (commentRegexp.test(line)) {
+      // ignore comments
     } else if (sRegexp.test(line)) {
       // not supported
     } else if (matLibRegexp.test(line)) {
@@ -128,7 +126,7 @@ export function parseOBJ(text: string): Geometry[] {
       // not supported
     } else if (useMapRegexp.test(line)) {
       // not supported
-    }
+    }*/
   });
 
   commitObject();

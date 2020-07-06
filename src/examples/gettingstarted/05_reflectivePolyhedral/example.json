@@ -1,0 +1,8 @@
+{
+  "slug": "getting_started_cubemap_texture",
+  "en": {
+    "name": "Getting Started - Cube Map Texture",
+    "description": "A bare-bones test of loading and rendering with a cubemap texture directly.",
+    "keywords": [ "basics", "geometry", "cubemap", "direct", "reflection" ]
+  }
+}

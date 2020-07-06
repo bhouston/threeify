@@ -1,0 +1,8 @@
+{
+  "slug": "getting_started_textured_plane",
+  "en": {
+    "name": "Getting Started - Textures",
+    "description": "A simple test of rendering a texture.",
+    "keywords": [ "basics", "textures", "direct" ]
+  }
+}

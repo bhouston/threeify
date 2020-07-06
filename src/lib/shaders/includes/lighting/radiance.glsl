@@ -1,3 +1,4 @@
+// Q: where is this from?  What is its purpose?
 
 vec3 getPunctualRadianceSubsurface(vec3 n, vec3 v, vec3 l, float scale, float distortion, float power, vec3 color, float thickness)
 {
