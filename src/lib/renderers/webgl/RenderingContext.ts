@@ -45,12 +45,16 @@ export class RenderingContext {
 
   constructor(canvas: HTMLCanvasElement | null = null) {
     if (canvas === null) {
+      canvas = document.getElementById("threeify-framebuffer") as HTMLCanvasElement | null;
+    }
+    if (canvas === null) {
       canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas") as HTMLCanvasElement;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       canvas.style.margin = "0";
       canvas.style.width = "100%";
       canvas.style.height = "100%";
+
     }
 
     const options: WebGLContextAttributes = {};
