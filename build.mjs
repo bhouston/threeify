@@ -131,12 +131,12 @@ async function main() {
       fs.copyFileSync( inputFileName, outputFileName);
 
       if( extension !== "br" ) {
-        const compressedFileName = inputFileName + ".br";
+        const compressedFileName = outputFileName + ".br";
         if (fs.existsSync(compressedFileName)) {
           fs.unlinkSync(compressedFileName);
         }
         if (program.compress) {
-          await compress(inputFileName);
+          await compress(outputFileName);
         }
       }
     });
