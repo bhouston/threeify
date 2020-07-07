@@ -1,3 +1,10 @@
+# [1.25.0](https://github.com/threeify/threeify/compare/v1.24.0...v1.25.0) (2020-07-07)
+
+
+### Features
+
+* add puppeteer screenshot generation when building examples. ([932726b](https://github.com/threeify/threeify/commit/932726b78776d71339665a603db2e82bed66afc6))
+
 # [1.24.0](https://github.com/threeify/threeify/compare/v1.23.0...v1.24.0) (2020-07-06)
 
 
