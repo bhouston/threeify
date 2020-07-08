@@ -1,4 +1,4 @@
-import { icosahedron } from "../../../lib/geometry/primitives/polyhedrons";
+import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -19,7 +19,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = icosahedron(0.75, 2);
+  const geometry = icosahedronGeometry(0.75, 2);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const cubeTexture = new CubeTexture([
     await fetchImage("/assets/textures/cube/pisa/px.png"),

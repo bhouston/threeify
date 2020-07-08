@@ -9,7 +9,7 @@ import { Vector3 } from "../../math/Vector3";
 import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 
-export function box(
+export function boxGeometry(
   width = 1,
   height = 1,
   depth = 1,

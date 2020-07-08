@@ -10,7 +10,13 @@ import { Vector3 } from "../../math/Vector3";
 import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 
-export function cylinder(radius = 0.5, height = 1, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2): Geometry {
+export function cylinderGeometry(
+  radius = 0.5,
+  height = 1,
+  segments = 8,
+  thetaStart = 0,
+  thetaLength = Math.PI * 2,
+): Geometry {
   const indicesTop: number[] = [];
   const verticesTop: number[] = [];
   const normalsTop: number[] = [];

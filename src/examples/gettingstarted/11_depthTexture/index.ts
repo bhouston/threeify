@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/box";
+import { boxGeometry } from "../../../lib/geometry/primitives/boxGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -31,7 +31,7 @@ async function init(): Promise<null> {
     document.body.appendChild(canvas);
   }
 
-  const geometry = box(0.75, 0.75, 0.75);
+  const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const program = makeProgramFromShaderMaterial(context, material);
 

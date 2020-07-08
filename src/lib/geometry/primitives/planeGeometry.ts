@@ -8,7 +8,7 @@
 import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 
-export function plane(width = 1, height = 1, widthSegments = 1, heightSegments = 1): Geometry {
+export function planeGeometry(width = 1, height = 1, widthSegments = 1, heightSegments = 1): Geometry {
   const widthHalf = width / 2;
   const heightHalf = height / 2;
 

@@ -1,4 +1,4 @@
-import { box } from "../../../lib/geometry/primitives/box";
+import { boxGeometry } from "../../../lib/geometry/primitives/boxGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -24,7 +24,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = box(0.75, 0.75, 0.75);
+  const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 

@@ -1,4 +1,4 @@
-import { plane } from "../../../lib/geometry/primitives/plane";
+import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -23,7 +23,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = plane(1.5, 1.5, 10, 10);
+  const geometry = planeGeometry(1.5, 1.5, 10, 10);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   // this is using the standard opengl normal map.
   const normalsTexture = new Texture(await fetchImage("/assets/textures/normalMap.png"));

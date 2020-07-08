@@ -11,21 +11,21 @@ import { makeFloat32Attribute } from "../Attribute";
 import { Geometry } from "../Geometry";
 import { computeVertexNormals } from "../Geometry.Functions";
 
-export function tetrahedron(radius = 1, detail = 0): Geometry {
+export function tetrahedronGeometry(radius = 1, detail = 0): Geometry {
   const vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];
   const indices = [2, 1, 0, 0, 3, 2, 1, 3, 0, 2, 3, 1];
 
-  return polyhedron(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail);
 }
 
-export function octahedron(radius = 1, detail = 0): Geometry {
+export function octahedronGeometry(radius = 1, detail = 0): Geometry {
   const vertices = [1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1];
   const indices = [0, 2, 4, 0, 4, 3, 0, 3, 5, 0, 5, 2, 1, 2, 5, 1, 5, 3, 1, 3, 4, 1, 4, 2];
 
-  return polyhedron(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail);
 }
 
-export function icosahedron(radius = 1, detail = 0): Geometry {
+export function icosahedronGeometry(radius = 1, detail = 0): Geometry {
   const t = (1 + Math.sqrt(5)) / 2;
 
   const vertices = [
@@ -130,9 +130,9 @@ export function icosahedron(radius = 1, detail = 0): Geometry {
     1,
   ];
 
-  return polyhedron(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail);
 }
-export function dodecahedron(radius = 1, detail = 0): Geometry {
+export function dodecahedronGeometry(radius = 1, detail = 0): Geometry {
   const t = (1 + Math.sqrt(5)) / 2;
   const r = 1 / t;
 
@@ -317,10 +317,10 @@ export function dodecahedron(radius = 1, detail = 0): Geometry {
     9,
   ];
 
-  return polyhedron(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail);
 }
 
-export function polyhedron(vertices: number[], indices: number[], radius = 1, detail = 0): Geometry {
+export function polyhedronGeometry(vertices: number[], indices: number[], radius = 1, detail = 0): Geometry {
   // default buffer data
   const vertexBuffer: number[] = [];
   const uvBuffer: number[] = [];
