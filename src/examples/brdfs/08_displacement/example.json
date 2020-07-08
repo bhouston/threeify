@@ -1,5 +1,6 @@
 {
   "slug": "height_map_microgeometry_displacement",
+  "theme": "dark",
   "en": {
     "name": "Height Map-based Displacement",
     "description": "A height map is used to displace the positions of the mesh in the normal direction in an animated fashion.  A normal map is also blended in and out in time to simulation a morphing effect.",

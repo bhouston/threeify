@@ -1,5 +1,6 @@
 {
   "slug": "brdf_lambertian",
+  "theme": "dark",
   "en": {
     "name": "Lambertian Diffuse BRDF",
     "description": "A test of the Lambertian diffuse BRDF in isolation.",
