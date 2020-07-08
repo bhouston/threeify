@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/threeify/threeify/compare/v1.25.0...v1.26.0) (2020-07-08)
+
+
+### Features
+
+* automatic resizing of the canvas framebuffer on element resize ([e276ac0](https://github.com/threeify/threeify/commit/e276ac04ba99c0ebadb2548ae077744a1fa9f1f1))
+
 # [1.25.0](https://github.com/threeify/threeify/compare/v1.24.0...v1.25.0) (2020-07-07)
 
 
