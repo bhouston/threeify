@@ -1,5 +1,6 @@
 {
   "slug": "brdf_specular_ggx",
+  "theme": "dark",
   "en": {
     "name": "GGX Specular BRDF",
     "description": "A test of the GGX specular BRDF layered on top of the Lambertian diffuse BRDF.",

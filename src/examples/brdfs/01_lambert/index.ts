@@ -58,6 +58,7 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
+    uniforms.viewToScreen = makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio);
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
     canvasFramebuffer.clear(AttachmentBits.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);

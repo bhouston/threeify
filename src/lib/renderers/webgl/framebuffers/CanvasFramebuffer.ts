@@ -21,10 +21,33 @@ import { VirtualFramebuffer } from "./VirtualFramebuffer";
 export class CanvasFramebuffer extends VirtualFramebuffer {
   public readonly canvas: HTMLCanvasElement | OffscreenCanvas;
   devicePixelRatio = 1.0;
+  autoResize = true;
 
   constructor(context: RenderingContext) {
     super(context);
     this.canvas = context.gl.canvas;
+
+    const canvas = this.canvas;
+    if (canvas instanceof HTMLCanvasElement) {
+      window.addEventListener("resize", () => {
+        if (this.autoResize === true) {
+          this.resize();
+        }
+      });
+    }
+  }
+
+  resize(): void {
+    const canvas = this.canvas;
+    if (canvas instanceof HTMLCanvasElement) {
+      const width = Math.floor(canvas.clientWidth / this.devicePixelRatio);
+      const height = Math.floor(canvas.clientHeight / this.devicePixelRatio);
+      console.log("width", width, "height", height);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+    }
   }
 
   get size(): Vector2 {

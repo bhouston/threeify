@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tgt & tsc",
-    "build-examples": "node --experimental-modules build.mjs -g **/index.js -o ../threeify.org/public/examples -s -m -c -v 0",
+    "build-examples": "node --experimental-modules build.mjs -o ../threeify.org/public -m -c -v 0",
     "dev": "npm run watch & npm start",
     "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
