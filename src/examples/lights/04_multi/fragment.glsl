@@ -4,14 +4,15 @@ varying vec3 v_viewSurfacePosition;
 varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
+#define MAX_PUNCTUAL_LIGHTS 10
 uniform int numPunctualLights;
-uniform int punctualLightType[40];
-uniform vec3 punctualLightViewPosition[40];
-uniform vec3 punctualLightViewDirection[40];
-uniform vec3 punctualLightColor[40];
-uniform float punctualLightRange[40];
-uniform float punctualLightInnerCos[40];
-uniform float punctualLightOuterCos[40];
+uniform int punctualLightType[MAX_PUNCTUAL_LIGHTS];
+uniform vec3 punctualLightViewPosition[MAX_PUNCTUAL_LIGHTS];
+uniform vec3 punctualLightViewDirection[MAX_PUNCTUAL_LIGHTS];
+uniform vec3 punctualLightColor[MAX_PUNCTUAL_LIGHTS];
+uniform float punctualLightRange[MAX_PUNCTUAL_LIGHTS];
+uniform float punctualLightInnerCos[MAX_PUNCTUAL_LIGHTS];
+uniform float punctualLightOuterCos[MAX_PUNCTUAL_LIGHTS];
 
 uniform sampler2D albedoMap;
 
@@ -39,7 +40,7 @@ void main() {
 
   vec3 outputColor;
 
-  for( int i = 0; i < 100; i ++ ) {
+  for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i ++ ) {
 
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
