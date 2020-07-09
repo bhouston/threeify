@@ -1,13 +1,7 @@
-import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
+import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
-import {
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../lib/math/Vector2";
+import { makeMatrix4PerspectiveFov, makeMatrix4Translation } from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
@@ -23,16 +17,16 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = icosahedronGeometry(0.75, 5);
+  const geometry = planeGeometry(3, 3);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const normalsTexture = new Texture(await fetchImage("/assets/textures/golfball/normals2.jpg"));
+  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
   if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
     document.body.appendChild(canvasFramebuffer.canvas);
   }
-  const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
+  const map = makeTexImage2DFromTexture(context, texture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -42,12 +36,14 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(30.0),
-    pointLightRange: 6.0,
+    pointLightViewDirection: new Vector3(0.0, 0, -1.0),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(10.0),
+    pointLightRange: 15.0,
+    pointLightInnerCos: 1.0,
+    pointLightOuterCos: Math.cos(Math.PI * 0.5),
 
     // materials
-    normalModulator: new Vector2(1, 1),
-    normalMap: normalsMap,
+    albedoMap: map,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -57,11 +53,13 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    /* uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
-    );
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
+    );*/
+    uniforms.pointLightInnerCos = Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0023));
+    uniforms.pointLightOuterCos = uniforms.pointLightInnerCos * Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0017));
+    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 0.5, Math.cos(now * 0.00087) * 0.5, 1.5);
 
     canvasFramebuffer.clear(AttachmentBits.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);

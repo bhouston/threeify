@@ -1,4 +1,4 @@
-import { icosahedron } from "../../../lib/geometry/primitives/polyhedrons";
+import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -22,7 +22,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = icosahedron(0.75, 5);
+  const geometry = icosahedronGeometry(0.75, 5);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const texture = new Texture(await fetchImage("/assets/textures/planets/jupiter_2k.jpg"));
 

@@ -1,0 +1,9 @@
+{
+  "slug": "point_light",
+  "theme": "dark",
+  "en": {
+    "name": "Point Light",
+    "description": "A point light has an intensity-color, a position and range.",
+    "keywords": ["light", "point", "punctual"]
+  }
+}

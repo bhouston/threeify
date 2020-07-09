@@ -54,7 +54,6 @@ export class RenderingContext {
       canvas.style.margin = "0";
       canvas.style.width = "100%";
       canvas.style.height = "100%";
-      canvas.style.position = "absolute";
     }
 
     const options: WebGLContextAttributes = {};

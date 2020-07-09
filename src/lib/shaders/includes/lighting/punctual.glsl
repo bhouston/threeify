@@ -35,19 +35,31 @@ float getRangeAttenuation(float distanceToLightSource, float maxRange)
 }
 
 // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_lights_punctual/README.md#inner-and-outer-cone-angles
-float getSpotAttenuation(vec3 pointToLight, vec3 spotDirection, float outerConeCos, float innerConeCos)
+float getSpotAttenuation(vec3 pointToLight, PunctualLight punctualLight)
 {
-    float actualCos = dot(normalize(spotDirection), normalize(-pointToLight));
-    if (actualCos > outerConeCos)
+    float actualCos = dot(punctualLight.direction, -pointToLight);
+    if (actualCos > punctualLight.outerConeCos)
     {
-        if (actualCos < innerConeCos)
+        if (actualCos < punctualLight.innerConeCos)
         {
-            return smoothstep(outerConeCos, innerConeCos, actualCos);
+            return smoothstep(punctualLight.outerConeCos, punctualLight.innerConeCos, actualCos);
         }
         return 1.;
     }
     return 0.;
 }
+
+void spotLightToDirectIrradiance( in Surface surface, in PunctualLight punctualLight, out DirectIrradiance directIrradiance ) {
+
+  vec3 surfaceToLight = punctualLight.position - surface.position;
+  vec3 lightDirection = normalize( surfaceToLight );
+  float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
+  lightAttenuation *= getSpotAttenuation( lightDirection, punctualLight );
+
+  directIrradiance.lightDirection = lightDirection;
+  directIrradiance.irradiance = punctualLight.color * lightAttenuation * saturate( dot( surface.normal, lightDirection ) );
+}
+
 
 void pointLightToDirectIrradiance( in Surface surface, in PunctualLight punctualLight, out DirectIrradiance directIrradiance ) {
 
