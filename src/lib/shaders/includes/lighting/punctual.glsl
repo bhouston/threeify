@@ -49,6 +49,16 @@ float getSpotAttenuation(vec3 pointToLight, PunctualLight punctualLight)
     return 0.;
 }
 
+void pointLightToDirectIrradiance( in Surface surface, in PunctualLight punctualLight, out DirectIrradiance directIrradiance ) {
+
+  vec3 surfaceToLight = punctualLight.position - surface.position;
+  float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
+  vec3 lightDirection = normalize( surfaceToLight );
+
+  directIrradiance.lightDirection = lightDirection;
+  directIrradiance.irradiance = punctualLight.color * lightAttenuation * saturate( dot( surface.normal, lightDirection ) );
+}
+
 void spotLightToDirectIrradiance( in Surface surface, in PunctualLight punctualLight, out DirectIrradiance directIrradiance ) {
 
   vec3 surfaceToLight = punctualLight.position - surface.position;
@@ -60,13 +70,8 @@ void spotLightToDirectIrradiance( in Surface surface, in PunctualLight punctualL
   directIrradiance.irradiance = punctualLight.color * lightAttenuation * saturate( dot( surface.normal, lightDirection ) );
 }
 
+void directionalLightToDirectIrradiance( in Surface surface, in PunctualLight punctualLight, out DirectIrradiance directIrradiance ) {
 
-void pointLightToDirectIrradiance( in Surface surface, in PunctualLight punctualLight, out DirectIrradiance directIrradiance ) {
-
-  vec3 surfaceToLight = punctualLight.position - surface.position;
-  float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
-  vec3 lightDirection = normalize( surfaceToLight );
-
-  directIrradiance.lightDirection = lightDirection;
-  directIrradiance.irradiance = punctualLight.color * lightAttenuation * saturate( dot( surface.normal, lightDirection ) );
+  directIrradiance.lightDirection = -punctualLight.direction;
+	directIrradiance.irradiance = punctualLight.color * saturate( dot( surface.normal, directIrradiance.lightDirection ) );
 }

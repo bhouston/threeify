@@ -3,7 +3,7 @@
   "theme": "dark",
   "en": {
     "name": "Spot Light",
-    "description": "Similar to a point light but has a direction and an inner and outer cone angle for the falloff.",
+    "description": "Similar to a point light but has a direction and an inner and outer cone angle for the falloff.  (TODO: Add units.)",
     "keywords": ["light", "spot", "punctual"]
   }
 }
