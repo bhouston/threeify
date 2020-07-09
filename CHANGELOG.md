@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/threeify/threeify/compare/v1.29.0...v1.30.0) (2020-07-09)
+
+
+### Features
+
+* multiple punctual light example ([c719305](https://github.com/threeify/threeify/commit/c719305991a44d3b5fe837c5767b26f9708a4f88))
+
 # [1.29.0](https://github.com/threeify/threeify/compare/v1.28.0...v1.29.0) (2020-07-09)
 
 
