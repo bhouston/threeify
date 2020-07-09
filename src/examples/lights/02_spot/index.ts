@@ -35,12 +35,12 @@ async function init(): Promise<null> {
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
-    pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightViewDirection: new Vector3(0.0, 0, -1.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(10.0),
-    pointLightRange: 15.0,
-    pointLightInnerCos: 1.0,
-    pointLightOuterCos: Math.cos(Math.PI * 0.5),
+    spotLightViewPosition: new Vector3(0.0, 0, 0.0),
+    spotLightViewDirection: new Vector3(0.0, 0, -1.0),
+    spotLightColor: new Vector3(1, 1, 1).multiplyByScalar(10.0),
+    spotLightRange: 15.0,
+    spotLightInnerCos: 1.0,
+    spotLightOuterCos: Math.cos(Math.PI * 0.5),
 
     // materials
     albedoMap: map,
@@ -57,9 +57,9 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );*/
-    uniforms.pointLightInnerCos = Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0023));
-    uniforms.pointLightOuterCos = uniforms.pointLightInnerCos * Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0017));
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 0.5, Math.cos(now * 0.00087) * 0.5, 1.5);
+    uniforms.spotLightInnerCos = Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0023));
+    uniforms.spotLightOuterCos = uniforms.spotLightInnerCos * Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0017));
+    uniforms.spotLightViewPosition = new Vector3(Math.cos(now * 0.001) * 0.5, Math.cos(now * 0.00087) * 0.5, 1.5);
 
     canvasFramebuffer.clear(AttachmentBits.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);

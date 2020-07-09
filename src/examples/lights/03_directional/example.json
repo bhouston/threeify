@@ -1,9 +1,9 @@
 {
-  "slug": "directional_light",
+  "slug": "multiple_lights",
   "theme": "dark",
   "en": {
-    "name": "Directional Light",
-    "description": "Directional light has a direction and an intensity-color, but no range nor position.  (TODO: Add units.)",
-    "keywords": ["light", "directional", "punctual"]
+    "name": "Multiple Light",
+    "description": "Multiple lights types all simultaneously moving around",
+    "keywords": ["light", "directional", "point", "spot", "punctual"]
   }
 }

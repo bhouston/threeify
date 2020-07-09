@@ -40,12 +40,19 @@ async function init(): Promise<null> {
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
-    directionalLightViewDirection: new Vector3(0.0, 0, -1.0),
-    directionalLightColor: new Vector3(1, 1, 1).multiplyByScalar(5.0),
+    numPunctualLights: 3,
+    punctualLightType: [0, 1, 2],
+    punctualLightViewPosition: [new Vector3(-1.0, 0, 0.0), new Vector3(0.0, 0, 0.0), new Vector3()],
+    punctualLightViewDirection: [new Vector3(), new Vector3(0.0, 0, -1.0), new Vector3(0.0, -1.0, -1.0).normalize()],
+    punctualLightColor: [new Vector3(60, 4, 4), new Vector3(4, 30, 4), new Vector3(0.1, 0.1, 1)],
+    punctualLightRange: [15.0, 15.0, 0],
+    punctualLightInnerCos: [0, 0.95, 0],
+    punctualLightOuterCos: [0, 0.9, 0],
 
     // materials
     albedoMap: map,
   };
+
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
   canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
@@ -58,11 +65,18 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.directionalLightViewDirection = new Vector3(
+    uniforms.punctualLightViewDirection[2] = new Vector3(
       Math.cos(now * 0.001) * 0.5,
       Math.cos(now * 0.00087) * 0.5,
       Math.cos(now * 0.00045) * 0.5,
     ).normalize();
+    uniforms.punctualLightViewPosition[0] = new Vector3(
+      Math.cos(now * 0.00097) * 5.0,
+      Math.cos(now * 0.00082) * 5.0,
+      1.5,
+    );
+    uniforms.punctualLightInnerCos[1] = 1.0;
+    uniforms.punctualLightOuterCos[1] = 0.97 + 0.025 * Math.cos(now * 0.0017);
 
     canvasFramebuffer.clear(AttachmentBits.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
