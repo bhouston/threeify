@@ -1,3 +1,11 @@
+# [1.27.0](https://github.com/threeify/threeify/compare/v1.26.0...v1.27.0) (2020-07-09)
+
+
+### Features
+
+* point light example ([8eb19ad](https://github.com/threeify/threeify/commit/8eb19adc73b38c8dc6e76bd9acdbf9ad71625064))
+* spot light example ([88f60b6](https://github.com/threeify/threeify/commit/88f60b6f8cf9112df513c6c48c017ccf9d091f1a))
+
 # [1.26.0](https://github.com/threeify/threeify/compare/v1.25.0...v1.26.0) (2020-07-08)
 
 
