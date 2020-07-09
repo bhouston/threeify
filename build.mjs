@@ -68,7 +68,7 @@ async function main() {
       let inputFileName = inputFileNames[i];
       try {
         const inputDirectory = path.dirname(inputFileName);
-        const outputDirectory = inputDirectory.replace(rootDir, program.outDir + "/examples");
+        const outputDirectory = inputDirectory.replace(rootDir, program.outDir);
         const sourceDirectory = inputDirectory.replace(rootDir, sourceDir);
 
         const name = inputDirectory.replace(rootDir, "").replace("/examples/", "");
