@@ -1,3 +1,16 @@
+# [1.31.0](https://github.com/threeify/threeify/compare/v1.30.0...v1.31.0) (2020-07-09)
+
+
+### Bug Fixes
+
+* fix example.json for multi-light example ([2359448](https://github.com/threeify/threeify/commit/23594482c95ed1cc54b1fe55c6485d3f1de4037b))
+* improve example build script. ([c20530f](https://github.com/threeify/threeify/commit/c20530f111fe480af336c78fa72f86f126db57b4))
+
+
+### Features
+
+* break on max light number ([529ed0d](https://github.com/threeify/threeify/commit/529ed0d54e6d8da90550d49945967613f3e52249))
+
 # [1.30.0](https://github.com/threeify/threeify/compare/v1.29.0...v1.30.0) (2020-07-09)
 
 
