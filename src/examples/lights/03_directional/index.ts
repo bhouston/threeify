@@ -1,7 +1,12 @@
 import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
+import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
-import { makeMatrix4PerspectiveFov, makeMatrix4Translation } from "../../../lib/math/Matrix4.Functions";
+import {
+  makeMatrix4PerspectiveFov,
+  makeMatrix4RotationFromEuler,
+  makeMatrix4Translation,
+} from "../../../lib/math/Matrix4.Functions";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
@@ -19,7 +24,7 @@ import vertexSourceCode from "./vertex.glsl";
 async function init(): Promise<null> {
   const geometry = icosahedronGeometry(0.75, 5);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
+  const texture = new Texture(await fetchImage("/assets/textures/planets/moon_2k.jpg"));
 
   const context = new RenderingContext();
   const canvasFramebuffer = context.canvasFramebuffer;
@@ -36,7 +41,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewDirection: new Vector3(0.0, 0, -1.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(10.0),
+    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(5.0),
 
     // materials
     albedoMap: map,
@@ -49,10 +54,10 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
 
-    /* uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
-    );*/
+    );
     uniforms.pointLightViewDirection = new Vector3(
       Math.cos(now * 0.001) * 0.5,
       Math.cos(now * 0.00087) * 0.5,

@@ -24,8 +24,8 @@ uniform sampler2D albedoMap;
 void main() {
 
   vec3 albedo = sRGBToLinear( texture2D(albedoMap, v_uv0).rgb );
-  vec3 specular = vec3(.5);
-  float specularRoughness = .25;
+  vec3 specular = vec3(.25);
+  float specularRoughness = .5;
   vec3 specularF0 = specularIntensityToF0( specular );
 
   Surface surface;
