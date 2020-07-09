@@ -1,3 +1,11 @@
+# [1.28.0](https://github.com/threeify/threeify/compare/v1.27.0...v1.28.0) (2020-07-09)
+
+
+### Features
+
+* directional light w/ example ([7ff04db](https://github.com/threeify/threeify/commit/7ff04db576e265e775e584b706779ba1f4c0d88c))
+* more compelling directional light example - moon texture ([e27f97d](https://github.com/threeify/threeify/commit/e27f97d43a11f87fa125155af40ce7d406d936b3))
+
 # [1.27.0](https://github.com/threeify/threeify/compare/v1.26.0...v1.27.0) (2020-07-09)
 
 
