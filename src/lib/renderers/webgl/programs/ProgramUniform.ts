@@ -1,3 +1,9 @@
+import {
+  linearizeMatrix4Array,
+  linearizeNumberArray,
+  linearizeVector2Array,
+  linearizeVector3Array,
+} from "../../../math/arrays/Linearizers";
 import { Matrix4 } from "../../../math/Matrix4";
 import { Vector2 } from "../../../math/Vector2";
 import { Vector3 } from "../../../math/Vector3";
@@ -7,13 +13,26 @@ import { TexImage2D } from "../textures/TexImage2D";
 import { Program } from "./Program";
 import { UniformType } from "./UniformType";
 
-export type UniformValue = number | Vector2 | Vector3 | Matrix4 | TexImage2D;
+export type UniformValue =
+  | number
+  | Vector2
+  | Vector3
+  | Matrix4
+  | TexImage2D
+  | number[]
+  | Vector2[]
+  | Vector3[]
+  | Matrix4[];
 export type UniformValueMap = { [key: string]: UniformValue };
+
+const array1dRegexp = /^([a-zA-Z_0-9]+)\[[0-9]+\]$/;
+// glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
 
 export class ProgramUniform {
   context: RenderingContext;
   name: string;
   size: number;
+  dimensions: number;
   uniformType: UniformType;
   glLocation: WebGLUniformLocation;
   valueHashCode = 0;
@@ -21,7 +40,6 @@ export class ProgramUniform {
 
   constructor(public program: Program, public index: number) {
     this.context = program.context;
-    this.name = name;
 
     const gl = program.context.gl;
 
@@ -32,7 +50,14 @@ export class ProgramUniform {
         throw new Error(`Can not find uniform with index: ${index}`);
       }
 
-      this.name = activeInfo.name;
+      const array1dMatch = activeInfo.name.match(array1dRegexp);
+      if (array1dMatch !== null) {
+        this.name = array1dMatch[1];
+        this.dimensions = 1;
+      } else {
+        this.name = activeInfo.name;
+        this.dimensions = 0;
+      }
       this.size = activeInfo.size;
       this.uniformType = activeInfo.type as UniformType;
 
@@ -72,6 +97,12 @@ export class ProgramUniform {
           }
           return this;
         }
+        if (value instanceof Array && value.length > 0 && typeof value[0] === "number") {
+          const array = linearizeNumberArray(value as number[]);
+          gl.uniform1fv(this.glLocation, array);
+          this.valueHashCode = -1;
+          return this;
+        }
         break;
       case UniformType.FloatVec2:
         if (value instanceof Vector2) {
@@ -82,6 +113,12 @@ export class ProgramUniform {
           }
           return this;
         }
+        if (value instanceof Array && value.length > 0 && value[0] instanceof Vector2) {
+          const array = linearizeVector2Array(value as Vector2[]);
+          gl.uniform2fv(this.glLocation, array);
+          this.valueHashCode = -1;
+          return this;
+        }
         break;
       case UniformType.FloatVec3:
         if (value instanceof Vector3) {
@@ -90,6 +127,13 @@ export class ProgramUniform {
             gl.uniform3f(this.glLocation, value.x, value.y, value.z);
             this.valueHashCode = hashCode;
           }
+          return this;
+        }
+        if (value instanceof Array && value.length > 0 && value[0] instanceof Vector3) {
+          const array = linearizeVector3Array(value as Vector3[]);
+          console.log(this.name, "linearized array", array);
+          gl.uniform3fv(this.glLocation, array);
+          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -109,6 +153,12 @@ export class ProgramUniform {
             gl.uniformMatrix4fv(this.glLocation, false, value.elements);
             this.valueHashCode = hashCode;
           }
+          return this;
+        }
+        if (value instanceof Array && value.length > 0 && value[0] instanceof Matrix4) {
+          const array = linearizeMatrix4Array(value as Matrix4[]);
+          gl.uniformMatrix4fv(this.glLocation, false, array);
+          this.valueHashCode = -1;
           return this;
         }
         break;
