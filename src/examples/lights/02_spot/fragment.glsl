@@ -4,12 +4,12 @@ varying vec3 v_viewSurfacePosition;
 varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
-uniform vec3 pointLightViewPosition;
-uniform vec3 pointLightViewDirection;
-uniform vec3 pointLightColor;
-uniform float pointLightRange;
-uniform float pointLightInnerCos;
-uniform float pointLightOuterCos;
+uniform vec3 spotLightViewPosition;
+uniform vec3 spotLightViewDirection;
+uniform vec3 spotLightColor;
+uniform float spotLightRange;
+uniform float spotLightInnerCos;
+uniform float spotLightOuterCos;
 
 uniform sampler2D albedoMap;
 
@@ -36,12 +36,12 @@ void main() {
   uvToTangentFrame( surface, v_uv0 );
 
   PunctualLight punctualLight;
-  punctualLight.position = pointLightViewPosition;
-  punctualLight.direction = pointLightViewDirection;
-  punctualLight.color = pointLightColor;
-  punctualLight.range = pointLightRange;
-  punctualLight.innerConeCos = pointLightInnerCos;
-  punctualLight.outerConeCos = pointLightOuterCos;
+  punctualLight.position = spotLightViewPosition;
+  punctualLight.direction = spotLightViewDirection;
+  punctualLight.color = spotLightColor;
+  punctualLight.range = spotLightRange;
+  punctualLight.innerConeCos = spotLightInnerCos;
+  punctualLight.outerConeCos = spotLightOuterCos;
 
   DirectIrradiance directIrradiance;
   spotLightToDirectIrradiance( surface, punctualLight, directIrradiance );
