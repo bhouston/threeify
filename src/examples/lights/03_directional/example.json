@@ -1,0 +1,9 @@
+{
+  "slug": "directional_light",
+  "theme": "dark",
+  "en": {
+    "name": "Directional Light",
+    "description": "Directional light has a direction and an intensity-color, but no range nor position.  (TODO: Add units.)",
+    "keywords": ["light", "directional", "punctual"]
+  }
+}
