@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/threeify/threeify/compare/v1.28.0...v1.29.0) (2020-07-09)
+
+
+### Features
+
+* add support for array uniforms (float, vec2, vec3, mat4) ([c27d7da](https://github.com/threeify/threeify/commit/c27d7da4d6fdea3e49d157ba28a753e50d205adb))
+
 # [1.28.0](https://github.com/threeify/threeify/compare/v1.27.0...v1.28.0) (2020-07-09)
 
 
