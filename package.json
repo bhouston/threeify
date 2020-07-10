@@ -67,7 +67,7 @@
     "typescript": "^3.9.3"
   },
   "engines": {
-    "node": "12.13.0"
+    "node": "^12.13.0"
   },
   "engineStrict": true,
   "prettier": {
