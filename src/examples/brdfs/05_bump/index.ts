@@ -28,11 +28,9 @@ async function init(): Promise<null> {
   const bumpTexture = new Texture(await fetchImage("/assets/textures/bricks/bump.jpg"));
   const specularRoughnessTexture = new Texture(await fetchImage("/assets/textures/bricks/roughness.jpg"));
 
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvasFramebuffer.canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

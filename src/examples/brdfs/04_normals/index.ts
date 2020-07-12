@@ -27,11 +27,10 @@ async function init(): Promise<null> {
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const normalsTexture = new Texture(await fetchImage("/assets/textures/golfball/normals2.jpg"));
 
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvasFramebuffer.canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
+
   const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

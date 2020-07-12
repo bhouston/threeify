@@ -30,11 +30,10 @@ async function init(): Promise<null> {
     await fetchImage("/assets/textures/cube/pisa/nz.png"),
   ]);
 
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvasFramebuffer.canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
+
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),

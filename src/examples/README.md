@@ -5,6 +5,7 @@
 - A per-example build system.
 - It runs from a single \*.ts file that pulls in the modules.
 - The build system is as simple as possible.
+- No example helpers outside of core library, otherwise it obscures things and makes the library hard to use.
 
 ## Challenges
 

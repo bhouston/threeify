@@ -15,11 +15,10 @@ geometry.indices = makeUint32Attribute([0, 1, 2], 1);
 
 const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
 
-const context = new RenderingContext();
+const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
 const canvasFramebuffer = context.canvasFramebuffer;
-if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-  document.body.appendChild(canvasFramebuffer.canvas);
-}
+window.addEventListener("resize", () => canvasFramebuffer.resize());
+
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
 const uniforms = { scale: 1.0, color: new Vector3() };
