@@ -6,9 +6,9 @@
   <body>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
-      let scriptUrl = urlParams.get('scriptUrl');
-      const name = urlParams.get('name')
-      if( name !== null ) {
+      let scriptUrl = urlParams.get("scriptUrl");
+      const name = urlParams.get("name");
+      if (name !== null) {
         scriptUrl = `dist/examples/${name}/index.js`;
       }
       var script = document.createElement("script");
