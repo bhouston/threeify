@@ -1,9 +1,67 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <title>Threeify - Example Loader</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+    />
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      .box {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+      }
+
+      .box .row {
+      }
+
+      .box .row.header {
+        flex: 0 1 auto;
+        /* The above is shorthand for:
+  flex-grow: 0,
+  flex-shrink: 1,
+  flex-basis: auto
+  */
+      }
+
+      .box .row.content {
+        flex: 1 1 auto;
+        overflow: hidden;
+      }
+      .framebuffer {
+        width: 100%;
+        height: 100%;
+      }
+
+      .box .row.footer {
+        flex: 0 1 40px;
+      }
+    </style>
   </head>
   <body>
+    <div class="box">
+      <div class="row header">
+        <p>
+          <b>header</b>
+          <br />
+          <br />(sized to content)
+        </p>
+      </div>
+      <div class="row content">
+        <canvas class="framebuffer" id="framebuffer" width='10' height='10'>
+      </div>
+      <div class="row footer">
+        <p><b>footer</b> (fixed height)</p>
+      </div>
+    </div>
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       let scriptUrl = urlParams.get("scriptUrl");
