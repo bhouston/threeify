@@ -11,6 +11,17 @@
 
 **threeify** is a Typescript 3D library loosely based on three.js.
 
+Feature overview:
+
+- Modern: Typescript, Tree Shakable, Small Build Files
+- Rendering: WebGL 1, WebGL 2 (coming soon) and WebGPU (coming soon)
+- Materials: Physically based materials
+- Post Effects: DOF (coming soon), Motion Blur ((coming soon)), SOA (coming soon), TRAA (coming soon)
+- Animation: Clips (coming soon), Mixer (coming soon)
+- Assets: glTF (coming soon), Draco (coming soon) and Basis (coming soon)
+- XR: Augmented Reality and Virtual Reality via WebXR (coming soon)
+- Documented (TSDocs) and Tested (Jest)
+
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 ### Warning

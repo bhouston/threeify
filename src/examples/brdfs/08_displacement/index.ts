@@ -38,11 +38,10 @@ async function init(): Promise<null> {
   const displacementTexture = new Texture(await fetchImage("/assets/models/ninjaHead/displacement.jpg"));
   const normalTexture = new Texture(await fetchImage("/assets/models/ninjaHead/normal.png"));
 
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvasFramebuffer.canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
+
   const displacementMap = makeTexImage2DFromTexture(context, displacementTexture);
   const normalMap = makeTexImage2DFromTexture(context, normalTexture);
   const program = makeProgramFromShaderMaterial(context, material);

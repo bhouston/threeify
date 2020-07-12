@@ -24,12 +24,9 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  const canvas = canvasFramebuffer.canvas;
-  if (canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);

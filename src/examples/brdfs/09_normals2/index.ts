@@ -28,11 +28,10 @@ async function init(): Promise<null> {
   // this is using the standard opengl normal map.
   const normalsTexture = new Texture(await fetchImage("/assets/textures/normalMap.png"));
 
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvasFramebuffer.canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
+
   const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

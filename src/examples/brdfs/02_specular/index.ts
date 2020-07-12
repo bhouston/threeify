@@ -26,11 +26,10 @@ async function init(): Promise<null> {
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const texture = new Texture(await fetchImage("/assets/textures/planets/jupiter_2k.jpg"));
 
-  const context = new RenderingContext();
+  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
-  if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-    document.body.appendChild(canvasFramebuffer.canvas);
-  }
+  window.addEventListener("resize", () => canvasFramebuffer.resize());
+
   const map = makeTexImage2DFromTexture(context, texture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

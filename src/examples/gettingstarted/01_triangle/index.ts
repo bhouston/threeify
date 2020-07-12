@@ -13,11 +13,10 @@ geometry.attributes["color"] = makeUint8Attribute([255, 0, 0, 0, 255, 0, 0, 0, 2
 
 const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
 
-const context = new RenderingContext();
+const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
 const canvasFramebuffer = context.canvasFramebuffer;
-if (canvasFramebuffer.canvas instanceof HTMLCanvasElement) {
-  document.body.appendChild(canvasFramebuffer.canvas);
-}
+window.addEventListener("resize", () => canvasFramebuffer.resize());
+
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
 const uniforms = {};

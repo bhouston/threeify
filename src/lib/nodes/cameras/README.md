@@ -31,3 +31,9 @@ A: PixelAspectRatio is almost always 1.0, thus leave it alone. ViewAspectRatio c
 ## Changes from Three.js
 
 - top, bottom, left, right -> height and center. This is easier to use. Everything else can be derived.
+
+# Learnings from Babylon:
+
+- They have a free camera rather than a perspective or orthographic camera.
+- Their camera has a target.
+- They can attach their camera to a canvas???? Built in controller?
