@@ -19,6 +19,32 @@
 
 This library is currently in alpha and in midst of significant development. It may not even compile properly. You have been warned.
 
+## Install and Import
+
+Threeify and its modules are published on npm with full typing support. To install, use:
+
+```sh
+npm install threeify --save
+```
+
+Or
+
+```sh
+yarn add threeify
+```
+
+This will allow you to import Threeify entirely using:
+
+```javascript
+import * as THREEIFY from "threeify"; // NOT YET SUPPORTED
+```
+
+or individual classes using:
+
+```javascript
+import { RenderContext, Vector3 } from "threeify";
+```
+
 ### Usage
 
 This code creates a scene, a camera, and a geometric cube, and it adds the cube to the scene. It then creates a `WebGL` renderer context for the scene and camera, and it adds that viewport to the `document.body` element. Finally, it animates the cube within the scene for the camera.
@@ -102,4 +128,3 @@ This project exists thanks to all <a href="https://github.com/threeify/threeify/
 ## License
 
 [ISC](https://github.com/threeify/threeify/blob/master/LICENSE.md)
-
