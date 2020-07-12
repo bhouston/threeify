@@ -1,9 +1,9 @@
 {
-  "slug": "multiple_lights",
+  "slug": "directional_light",
   "theme": "dark",
   "en": {
-    "name": "Multiple Light",
-    "description": "Multiple lights types all simultaneously moving around",
-    "keywords": ["light", "directional", "point", "spot", "punctual"]
+    "name": "Directional Light",
+    "description": "A directional light is represented by a direction and an irradiance",
+    "keywords": ["light", "directional", "punctual"]
   }
 }

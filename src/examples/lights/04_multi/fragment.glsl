@@ -42,6 +42,8 @@ void main() {
 
   for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i ++ ) {
 
+    if( i >= numPunctualLights ) break;
+
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
     punctualLight.position = punctualLightViewPosition[i];
@@ -67,8 +69,6 @@ void main() {
 
     outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
     outputColor += irradiance * BRDF_Diffuse_Lambert( albedo );
-
-    if( i >= numPunctualLights ) break;
 
   }
 
