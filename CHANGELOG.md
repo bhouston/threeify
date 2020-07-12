@@ -1,3 +1,11 @@
+# [1.33.0](https://github.com/threeify/threeify/compare/v1.32.0...v1.33.0) (2020-07-12)
+
+
+### Features
+
+* add goals to overview in README.md (inspired by PlayCanvas) ([df76405](https://github.com/threeify/threeify/commit/df76405b9abc415e3e177c16567c10cfdb7fe628))
+* simplified canvas resizing based on Babylon & PlayCanvas ([9145977](https://github.com/threeify/threeify/commit/9145977901c77d04d8bc5960dfdd267396c85488))
+
 # [1.32.0](https://github.com/threeify/threeify/compare/v1.31.0...v1.32.0) (2020-07-12)
 
 
