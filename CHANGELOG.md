@@ -1,3 +1,18 @@
+# [1.32.0](https://github.com/threeify/threeify/compare/v1.31.0...v1.32.0) (2020-07-12)
+
+
+### Bug Fixes
+
+* break should have been at the start of the loop. ([e88fb87](https://github.com/threeify/threeify/commit/e88fb876063fc9bfc1f5c022673d6ad276b56db9))
+* directional light description was incorrect ([40e1923](https://github.com/threeify/threeify/commit/40e19232fd763e984e92ccecbdbb3a6d099196d5))
+
+
+### Features
+
+* add npm/yarn install directions to readme. ([9a8c701](https://github.com/threeify/threeify/commit/9a8c701884344f300668c98c3f6868b0401f41bb))
+* add threeify.org to workspace ([e043edc](https://github.com/threeify/threeify/commit/e043edc714a8bae207494089156eaf8a02d47316))
+* remove example builder to threeify,org project, ([32ae498](https://github.com/threeify/threeify/commit/32ae498bf05f6d43a8029442d531f700d0136851))
+
 # [1.31.0](https://github.com/threeify/threeify/compare/v1.30.0...v1.31.0) (2020-07-09)
 
 
