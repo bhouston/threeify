@@ -10,7 +10,7 @@ import { IDisposable } from "../../../core/types";
 import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
 import { CubeTexture } from "../../../textures/CubeTexture";
-import { Texture, TextureImage } from "../../../textures/Texture";
+import { Texture, TextureSource } from "../../../textures/Texture";
 import { Pool } from "../../Pool";
 import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
@@ -25,7 +25,7 @@ export class TexImage2D implements IDisposable {
 
   constructor(
     public context: RenderingContext,
-    public images: TextureImage[],
+    public images: TextureSource[],
     public size: Vector2,
     public level = 0,
     public internalFormat = PixelFormat.RGBA,
@@ -44,28 +44,7 @@ export class TexImage2D implements IDisposable {
       this.glTexture = glTexture;
     }
 
-    gl.bindTexture(this.target, this.glTexture);
-    if (images.length === 0) {
-      gl.texImage2D(
-        this.target,
-        this.level,
-        this.internalFormat,
-        this.size.width,
-        this.size.height,
-        0,
-        this.pixelFormat,
-        this.dataType,
-        null,
-      );
-    } else if (images.length === 1) {
-      this.loadImage(images[0]);
-    } else if (images.length === 6) {
-      images.forEach((image: TextureImage, index: number) => {
-        this.loadImage(image, TextureTarget.CubeMapPositiveX + index);
-      });
-    } else {
-      throw new Error("Unsupported number of images");
-    }
+    this.loadImages(images);
 
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
@@ -100,9 +79,37 @@ export class TexImage2D implements IDisposable {
     }
   }
 
-  private loadImage(image: TextureImage, target: TextureTarget | undefined = undefined): void {
+  public loadImages(images: TextureSource[]): void {
     const gl = this.context.gl;
-    if (image instanceof ArrayBufferImage) {
+    gl.bindTexture(this.target, this.glTexture);
+    if (images.length === 0) {
+      this.loadImage(null);
+    } else if (images.length === 1) {
+      this.loadImage(images[0]);
+    } else if (images.length === 6) {
+      images.forEach((image: TextureSource, index: number) => {
+        this.loadImage(image, TextureTarget.CubeMapPositiveX + index);
+      });
+    } else {
+      throw new Error("Unsupported number of images");
+    }
+  }
+
+  private loadImage(image: TextureSource | null, target: TextureTarget | undefined = undefined): void {
+    const gl = this.context.gl;
+    if (image === null) {
+      gl.texImage2D(
+        target ?? this.target,
+        this.level,
+        this.internalFormat,
+        this.size.width,
+        this.size.height,
+        0,
+        this.pixelFormat,
+        this.dataType,
+        null,
+      );
+    } else if (image instanceof ArrayBufferImage) {
       gl.texImage2D(
         target ?? this.target,
         this.level,
@@ -114,7 +121,7 @@ export class TexImage2D implements IDisposable {
         this.dataType,
         new Uint8Array(image.data),
       );
-    } else if (image instanceof HTMLImageElement) {
+    } else if (image instanceof HTMLCanvasElement || image instanceof OffscreenCanvas) {
       gl.texImage2D(target ?? this.target, this.level, this.internalFormat, this.pixelFormat, this.dataType, image);
     } else {
       throw new Error("unsupported image type");

@@ -13,11 +13,11 @@ import { TextureWrap } from "../renderers/webgl/textures/TextureWrap";
 import { ArrayBufferImage } from "./ArrayBufferImage";
 import { VirtualTexture } from "./VirtualTexture";
 
-export type TextureImage = ArrayBufferImage | HTMLImageElement;
+export type TextureSource = ArrayBufferImage | HTMLImageElement | HTMLCanvasElement | OffscreenCanvas;
 
 export class Texture extends VirtualTexture {
   constructor(
-    public image: TextureImage,
+    public image: TextureSource,
     public wrapS = TextureWrap.ClampToEdge,
     public wrapT = TextureWrap.ClampToEdge,
     level = 0,
