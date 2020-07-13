@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/threeify/threeify/compare/v1.35.0...v1.35.1) (2020-07-13)
+
+
+### Bug Fixes
+
+* wait for user interaction before playing video ([8e887d3](https://github.com/threeify/threeify/commit/8e887d3b74ecbcf2ee9e4c462a73825293c4bf9e))
+
 # [1.35.0](https://github.com/threeify/threeify/compare/v1.34.0...v1.35.0) (2020-07-13)
 
 
