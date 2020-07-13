@@ -15,8 +15,9 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { makeTextureFromVideoElement } from "../../../lib/textures/Texture";
+import { makeTexImage2DFromTexture, TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { fetchImage } from "../../../lib/textures/loaders/Image";
+import { makeTextureFromVideoElement, Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
@@ -28,6 +29,16 @@ async function init(): Promise<null> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const program = makeProgramFromShaderMaterial(context, material);
+  const clickToPlayTexture = new Texture(await fetchImage("/assets/textures/videos/ClickToPlay.png"));
+
+  const clickToPlayMap = makeTexImage2DFromTexture(context, clickToPlayTexture);
+  const uniforms = {
+    localToWorld: new Matrix4(),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
+    viewToScreen: makeMatrix4OrthographicSimple(1.5, new Vector2(), 0.1, 2.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewLightPosition: new Vector3(0, 0, 0),
+    map: clickToPlayMap,
+  };
 
   const video = document.createElement("video");
   const source = document.createElement("source");
@@ -35,18 +46,21 @@ async function init(): Promise<null> {
   source.src = "/assets/textures/videos/sintel.mp4";
   video.appendChild(source);
 
-  await video.play();
-  video.currentTime = 3; // jump ahead to content
+  let videoMap: TexImage2D | null = null;
 
-  const texture = makeTextureFromVideoElement(video);
-  const uvTestTexture = makeTexImage2DFromTexture(context, texture);
-  const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4OrthographicSimple(1.5, new Vector2(), 0.1, 2.0, 1.0, canvasFramebuffer.aspectRatio),
-    viewLightPosition: new Vector3(0, 0, 0),
-    map: uvTestTexture,
-  };
+  const body = document.getElementsByTagName("body")[0];
+  body.addEventListener(
+    "click",
+    async function (): Promise<void> {
+      await video.play();
+      video.currentTime = 3; // jump ahead to content
+      const videoTexture = makeTextureFromVideoElement(video);
+      videoMap = makeTexImage2DFromTexture(context, videoTexture);
+      uniforms.map = videoMap;
+    },
+    false,
+  );
+
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
   const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
@@ -57,11 +71,9 @@ async function init(): Promise<null> {
       new Euler(now * 0.0001, now * 0.0013, now * 0.00077),
       uniforms.localToWorld,
     );
-    if (video.readyState >= video.HAVE_CURRENT_DATA) {
-      uvTestTexture.loadImages([video]);
+    if (videoMap !== null && video.readyState >= video.HAVE_CURRENT_DATA) {
+      videoMap.loadImages([video]);
     }
-    uniforms.map = uvTestTexture;
-
     canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
