@@ -39,3 +39,18 @@ export class Texture extends VirtualTexture {
     this.size = new Vector2(image.width, image.height);
   }
 }
+
+export function makeTextureFromVideoElement(video: HTMLVideoElement): Texture {
+  return new Texture(
+    video,
+    TextureWrap.ClampToEdge,
+    TextureWrap.ClampToEdge,
+    0,
+    TextureFilter.Linear,
+    TextureFilter.Linear,
+    PixelFormat.RGB,
+    DataType.UnsignedByte,
+    false,
+    0,
+  );
+}

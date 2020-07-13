@@ -18,6 +18,7 @@ import { DataType } from "./DataType";
 import { PixelFormat } from "./PixelFormat";
 import { TexParameters } from "./TexParameters";
 import { TextureTarget } from "./TextureTarget";
+import { TextureWrap } from "./TextureWrap";
 
 export class TexImage2D implements IDisposable {
   disposed = false;
@@ -133,6 +134,13 @@ export function makeTexImage2DFromTexture(
   level = 0,
   internalFormat: PixelFormat = PixelFormat.RGBA,
 ): TexImage2D {
+  const params = new TexParameters();
+  params.anisotropyLevels = texture.anisotropicLevels;
+  params.generateMipmaps = texture.generateMipmaps;
+  params.magFilter = texture.magFilter;
+  params.minFilter = texture.minFilter;
+  params.wrapS = texture.wrapS;
+  params.wrapT = texture.wrapT;
   return new TexImage2D(
     context,
     [texture.image],
@@ -142,6 +150,7 @@ export function makeTexImage2DFromTexture(
     texture.dataType,
     internalFormat,
     TextureTarget.Texture2D,
+    params,
   );
 }
 
@@ -151,6 +160,13 @@ export function makeTexImage2DFromCubeTexture(
   level = 0,
   internalFormat: PixelFormat = PixelFormat.RGBA,
 ): TexImage2D {
+  const params = new TexParameters();
+  params.anisotropyLevels = texture.anisotropicLevels;
+  params.generateMipmaps = texture.generateMipmaps;
+  params.magFilter = texture.magFilter;
+  params.minFilter = texture.minFilter;
+  params.wrapS = TextureWrap.ClampToEdge;
+  params.wrapT = TextureWrap.ClampToEdge;
   return new TexImage2D(
     context,
     texture.images,
@@ -160,6 +176,7 @@ export function makeTexImage2DFromCubeTexture(
     texture.dataType,
     internalFormat,
     TextureTarget.TextureCubeMap,
+    params,
   );
 }
 
