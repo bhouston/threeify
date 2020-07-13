@@ -121,10 +121,8 @@ export class TexImage2D implements IDisposable {
         this.dataType,
         new Uint8Array(image.data),
       );
-    } else if (image instanceof HTMLCanvasElement || image instanceof OffscreenCanvas) {
-      gl.texImage2D(target ?? this.target, this.level, this.internalFormat, this.pixelFormat, this.dataType, image);
     } else {
-      throw new Error("unsupported image type");
+      gl.texImage2D(target ?? this.target, this.level, this.internalFormat, this.pixelFormat, this.dataType, image);
     }
   }
 }

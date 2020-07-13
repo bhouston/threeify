@@ -13,7 +13,14 @@ import { TextureWrap } from "../renderers/webgl/textures/TextureWrap";
 import { ArrayBufferImage } from "./ArrayBufferImage";
 import { VirtualTexture } from "./VirtualTexture";
 
-export type TextureSource = ArrayBufferImage | HTMLImageElement | HTMLCanvasElement | OffscreenCanvas;
+export type TextureSource =
+  | ArrayBufferImage
+  | ImageData
+  | HTMLImageElement
+  | HTMLCanvasElement
+  | HTMLVideoElement
+  | OffscreenCanvas
+  | ImageBitmap;
 
 export class Texture extends VirtualTexture {
   constructor(
