@@ -1,3 +1,10 @@
+# [1.34.0](https://github.com/threeify/threeify/compare/v1.33.0...v1.34.0) (2020-07-13)
+
+
+### Features
+
+* canvas texture example ([b01648b](https://github.com/threeify/threeify/commit/b01648b35c0133aba8a5f813b08bf81b08933b30))
+
 # [1.33.0](https://github.com/threeify/threeify/compare/v1.32.0...v1.33.0) (2020-07-12)
 
 
