@@ -1,3 +1,10 @@
+# [1.35.0](https://github.com/threeify/threeify/compare/v1.34.0...v1.35.0) (2020-07-13)
+
+
+### Features
+
+* video to texture example ([12d8029](https://github.com/threeify/threeify/commit/12d8029887c5f197df04e57155d9f5ccf76c26d2))
+
 # [1.34.0](https://github.com/threeify/threeify/compare/v1.33.0...v1.34.0) (2020-07-13)
 
 
