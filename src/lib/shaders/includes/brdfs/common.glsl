@@ -1,6 +1,6 @@
 #pragma once
 
-struct DirectIrradiance {
+struct DirectLight {
 	vec3 irradiance;
 	vec3 lightDirection;
 };
