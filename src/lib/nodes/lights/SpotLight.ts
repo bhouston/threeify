@@ -43,29 +43,35 @@ export class SpotLight extends Light {
     super(LightType.Spot, color, intensity);
   }
 
-  /*
-  intensity = power per solid angle. ref: equation (15) from
-  https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
-  */
+  /**
+   * luminous power, AKA luminous flux (lm)
+   */
   get power(): number {
+    // integrate across all solid angles
     return this.intensity * 4 * Math.PI;
   }
 
-  /*
-  intensity = power per solid angle. ref: equation (15) from
-  https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
-  */
+  /**
+   * luminous power, AKA luminious flux (lm)
+   */
   set power(value: number) {
-    this.intensity = value / (4 * Math.PI);
+    // devide by solid angles
+    this.intensity / (4 * Math.PI);
   }
 
-  // direction points in the -z local axis
+  /**
+   * direction points in the -z local axis
+   */
   get direction(): Vector3 {
     // figure out where the -z axis is pointing from the matrix.
     return eulerToNegativeZDirection(this.rotation);
   }
+
+  /**
+   * direction points in the -z local axis
+   */
   set direction(v: Vector3) {
     // adjust matrix to point in this direction.
-    this.rotation = negativeZDirectionToEuler(v);
+    this.rotation = negativeZDirectionToEuler(v, this.rotation);
   }
 }

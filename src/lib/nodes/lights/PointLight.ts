@@ -29,15 +29,17 @@ export class PointLight extends Light {
     super(LightType.Point, color, intensity);
   }
 
+  /**
+   * luminous power, AKA luminous flux (lm)
+   */
   get power(): number {
-    // intensity = power per solid angle. ref: equation (15) from
-    // https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
     return this.intensity * 4 * Math.PI;
   }
 
+  /**
+   * luminous power, AKA luminous flux (lm)
+   */
   set power(value: number) {
-    // intensity = power per solid angle. ref: equation (15) from
-    // https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
     this.intensity = value / (4 * Math.PI);
   }
 }
