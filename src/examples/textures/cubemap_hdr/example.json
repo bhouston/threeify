@@ -1,0 +1,8 @@
+{
+  "slug": "hdr",
+  "en": {
+    "name": "High Dynamic Range Texture",
+    "description": "Loading Radiance HDR (encoded as RGBE) and then storing it in RGBD format.  The RGBD data is decoded to linear for rendering and then sRGB corrected when written to the output.",
+    "keywords": ["basics", "hrd", "sRGB", "RGBE", "RGBD"]
+  }
+}

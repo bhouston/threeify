@@ -1,0 +1,8 @@
+{
+  "slug": "canvas_texture",
+  "en": {
+    "name": "Canvas Texture",
+    "description": "Redrawing a canvas into a texture every frame.",
+    "keywords": ["basics", "canvas", "texture", "framebuffer"]
+  }
+}

@@ -1,8 +1,0 @@
-{
-  "slug": "getting_started_canvas_texture",
-  "en": {
-    "name": "Getting Started - Canvas Texture",
-    "description": "Redrawing a Canvas Texture every frame and using that as the source of the texture.",
-    "keywords": ["basics", "canvas", "framebuffer"]
-  }
-}
