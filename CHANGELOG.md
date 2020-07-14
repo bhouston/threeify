@@ -1,3 +1,10 @@
+# [1.36.0](https://github.com/threeify/threeify/compare/v1.35.1...v1.36.0) (2020-07-14)
+
+
+### Features
+
+* be consistent in naming roughness and alphaRoughness. ([3cb790a](https://github.com/threeify/threeify/commit/3cb790a171beed43b9fb9a9a114bfc4657aa0934))
+
 ## [1.35.1](https://github.com/threeify/threeify/compare/v1.35.0...v1.35.1) (2020-07-13)
 
 
