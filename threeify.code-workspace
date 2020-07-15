@@ -9,7 +9,6 @@
   ],
   "extensions": {
     "recommendations": [
-      "esbenp.prettier-vscode",
       "editorconfig.editorconfig",
       "dbaeumer.vscode-eslint",
       "kisstkondoros.vscode-codemetrics",
@@ -29,7 +28,9 @@
     },
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
-    "editor.rulers": [120],
+    "editor.rulers": [
+      120
+    ],
     "files.exclude": {
       "node_modules/": true
     },

@@ -9,7 +9,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: ["@typescript-eslint", "cflint", "import"],
+  plugins: ["@typescript-eslint", "cflint", "import", "glsl"],
   settings: {
     "import/resolver": {
       typescript: {},
