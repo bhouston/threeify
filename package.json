@@ -24,6 +24,7 @@
     "dev": "npm run watch & npm start",
     "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
+    "docs": "typedoc",
     "watch": "tsc --watch & tgt --watch",
     "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
   },
@@ -51,6 +52,7 @@
     "semantic-release": "^17.0.8",
     "threeify-glsl-transpiler": "1.1.12",
     "ts-jest": "^26.1.0",
+    "typedoc": "^0.17.8",
     "typescript": "^3.9.3"
   },
   "engines": {

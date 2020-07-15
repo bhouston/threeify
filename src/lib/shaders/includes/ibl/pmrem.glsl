@@ -1,6 +1,4 @@
 
-#define NUM_SAMPLES (1024) // Q: What did the glTF IBL Sample use for this number?
-
 #pragma include <math/hammersley.glsl>
 
 vec3 getImportanceSampleDirection(vec3 normal, float sinTheta, float cosTheta, float phi) {
@@ -34,7 +32,14 @@ vec3 getImportanceSampleDirection(vec3 normal, float sinTheta, float cosTheta, f
 #pragma include <brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
 #pragma include <brdfs/sheen/d_charlie>
 
-vec3 getImportanceSample(uint sampleIndex, vec3 N, float roughness)
+#define NUM_SAMPLES 1024  // Q: What did the glTF IBL Sampler use for this number?
+#define LOD_BIAS 0.0      // Q: what is the value used by the glTF IBL Sampler use?
+
+#define DISTRIBUTION_LAMBERTIAN 0
+#define DISTRIBUTION_GGX 1
+#define DISTRIBUTION_CHARLIE 2
+
+vec3 getImportanceSample(uint distributionType, uint sampleIndex, vec3 N, float roughness)
 {
 	float u = float(sampleIndex) / float(NUM_SAMPLES);
 	float v = Hammersley(sampleIndex);
@@ -43,18 +48,20 @@ vec3 getImportanceSample(uint sampleIndex, vec3 N, float roughness)
     float cosTheta = 0.f;
 	float sinTheta = 0.f;
 
-	if(pFilterParameters.distribution == cLambertian)
+	if(distributionType == DISTRIBUTION_LAMBERTIAN)
 	{
 		cosTheta = 1.0 - v;
 		sinTheta = sqrt(1.0 - cosTheta*cosTheta);
 	}
-	else if(pFilterParameters.distribution == cGGX)
+
+  if(distributionType == DISTRIBUTION_GGX)
 	{
 		float alphaRoughness = roughness * roughness;
 		cosTheta = sqrt((1.0 - v) / (1.0 + (alphaRoughness*alphaRoughness - 1.0) * v));
 		sinTheta = sqrt(1.0 - cosTheta*cosTheta);
 	}
-	else if(pFilterParameters.distribution == cCharlie)
+
+  if(distributionType == DISTRIBUTION_CHARLIE)
 	{
 		float alphaRoughness = roughness * roughness;
 		sinTheta = pow(v, alphaRoughness / (2.0*alphaRoughness + 1.0));
@@ -64,14 +71,14 @@ vec3 getImportanceSample(uint sampleIndex, vec3 N, float roughness)
 	return getImportanceSampleDirection(N, sinTheta, cosTheta, phi);
 }
 
-float PDF(vec3 V, vec3 H, vec3 N, vec3 L, float roughness)
-{
-	if(pFilterParameters.distribution == cLambertian)
+float PDF(uint distributionType, vec3 V, vec3 H, vec3 N, vec3 L, float roughness) {
+	if(distributionType == DISTRIBUTION_LAMBERTIAN)
 	{
 		float dotNL = dot(N, L);
 		return max(dotNL * RECIPROCAL_PI, 0.0);
 	}
-	else if(pFilterParameters.distribution == cGGX)
+
+  if(distributionType == DISTRIBUTION_GGX)
 	{
 		float dotVH = saturate( dot(V, H) );
 		float dotNH = saturate( dot(N, H) );
@@ -80,27 +87,27 @@ float PDF(vec3 V, vec3 H, vec3 N, vec3 L, float roughness)
 		float D = D_GGX( alpha, dotNH);
 		return max(D * dotVH / (4.0 * dotVH), 0.0);
 	}
-	else if(pFilterParameters.distribution == cCharlie)
+
+  if(distributionType == DISTRIBUTION_CHARLIE)
 	{
 		float dotVH = saturate( dot(V, H) );
 		float dotNH = saturate( dot(N, H) );
 
 		float D = D_Charlie(roughness, dotNH);
-		return max(D * dotVH / (4.0 * dotVH), 0.0);
+		return max(D * dotVH / (4.0 * dotVH), 0.0 );
 	}
 
 	return 0.f;
 }
 
-vec3 filterColor(vec3 N, float roughness)
+vec3 filterColor(uint distributionType, vec3 N, float roughness)
 {
 	vec4 color = vec4(0.f);
-	const uint NumSamples = NUM_SAMPLES;
 	const float solidAngleTexel = 4.0 * PI / (6.0 * pFilterParameters.width * pFilterParameters.width);
 
-	for(uint i = 0; i < NumSamples; ++i)
+	for(uint i = 0; i < NUM_SAMPLES; ++i)
 	{
-		vec3 H = getImportanceSample(i, N, roughness);
+		vec3 H = getImportanceSample(distributionType, i, N, roughness);
 		// Note: reflect takes incident vector.
 		// Note: N = V
 		vec3 V = N;
@@ -112,20 +119,20 @@ vec3 filterColor(vec3 N, float roughness)
 		{
 			float lod = 0.0;
 
-			if (roughness > 0.0 || pFilterParameters.distribution == cLambertian)
+			if (roughness > 0.0 || distributionType == DISTRIBUTION_LAMBERTIAN)
 			{
 				// Mipmap Filtered Samples
 				// see https://github.com/derkreature/IBLBaker
 				// see https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch20.html
-				float pdf = PDF(V, H, N, L, roughness );
+				float pdf = PDF(distributionType, V, H, N, L, roughness );
 
-				float solidAngleSample = 1.0 / (NumSamples * pdf);
+				float solidAngleSample = 1.0 / (float( NUM_SAMPLES ) * pdf);
 
 				lod = 0.5 * log2(solidAngleSample / solidAngleTexel);
-				lod += pFilterParameters.lodBias;
+				lod += LOD_BIAS;
 			}
 
-			if(pFilterParameters.distribution == cLambertian)
+			if(distributionType == DISTRIBUTION_LAMBERTIAN)
 			{
 				color += vec4(texture(uCubeMap, H, lod).rgb, 1.0);
 			}
@@ -149,7 +156,7 @@ vec3 filterColor(vec3 N, float roughness)
 
 // Compute LUT for GGX distribution.
 // See https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
-vec3 LUT(float NdotV, float roughness)
+vec3 LUT(uint distributionType, float NdotV, float roughness)
 {
 	// Compute spherical view vector: (sin(phi), 0, cos(phi))
 	vec3 V = vec3(sqrt(1.0 - NdotV * NdotV), 0.0, NdotV);
@@ -169,7 +176,7 @@ vec3 LUT(float NdotV, float roughness)
 	for(uint i = 0; i < NUM_SAMPLES; ++i)
 	{
 		// Importance sampling, depending on the distribution.
-		vec3 H = getImportanceSample(i, N, roughness);
+		vec3 H = getImportanceSample(distributionType, i, N, roughness);
 		vec3 L = normalize(reflect(-V, H));
 
 		float dotNL = saturate(L.z);
@@ -180,7 +187,7 @@ vec3 LUT(float NdotV, float roughness)
 		if (NdotL > 0.0)
 		{
 
-			if (pFilterParameters.distribution == cGGX)
+			if (distributionType == DISTRIBUTION_GGX)
 			{
 				// LUT for GGX distribution.
 
@@ -194,7 +201,7 @@ vec3 LUT(float NdotV, float roughness)
 				C += 0;
 			}
 
-			if (pFilterParameters.distribution == cCharlie)
+			if (distributionType == DISTRIBUTION_CHARLIE)
 			{
 				// LUT for Charlie distribution.
 				float sheenDistribution = D_Charlie(roughness, dotNH);
@@ -210,11 +217,11 @@ vec3 LUT(float NdotV, float roughness)
 	// The PDF is simply pdf(v, h) -> NDF * <nh>.
 	// To parametrize the PDF over l, use the Jacobian transform, yielding to: pdf(v, l) -> NDF * <nh> / 4<vh>
 	// Since the BRDF divide through the PDF to be normalized, the 4 can be pulled out of the integral.
-	return vec3(4.0 * A, 4.0 * B, 4.0 * 2.0 * PI * C) / NUM_SAMPLES;
+	return vec3(4.0 * A, 4.0 * B, 4.0 * 2.0 * PI * C) / float( NUM_SAMPLES );
 }
 
 // entry point
-void filterCubeMap(uint currentMipLevel, float roughness)
+void filterCubeMap(uint distributionType, uint currentMipLevel, float roughness)
 {
 	vec2 newUV = inUV * float(1 << currentMipLevel);
 
@@ -227,7 +234,7 @@ void filterCubeMap(uint currentMipLevel, float roughness)
 		vec3 direction = normalize(scan);
 		direction.y = -direction.y;
 
-		writeFace(face, filterColor(direction, roughness));
+		writeFace(face, filterColor(distributionType, direction, roughness));
 
 		//Debug output:
 		//writeFace(face,  texture(uCubeMap, direction).rgb);
@@ -240,7 +247,7 @@ void filterCubeMap(uint currentMipLevel, float roughness)
 	if (currentMipLevel == 0)
 	{
 
-		outLUT = LUT(inUV.x, inUV.y, roughness);
+		outLUT = LUT(distributionType, inUV.x, inUV.y, roughness);
 
 	}
 }
