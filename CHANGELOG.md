@@ -1,3 +1,11 @@
+# [1.37.0](https://github.com/threeify/threeify/compare/v1.36.0...v1.37.0) (2020-07-15)
+
+
+### Features
+
+* add basic TSDocs generation ([ea41218](https://github.com/threeify/threeify/commit/ea4121896e690b8468439b8ea8a2c61855610d02))
+* adopt TSDoc comments on Lights. ([531fe27](https://github.com/threeify/threeify/commit/531fe272a47cfd130876ae9059f5147fd5867204))
+
 # [1.36.0](https://github.com/threeify/threeify/compare/v1.35.1...v1.36.0) (2020-07-14)
 
 
