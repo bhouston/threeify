@@ -1,0 +1,8 @@
+{
+  "slug": "orthographic_camera",
+  "en": {
+    "name": "Orthographic Camera",
+    "description": "A test of using an orthographic camera to render.",
+    "keywords": ["basics", "camera", "orthographic"]
+  }
+}

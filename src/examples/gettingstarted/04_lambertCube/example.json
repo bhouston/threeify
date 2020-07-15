@@ -1,8 +1,0 @@
-{
-  "slug": "getting_started_cube_diffuse",
-  "en": {
-    "name": "Getting Started - Cube Diffuse",
-    "description": "A bare-bones test of lighting a cube geometry directly.",
-    "keywords": [ "basics", "geometry", "cube", "direct", "diffuse" ]
-  }
-}
