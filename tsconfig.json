@@ -15,5 +15,13 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ],
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "./docs",
+    "gaID": "UA-172098276-1",
+    "gaID": "threeify.org"
+  }
 }
