@@ -15,7 +15,7 @@ import { blendModeToBlendState } from "../../../lib/renderers/webgl/BlendState";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
-import { Framebuffer, makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -52,8 +52,6 @@ async function init(): Promise<null> {
   const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
 
   const framebuffer = new Framebuffer(context);
-  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, cubeTexture.size));
-
   const blendState = blendModeToBlendState(Blending.Over);
 
   cubeMapFaces.forEach((cubeMapFace, index) => {
