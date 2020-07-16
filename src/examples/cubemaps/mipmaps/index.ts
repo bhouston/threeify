@@ -1,4 +1,3 @@
-import { convertToInterleavedGeometry } from "../../../lib/geometry/Geometry.Functions";
 import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
@@ -20,18 +19,16 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
+  const geometry = icosahedronGeometry(0.75, 4);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const cubeTexture = new CubeMapTexture(
-    await Promise.all([
-      fetchImage("/assets/textures/cube/pisa/px.png"),
-      fetchImage("/assets/textures/cube/pisa/nx.png"),
-      fetchImage("/assets/textures/cube/pisa/py.png"),
-      fetchImage("/assets/textures/cube/pisa/ny.png"),
-      fetchImage("/assets/textures/cube/pisa/pz.png"),
-      fetchImage("/assets/textures/cube/pisa/nz.png"),
-    ]),
-  );
+  const images = [];
+  for (let level = 0; level < 9; level++) {
+    for (let face = 0; face < 6; face++) {
+      images.push(fetchImage(`/assets/textures/cube/angusMipmaps/cube_m0${level}_c0${face}.jpg`));
+    }
+  }
+  const cubeTexture = new CubeMapTexture(await Promise.all(images));
+  cubeTexture.generateMipmaps = false;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
@@ -42,24 +39,24 @@ async function init(): Promise<null> {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount,
-    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
   };
-
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   function animate(): void {
+    requestAnimationFrame(animate);
     const now = Date.now();
+
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld,
     );
-    uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    uniforms.perceptualRoughness = Math.sin(now * 0.005) * 0.5 + 0.5;
 
-    requestAnimationFrame(animate);
+    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
   }
 
   animate();

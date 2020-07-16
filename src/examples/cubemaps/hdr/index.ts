@@ -22,14 +22,16 @@ import vertexSourceCode from "./vertex.glsl";
 async function init(): Promise<null> {
   const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const cubeTexture = new CubeMapTexture([
-    await fetchHDR("/assets/textures/cube/pisaHDR/px.hdr"),
-    await fetchHDR("/assets/textures/cube/pisaHDR/nx.hdr"),
-    await fetchHDR("/assets/textures/cube/pisaHDR/py.hdr"),
-    await fetchHDR("/assets/textures/cube/pisaHDR/ny.hdr"),
-    await fetchHDR("/assets/textures/cube/pisaHDR/pz.hdr"),
-    await fetchHDR("/assets/textures/cube/pisaHDR/nz.hdr"),
-  ]);
+  const cubeTexture = new CubeMapTexture(
+    await Promise.all([
+      fetchHDR("/assets/textures/cube/pisaHDR/px.hdr"),
+      fetchHDR("/assets/textures/cube/pisaHDR/nx.hdr"),
+      fetchHDR("/assets/textures/cube/pisaHDR/py.hdr"),
+      fetchHDR("/assets/textures/cube/pisaHDR/ny.hdr"),
+      fetchHDR("/assets/textures/cube/pisaHDR/pz.hdr"),
+      fetchHDR("/assets/textures/cube/pisaHDR/nz.hdr"),
+    ]),
+  );
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
