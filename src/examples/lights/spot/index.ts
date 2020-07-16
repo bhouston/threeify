@@ -7,7 +7,7 @@ import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buf
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { CullingState } from "../../../lib/renderers/webgl/CullingState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -60,7 +60,7 @@ async function init(): Promise<null> {
     uniforms.spotLightOuterCos = uniforms.spotLightInnerCos * Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0017));
     uniforms.spotLightViewPosition = new Vector3(Math.cos(now * 0.001) * 0.5, Math.cos(now * 0.00087) * 0.5, 1.5);
 
-    canvasFramebuffer.clear(AttachmentBits.All);
+    canvasFramebuffer.clear(BufferBit.All);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);

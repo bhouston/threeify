@@ -6,7 +6,7 @@ import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
-import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture, TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -72,7 +72,7 @@ async function init(): Promise<null> {
       }
       videoMap.loadImages([video]);
     }
-    canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
+    canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);

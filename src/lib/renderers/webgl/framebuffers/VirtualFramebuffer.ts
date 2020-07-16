@@ -19,12 +19,8 @@ import { MaskState } from "../MaskState";
 import { Program } from "../programs/Program";
 import { UniformValueMap } from "../programs/ProgramUniform";
 import { RenderingContext } from "../RenderingContext";
-import { sizeOfDataType } from "../textures/DataType";
-import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { VertexArrayObject } from "../VertexArrayObject";
-import { Attachment } from "./Attachment";
-import { AttachmentBits } from "./AttachmentBits";
-import { AttachmentPoint } from "./AttachmentPoint";
+import { BufferBit } from "./BufferBit";
 
 const GL = WebGLRenderingContext;
 
@@ -37,12 +33,12 @@ export abstract class VirtualFramebuffer implements IDisposable {
   public maskState: MaskState | undefined = undefined;
   public viewport: Box2 | undefined = undefined;
 
-  constructor(public context: RenderingContext, public attachments: Array<Attachment> = []) {}
+  constructor(public context: RenderingContext) {}
 
   abstract get size(): Vector2;
 
   clear(
-    attachmentBits: AttachmentBits = AttachmentBits.Color | AttachmentBits.Depth,
+    attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
     clearState: ClearState | undefined = undefined,
   ): void {
     // eslint-disable-next-line cflint/no-this-assignment
@@ -129,53 +125,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
       this.clear();
     }
     this.context.render(node, camera);
-  }
-
-  readPixels(pixelBuffer: ArrayBufferView): ArrayBufferView {
-    const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoint.Color0);
-    if (attachment === undefined) {
-      throw new Error("can not find Color0 attachment");
-    }
-
-    const texImage2D = attachment.texImage2D;
-    const dataType = texImage2D.dataType;
-    const pixelFormat = texImage2D.pixelFormat;
-    if (pixelFormat !== PixelFormat.RGBA) {
-      throw new Error(`can not read non-RGBA color0 attachment: ${pixelFormat}`);
-    }
-
-    const oldFramebuffer = this.context.framebuffer;
-    // eslint-disable-next-line cflint/no-this-assignment
-    this.context.framebuffer = this;
-    try {
-      const status = this.context.gl.checkFramebufferStatus(GL.FRAMEBUFFER);
-      if (status !== GL.FRAMEBUFFER_COMPLETE) {
-        throw new Error(`can not read non-complete Framebuffer: ${status}`);
-      }
-
-      const pixelByteLength =
-        sizeOfDataType(dataType) *
-        numPixelFormatComponents(pixelFormat) *
-        texImage2D.size.width *
-        texImage2D.size.height;
-      if (pixelBuffer.byteLength < pixelByteLength) {
-        throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
-      }
-
-      this.context.gl.readPixels(
-        0,
-        0,
-        texImage2D.size.width,
-        texImage2D.size.height,
-        pixelFormat,
-        dataType,
-        pixelBuffer,
-      );
-
-      return pixelBuffer;
-    } finally {
-      this.context.framebuffer = oldFramebuffer;
-    }
   }
 
   abstract dispose(): void;

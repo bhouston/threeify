@@ -32,8 +32,8 @@ vec3 getImportanceSampleDirection(vec3 normal, float sinTheta, float cosTheta, f
 #pragma include <brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
 #pragma include <brdfs/sheen/d_charlie>
 
-#define NUM_SAMPLES 1024  // Q: What did the glTF IBL Sampler use for this number?
-#define LOD_BIAS 0.0      // Q: what is the value used by the glTF IBL Sampler use?
+#define NUM_SAMPLES 1024
+#define LOD_BIAS 1
 
 #define DISTRIBUTION_LAMBERTIAN 0
 #define DISTRIBUTION_GGX 1

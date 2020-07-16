@@ -12,9 +12,9 @@ import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
-import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
-import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
+import { Framebuffer, makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -48,7 +48,8 @@ async function init(): Promise<null> {
 
   const framebufferSize = new Vector2(1024, 1024);
   const depthAttachment = makeDepthAttachment(context, framebufferSize);
-  const framebuffer = new Framebuffer(context, [depthAttachment]);
+  const framebuffer = new Framebuffer(context);
+  framebuffer.attach(Attachment.Depth, depthAttachment);
 
   function animate(): void {
     const now = Date.now();
@@ -58,11 +59,11 @@ async function init(): Promise<null> {
     );
     uniforms.map = uvTestTexture;
 
-    framebuffer.clear(AttachmentBits.All, whiteClearState);
+    framebuffer.clear(BufferBit.All, whiteClearState);
     framebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
-    uniforms.map = depthAttachment.texImage2D;
-    canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
+    uniforms.map = depthAttachment;
+    canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
