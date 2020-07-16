@@ -13,7 +13,7 @@ import { makeColor3FromHSL, makeHexStringFromColor3 } from "../../../lib/math/Ve
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -79,7 +79,7 @@ async function init(): Promise<null> {
     uvTestTexture.loadImages([canvas]);
     uniforms.map = uvTestTexture;
 
-    canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
+    canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);

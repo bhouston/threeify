@@ -12,9 +12,13 @@ import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { makeColorAttachment, makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
-import { AttachmentBits } from "../../../lib/renderers/webgl/framebuffers/AttachmentBits";
-import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
+import {
+  Framebuffer,
+  makeColorAttachment,
+  makeDepthAttachment,
+} from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -33,9 +37,10 @@ async function init(): Promise<null> {
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const framebufferSize = new Vector2(1024, 1024);
-  const colorAttachment = makeColorAttachment(context, framebufferSize, 0);
-  const depthAttachment = makeDepthAttachment(context, framebufferSize);
-  const framebuffer = new Framebuffer(context, [colorAttachment, depthAttachment]);
+  const colorAttachment = makeColorAttachment(context, framebufferSize);
+  const framebuffer = new Framebuffer(context);
+  framebuffer.attach(Attachment.Color0, colorAttachment);
+  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, framebufferSize));
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
@@ -58,11 +63,11 @@ async function init(): Promise<null> {
     );
     uniforms.map = uvTestTexture;
 
-    framebuffer.clear(AttachmentBits.All, whiteClearState);
+    framebuffer.clear(BufferBit.All, whiteClearState);
     framebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
-    uniforms.map = colorAttachment.texImage2D;
-    canvasFramebuffer.clear(AttachmentBits.All, whiteClearState);
+    uniforms.map = colorAttachment;
+    canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
