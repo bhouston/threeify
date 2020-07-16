@@ -1,3 +1,12 @@
+# [1.40.0](https://github.com/threeify/threeify/compare/v1.39.1...v1.40.0) (2020-07-16)
+
+
+### Features
+
+* adopt promise.all in examples for faster image loading. ([0e7bb2d](https://github.com/threeify/threeify/commit/0e7bb2d581d0b1ae8c59ae88c4761b7711993755))
+* manual cubemap mipmap loading example ([3e11038](https://github.com/threeify/threeify/commit/3e11038a8a51bb1cdd651a2523da4cb0b61bb88c))
+* support manual miomap loading in cubetexture ([212d8d5](https://github.com/threeify/threeify/commit/212d8d5f62ac853a4d831c2c8a47cb03df1dc89d))
+
 ## [1.39.1](https://github.com/threeify/threeify/compare/v1.39.0...v1.39.1) (2020-07-16)
 
 
