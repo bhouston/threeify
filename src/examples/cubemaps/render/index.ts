@@ -18,6 +18,7 @@ import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuff
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
 import { cubeMapFaces, CubeMapTexture } from "../../../lib/textures/CubeTexture";
 import fragmentSourceCode from "./fragment.glsl";
 import { patternMaterial } from "./pattern/PatternMaterial";
@@ -28,6 +29,8 @@ async function init(): Promise<null> {
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const imageSize = new Vector2(1024, 1024);
   const cubeTexture = new CubeMapTexture([imageSize, imageSize, imageSize, imageSize, imageSize, imageSize]);
+  cubeTexture.minFilter = TextureFilter.Linear;
+  cubeTexture.generateMipmaps = false;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
