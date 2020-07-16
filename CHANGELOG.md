@@ -1,3 +1,10 @@
+# [1.38.0](https://github.com/threeify/threeify/compare/v1.37.0...v1.38.0) (2020-07-16)
+
+
+### Features
+
+* render to cube map faces ([26c23f4](https://github.com/threeify/threeify/commit/26c23f4cac627eab176581acdde16fd8c4caebf4))
+
 # [1.37.0](https://github.com/threeify/threeify/compare/v1.36.0...v1.37.0) (2020-07-15)
 
 
