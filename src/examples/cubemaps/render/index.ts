@@ -20,11 +20,16 @@ import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext"
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
 import { cubeMapFaces, CubeMapTexture } from "../../../lib/textures/CubeTexture";
+import { fetchImage } from "../../../lib/textures/loaders/Image";
+import { Texture } from "../../../lib/textures/Texture";
 import fragmentSourceCode from "./fragment.glsl";
 import { patternMaterial } from "./pattern/PatternMaterial";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
+  // TODO: Required because of a timing error on Threeify.org website.  Fix this.
+  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
+
   const geometry = icosahedronGeometry(0.75, 4);
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const imageSize = new Vector2(1024, 1024);
