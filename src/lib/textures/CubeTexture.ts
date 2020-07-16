@@ -21,7 +21,7 @@ export class CubeMapTexture extends VirtualTexture implements IPoolUser {
     public images: TextureSource[],
     level = 0,
     magFilter = TextureFilter.Linear,
-    minFilter = TextureFilter.Linear,
+    minFilter = TextureFilter.LinearMipmapLinear,
     pixelFormat = PixelFormat.RGBA,
     dataType = DataType.UnsignedByte,
     generateMipmaps = true,

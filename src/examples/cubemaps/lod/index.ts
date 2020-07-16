@@ -44,6 +44,7 @@ async function init(): Promise<null> {
     mipCount: cubeTexture.mipCount,
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
   };
+
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 

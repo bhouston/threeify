@@ -89,7 +89,8 @@ export class TexImage2D implements IDisposable {
       const numLevels = Math.floor(this.images.length / 6);
       for (let level = 0; level < numLevels; level++) {
         for (let face = 0; face < 6; face++) {
-          const image = images[level * 6 + face];
+          const imageIndex = level * 6 + face;
+          const image = images[imageIndex];
           this.loadImage(image, TextureTarget.CubeMapPositiveX + face, level);
         }
       }

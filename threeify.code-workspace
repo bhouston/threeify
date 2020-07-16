@@ -5,6 +5,9 @@
     },
     {
       "path": "../threeify.org"
+    },
+    {
+      "path": "../threeify-glsl-transpiler"
     }
   ],
   "extensions": {

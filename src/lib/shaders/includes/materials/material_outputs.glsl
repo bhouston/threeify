@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <operations/normals/packing>
+#pragma include <normals/packing>
 #pragma include "output_flags"
 
 vec4 getMaterialOutput( int materialOutput, vec4 viewPosition, vec3 viewNormal, vec4 albedo, float metalness, float roughness, vec4 beauty ) {
