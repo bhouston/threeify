@@ -1,3 +1,17 @@
+# [1.39.0](https://github.com/threeify/threeify/compare/v1.38.0...v1.39.0) (2020-07-16)
+
+
+### Bug Fixes
+
+* make lod example work again -- bad minFilter default. ([51d0d76](https://github.com/threeify/threeify/commit/51d0d763ea34ce048e7d2b3767de23502e9ed5ae))
+
+
+### Features
+
+* cubemap transform/projection helpers ([25eac5b](https://github.com/threeify/threeify/commit/25eac5ba3dab1f9e0292fc4566680ef513c0c153))
+* matrix4LookAt ([eaeeb5f](https://github.com/threeify/threeify/commit/eaeeb5fe34cc0bc4b572ae7312e1dc1b1a070124))
+* support mip level loading in Texture, CubeTexture, TexImage2D ([b37ac9d](https://github.com/threeify/threeify/commit/b37ac9df571ffa9613dc4d2a1a1feabe93c473b2))
+
 # [1.38.0](https://github.com/threeify/threeify/compare/v1.37.0...v1.38.0) (2020-07-16)
 
 
