@@ -10,17 +10,7 @@ import { DataType } from "../renderers/webgl/textures/DataType";
 import { PixelFormat } from "../renderers/webgl/textures/PixelFormat";
 import { TextureFilter } from "../renderers/webgl/textures/TextureFilter";
 import { TextureWrap } from "../renderers/webgl/textures/TextureWrap";
-import { ArrayBufferImage } from "./ArrayBufferImage";
-import { VirtualTexture } from "./VirtualTexture";
-
-export type TextureSource =
-  | ArrayBufferImage
-  | ImageData
-  | HTMLImageElement
-  | HTMLCanvasElement
-  | HTMLVideoElement
-  | OffscreenCanvas
-  | ImageBitmap;
+import { TextureSource, VirtualTexture } from "./VirtualTexture";
 
 export class Texture extends VirtualTexture {
   constructor(

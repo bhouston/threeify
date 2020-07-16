@@ -9,8 +9,9 @@
 import { IDisposable } from "../../../core/types";
 import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
-import { CubeTexture } from "../../../textures/CubeTexture";
-import { Texture, TextureSource } from "../../../textures/Texture";
+import { CubeMapTexture } from "../../../textures/CubeTexture";
+import { Texture } from "../../../textures/Texture";
+import { TextureSource } from "../../../textures/VirtualTexture";
 import { Pool } from "../../Pool";
 import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
@@ -23,12 +24,11 @@ import { TextureWrap } from "./TextureWrap";
 export class TexImage2D implements IDisposable {
   disposed = false;
   glTexture: WebGLTexture;
+  size = new Vector2();
 
   constructor(
     public context: RenderingContext,
     public images: TextureSource[],
-    public size: Vector2,
-    public level = 0,
     public internalFormat = PixelFormat.RGBA,
     public dataType = DataType.UnsignedByte,
     public pixelFormat = PixelFormat.RGBA,
@@ -83,47 +83,57 @@ export class TexImage2D implements IDisposable {
   public loadImages(images: TextureSource[]): void {
     const gl = this.context.gl;
     gl.bindTexture(this.target, this.glTexture);
-    if (images.length === 0) {
-      this.loadImage(null);
-    } else if (images.length === 1) {
+    if (images.length === 1) {
       this.loadImage(images[0]);
-    } else if (images.length === 6) {
-      images.forEach((image: TextureSource, index: number) => {
-        this.loadImage(image, TextureTarget.CubeMapPositiveX + index);
-      });
+    } else if (this.target === TextureTarget.TextureCubeMap) {
+      const numLevels = Math.floor(this.images.length / 6);
+      for (let level = 0; level < numLevels; level++) {
+        for (let face = 0; face < 6; face++) {
+          const image = images[level * 6 + face];
+          this.loadImage(image, TextureTarget.CubeMapPositiveX + face, level);
+        }
+      }
     } else {
       throw new Error("Unsupported number of images");
     }
   }
 
-  private loadImage(image: TextureSource | null, target: TextureTarget | undefined = undefined): void {
+  private loadImage(image: TextureSource, target: TextureTarget | undefined = undefined, level = 0): void {
     const gl = this.context.gl;
-    if (image === null) {
+
+    if (image instanceof Vector2) {
       gl.texImage2D(
         target ?? this.target,
-        this.level,
+        level,
         this.internalFormat,
-        this.size.width,
-        this.size.height,
+        image.width,
+        image.height,
         0,
         this.pixelFormat,
         this.dataType,
         null,
       );
+      if (level === 0) {
+        this.size.copy(image);
+      }
     } else if (image instanceof ArrayBufferImage) {
       gl.texImage2D(
         target ?? this.target,
-        this.level,
+        level,
         this.internalFormat,
-        this.size.width,
-        this.size.height,
+        image.width,
+        image.height,
         0,
         this.pixelFormat,
         this.dataType,
         new Uint8Array(image.data),
       );
+      if (level === 0) {
+        this.size.set(image.width, image.height);
+      }
     } else {
-      gl.texImage2D(target ?? this.target, this.level, this.internalFormat, this.pixelFormat, this.dataType, image);
+      gl.texImage2D(target ?? this.target, level, this.internalFormat, this.pixelFormat, this.dataType, image);
+      this.size.set(image.width, image.height);
     }
   }
 }
@@ -131,7 +141,6 @@ export class TexImage2D implements IDisposable {
 export function makeTexImage2DFromTexture(
   context: RenderingContext,
   texture: Texture,
-  level = 0,
   internalFormat: PixelFormat = PixelFormat.RGBA,
 ): TexImage2D {
   const params = new TexParameters();
@@ -144,8 +153,6 @@ export function makeTexImage2DFromTexture(
   return new TexImage2D(
     context,
     [texture.image],
-    texture.size,
-    level,
     texture.pixelFormat,
     texture.dataType,
     internalFormat,
@@ -156,8 +163,7 @@ export function makeTexImage2DFromTexture(
 
 export function makeTexImage2DFromCubeTexture(
   context: RenderingContext,
-  texture: CubeTexture,
-  level = 0,
+  texture: CubeMapTexture,
   internalFormat: PixelFormat = PixelFormat.RGBA,
 ): TexImage2D {
   const params = new TexParameters();
@@ -170,8 +176,6 @@ export function makeTexImage2DFromCubeTexture(
   return new TexImage2D(
     context,
     texture.images,
-    texture.size,
-    level,
     texture.pixelFormat,
     texture.dataType,
     internalFormat,

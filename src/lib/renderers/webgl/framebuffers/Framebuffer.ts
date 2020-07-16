@@ -121,9 +121,7 @@ export function makeColorAttachment(
   texParams.minFilter = TextureFilter.Linear;
   return new TexImage2D(
     context,
-    [],
-    size,
-    0,
+    [size],
     PixelFormat.RGBA,
     dataType ?? DataType.UnsignedByte,
     PixelFormat.RGBA,
@@ -143,9 +141,7 @@ export function makeDepthAttachment(context: RenderingContext, size: Vector2): T
 
   return new TexImage2D(
     context,
-    [],
-    size,
-    0,
+    [size],
     PixelFormat.DepthComponent,
     dataType,
     PixelFormat.DepthComponent,
