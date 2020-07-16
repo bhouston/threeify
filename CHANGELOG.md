@@ -1,3 +1,10 @@
+## [1.39.1](https://github.com/threeify/threeify/compare/v1.39.0...v1.39.1) (2020-07-16)
+
+
+### Bug Fixes
+
+* do not use mipmaps if rendering into the first level of a cube map directly ([f5bdc86](https://github.com/threeify/threeify/commit/f5bdc86d98ed1111ccf1c3e4c60c0657c588ce20))
+
 # [1.39.0](https://github.com/threeify/threeify/compare/v1.38.0...v1.39.0) (2020-07-16)
 
 
