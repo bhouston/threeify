@@ -28,8 +28,8 @@ export class CubeMapTexture extends VirtualTexture implements IPoolUser {
     anisotropicLevels = 1,
   ) {
     super(level, magFilter, minFilter, pixelFormat, dataType, generateMipmaps, anisotropicLevels);
-    if (this.images.length !== 6) {
-      throw new Error("images must be of length 6");
+    if (this.images.length % 6 !== 0 || this.images.length === 0) {
+      throw new Error(`images.length (${this.images.length}) must be a positive multiple of 6`);
     }
     this.size = new Vector2(images[0].width, images[0].height);
   }
