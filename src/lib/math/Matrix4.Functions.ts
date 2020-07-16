@@ -240,6 +240,51 @@ export function makeMatrix4RotationFromAngleAxis(axis: Vector3, angle: number, r
   );
 }
 
+export function makeMatrix4LookAt(eye: Vector3, target: Vector3, up: Vector3, result = new Matrix4()): Matrix4 {
+  const te = result.elements;
+
+  const look = eye.clone().sub(target);
+
+  const lookLength = look.length();
+  if (lookLength === 0) {
+    look.z = 1.0;
+  } else {
+    look.multiplyByScalar(1.0 / lookLength);
+  }
+
+  const right = up.clone().cross(look);
+
+  const rightLength = right.length();
+  if (rightLength === 0) {
+    // up and z are parallel
+
+    if (Math.abs(up.z) === 1) {
+      up.x += 0.0001;
+    } else {
+      up.z += 0.0001;
+    }
+
+    up.normalize();
+    right.cross(up);
+  } else {
+    right.multiplyByScalar(1.0 / rightLength);
+  }
+
+  const up2 = look.clone().cross(right);
+
+  te[0] = right.x;
+  te[4] = up2.x;
+  te[8] = look.x;
+  te[1] = right.y;
+  te[5] = up2.y;
+  te[9] = look.y;
+  te[2] = right.z;
+  te[6] = up2.z;
+  te[10] = look.z;
+
+  return result;
+}
+
 export function makeMatrix4RotationFromEuler(euler: Euler, result = new Matrix4()): Matrix4 {
   const te = result.elements;
 
