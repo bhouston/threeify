@@ -1,4 +1,6 @@
+import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
 import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
+import { Blending } from "../../../lib/materials/Blending";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -7,8 +9,9 @@ import {
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
+import { makeColor3FromHSL } from "../../../lib/math/Vector3.Functions";
+import { blendModeToBlendState } from "../../../lib/renderers/webgl/BlendState";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
@@ -16,10 +19,11 @@ import { Framebuffer, makeDepthAttachment } from "../../../lib/renderers/webgl/f
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { TextureTarget } from "../../../lib/renderers/webgl/textures/TextureTarget";
+import { cubeMapFaces } from "../../../lib/renderers/webgl/textures/TextureTarget";
 import { CubeTexture } from "../../../lib/textures/CubeTexture";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import fragmentSourceCode from "./fragment.glsl";
+import { patternMaterial } from "./pattern/PatternMaterial";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
@@ -38,12 +42,27 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
+  const patternGeometry = planeGeometry(2, 2, 1, 1);
+  const patternProgram = makeProgramFromShaderMaterial(context, patternMaterial);
+  const patternUniforms = {
+    color: new Vector3(1, 0, 0),
+  };
+
+  const patternBufferGeometry = makeBufferGeometryFromGeometry(context, patternGeometry);
   const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
 
-  const framebufferSize = new Vector2(1024, 1024);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attach(Attachment.Color0, cubeMap, TextureTarget.CubeMapPositiveX, 0);
-  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, framebufferSize));
+  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, cubeTexture.size));
+
+  const blendState = blendModeToBlendState(Blending.Over);
+
+  cubeMapFaces.forEach((cubeMapFace, index) => {
+    framebuffer.attach(Attachment.Color0, cubeMap, cubeMapFace.target, 0);
+    patternUniforms.color = makeColor3FromHSL(index / 6, 0.5, 0.5);
+
+    framebuffer.blendState = blendState;
+    framebuffer.renderBufferGeometry(patternProgram, patternUniforms, patternBufferGeometry);
+  });
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

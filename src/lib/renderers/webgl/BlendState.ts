@@ -132,7 +132,7 @@ export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState
   }
 }
 
-export function blendModeToBlendState(blending: Blending, premultiplied: boolean): BlendState {
+export function blendModeToBlendState(blending: Blending, premultiplied = true): BlendState {
   if (premultiplied) {
     switch (blending) {
       case Blending.None:
