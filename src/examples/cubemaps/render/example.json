@@ -1,8 +1,8 @@
 {
-  "slug": "cubemap_texture",
+  "slug": "cubemap_render",
   "en": {
-    "name": "Cube Map Texture",
-    "description": "A bare-bones test of loading and rendering with a cubemap texture directly.",
-    "keywords": ["basics", "geometry", "cubemap", "direct", "reflection"]
+    "name": "Render to Cube Map Textures",
+    "description": "Rendering to the faces of a cube map on each frame.",
+    "keywords": ["render-to-texture", "cubemap"]
   }
 }

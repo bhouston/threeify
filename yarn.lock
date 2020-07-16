@@ -9384,10 +9384,10 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-threeify-glsl-transpiler@1.1.12:
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/threeify-glsl-transpiler/-/threeify-glsl-transpiler-1.1.12.tgz#c6967600254a2cacadab9026c9f80c9086c1ed8a"
-  integrity sha512-jN1nVl7CDgpI87CC5CV5SpqtRnfBNtKhiIbJanTbpFvlbwFZVn5vYwEWZNJJxrZoLF3tsCpKysJcOxX6fjOJTA==
+threeify-glsl-transpiler@1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/threeify-glsl-transpiler/-/threeify-glsl-transpiler-1.1.13.tgz#5265379f2aa3970e5173bb067cbc0604a6342276"
+  integrity sha512-4/aCgwyw8GHrMiy8er2uMof1PJwblaru8Uplhtys4JvbX7coIDNFEQriIi5S25FM8CAQIVeFHd39cLUgvIQN6Q==
   dependencies:
     commander "^5.1.0"
     glob "^7.1.6"

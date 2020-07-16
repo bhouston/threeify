@@ -50,7 +50,7 @@
     "jest": "^26.0.1",
     "prettier": "^2.0.5",
     "semantic-release": "^17.0.8",
-    "threeify-glsl-transpiler": "1.1.12",
+    "threeify-glsl-transpiler": "1.1.13",
     "ts-jest": "^26.1.0",
     "typedoc": "^0.17.8",
     "typescript": "^3.9.3"

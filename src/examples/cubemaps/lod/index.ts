@@ -14,7 +14,7 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { CubeTexture } from "../../../lib/textures/CubeTexture";
+import { CubeMapTexture } from "../../../lib/textures/CubeTexture";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
@@ -22,7 +22,7 @@ import vertexSourceCode from "./vertex.glsl";
 async function init(): Promise<null> {
   const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
   const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
-  const cubeTexture = new CubeTexture([
+  const cubeTexture = new CubeMapTexture([
     await fetchImage("/assets/textures/cube/pisa/px.png"),
     await fetchImage("/assets/textures/cube/pisa/nx.png"),
     await fetchImage("/assets/textures/cube/pisa/py.png"),
@@ -44,6 +44,7 @@ async function init(): Promise<null> {
     mipCount: cubeTexture.mipCount,
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
   };
+
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
