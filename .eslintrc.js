@@ -24,6 +24,7 @@ module.exports = {
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
   ],
+  ignorePatterns: ["*.md", "*.js"],
   rules: {
     "@typescript-eslint/ban-types": 1,
     "@typescript-eslint/explicit-function-return-type": 2,
