@@ -1,0 +1,8 @@
+{
+  "slug": "glsl_unit_tests",
+  "en": {
+    "name": "GLSL Unit Test Runner",
+    "description": "Runs all the glsl unit tests.",
+    "keywords": ["unit", "test", "glsl"]
+  }
+}

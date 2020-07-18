@@ -8,8 +8,8 @@
 import { Vector2 } from "../../../math/Vector2";
 import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
-import { DataType } from "../textures/DataType";
-import { PixelFormat } from "../textures/PixelFormat";
+import { DataType, sizeOfDataType } from "../textures/DataType";
+import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
 import { TexImage2D } from "../textures/TexImage2D";
 import { TexParameters } from "../textures/TexParameters";
 import { TextureFilter } from "../textures/TextureFilter";
@@ -52,54 +52,46 @@ export class Framebuffer extends VirtualFramebuffer {
     return this.#size;
   }
 
-  /*
-  readPixels(pixelBuffer: ArrayBufferView): ArrayBufferView {
-    const attachment = this.attachments.find((attachment) => attachment.attachmentPoint === AttachmentPoint.Color0);
-    if (attachment === undefined) {
-      throw new Error("can not find Color0 attachment");
-    }
-
-    const texImage2D = attachment.texImage2D;
-    const dataType = texImage2D.dataType;
-    const pixelFormat = texImage2D.pixelFormat;
-    if (pixelFormat !== PixelFormat.RGBA) {
-      throw new Error(`can not read non-RGBA color0 attachment: ${pixelFormat}`);
-    }
-
-    const oldFramebuffer = this.context.framebuffer;
+  readPixels(pixelBuffer: ArrayBufferView | undefined = undefined): ArrayBufferView {
     // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
-    try {
-      const status = this.context.gl.checkFramebufferStatus(GL.FRAMEBUFFER);
-      if (status !== GL.FRAMEBUFFER_COMPLETE) {
-        throw new Error(`can not read non-complete Framebuffer: ${status}`);
-      }
 
-      const pixelByteLength =
-        sizeOfDataType(dataType) *
-        numPixelFormatComponents(pixelFormat) *
-        texImage2D.size.width *
-        texImage2D.size.height;
-      if (pixelBuffer.byteLength < pixelByteLength) {
-        throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
-      }
+    const gl = this.context.gl;
 
-      this.context.gl.readPixels(
-        0,
-        0,
-        texImage2D.size.width,
-        texImage2D.size.height,
-        pixelFormat,
-        dataType,
-        pixelBuffer,
-      );
-
-      return pixelBuffer;
-    } finally {
-      this.context.framebuffer = oldFramebuffer;
+    const status = gl.checkFramebufferStatus(GL.FRAMEBUFFER);
+    if (status !== GL.FRAMEBUFFER_COMPLETE) {
+      throw new Error(`can not read non-complete Framebuffer: ${status}`);
     }
+
+    const texImage2D = this._attachments[Attachment.Color0];
+    if (texImage2D === undefined) {
+      throw new Error("no attachment on Color0");
+    }
+
+    const pixelByteLength =
+      sizeOfDataType(texImage2D.dataType) *
+      numPixelFormatComponents(texImage2D.pixelFormat) *
+      texImage2D.size.width *
+      texImage2D.size.height;
+    if (pixelBuffer === undefined) {
+      pixelBuffer = new Uint8Array(pixelByteLength);
+    }
+    if (pixelBuffer.byteLength < pixelByteLength) {
+      throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
+    }
+
+    gl.readPixels(
+      0,
+      0,
+      texImage2D.size.width,
+      texImage2D.size.height,
+      texImage2D.pixelFormat,
+      texImage2D.dataType,
+      pixelBuffer,
+    );
+
+    return pixelBuffer;
   }
-*/
 
   dispose(): void {
     if (!this.disposed) {

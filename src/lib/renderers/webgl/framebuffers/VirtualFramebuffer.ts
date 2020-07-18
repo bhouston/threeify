@@ -127,5 +127,13 @@ export abstract class VirtualFramebuffer implements IDisposable {
     this.context.render(node, camera);
   }
 
+  flush(): void {
+    this.context.gl.flush();
+  }
+
+  finish(): void {
+    this.context.gl.finish();
+  }
+
   abstract dispose(): void;
 }
