@@ -18,8 +18,8 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = (await fetchOBJ("/assets/models/cloth/cloth.obj"))[0];
@@ -30,7 +30,7 @@ async function init(): Promise<null> {
       makeMatrix4Scale(new Vector3(10, 10, 10)),
     ),
   );
-  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+  const material = new ShaderMaterial(vertexSource, fragmentSource);
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
