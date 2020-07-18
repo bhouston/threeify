@@ -14,3 +14,8 @@ float pow2( const in float x ) { return x*x; }
 float pow3( const in float x ) { return x*x*x; }
 float pow4( const in float x ) { float x2 = x*x; return x2*x2; }
 float average( const in vec3 color ) { return dot( color, vec3( 0.3333 ) ); }
+
+// https://stackoverflow.com/questions/9446888/best-way-to-detect-nans-in-opengl-shaders
+bool isnan( float val ) {
+  return ( val < 0.0 || 0.0 < val || val == 0.0 ) ? false : true;
+}
