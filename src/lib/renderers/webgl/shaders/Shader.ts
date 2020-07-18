@@ -79,7 +79,7 @@ export class Shader implements IDisposable {
   disposed = false;
   glShader: WebGLShader;
   #validated = false;
-  finalsource: string;
+  finalSource: string;
 
   constructor(
     public context: RenderingContext,
@@ -110,12 +110,12 @@ export class Shader implements IDisposable {
       }
       prefix.push("#extension GL_OES_standard_derivatives : enable");
     }
-    const combinedsource = prefix.join("\n") + "\n" + source;
+    const combinedSource = prefix.join("\n") + "\n" + source;
 
-    this.finalsource = removeDeadCode(combinedsource);
+    this.finalSource = removeDeadCode(combinedSource);
 
     // Set the shader source code.
-    gl.shaderSource(this.glShader, this.finalsource);
+    gl.shaderSource(this.glShader, this.finalSource);
 
     // Compile the shader
     gl.compileShader(this.glShader);
@@ -123,7 +123,7 @@ export class Shader implements IDisposable {
     // NOTE: purposely not checking if this compiled.
   }
 
-  get translatedsource(): string {
+  get translatedSource(): string {
     const ds = this.context.glxo.WEBGL_debug_shaders;
     if (ds !== null) {
       return ds.getTranslatedShaderSource(this.glShader);
@@ -146,7 +146,7 @@ export class Shader implements IDisposable {
       const infoLog = gl.getShaderInfoLog(this.glShader);
       const errorMessage = `could not compile shader:\n${infoLog}`;
       console.error(errorMessage);
-      console.error(insertLineNumbers(this.finalsource));
+      console.error(insertLineNumbers(this.finalSource));
       this.disposed = true;
       throw new Error(errorMessage);
     }
