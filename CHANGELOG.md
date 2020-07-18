@@ -1,3 +1,19 @@
+# [1.43.0](https://github.com/threeify/threeify/compare/v1.42.0...v1.43.0) (2020-07-18)
+
+
+### Bug Fixes
+
+* fix off by one line numbers if shader source code output ([6deb7bc](https://github.com/threeify/threeify/commit/6deb7bc489f1f2dedd694f9a946c1319162e4701))
+
+
+### Features
+
+* add flush and finish to framebuffer ([7802704](https://github.com/threeify/threeify/commit/780270428cf26af2fea127f92708a8fa4ecdc03f))
+* add initial glsl unit test framework ([0a48335](https://github.com/threeify/threeify/commit/0a4833518b1eed6621fafdb91826c4be5d520574))
+* add optional webgl helpers from greggman - show draw calls & gl error check ([f0ce29d](https://github.com/threeify/threeify/commit/f0ce29d57b23acf7378d08312d33e5873cd00c3d))
+* allow for readPixels from framebuffer ([554f928](https://github.com/threeify/threeify/commit/554f928a255a737f78b4a4827960d96439d8eb4f))
+* optional webgl-gl-error-check script in example.html ([9f19a88](https://github.com/threeify/threeify/commit/9f19a88c4928a0e2bcc906ee0f51a8df9d9240dc))
+
 # [1.42.0](https://github.com/threeify/threeify/compare/v1.41.0...v1.42.0) (2020-07-18)
 
 
