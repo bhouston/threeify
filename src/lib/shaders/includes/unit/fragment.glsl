@@ -1,12 +1,15 @@
 #pragma once
 precision highp float;
 
+varying vec2 v_uv;
+
 #pragma include <math/bytePacking>
 
 struct TestResults {
   int numSuccesses;
   int numFailures;
-  int idOfFirstFailure;
+  int runIdResult;
+  int runId;
 };
 
 // IDEA: Varying which unit test to run based on a varying from the vertex shader.
@@ -40,11 +43,14 @@ bool equalsTolerance( vec4 rhs, vec4 lhs, float tolerance ) {
 void asset( inout TestResults results, in int id, in bool value ) {
   if( value ) {
     results.numSuccesses ++;
+    if( id == results.runId ) {
+      results.runIdResult = 1;
+    }
   }
   else {
     results.numFailures ++;
-    if( results.idOfFirstFailure == 0 ) {
-      results.idOfFirstFailure = id;
+    if( id == results.runId ) {
+      results.runIdResult = 0;
     }
   }
 }
@@ -53,7 +59,7 @@ vec4 testResultsToFragColor( in TestResults results ) {
   return vec4(
     float( results.numSuccesses ) / 255.,
     float( results.numFailures ) / 255.,
-    float( results.idOfFirstFailure ) / 255.,
+    float( results.runIdResult ) / 255.,
     1. );
 }
 
@@ -70,10 +76,12 @@ void tests( inout TestResults results );
 
 void main() {
 
-  TestResults result;
+  TestResults results;
+  results.runId = int( floor( v_uv.x * 1024. ) );
+  results.runIdResult = 2;
 
-  tests( result );
+  tests( results );
 
-  gl_FragColor = testResultsToFragColor( result );
+  gl_FragColor = testResultsToFragColor( results );
 
 }
