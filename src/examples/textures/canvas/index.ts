@@ -18,8 +18,8 @@ import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/prog
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { Texture } from "../../../lib/textures/Texture";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
 function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number): void {
   if (ctx === null) {
@@ -40,7 +40,7 @@ function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number)
 }
 async function init(): Promise<null> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+  const material = new ShaderMaterial(vertexSource, fragmentSource);
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;

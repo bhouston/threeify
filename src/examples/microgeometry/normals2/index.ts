@@ -19,12 +19,12 @@ import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext"
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
-  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+  const material = new ShaderMaterial(vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
   const normalsTexture = new Texture(await fetchImage("/assets/textures/normalMap.png"));
 

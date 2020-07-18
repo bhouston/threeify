@@ -6,14 +6,14 @@ import { makeColor3FromHSL } from "../../../lib/math/Vector3.Functions";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
 const geometry = new Geometry();
 geometry.attributes["position"] = makeFloat32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
 geometry.indices = makeUint32Attribute([0, 1, 2], 1);
 
-const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+const material = new ShaderMaterial(vertexSource, fragmentSource);
 
 const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
 const canvasFramebuffer = context.canvasFramebuffer;

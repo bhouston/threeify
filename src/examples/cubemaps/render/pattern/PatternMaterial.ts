@@ -1,5 +1,5 @@
 import { ShaderMaterial } from "../../../../lib/materials/ShaderMaterial";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
-export const patternMaterial = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+export const patternMaterial = new ShaderMaterial(vertexSource, fragmentSource);

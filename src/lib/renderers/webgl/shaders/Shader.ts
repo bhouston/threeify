@@ -10,8 +10,8 @@ import { GL } from "../GL";
 import { RenderingContext } from "../RenderingContext";
 import { ShaderType } from "./ShaderType";
 
-function insertLineNumbers(sourceCode: string): string {
-  const inputLines = sourceCode.split("\n");
+function insertLineNumbers(source: string): string {
+  const inputLines = source.split("\n");
   const outputLines = ["\n"];
   const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
   for (let l = 0; l < inputLines.length; l++) {
@@ -22,7 +22,7 @@ function insertLineNumbers(sourceCode: string): string {
 }
 
 // This reduces the code bulk when debugging shaders
-function removeDeadCode(sourceCode: string): string {
+function removeDeadCode(source: string): string {
   const defineRegexp = /^#define +([\w\d_]+)/;
   const undefRegexp = /^#undef +([\w\d_]+)/;
   const ifdefRegexp = /^#ifdef +([\w\d_]+)/;
@@ -34,7 +34,7 @@ function removeDeadCode(sourceCode: string): string {
   const liveCodeStack: boolean[] = [true];
 
   const outputLines: string[] = [];
-  sourceCode.split("\n").forEach((line) => {
+  source.split("\n").forEach((line) => {
     const isLive = liveCodeStack[liveCodeStack.length - 1];
 
     if (isLive) {
@@ -79,11 +79,11 @@ export class Shader implements IDisposable {
   disposed = false;
   glShader: WebGLShader;
   #validated = false;
-  finalSourceCode: string;
+  finalsource: string;
 
   constructor(
     public context: RenderingContext,
-    public sourceCode: string,
+    public source: string,
     public shaderType: ShaderType,
     public glslVersion = 300,
   ) {
@@ -110,12 +110,12 @@ export class Shader implements IDisposable {
       }
       prefix.push("#extension GL_OES_standard_derivatives : enable");
     }
-    const combinedSourceCode = prefix.join("\n") + "\n" + sourceCode;
+    const combinedsource = prefix.join("\n") + "\n" + source;
 
-    this.finalSourceCode = removeDeadCode(combinedSourceCode);
+    this.finalsource = removeDeadCode(combinedsource);
 
     // Set the shader source code.
-    gl.shaderSource(this.glShader, this.finalSourceCode);
+    gl.shaderSource(this.glShader, this.finalsource);
 
     // Compile the shader
     gl.compileShader(this.glShader);
@@ -123,7 +123,7 @@ export class Shader implements IDisposable {
     // NOTE: purposely not checking if this compiled.
   }
 
-  get translatedSourceCode(): string {
+  get translatedsource(): string {
     const ds = this.context.glxo.WEBGL_debug_shaders;
     if (ds !== null) {
       return ds.getTranslatedShaderSource(this.glShader);
@@ -146,7 +146,7 @@ export class Shader implements IDisposable {
       const infoLog = gl.getShaderInfoLog(this.glShader);
       const errorMessage = `could not compile shader:\n${infoLog}`;
       console.error(errorMessage);
-      console.error(insertLineNumbers(this.finalSourceCode));
+      console.error(insertLineNumbers(this.finalsource));
       this.disposed = true;
       throw new Error(errorMessage);
     }

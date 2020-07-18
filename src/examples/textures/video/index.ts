@@ -12,12 +12,12 @@ import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext"
 import { makeTexImage2DFromTexture, TexImage2D } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { makeTextureFromVideoElement, Texture } from "../../../lib/textures/Texture";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1.0, 0.5);
-  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+  const material = new ShaderMaterial(vertexSource, fragmentSource);
   const clickToPlayTexture = new Texture(await fetchImage("/assets/textures/videos/ClickToPlay.png"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);

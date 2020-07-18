@@ -22,8 +22,8 @@ import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext"
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
-import fragmentSourceCode from "./fragment.glsl";
-import vertexSourceCode from "./vertex.glsl";
+import fragmentSource from "./fragment.glsl";
+import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = (await fetchOBJ("/assets/models/ninjaHead/ninjaHead.obj"))[0];
@@ -34,7 +34,7 @@ async function init(): Promise<null> {
       makeMatrix4Translation(new Vector3(0, -172, -4)),
     ),
   );
-  const material = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
+  const material = new ShaderMaterial(vertexSource, fragmentSource);
   const displacementTexture = new Texture(await fetchImage("/assets/models/ninjaHead/displacement.jpg"));
   const normalTexture = new Texture(await fetchImage("/assets/models/ninjaHead/normal.png"));
 
