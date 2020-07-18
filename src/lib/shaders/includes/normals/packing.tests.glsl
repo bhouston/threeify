@@ -1,10 +1,10 @@
 #pragma include <unit/fragment>
-#pragma include <cubemaps/equirectangular>
+#pragma include "packing"
 
-void testEquivalency( inout TestResults results, in int testId, in vec3 dir ) {
-  vec2 uv = directionToEquirectangularUV( dir );
-  vec3 dir2 = equirectangularUvToDirection( uv );
-  asset( results, testId, dir == dir2 );
+void testEquivalency( inout TestResults results, in int testId, in vec3 normal ) {
+  vec3 rgb = normalToRgb( normal );
+  vec3 normal2 = rgbToNormal( rgb );
+  asset( results, testId, equalsTolerance( normal, normal2, 0.0001 ) );
 }
 
 void tests( inout TestResults results ) {
