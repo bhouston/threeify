@@ -74,6 +74,7 @@
       "rgbm",
       "scanline",
       "slerp",
+      "srgb",
       "struct",
       "threeify",
       "threeifydev",
