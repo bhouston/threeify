@@ -13,12 +13,10 @@ varying vec4 v_homogeneousVertexPosition;
 void main() {
 
   // step one, convert from screen space to ray.
-  vec3 eyePosition = vec3(0.0);
-  vec3 nearClipPosition = ( viewToWorld * screenToView * v_homogeneousVertexPosition ).xyz;
+  vec3 viewPosition = ( viewToWorld * screenToView * v_homogeneousVertexPosition ).xyz;
+  vec3 viewDirection = normalize( viewPosition );
 
-  vec3 direction = normalize( nearClipPosition - eyePosition );
-
-  vec2 equirectangularUv = directionToEquirectangularUV( direction );
+  vec2 equirectangularUv = directionToEquirectangularUV( viewDirection );
 
   vec3 outputColor = vec3(0.);
   outputColor += sRGBToLinear( texture2D( equirectangularMap, equirectangularUv ).rgb );
