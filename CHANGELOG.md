@@ -1,3 +1,11 @@
+# [1.44.0](https://github.com/threeify/threeify/compare/v1.43.0...v1.44.0) (2020-07-18)
+
+
+### Features
+
+* glsl unit test coverage for rgbe, srgb, math and packing. ([f9f5b4f](https://github.com/threeify/threeify/commit/f9f5b4fb8a771c1bec8255294d1c2f6a7b215c84))
+* output html text of unit test results with exact test numbers that fail. ([a2530d2](https://github.com/threeify/threeify/commit/a2530d225bd9f0802292387b36b6913a167659ab))
+
 # [1.43.0](https://github.com/threeify/threeify/compare/v1.42.0...v1.43.0) (2020-07-18)
 
 
