@@ -67,10 +67,6 @@ export class Framebuffer extends VirtualFramebuffer {
     if (texImage2D === undefined) {
       throw new Error("no attachment on Color0");
     }
-    console.log("texImage2D", texImage2D);
-    console.log("dataType", DataType[texImage2D.dataType]);
-    console.log("internalFormat", PixelFormat[texImage2D.internalFormat]);
-    console.log("pixelFormat", PixelFormat[texImage2D.pixelFormat]);
 
     const pixelByteLength =
       sizeOfDataType(texImage2D.dataType) *
@@ -84,8 +80,6 @@ export class Framebuffer extends VirtualFramebuffer {
       throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
     }
 
-    console.log("IMPLEMENTATION_COLOR_READ_FORMAT", PixelFormat[gl.getParameter(GL.IMPLEMENTATION_COLOR_READ_FORMAT)]);
-    console.log("IMPLEMENTATION_COLOR_READ_TYPE", gl.getParameter(GL.IMPLEMENTATION_COLOR_READ_TYPE));
     gl.readPixels(
       0,
       0,
