@@ -1,3 +1,14 @@
+# [1.41.0](https://github.com/threeify/threeify/compare/v1.40.0...v1.41.0) (2020-07-18)
+
+
+### Features
+
+* add cubemap faces table to simplify mappings ([43e35db](https://github.com/threeify/threeify/commit/43e35db6b9c3000a83cbee106b38b3e333c7e926))
+* add direction <-> equirectangular conversion functions ([07a43a1](https://github.com/threeify/threeify/commit/07a43a14cbe177009b5ffa0e23a5c5e640c1245a))
+* add equirectangular and cross cubemap assets ([318a0e9](https://github.com/threeify/threeify/commit/318a0e9412209475165af56da3e68f55579f073d))
+* equirectangular background pass example ([69c216b](https://github.com/threeify/threeify/commit/69c216b5718f3a29527b0e2bfcbfb388cc555d19))
+* examples now explicitly list their required extensions. ([2614dda](https://github.com/threeify/threeify/commit/2614dda3dbbedba2c3fcbb611f6fc7e44f146fc6))
+
 # [1.40.0](https://github.com/threeify/threeify/compare/v1.39.1...v1.40.0) (2020-07-16)
 
 
