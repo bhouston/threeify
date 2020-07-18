@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/threeify/threeify/compare/v1.41.0...v1.42.0) (2020-07-18)
+
+
+### Features
+
+* simplified pass geometry for post effect passes and similar. ([a8993b6](https://github.com/threeify/threeify/commit/a8993b6636e97fe2b220feb494aaa8f35bcc4849))
+
 # [1.41.0](https://github.com/threeify/threeify/compare/v1.40.0...v1.41.0) (2020-07-18)
 
 
