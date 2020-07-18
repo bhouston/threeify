@@ -1,4 +1,4 @@
-import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
+import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -18,7 +18,7 @@ import fragmentSourceCode from "./fragment.glsl";
 import vertexSourceCode from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const passGeometry = planeGeometry(2, 2, 1, 1);
+  const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSourceCode, fragmentSourceCode);
   const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/equirectangular.jpg"));
   const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/equirectangular.png"));
@@ -36,7 +36,7 @@ async function init(): Promise<null> {
     screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
     equirectangularMap: garageMap,
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, passGeometry);
+  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   function animate(): void {
