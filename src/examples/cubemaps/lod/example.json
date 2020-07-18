@@ -1,5 +1,6 @@
 {
   "slug": "cubemap_lod_roughness",
+  "requiredExtensions": ["EXT_shader_texture_lod"],
   "en": {
     "name": "Cube Map LOD Roughness",
     "description": "A test of explicitly setting the cube map LOD to simulate reflections with varying surface roughness.  Requires the ext_shader_texture_lod extension.",
