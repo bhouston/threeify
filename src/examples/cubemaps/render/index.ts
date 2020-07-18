@@ -1,4 +1,4 @@
-import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
+import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
 import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
@@ -41,7 +41,7 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
-  const patternGeometry = planeGeometry(2, 2, 1, 1);
+  const patternGeometry = passGeometry();
   const patternProgram = makeProgramFromShaderMaterial(context, patternMaterial);
   const patternUniforms = {
     color: new Vector3(1, 0, 0),
