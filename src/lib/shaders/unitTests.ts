@@ -1,4 +1,5 @@
-import rgbeTests from "./includes/color/spaces/rgbe.tests.glsl";
+import rgbdTests from "./includes/color/encodings/rgbd.tests.glsl";
+import rgbeTests from "./includes/color/encodings/rgbe.tests.glsl";
 import srgbTests from "./includes/color/spaces/srgb.tests.glsl";
 import equirectangularTests from "./includes/cubemaps/equirectangular.tests.glsl";
 import mathTests from "./includes/math/math.tests.glsl";
@@ -10,6 +11,10 @@ type GLSLUnitTest = {
 };
 
 export const glslUnitTests: Array<GLSLUnitTest> = [
+  {
+    name: "rgbd",
+    source: rgbdTests,
+  },
   {
     name: "rgbe",
     source: rgbeTests,
