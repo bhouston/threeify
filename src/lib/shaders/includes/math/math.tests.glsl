@@ -3,21 +3,21 @@
 
 void tests( inout TestResults results ) {
 
-  asset( results, 10, equalsTolerance( cos( PI ), -1., 0.000001 ) );
-  asset( results, 11, equalsTolerance( cos( PI2 ), 1., 0.000001 ) );
+  asset( results, 10, eqAbs( cos( PI ), -1., 0.000001 ) );
+  asset( results, 11, eqAbs( cos( PI2 ), 1., 0.000001 ) );
 
-  asset( results, 20, equalsTolerance( sin( PI ), 0., 0.000001 ) );
-  asset( results, 21, equalsTolerance( sin( PI2 ), 0., 0.000001 ) );
+  asset( results, 20, eqAbs( sin( PI ), 0., 0.000001 ) );
+  asset( results, 21, eqAbs( sin( PI2 ), 0., 0.000001 ) );
 
-  asset( results, 31, equalsTolerance( 0.5 * PI, PI_HALF, 0.000001 ) );
+  asset( results, 31, eqAbs( 0.5 * PI, PI_HALF, 0.000001 ) );
 
-  asset( results, 41, equalsTolerance( 1.0 / PI, RECIPROCAL_PI, 0.000001 ) );
-  asset( results, 42, equalsTolerance( 1.0 / PI2, RECIPROCAL_PI2, 0.000001 ) );
+  asset( results, 41, eqAbs( 1.0 / PI, RECIPROCAL_PI, 0.000001 ) );
+  asset( results, 42, eqAbs( 1.0 / PI2, RECIPROCAL_PI2, 0.000001 ) );
 
-  asset( results, 50, equalsTolerance( saturate( -2.), 0., 0.000001 ) );
-  asset( results, 51, equalsTolerance( saturate( 2.), 1., 0.000001 ) );
+  asset( results, 50, eqAbs( saturate( -2.), 0., 0.000001 ) );
+  asset( results, 51, eqAbs( saturate( 2.), 1., 0.000001 ) );
 
-  asset( results, 60, equalsTolerance( whiteComplement( vec3( 1.0, 0.5, 0.0 ) ), vec3( 0.0, 0.5, 1.0 ), 0.000001 ) );
+  asset( results, 60, eqAbs( whiteComplement( vec3( 1.0, 0.5, 0.0 ) ), vec3( 0.0, 0.5, 1.0 ), 0.000001 ) );
 
   asset( results, 70, pow2( 2.0 ) == 4.0 );
   asset( results, 71, pow2( -2.0 ) == 4.0 );
@@ -28,8 +28,8 @@ void tests( inout TestResults results ) {
   asset( results, 90, pow4( 2.0 ) == 16.0 );
   asset( results, 91, pow4( -2.0 ) == 16.0 );
 
-  asset( results, 100, equalsTolerance( average( vec3( -2.0 ) ), -2.0, 0.000001 ) );
-  asset( results, 101, equalsTolerance( average( vec3( 10., 20., 30. ) ), 20., 0.000001 ) );
+  asset( results, 100, eqAbs( average( vec3( -2.0 ) ), -2.0, 0.000001 ) );
+  asset( results, 101, eqAbs( average( vec3( 10., 20., 30. ) ), 20., 0.000001 ) );
 
   float divisor = 0.;
   asset( results, 110, ! isinf( 0. / 1. ) );

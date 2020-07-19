@@ -4,7 +4,7 @@
 void testEquivalency( inout TestResults results, in int testId, in vec3 linear ) {
   vec4 rgbe = linearToRGBE( linear );
   vec3 linear2 = rgbeToLinear( rgbe );
-  asset( results, testId, equalsRelativeTolerance( linear, linear2, 0.01 ) );
+  asset( results, testId, eqRel( linear, linear2, 0.01 ) );
 }
 
 void tests( inout TestResults results ) {
