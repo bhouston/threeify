@@ -15,9 +15,11 @@ float pow3( const in float x ) { return x*x*x; }
 float pow4( const in float x ) { float x2 = x*x; return x2*x2; }
 float average( const in vec3 color ) { return dot( color, vec3( 0.333333333333 ) ); }
 
-// source: https://www.shadertoy.com/view/lsjBDy
+const float NAN = sqrt( 0. );
 bool isnan( const float x ) {
-  return (x) != (x);
+  // this appears to be against the specification. another solution was offered here:
+  // https://www.shadertoy.com/view/lsjBDy
+  return (x) == NAN;
 }
 bool isinf( const float x ) {
   return (x) == (x)+1.;
