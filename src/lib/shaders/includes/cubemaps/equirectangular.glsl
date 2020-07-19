@@ -7,8 +7,8 @@
  */
 vec2 directionToEquirectangularUV( in vec3 dir ) {
 	return vec2(
-		0.5 - 0.5 * atan(dir.z, dir.x) / PI,
-		1. - acos(dir.y) / PI);
+		fract( atan(dir.z, dir.x) * RECIPROCAL_PI2 + 0.75 ), // this makes maps -z dir to the center of the UV space.
+		acos(dir.y) / PI);
 }
 
 /**

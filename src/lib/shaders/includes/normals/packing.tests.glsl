@@ -4,7 +4,7 @@
 void testEquivalency( inout TestResults results, in int testId, in vec3 normal ) {
   vec3 rgb = normalToRgb( normal );
   vec3 normal2 = rgbToNormal( rgb );
-  asset( results, testId, equalsTolerance( normal, normal2, 0.0001 ) );
+  asset( results, testId, eqAbs( normal, normal2, 0.0001 ) );
 }
 
 void tests( inout TestResults results ) {

@@ -36,12 +36,15 @@ export function planeGeometry(width = 1, height = 1, widthSegments = 1, heightSe
     for (let ix = 0; ix < gridX1; ix++) {
       const x = ix * segmentWidth - widthHalf;
 
+      // based on the right-hand coordinate system used for world
+      // space (-w/2,-h/2) is bottom left, (w/2,h/2) is top right
       vertices.push(x, -y, 0);
 
       normals.push(0, 0, 1);
 
-      uvs.push(ix / gridX);
-      uvs.push(1 - iy / gridY);
+      // based on the standard texture coordinate space
+      // (0,0) is top left, (1,1) is bottom right
+      uvs.push(ix / gridX, iy / gridY);
     }
   }
 
