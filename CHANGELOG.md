@@ -1,3 +1,17 @@
+# [1.46.0](https://github.com/threeify/threeify/compare/v1.45.1...v1.46.0) (2020-07-19)
+
+
+### Bug Fixes
+
+* fix isna ([765e703](https://github.com/threeify/threeify/commit/765e703779f0f3718a306efe806e81d2a46328c5))
+* fix seam by not allowing for mipmap filtering on equirectangular cube map ([fef13d2](https://github.com/threeify/threeify/commit/fef13d28d7fe2c3a2c293ea3ad9df954feeab677))
+* isnan and isinf glsl unit tests pass now ([a18631c](https://github.com/threeify/threeify/commit/a18631cd396a391325ea10d96d17866245a202ba))
+
+
+### Features
+
+* add isinf and fix isnan ([7597071](https://github.com/threeify/threeify/commit/75970716ab5c87d5324a933324e8d7b92dbefbee))
+
 ## [1.45.1](https://github.com/threeify/threeify/compare/v1.45.0...v1.45.1) (2020-07-19)
 
 
