@@ -47,14 +47,14 @@ async function init(): Promise<null> {
     const result = framebuffer.readPixels() as Uint8Array;
 
     let numPasses = 0;
-    let numFailures = 0;
+    let numFails = 0;
     const failureIds = [];
 
     for (let i = 0; i < result.length; i += 4) {
       const runResult = result[i + 2];
       switch (runResult) {
         case 0:
-          numFailures++;
+          numFails++;
           failureIds.push(i / 4);
           break;
         case 1:
@@ -63,12 +63,12 @@ async function init(): Promise<null> {
       }
     }
 
-    output.push(`${glslUnitTest.name}.tests.glsl: ${numPasses + numFailures} tests`);
+    output.push(`${glslUnitTest.name}.tests.glsl: ${numPasses + numFails} tests`);
     if (numPasses > 0) {
       output.push(`  ${numPasses} passed`);
     }
-    if (numFailures > 0) {
-      output.push(`  ${numFailures} failed: ${failureIds.join(" ")}`);
+    if (numFails > 0) {
+      output.push(`  ${numFails} failed: ${failureIds.join(" ")}`);
     }
     output.push("");
   });

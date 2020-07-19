@@ -17,14 +17,19 @@ void tests( inout TestResults results ) {
   asset( results, 9, ! isnan( 0. / 1. ) );
   asset( results, 10, isnan( 1. / divisor ) );
   asset( results, 11, isnan( sqrt( divisor ) ) );
+ asset( results, 12, isnan( atan( 1., 0. ) ) );
 
-  asset( results, 12, equalsTolerance( saturate( -2.), 0., 0.000001 ) );
-  asset( results, 13, equalsTolerance( saturate( 2.), 1., 0.000001 ) );
+  asset( results, 20, equalsTolerance( saturate( -2.), 0., 0.000001 ) );
+  asset( results, 21, equalsTolerance( saturate( 2.), 1., 0.000001 ) );
 
-  asset( results, 15, equalsTolerance( cos( PI ), -1., 0.000001 ) );
-  asset( results, 16, equalsTolerance( cos( PI2 ), 1., 0.000001 ) );
+  asset( results, 30, equalsTolerance( cos( PI ), -1., 0.000001 ) );
+  asset( results, 31, equalsTolerance( cos( PI2 ), 1., 0.000001 ) );
 
-  asset( results, 17, equalsTolerance( sin( PI ), 0., 0.000001 ) );
-  asset( results, 18, equalsTolerance( sin( PI2 ), 0., 0.000001 ) );
+  asset( results, 40, equalsTolerance( sin( PI ), 0., 0.000001 ) );
+  asset( results, 41, equalsTolerance( sin( PI2 ), 0., 0.000001 ) );
+
+  asset( results, 50, equalsTolerance( 1.0 / PI, RECIPROCAL_PI, 0.000001 ) );
+  asset( results, 51, equalsTolerance( 1.0 / PI2, RECIPROCAL_PI2, 0.000001 ) );
+  asset( results, 52, equalsTolerance( 0.5 * PI, PI_HALF, 0.000001 ) );
 
 }
