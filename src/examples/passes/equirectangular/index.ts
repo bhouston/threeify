@@ -51,9 +51,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    passUniforms.viewToWorld = makeMatrix4Inverse(
-      makeMatrix4RotationFromEuler(new Euler(now * 0.0003, -now * 0.0004, 0)),
-    );
+    passUniforms.viewToWorld = makeMatrix4Inverse(makeMatrix4RotationFromEuler(new Euler(0, now * 0.0004, 0)));
     passUniforms.equirectangularMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
 
     canvasFramebuffer.renderBufferGeometry(passProgram, passUniforms, bufferGeometry, depthTestState);

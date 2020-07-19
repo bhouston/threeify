@@ -15,54 +15,54 @@ struct TestResults {
 // IDEA: Varying which unit test to run based on a varying from the vertex shader.
 //  This one can have multiple identified failures per run.
 
-bool equalsTolerance( float rhs, float lhs, float tolerance ) {
+bool eqAbs( float rhs, float lhs, float tolerance ) {
   return abs( rhs - lhs ) < tolerance;
 }
 
-bool equalsTolerance( vec2 rhs, vec2 lhs, float tolerance ) {
+bool eqAbs( vec2 rhs, vec2 lhs, float tolerance ) {
   return
-    equalsTolerance( rhs.x, lhs.x, tolerance ) &&
-    equalsTolerance( rhs.y, lhs.y, tolerance );
+    eqAbs( rhs.x, lhs.x, tolerance ) &&
+    eqAbs( rhs.y, lhs.y, tolerance );
 }
 
-bool equalsTolerance( vec3 rhs, vec3 lhs, float tolerance ) {
+bool eqAbs( vec3 rhs, vec3 lhs, float tolerance ) {
   return
-    equalsTolerance( rhs.x, lhs.x, tolerance ) &&
-    equalsTolerance( rhs.y, lhs.y, tolerance ) &&
-    equalsTolerance( rhs.z, lhs.z, tolerance );
+    eqAbs( rhs.x, lhs.x, tolerance ) &&
+    eqAbs( rhs.y, lhs.y, tolerance ) &&
+    eqAbs( rhs.z, lhs.z, tolerance );
 }
 
-bool equalsTolerance( vec4 rhs, vec4 lhs, float tolerance ) {
+bool eqAbs( vec4 rhs, vec4 lhs, float tolerance ) {
   return
-    equalsTolerance( rhs.x, lhs.x, tolerance ) &&
-    equalsTolerance( rhs.y, lhs.y, tolerance ) &&
-    equalsTolerance( rhs.z, lhs.z, tolerance ) &&
-    equalsTolerance( rhs.w, lhs.w, tolerance );
+    eqAbs( rhs.x, lhs.x, tolerance ) &&
+    eqAbs( rhs.y, lhs.y, tolerance ) &&
+    eqAbs( rhs.z, lhs.z, tolerance ) &&
+    eqAbs( rhs.w, lhs.w, tolerance );
 }
 
-bool equalsRelativeTolerance( float rhs, float lhs, float tolerance ) {
+bool eqRel( float rhs, float lhs, float tolerance ) {
   return (abs( rhs - lhs )/max(abs(rhs),abs(lhs))) < tolerance;
 }
 
-bool equalsRelativeTolerance( vec2 rhs, vec2 lhs, float tolerance ) {
+bool eqRel( vec2 rhs, vec2 lhs, float tolerance ) {
   return
-    equalsRelativeTolerance( rhs.x, lhs.x, tolerance ) &&
-    equalsRelativeTolerance( rhs.y, lhs.y, tolerance );
+    eqRel( rhs.x, lhs.x, tolerance ) &&
+    eqRel( rhs.y, lhs.y, tolerance );
 }
 
-bool equalsRelativeTolerance( vec3 rhs, vec3 lhs, float tolerance ) {
+bool eqRel( vec3 rhs, vec3 lhs, float tolerance ) {
   return
-    equalsRelativeTolerance( rhs.x, lhs.x, tolerance ) &&
-    equalsRelativeTolerance( rhs.y, lhs.y, tolerance ) &&
-    equalsRelativeTolerance( rhs.z, lhs.z, tolerance );
+    eqRel( rhs.x, lhs.x, tolerance ) &&
+    eqRel( rhs.y, lhs.y, tolerance ) &&
+    eqRel( rhs.z, lhs.z, tolerance );
 }
 
-bool equalsRelativeTolerance( vec4 rhs, vec4 lhs, float tolerance ) {
+bool eqRel( vec4 rhs, vec4 lhs, float tolerance ) {
   return
-    equalsRelativeTolerance( rhs.x, lhs.x, tolerance ) &&
-    equalsRelativeTolerance( rhs.y, lhs.y, tolerance ) &&
-    equalsRelativeTolerance( rhs.z, lhs.z, tolerance ) &&
-    equalsRelativeTolerance( rhs.w, lhs.w, tolerance );
+    eqRel( rhs.x, lhs.x, tolerance ) &&
+    eqRel( rhs.y, lhs.y, tolerance ) &&
+    eqRel( rhs.z, lhs.z, tolerance ) &&
+    eqRel( rhs.w, lhs.w, tolerance );
 }
 
 void asset( inout TestResults results, in int id, in bool value ) {
