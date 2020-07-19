@@ -1,3 +1,16 @@
+# [1.45.0](https://github.com/threeify/threeify/compare/v1.44.0...v1.45.0) (2020-07-19)
+
+
+### Bug Fixes
+
+* rgbe unit tests pass. ([c2a4d9c](https://github.com/threeify/threeify/commit/c2a4d9ce9b7c63c7925ea4a958fcc300bb175df1))
+
+
+### Features
+
+* rgbd color encoding. ([3ee1544](https://github.com/threeify/threeify/commit/3ee15445de92bb77f765ab43a312c6a0c14025e7))
+* rgbd unit tests ([67b3dda](https://github.com/threeify/threeify/commit/67b3dda5c344dbf8985e752908ebb129f8e292a2))
+
 # [1.44.0](https://github.com/threeify/threeify/compare/v1.43.0...v1.44.0) (2020-07-18)
 
 
