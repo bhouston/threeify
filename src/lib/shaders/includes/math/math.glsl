@@ -15,7 +15,10 @@ float pow3( const in float x ) { return x*x*x; }
 float pow4( const in float x ) { float x2 = x*x; return x2*x2; }
 float average( const in vec3 color ) { return dot( color, vec3( 0.333333333333 ) ); }
 
-// https://stackoverflow.com/questions/9446888/best-way-to-detect-nans-in-opengl-shaders
-bool isnan( const float val ) {
-  return ( val < 0.0 || 0.0 < val || val == 0.0 ) ? false : true;
+// source: https://www.shadertoy.com/view/lsjBDy
+bool isnan( const float x ) {
+  return (x) != (x);
+}
+bool isinf( const float x ) {
+  return (x) == (x)+1.;
 }

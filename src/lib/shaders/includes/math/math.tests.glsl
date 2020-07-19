@@ -14,10 +14,11 @@ void tests( inout TestResults results ) {
   asset( results, 7, equalsTolerance( average( vec3( -2.0 ) ), -2.0, 0.000001 ) );
   asset( results, 8, equalsTolerance( average( vec3( 10., 20., 30. ) ), 20., 0.000001 ) );
   float divisor = 0.;
-  asset( results, 9, ! isnan( 0. / 1. ) );
-  asset( results, 10, isnan( 1. / divisor ) );
-  asset( results, 11, isnan( sqrt( divisor ) ) );
- asset( results, 12, isnan( atan( 1., 0. ) ) );
+  asset( results, 9, ! isinf( 0. / 1. ) );
+  asset( results, 10, isinf( 1. / divisor ) );
+  /*asset( results, 11, isnan( sqrt( divisor ) ) );
+  asset( results, 12, isnan( atan( 1., 0. ) ) );
+  asset( results, 13, isnan( atan( 0. ) ) );*/
 
   asset( results, 20, equalsTolerance( saturate( -2.), 0., 0.000001 ) );
   asset( results, 21, equalsTolerance( saturate( 2.), 1., 0.000001 ) );
