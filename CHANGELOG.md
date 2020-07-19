@@ -1,3 +1,19 @@
+# [1.47.0](https://github.com/threeify/threeify/compare/v1.46.0...v1.47.0) (2020-07-19)
+
+
+### Bug Fixes
+
+* direction to equirectangular uv was not calibrated for right hand coordinate systems ([6db2f27](https://github.com/threeify/threeify/commit/6db2f274437a368714c21c8727bf03b091cc7546))
+* plane UVs are not correct in texture space ([7b2ff75](https://github.com/threeify/threeify/commit/7b2ff751221d9391380a1ac4b7a928d912667f88))
+* uvs for pass Geometry were not in texture space ([7d82a46](https://github.com/threeify/threeify/commit/7d82a46a05b975330d6fdc4b27f8b61c25313b98))
+* uvs in passGeometry were not in texture space properly ([dde849a](https://github.com/threeify/threeify/commit/dde849af95aee3a8ba191529af64a8df9338be0d))
+
+
+### Features
+
+* add coordinate space references. ([56069cc](https://github.com/threeify/threeify/commit/56069cc9474275981e55d5aaccbc1618a20e8ec9))
+* add texture space to coordinate references. ([6a57989](https://github.com/threeify/threeify/commit/6a579896d45c11be550ee867ad101c4d1feae20e))
+
 # [1.46.0](https://github.com/threeify/threeify/compare/v1.45.1...v1.46.0) (2020-07-19)
 
 
