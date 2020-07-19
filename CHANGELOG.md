@@ -1,3 +1,10 @@
+## [1.45.1](https://github.com/threeify/threeify/compare/v1.45.0...v1.45.1) (2020-07-19)
+
+
+### Bug Fixes
+
+* math glsl tests except for isnan ([a53a59e](https://github.com/threeify/threeify/commit/a53a59e9a7a85cc2991905e6c3936babeb5b5bf1))
+
 # [1.45.0](https://github.com/threeify/threeify/compare/v1.44.0...v1.45.0) (2020-07-19)
 
 
