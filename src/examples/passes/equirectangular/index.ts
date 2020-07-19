@@ -12,6 +12,8 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
+import { TextureWrap } from "../../../lib/renderers/webgl/textures/TextureWrap";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSource from "./fragment.glsl";
@@ -21,7 +23,13 @@ async function init(): Promise<null> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/equirectangular.jpg"));
+  garageTexture.wrapS = TextureWrap.Repeat;
+  garageTexture.wrapT = TextureWrap.ClampToEdge;
+  garageTexture.minFilter = TextureFilter.Linear;
   const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/equirectangular.png"));
+  debugTexture.wrapS = TextureWrap.Repeat;
+  debugTexture.wrapT = TextureWrap.ClampToEdge;
+  debugTexture.minFilter = TextureFilter.Linear;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
@@ -43,7 +51,9 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    passUniforms.viewToWorld = makeMatrix4Inverse(makeMatrix4RotationFromEuler(new Euler(Math.PI, -now * 0.0002, 0)));
+    passUniforms.viewToWorld = makeMatrix4Inverse(
+      makeMatrix4RotationFromEuler(new Euler(now * 0.0003, -now * 0.0004, 0)),
+    );
     passUniforms.equirectangularMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
 
     canvasFramebuffer.renderBufferGeometry(passProgram, passUniforms, bufferGeometry, depthTestState);

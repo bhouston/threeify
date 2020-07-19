@@ -6,10 +6,10 @@ varying vec2 v_uv;
 #pragma include <math/bytePacking>
 
 struct TestResults {
-  int numSuccesses;
-  int numFailures;
-  int runIdResult;
-  int runId;
+  int numPasses;
+  int numFails;
+  int selectorResult;
+  int selectorId;
 };
 
 // IDEA: Varying which unit test to run based on a varying from the vertex shader.
@@ -67,24 +67,24 @@ bool equalsRelativeTolerance( vec4 rhs, vec4 lhs, float tolerance ) {
 
 void asset( inout TestResults results, in int id, in bool value ) {
   if( value ) {
-    results.numSuccesses ++;
-    if( id == results.runId ) {
-      results.runIdResult = 1;
+    results.numPasses ++;
+    if( id == results.selectorId ) {
+      results.selectorResult = 1;
     }
   }
   else {
-    results.numFailures ++;
-    if( id == results.runId ) {
-      results.runIdResult = 0;
+    results.numFails ++;
+    if( id == results.selectorId ) {
+      results.selectorResult = 0;
     }
   }
 }
 
 vec4 testResultsToFragColor( in TestResults results ) {
   return vec4(
-    float( results.numSuccesses ) / 255.,
-    float( results.numFailures ) / 255.,
-    float( results.runIdResult ) / 255.,
+    float( results.numPasses ) / 255.,
+    float( results.numFails ) / 255.,
+    float( results.selectorResult ) / 255.,
     1. );
 }
 
@@ -102,8 +102,8 @@ void tests( inout TestResults results );
 void main() {
 
   TestResults results;
-  results.runId = int( floor( v_uv.x * 1024. ) );
-  results.runIdResult = 2;
+  results.selectorId = int( floor( v_uv.x * 1024. ) );
+  results.selectorResult = 2;
 
   tests( results );
 
