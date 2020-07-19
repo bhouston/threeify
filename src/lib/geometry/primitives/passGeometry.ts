@@ -24,7 +24,7 @@ export function passGeometry(min = new Vector2(-1, -1), max = new Vector2(1, 1))
 
   // texture space is not the same as clip space.  Thus this goes to the same locations but it has different
   // values
-  geometry.attributes["uv"] = makeFloat32Attribute([1, 0, 0, 0, 0, 1, 1, 1], 2);
+  geometry.attributes["uv"] = makeFloat32Attribute([0, 1, 0, 0, 1, 0, 1, 1], 2);
 
   // because -z points forward, the normals for this to point towards would have to be +z.
   geometry.attributes["normal"] = makeFloat32Attribute([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1], 3);
