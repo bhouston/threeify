@@ -25,8 +25,10 @@ vec3 flatSurfaceNormal( vec3 position ) {
   return normalize(cross(dFdx(position), dFdy(position)));
 }
 
-// Get normal, tangent and bitangent vectors.
-// based on the glTF reference viewer
+/**
+ * Get normal, tangent and bitangent vectors.
+ * based on the glTF reference viewer
+ */
 void uvToTangentFrame( inout Surface surface, in vec2 uv ) {
   vec3 tempTangent = dFdy( uv.y ) * dFdx(surface.position) - dFdx( uv.y ) * dFdy(surface.position);
 
@@ -43,7 +45,9 @@ void rotateTangentFrame( inout Surface surface, in vec2 anisotropicDirection ) {
   surface.bitangent = normalMatrix * vec3( anisotropicDirection.x, -anisotropicDirection.y, 0. );
 }
 
-// this should be done after rotating the tangent frame
+/**
+ * this should be done after rotating the tangent frame
+ */
 void perturbSurfaceNormal_ObjectSpace( inout Surface surface, in vec3 normal ) {
   // NOTE: it appears that if you distort the normal via a normal map you do not have to change tangent or bitangent.
   // It appears that you can do that normal moduluation after this tangent frame construction
@@ -51,14 +55,19 @@ void perturbSurfaceNormal_ObjectSpace( inout Surface surface, in vec3 normal ) {
   surface.normal = normalMatrix * normalize(normal);
 }
 
-// this should be done after rotating the tangent frame
+/**
+ * this should be done after rotating the tangent frame
+ */
 void perturbSurfaceNormal_TangentSpace( inout Surface surface, in vec3 normal ) {
   // NOTE: it appears that if you distort the normal via a normal map you do not have to change tangent or bitangent.
   // It appears that you can do that normal moduluation after this tangent frame construction
   mat3 normalMatrix = surfaceToNormalMatrix( surface );
   surface.normal = normalMatrix * normalize( normal );
 }
-// this likely should be done after perturbing and rotating.
+
+/**
+ * this likely should be done after perturbing and rotating.
+ */
 void alignSurfaceWithViewDirection( inout Surface surface ) {
 
   // For a back-facing surface, the tangential basis vectors are negated.
@@ -69,8 +78,10 @@ void alignSurfaceWithViewDirection( inout Surface surface ) {
 
 }
 
-// modified verison of the Three.js implementation of:
-// http://api.unrealengine.com/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace/mm_sfgrad_bump.pdf
+/**
+ * modified verison of the Three.js implementation of:
+ * http://api.unrealengine.com/attachments/Engine/Rendering/LightingAndShadows/BumpMappingWithoutTangentSpace/mm_sfgrad_bump.pdf
+ */
 void perturbSurfaceNormal_BumpMap( inout Surface surface, in sampler2D bumpMap, in vec2 bumpUv, in float bumpScale ) {
 
   vec3 dPdx = normalize( dFdx( surface.position ) );
