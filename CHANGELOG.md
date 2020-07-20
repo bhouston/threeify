@@ -1,3 +1,19 @@
+# [1.50.0](https://github.com/threeify/threeify/compare/v1.49.0...v1.50.0) (2020-07-20)
+
+
+### Bug Fixes
+
+* flip video texture coordinates. ([c8cac97](https://github.com/threeify/threeify/commit/c8cac973bf54321da68d3bc9ff4579de89b98e94))
+* PrimitiveView was using inconsistent byte and float strides. ([182d36b](https://github.com/threeify/threeify/commit/182d36b0aa17232cbb4ed7b93241853ad24c6485))
+* uninitialized uniform when hashcode is 0 error. ([4dc5399](https://github.com/threeify/threeify/commit/4dc53991747fa07d409f4b69dd9a9c3cc65e7299))
+
+
+### Features
+
+* add async cube map loaders ([fdf4773](https://github.com/threeify/threeify/commit/fdf4773226a6d13017ba3bc62d04afd23ae4d14b))
+* add glTF sample environments ([53ddd9d](https://github.com/threeify/threeify/commit/53ddd9db46349704598f313bd3845167207232ef))
+* add greggman's webgl-error-check script. ([b8ddf41](https://github.com/threeify/threeify/commit/b8ddf411c36d4c9ee7acf197e9d8d325dff8838b))
+
 # [1.49.0](https://github.com/threeify/threeify/compare/v1.48.0...v1.49.0) (2020-07-20)
 
 
