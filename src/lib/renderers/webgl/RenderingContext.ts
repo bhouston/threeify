@@ -65,6 +65,20 @@ export class RenderingContext {
     // this.programPool = new ProgramPool(this);
     // this.bufferPool = new BufferPool(this);
     this.#framebuffer = this.canvasFramebuffer;
+
+    /*
+    this.gl.bindTexture(TextureTarget.Texture2D, null);
+    this.gl.texImage2D(
+      TextureTarget.Texture2D,
+      0,
+      PixelFormat.RGBA,
+      1,
+      1,
+      0,
+      PixelFormat.RGB,
+      DataType.UnsignedByte,
+      new Float32Array([1, 0, 0]),
+    );*/
   }
 
   get debugVendor(): string {
