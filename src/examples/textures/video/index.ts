@@ -20,15 +20,12 @@ async function init(): Promise<null> {
   const geometry = planeGeometry(1.0, 0.5);
   const uvs = geometry.attributes["uv"];
   if (uvs !== undefined) {
-    console.log(uvs.attributeData.arrayBuffer);
     const uvView = new Vector2View(uvs.attributeData.arrayBuffer);
     const uv = new Vector2();
-    console.log(uvView);
     for (let u = 0; u < uvView.count; u++) {
       uvView.get(u, uv);
       uv.y = 1.0 - uv.y;
       uvView.set(u, uv);
-      console.log(u, uv);
     }
   }
   const material = new ShaderMaterial(vertexSource, fragmentSource);
