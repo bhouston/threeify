@@ -14,23 +14,14 @@ import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/prog
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { CubeMapTexture } from "../../../lib/textures/CubeTexture";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
+import { fetchCubeImages } from "../../../lib/textures/loaders/Image";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = icosahedronGeometry(0.75, 2);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const cubeTexture = new CubeMapTexture(
-    await Promise.all([
-      fetchImage("/assets/textures/cube/pisa/px.png"),
-      fetchImage("/assets/textures/cube/pisa/nx.png"),
-      fetchImage("/assets/textures/cube/pisa/py.png"),
-      fetchImage("/assets/textures/cube/pisa/ny.png"),
-      fetchImage("/assets/textures/cube/pisa/pz.png"),
-      fetchImage("/assets/textures/cube/pisa/nz.png"),
-    ]),
-  );
+  const cubeTexture = new CubeMapTexture(await fetchCubeImages("/assets/textures/cube/pisa/*.png"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;

@@ -15,6 +15,15 @@ class Buffer {
   constructor(public data: Uint8Array, public position: number) {}
 }
 
+export async function fetchCubeHDRs(urlPattern: string): Promise<ArrayBufferImage[]> {
+  const cubeMapFaces = ["px", "nx", "py", "ny", "pz", "nz"];
+  const fetchPromises: Promise<ArrayBufferImage>[] = [];
+  cubeMapFaces.forEach((face) => {
+    fetchPromises.push(fetchHDR(urlPattern.replace("*", face)));
+  });
+  return Promise.all(fetchPromises);
+}
+
 export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
   const response = await fetch(url);
   if (!response.ok) {

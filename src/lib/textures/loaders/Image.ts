@@ -15,3 +15,12 @@ export function fetchImage(url: string): Promise<HTMLImageElement> {
     image.src = url;
   });
 }
+
+export async function fetchCubeImages(urlPattern: string): Promise<HTMLImageElement[]> {
+  const cubeMapFaces = ["px", "nx", "py", "ny", "pz", "nz"];
+  const fetchPromises: Promise<HTMLImageElement>[] = [];
+  cubeMapFaces.forEach((face) => {
+    fetchPromises.push(fetchImage(urlPattern.replace("*", face)));
+  });
+  return Promise.all(fetchPromises);
+}
