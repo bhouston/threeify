@@ -1,3 +1,4 @@
+import lambertTests from "./includes/brdfs/diffuse/lambert.tests.glsl";
 import rgbdTests from "./includes/color/encodings/rgbd.tests.glsl";
 import rgbeTests from "./includes/color/encodings/rgbe.tests.glsl";
 import srgbTests from "./includes/color/spaces/srgb.tests.glsl";
@@ -11,6 +12,10 @@ type GLSLUnitTest = {
 };
 
 export const glslUnitTests: Array<GLSLUnitTest> = [
+  {
+    name: "lambert",
+    source: lambertTests,
+  },
   {
     name: "rgbd",
     source: rgbdTests,
