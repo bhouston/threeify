@@ -1,5 +1,5 @@
 #pragma include <unit/fragment>
-#pragma include <cubemaps/equirectangular>
+#pragma include "equirectangular"
 
 void testEquivalency( inout TestResults results, in int testId, in vec3 dir ) {
   vec2 uv = directionToEquirectangularUV( dir );
