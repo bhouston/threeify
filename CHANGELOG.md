@@ -1,3 +1,10 @@
+# [1.49.0](https://github.com/threeify/threeify/compare/v1.48.0...v1.49.0) (2020-07-20)
+
+
+### Features
+
+* lambert brdf glsl unit tests ([45f4bc3](https://github.com/threeify/threeify/commit/45f4bc3353ca6cfbf1990cebc899fda952879aba))
+
 # [1.48.0](https://github.com/threeify/threeify/compare/v1.47.0...v1.48.0) (2020-07-20)
 
 
