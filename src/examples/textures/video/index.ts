@@ -1,5 +1,6 @@
 import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
+import { Vector2View } from "../../../lib/math/arrays/PrimitiveView";
 import { Matrix4 } from "../../../lib/math/Matrix4";
 import { makeMatrix4OrthographicSimple, makeMatrix4Translation } from "../../../lib/math/Matrix4.Functions";
 import { Vector2 } from "../../../lib/math/Vector2";
@@ -17,6 +18,19 @@ import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1.0, 0.5);
+  const uvs = geometry.attributes["uv"];
+  if (uvs !== undefined) {
+    console.log(uvs.attributeData.arrayBuffer);
+    const uvView = new Vector2View(uvs.attributeData.arrayBuffer);
+    const uv = new Vector2();
+    console.log(uvView);
+    for (let u = 0; u < uvView.count; u++) {
+      uvView.get(u, uv);
+      uv.y = 1.0 - uv.y;
+      uvView.set(u, uv);
+      console.log(u, uv);
+    }
+  }
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const clickToPlayTexture = new Texture(await fetchImage("/assets/textures/videos/ClickToPlay.png"));
 
