@@ -13,13 +13,12 @@ vec2 directionToEquirectangularUV( in vec3 dir ) {
 
 /**
  * equirectangular uvs -> local direction
- * TODO: Validate it is the opposite of directionToEquirectangularUV
  */
 vec3 equirectangularUvToDirection( in vec2 uv ) {
-  vec2 spherical = uv * vec2( PI, PI * 0.5 );
-  float cos_y = cos(spherical.y);
-  float sin_y = sin(spherical.y);
-  float cos_x = cos(spherical.x);
-  float sin_x = sin(spherical.x);
-	return vec3( cos_y * sin_x, sin_y, cos_y * cos_x );
+  vec2 s = vec2(
+    ( uv.x - 0.75 ) * PI2,
+    uv.y * PI );
+  vec2 cs = cos( s );
+  vec2 ss = sin( s );
+	return vec3( cs.x * ss.y, cs.y, ss.x * ss.y );
 }
