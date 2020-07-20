@@ -1,3 +1,10 @@
+# [1.48.0](https://github.com/threeify/threeify/compare/v1.47.0...v1.48.0) (2020-07-20)
+
+
+### Features
+
+* perfect equirectangular uv <-> direction equivalency ([247755a](https://github.com/threeify/threeify/commit/247755ad03ab326e525e912779e0ec96d14e7fff))
+
 # [1.47.0](https://github.com/threeify/threeify/compare/v1.46.0...v1.47.0) (2020-07-19)
 
 
