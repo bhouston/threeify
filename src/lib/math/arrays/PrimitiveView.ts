@@ -29,9 +29,12 @@ export class PrimitiveView<P extends IArrayable> {
       this.floatStride = dataArray.vertexStride / 4;
       this.floatArray = new Float32Array(dataArray.attributeData.arrayBuffer);
     } else if (dataArray instanceof Float32Array) {
+      console.log("dataArray is a Float32Array", dataArray);
       this.floatArray = dataArray;
     } else if (dataArray instanceof ArrayBuffer) {
       this.floatArray = new Float32Array(dataArray);
+      console.log("dataArray is a ArrayBuffer", dataArray);
+      console.log("convering to a Float32Array", this.floatArray);
     } else {
       throw new Error("unsupported value");
     }
@@ -61,8 +64,8 @@ export class PrimitiveView<P extends IArrayable> {
 export class Vector2View extends PrimitiveView<Vector2> {
   readonly tempPrimitive = new Vector2();
 
-  constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
-    super(dataArray, 8, byteStride, byteOffset);
+  constructor(dataArray: DataArray, floatStride = -1, floatOffset = -1) {
+    super(dataArray, 2, floatStride, floatOffset);
   }
 
   add(index: number, v: Vector2): this {
@@ -73,8 +76,8 @@ export class Vector2View extends PrimitiveView<Vector2> {
 export class Vector3View extends PrimitiveView<Vector3> {
   readonly tempPrimitive = new Vector3();
 
-  constructor(dataArray: DataArray, byteStride = -1, byteOffset = -1) {
-    super(dataArray, 12, byteStride, byteOffset);
+  constructor(dataArray: DataArray, floatStride = -1, floatOffset = -1) {
+    super(dataArray, 3, floatStride, floatOffset);
   }
 
   add(index: number, v: Vector3): this {
@@ -82,18 +85,22 @@ export class Vector3View extends PrimitiveView<Vector3> {
   }
 }
 
-export function makeVector2View(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector2View {
-  return new Vector2View(dataArray, byteStride, byteOffset);
+export function makeVector2View(dataArray: DataArray, floatStride = -1, floatOffset = -1): Vector2View {
+  return new Vector2View(dataArray, floatStride, floatOffset);
 }
-export function makeVector3View(dataArray: DataArray, byteStride = -1, byteOffset = -1): Vector3View {
-  return new Vector3View(dataArray, byteStride, byteOffset);
+export function makeVector3View(dataArray: DataArray, floatStride = -1, floatOffset = -1): Vector3View {
+  return new Vector3View(dataArray, floatStride, floatOffset);
 }
-export function makeQuaternionView(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Quaternion> {
-  return new PrimitiveView<Quaternion>(dataArray, 16, byteStride, byteOffset);
+export function makeQuaternionView(
+  dataArray: DataArray,
+  floatStride = -1,
+  floatOffset = -1,
+): PrimitiveView<Quaternion> {
+  return new PrimitiveView<Quaternion>(dataArray, 4, floatStride, floatOffset);
 }
-export function makeMatrix3View(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Matrix3> {
-  return new PrimitiveView<Matrix3>(dataArray, 36, byteStride, byteOffset);
+export function makeMatrix3View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Matrix3> {
+  return new PrimitiveView<Matrix3>(dataArray, 9, floatStride, floatOffset);
 }
-export function makeMatrix4View(dataArray: DataArray, byteStride = -1, byteOffset = -1): PrimitiveView<Matrix4> {
-  return new PrimitiveView<Matrix4>(dataArray, 64, byteStride, byteOffset);
+export function makeMatrix4View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Matrix4> {
+  return new PrimitiveView<Matrix4>(dataArray, 16, floatStride, floatOffset);
 }
