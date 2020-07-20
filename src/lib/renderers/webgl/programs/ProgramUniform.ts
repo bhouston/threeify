@@ -34,7 +34,7 @@ export class ProgramUniform {
   dimensions: number;
   uniformType: UniformType;
   glLocation: WebGLUniformLocation;
-  valueHashCode = 0;
+  valueHashCode = 982345792759832448; // large random hashcode so to never get a hit
   textureUnit = -1;
 
   constructor(public program: Program, public index: number) {

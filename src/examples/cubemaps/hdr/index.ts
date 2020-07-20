@@ -15,23 +15,14 @@ import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/prog
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { CubeMapTexture } from "../../../lib/textures/CubeTexture";
-import { fetchHDR } from "../../../lib/textures/loaders/HDR";
+import { fetchCubeHDRs } from "../../../lib/textures/loaders/HDR";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const cubeTexture = new CubeMapTexture(
-    await Promise.all([
-      fetchHDR("/assets/textures/cube/pisaHDR/px.hdr"),
-      fetchHDR("/assets/textures/cube/pisaHDR/nx.hdr"),
-      fetchHDR("/assets/textures/cube/pisaHDR/py.hdr"),
-      fetchHDR("/assets/textures/cube/pisaHDR/ny.hdr"),
-      fetchHDR("/assets/textures/cube/pisaHDR/pz.hdr"),
-      fetchHDR("/assets/textures/cube/pisaHDR/nz.hdr"),
-    ]),
-  );
+  const cubeTexture = new CubeMapTexture(await fetchCubeHDRs("/assets/textures/cube/pisa/*.hdr"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
