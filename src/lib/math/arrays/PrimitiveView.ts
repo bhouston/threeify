@@ -29,12 +29,9 @@ export class PrimitiveView<P extends IArrayable> {
       this.floatStride = dataArray.vertexStride / 4;
       this.floatArray = new Float32Array(dataArray.attributeData.arrayBuffer);
     } else if (dataArray instanceof Float32Array) {
-      console.log("dataArray is a Float32Array", dataArray);
       this.floatArray = dataArray;
     } else if (dataArray instanceof ArrayBuffer) {
       this.floatArray = new Float32Array(dataArray);
-      console.log("dataArray is a ArrayBuffer", dataArray);
-      console.log("convering to a Float32Array", this.floatArray);
     } else {
       throw new Error("unsupported value");
     }
