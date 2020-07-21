@@ -1,3 +1,13 @@
+# [1.51.0](https://github.com/threeify/threeify/compare/v1.50.0...v1.51.0) (2020-07-21)
+
+
+### Features
+
+* add DeviceOrientationController ([1649801](https://github.com/threeify/threeify/commit/1649801861a5c2f5d91037ed27a6ba5c98c7fb00))
+* add radToDeg, degToRad ([ac4a646](https://github.com/threeify/threeify/commit/ac4a646f30ae4eb77c053ed777eccb0bffffda4a))
+* add transform(Point|Direction) for Vector2 ([47b8dcd](https://github.com/threeify/threeify/commit/47b8dcd232d88939d67ecf56f5879ecc6b4f9d34))
+* upgrade es-dev-server to https ([7be5842](https://github.com/threeify/threeify/commit/7be5842f68f77eb4d4a1495458f9d7db4fdf7bfc))
+
 # [1.50.0](https://github.com/threeify/threeify/compare/v1.49.0...v1.50.0) (2020-07-20)
 
 
