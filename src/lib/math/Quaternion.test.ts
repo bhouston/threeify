@@ -19,38 +19,40 @@ const qXZW = new Quaternion(0.5, 0, 1, 0.25).normalize();
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
 const testOrders = [EulerOrder.XYZ, EulerOrder.YXZ, EulerOrder.ZXY, EulerOrder.ZYX, EulerOrder.YZX, EulerOrder.XZY];
 
-test("Constructor", () => {
-  const a = new Quaternion();
-  expect(a.x).toBe(0);
-  expect(a.y).toBe(0);
-  expect(a.z).toBe(0);
-  expect(a.w).toBe(1);
-});
+describe("Quaternionr", () => {
+  test("constructor defaults", () => {
+    const a = new Quaternion();
+    expect(a.x).toBe(0);
+    expect(a.y).toBe(0);
+    expect(a.z).toBe(0);
+    expect(a.w).toBe(1);
+  });
 
-test("Constructor Values", () => {
-  const b = new Quaternion(1, 2, 3, 4);
-  expect(b.x).toBe(1);
-  expect(b.y).toBe(2);
-  expect(b.z).toBe(3);
-  expect(b.w).toBe(4);
-});
+  test("constructor Values", () => {
+    const b = new Quaternion(1, 2, 3, 4);
+    expect(b.x).toBe(1);
+    expect(b.y).toBe(2);
+    expect(b.z).toBe(3);
+    expect(b.w).toBe(4);
+  });
 
-test("Clone", () => {
-  const b = new Quaternion(1, 2, 3, 4);
-  const c = b.clone();
-  expect(c.x).toBe(1);
-  expect(c.y).toBe(2);
-  expect(c.z).toBe(3);
-  expect(c.w).toBe(4);
-});
+  test("clone", () => {
+    const b = new Quaternion(1, 2, 3, 4);
+    const c = b.clone();
+    expect(c.x).toBe(1);
+    expect(c.y).toBe(2);
+    expect(c.z).toBe(3);
+    expect(c.w).toBe(4);
+  });
 
-test("Copy", () => {
-  const b = new Quaternion(1, 2, 3, 4);
-  const d = new Quaternion().copy(b);
-  expect(d.x).toBe(1);
-  expect(d.y).toBe(2);
-  expect(d.z).toBe(3);
-  expect(d.w).toBe(4);
+  test("copy", () => {
+    const b = new Quaternion(1, 2, 3, 4);
+    const d = new Quaternion().copy(b);
+    expect(d.x).toBe(1);
+    expect(d.y).toBe(2);
+    expect(d.z).toBe(3);
+    expect(d.w).toBe(4);
+  });
 });
 
 describe("Quaternion-Euler ", () => {

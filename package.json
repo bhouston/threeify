@@ -23,7 +23,7 @@
     "build": "tgt & tsc",
     "dev": "npm run watch & npm start",
     "lint": "eslint ./src/",
-    "start": "es-dev-server --node-resolve --watch --http2",
+    "start": "es-dev-server --node-resolve --watch",
     "docs": "typedoc",
     "watch": "tsc --watch & tgt --watch",
     "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"

@@ -4,7 +4,7 @@
 void testEquivalency( inout TestResults results, in int testId, in vec3 srgb ) {
   vec3 linear = sRGBToLinear( srgb );
   vec3 srgb2 = linearTosRGB( linear );
-  asset( results, testId, eqAbs( srgb, srgb2, 0.0001 ) );
+  assert( results, testId, eqAbs( srgb, srgb2, 0.0001 ) );
 }
 
 void tests( inout TestResults results ) {

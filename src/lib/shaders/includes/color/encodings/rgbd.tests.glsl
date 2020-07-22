@@ -4,7 +4,7 @@
 void testEquivalency( inout TestResults results, in int testId, in vec3 linear, in float maxRange ) {
   vec4 rgbd = linearToRGBD( linear, maxRange );
   vec3 linear2 = rgbdToLinear( rgbd, maxRange );
-  asset( results, testId, eqRel( linear, linear2, 0.01 ) );
+  assert( results, testId, eqRel( linear, linear2, 0.01 ) );
 }
 
 void tests( inout TestResults results ) {

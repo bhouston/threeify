@@ -19,30 +19,40 @@ function delta(a: Euler, b: Euler): number {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z);
 }
 
-test("Instancing", () => {
-  const a = new Euler();
-  expect(a.x).toBe(0);
-  expect(a.y).toBe(0);
-  expect(a.z).toBe(0);
-  expect(a.order).toBe(EulerOrder.Default);
+describe("Euler", () => {
+  test("constructor defaults", () => {
+    const a = new Euler();
+    expect(a.x).toBe(0);
+    expect(a.y).toBe(0);
+    expect(a.z).toBe(0);
+    expect(a.order).toBe(EulerOrder.Default);
+  });
 
-  const b = new Euler(1, 2, 3, EulerOrder.ZXY);
-  expect(b.x).toBe(1);
-  expect(b.y).toBe(2);
-  expect(b.z).toBe(3);
-  expect(b.order).toBe(EulerOrder.ZXY);
+  test("constructor values", () => {
+    const b = new Euler(1, 2, 3, EulerOrder.ZXY);
+    expect(b.x).toBe(1);
+    expect(b.y).toBe(2);
+    expect(b.z).toBe(3);
+    expect(b.order).toBe(EulerOrder.ZXY);
+  });
 
-  const c = b.clone();
-  expect(c.x).toBe(1);
-  expect(c.y).toBe(2);
-  expect(c.z).toBe(3);
-  expect(c.order).toBe(EulerOrder.ZXY);
+  test("clone", () => {
+    const b = new Euler(1, 2, 3, EulerOrder.ZXY);
+    const c = b.clone();
+    expect(c.x).toBe(1);
+    expect(c.y).toBe(2);
+    expect(c.z).toBe(3);
+    expect(c.order).toBe(EulerOrder.ZXY);
+  });
 
-  const d = new Euler().copy(b);
-  expect(d.x).toBe(1);
-  expect(d.y).toBe(2);
-  expect(d.z).toBe(3);
-  expect(d.order).toBe(EulerOrder.ZXY);
+  test("copy", () => {
+    const b = new Euler(1, 2, 3, EulerOrder.ZXY);
+    const d = new Euler().copy(b);
+    expect(d.x).toBe(1);
+    expect(d.y).toBe(2);
+    expect(d.z).toBe(3);
+    expect(d.order).toBe(EulerOrder.ZXY);
+  });
 });
 
 describe("Euler-Quaternion", () => {

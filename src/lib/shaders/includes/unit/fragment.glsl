@@ -65,7 +65,7 @@ bool eqRel( vec4 rhs, vec4 lhs, float tolerance ) {
     eqRel( rhs.w, lhs.w, tolerance );
 }
 
-void asset( inout TestResults results, in int id, in bool value ) {
+void assert( inout TestResults results, in int id, in bool value ) {
   if( value ) {
     results.numPasses ++;
     if( id == results.selectorId ) {
@@ -89,13 +89,13 @@ vec4 testResultsToFragColor( in TestResults results ) {
 }
 
 // TODO: Is this actually useful?
-#define assetNotNaN(results,id,value) asset( results, id, !isnan(value));
-#define assetEqual(results,id,lhs,rhs) asset( results, id, (lhs)==(rhs));
-#define assetNotEqual(results,id,lhs,rhs) asset( results, id, (lhs)!=(rhs));
-#define assetGreater(results,id,lhs,rhs) asset( results, id, (lhs)>(rhs));
-#define assetGreaterOrEqual(results,id,lhs,rhs) asset( results, id, (lhs)=>(rhs));
-#define assetLess(results,id,lhs,rhs) asset( results, id, (lhs)<(rhs));
-#define assetLessOrEqual(results,id,lhs,rhs) asset( results, id, (lhs)<=(rhs));
+#define assertNotNaN(results,id,value) asset( results, id, !isnan(value));
+#define assertEqual(results,id,lhs,rhs) asset( results, id, (lhs)==(rhs));
+#define assertNotEqual(results,id,lhs,rhs) asset( results, id, (lhs)!=(rhs));
+#define assertGreater(results,id,lhs,rhs) asset( results, id, (lhs)>(rhs));
+#define assertGreaterOrEqual(results,id,lhs,rhs) asset( results, id, (lhs)=>(rhs));
+#define assertLess(results,id,lhs,rhs) asset( results, id, (lhs)<(rhs));
+#define assertLessOrEqual(results,id,lhs,rhs) asset( results, id, (lhs)<=(rhs));
 
 void tests( inout TestResults results );
 
