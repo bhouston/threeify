@@ -1,3 +1,18 @@
+# [1.52.0](https://github.com/threeify/threeify/compare/v1.51.0...v1.52.0) (2020-07-22)
+
+
+### Bug Fixes
+
+* Euler.set ([09d90ee](https://github.com/threeify/threeify/commit/09d90eea6801d1875ee6a629638413708105996a))
+* Quaternion.copy ([578efe5](https://github.com/threeify/threeify/commit/578efe5ca78ae711eee08906e742f9e4e6d447a5))
+
+
+### Features
+
+* expanded unit test coverage for Euler, Quaternion, Vector2 and Vector3. ([820a635](https://github.com/threeify/threeify/commit/820a6353ec30008699f21680a3ef8adabed6b572))
+* simplified DeviceOrientation ([929156e](https://github.com/threeify/threeify/commit/929156e514bdf3e3b527dae410ae309c54554ea3))
+* standalone and simplier device orientation example ([d492098](https://github.com/threeify/threeify/commit/d492098f7622084ff9a415391500b998aceeb946))
+
 # [1.51.0](https://github.com/threeify/threeify/compare/v1.50.0...v1.51.0) (2020-07-21)
 
 
