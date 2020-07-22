@@ -1,23 +1,33 @@
+import { IDisposable } from "../core/types";
 import { Euler, EulerOrder } from "../math/Euler";
 import { Quaternion } from "../math/Quaternion";
 import { makeQuaternionFromAxisAngle, makeQuaternionFromEuler } from "../math/Quaternion.Functions";
 import { degToRad } from "../math/Utilities";
 import { Vector3 } from "../math/Vector3";
-import { Controller } from "./Controller";
 
-export class DeviceOrientationController extends Controller {
-  deviceOrientation = new Euler(0, 0, 0, EulerOrder.YXZ);
-  screenOrientation = 0;
-  onDispose: (() => void) | undefined = undefined;
+const zAxis = new Vector3(0, 0, 1);
+// - PI/2 around the x-axis
+const q1 = new Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5));
 
-  constructor(public fnCallback: (orientation: Quaternion) => void) {
-    super();
+export class DeviceOrientation implements IDisposable {
+  disposed = false;
+  private deviceOrientation = new Euler(0, 0, 0, EulerOrder.YXZ);
+  private screenOrientation = 0;
+  private onDispose: () => void;
+  private tempValue = new Quaternion();
 
+  constructor() {
     // this is required because when invoked on an event, "this" is set to "window"
     const onDeviceOrientation = (event: DeviceOrientationEvent): void => {
-      this.deviceOrientation.set(degToRad(event.beta ?? 0), degToRad(event.alpha ?? 0), degToRad(event.gamma ?? 0));
+      this.deviceOrientation.set(
+        degToRad(event.beta ?? 0),
+        degToRad(event.alpha ?? 0 - 180.0),
+        -degToRad(event.gamma ?? 0),
+        EulerOrder.YXZ,
+      );
     };
     const onOrientationChange = (): void => {
+      console.log("orientation", window.orientation);
       this.screenOrientation = -degToRad(window.orientation as number);
     };
 
@@ -49,27 +59,20 @@ export class DeviceOrientationController extends Controller {
     };
   }
 
-  update(): void {
-    if (!this.enabled) {
-      return;
-    }
-
-    const zAxis = new Vector3(0, 0, 1);
-    const q1 = new Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)); // - PI/2 around the x-axis
-
+  get orientation(): Quaternion {
     const result = makeQuaternionFromEuler(this.deviceOrientation);
-    result.multiply(q1); // camera looks out the back of the device, not the top
-    result.multiply(makeQuaternionFromAxisAngle(zAxis, this.screenOrientation)); // adjust for screen orientation
+    // camera looks out the back of the device, not the top
+    result.multiply(q1);
+    // adjust for screen orientation
+    result.multiply(makeQuaternionFromAxisAngle(zAxis, this.screenOrientation, this.tempValue));
 
-    this.fnCallback(result);
+    return result;
   }
 
   dispose(): void {
     if (!this.disposed) {
-      if (this.onDispose !== undefined) {
-        this.onDispose();
-      }
-      super.dispose();
+      this.onDispose();
+      this.disposed = true;
     }
   }
 }
