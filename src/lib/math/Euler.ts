@@ -19,7 +19,7 @@ export class Euler implements IPrimitive<Euler> {
   }
 
   set(x: number, y: number, z: number, order: EulerOrder = EulerOrder.Default): this {
-    this.x = z;
+    this.x = x;
     this.y = y;
     this.z = z;
     this.order = order;
