@@ -1,3 +1,10 @@
+# [1.54.0](https://github.com/threeify/threeify/compare/v1.53.0...v1.54.0) (2020-07-22)
+
+
+### Features
+
+* unitInterval to vec3. fix vec2 to unitInterval.  clean up unit tests in general. ([0c1d679](https://github.com/threeify/threeify/commit/0c1d6792d26d57fef7cf05bb848224686b43eae3))
+
 # [1.53.0](https://github.com/threeify/threeify/compare/v1.52.0...v1.53.0) (2020-07-22)
 
 
