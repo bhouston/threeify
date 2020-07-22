@@ -8,4 +8,12 @@ test("Instancing", () => {
   const b = new Vector2(1, 2);
   expect(b.x).toBe(1);
   expect(b.y).toBe(2);
+
+  const c = b.clone();
+  expect(c.x).toBe(1);
+  expect(c.y).toBe(2);
+
+  const d = new Vector2().copy(b);
+  expect(d.x).toBe(1);
+  expect(d.y).toBe(2);
 });

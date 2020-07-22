@@ -1,15 +1,76 @@
+import { EulerOrder } from "./Euler";
+import { makeEulerFromQuaternion } from "./Euler.Functions";
+import { makeMatrix4RotationFromQuaternion } from "./Matrix4.Functions";
 import { Quaternion } from "./Quaternion";
+import { makeQuaternionFromEuler, makeQuaternionFromRotationMatrix4 } from "./Quaternion.Functions";
 
-test("Instancing", () => {
+const qX = new Quaternion(1, 0, 0).normalize();
+const qY = new Quaternion(0, 1, 0).normalize();
+const qZ = new Quaternion(0, 0, 1).normalize();
+const qW = new Quaternion(0, 0, 0, 1).normalize();
+const qXY = new Quaternion(1, 0.5, 0).normalize();
+const qYZ = new Quaternion(0, 1, 0.5).normalize();
+const qXZ = new Quaternion(0.5, 0, 1).normalize();
+const qXYZ = new Quaternion(0.25, 0.5, 1).normalize();
+const qXYW = new Quaternion(1, 0.5, 0, 0.25).normalize();
+const qYZW = new Quaternion(0, 1, 0.5, 0.25).normalize();
+const qXZW = new Quaternion(0.5, 0, 1, 0.25).normalize();
+
+const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
+const testOrders = [EulerOrder.XYZ, EulerOrder.YXZ, EulerOrder.ZXY, EulerOrder.ZYX, EulerOrder.YZX, EulerOrder.XZY];
+
+test("Constructor", () => {
   const a = new Quaternion();
   expect(a.x).toBe(0);
   expect(a.y).toBe(0);
   expect(a.z).toBe(0);
   expect(a.w).toBe(1);
+});
 
+test("Constructor Values", () => {
   const b = new Quaternion(1, 2, 3, 4);
   expect(b.x).toBe(1);
   expect(b.y).toBe(2);
   expect(b.z).toBe(3);
   expect(b.w).toBe(4);
+});
+
+test("Clone", () => {
+  const b = new Quaternion(1, 2, 3, 4);
+  const c = b.clone();
+  expect(c.x).toBe(1);
+  expect(c.y).toBe(2);
+  expect(c.z).toBe(3);
+  expect(c.w).toBe(4);
+});
+
+test("Copy", () => {
+  const b = new Quaternion(1, 2, 3, 4);
+  const d = new Quaternion().copy(b);
+  expect(d.x).toBe(1);
+  expect(d.y).toBe(2);
+  expect(d.z).toBe(3);
+  expect(d.w).toBe(4);
+});
+
+describe("Quaternion-Euler ", () => {
+  testValues.forEach((q, qi) => {
+    testOrders.forEach((eulerOrder, ei) => {
+      test(`q${qi} order ${ei}`, () => {
+        const e = makeEulerFromQuaternion(q, eulerOrder);
+        const q2 = makeQuaternionFromEuler(e);
+        expect(q2.clone().sub(q).length()).toBeLessThan(0.000001);
+      });
+    });
+  });
+});
+
+describe("Quaternion-Matrix4", () => {
+  testValues.forEach((q, qi) => {
+    test(`q ${qi}`, () => {
+      const m = makeMatrix4RotationFromQuaternion(q);
+      const q2 = makeQuaternionFromRotationMatrix4(m);
+      expect(q2.clone().sub(q).length()).toBeLessThan(0.000001);
+    });
+  });
 });
