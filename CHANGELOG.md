@@ -1,3 +1,15 @@
+# [1.53.0](https://github.com/threeify/threeify/compare/v1.52.0...v1.53.0) (2020-07-22)
+
+
+### Bug Fixes
+
+* asset -> asssert spelling error. ([466f3b4](https://github.com/threeify/threeify/commit/466f3b44f391da514b172ca3d70ed6aa68a7c610))
+
+
+### Features
+
+* add Vector4 tests. ([1ed06e0](https://github.com/threeify/threeify/commit/1ed06e03772ac5f25e08d31bf8f9e566b1d4bb55))
+
 # [1.52.0](https://github.com/threeify/threeify/compare/v1.51.0...v1.52.0) (2020-07-22)
 
 
