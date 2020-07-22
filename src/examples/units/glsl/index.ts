@@ -14,8 +14,8 @@ import {
 } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import vertexSource from "../../../lib/shaders/includes/unit/vertex.glsl";
-import { glslUnitTests } from "../../../lib/shaders/unitTests";
+import vertexSource from "../../../lib/shaders/includes/tests/vertex.glsl";
+import { glslTestSuites } from "../../../lib/shaders/testSuites";
 
 async function init(): Promise<null> {
   const geometry = passGeometry();
@@ -37,7 +37,7 @@ async function init(): Promise<null> {
 
   const output: string[] = [];
 
-  glslUnitTests.forEach((glslUnitTest) => {
+  glslTestSuites.forEach((glslUnitTest) => {
     const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
     const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
 
@@ -46,29 +46,35 @@ async function init(): Promise<null> {
 
     const result = framebuffer.readPixels() as Uint8Array;
 
-    let numPasses = 0;
-    let numFails = 0;
+    const passIds = [];
     const failureIds = [];
+    const duplicateIds = [];
 
     for (let i = 0; i < result.length; i += 4) {
       const runResult = result[i + 2];
+      const id = i / 4;
       switch (runResult) {
         case 0:
-          numFails++;
-          failureIds.push(i / 4);
+          failureIds.push(id);
           break;
         case 1:
-          numPasses++;
+          passIds.push(id);
+          break;
+        case 3:
+          duplicateIds.push(id);
           break;
       }
     }
 
-    output.push(`${glslUnitTest.name}.tests.glsl: ${numPasses + numFails} tests`);
-    if (numPasses > 0) {
-      output.push(`  ${numPasses} passed`);
+    output.push(`${glslUnitTest.name}.tests.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
+    if (passIds.length > 0) {
+      output.push(`  ${passIds.length} passed`);
     }
-    if (numFails > 0) {
-      output.push(`  ${numFails} failed: ${failureIds.join(" ")}`);
+    if (failureIds.length > 0) {
+      output.push(`  ${failureIds.length} failed: ${failureIds.join(" ")}`);
+    }
+    if (duplicateIds.length > 0) {
+      output.push(`  ${duplicateIds.length} duplicate test ids: ${duplicateIds.join(" ")}`);
     }
     output.push("");
   });

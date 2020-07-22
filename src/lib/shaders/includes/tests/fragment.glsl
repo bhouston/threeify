@@ -3,16 +3,12 @@ precision highp float;
 
 varying vec2 v_uv;
 
-#pragma include <math/bytePacking>
-
-struct TestResults {
-  int numPasses;
-  int numFails;
+struct TestSuite {
   int selectorResult;
   int selectorId;
 };
 
-// IDEA: Varying which unit test to run based on a varying from the vertex shader.
+// IDEA: Varying which suite test to run based on a varying from the vertex shader.
 //  This one can have multiple identified failures per run.
 
 bool eqAbs( float rhs, float lhs, float tolerance ) {
@@ -65,48 +61,54 @@ bool eqRel( vec4 rhs, vec4 lhs, float tolerance ) {
     eqRel( rhs.w, lhs.w, tolerance );
 }
 
-void assert( inout TestResults results, in int id, in bool value ) {
-  if( value ) {
-    results.numPasses ++;
-    if( id == results.selectorId ) {
-      results.selectorResult = 1;
-    }
+void assert( inout TestSuite suite, in int id, in bool value ) {
+  if( id != suite.selectorId ) {
+    return;
   }
-  else {
-    results.numFails ++;
-    if( id == results.selectorId ) {
-      results.selectorResult = 0;
-    }
-  }
-}
 
-vec4 testResultsToFragColor( in TestResults results ) {
-  return vec4(
-    float( results.numPasses ) / 255.,
-    float( results.numFails ) / 255.,
-    float( results.selectorResult ) / 255.,
-    1. );
+  // duplicate usage of selectorId
+  if( suite.selectorResult != 2 ) {
+    suite.selectorResult = 3;
+    return;
+  }
+
+  suite.selectorResult = ( value ) ? 1 : 0;
 }
 
 // TODO: Is this actually useful?
-#define assertNotNaN(results,id,value) asset( results, id, !isnan(value));
-#define assertEqual(results,id,lhs,rhs) asset( results, id, (lhs)==(rhs));
-#define assertNotEqual(results,id,lhs,rhs) asset( results, id, (lhs)!=(rhs));
-#define assertGreater(results,id,lhs,rhs) asset( results, id, (lhs)>(rhs));
-#define assertGreaterOrEqual(results,id,lhs,rhs) asset( results, id, (lhs)=>(rhs));
-#define assertLess(results,id,lhs,rhs) asset( results, id, (lhs)<(rhs));
-#define assertLessOrEqual(results,id,lhs,rhs) asset( results, id, (lhs)<=(rhs));
+#define assertNotNaN(suite,id,value) asset( suite, id, !isnan(value));
+#define assertEqual(suite,id,lhs,rhs) asset( suite, id, (lhs)==(rhs));
+#define assertNotEqual(suite,id,lhs,rhs) asset( suite, id, (lhs)!=(rhs));
+#define assertGreater(suite,id,lhs,rhs) asset( suite, id, (lhs)>(rhs));
+#define assertGreaterOrEqual(suite,id,lhs,rhs) asset( suite, id, (lhs)=>(rhs));
+#define assertLess(suite,id,lhs,rhs) asset( suite, id, (lhs)<(rhs));
+#define assertLessOrEqual(suite,id,lhs,rhs) asset( suite, id, (lhs)<=(rhs));
 
-void tests( inout TestResults results );
+void initSuite( inout TestSuite suite ) {
+
+  suite.selectorId = int( floor( v_uv.x * 1024. ) );
+  suite.selectorResult = 2;
+
+}
+
+vec4 toSuiteResult( in TestSuite suite ) {
+  return vec4(
+    0.,
+    0.,
+    float( suite.selectorResult ) / 255.,
+    1. );
+}
+
+void tests( inout TestSuite suite );
 
 void main() {
 
-  TestResults results;
-  results.selectorId = int( floor( v_uv.x * 1024. ) );
-  results.selectorResult = 2;
+  TestSuite suite;
 
-  tests( results );
+  initSuite( suite );
 
-  gl_FragColor = testResultsToFragColor( results );
+  tests( suite );
+
+  gl_FragColor = toSuiteResult( suite );
 
 }
