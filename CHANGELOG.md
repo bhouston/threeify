@@ -1,3 +1,10 @@
+# [1.55.0](https://github.com/threeify/threeify/compare/v1.54.0...v1.55.0) (2020-07-22)
+
+
+### Features
+
+* material output example ([c12ee6d](https://github.com/threeify/threeify/commit/c12ee6d44d440cd1e069774c331f02743986ef37))
+
 # [1.54.0](https://github.com/threeify/threeify/compare/v1.53.0...v1.54.0) (2020-07-22)
 
 
