@@ -31,7 +31,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
   copy(q: Quaternion): this {
     this.x = q.x;
     this.y = q.y;
-    this.z = q.x;
+    this.z = q.z;
     this.w = q.w;
 
     return this;
