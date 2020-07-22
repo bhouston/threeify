@@ -5,7 +5,7 @@ import srgbTests from "./includes/color/spaces/srgb.test.glsl";
 import equirectangularTests from "./includes/cubemaps/equirectangular.test.glsl";
 import mathTests from "./includes/math/math.test.glsl";
 import unitIntervalPackingTests from "./includes/math/unitIntervalPacking.test.glsl";
-import packingTests from "./includes/normals/packing.test.glsl";
+import normalPackingTests from "./includes/normals/normalPacking.test.glsl";
 
 type GLSLTestSuite = {
   name: string;
@@ -38,8 +38,8 @@ export const glslTestSuites: Array<GLSLTestSuite> = [
     source: mathTests,
   },
   {
-    name: "packing",
-    source: packingTests,
+    name: "normalPacking",
+    source: normalPackingTests,
   },
   {
     name: "unitIntervalPacking",

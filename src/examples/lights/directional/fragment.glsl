@@ -15,7 +15,7 @@ uniform sampler2D albedoMap;
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/packing>
+#pragma include <normals/normalPacking>
 
 void main() {
 

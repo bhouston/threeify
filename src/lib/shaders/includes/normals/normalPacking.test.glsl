@@ -1,5 +1,5 @@
 #pragma include <tests/fragment>
-#pragma include "packing"
+#pragma include "normalPacking"
 
 void testEquivalency( inout TestSuite suite, in int testId, in vec3 normal ) {
   vec3 rgb = normalToRgb( normal );
