@@ -1,13 +1,12 @@
-import { DeviceOrientationController } from "../../../lib/controllers/DeviceOrientation";
 import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
+import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
   makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromQuaternion,
+  makeMatrix4RotationFromEuler,
 } from "../../../lib/math/Matrix4.Functions";
-import { Quaternion } from "../../../lib/math/Quaternion";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
@@ -47,32 +46,14 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-
-  const deviceOrientation = new Quaternion();
-
-  let deviceOrientationController: DeviceOrientationController | undefined = undefined;
-
-  const body = document.getElementsByTagName("body")[0];
-  body.addEventListener(
-    "click",
-    () => {
-      if (deviceOrientationController === undefined) {
-        deviceOrientationController = new DeviceOrientationController((orientation) => {
-          deviceOrientation.copy(orientation);
-        });
-      }
-    },
-    false,
-  );
-
   function animate(): void {
     requestAnimationFrame(animate);
 
-    if (deviceOrientationController !== undefined) {
-      deviceOrientationController.update();
-    }
     const now = Date.now();
-    passUniforms.viewToWorld = makeMatrix4RotationFromQuaternion(deviceOrientation);
+
+    passUniforms.viewToWorld = makeMatrix4Inverse(
+      makeMatrix4RotationFromEuler(new Euler(Math.sin(now * 0.0003), now * 0.0004, 0)),
+    );
     passUniforms.equirectangularMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
 
     canvasFramebuffer.renderBufferGeometry(passProgram, passUniforms, bufferGeometry, depthTestState);
