@@ -1,3 +1,10 @@
+# [1.57.0](https://github.com/threeify/threeify/compare/v1.56.0...v1.57.0) (2020-07-23)
+
+
+### Features
+
+* add equirectangular to cubemap example ([f129c50](https://github.com/threeify/threeify/commit/f129c502c9602c3a50c9c5904562266887286a55))
+
 # [1.56.0](https://github.com/threeify/threeify/compare/v1.55.0...v1.56.0) (2020-07-23)
 
 
