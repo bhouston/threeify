@@ -1,3 +1,10 @@
+# [1.56.0](https://github.com/threeify/threeify/compare/v1.55.0...v1.56.0) (2020-07-23)
+
+
+### Features
+
+* refactored output channels example ([e84be98](https://github.com/threeify/threeify/commit/e84be98f6a3139ad734373e9210fe71b4f39ed6b))
+
 # [1.55.0](https://github.com/threeify/threeify/compare/v1.54.0...v1.55.0) (2020-07-22)
 
 
