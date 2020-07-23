@@ -78,6 +78,14 @@ export class TexImage2D implements IDisposable {
     gl.bindTexture(this.target, this.glTexture);
     gl.generateMipmap(this.target);
     gl.bindTexture(this.target, null);
+    this.texParameters.generateMipmaps = true;
+  }
+
+  get mipCount(): number {
+    if (!this.texParameters.generateMipmaps) {
+      return 1;
+    }
+    return Math.floor(Math.log2(Math.max(this.size.width, this.size.height)));
   }
 
   dispose(): void {
