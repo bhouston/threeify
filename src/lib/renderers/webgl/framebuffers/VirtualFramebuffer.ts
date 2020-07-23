@@ -48,76 +48,6 @@ export abstract class VirtualFramebuffer implements IDisposable {
     gl.clear(attachmentBits);
   }
 
-  renderBufferGeometry(
-    program: Program,
-    uniforms: UniformValueMap,
-    bufferGeometry: BufferGeometry,
-    depthTestState: DepthTestState | undefined = undefined,
-    blendState: BlendState | undefined = undefined,
-    maskState: MaskState | undefined = undefined,
-    cullingState: CullingState | undefined = undefined,
-  ): void {
-    // eslint-disable-next-line cflint/no-this-assignment
-    this.context.framebuffer = this;
-    this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
-    this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
-    this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
-    this.context.cullingState = cullingState ?? this.cullingState ?? this.context.cullingState;
-    this.context.program = program;
-    this.context.program.setUniformValues(uniforms);
-    this.context.program.setAttributeBuffers(bufferGeometry);
-
-    // draw
-    const gl = this.context.gl;
-    this.context.viewport = new Box2(new Vector2(), this.size);
-    if (bufferGeometry.indices !== undefined) {
-      gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
-    } else {
-      gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
-    }
-  }
-
-  renderVertexArrayObject(
-    program: Program,
-    uniforms: UniformValueMap,
-    vao: VertexArrayObject,
-    depthTestState: DepthTestState | undefined = undefined,
-    blendState: BlendState | undefined = undefined,
-    maskState: MaskState | undefined = undefined,
-    cullingState: CullingState | undefined = undefined,
-  ): void {
-    // eslint-disable-next-line cflint/no-this-assignment
-    this.context.framebuffer = this;
-    this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
-    this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
-    this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
-    this.context.cullingState = cullingState ?? this.cullingState ?? this.context.cullingState;
-    this.context.program = program;
-    this.context.program.setUniformValues(uniforms);
-    this.context.program.setAttributeBuffers(vao);
-
-    // draw
-    const gl = this.context.gl;
-    gl.drawArrays(vao.primitive, vao.offset, vao.count);
-  }
-
-  renderPass(
-    program: Program,
-    uniforms: UniformValueMap,
-    depthTestState: DepthTestState | undefined = undefined,
-    blendState: BlendState | undefined = undefined,
-    maskState: MaskState | undefined = undefined,
-    cullingState: CullingState | undefined = undefined,
-  ): void {
-    // eslint-disable-next-line cflint/no-this-assignment
-    this.context.framebuffer = this;
-    this.context.blendState = blendState ?? this.blendState ?? this.context.blendState;
-    this.context.depthTestState = depthTestState ?? this.depthTestState ?? this.context.depthTestState;
-    this.context.maskState = maskState ?? this.maskState ?? this.context.maskState;
-    this.context.cullingState = cullingState ?? this.cullingState ?? this.context.cullingState;
-    this.context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
-  }
-
   render(node: Node, camera: Camera, clear = false): void {
     // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
@@ -136,4 +66,84 @@ export abstract class VirtualFramebuffer implements IDisposable {
   }
 
   abstract dispose(): void;
+}
+
+export function renderBufferGeometry(
+  framebuffer: VirtualFramebuffer,
+  program: Program,
+  uniforms: UniformValueMap,
+  bufferGeometry: BufferGeometry,
+  depthTestState: DepthTestState | undefined = undefined,
+  blendState: BlendState | undefined = undefined,
+  maskState: MaskState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined,
+): void {
+  const context = framebuffer.context;
+
+  context.framebuffer = framebuffer;
+  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
+  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.program = program;
+  context.program.setUniformValues(uniforms);
+  context.program.setAttributeBuffers(bufferGeometry);
+  context.viewport = new Box2(new Vector2(), framebuffer.size);
+
+  // draw
+  const gl = context.gl;
+  if (bufferGeometry.indices !== undefined) {
+    gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
+  } else {
+    gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
+  }
+}
+
+export function renderVertexArrayObject(
+  framebuffer: VirtualFramebuffer,
+  program: Program,
+  uniforms: UniformValueMap,
+  vao: VertexArrayObject,
+  depthTestState: DepthTestState | undefined = undefined,
+  blendState: BlendState | undefined = undefined,
+  maskState: MaskState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined,
+): void {
+  const context = framebuffer.context;
+
+  context.framebuffer = framebuffer;
+  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
+  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.program = program;
+  context.program.setUniformValues(uniforms);
+  context.viewport = new Box2(new Vector2(), framebuffer.size);
+
+  // draw
+  const gl = context.gl;
+  gl.drawArrays(vao.primitive, vao.offset, vao.count);
+}
+
+export function renderPass(
+  framebuffer: VirtualFramebuffer,
+  program: Program,
+  uniforms: UniformValueMap,
+  depthTestState: DepthTestState | undefined = undefined,
+  blendState: BlendState | undefined = undefined,
+  maskState: MaskState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined,
+): void {
+  const context = framebuffer.context;
+
+  context.framebuffer = framebuffer;
+  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
+  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.program = program;
+  context.program.setUniformValues(uniforms);
+  context.viewport = new Box2(new Vector2(), framebuffer.size);
+
+  context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
 }

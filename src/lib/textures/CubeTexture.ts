@@ -35,89 +35,37 @@ export class CubeMapTexture extends VirtualTexture implements IPoolUser {
   }
 }
 
-type CubeMapFace = {
-  index: number;
-  name: string;
-  target: TextureTarget;
-  worldLook: Vector3;
-  worldUp: Vector3;
-  crossPosition: Vector2; // location within a cross that is 4x3: https://github.com/tmarrinan/cube2equirect
-  uvIndices: Vector2; // the indices and sign of the uvs: https://www.khronos.org/opengl/wiki/File:CubeMapAxes.png
-  uvSigns: Vector2; // the indices and sign of the uvs: https://www.khronos.org/opengl/wiki/File:CubeMapAxes.png
-};
+export const cubeFaceNames = ["right", "left", "top", "bottom", "back", "front"];
 
-// names are from https://learnopengl.com/Advanced-OpenGL/Cubemaps
+export const cubeFaceTargets = [
+  TextureTarget.CubeMapPositiveX,
+  TextureTarget.CubeMapNegativeX,
+  TextureTarget.CubeMapPositiveY,
+  TextureTarget.CubeMapNegativeY,
+  TextureTarget.CubeMapPositiveZ,
+  TextureTarget.CubeMapNegativeZ,
+];
 
-export const cubeMapFaces: Array<CubeMapFace> = [
-  {
-    index: 0,
-    name: "right",
-    target: TextureTarget.CubeMapPositiveX,
-    worldLook: new Vector3(1, 0, 0),
-    worldUp: new Vector3(0.0, -1.0, 0.0),
-    crossPosition: new Vector2(2, 1),
-    uvIndices: new Vector2(2, 1),
-    uvSigns: new Vector2(-1, -1),
-  },
-  {
-    index: 1,
-    name: "left",
-    target: TextureTarget.CubeMapNegativeX,
-    worldLook: new Vector3(-1, 0, 0),
-    worldUp: new Vector3(0.0, -1.0, 0.0),
-    crossPosition: new Vector2(0, 1),
-    uvIndices: new Vector2(2, 1),
-    uvSigns: new Vector2(-1, -1),
-  },
-  {
-    index: 2,
-    name: "top",
-    target: TextureTarget.CubeMapPositiveY,
-    worldLook: new Vector3(0, 1, 0),
-    worldUp: new Vector3(0.0, 0.0, 1.0),
-    crossPosition: new Vector2(1, 0),
-    uvIndices: new Vector2(0, 2),
-    uvSigns: new Vector2(1, 1),
-  },
-  {
-    index: 3,
-    name: "bottom",
-    target: TextureTarget.CubeMapNegativeY,
-    worldLook: new Vector3(0, -1, 0),
-    worldUp: new Vector3(0.0, 0.0, -1.0),
-    crossPosition: new Vector2(1, 2),
-    uvIndices: new Vector2(0, 2),
-    uvSigns: new Vector2(1, -1),
-  },
-  {
-    index: 4,
-    name: "back",
-    target: TextureTarget.CubeMapPositiveZ,
-    worldLook: new Vector3(0, 0, 1),
-    worldUp: new Vector3(0.0, -1.0, 0.0),
-    crossPosition: new Vector2(3, 1),
-    uvIndices: new Vector2(0, 1),
-    uvSigns: new Vector2(1, -1),
-  },
-  {
-    index: 5,
-    name: "front",
-    target: TextureTarget.CubeMapNegativeZ,
-    worldLook: new Vector3(0, 0, -1),
-    worldUp: new Vector3(0.0, -1.0, 0.0),
-    crossPosition: new Vector2(1, 1),
-    uvIndices: new Vector2(0, 1),
-    uvSigns: new Vector2(-1, -1),
-  },
+export const cubeFaceLooks = [
+  new Vector3(1, 0, 0),
+  new Vector3(-1, 0, 0),
+  new Vector3(0, 1, 0),
+  new Vector3(0, -1, 0),
+  new Vector3(0, 0, 1),
+  new Vector3(0, 0, -1),
+];
+
+export const cubeFaceUps = [
+  new Vector3(0, -1, 0),
+  new Vector3(0, -1, 0),
+  new Vector3(0, 0, 1),
+  new Vector3(0, 0, -1),
+  new Vector3(0, 1, 0),
+  new Vector3(0, -1, 0),
 ];
 
 export function makeMatrix4CubeMapTransform(position: Vector3, faceIndex: number, result = new Matrix4()): Matrix4 {
-  return makeMatrix4LookAt(
-    position,
-    position.clone().add(cubeMapFaces[faceIndex].worldLook),
-    cubeMapFaces[faceIndex].worldUp,
-    result,
-  );
+  return makeMatrix4LookAt(position, position.clone().add(cubeFaceLooks[faceIndex]), cubeFaceUps[faceIndex], result);
 }
 
 /*

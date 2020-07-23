@@ -13,6 +13,7 @@ import { ClearState } from "../../../lib/renderers/webgl/ClearState";
 import { CullingState } from "../../../lib/renderers/webgl/CullingState";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -78,7 +79,7 @@ async function init(): Promise<null> {
     uniforms.punctualLightOuterCos[1] = 0.97 + 0.025 * Math.cos(now * 0.0017);
 
     canvasFramebuffer.clear(BufferBit.All);
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);
   }

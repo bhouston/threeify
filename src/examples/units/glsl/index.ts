@@ -11,7 +11,9 @@ import {
   Framebuffer,
   makeColorAttachment,
   makeDepthAttachment,
+  readPixelsFromFramebuffer,
 } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import vertexSource from "../../../lib/shaders/includes/tests/vertex.glsl";
@@ -42,9 +44,9 @@ async function init(): Promise<null> {
     const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
 
     framebuffer.clear(BufferBit.All);
-    framebuffer.renderBufferGeometry(unitProgram, unitUniforms, bufferGeometry);
+    renderBufferGeometry(framebuffer, unitProgram, unitUniforms, bufferGeometry);
 
-    const result = framebuffer.readPixels() as Uint8Array;
+    const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
 
     const passIds = [];
     const failureIds = [];

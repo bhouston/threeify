@@ -11,6 +11,7 @@ import {
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -58,7 +59,7 @@ async function init(): Promise<null> {
     if (deviceOrientation !== undefined) {
       uniforms.localToWorld = makeMatrix4Inverse(makeMatrix4RotationFromQuaternion(deviceOrientation.orientation));
     }
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
   }
 
   animate();

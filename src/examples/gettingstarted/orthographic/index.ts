@@ -11,6 +11,7 @@ import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -45,7 +46,7 @@ async function init(): Promise<null> {
       new Euler(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld,
     );
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
   }

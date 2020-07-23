@@ -2,6 +2,7 @@ import { makeFloat32Attribute, makeUint8Attribute } from "../../../lib/geometry/
 import { Geometry } from "../../../lib/geometry/Geometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import fragmentSource from "./fragment.glsl";
@@ -21,4 +22,4 @@ const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
 const uniforms = {};
 
-canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
+renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);

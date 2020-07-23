@@ -15,6 +15,7 @@ import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/Dept
 import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
 import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { Framebuffer, makeDepthAttachment } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -60,11 +61,11 @@ async function init(): Promise<null> {
     uniforms.map = uvTestTexture;
 
     framebuffer.clear(BufferBit.All, whiteClearState);
-    framebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(framebuffer, program, uniforms, bufferGeometry, depthTestState);
 
     uniforms.map = depthAttachment;
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
   }

@@ -19,6 +19,7 @@ import {
   makeColorAttachment,
   makeDepthAttachment,
 } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -64,11 +65,11 @@ async function init(): Promise<null> {
     uniforms.map = uvTestTexture;
 
     framebuffer.clear(BufferBit.All, whiteClearState);
-    framebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(framebuffer, program, uniforms, bufferGeometry, depthTestState);
 
     uniforms.map = colorAttachment;
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
 
     requestAnimationFrame(animate);
   }

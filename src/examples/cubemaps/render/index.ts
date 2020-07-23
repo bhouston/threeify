@@ -15,11 +15,12 @@ import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buf
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
 import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
 import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
-import { cubeMapFaces, CubeMapTexture } from "../../../lib/textures/CubeTexture";
+import { cubeFaceTargets, CubeMapTexture } from "../../../lib/textures/CubeTexture";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSource from "./fragment.glsl";
@@ -66,18 +67,18 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
     const now = Date.now();
 
-    cubeMapFaces.forEach((cubeMapFace, index) => {
-      framebuffer.attach(Attachment.Color0, cubeMap, cubeMapFace.target, 0);
+    cubeFaceTargets.forEach((target, index) => {
+      framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
       patternUniforms.color = makeColor3FromHSL(index / 6 + now * 0.0001, 0.5, 0.5);
 
-      framebuffer.renderBufferGeometry(patternProgram, patternUniforms, patternBufferGeometry);
+      renderBufferGeometry(framebuffer, patternProgram, patternUniforms, patternBufferGeometry);
     });
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld,
     );
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
   }
 
   animate();

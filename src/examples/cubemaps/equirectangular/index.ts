@@ -11,9 +11,10 @@ import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeCubeMapFromEquirectangularTexture } from "../../../lib/renderers/webgl/utilities/CubeMap.Functions";
+import { makeTexImage2DFromEquirectangularTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSource from "./fragment.glsl";
@@ -29,7 +30,7 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
-  const cubeMap = makeCubeMapFromEquirectangularTexture(context, debugTexture, new Vector2(1024, 1024));
+  const cubeMap = makeTexImage2DFromEquirectangularTexture(context, debugTexture, new Vector2(1024, 1024));
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
@@ -53,7 +54,7 @@ async function init(): Promise<null> {
     );
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
 
-    canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
   }
 
   animate();
