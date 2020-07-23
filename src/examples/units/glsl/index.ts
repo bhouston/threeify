@@ -66,7 +66,7 @@ async function init(): Promise<null> {
       }
     }
 
-    output.push(`${glslUnitTest.name}.tests.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
+    output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
     if (passIds.length > 0) {
       output.push(`  ${passIds.length} passed`);
     }
