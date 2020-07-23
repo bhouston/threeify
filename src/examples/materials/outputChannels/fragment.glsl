@@ -65,7 +65,7 @@ void main() {
 
   outputChannels.beauty = linearTosRGB( outputColor );
 
-  int newFragmentOutputs = int( mod(( -gl_FragCoord.x * 3. + gl_FragCoord.y ) * 0.002 + float( time ) / 3000., 10. ) );
+  int newFragmentOutputs = int( mod(( -gl_FragCoord.x * 3. + gl_FragCoord.y ) * 0.002 + float( time ) / 3000., 13. ) );
 
   writeOutputChannels( outputChannels, newFragmentOutputs );
 
