@@ -1,0 +1,9 @@
+{
+  "slug": "material_output_channels",
+  "theme": "light",
+  "en": {
+    "name": "Material Output Channels",
+    "description": "Demonstrates the ability to select the output channel of the material shader.  Cycles between depth, packed depth, normal, albedo, diffuse, specular and beauty.",
+    "keywords": ["pass", "normal", "voa", "albedo", "depth"]
+  }
+}

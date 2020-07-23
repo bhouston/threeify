@@ -12,7 +12,7 @@ uniform sampler2D normalMap;
 uniform vec2 normalScale;
 uniform float displacementScale;
 uniform int fragmentOutputs;
-
+uniform int time;
 #pragma include <brdfs/common>
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
@@ -20,15 +20,20 @@ uniform int fragmentOutputs;
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
 #pragma include <normals/normalPacking>
-#pragma include <materials/writeFragmentOutputs>
+#pragma include <materials/outputChannels>
 
 void main() {
 
-  vec3 albedo = mix( vec3(0.2), vec3( 1., 0., 0. ), normalScale.y );
+  OutputChannels outputChannels;
+
+  outputChannels.alpha = 1.0;
+  vec3 albedo = outputChannels.albedo = mix( vec3(0.2), vec3( 1., 0., 0. ), normalScale.y );
   vec3 specular = vec3(1.);
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0( specular );
   vec3 normal = normalize( rgbToNormal( texture2D( normalMap, vec2(1.0)-v_uv0 ).rgb ) * vec3( normalScale, 1. ) );
+  outputChannels.metalness = 0.0;
+  outputChannels.roughness = specularRoughness;
 
   Surface surface;
   surface.position = v_viewSurfacePosition;
@@ -37,6 +42,9 @@ void main() {
 
   uvToTangentFrame( surface, v_uv0 );
   perturbSurfaceNormal_TangentSpace( surface, normal );
+
+  outputChannels.normal = surface.normal;
+  outputChannels.clipDepth = -surface.position.z / 4.0;
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -52,12 +60,13 @@ void main() {
   vec3 outputDiffuse;
   vec3 outputSpecular;
   vec3 outputColor;
-  outputColor += ( outputSpecular = irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness ) );
-  outputColor += ( outputDiffuse = irradiance * BRDF_Diffuse_Lambert( albedo ) );
+  outputColor += outputChannels.specular = irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
+  outputColor += outputChannels.diffuse = irradiance * BRDF_Diffuse_Lambert( albedo );
 
-  vec3 beauty;
-  beauty.rgb = linearTosRGB( outputColor );
+  outputChannels.beauty = linearTosRGB( outputColor );
 
-  writeFragmentOutputs( fragmentOutputs, -surface.position.z / 5.0, surface.normal, albedo, 0.0, specularRoughness, beauty, outputDiffuse, outputSpecular );
+  int newFragmentOutputs = int( mod(( -gl_FragCoord.x * 3. + gl_FragCoord.y ) * 0.002 + float( time ) / 3000., 10. ) );
+
+  writeOutputChannels( outputChannels, newFragmentOutputs );
 
 }
