@@ -1,3 +1,15 @@
+# [1.59.0](https://github.com/threeify/threeify/compare/v1.58.0...v1.59.0) (2020-07-23)
+
+
+### Bug Fixes
+
+* fix broken TexImage2D class ([98d9a88](https://github.com/threeify/threeify/commit/98d9a884ef1dbc249a60c92b3a4c8fbec1f76de5))
+
+
+### Features
+
+* refactor away large cubeMapFaces, replace with atomic arrays ([a7362bb](https://github.com/threeify/threeify/commit/a7362bb9c9a47ce0bd7d587e33fe8329c4460fad))
+
 # [1.58.0](https://github.com/threeify/threeify/compare/v1.57.0...v1.58.0) (2020-07-23)
 
 
