@@ -1,20 +1,5 @@
 #pragma once
 
-// entry point
-void panoramaToCubeMap()
-{
-	for(int face = 0; face < 6; ++face)
-	{
-		vec3 scan = uvToXYZ(face, inUV*2.0-1.0);
-
-		vec3 direction = normalize(scan);
-
-		vec2 src = dirToUV(direction);
-
-		writeFace(face, texture(uPanorama, src).rgb);
-	}
-}
-
 // reference: https://github.com/tmarrinan/cube2equirect
 void directionToCubeFaceUV( vec3 dir, out int face, out vec2 uv ) {
 
@@ -66,7 +51,7 @@ vec3 cubeFaceUVToDirection(int face, vec2 uv) {
   else if(face == 2) {
 		result =vec3( uv.x, -1., uv.y );
   }
-	else if(fa {
+	else if(face == 3) {
 		result =vec3( uv.x, 1., -uv.y );
   }
 	else if(face == 4) {
