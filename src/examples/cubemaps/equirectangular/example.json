@@ -1,5 +1,6 @@
 {
   "slug": "cubemap_equirectangular",
+  "extensions": ["EXT_shader_texture_lod"],
   "en": {
     "name": "Cube Map from Equirectangular Map",
     "description": "This loads a equirectangular map (AKA lat-long map) and renders it to the faces of a cube map.",
