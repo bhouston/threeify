@@ -1,9 +1,0 @@
-{
-  "slug": "material_output",
-  "theme": "light",
-  "en": {
-    "name": "Material Output Selector",
-    "description": "Demonstrates the ability to select the output of the material shader.  Cycles between depth, packed depth, normal, albedo, diffuse, specular and beauty.",
-    "keywords": ["pass", "normal", "voa", "albedo", "depth"]
-  }
-}

@@ -1,6 +1,6 @@
 import { transformGeometry } from "../../../lib/geometry/Geometry.Functions";
 import { fetchOBJ } from "../../../lib/geometry/loaders/OBJ";
-import { FragmentOutput } from "../../../lib/materials/MaterialOutputs";
+import { OutputChannels } from "../../../lib/materials/OutputChannels";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler, EulerOrder } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -64,7 +64,8 @@ async function init(): Promise<null> {
     displacementScale: 1.0,
 
     // shader output
-    fragmentOutputs: FragmentOutput.Normal,
+    fragmentOutputs: OutputChannels.Normal,
+    time: 0,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -72,18 +73,28 @@ async function init(): Promise<null> {
   canvasFramebuffer.cullingState = new CullingState(true);
 
   const fragmentOutputs = [
-    FragmentOutput.Depth,
-    FragmentOutput.DepthPacked,
-    FragmentOutput.Beauty,
-    FragmentOutput.Normal,
-    FragmentOutput.Albedo,
-    FragmentOutput.Diffuse,
-    FragmentOutput.Specular,
+    OutputChannels.Depth,
+    OutputChannels.DepthPacked,
+    OutputChannels.Beauty,
+    OutputChannels.Normal,
+    OutputChannels.Albedo,
+    OutputChannels.Diffuse,
+    OutputChannels.Specular,
   ];
+
+  let lastNow = Date.now();
+  let averageDelta = -1;
 
   function animate(): void {
     const now = Date.now();
+    if (averageDelta < 0) {
+      averageDelta = lastNow - now;
+    } else {
+      averageDelta = averageDelta * 0.9 + (lastNow - now) * 0.1;
+    }
+    lastNow = now;
 
+    uniforms.time = uniforms.time + averageDelta;
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,

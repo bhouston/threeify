@@ -9,7 +9,7 @@ import { Vector3 } from "../math/Vector3";
 import { TextureAccessor } from "../textures/TextureAccessor";
 import { Blending } from "./Blending";
 import { Material } from "./Material";
-import { FragmentOutput } from "./MaterialOutputs";
+import { OutputChannels } from "./OutputChannels";
 
 export class PhysicalMaterial extends Material {
   version = 0;
@@ -24,7 +24,7 @@ export class PhysicalMaterial extends Material {
   normalFactor = 1.0;
   normalMap: TextureAccessor = new TextureAccessor();
   blendMode = Blending.Over;
-  outputs = FragmentOutput.Beauty;
+  outputs = OutputChannels.Beauty;
 
   dirty(): void {
     this.version++;

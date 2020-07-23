@@ -1,9 +1,9 @@
-import { FragmentOutput } from "../../../materials/MaterialOutputs";
+import { OutputChannels } from "../../../materials/OutputChannels";
 
 function createEnumDefines(): string {
   const output = [];
-  for (const name in Object.keys(FragmentOutput)) {
-    output.push(`#define FRAGMENT_OUTPUT ${FragmentOutput[name]}`);
+  for (const name in Object.keys(OutputChannels)) {
+    output.push(`#define FRAGMENT_OUTPUT ${OutputChannels[name]}`);
   }
   return output.join("\n");
 }
