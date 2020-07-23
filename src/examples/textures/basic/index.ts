@@ -1,6 +1,7 @@
 import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
@@ -22,7 +23,7 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = { map: makeTexImage2DFromTexture(context, texture) };
 
-  canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
+  renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 
   return null;
 }

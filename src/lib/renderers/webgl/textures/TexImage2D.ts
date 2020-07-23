@@ -11,13 +11,14 @@ import { passGeometry } from "../../../geometry/primitives/passGeometry";
 import { ShaderMaterial } from "../../../materials/ShaderMaterial";
 import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
-import { cubeMapFaces, CubeMapTexture } from "../../../textures/CubeTexture";
+import { cubeFaceTargets, CubeMapTexture } from "../../../textures/CubeTexture";
 import { Texture } from "../../../textures/Texture";
 import { TextureSource } from "../../../textures/VirtualTexture";
 import { Pool } from "../../Pool";
 import { makeBufferGeometryFromGeometry } from "../buffers/BufferGeometry";
 import { Attachment } from "../framebuffers/Attachment";
 import { Framebuffer } from "../framebuffers/Framebuffer";
+import { renderBufferGeometry } from "../framebuffers/VirtualFramebuffer";
 import { GL } from "../GL";
 import { makeProgramFromShaderMaterial } from "../programs/Program";
 import { RenderingContext } from "../RenderingContext";
@@ -237,10 +238,10 @@ export function makeTexImage2DFromEquirectangularTexture(
     faceIndex: 0,
   };
 
-  cubeMapFaces.forEach((cubeMapFace) => {
-    cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, cubeMapFace.target, 0);
-    cubeFaceUniforms.faceIndex = cubeMapFace.index;
-    cubeFaceFramebuffer.renderBufferGeometry(cubeFaceProgram, cubeFaceUniforms, cubeFaceBufferGeometry);
+  cubeFaceTargets.forEach((target, index) => {
+    cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
+    cubeFaceUniforms.faceIndex = index;
+    renderBufferGeometry(cubeFaceFramebuffer, cubeFaceProgram, cubeFaceUniforms, cubeFaceBufferGeometry);
   });
 
   if (generateMipmaps) {

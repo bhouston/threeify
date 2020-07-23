@@ -48,49 +48,12 @@ export class Framebuffer extends VirtualFramebuffer {
     this.size.copy(texImage2D.size);
   }
 
-  get size(): Vector2 {
-    return this.#size;
+  getAttachment(attachmentPoint: Attachment): TexImage2D | undefined {
+    return this._attachments[attachmentPoint];
   }
 
-  readPixels(pixelBuffer: ArrayBufferView | undefined = undefined): ArrayBufferView {
-    // eslint-disable-next-line cflint/no-this-assignment
-    this.context.framebuffer = this;
-
-    const gl = this.context.gl;
-
-    const status = gl.checkFramebufferStatus(GL.FRAMEBUFFER);
-    if (status !== GL.FRAMEBUFFER_COMPLETE) {
-      throw new Error(`can not read non-complete Framebuffer: ${status}`);
-    }
-
-    const texImage2D = this._attachments[Attachment.Color0];
-    if (texImage2D === undefined) {
-      throw new Error("no attachment on Color0");
-    }
-
-    const pixelByteLength =
-      sizeOfDataType(texImage2D.dataType) *
-      numPixelFormatComponents(texImage2D.pixelFormat) *
-      texImage2D.size.width *
-      texImage2D.size.height;
-    if (pixelBuffer === undefined) {
-      pixelBuffer = new Uint8Array(pixelByteLength);
-    }
-    if (pixelBuffer.byteLength < pixelByteLength) {
-      throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
-    }
-
-    gl.readPixels(
-      0,
-      0,
-      texImage2D.size.width,
-      texImage2D.size.height,
-      texImage2D.pixelFormat,
-      texImage2D.dataType,
-      pixelBuffer,
-    );
-
-    return pixelBuffer;
+  get size(): Vector2 {
+    return this.#size;
   }
 
   dispose(): void {
@@ -100,6 +63,50 @@ export class Framebuffer extends VirtualFramebuffer {
       this.disposed = true;
     }
   }
+}
+
+export function readPixelsFromFramebuffer(
+  framebuffer: Framebuffer,
+  pixelBuffer: ArrayBufferView | undefined = undefined,
+): ArrayBufferView {
+  const context = framebuffer.context;
+  context.framebuffer = framebuffer;
+
+  const gl = context.gl;
+
+  const status = gl.checkFramebufferStatus(GL.FRAMEBUFFER);
+  if (status !== GL.FRAMEBUFFER_COMPLETE) {
+    throw new Error(`can not read non-complete Framebuffer: ${status}`);
+  }
+
+  const texImage2D = framebuffer.getAttachment(Attachment.Color0);
+  if (texImage2D === undefined) {
+    throw new Error("no attachment on Color0");
+  }
+
+  const pixelByteLength =
+    sizeOfDataType(texImage2D.dataType) *
+    numPixelFormatComponents(texImage2D.pixelFormat) *
+    texImage2D.size.width *
+    texImage2D.size.height;
+  if (pixelBuffer === undefined) {
+    pixelBuffer = new Uint8Array(pixelByteLength);
+  }
+  if (pixelBuffer.byteLength < pixelByteLength) {
+    throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
+  }
+
+  gl.readPixels(
+    0,
+    0,
+    texImage2D.size.width,
+    texImage2D.size.height,
+    texImage2D.pixelFormat,
+    texImage2D.dataType,
+    pixelBuffer,
+  );
+
+  return pixelBuffer;
 }
 
 export function makeColorAttachment(

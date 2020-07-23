@@ -4,6 +4,7 @@ import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeColor3FromHSL } from "../../../lib/math/Vector3.Functions";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import fragmentSource from "./fragment.glsl";
@@ -28,7 +29,8 @@ function animate(): void {
 
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
   uniforms.color = makeColor3FromHSL(Date.now() * 0.001, 1.0, 0.5, uniforms.color);
-  canvasFramebuffer.renderBufferGeometry(program, uniforms, bufferGeometry);
+
+  renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 }
 
 animate();
