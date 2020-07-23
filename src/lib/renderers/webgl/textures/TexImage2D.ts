@@ -21,7 +21,6 @@ import { Framebuffer } from "../framebuffers/Framebuffer";
 import { GL } from "../GL";
 import { makeProgramFromShaderMaterial } from "../programs/Program";
 import { RenderingContext } from "../RenderingContext";
-import { makeTexImage2DFromCubeTexture, makeTexImage2DFromTexture, TexImage2D } from "../textures/TexImage2D";
 import { TextureFilter } from "../textures/TextureFilter";
 import cubeFaceFragmentSource from "./cubeFaces/fragment.glsl";
 import cubeFaceVertexSource from "./cubeFaces/vertex.glsl";
