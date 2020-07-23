@@ -73,6 +73,13 @@ export class TexImage2D implements IDisposable {
     gl.bindTexture(this.target, null);
   }
 
+  generateMipmaps(): void {
+    const gl = this.context.gl;
+    gl.bindTexture(this.target, this.glTexture);
+    gl.generateMipmap(this.target);
+    gl.bindTexture(this.target, null);
+  }
+
   dispose(): void {
     if (!this.disposed) {
       this.context.gl.deleteTexture(this.glTexture);
