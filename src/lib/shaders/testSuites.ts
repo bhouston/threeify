@@ -2,6 +2,7 @@ import lambertTests from "./includes/brdfs/diffuse/lambert.test.glsl";
 import rgbdTests from "./includes/color/encodings/rgbd.test.glsl";
 import rgbeTests from "./includes/color/encodings/rgbe.test.glsl";
 import srgbTests from "./includes/color/spaces/srgb.test.glsl";
+import cubeFacesTests from "./includes/cubemaps/cubeFaces.test.glsl";
 import equirectangularTests from "./includes/cubemaps/equirectangular.test.glsl";
 import mathTests from "./includes/math/math.test.glsl";
 import unitIntervalPackingTests from "./includes/math/unitIntervalPacking.test.glsl";
@@ -32,6 +33,10 @@ export const glslTestSuites: Array<GLSLTestSuite> = [
   {
     name: "equirectangular",
     source: equirectangularTests,
+  },
+  {
+    name: "cubeFaces",
+    source: cubeFacesTests,
   },
   {
     name: "math",

@@ -76,6 +76,7 @@ function removeDeadCode(source: string): string {
 }
 
 export class Shader implements IDisposable {
+  readonly id: number;
   disposed = false;
   glShader: WebGLShader;
   #validated = false;
@@ -121,6 +122,7 @@ export class Shader implements IDisposable {
     gl.compileShader(this.glShader);
 
     // NOTE: purposely not checking if this compiled.
+    this.id = this.context.registerResource(this);
   }
 
   get translatedSource(): string {
@@ -156,6 +158,7 @@ export class Shader implements IDisposable {
   dispose(): void {
     if (!this.disposed) {
       this.context.gl.deleteShader(this.glShader);
+      this.context.disposeResource(this);
       this.disposed = true;
     }
   }

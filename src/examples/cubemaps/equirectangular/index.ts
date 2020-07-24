@@ -1,12 +1,7 @@
 import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
-import {
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
+import { makeMatrix4PerspectiveFov, makeMatrix4Translation } from "../../../lib/math/Matrix4.Functions";
 import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
@@ -48,10 +43,10 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
     const now = Date.now();
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    /* uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld,
-    );
+    );*/
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
 
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);

@@ -6,6 +6,7 @@ import { BufferTarget } from "./BufferTarget";
 import { BufferUsage } from "./BufferUsage";
 
 export class Buffer implements IDisposable {
+  readonly id: number;
   disposed = false;
   glBuffer: WebGLBuffer;
 
@@ -33,6 +34,8 @@ export class Buffer implements IDisposable {
     // load data
     // console.log(`gl.bufferData(${this.target}, ${arrayBuffer}, ${this.usage})`);
     gl.bufferData(this.target, arrayBuffer, this.usage);
+
+    this.id = this.context.registerResource(this);
   }
 
   update(
@@ -55,6 +58,7 @@ export class Buffer implements IDisposable {
   dispose(): void {
     if (!this.disposed) {
       this.context.gl.deleteBuffer(this.glBuffer);
+      this.context.disposeResource(this);
       this.disposed = true;
     }
   }
