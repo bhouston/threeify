@@ -65,7 +65,6 @@ async function init(): Promise<null> {
     displacementScale: 1.0,
 
     // shader output
-    fragmentOutputs: OutputChannels.Normal,
     time: 0,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -100,7 +99,6 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.fragmentOutputs = fragmentOutputs[Math.floor(now / 5000) % fragmentOutputs.length];
 
     const effectScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
     uniforms.normalScale = new Vector2(-1.0, 1.0).multiplyByScalar(effectScale);

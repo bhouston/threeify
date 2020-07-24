@@ -248,11 +248,12 @@ export function makeTexImage2DFromEquirectangularTexture(
     cubeMap.generateMipmaps();
   }
 
+  /*
   cubeFaceFramebuffer.dispose();
   cubeFaceBufferGeometry.dispose();
   cubeFaceProgram.dispose();
   cubeFaceGeometry.dispose();
-  equirectangularMap.dispose();
+  equirectangularMap.dispose();*/
 
   return cubeMap;
 }
