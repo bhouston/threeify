@@ -43,22 +43,22 @@ vec3 cubeFaceUVToDirection(int face, vec2 uv) {
   vec3 result;
 
 	if(face == 0) {
-		result = vec3( 1., uv.y, -uv.x );
+		result = vec3( 1., -uv.y, -uv.x );
   }
   else if(face == 1) {
-		result = vec3( -1., uv.y, uv.x );
+		result = vec3( -1., -uv.y, uv.x );
   }
   else if(face == 2) {
-		result =vec3( uv.x, -1., uv.y );
+		result =vec3( uv.x, 1., uv.y );
   }
 	else if(face == 3) {
-		result =vec3( uv.x, 1., -uv.y );
+		result =vec3( uv.x, -1., -uv.y );
   }
 	else if(face == 4) {
-		result = vec3( uv.x, uv.y, 1. );
+		result = vec3( uv.x, -uv.y, 1. );
   }
 	else  {
-		result = vec3( -uv.x, uv.y, -1. );
+		result = vec3( -uv.x, -uv.y, -1. );
   }
 
   return normalize( result );
