@@ -39,6 +39,10 @@ async function init(): Promise<null> {
 
   const output: string[] = [];
 
+  let totalPasses = 0;
+  let totalFailures = 0;
+  let totalDuplicates = 0;
+
   glslTestSuites.forEach((glslUnitTest) => {
     const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
     const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
@@ -68,18 +72,25 @@ async function init(): Promise<null> {
       }
     }
 
+    totalPasses += passIds.length;
+    totalFailures += failureIds.length;
+    totalDuplicates += duplicateIds.length;
+
     output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
-    if (passIds.length > 0) {
-      output.push(`  ${passIds.length} passed`);
+    if (failureIds.length == 0 && duplicateIds.length == 0) {
+      output.push("  ALL PASSED");
     }
     if (failureIds.length > 0) {
-      output.push(`  ${failureIds.length} failed: ${failureIds.join(" ")}`);
+      output.push(`  ${failureIds.length} FAILED: ${failureIds.join(" ")}`);
     }
     if (duplicateIds.length > 0) {
-      output.push(`  ${duplicateIds.length} duplicate test ids: ${duplicateIds.join(" ")}`);
+      output.push(`  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(" ")}`);
     }
     output.push("");
   });
+
+  output.push("");
+  output.push(`SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`);
 
   const textElement = document.getElementById("text");
   if (textElement !== null) {
