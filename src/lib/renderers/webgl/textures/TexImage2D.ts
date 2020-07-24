@@ -248,12 +248,14 @@ export function makeTexImage2DFromEquirectangularTexture(
     cubeMap.generateMipmaps();
   }
 
-  /*
+  cubeFaceFramebuffer.flush();
+  cubeFaceFramebuffer.finish();
+
   cubeFaceFramebuffer.dispose();
-  cubeFaceBufferGeometry.dispose();
+  // cubeFaceBufferGeometry.dispose(); - causes crashes.  Huh?
   cubeFaceProgram.dispose();
   cubeFaceGeometry.dispose();
-  equirectangularMap.dispose();*/
+  equirectangularMap.dispose();
 
   return cubeMap;
 }
