@@ -1,3 +1,17 @@
+# [1.60.0](https://github.com/threeify/threeify/compare/v1.59.0...v1.60.0) (2020-07-24)
+
+
+### Bug Fixes
+
+* fix y-flip bug in cubeFaceUVToDirection ([d0f0d17](https://github.com/threeify/threeify/commit/d0f0d176744e41afdd6e9817020b9be30b579d63))
+
+
+### Features
+
+* add tracking of GPU resources ([f8c7195](https://github.com/threeify/threeify/commit/f8c7195b8ecc55f704bc295e1cdf0864a4d6aa8d))
+* cubeFaceUVToDirection is unit tested and corrected. ([3808b1a](https://github.com/threeify/threeify/commit/3808b1a87fb7c68f97661ff79c481649b4b17c6c))
+* more comprehensive cube face uv glsl tests ([aeafe52](https://github.com/threeify/threeify/commit/aeafe5231a7629b36ed2a6dafaada4ec5aa5c36b))
+
 # [1.59.0](https://github.com/threeify/threeify/compare/v1.58.0...v1.59.0) (2020-07-23)
 
 
