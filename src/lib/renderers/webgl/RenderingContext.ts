@@ -9,6 +9,7 @@ import { Box2 } from "../../math/Box2";
 import { Camera } from "../../nodes/cameras/Camera";
 import { Node } from "../../nodes/Node";
 import { BlendState } from "./BlendState";
+import { Buffer } from "./buffers/Buffer";
 import { ClearState } from "./ClearState";
 import { CullingState } from "./CullingState";
 import { DepthTestState } from "./DepthTestState";
@@ -22,12 +23,21 @@ import { MaskState } from "./MaskState";
 import { getParameterAsString } from "./Parameters";
 import { Program } from "./programs/Program";
 import { UniformValueMap } from "./programs/ProgramUniform";
+import { Renderbuffer } from "./Renderbuffer";
+import { Shader } from "./shaders/Shader";
+import { TexImage2D } from "./textures/TexImage2D";
+import { VertexArrayObject } from "./VertexArrayObject";
+
+export type Resource = VertexArrayObject | TexImage2D | Program | Shader | Framebuffer | Buffer | Renderbuffer;
+export type ResourceMap = { [id: number]: Resource };
 
 export class RenderingContext {
   readonly gl: WebGLRenderingContext;
   readonly glx: Extensions;
   readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
+  readonly resources: ResourceMap = {};
+  nextResourceId = 0;
 
   // readonly texImage2DPool: TexImage2DPool;
   // readonly programPool: ProgramPool;
@@ -65,6 +75,16 @@ export class RenderingContext {
     // this.programPool = new ProgramPool(this);
     // this.bufferPool = new BufferPool(this);
     this.#framebuffer = this.canvasFramebuffer;
+  }
+
+  registerResource(resource: Resource): number {
+    const id = this.nextResourceId++;
+    this.resources[id] = resource;
+    return id;
+  }
+
+  disposeResource(resource: Resource): void {
+    delete this.resources[resource.id];
   }
 
   get debugVendor(): string {

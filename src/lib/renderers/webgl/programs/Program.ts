@@ -21,6 +21,7 @@ export type UniformMap = { [key: string]: ProgramUniform | undefined };
 export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
 
 export class Program implements IDisposable {
+  readonly id: number;
   disposed = false;
   vertexShader: Shader;
   fragmentShader: Shader;
@@ -60,6 +61,7 @@ export class Program implements IDisposable {
     gl.linkProgram(this.glProgram);
 
     // NOTE: purposely not checking here if it compiled.
+    this.id = this.context.registerResource(this);
   }
 
   // TODO: Convert this to a promise with a setTimeout(0) until the completion status is true
@@ -172,6 +174,7 @@ export class Program implements IDisposable {
       this.vertexShader.dispose();
       this.fragmentShader.dispose();
       this.context.gl.deleteProgram(this.glProgram);
+      this.context.disposeResource(this);
       this.disposed = true;
     }
   }

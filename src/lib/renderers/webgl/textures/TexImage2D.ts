@@ -32,6 +32,7 @@ import { TextureTarget } from "./TextureTarget";
 import { TextureWrap } from "./TextureWrap";
 
 export class TexImage2D implements IDisposable {
+  readonly id: number;
   disposed = false;
   glTexture: WebGLTexture;
   size = new Vector2();
@@ -81,6 +82,8 @@ export class TexImage2D implements IDisposable {
     }
 
     gl.bindTexture(this.target, null);
+
+    this.id = this.context.registerResource(this);
   }
 
   generateMipmaps(): void {
@@ -101,6 +104,7 @@ export class TexImage2D implements IDisposable {
   dispose(): void {
     if (!this.disposed) {
       this.context.gl.deleteTexture(this.glTexture);
+      this.context.disposeResource(this);
       this.disposed = true;
     }
   }

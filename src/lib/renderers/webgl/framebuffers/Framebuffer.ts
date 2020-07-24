@@ -20,6 +20,7 @@ import { VirtualFramebuffer } from "./VirtualFramebuffer";
 export type AttachmentMap = { [point: number]: TexImage2D | undefined };
 
 export class Framebuffer extends VirtualFramebuffer {
+  readonly id: number;
   readonly glFramebuffer: WebGLFramebuffer;
   readonly #size: Vector2 = new Vector2();
   private _attachments: AttachmentMap = {};
@@ -37,6 +38,8 @@ export class Framebuffer extends VirtualFramebuffer {
 
       this.glFramebuffer = glFramebuffer;
     }
+
+    this.id = this.context.registerResource(this);
   }
 
   attach(attachmentPoint: Attachment, texImage2D: TexImage2D, target = texImage2D.target, level = 0): void {
@@ -60,6 +63,7 @@ export class Framebuffer extends VirtualFramebuffer {
     if (!this.disposed) {
       const gl = this.context.gl;
       gl.deleteFramebuffer(this.glFramebuffer);
+      this.context.disposeResource(this);
       this.disposed = true;
     }
   }

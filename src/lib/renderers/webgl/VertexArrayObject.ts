@@ -11,6 +11,7 @@ import { PrimitiveType } from "./buffers/PrimitiveType";
 import { Program } from "./programs/Program";
 
 export class VertexArrayObject implements IDisposable {
+  readonly id: number;
   disposed = false;
   glVertexArrayObject: WebGLVertexArrayObject;
   primitive: PrimitiveType = PrimitiveType.Triangles;
@@ -36,12 +37,15 @@ export class VertexArrayObject implements IDisposable {
     glxVAO.bindVertexArrayOES(this.glVertexArrayObject);
 
     program.setAttributeBuffers(bufferGeometry);
+
+    this.id = this.program.context.registerResource(this);
   }
 
   dispose(): void {
     if (!this.disposed) {
       const glxVAO = this.program.context.glx.OES_vertex_array_object;
       glxVAO.deleteVertexArrayOES(this.glVertexArrayObject);
+      this.program.context.disposeResource(this);
       this.disposed = true;
     }
   }
