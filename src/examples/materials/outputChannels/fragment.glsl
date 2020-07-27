@@ -5,7 +5,7 @@ varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
-uniform vec3 pointLightColor;
+uniform vec3 pointLightIntensity;
 uniform float pointLightRange;
 
 uniform sampler2D normalMap;
@@ -48,7 +48,7 @@ void main() {
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
-  punctualLight.color = pointLightColor;
+  punctualLight.intensity = pointLightIntensity;
   punctualLight.range = pointLightRange;
 
   DirectLight directLight;

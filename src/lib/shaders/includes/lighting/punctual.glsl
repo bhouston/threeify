@@ -11,7 +11,7 @@ struct PunctualLight
 {
     int type;
     vec3 position;
-    vec3 color;
+    vec3 intensity;
     vec3 direction;
     float range;
     float innerConeCos;
@@ -56,7 +56,7 @@ void pointLightToDirectLight( in Surface surface, in PunctualLight punctualLight
   vec3 lightDirection = normalize( surfaceToLight );
 
   directLight.lightDirection = lightDirection;
-  directLight.irradiance = punctualLight.color * lightAttenuation * saturate( dot( surface.normal, lightDirection ) );
+  directLight.radiance = punctualLight.intensity * lightAttenuation;
 }
 
 void spotLightToDirectLight( in Surface surface, in PunctualLight punctualLight, out DirectLight directLight ) {
@@ -67,11 +67,11 @@ void spotLightToDirectLight( in Surface surface, in PunctualLight punctualLight,
   lightAttenuation *= getSpotAttenuation( lightDirection, punctualLight );
 
   directLight.lightDirection = lightDirection;
-  directLight.irradiance = punctualLight.color * lightAttenuation * saturate( dot( surface.normal, lightDirection ) );
+  directLight.radiance = punctualLight.intensity * lightAttenuation;
 }
 
 void directionalLightToDirectLight( in Surface surface, in PunctualLight punctualLight, out DirectLight directLight ) {
 
   directLight.lightDirection = -punctualLight.direction;
-	directLight.irradiance = punctualLight.color * saturate( dot( surface.normal, directLight.lightDirection ) );
+	directLight.radiance = punctualLight.intensity;
 }

@@ -38,7 +38,7 @@ void main() {
   PunctualLight punctualLight;
   punctualLight.position = spotLightViewPosition;
   punctualLight.direction = spotLightViewDirection;
-  punctualLight.color = spotLightColor;
+  punctualLight.intensity = spotLightColor;
   punctualLight.range = spotLightRange;
   punctualLight.innerConeCos = spotLightInnerCos;
   punctualLight.outerConeCos = spotLightOuterCos;
@@ -47,13 +47,17 @@ void main() {
   spotLightToDirectLight( surface, punctualLight, directLight );
 
   vec3 lightDirection = directLight.lightDirection;
-  vec3 irradiance = directLight.irradiance;
+  vec3 lightRadiance = directLight.radiance;
 
-  vec3 outputColor;
-  outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
-  outputColor += irradiance * BRDF_Diffuse_Lambert( albedo );
+  float normalFluxRatio = saturate( dot( lightDirection, surface.normal ) );
 
-  gl_FragColor.rgb = linearTosRGB( outputColor );
+  vec3 outgoingRadiance;
+  outgoingRadiance += lightRadiance * normalFluxRatio *
+    BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness ) ;
+  outgoingRadiance += lightRadiance * normalFluxRatio *
+    BRDF_Diffuse_Lambert( albedo );
+
+  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
   gl_FragColor.a = 1.;
 
 }
