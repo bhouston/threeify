@@ -1,3 +1,11 @@
+# [1.61.0](https://github.com/threeify/threeify/compare/v1.60.0...v1.61.0) (2020-07-28)
+
+
+### Features
+
+* refactor towards standard BRDF form (incoming irradiance to output radiance) ([2dc16f7](https://github.com/threeify/threeify/commit/2dc16f73f4f44bce569512809da98f8250199196))
+* simplify DirectLight to radiance and direction. Use dotNL instead of normalFluxRatio. ([e623d6a](https://github.com/threeify/threeify/commit/e623d6a34541aa8cea908114cec0e100a6b075ba))
+
 # [1.60.0](https://github.com/threeify/threeify/compare/v1.59.0...v1.60.0) (2020-07-24)
 
 
