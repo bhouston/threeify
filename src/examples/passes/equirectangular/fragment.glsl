@@ -16,7 +16,7 @@ void main() {
   vec3 viewPosition = ( viewToWorld * screenToView * v_homogeneousVertexPosition ).xyz;
   vec3 viewDirection = normalize( viewPosition );
 
-  vec2 equirectangularUv = directionToEquirectangularUV( viewDirection );
+  vec2 equirectangularUv = directionToLatLongUV( viewDirection );
 
   vec3 outputColor = vec3(0.);
   outputColor += sRGBToLinear( texture2D( equirectangularMap, equirectangularUv ).rgb );

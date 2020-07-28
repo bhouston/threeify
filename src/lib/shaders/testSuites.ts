@@ -3,7 +3,7 @@ import rgbdTests from "./includes/color/encodings/rgbd.test.glsl";
 import rgbeTests from "./includes/color/encodings/rgbe.test.glsl";
 import srgbTests from "./includes/color/spaces/srgb.test.glsl";
 import cubeFacesTests from "./includes/cubemaps/cubeFaces.test.glsl";
-import equirectangularTests from "./includes/cubemaps/equirectangular.test.glsl";
+import latLongTests from "./includes/cubemaps/latLong.test.glsl";
 import mathTests from "./includes/math/math.test.glsl";
 import unitIntervalPackingTests from "./includes/math/unitIntervalPacking.test.glsl";
 import normalPackingTests from "./includes/normals/normalPacking.test.glsl";
@@ -31,8 +31,8 @@ export const glslTestSuites: Array<GLSLTestSuite> = [
     source: srgbTests,
   },
   {
-    name: "equirectangular",
-    source: equirectangularTests,
+    name: "latLong",
+    source: latLongTests,
   },
   {
     name: "cubeFaces",

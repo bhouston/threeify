@@ -216,19 +216,19 @@ export function makeTexImage2DFromCubeTexture(
 
 export function makeTexImage2DFromEquirectangularTexture(
   context: RenderingContext,
-  equirectangularTexture: Texture,
+  latLongTexture: Texture,
   faceSize = new Vector2(512, 512),
   generateMipmaps = true,
 ): TexImage2D {
   // required for proper reading.
-  equirectangularTexture.wrapS = TextureWrap.Repeat;
-  equirectangularTexture.wrapT = TextureWrap.ClampToEdge;
-  equirectangularTexture.minFilter = TextureFilter.Linear;
+  latLongTexture.wrapS = TextureWrap.Repeat;
+  latLongTexture.wrapT = TextureWrap.ClampToEdge;
+  latLongTexture.minFilter = TextureFilter.Linear;
 
   const cubeTexture = new CubeMapTexture([faceSize, faceSize, faceSize, faceSize, faceSize, faceSize]);
   cubeTexture.generateMipmaps = generateMipmaps;
 
-  const equirectangularMap = makeTexImage2DFromTexture(context, equirectangularTexture);
+  const latLongMap = makeTexImage2DFromTexture(context, latLongTexture);
   const cubeFaceGeometry = passGeometry();
   const cubeFaceMaterial = new ShaderMaterial(cubeFaceVertexSource, cubeFaceFragmentSource);
   const cubeFaceProgram = makeProgramFromShaderMaterial(context, cubeFaceMaterial);
@@ -238,7 +238,7 @@ export function makeTexImage2DFromEquirectangularTexture(
   const cubeFaceFramebuffer = new Framebuffer(context);
 
   const cubeFaceUniforms = {
-    map: equirectangularMap,
+    map: latLongMap,
     faceIndex: 0,
   };
 
@@ -259,7 +259,7 @@ export function makeTexImage2DFromEquirectangularTexture(
   // cubeFaceBufferGeometry.dispose(); - causes crashes.  Huh?
   cubeFaceProgram.dispose();
   cubeFaceGeometry.dispose();
-  equirectangularMap.dispose();
+  latLongMap.dispose();
 
   return cubeMap;
 }

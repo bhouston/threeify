@@ -1,8 +1,8 @@
 {
-  "slug": "pass_equirectangular",
+  "slug": "pass_latlong",
   "en": {
     "name": "Equirectangular Background Pass",
-    "description": "Uses a equirectangular image (AKA lat-long image) as a background without converting it to a cubemap.",
-    "keywords": ["cubemap", "pass", "background", "spherical", "equirectangular", "lat-long"]
+    "description": "Uses a latlong image (AKA lat-long image) as a background without converting it to a cubemap.",
+    "keywords": ["cubemap", "pass", "background", "spherical", "latlong", "lat-long"]
   }
 }
