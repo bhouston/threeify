@@ -12,7 +12,7 @@ uniform int faceIndex;
 void main() {
 
   vec3 direction = cubeFaceUVToDirection( faceIndex, v_uv );
-  vec2 equirectangularUv = directionToEquirectangularUV( direction );
+  vec2 equirectangularUv = directionToLatLongUV( direction );
 
   gl_FragColor = texture2D( map, equirectangularUv );
 

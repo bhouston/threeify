@@ -23,11 +23,11 @@ import vertexSource from "./vertex.glsl";
 async function init(): Promise<null> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
-  const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/equirectangular.jpg"));
+  const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/latLong.jpg"));
   garageTexture.wrapS = TextureWrap.Repeat;
   garageTexture.wrapT = TextureWrap.ClampToEdge;
   garageTexture.minFilter = TextureFilter.Linear;
-  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/equirectangular.png"));
+  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/latLong.png"));
   debugTexture.wrapS = TextureWrap.Repeat;
   debugTexture.wrapT = TextureWrap.ClampToEdge;
   debugTexture.minFilter = TextureFilter.Linear;
@@ -43,7 +43,7 @@ async function init(): Promise<null> {
   const passUniforms = {
     viewToWorld: new Matrix4(),
     screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
-    equirectangularMap: garageMap,
+    latLongMap: garageMap,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -55,7 +55,7 @@ async function init(): Promise<null> {
     passUniforms.viewToWorld = makeMatrix4Inverse(
       makeMatrix4RotationFromEuler(new Euler(Math.sin(now * 0.0003), now * 0.0004, 0)),
     );
-    passUniforms.equirectangularMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
+    passUniforms.latLongMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
 
     renderBufferGeometry(canvasFramebuffer, passProgram, passUniforms, bufferGeometry, depthTestState);
   }

@@ -16,7 +16,7 @@ import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/equirectangular.png"));
+  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/latLong.png"));
 
   const geometry = icosahedronGeometry(0.75, 4);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
