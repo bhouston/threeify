@@ -1,3 +1,10 @@
+## [1.61.1](https://github.com/threeify/threeify/compare/v1.61.0...v1.61.1) (2020-07-28)
+
+
+### Bug Fixes
+
+* normal maps coordinate fix ([460fc68](https://github.com/threeify/threeify/commit/460fc684b77aed8bbc0c17c762c8bbdad9390c97))
+
 # [1.61.0](https://github.com/threeify/threeify/compare/v1.60.0...v1.61.0) (2020-07-28)
 
 
