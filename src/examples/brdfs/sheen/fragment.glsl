@@ -42,17 +42,14 @@ void main() {
   DirectLight directLight;
   pointLightToDirectLight( surface, punctualLight, directLight );
 
-  vec3 lightDirection = directLight.lightDirection;
-  vec3 lightRadiance = directLight.radiance;
-
-  float normalFluxRatio = saturate( dot( lightDirection, surface.normal ) );
+  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
   vec3 outgoingRadiance;
-  outgoingRadiance += lightRadiance * normalFluxRatio *
-    BRDF_Sheen_Charlie( surface, lightDirection, sheenColor, sheenIntensity, sheenRoughness ) ;
-  outgoingRadiance +=  (1. - sheenIntensity ) * lightRadiance * normalFluxRatio *
-    BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness ) ;
-  outgoingRadiance += lightRadiance * normalFluxRatio *
+  outgoingRadiance += directLight.radiance * dotNL *
+    BRDF_Sheen_Charlie( surface, directLight.direction, sheenColor, sheenIntensity, sheenRoughness ) ;
+  outgoingRadiance +=  (1. - sheenIntensity ) * directLight.radiance * dotNL *
+    BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+  outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outgoingRadiance );

@@ -64,14 +64,11 @@ void main() {
       directionalLightToDirectLight( surface, punctualLight, directLight );
     }
 
-    vec3 lightDirection = directLight.lightDirection;
-    vec3 lightRadiance = directLight.radiance;
+    float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
-    float normalFluxRatio = saturate( dot( lightDirection, surface.normal ) );
-
-    outgoingRadiance += lightRadiance * normalFluxRatio *
-      BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness ) ;
-    outgoingRadiance += lightRadiance * normalFluxRatio *
+    outgoingRadiance += directLight.radiance * dotNL *
+      BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+    outgoingRadiance += directLight.radiance * dotNL *
       BRDF_Diffuse_Lambert( albedo );
 
   }

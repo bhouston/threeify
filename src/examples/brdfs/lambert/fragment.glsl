@@ -36,13 +36,10 @@ void main() {
   DirectLight directLight;
   pointLightToDirectLight( surface, punctualLight, directLight );
 
-  vec3 lightDirection = directLight.lightDirection;
-  vec3 lightRadiance = directLight.radiance;
-
-  float normalFluxRatio = saturate( dot( lightDirection, surface.normal ) );
+  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
   vec3 outgoingRadiance;
-  outgoingRadiance += lightRadiance * normalFluxRatio *
+  outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outgoingRadiance );

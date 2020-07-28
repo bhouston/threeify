@@ -1,9 +1,8 @@
 #pragma once
 
-// Q: should this be radiance?  Then we can change its interaction based on the different surface normals?
 struct DirectLight {
 	vec3 radiance;        // in standard BRDF notation: L[i](w[i])
-	vec3 lightDirection;  // in standard BRDF notation: w[i]
+	vec3 direction;  // in standard BRDF notation: w[i]
 };
 
 struct Surface {

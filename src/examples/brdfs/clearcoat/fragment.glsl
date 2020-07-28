@@ -12,7 +12,6 @@ uniform sampler2D albedoMap;
 
 uniform sampler2D clearCoatBumpMap;
 
-
 #pragma include <brdfs/common>
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
@@ -47,18 +46,15 @@ void main() {
   DirectLight directLight;
   pointLightToDirectLight( surface, punctualLight, directLight );
 
-  vec3 lightDirection = directLight.lightDirection;
-  vec3 lightRadiance = directLight.radiance;
-
-  float clearCoatNormalFluxRatio = saturate( dot( lightDirection, clearCoatSurface.normal ) );
-  float normalFluxRatio = saturate( dot( lightDirection, surface.normal ) );
+  float clearCoatDotNL = saturate( dot( directLight.direction, clearCoatSurface.normal ) );
+  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
   vec3 outgoingRadiance;
-  outgoingRadiance += lightRadiance * clearCoatNormalFluxRatio *
-    BRDF_Specular_GGX( clearCoatSurface, lightDirection, clearCoatF0, clearCoatRoughness ) ;
-  outgoingRadiance += lightRadiance * normalFluxRatio *
-    BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness ) ;
-  outgoingRadiance += lightRadiance * normalFluxRatio *
+  outgoingRadiance += directLight.radiance * clearCoatDotNL *
+    BRDF_Specular_GGX( clearCoatSurface, directLight.direction, clearCoatF0, clearCoatRoughness ) ;
+  outgoingRadiance += directLight.radiance * dotNL *
+    BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+  outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
   gl_FragColor.rgb = linearTosRGB( outgoingRadiance );

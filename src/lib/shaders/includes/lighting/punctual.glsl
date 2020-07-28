@@ -55,7 +55,7 @@ void pointLightToDirectLight( in Surface surface, in PunctualLight punctualLight
   float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
   vec3 lightDirection = normalize( surfaceToLight );
 
-  directLight.lightDirection = lightDirection;
+  directLight.direction = lightDirection;
   directLight.radiance = punctualLight.intensity * lightAttenuation;
 }
 
@@ -66,12 +66,12 @@ void spotLightToDirectLight( in Surface surface, in PunctualLight punctualLight,
   float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
   lightAttenuation *= getSpotAttenuation( lightDirection, punctualLight );
 
-  directLight.lightDirection = lightDirection;
+  directLight.direction = lightDirection;
   directLight.radiance = punctualLight.intensity * lightAttenuation;
 }
 
 void directionalLightToDirectLight( in Surface surface, in PunctualLight punctualLight, out DirectLight directLight ) {
 
-  directLight.lightDirection = -punctualLight.direction;
+  directLight.direction = -punctualLight.direction;
 	directLight.radiance = punctualLight.intensity;
 }
