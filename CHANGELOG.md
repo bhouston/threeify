@@ -1,3 +1,10 @@
+# [1.62.0](https://github.com/threeify/threeify/compare/v1.61.1...v1.62.0) (2020-07-28)
+
+
+### Features
+
+* rename equirectangular to latLong, more user friendly ([9edeb8f](https://github.com/threeify/threeify/commit/9edeb8fee60464648f7de3a85fab87abf1521af8))
+
 ## [1.61.1](https://github.com/threeify/threeify/compare/v1.61.0...v1.61.1) (2020-07-28)
 
 
