@@ -42,7 +42,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vector3(2.0, 0, 3.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(10.0),
+    pointLightIntensity: new Vector3(1, 1, 1).multiplyByScalar(10.0),
     pointLightRange: 12.0,
 
     // materials

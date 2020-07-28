@@ -5,7 +5,7 @@ varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
-uniform vec3 pointLightColor;
+uniform vec3 pointLightIntensity;
 uniform float pointLightRange;
 
 uniform vec3 albedoModulator;
@@ -23,7 +23,7 @@ void main() {
   PunctualLight punctualLight;
   punctualLight.type = LightType_Point;
   punctualLight.position = pointLightViewPosition;
-  punctualLight.color = pointLightColor;
+  punctualLight.intensity = pointLightIntensity;
   punctualLight.direction = vec3(0.);
   punctualLight.range = pointLightRange;
   punctualLight.innerConeCos = 0.;
@@ -36,13 +36,13 @@ void main() {
   DirectLight directLight;
   pointLightToDirectLight( surface, punctualLight, directLight );
 
-  vec3 lightDirection = directLight.lightDirection;
-  vec3 irradiance = directLight.irradiance;
+  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
-  vec3 outputColor;
-  outputColor += irradiance * BRDF_Diffuse_Lambert( albedo );
+  vec3 outgoingRadiance;
+  outgoingRadiance += directLight.radiance * dotNL *
+    BRDF_Diffuse_Lambert( albedo );
 
-  gl_FragColor.rgb = linearTosRGB( outputColor );
+  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
   gl_FragColor.a = 1.;
 
 }

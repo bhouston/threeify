@@ -38,7 +38,7 @@ void main() {
 
   uvToTangentFrame( surface, v_uv0 );
 
-  vec3 outputColor;
+  vec3 outgoingRadiance;
 
   for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i ++ ) {
 
@@ -48,7 +48,7 @@ void main() {
     punctualLight.type = punctualLightType[i];
     punctualLight.position = punctualLightViewPosition[i];
     punctualLight.direction = punctualLightViewDirection[i];
-    punctualLight.color = punctualLightColor[i];
+    punctualLight.intensity = punctualLightColor[i];
     punctualLight.range = punctualLightRange[i];
     punctualLight.innerConeCos = punctualLightInnerCos[i];
     punctualLight.outerConeCos = punctualLightOuterCos[i];
@@ -64,15 +64,16 @@ void main() {
       directionalLightToDirectLight( surface, punctualLight, directLight );
     }
 
-    vec3 lightDirection = directLight.lightDirection;
-    vec3 irradiance = directLight.irradiance;
+    float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
-    outputColor += irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
-    outputColor += irradiance * BRDF_Diffuse_Lambert( albedo );
+    outgoingRadiance += directLight.radiance * dotNL *
+      BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+    outgoingRadiance += directLight.radiance * dotNL *
+      BRDF_Diffuse_Lambert( albedo );
 
   }
 
-  gl_FragColor.rgb = linearTosRGB( outputColor );
+  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
   gl_FragColor.a = 1.;
 
 }

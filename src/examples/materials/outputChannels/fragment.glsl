@@ -5,7 +5,7 @@ varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
-uniform vec3 pointLightColor;
+uniform vec3 pointLightIntensity;
 uniform float pointLightRange;
 
 uniform sampler2D normalMap;
@@ -48,22 +48,23 @@ void main() {
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
-  punctualLight.color = pointLightColor;
+  punctualLight.intensity = pointLightIntensity;
   punctualLight.range = pointLightRange;
 
   DirectLight directLight;
   pointLightToDirectLight( surface, punctualLight, directLight );
 
-  vec3 lightDirection = directLight.lightDirection;
-  vec3 irradiance = directLight.irradiance;
+  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
 
   vec3 outputDiffuse;
   vec3 outputSpecular;
-  vec3 outputColor;
-  outputColor += outputChannels.specular = irradiance * BRDF_Specular_GGX( surface, lightDirection, specularF0, specularRoughness );
-  outputColor += outputChannels.diffuse = irradiance * BRDF_Diffuse_Lambert( albedo );
+  vec3 outputRadiance;
+  outputRadiance += outputChannels.specular = directLight.radiance * dotNL *
+    BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness );
+  outputRadiance += outputChannels.diffuse = directLight.radiance * dotNL *
+    BRDF_Diffuse_Lambert( albedo );
 
-  outputChannels.beauty = linearTosRGB( outputColor );
+  outputChannels.beauty = linearTosRGB( outputRadiance );
 
   int newFragmentOutputs = int( mod(( -gl_FragCoord.x * 3. + gl_FragCoord.y ) * 0.002 + float( time ) / 3000., 13. ) );
 

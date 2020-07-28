@@ -43,7 +43,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightColor: new Vector3(1, 1, 1).multiplyByScalar(30.0),
+    pointLightIntensity: new Vector3(1, 1, 1).multiplyByScalar(30.0),
     pointLightRange: 12.0,
 
     // materials
@@ -62,7 +62,8 @@ async function init(): Promise<null> {
       new Euler(0, 0, now * 0.0002, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.normalModulator = new Vector2(1, 1).multiplyByScalar(Math.cos(now * 0.001) * 0.5 + 0.5);
+    // Q: Why is this one -1 required?  Is the tangent space from UV calculation incorrect?
+    uniforms.normalModulator = new Vector2(-1, 1).multiplyByScalar(Math.cos(now * 0.001) * 0.5 + 0.5);
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.sin(now * 0.003) * 3.0, 1.5);
 
     canvasFramebuffer.clear(BufferBit.All);
