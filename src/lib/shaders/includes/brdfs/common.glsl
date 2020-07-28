@@ -42,7 +42,7 @@ void rotateTangentFrame( inout Surface surface, in vec2 anisotropicDirection ) {
   // NOTE: The null anisotropic direction value is (1, 0, 0)
   mat3 normalMatrix = surfaceToNormalMatrix( surface );
   surface.tangent = normalMatrix * vec3( anisotropicDirection.yx, 0. );
-  surface.bitangent = normalMatrix * vec3( anisotropicDirection.x, -anisotropicDirection.y, 0. );
+  surface.bitangent = normalMatrix * vec3( anisotropicDirection.x, anisotropicDirection.y, 0. );
 }
 
 /**

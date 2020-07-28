@@ -61,7 +61,7 @@ async function init(): Promise<null> {
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
     );
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
+    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.cos(now * 0.0007) * 2.0, 1.0);
 
     canvasFramebuffer.clear(BufferBit.All);
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);

@@ -53,7 +53,7 @@ async function init(): Promise<null> {
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
 
     // lights
-    pointLightViewPosition: new Vector3(0.0, 0, 0.0),
+    pointLightViewPosition: new Vector3(0, 0, 0),
     pointLightIntensity: new Vector3(1, 1, 1).multiplyByScalar(40.0),
     pointLightRange: 12.0,
 
@@ -77,7 +77,7 @@ async function init(): Promise<null> {
     );
 
     const effectScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
-    uniforms.normalScale = new Vector2(-1.0, 1.0).multiplyByScalar(effectScale);
+    uniforms.normalScale = new Vector2(1, 1).multiplyByScalar(effectScale);
     uniforms.displacementScale = effectScale * 0.1;
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
 
