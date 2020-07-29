@@ -1,10 +1,11 @@
 #pragma include <tests/fragment>
 #pragma include "mat3"
+#pragma include <math/math>
 
 void testMatEquals( inout TestSuite suite, int id, mat3 m, mat3 target ) {
   for( int i = 0; i < 3; i ++ ) {
     for( int j = 0; j < 3; j ++ ) {
-      assert( suite, id + i*3 + j, m[i][j] == target[i][j] );
+      assert( suite, id + i*3 + j, eqAbs( m[i][j], target[i][j], 0.000001 ) );
     }
   }
 }
@@ -32,4 +33,5 @@ void tests( inout TestSuite suite ) {
   manual[2][2] = 8.;
   testMatEquals( suite, 120, manual, reference );
 
+  mat3 rot90 = mat3RotateZ( degToRad( 90. ) );
 }

@@ -4,7 +4,7 @@
 void testMatEquals( inout TestSuite suite, int id, mat2 m, mat2 target ) {
   for( int i = 0; i < 2; i ++ ) {
     for( int j = 0; j < 2; j ++ ) {
-      assert( suite, id + i*2 + j, m[i][j] == target[i][j] );
+      assert( suite, id + i*2 + j, eqAbs( m[i][j], target[i][j], 0.000001 ) );
     }
   }
 }
@@ -28,5 +28,7 @@ void tests( inout TestSuite suite ) {
   manual[0] = vec2( 0., 1. );
   manual[1].yx = vec2( 3., 2. );
   testMatEquals( suite, 50, manual, reference );
+
+
 
 }
