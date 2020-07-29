@@ -14,6 +14,23 @@ mat3 tangentToViewFromPositionNormalUV( vec3 position, in vec3 normal, in vec2 u
   return mat3( tangent, bitangent, normal );
 }
 
+// from glTF IBL Sampler.
+mat3 tangentToViewFromNormal( const in vec3 normal ) {
+  vec3 bitangent = vec3(0., 1., 0.);
+	if (abs(normal.y) > abs(normal.x) && abs(normal.y) > abs(normal.z)) {
+		// Sampling +Y or -Y, so we need a more robust bitangent.
+		if (NdotY > 0.0) {
+			bitangent = vec3(0.0, 0.0, 1.0);
+		}
+		else {
+			bitangent = vec3(0.0, 0.0, -1.0);
+		}
+	}
+
+  vec3 tangent = cross( bitangent, normal );
+  bitangent = cross( normal, tangent );
+  return  mat3( tangent, bitangent, normal );
+}
 
 
 /*
