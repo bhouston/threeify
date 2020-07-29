@@ -18,6 +18,7 @@ uniform sampler2D specularAnisotropicFlowMap;
 #pragma include <brdfs/specular/anisotropy>
 #pragma include <color/spaces/srgb>
 #pragma include <normals/tangentSpace>
+#pragma include <math/mat2>
 #pragma include <math/mat3>
 
 void main() {
@@ -33,8 +34,9 @@ void main() {
   vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
-  tangentToView = tangentToView * mat3RotateZDirection( normalize( specularAnisotropicFlow ).yx );
+  tangentToView = tangentToView * mat3RotateZDirection( normalize( specularAnisotropicFlow ) * mat2Rotate( degToRad( 90. ) ) );
   tangentToView[2] = bendNormalForAnistropicReflections( viewDirection, tangentToView, length( specularAnisotropicFlow ), specularRoughness );
+
   normal = tangentToView[2];
 
   PunctualLight punctualLight;
