@@ -1,3 +1,13 @@
+# [1.65.0](https://github.com/threeify/threeify/compare/v1.64.0...v1.65.0) (2020-07-29)
+
+
+### Features
+
+* directory for glsl samplers ([3d8ae72](https://github.com/threeify/threeify/commit/3d8ae7234ab4777932fbbeecd4e7934f94ab9646))
+* framework for lambertian importance sampler ([369485e](https://github.com/threeify/threeify/commit/369485e2c11329e722c8185c814721d133f88cae))
+* lambertian importance sampler produces result ([a11ee44](https://github.com/threeify/threeify/commit/a11ee4478351efa3be5bd1c84b5d03246248842c))
+* struct unit tests. ([dc635b2](https://github.com/threeify/threeify/commit/dc635b2c87840ec912c9c1fa050c8b75ea475413))
+
 # [1.64.0](https://github.com/threeify/threeify/compare/v1.63.0...v1.64.0) (2020-07-29)
 
 
