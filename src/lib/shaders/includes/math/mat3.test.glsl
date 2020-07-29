@@ -33,5 +33,4 @@ void tests( inout TestSuite suite ) {
   manual[2][2] = 8.;
   testMatEquals( suite, 120, manual, reference );
 
-  mat3 rot90 = mat3RotateZ( degToRad( 90. ) );
 }

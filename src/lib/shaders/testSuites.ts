@@ -6,6 +6,7 @@ import cubeFacesTests from "./includes/cubemaps/cubeFaces.test.glsl";
 import latLongTests from "./includes/cubemaps/latLong.test.glsl";
 import mat2Tests from "./includes/math/mat2.test.glsl";
 import mat3Tests from "./includes/math/mat3.test.glsl";
+import mat4Tests from "./includes/math/mat4.test.glsl";
 import mathTests from "./includes/math/math.test.glsl";
 import unitIntervalPackingTests from "./includes/math/unitIntervalPacking.test.glsl";
 import normalPackingTests from "./includes/normals/normalPacking.test.glsl";
@@ -51,6 +52,10 @@ export const glslTestSuites: Array<GLSLTestSuite> = [
   {
     name: "mat3",
     source: mat3Tests,
+  },
+  {
+    name: "mat4",
+    source: mat4Tests,
   },
   {
     name: "normalPacking",
