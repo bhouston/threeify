@@ -1,4 +1,5 @@
 #pragma include <tests/fragment>
+#pragma include "mat2"
 #pragma include "mat3"
 #pragma include <math/math>
 
@@ -17,6 +18,9 @@ void tests( inout TestSuite suite ) {
   mat3 zero = mat3( 0., 0., 0., 0., 0., 0., 0., 0., 0. );
   testMatEquals( suite, 40, uninitialized, zero );
 
+  mat3 easyIdentity = mat3(1.0);
+  testMatEquals( suite, 60, easyIdentity, mat3Identity() );
+
   mat3 reference = mat3( 0., 1., 2., 3., 4., 5., 6., 7., 8. );
 
   mat3 refByIdentity = reference * mat3Identity();
@@ -33,4 +37,9 @@ void tests( inout TestSuite suite ) {
   manual[2][2] = 8.;
   testMatEquals( suite, 120, manual, reference );
 
+  mat2 m2rot90 = mat2Rotate( degToRad( 90. ) );
+  mat3 m3fromm2 = mat3( m2rot90 );  // This is a neat feature.
+  mat3 m3rot90 = mat3RotateZ( degToRad( 90. ) );
+
+  testMatEquals( suite, 200, m3fromm2, m3rot90 );
 }

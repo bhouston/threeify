@@ -1,27 +1,15 @@
 precision highp float;
 
-uniform mat4 viewToWorld;
-uniform mat4 screenToView;
 
-uniform sampler2D equirectangularMap;
+varying vec3 v_objectPosition;
+varying vec3 v_viewPosition;
+varying vec3 v_viewNormal;
 
-varying vec4 v_homogeneousVertexPosition;
-
-#pragma include <color/spaces/srgb>
-#pragma include <cubemaps/equirectangular>
+uniform samplerCube cubeMap;
 
 void main() {
 
-  // step one, convert from screen space to ray.
-  vec3 viewPosition = ( viewToWorld * screenToView * v_homogeneousVertexPosition ).xyz;
-  vec3 viewDirection = normalize( viewPosition );
-
-  vec2 equirectangularUv = directionToLatLongUV( viewDirection );
-
-  vec3 outputColor = vec3(0.);
-  outputColor += sRGBToLinear( texture2D( equirectangularMap, equirectangularUv ).rgb );
-
-  gl_FragColor.rgb = linearTosRGB( outputColor );
-  gl_FragColor.a = 1.0;
+  vec3 reflectDir = reflect( normalize( v_viewPosition ),normalize( v_viewNormal ) );
+  gl_FragColor = textureCube( cubeMap, normalize( v_objectPosition ) );
 
 }

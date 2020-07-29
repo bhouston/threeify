@@ -15,7 +15,7 @@ uniform sampler2D specularMap;
 uniform float     specularRoughnessModulator;
 uniform sampler2D specularRoughnessMap;
 
-#pragma include <brdfs/common>
+
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>

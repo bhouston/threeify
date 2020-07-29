@@ -16,7 +16,7 @@ uniform float punctualLightOuterCos[MAX_PUNCTUAL_LIGHTS];
 
 uniform sampler2D albedoMap;
 
-#pragma include <brdfs/common>
+
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
 #pragma include <brdfs/diffuse/lambert>

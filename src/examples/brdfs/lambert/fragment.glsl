@@ -11,7 +11,7 @@ uniform float pointLightRange;
 uniform vec3 albedoModulator;
 uniform sampler2D albedoMap;
 
-#pragma include <brdfs/common>
+
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <color/spaces/srgb>
