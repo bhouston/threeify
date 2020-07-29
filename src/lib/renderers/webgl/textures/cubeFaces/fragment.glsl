@@ -7,7 +7,7 @@ uniform sampler2D map;
 uniform int faceIndex;
 
 #pragma include <cubemaps/cubeFaces>
-#pragma include <cubemaps/equirectangular>
+#pragma include <cubemaps/latLong>
 
 void main() {
 

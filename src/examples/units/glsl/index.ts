@@ -75,7 +75,8 @@ async function init(): Promise<null> {
       }
     } catch (e) {
       totalFailures++;
-      compileError = e;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      compileError = e.message !== undefined ? e.message : "unknown";
     }
 
     totalPasses += passIds.length;
@@ -84,7 +85,7 @@ async function init(): Promise<null> {
 
     output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
     if (compileError !== undefined) {
-      output.push(`  COMPILE FAILED: ${compileError.message}`);
+      output.push(`  COMPILE FAILED: ${compileError}`);
     } else if (failureIds.length === 0 && duplicateIds.length === 0) {
       output.push("  ALL PASSED");
     }
