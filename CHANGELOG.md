@@ -1,3 +1,15 @@
+# [1.64.0](https://github.com/threeify/threeify/compare/v1.63.0...v1.64.0) (2020-07-29)
+
+
+### Bug Fixes
+
+* fix equilateral example after latlong name change ([c4a2aff](https://github.com/threeify/threeify/commit/c4a2affa9881c2ff98138b3ac0e65ec45a0bc461))
+
+
+### Features
+
+* remove completely Surface glsl struct ([662db5d](https://github.com/threeify/threeify/commit/662db5d1d8e3fc1611376cacf5bac6dc7305ba57))
+
 # [1.63.0](https://github.com/threeify/threeify/compare/v1.62.0...v1.63.0) (2020-07-29)
 
 
