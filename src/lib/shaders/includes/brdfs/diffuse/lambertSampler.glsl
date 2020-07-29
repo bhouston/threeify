@@ -1,3 +1,4 @@
+#include <math/math>
 #include <math/sampling/hammersley>
 #include <normals/tangentSpace>
 
@@ -20,16 +21,19 @@ float BRDF_Diffuse_Lambert_PDF(
 	return dotNL * RECIPROCAL_PI;
 }
 
-vec3 sampleIBL( vec3 direction, float lod );
+vec4 sampleIBL( vec3 direction, float lod );
+
+#define NUM_SAMPLES 1024
+#define LOD_BIAS 1.0
 
 vec3 BRDF_Diffuse_Lambert_Filter(vec3 N, float filterWidth ) {
 
 	vec4 color;
-	const float solidAngleTexel = 4. * PI / (6. * pow2( filterWidth );
+	float solidAngleTexel = 4. * PI / (6. * pow2( filterWidth ) );
 
-	for( uint i = 0; i < NUM_SAMPLES; i++ ) {
+	for( int i = 0; i < NUM_SAMPLES; i++ ) {
 
-    vec2 sampleUv = hammersley2( sampleIndex, NUM_SAMPLES );
+    vec2 sampleUv = hammersley2( i, NUM_SAMPLES );
     vec3 tangentSpaceSampleDirection = BRDF_Diffuse_Lambert_SampleDirection( sampleUv );
     vec3 surfaceSampleDirection = tangentToViewFromNormal( N ) * tangentSpaceSampleDirection;
     vec3 H = surfaceSampleDirection;
@@ -54,7 +58,7 @@ vec3 BRDF_Diffuse_Lambert_Filter(vec3 N, float filterWidth ) {
       lod = 0.5 * log2( solidAngleSample / solidAngleTexel );
       lod += LOD_BIAS;
 
-      color += vec4( sampleIBL( H, lod ), 1.0 );
+      color += sampleIBL( H, lod );
 		}
 	}
 

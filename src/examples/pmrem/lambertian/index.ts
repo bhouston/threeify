@@ -4,7 +4,6 @@ import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
-  makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
@@ -53,11 +52,8 @@ async function init(): Promise<null> {
   const samplerGeometry = passGeometry();
   const samplerProgram = makeProgramFromShaderMaterial(context, samplerMaterial);
   const samplerUniforms = {
-    color: new Vector3(1, 0, 0),
-    viewToWorld: new Matrix4(),
-    screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
     envCubeMap: envCubeMap,
-    cubeFaceIndex: 0,
+    faceIndex: 0,
   };
 
   const samplerBufferGeometry = makeBufferGeometryFromGeometry(context, samplerGeometry);
@@ -67,8 +63,7 @@ async function init(): Promise<null> {
 
   cubeFaceTargets.forEach((target, index) => {
     framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
-    samplerUniforms.cubeFaceIndex = index;
-    samplerUniforms.color.x = index / 6.0;
+    samplerUniforms.faceIndex = index;
 
     renderBufferGeometry(framebuffer, samplerProgram, samplerUniforms, samplerBufferGeometry);
   });

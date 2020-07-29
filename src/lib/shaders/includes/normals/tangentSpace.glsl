@@ -19,7 +19,7 @@ mat3 tangentToViewFromNormal( const in vec3 normal ) {
   vec3 bitangent = vec3(0., 1., 0.);
 	if (abs(normal.y) > abs(normal.x) && abs(normal.y) > abs(normal.z)) {
 		// Sampling +Y or -Y, so we need a more robust bitangent.
-		if (NdotY > 0.0) {
+		if (normal.y > 0.0) {
 			bitangent = vec3(0.0, 0.0, 1.0);
 		}
 		else {
