@@ -2,7 +2,6 @@
 // https://github.com/KhronosGroup/glTF-Sample-Viewer/blob/master/src/shaders/punctual.glsl
 #pragma once
 #pragma include <math/math>
-#pragma include <brdfs/common>
 
 // lights
 // KHR_lights_punctual extension.
@@ -24,10 +23,8 @@ const int LightType_Spot = 2;
 
 
 // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_lights_punctual/README.md#range-property
-float getRangeAttenuation(float distanceToLightSource, float maxRange)
-{
-    if (maxRange <= 0.)
-    {
+float getRangeAttenuation( float distanceToLightSource, float maxRange ) {
+    if (maxRange <= 0.) {
         // negative range means unlimited
         return 1.;
     }
@@ -35,23 +32,20 @@ float getRangeAttenuation(float distanceToLightSource, float maxRange)
 }
 
 // https://github.com/KhronosGroup/glTF/blob/master/extensions/2.0/Khronos/KHR_lights_punctual/README.md#inner-and-outer-cone-angles
-float getSpotAttenuation(vec3 pointToLight, PunctualLight punctualLight)
-{
-    float actualCos = dot(punctualLight.direction, -pointToLight);
-    if (actualCos > punctualLight.outerConeCos)
-    {
-        if (actualCos < punctualLight.innerConeCos)
-        {
-            return smoothstep(punctualLight.outerConeCos, punctualLight.innerConeCos, actualCos);
+float getSpotAttenuation( vec3 pointToLight, PunctualLight punctualLight ) {
+    float actualCos = dot( punctualLight.direction, -pointToLight );
+    if( actualCos > punctualLight.outerConeCos ) {
+        if( actualCos < punctualLight.innerConeCos ) {
+            return smoothstep( punctualLight.outerConeCos, punctualLight.innerConeCos, actualCos );
         }
         return 1.;
     }
     return 0.;
 }
 
-void pointLightToDirectLight( in Surface surface, in PunctualLight punctualLight, out DirectLight directLight ) {
+void pointLightToDirectLight( in vec3 position, in PunctualLight punctualLight, out DirectLight directLight ) {
 
-  vec3 surfaceToLight = punctualLight.position - surface.position;
+  vec3 surfaceToLight = punctualLight.position - position;
   float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
   vec3 lightDirection = normalize( surfaceToLight );
 
@@ -59,9 +53,9 @@ void pointLightToDirectLight( in Surface surface, in PunctualLight punctualLight
   directLight.radiance = punctualLight.intensity * lightAttenuation;
 }
 
-void spotLightToDirectLight( in Surface surface, in PunctualLight punctualLight, out DirectLight directLight ) {
+void spotLightToDirectLight( in vec3 position, in PunctualLight punctualLight, out DirectLight directLight ) {
 
-  vec3 surfaceToLight = punctualLight.position - surface.position;
+  vec3 surfaceToLight = punctualLight.position - position;
   vec3 lightDirection = normalize( surfaceToLight );
   float lightAttenuation = getRangeAttenuation( length( surfaceToLight ), punctualLight.range );
   lightAttenuation *= getSpotAttenuation( lightDirection, punctualLight );
@@ -70,7 +64,7 @@ void spotLightToDirectLight( in Surface surface, in PunctualLight punctualLight,
   directLight.radiance = punctualLight.intensity * lightAttenuation;
 }
 
-void directionalLightToDirectLight( in Surface surface, in PunctualLight punctualLight, out DirectLight directLight ) {
+void directionalLightToDirectLight( in PunctualLight punctualLight, out DirectLight directLight ) {
 
   directLight.direction = -punctualLight.direction;
 	directLight.radiance = punctualLight.intensity;
