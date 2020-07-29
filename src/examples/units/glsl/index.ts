@@ -44,32 +44,38 @@ async function init(): Promise<null> {
   let totalDuplicates = 0;
 
   glslTestSuites.forEach((glslUnitTest) => {
-    const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
-    const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
-
-    framebuffer.clear(BufferBit.All);
-    renderBufferGeometry(framebuffer, unitProgram, unitUniforms, bufferGeometry);
-
-    const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
-
     const passIds = [];
     const failureIds = [];
     const duplicateIds = [];
+    let compileError = undefined;
 
-    for (let i = 0; i < result.length; i += 4) {
-      const runResult = result[i + 2];
-      const id = i / 4;
-      switch (runResult) {
-        case 0:
-          failureIds.push(id);
-          break;
-        case 1:
-          passIds.push(id);
-          break;
-        case 3:
-          duplicateIds.push(id);
-          break;
+    try {
+      const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
+      const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
+
+      framebuffer.clear(BufferBit.All);
+      renderBufferGeometry(framebuffer, unitProgram, unitUniforms, bufferGeometry);
+
+      const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
+
+      for (let i = 0; i < result.length; i += 4) {
+        const runResult = result[i + 2];
+        const id = i / 4;
+        switch (runResult) {
+          case 0:
+            failureIds.push(id);
+            break;
+          case 1:
+            passIds.push(id);
+            break;
+          case 3:
+            duplicateIds.push(id);
+            break;
+        }
       }
+    } catch (e) {
+      totalFailures++;
+      compileError = e;
     }
 
     totalPasses += passIds.length;
@@ -77,7 +83,9 @@ async function init(): Promise<null> {
     totalDuplicates += duplicateIds.length;
 
     output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
-    if (failureIds.length == 0 && duplicateIds.length == 0) {
+    if (compileError !== undefined) {
+      output.push(`  COMPILE FAILED: ${compileError.message}`);
+    } else if (failureIds.length === 0 && duplicateIds.length === 0) {
       output.push("  ALL PASSED");
     }
     if (failureIds.length > 0) {
