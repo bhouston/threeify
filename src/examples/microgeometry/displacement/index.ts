@@ -59,10 +59,11 @@ async function init(): Promise<null> {
 
     // materials
     normalMap: normalMap,
-    normalScale: new Vector2(1, 1),
+    normalScale: new Vector2(-1, 1),
     displacementMap: displacementMap,
     displacementScale: 1.0,
   };
+
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
   canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
@@ -77,7 +78,7 @@ async function init(): Promise<null> {
     );
 
     const effectScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
-    uniforms.normalScale = new Vector2(1, 1).multiplyByScalar(effectScale);
+    uniforms.normalScale = new Vector2(-1, 1).multiplyByScalar(effectScale);
     uniforms.displacementScale = effectScale * 0.1;
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
 

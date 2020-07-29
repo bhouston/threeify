@@ -36,14 +36,12 @@ void main() {
   mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
   tangentToView = tangentToView * mat3RotateZDirection( normalize( specularAnisotropicFlow ) * mat2Rotate( degToRad( 90. ) ) );
   tangentToView[2] = bendNormalForAnistropicReflections( viewDirection, tangentToView, length( specularAnisotropicFlow ), specularRoughness );
-
   normal = tangentToView[2];
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
   punctualLight.intensity = pointLightIntensity;
   punctualLight.range = pointLightRange;
-
 
   DirectLight directLight;
   pointLightToDirectLight( position, punctualLight, directLight );

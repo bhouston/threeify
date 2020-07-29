@@ -34,7 +34,8 @@ void main() {
   vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
-  tangentToView *= mat3( vec3( 1., 0., 0. ), vec3( 0., 1., 0. ), normalDelta ); // warning, non-orthogonal matrix
+  // warning, non-orthogonal matrix
+  tangentToView *= mat3( vec3( 1., 0., 0. ), vec3( 0., 1., 0. ), normalize( normalDelta ) );
   normal = tangentToView[2];
 
   PunctualLight punctualLight;
