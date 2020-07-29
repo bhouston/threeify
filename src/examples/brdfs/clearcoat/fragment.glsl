@@ -18,6 +18,7 @@ uniform sampler2D clearCoatBumpMap;
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
+#pragma include <normals/bumpMapping>
 #pragma include <normals/tangentSpace>
 
 void main() {
@@ -33,8 +34,8 @@ void main() {
   vec3 normal = normalize( v_viewSurfaceNormal );
   vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
-  mat3 tangentToView = tangentToViewFromPositionUV( position, normal, v_uv0 );
-  normal = tangentToView[3];
+  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  normal = tangentToView[2];
 
 	vec3 clearCoatNormal = perturbNormalFromBumpMap( position, normal, clearCoatBumpMap, v_uv0, 1. );
 

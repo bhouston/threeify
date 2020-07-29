@@ -5,21 +5,14 @@ struct DirectLight {
 	vec3 direction;  // in standard BRDF notation: w[i]
 };
 
-struct Surface {
-	vec3 position;
-	vec3 normal;
-  vec3 tangent;
-  vec3 bitangent;
-  vec3 viewDirection;
-};
-
 vec3 specularIntensityToF0( in vec3 specularIntensity ) {
   return specularIntensity * specularIntensity * 0.16;
 }
 
+/*
 /**
  * this likely should be done after perturbing and rotating.
- */
+ * /
 void alignSurfaceWithViewDirection( inout Surface surface ) {
 
   // For a back-facing surface, the tangential basis vectors are negated.
@@ -28,4 +21,4 @@ void alignSurfaceWithViewDirection( inout Surface surface ) {
   surface.bitangent *= facing;
   surface.normal *= facing;
 
-}
+}*/
