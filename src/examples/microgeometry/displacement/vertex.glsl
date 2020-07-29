@@ -13,14 +13,14 @@ varying vec3 v_viewSurfacePosition;
 varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
-#pragma include <math/matrix4>
+#pragma include <math/mat4>
 #pragma include <vertex/displacement>
 
 void main() {
 
   mat4 localToView = worldToView * localToWorld;
-  v_viewSurfaceNormal = transformDirection( localToView, normal );
-  v_viewSurfacePosition = transformPosition( localToView, position );
+  v_viewSurfaceNormal = mat4TransformDirection( localToView, normal );
+  v_viewSurfacePosition = mat4TransformPosition( localToView, position );
   v_uv0 = uv;
 
   float displacementAmount = texture2D( displacementMap, vec2(1.0)- uv ).x * displacementScale;
