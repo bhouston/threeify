@@ -1,5 +1,9 @@
 #pragma once
 
+vec3 specularIntensityToF0( in vec3 specularIntensity ) {
+  return specularIntensity * specularIntensity * 0.16;
+}
+
 vec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {
 
 	// Original approximation by Christophe Schlick '94
@@ -17,4 +21,15 @@ vec3 F_Schlick( const in vec3 specularColor, const in float dotLH ) {
 vec3 F_Schlick_2(vec3 f0, vec3 f90, float VdotH)
 {
     return f0 + (f90 - f0) * pow(clamp(1. - VdotH, 0., 1.), 5.);
+}
+
+// Q: Where is this from?  Should we use it?
+vec3 F_Schlick_RoughnessDependent( const in vec3 F0, const in float dotNV, const in float roughness ) {
+
+	// See F_Schlick
+	float fresnel = exp2( ( -5.55473 * dotNV - 6.98316 ) * dotNV );
+	vec3 Fr = max( vec3( 1. - roughness ), F0 ) - F0;
+
+	return Fr * fresnel + F0;
+
 }

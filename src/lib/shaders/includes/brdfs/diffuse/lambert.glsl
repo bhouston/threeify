@@ -1,6 +1,6 @@
 #pragma once
 #pragma include <math/math>
-#pragma include <brdfs/common>
+
 
 // three.js
 vec3 BRDF_Diffuse_Lambert(

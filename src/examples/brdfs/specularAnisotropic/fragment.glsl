@@ -11,7 +11,7 @@ uniform float pointLightRange;
 uniform float     specularAnisotropicScale;
 uniform sampler2D specularAnisotropicFlowMap;
 
-#pragma include <brdfs/common>
+
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>

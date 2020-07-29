@@ -13,7 +13,7 @@ uniform vec2 normalScale;
 uniform float displacementScale;
 uniform int fragmentOutputs;
 uniform int time;
-#pragma include <brdfs/common>
+
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
 #pragma include <brdfs/diffuse/lambert>

@@ -13,3 +13,19 @@ mat3 tangentToViewFromPositionNormalUV( vec3 position, in vec3 normal, in vec2 u
 
   return mat3( tangent, bitangent, normal );
 }
+
+
+
+/*
+/**
+ * this likely should be done after perturbing and rotating.
+ * /
+void alignSurfaceWithViewDirection( inout Surface surface ) {
+
+  // For a back-facing surface, the tangential basis vectors are negated.
+  float facing = step( 0., dot( surface.viewDirection, surface.normal ) ) * 2. - 1.;
+  surface.tangent *= facing;
+  surface.bitangent *= facing;
+  surface.normal *= facing;
+
+}*/

@@ -12,7 +12,7 @@ uniform sampler2D albedoMap;
 
 uniform sampler2D clearCoatBumpMap;
 
-#pragma include <brdfs/common>
+
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
 #pragma include <brdfs/diffuse/lambert>
