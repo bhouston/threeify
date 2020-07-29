@@ -3,6 +3,18 @@
 
 void tests( inout TestSuite suite ) {
 
+  float zero;
+  assert( suite, 0, zero == 0.0 );
+
+  vec2 zero2;
+  assert( suite, 1, length( zero2 ) == 0.0 );
+
+  vec3 zero3;
+  assert( suite, 2, length( zero3 ) == 0.0 );
+
+  vec4 zero4;
+  assert( suite, 3, length( zero4 ) == 0.0 );
+
   assert( suite, 10, eqAbs( cos( PI ), -1., 0.000001 ) );
   assert( suite, 11, eqAbs( cos( PI2 ), 1., 0.000001 ) );
 
@@ -41,16 +53,16 @@ void tests( inout TestSuite suite ) {
   // should be undefined according to spec: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/atan.xhtml
   assert( suite, 126, atan( 1., 0. ) == PI_HALF );
 
- assert( suite, 200, eqAbs( degToRad( 0. ), PI * 0., 0.000001 ) );
- assert( suite, 201, eqAbs( degToRad( 90. ), PI * 0.5, 0.000001 ) );
- assert( suite, 202, eqAbs( degToRad( 180. ), PI * 1., 0.000001 ) );
- assert( suite, 203, eqAbs( degToRad( 270. ), PI * 1.5, 0.000001 ) );
- assert( suite, 204, eqAbs( degToRad( 360. ), PI * 2., 0.000001 ) );
+  assert( suite, 200, eqAbs( degToRad( 0. ), PI * 0., 0.000001 ) );
+  assert( suite, 201, eqAbs( degToRad( 90. ), PI * 0.5, 0.000001 ) );
+  assert( suite, 202, eqAbs( degToRad( 180. ), PI * 1., 0.000001 ) );
+  assert( suite, 203, eqAbs( degToRad( 270. ), PI * 1.5, 0.000001 ) );
+  assert( suite, 204, eqAbs( degToRad( 360. ), PI * 2., 0.000001 ) );
 
- assert( suite, 205, eqAbs( radToDeg( degToRad( 0. ) ), 0., 0.000001 ) );
- assert( suite, 206, eqAbs( radToDeg( degToRad( 90. ) ), 90., 0.000001 ) );
- assert( suite, 207, eqAbs( radToDeg( degToRad( 180. ) ), 180., 0.000001 ) );
- assert( suite, 208, eqAbs( radToDeg( degToRad( 270. ) ), 270., 0.000001 ) );
- assert( suite, 209, eqAbs( radToDeg( degToRad( 360. ) ), 360., 0.000001 ) );
+  assert( suite, 205, eqAbs( radToDeg( degToRad( 0. ) ), 0., 0.000001 ) );
+  assert( suite, 206, eqAbs( radToDeg( degToRad( 90. ) ), 90., 0.000001 ) );
+  assert( suite, 207, eqAbs( radToDeg( degToRad( 180. ) ), 180., 0.000001 ) );
+  assert( suite, 208, eqAbs( radToDeg( degToRad( 270. ) ), 270., 0.000001 ) );
+  assert( suite, 209, eqAbs( radToDeg( degToRad( 360. ) ), 360., 0.000001 ) );
 
 }
