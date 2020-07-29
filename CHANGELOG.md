@@ -1,3 +1,29 @@
+# [1.63.0](https://github.com/threeify/threeify/compare/v1.62.0...v1.63.0) (2020-07-29)
+
+
+### Bug Fixes
+
+* anisotropy works without Surface ([b5c3280](https://github.com/threeify/threeify/commit/b5c3280e854bff0c9f6ee8e4f3747be97e8b275e))
+* make normals, displacement examples work again. ([8de52cf](https://github.com/threeify/threeify/commit/8de52cf45e5184588ef8e41d96dcede08dcb8cbd))
+* sheen works without Surface ([60caa7e](https://github.com/threeify/threeify/commit/60caa7ece0d56b00b38090e664341725551bc03e))
+
+
+### Features
+
+* add degToRad, radToDeg in glsl with unit tests ([a6237eb](https://github.com/threeify/threeify/commit/a6237eb1c139cc6af47a7dde1a49ed09d0c7ffb9))
+* add mat2RotateDirection ([b2761ae](https://github.com/threeify/threeify/commit/b2761ae673806df33831245a5f2208b7b49251c6))
+* add mat4 to glsl unit tests. ([1403c01](https://github.com/threeify/threeify/commit/1403c0189322267a87425a564c5fb08154f7a729))
+* add spherical.glsl and adopt it in latLong conversion code. ([cd76e43](https://github.com/threeify/threeify/commit/cd76e433e1cd6ad4f98baebff410f4846ff907f4))
+* adopt threshold for mat3/mat2 compares. ([80517a6](https://github.com/threeify/threeify/commit/80517a6d3e95c6e7aee516a862a6a9f65adc5560))
+* isolate glsl unit tests that fail and report on them. ([ff0e595](https://github.com/threeify/threeify/commit/ff0e5956b1da73396d50cc6e5587cd05908b4a16))
+* mat2 glsl helpers with tests. ([978dde2](https://github.com/threeify/threeify/commit/978dde2c8faeca1c5e7d55e5d5cfb80574c0cc5b))
+* mat3 glsl helpers with tests ([d1d222b](https://github.com/threeify/threeify/commit/d1d222b1447bacf5fd1a01f282e9a844a80b7bc7))
+* matrix4 -> mat4.glsl and unify matrix func naming scheme. ([e5e9bb6](https://github.com/threeify/threeify/commit/e5e9bb602fdd5d8be1ba0f6f36b4aa34d151846a))
+* rename spherical to nzSpherical to reflect its polarity. ([28e3949](https://github.com/threeify/threeify/commit/28e3949746a334adb6ba317504f7ed4cf5816840))
+* replace Surface struct with proper tangentToView mat3 ([da01669](https://github.com/threeify/threeify/commit/da01669737e8201bd74d577f48d4ceb12624d80e))
+* validated mat3 rotation on axes ([4d023bc](https://github.com/threeify/threeify/commit/4d023bc9be6be9def7ab5aaa580e6fa6e6dc7cc2))
+* yuv <-> linear rgb conversion. ([c864909](https://github.com/threeify/threeify/commit/c864909a5cdb88ef857762e2692a7ae252895365))
+
 # [1.62.0](https://github.com/threeify/threeify/compare/v1.61.1...v1.62.0) (2020-07-28)
 
 
