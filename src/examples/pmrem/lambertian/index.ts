@@ -1,4 +1,5 @@
 import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
+import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
 import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
 import { Euler } from "../../../lib/math/Euler";
 import { Matrix4 } from "../../../lib/math/Matrix4";
@@ -6,44 +7,78 @@ import {
   makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
+  makeMatrix4Translation,
 } from "../../../lib/math/Matrix4.Functions";
+import { Vector2 } from "../../../lib/math/Vector2";
+import { Vector3 } from "../../../lib/math/Vector3";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
 import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
+import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
+import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
 import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
+import {
+  makeTexImage2DFromCubeTexture,
+  makeTexImage2DFromEquirectangularTexture,
+} from "../../../lib/renderers/webgl/textures/TexImage2D";
 import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
 import { TextureWrap } from "../../../lib/renderers/webgl/textures/TextureWrap";
+import { cubeFaceTargets, CubeMapTexture } from "../../../lib/textures/CubeTexture";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSource from "./fragment.glsl";
+import { samplerMaterial } from "./sampler/SamplerMaterial";
 import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
-  const geometry = passGeometry();
-  const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const geometry = icosahedronGeometry(0.75, 2);
+  const material = new ShaderMaterial(vertexSource, fragmentSource);
   const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/latLong.jpg"));
   garageTexture.wrapS = TextureWrap.Repeat;
   garageTexture.wrapT = TextureWrap.ClampToEdge;
   garageTexture.minFilter = TextureFilter.Linear;
-  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/latLong.png"));
-  debugTexture.wrapS = TextureWrap.Repeat;
-  debugTexture.wrapT = TextureWrap.ClampToEdge;
-  debugTexture.minFilter = TextureFilter.Linear;
+
+  const imageSize = new Vector2(1024, 1024);
+  const lambertianCubeTexture = new CubeMapTexture([imageSize, imageSize, imageSize, imageSize, imageSize, imageSize]);
+  lambertianCubeTexture.minFilter = TextureFilter.Linear;
+  lambertianCubeTexture.generateMipmaps = false;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
-  const garageMap = makeTexImage2DFromTexture(context, garageTexture);
-  const debugMap = makeTexImage2DFromTexture(context, debugTexture);
+  const envCubeMap = makeTexImage2DFromEquirectangularTexture(context, garageTexture, new Vector2(1024, 1024));
 
-  const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
-  const passUniforms = {
+  const samplerGeometry = passGeometry();
+  const samplerProgram = makeProgramFromShaderMaterial(context, samplerMaterial);
+  const samplerUniforms = {
+    color: new Vector3(1, 0, 0),
     viewToWorld: new Matrix4(),
     screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
-    latLongMap: garageMap,
+    envCubeMap: envCubeMap,
+    cubeFaceIndex: 0,
+  };
+
+  const samplerBufferGeometry = makeBufferGeometryFromGeometry(context, samplerGeometry);
+  const lambertianCubeMap = makeTexImage2DFromCubeTexture(context, lambertianCubeTexture);
+
+  const framebuffer = new Framebuffer(context);
+
+  cubeFaceTargets.forEach((target, index) => {
+    framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
+    samplerUniforms.cubeFaceIndex = index;
+    samplerUniforms.color.x = index / 6.0;
+
+    renderBufferGeometry(framebuffer, samplerProgram, samplerUniforms, samplerBufferGeometry);
+  });
+
+  const program = makeProgramFromShaderMaterial(context, material);
+  const uniforms = {
+    localToWorld: new Matrix4(),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    cubeMap: lambertianCubeMap,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -51,13 +86,11 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-
-    passUniforms.viewToWorld = makeMatrix4Inverse(
-      makeMatrix4RotationFromEuler(new Euler(Math.sin(now * 0.0003), now * 0.0004, 0)),
+    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
+      uniforms.localToWorld,
     );
-    passUniforms.latLongMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
-
-    renderBufferGeometry(canvasFramebuffer, passProgram, passUniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
   }
 
   animate();

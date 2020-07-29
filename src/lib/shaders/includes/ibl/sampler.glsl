@@ -1,24 +1,10 @@
-mat3 normalToTangentSpace( const in vec3 normal ) {
-  vec3 bitangent = vec3(0., 1., 0.);
-	if (abs(normal.y) > abs(normal.x) && abs(normal.y) > abs(normal.z)) {
-		// Sampling +Y or -Y, so we need a more robust bitangent.
-		if (NdotY > 0.0) {
-			bitangent = vec3(0.0, 0.0, 1.0);
-		}
-		else {
-			bitangent = vec3(0.0, 0.0, -1.0);
-		}
-	}
 
-  vec3 tangent = cross(bitangent, normal);
-  bitangent = cross(normal, tangent);
-  return  mat3( tangent, bitangent, normal );
-}
 
 #pragma include <math/math>
-#pragma include <math/hammersley.glsl>
+#pragma include <math/sampling/hammersley.glsl>
 #pragma include <brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
 #pragma include <brdfs/sheen/d_charlie>
+#pragma include <normals/tangentSpace.glsl>
 
 #define NUM_SAMPLES 1024
 #define LOD_BIAS 1
@@ -27,10 +13,48 @@ mat3 normalToTangentSpace( const in vec3 normal ) {
 #define DISTRIBUTION_GGX 1
 #define DISTRIBUTION_CHARLIE 2
 
+
+vec3 BRDF_Diffuse_Lambert_SampleDirection( vec2 sampleUv ) {
+	float phi = PI2 * sampleUv.x;
+  float cosTheta = 0.;
+	float sinTheta = 0.;
+
+  cosTheta = 1. - sampleUv.y;
+  sinTheta = sqrt( 1. - cosTheta*cosTheta );
+
+  return normalize( vec3( sinTheta * cos( phi ), sinTheta * sin( phi ), cosTheta ) );
+}
+
+vec3 BRDF_Specular_GGX_SampleDirection( vec2 sampleUv ) {
+	float phi = PI2 * sampleUv.x;
+  float cosTheta = 0.;
+	float sinTheta = 0.;
+
+ 	float alphaRoughness = pow2( roughness );
+	cosTheta = sqrt( ( 1. - sampleUv.y ) / ( 1. + ( pow2( alphaRoughness ) - 1. ) * sampleUv.y ) );
+	sinTheta = sqrt( 1. - pow2( cosTheta ) );
+
+  return normalize( vec3( sinTheta * cos( phi ), sinTheta * sin( phi ), cosTheta ) );
+}
+
+vec3 BRDF_Specular_GGX_SampleDirection( vec2 sampleUv ) {
+	float phi = PI2 * sampleUv.x;
+  float cosTheta = 0.;
+	float sinTheta = 0.;
+
+ 	float alphaRoughness = pow2( roughness );
+  sinTheta = pow( sampleUv.y, alphaRoughness / ( 2.*alphaRoughness + 1. ) );
+  cosTheta = sqrt( 1. - pow2( sinTheta ) );
+
+  return normalize( vec3( sinTheta * cos( phi ), sinTheta * sin( phi ), cosTheta ) );
+}
+
+/*
+
 vec3 getImportanceSample(uint distributionType, uint sampleIndex, vec3 N, float roughness) {
 
   float u = float(sampleIndex) / float(NUM_SAMPLES);
-	float v = Hammersley(sampleIndex);
+	float v = hammersley(sampleIndex);
 
 	float phi = PI2 * u;
   float cosTheta = 0.;
@@ -54,11 +78,37 @@ vec3 getImportanceSample(uint distributionType, uint sampleIndex, vec3 N, float 
 	}
 
 	vec3 sampleDirection = normalize( vec3( sinTheta * cos( phi ), sinTheta * sin( phi ), cosTheta ) );
-  mat3 tangentFrame = normalToTangentSpace( surfaceNormal );
+  mat3 tangentToView = tangentToViewFromNormal( surfaceNormal );
 
-	return normalMatrix * sampleDirection;
+	return tangentToView * sampleDirection;
+}*/
+
+float BRDF_Specular_GGX_PDF(
+  const in vec3 normal,
+  const in vec3 viewDirection,
+  const in vec3 halfVector,
+  const in float roughness ) {
+
+  float dotVH = saturate( dot( viewDirection, halfVector ) );
+  float dotNH = saturate( dot( normal, halfVector ) );
+  float alpha = pow2( roughness );
+  float D = D_GGX( alpha, dotNH );
+  return max( D * dotNH / ( 4. * dotVH ), 0.);
 }
 
+float BRDF_Sheen_Charlie_PDF(
+  const in vec3 normal,
+  const in vec3 viewDirection,
+  const in vec3 halfVector,
+  const in float sheenRoughness ) {
+
+  float dotVH = saturate( dot( viewDirection, halfVector ) );
+  float dotNH = saturate( dot( normal, halfVector ) );
+  float D = D_Charlie( sheenRoughness, dotNH );
+  return max( D * dotNH / ( 4. * dotVH ), 0. );
+}
+
+/*
 float PDF(uint distributionType, vec3 V, vec3 H, vec3 N, vec3 L, float roughness) {
 
   if( distributionType == DISTRIBUTION_LAMBERTIAN ) {
@@ -84,10 +134,10 @@ float PDF(uint distributionType, vec3 V, vec3 H, vec3 N, vec3 L, float roughness
 	}
 
 	return 0.;
-}
+}*/
 
-vec3 sampleIBL( vec3 direction, float lod );
 
+/*
 vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWidth ) {
 
 	vec4 color = vec4(0.f);
@@ -135,6 +185,7 @@ vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWid
 	return color.rgb / color.w;
 }
 
+*/
 #pragma include <brdfs/specular/v_ggx_smithcorrelated>  // NOTE: takes alpha, original versions here took roughness
 #pragma include <brdfs/sheen/v_charlie>
 
@@ -172,24 +223,10 @@ vec3 LUT(uint distributionType, float NdotV, float roughness)
 		{
 
 			if (distributionType == DISTRIBUTION_GGX)
-			{
-				// LUT for GGX distribution.
-
-				// Taken from: https://bruop.github.io/ibl
-				// Shadertoy: https://www.shadertoy.com/view/3lXXDB
-				// Terms besides V are from the GGX PDF we're dividing by.
-				float V_pdf = V_SmithGGXCorrelated(alphaRoughness, dotNV, dotNL) * dotVH * dotNL / dotNH;
-				float Fc = pow(1.0 - dotVH, 5.0);
-				A += (1.0 - Fc) * V_pdf;
-				B += Fc * V_pdf;
-				C += 0;
-			}
-
-			if (distributionType == DISTRIBUTION_CHARLIE)
-			{
-				// LUT for Charlie distribution.
-				float sheenDistribution = D_Charlie(roughness, dotNH);
-				float sheenVisibility = V_Charlie(roughness, dotNL, dotNV);
+			{		float dotVH = saturate( dot( viewDirection, halfVector ) );
+		float dotNH = saturate( dot( normal, halfVector ) );
+		float D = D_Charlie( sheenRoughness, dotNH );
+		return max( D * dotNH / ( 4. * dotVH ), 0. );
 
 				A += 0;
 				B += 0;

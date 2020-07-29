@@ -1,14 +1,17 @@
 attribute vec3 position;
+attribute vec3 normal;
 
-varying vec4 v_homogeneousVertexPosition;
+uniform mat4 localToWorld;
+uniform mat4 worldToView;
+uniform mat4 viewToScreen;
+
+varying vec3 v_viewPosition;
+varying vec3 v_viewNormal;
 
 void main() {
 
-  // homogeneous vertex position
-  gl_Position.xy = position.xy;
-  gl_Position.z = -1.; // position at near clipping plane.  (set to 1. for far clipping plane.)
-  gl_Position.w = 1.; // nortmalized
-
-  v_homogeneousVertexPosition = gl_Position;
+  v_viewNormal = normalize( ( worldToView * localToWorld * vec4( normalize( position ), 0. ) ).xyz );
+  v_viewPosition = ( worldToView * localToWorld * vec4( position, 1. ) ).xyz;
+  gl_Position = viewToScreen * vec4( v_viewPosition, 1. );
 
 }
