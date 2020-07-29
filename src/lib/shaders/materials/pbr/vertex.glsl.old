@@ -14,11 +14,11 @@ varying vec2 v_uv2;
 uniform mat4 localToView;  // geometry
 uniform mat4 viewToScreen; // camera
 
-#pragma include <math/matrix4>
+#pragma include <math/mat4>
 
 void main() {
 
-    v_viewPosition = transformPosition( localToView, position );
+    v_viewPosition = mat4TransformPosition( localToView, position );
     v_viewNormal = transformNormal( localToView, normal );
     v_uv0 = uv0;
     v_uv1 = uv1;

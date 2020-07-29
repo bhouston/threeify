@@ -47,7 +47,7 @@ async function init(): Promise<null> {
     pointLightRange: 12.0,
 
     // materials
-    normalModulator: new Vector2(1, 1),
+    normalModulator: new Vector2(-1, 1),
     normalMap: normalsMap,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -63,7 +63,7 @@ async function init(): Promise<null> {
       uniforms.localToWorld,
     );
     // Q: Why is this one -1 required?  Is the tangent space from UV calculation incorrect?
-    uniforms.normalModulator = new Vector2(1, 1).multiplyByScalar(Math.cos(now * 0.001) * 0.5 + 0.5);
+    uniforms.normalModulator = new Vector2(-1, 1).multiplyByScalar(Math.cos(now * 0.001) * 0.5 + 0.5);
     uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.sin(now * 0.003) * 3.0, 1.5);
 
     canvasFramebuffer.clear(BufferBit.All);

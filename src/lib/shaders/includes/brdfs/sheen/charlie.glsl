@@ -11,17 +11,24 @@
 #pragma include "v_charlie"
 
 // f_sheen
-vec3 BRDF_Sheen_Charlie( const in Surface surface, vec3 lightDirection, vec3 sheenColor, float sheenIntensity, float sheenRoughness ) {
-	vec3 halfDirection = normalize( lightDirection + surface.viewDirection );
+vec3 BRDF_Sheen_Charlie(
+  const in vec3 normal,
+  const in vec3 viewDirection,
+  const in vec3 lightDirection,
+  const in vec3 sheenColor,
+  const in float sheenIntensity,
+  const in float sheenRoughness ) {
 
-  sheenRoughness = clamp( sheenRoughness, 0.07, 1. );
+	vec3 halfDirection = normalize( lightDirection + viewDirection );
 
-	float dotNL = saturate( dot( surface.normal, lightDirection ) );
-	float dotNV = saturate( dot( surface.normal, surface.viewDirection ) );
-	float dotNH = saturate( dot( surface.normal, halfDirection ) );
+  float safeSheenRoughness = clamp( sheenRoughness, 0.07, 1. );
 
-  float sheenDistribution = D_Charlie(sheenRoughness, dotNH);
-  float sheenVisibility = V_Charlie(sheenRoughness, dotNL, dotNV);
+	float dotNL = saturate( dot( normal, lightDirection ) );
+	float dotNV = saturate( dot( normal, viewDirection ) );
+	float dotNH = saturate( dot( normal, halfDirection ) );
+
+  float sheenDistribution = D_Charlie( safeSheenRoughness, dotNH );
+  float sheenVisibility = V_Charlie( safeSheenRoughness, dotNL, dotNV );
 
   return sheenColor * sheenIntensity * sheenDistribution * sheenVisibility;
 

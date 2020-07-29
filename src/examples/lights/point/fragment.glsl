@@ -18,6 +18,7 @@ uniform sampler2D normalMap;
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
 #pragma include <normals/normalPacking>
+#pragma include <normals/tangentSpace>
 
 void main() {
 
@@ -26,15 +27,15 @@ void main() {
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0( specular );
 
-  vec3 normal = vec3( normalModulator, 1. ) * rgbToNormal( texture2D( normalMap, v_uv0 ).rgb );
+  vec3 normalDelta = vec3( normalModulator, 1. ) * rgbToNormal( texture2D( normalMap, v_uv0 ).rgb );
 
-  Surface surface;
-  surface.position = v_viewSurfacePosition;
-  surface.normal = normalize( v_viewSurfaceNormal );
-  surface.viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 position = v_viewSurfacePosition;
+  vec3 normal = normalize( v_viewSurfaceNormal );
+  vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
-  uvToTangentFrame( surface, v_uv0 );
-  perturbSurfaceNormal_TangentSpace( surface, normal );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  tangentToView *= mat3( vec3( 1., 0., 0. ), vec3( 0., 1., 0. ), normalDelta );
+  normal = tangentToView[2];
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -42,13 +43,13 @@ void main() {
   punctualLight.range = pointLightRange;
 
   DirectLight directLight;
-  pointLightToDirectLight( surface, punctualLight, directLight );
+  pointLightToDirectLight( position, punctualLight, directLight );
 
-  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
+  float dotNL = saturate( dot( directLight.direction, normal ) );
 
   vec3 outgoingRadiance;
   outgoingRadiance += directLight.radiance * dotNL *
-    BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+    BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness ) ;
   outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 

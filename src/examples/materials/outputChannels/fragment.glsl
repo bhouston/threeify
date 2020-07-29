@@ -35,13 +35,12 @@ void main() {
   outputChannels.metalness = 0.0;
   outputChannels.roughness = specularRoughness;
 
-  Surface surface;
-  surface.position = v_viewSurfacePosition;
-  surface.normal = normalize( v_viewSurfaceNormal );
-  surface.viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 position = v_viewSurfacePosition;
+  vec3 normal = normalize( v_viewSurfaceNormal );
+  vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
-  uvToTangentFrame( surface, v_uv0 );
-  perturbSurfaceNormal_TangentSpace( surface, normal );
+  mat3 tangentToView = tangentToViewFromPositionUV( surface.position, surface.normal, v_uv0 );
+  tangentToView *= mat3( vec3( 1., 0., 0. ), vec3( 0., 1., 0. ), normal );
 
   outputChannels.normal = surface.normal;
   outputChannels.clipDepth = -surface.position.z / 4.0;
@@ -60,7 +59,7 @@ void main() {
   vec3 outputSpecular;
   vec3 outputRadiance;
   outputRadiance += outputChannels.specular = directLight.radiance * dotNL *
-    BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness );
+    BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness );
   outputRadiance += outputChannels.diffuse = directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 

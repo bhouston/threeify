@@ -9,18 +9,20 @@ const float EPSILON = 1e-6;
 
 float saturate( const in float a ) { return clamp( a, 0., 1. ); }
 vec3 saturate( const in vec3 a ) { return clamp( a, 0., 1. ); }
-vec3 whiteComplement( const in vec3 a ) { return 1.0 - saturate(a); }
+vec3 whiteComplement( const in vec3 a ) { return 1. - saturate(a); }
 float pow2( const in float x ) { return x*x; }
 float pow3( const in float x ) { return x*x*x; }
 float pow4( const in float x ) { float x2 = x*x; return x2*x2; }
 float average( const in vec3 color ) { return dot( color, vec3( 0.333333333333 ) ); }
+float degToRad( const in float deg ) { return deg * PI / 180.; }
+float radToDeg( const in float rad ) { return rad * 180. / PI; }
 
 const float NAN = sqrt( 0. );
-bool isnan( const float x ) {
+bool isnan( const in float x ) {
   // this appears to be against the specification. another solution was offered here:
   // https://www.shadertoy.com/view/lsjBDy
   return (x) == NAN;
 }
-bool isinf( const float x ) {
+bool isinf( const in float x ) {
   return (x) == (x)+1.;
 }

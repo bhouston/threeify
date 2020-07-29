@@ -11,14 +11,20 @@
 #pragma include "v_ashikhmin"
 
 // f_sheen
-vec3 BRDF_Sheen_Ashikhmin( const in Surface surface, vec3 lightDirection, vec3 sheenColor, float sheenIntensity, float sheenRoughness ) {
-	vec3 halfDirection = normalize( lightDirection + surface.viewDirection );
+vec3 BRDF_Sheen_Ashikhmin(
+  const in vec3 normal,
+  const in vec3 viewDirection,
+  const in vec3 lightDirection,
+  const in vec3 sheenColor,
+  const in float sheenIntensity,
+  const in float sheenRoughness ) {
+	vec3 halfDirection = normalize( lightDirection + viewDirection );
 
   sheenRoughness = clamp( sheenRoughness, 0.07, 1. );
 
-	float dotNL = saturate( dot( surface.normal, lightDirection ) );
-	float dotNV = saturate( dot( surface.normal, surface.viewDirection ) );
-	float dotNH = saturate( dot( surface.normal, halfDirection ) );
+	float dotNL = saturate( dot( normal, lightDirection ) );
+	float dotNV = saturate( dot( normal, viewDirection ) );
+	float dotNH = saturate( dot( normal, halfDirection ) );
 
   float sheenDistribution = D_Ashikhmin(sheenRoughness, dotNH);
   float sheenVisibility = V_Ashikhmin(dotNL, dotNV);

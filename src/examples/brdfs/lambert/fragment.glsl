@@ -29,14 +29,14 @@ void main() {
   punctualLight.innerConeCos = 0.;
   punctualLight.outerConeCos = 0.;
 
-  Surface surface;
-  surface.position = v_viewSurfacePosition;
-  surface.normal = v_viewSurfaceNormal;
+  vec3 position = v_viewSurfacePosition;
+  vec3 normal = normalize( v_viewSurfaceNormal );
+  vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
   DirectLight directLight;
-  pointLightToDirectLight( surface, punctualLight, directLight );
+  pointLightToDirectLight( position, punctualLight, directLight );
 
-  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
+  float dotNL = saturate( dot( directLight.direction, normal ) );
 
   vec3 outgoingRadiance;
   outgoingRadiance += directLight.radiance * dotNL *

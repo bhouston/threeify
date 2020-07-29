@@ -19,6 +19,7 @@ uniform float sheenRoughness;
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
 #pragma include <color/spaces/srgb>
+#pragma include <normals/tangentSpace>
 
 void main() {
 
@@ -27,12 +28,12 @@ void main() {
   float specularRoughness = 0.5;
   vec3 specularF0 = specularIntensityToF0( specular );
 
-  Surface surface;
-  surface.position = v_viewSurfacePosition;
-  surface.normal = normalize( v_viewSurfaceNormal );
-  surface.viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 position = v_viewSurfacePosition;
+  vec3 normal = normalize( v_viewSurfaceNormal );
+  vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
-  uvToTangentFrame( surface, v_uv0 );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  normal = tangentToView[2];
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -40,15 +41,15 @@ void main() {
   punctualLight.range = pointLightRange;
 
   DirectLight directLight;
-  pointLightToDirectLight( surface, punctualLight, directLight );
+  pointLightToDirectLight( position, punctualLight, directLight );
 
-  float dotNL = saturate( dot( directLight.direction, surface.normal ) );
+  float dotNL = saturate( dot( directLight.direction, normal ) );
 
   vec3 outgoingRadiance;
   outgoingRadiance += directLight.radiance * dotNL *
-    BRDF_Sheen_Charlie( surface, directLight.direction, sheenColor, sheenIntensity, sheenRoughness ) ;
+    BRDF_Sheen_Charlie( normal, viewDirection, directLight.direction, sheenColor, sheenIntensity, sheenRoughness ) ;
   outgoingRadiance +=  (1. - sheenIntensity ) * directLight.radiance * dotNL *
-    BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+    BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness ) ;
   outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 

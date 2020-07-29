@@ -1,4 +1,4 @@
-mat3 normalToTangentFrame( const in vec3 normal ) {
+mat3 normalToTangentSpace( const in vec3 normal ) {
   vec3 bitangent = vec3(0., 1., 0.);
 	if (abs(normal.y) > abs(normal.x) && abs(normal.y) > abs(normal.z)) {
 		// Sampling +Y or -Y, so we need a more robust bitangent.
@@ -54,7 +54,7 @@ vec3 getImportanceSample(uint distributionType, uint sampleIndex, vec3 N, float 
 	}
 
 	vec3 sampleDirection = normalize( vec3( sinTheta * cos( phi ), sinTheta * sin( phi ), cosTheta ) );
-  mat3 tangentFrame = normalToTangentFrame( surfaceNormal );
+  mat3 tangentFrame = normalToTangentSpace( surfaceNormal );
 
 	return normalMatrix * sampleDirection;
 }

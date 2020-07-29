@@ -23,6 +23,7 @@ uniform sampler2D albedoMap;
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
 #pragma include <normals/normalPacking>
+#pragma include <normals/tangentSpace>
 
 void main() {
 
@@ -31,16 +32,16 @@ void main() {
   float specularRoughness = .25;
   vec3 specularF0 = specularIntensityToF0( specular );
 
-  Surface surface;
-  surface.position = v_viewSurfacePosition;
-  surface.normal = normalize( v_viewSurfaceNormal );
-  surface.viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 position = v_viewSurfacePosition;
+  vec3 normal = normalize( v_viewSurfaceNormal );
+  vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
-  uvToTangentFrame( surface, v_uv0 );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  normal = tangentToView[2];
 
   vec3 outgoingRadiance;
 
-  for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i ++ ) {
+  for( int i = 0; i < punctualLightType.length(); i ++ ) {
 
     if( i >= numPunctualLights ) break;
 
@@ -55,19 +56,19 @@ void main() {
 
     DirectLight directLight;
     if( punctualLight.type == 0 ) {
-      pointLightToDirectLight( surface, punctualLight, directLight );
+      pointLightToDirectLight( position, punctualLight, directLight );
     }
     if( punctualLight.type == 1 ) {
-      spotLightToDirectLight( surface, punctualLight, directLight );
+      spotLightToDirectLight( position, punctualLight, directLight );
     }
     if( punctualLight.type == 2 ) {
-      directionalLightToDirectLight( surface, punctualLight, directLight );
+      directionalLightToDirectLight( punctualLight, directLight );
     }
 
-    float dotNL = saturate( dot( directLight.direction, surface.normal ) );
+    float dotNL = saturate( dot( directLight.direction, normal ) );
 
     outgoingRadiance += directLight.radiance * dotNL *
-      BRDF_Specular_GGX( surface, directLight.direction, specularF0, specularRoughness ) ;
+      BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness ) ;
     outgoingRadiance += directLight.radiance * dotNL *
       BRDF_Diffuse_Lambert( albedo );
 
