@@ -1,6 +1,5 @@
 #pragma once
 
-
 mat4 mat4Identity() {
   return mat4(
     1., 0., 0., 0.,
@@ -52,7 +51,6 @@ mat3 mat3Scale( vec3 scale ){
     vec3( 0., scale.y, 0. ),
     vec3( 0., 0., scale.z ) );
 }
-
 
 vec3 mat4TransformPosition( in mat4 m, in vec3 p ) {
     return ( m * vec4( p, 1. ) ).xyz;

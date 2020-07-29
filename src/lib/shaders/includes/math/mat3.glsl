@@ -31,9 +31,11 @@ mat3 mat3RotateZDirection( vec2 dir ){
 mat3 mat3RotateX( float angle ){
   return mat3RotateXDirection( vec2( cos(angle), sin(angle) ) );
 }
+
 mat3 mat3RotateY( float angle ){
   return mat3RotateYDirection( vec2( cos(angle), sin(angle) ) );
 }
+
 mat3 mat3RotateZ( float angle ){
   return mat3RotateZDirection( vec2( cos(angle), sin(angle) ) );
 }
