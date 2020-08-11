@@ -1,4 +1,5 @@
 import { planeGeometry } from "../../../../lib/geometry/primitives/planeGeometry";
+import { Blending } from "../../../../lib/materials/Blending";
 import { ShaderMaterial } from "../../../../lib/materials/ShaderMaterial";
 import { Matrix4 } from "../../../../lib/math/Matrix4";
 import {
@@ -11,7 +12,10 @@ import {
 import { Vector2 } from "../../../../lib/math/Vector2";
 import { Vector3 } from "../../../../lib/math/Vector3";
 import { transformPoint } from "../../../../lib/math/Vector3Matrix4.Functions";
+import { blendModeToBlendState, BlendState } from "../../../../lib/renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { ClearState } from "../../../../lib/renderers/webgl/ClearState";
+import { BufferBit } from "../../../../lib/renderers/webgl/framebuffers/BufferBit";
 import {
   renderBufferGeometry,
   VirtualFramebuffer,
@@ -32,6 +36,7 @@ export class LayerRenderer {
   texImage2DCache: TexImage2DMap = {};
   #bufferGeometry: BufferGeometry;
   #program: Program;
+  #blendState: BlendState;
   screenToView = new Matrix4();
   viewToScreen = new Matrix4();
   renderSize = new Vector2();
@@ -40,18 +45,21 @@ export class LayerRenderer {
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
   layers: Layer[] = [];
   firstRender = true;
+  backgroundColor = new Vector3(1, 1, 1);
 
   constructor(canvas: HTMLCanvasElement) {
     this.context = new RenderingContext(canvas);
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, planeGeometry(1, 1, 1, 1));
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
+    this.#blendState = blendModeToBlendState(Blending.Over, false);
   }
 
   // have a sizeChanged function (for when the div changes size.)
   updateSize(framebuffer: VirtualFramebuffer): void {
     const renderSize = framebuffer.size;
     if (!renderSize.equals(this.renderSize)) {
-      const renderAspectRatio = renderSize.height / renderSize.width;
+      // console.log(`resizing canvas framebuffer to (${renderSize.x} ${renderSize.y})`);
+      const renderAspectRatio = renderSize.width / renderSize.height;
       this.viewToScreen = makeMatrix4OrthographicSimple(
         renderSize.height,
         new Vector2(0.0, 0.0),
@@ -117,6 +125,10 @@ export class LayerRenderer {
     const worldToViewScale = makeMatrix4Scale(new Vector3(scale, scale, 1.0));
     const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
 
+    // TODO: cache this.  Maybe expose it as this.clearState to allow setting bg alpha.
+    const whiteClearState = new ClearState(this.backgroundColor, 1.0);
+    framebuffer.clear(BufferBit.All, whiteClearState);
+
     this.layers.forEach((layer, index) => {
       const uniforms = {
         screenToView: this.screenToView,
@@ -144,7 +156,7 @@ export class LayerRenderer {
       }
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry(framebuffer, this.#program, uniforms, this.#bufferGeometry);
+      renderBufferGeometry(framebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, this.#blendState);
     });
   }
 }

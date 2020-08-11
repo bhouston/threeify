@@ -14,7 +14,6 @@ void main() {
   outputColor += sRGBToLinear( layerColor.rgb );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
-  gl_FragColor.b = 0.0;
   gl_FragColor.a = layerColor.a;
 
 }
