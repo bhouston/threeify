@@ -39,6 +39,7 @@ export class LayerRenderer {
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
   layers: Layer[] = [];
+  firstRender = true;
 
   constructor(canvas: HTMLCanvasElement) {
     this.context = new RenderingContext(canvas);
@@ -51,7 +52,14 @@ export class LayerRenderer {
     const renderSize = framebuffer.size;
     if (!renderSize.equals(this.renderSize)) {
       const renderAspectRatio = renderSize.height / renderSize.width;
-      this.viewToScreen = makeMatrix4OrthographicSimple(1.0, new Vector2(0.0, 0.0), 0, 1, 0, renderAspectRatio);
+      this.viewToScreen = makeMatrix4OrthographicSimple(
+        renderSize.height,
+        new Vector2(0.0, 0.0),
+        0.1,
+        3,
+        1,
+        renderAspectRatio,
+      );
       this.screenToView = makeMatrix4Inverse(this.viewToScreen);
       this.renderSize.copy(renderSize);
     }
@@ -94,11 +102,20 @@ export class LayerRenderer {
       this.renderSize.height / this.layerMaxSize.height,
     );
     const scale = fitScale * this.zoomScale;
+    if (this.firstRender) {
+      console.log("renderSize", this.renderSize);
+      console.log("layerMaxSize", this.layerMaxSize);
+      console.log("fitScale", fitScale);
+      console.log("zoomScale", this.zoomScale);
+      console.log("scale", scale);
+    }
 
     // convert from layer pixel space to view space using zoom and pan
-    const worldToViewTranslation = makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, -0.5));
-    const worldToViewScale = makeMatrix4Scale(new Vector3(scale, scale, scale));
-    const worldToView = makeMatrix4Concatenation(worldToViewTranslation, worldToViewScale);
+    const worldToViewTranslation = makeMatrix4Translation(
+      new Vector3(this.panPosition.x - this.layerMaxSize.x * 0.5, this.panPosition.y - this.layerMaxSize.y * 0.5, 0.0),
+    );
+    const worldToViewScale = makeMatrix4Scale(new Vector3(scale, scale, 1.0));
+    const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
 
     this.layers.forEach((layer, index) => {
       const uniforms = {
@@ -108,19 +125,23 @@ export class LayerRenderer {
         localToWorld: layer.localToWorld,
         layerMap: layer.texImage2D,
       };
-      console.log(`layer ${index}:`);
-      const localTopLeft = new Vector3(0, 0, 0);
-      const localBottomRight = new Vector3(1, 1, 0);
-      console.log(localTopLeft, localBottomRight);
-      const worldTopLeft = transformPoint(localTopLeft, uniforms.localToWorld);
-      const worldBottomRight = transformPoint(localBottomRight, uniforms.localToWorld);
-      console.log(worldTopLeft, worldBottomRight);
-      const viewTopLeft = transformPoint(worldTopLeft, uniforms.worldToView);
-      const viewBottomRight = transformPoint(worldBottomRight, uniforms.worldToView);
-      console.log(viewTopLeft, viewBottomRight);
-      const screenTopLeft = transformPoint(viewTopLeft, uniforms.viewToScreen);
-      const screenBottomRight = transformPoint(viewBottomRight, uniforms.viewToScreen);
-      console.log(screenTopLeft, screenBottomRight);
+
+      if (this.firstRender) {
+        console.log(`layer ${index}:`);
+        const localTopLeft = new Vector3(0, 0, 0);
+        const localBottomRight = new Vector3(1, 1, 0);
+        console.log("  local:", localTopLeft, localBottomRight);
+        const worldTopLeft = transformPoint(localTopLeft, uniforms.localToWorld);
+        const worldBottomRight = transformPoint(localBottomRight, uniforms.localToWorld);
+        console.log("  world:", worldTopLeft, worldBottomRight);
+        const viewTopLeft = transformPoint(worldTopLeft, uniforms.worldToView);
+        const viewBottomRight = transformPoint(worldBottomRight, uniforms.worldToView);
+        console.log("  view:", viewTopLeft, viewBottomRight);
+        const screenTopLeft = transformPoint(viewTopLeft, uniforms.viewToScreen);
+        const screenBottomRight = transformPoint(viewBottomRight, uniforms.viewToScreen);
+        console.log("  screen:", screenTopLeft, screenBottomRight);
+        this.firstRender = false;
+      }
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
       renderBufferGeometry(framebuffer, this.#program, uniforms, this.#bufferGeometry);

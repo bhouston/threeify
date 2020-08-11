@@ -33,7 +33,7 @@ async function init(): Promise<null> {
     layerRenderer.layers = layers;
     layerRenderer.context.canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     layerRenderer.render(layerRenderer.context.canvasFramebuffer);
-    console.log("drawing splats");
+    // console.log("drawing splats");
   }
 
   animate();
