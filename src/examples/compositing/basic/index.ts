@@ -14,13 +14,13 @@ async function init(): Promise<null> {
   const url = "/assets/textures/decals/splat.png";
   const image = await fetchImage(url);
   const texImage2D = await layerRenderer.loadTexImage2D(url, image);
-  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+  const whiteClearState = new ClearState(new Vector3(0, 0, 0), 1.0);
 
   function animate(): void {
     requestAnimationFrame(animate);
 
     const layers: Layer[] = [];
-    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(0, 0)));
+    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(100, 100)));
     layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(100, 0)));
     layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(0, 100)));
     layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(100, 100)));
