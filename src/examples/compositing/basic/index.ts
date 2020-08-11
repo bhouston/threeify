@@ -1,63 +1,39 @@
-import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler } from "../../../lib/math/Euler";
-import { Matrix4 } from "../../../lib/math/Matrix4";
-import {
-  makeMatrix4Inverse,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-} from "../../../lib/math/Matrix4.Functions";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
-import { TextureWrap } from "../../../lib/renderers/webgl/textures/TextureWrap";
+import { Vector2 } from "../../../lib/math/Vector2";
+import { Vector3 } from "../../../lib/math/Vector3";
+import { ClearState } from "../../../lib/renderers/webgl/ClearState";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+import { Layer } from "./layers/Layer";
+import { LayerRenderer } from "./layers/LayerRenderer";
 
 async function init(): Promise<null> {
-  const geometry = passGeometry();
-  const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
-  const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/latLong.jpg"));
-  garageTexture.wrapS = TextureWrap.Repeat;
-  garageTexture.wrapT = TextureWrap.ClampToEdge;
-  garageTexture.minFilter = TextureFilter.Linear;
-  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/latLong.png"));
-  debugTexture.wrapS = TextureWrap.Repeat;
-  debugTexture.wrapT = TextureWrap.ClampToEdge;
-  debugTexture.minFilter = TextureFilter.Linear;
+  const layerRenderer = new LayerRenderer(document.getElementById("framebuffer") as HTMLCanvasElement);
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  layerRenderer.layerMaxSize = new Vector2(2048, 2048);
 
-  const garageMap = makeTexImage2DFromTexture(context, garageTexture);
-  const debugMap = makeTexImage2DFromTexture(context, debugTexture);
+  const url = "/assets/textures/decals/splat.png";
+  const image = await fetchImage(url);
+  const texImage2D = await layerRenderer.loadTexImage2D(url, image);
+  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
 
-  const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
-  const passUniforms = {
-    viewToWorld: new Matrix4(),
-    screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
-    latLongMap: garageMap,
-  };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
   function animate(): void {
     requestAnimationFrame(animate);
 
-    const now = Date.now();
+    const layers: Layer[] = [];
+    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(0, 0)));
+    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(100, 0)));
+    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(0, 100)));
+    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(100, 100)));
+    layers.push(new Layer(layerRenderer, url, texImage2D, new Vector2(200, 200)));
 
-    passUniforms.viewToWorld = makeMatrix4Inverse(
-      makeMatrix4RotationFromEuler(new Euler(Math.sin(now * 0.0003), now * 0.0004, 0)),
-    );
-    passUniforms.latLongMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
+    // const now = Date.now();
+    // layerRenderer.zoomScale = Math.sin(now * 0.0001) + 2.0;
+    // layerRenderer.panPosition = new Vector2(Math.cos(now * 0.0003), Math.sin(now * 0.0002));
 
-    renderBufferGeometry(canvasFramebuffer, passProgram, passUniforms, bufferGeometry, depthTestState);
+    layerRenderer.layers = layers;
+    layerRenderer.context.canvasFramebuffer.clear(BufferBit.All, whiteClearState);
+    layerRenderer.render(layerRenderer.context.canvasFramebuffer);
+    console.log("drawing splats");
   }
 
   animate();

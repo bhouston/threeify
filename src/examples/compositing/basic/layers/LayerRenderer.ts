@@ -10,6 +10,7 @@ import {
 } from "../../../../lib/math/Matrix4.Functions";
 import { Vector2 } from "../../../../lib/math/Vector2";
 import { Vector3 } from "../../../../lib/math/Vector3";
+import { transformPoint } from "../../../../lib/math/Vector3Matrix4.Functions";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../../../lib/renderers/webgl/buffers/BufferGeometry";
 import {
   renderBufferGeometry,
@@ -17,19 +18,18 @@ import {
 } from "../../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial, Program } from "../../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../../lib/renderers/webgl/textures/TexImage2D";
+import { makeTexImage2DFromTexture, TexImage2D } from "../../../../lib/renderers/webgl/textures/TexImage2D";
 import { TextureWrap } from "../../../../lib/renderers/webgl/textures/TextureWrap";
-import { fetchImage } from "../../../../lib/textures/loaders/Image";
 import { Texture } from "../../../../lib/textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
 import vertexSource from "./vertex.glsl";
 
-export type LayerMap = { [key: string]: Layer | undefined };
+export type TexImage2DMap = { [key: string]: TexImage2D | undefined };
 
 export class LayerRenderer {
-  #context: RenderingContext;
-  layerCache: LayerMap = {};
+  context: RenderingContext;
+  texImage2DCache: TexImage2DMap = {};
   #bufferGeometry: BufferGeometry;
   #program: Program;
   screenToView = new Matrix4();
@@ -41,9 +41,9 @@ export class LayerRenderer {
   layers: Layer[] = [];
 
   constructor(canvas: HTMLCanvasElement) {
-    this.#context = new RenderingContext(canvas);
-    this.#bufferGeometry = makeBufferGeometryFromGeometry(this.#context, planeGeometry(1, 1, 1, 1));
-    this.#program = makeProgramFromShaderMaterial(this.#context, new ShaderMaterial(vertexSource, fragmentSource));
+    this.context = new RenderingContext(canvas);
+    this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, planeGeometry(1, 1, 1, 1));
+    this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
   }
 
   // have a sizeChanged function (for when the div changes size.)
@@ -57,32 +57,26 @@ export class LayerRenderer {
     }
   }
 
-  // preload image URL, returns promise?
-  fetchLayer(url: string, offset: Vector2, size: Vector2): Promise<Layer> {
-    const layerPromise = new Promise<Layer>((resolve, reject) => {
-      // check for cached layer
-      const cachedLayer = this.layerCache[url];
-      if (cachedLayer !== undefined && !cachedLayer.disposed) {
-        return resolve(cachedLayer);
+  loadTexImage2D(key: string, image: HTMLImageElement | ImageBitmap): Promise<TexImage2D> {
+    return new Promise<TexImage2D>((resolve) => {
+      // check for texture in cache.
+      const cachedTexImage2D = this.texImage2DCache[key];
+      if (cachedTexImage2D !== undefined && !cachedTexImage2D.disposed) {
+        return resolve(cachedTexImage2D);
       }
+      // create texture
+      const texture = new Texture(image);
+      texture.wrapS = TextureWrap.ClampToEdge;
+      texture.wrapT = TextureWrap.ClampToEdge;
+      texture.generateMipmaps = true;
+      texture.anisotropicLevels = 1;
+      texture.name = key;
 
-      // TODO: use ImageBitmap instead of HTMLImageElement
-      fetchImage(url).then((image) => {
-        // load texture
-        const texture = new Texture(image);
-        texture.wrapS = TextureWrap.ClampToEdge;
-        texture.wrapT = TextureWrap.ClampToEdge;
-        texture.generateMipmaps = true;
-        texture.anisotropicLevels = 1;
-        texture.name = url;
-
-        // create layer
-        const layer = new Layer(this, url, makeTexImage2DFromTexture(this.#context, texture), offset, size);
-        this.layerCache[url] = layer;
-        return resolve(layer);
-      });
+      // load texture onto the GPU
+      const texImage2D = makeTexImage2DFromTexture(this.context, texture);
+      this.texImage2DCache[key] = texImage2D;
+      return resolve(texImage2D);
     });
-    return layerPromise;
   }
 
   // ask how much memory is used
@@ -102,11 +96,11 @@ export class LayerRenderer {
     const scale = fitScale * this.zoomScale;
 
     // convert from layer pixel space to view space using zoom and pan
-    const worldToViewTranslation = makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, 0.5));
+    const worldToViewTranslation = makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, -0.5));
     const worldToViewScale = makeMatrix4Scale(new Vector3(scale, scale, scale));
     const worldToView = makeMatrix4Concatenation(worldToViewTranslation, worldToViewScale);
 
-    this.layers.forEach((layer) => {
+    this.layers.forEach((layer, index) => {
       const uniforms = {
         screenToView: this.screenToView,
         viewToScreen: this.viewToScreen,
@@ -114,7 +108,21 @@ export class LayerRenderer {
         localToWorld: layer.localToWorld,
         layerMap: layer.texImage2D,
       };
+      console.log(`layer ${index}:`);
+      const localTopLeft = new Vector3(0, 0, 0);
+      const localBottomRight = new Vector3(1, 1, 0);
+      console.log(localTopLeft, localBottomRight);
+      const worldTopLeft = transformPoint(localTopLeft, uniforms.localToWorld);
+      const worldBottomRight = transformPoint(localBottomRight, uniforms.localToWorld);
+      console.log(worldTopLeft, worldBottomRight);
+      const viewTopLeft = transformPoint(worldTopLeft, uniforms.worldToView);
+      const viewBottomRight = transformPoint(worldBottomRight, uniforms.worldToView);
+      console.log(viewTopLeft, viewBottomRight);
+      const screenTopLeft = transformPoint(viewTopLeft, uniforms.viewToScreen);
+      const screenBottomRight = transformPoint(viewBottomRight, uniforms.viewToScreen);
+      console.log(screenTopLeft, screenBottomRight);
 
+      // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
       renderBufferGeometry(framebuffer, this.#program, uniforms, this.#bufferGeometry);
     });
   }

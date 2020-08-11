@@ -10,9 +10,11 @@ varying vec2 v_uv;
 
 void main() {
   vec3 outputColor = vec3(0.);
-  outputColor += sRGBToLinear( texture2D( layerMap, v_uv ).rgb );
+  vec4 layerColor = texture2D( layerMap, v_uv );
+  outputColor += sRGBToLinear( layerColor.rgb );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
-  gl_FragColor.a = 1.0;
+  gl_FragColor.b = 0.0;
+  gl_FragColor.a = layerColor.a;
 
 }
