@@ -49,6 +49,7 @@ export class Framebuffer extends VirtualFramebuffer {
     gl.framebufferTexture2D(GL.FRAMEBUFFER, attachmentPoint, target, texImage2D.glTexture, level);
     this._attachments[attachmentPoint] = texImage2D;
     this.size.copy(texImage2D.size);
+    gl.bindFramebuffer(GL.FRAMEBUFFER, null);
   }
 
   getAttachment(attachmentPoint: Attachment): TexImage2D | undefined {
