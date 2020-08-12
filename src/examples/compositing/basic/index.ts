@@ -33,7 +33,7 @@ async function init(): Promise<null> {
     layers.push(new Layer(layerRenderer, radialUrl, radialTexImage2D, new Vector2(1000, 0)));
     layers.push(new Layer(layerRenderer, splatUrl, splatTexImage2D, new Vector2(500, 1000)));
     layers.push(new Layer(layerRenderer, radialUrl, radialTexImage2D, new Vector2(1250, 500)));
-    layers.push(new Layer(layerRenderer, concentricUrl, concentricTexImage2D, new Vector2(200, 200)));
+    layers.push(new Layer(layerRenderer, concentricUrl, concentricTexImage2D, new Vector2(0, 200)));
 
     // const now = Date.now();
     // layerRenderer.zoomScale = Math.sin(now * 0.0001) + 2.0;
@@ -51,7 +51,7 @@ async function init(): Promise<null> {
   });
   canvas.addEventListener("mousedown", (mouseEvent: MouseEvent) => {
     if (mouseEvent.button === 0) {
-      layerRenderer.zoomScale = 2.0;
+      layerRenderer.zoomScale = 4.0;
     }
   });
   canvas.addEventListener("mouseup", (mouseEvent: MouseEvent) => {

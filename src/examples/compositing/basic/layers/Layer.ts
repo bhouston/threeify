@@ -23,7 +23,7 @@ export class Layer {
     const localToWorldScale = makeMatrix4Scale(
       new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1.0),
     );
-    const localToWorldTranslation = makeMatrix4Translation(new Vector3(this.offset.x, this.offset.y, -1.0));
+    const localToWorldTranslation = makeMatrix4Translation(new Vector3(this.offset.x, this.offset.y, 0.0));
     this.localToWorld = makeMatrix4Concatenation(localToWorldTranslation, localToWorldScale);
   }
 }
