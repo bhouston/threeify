@@ -42,6 +42,9 @@ export function makeColorMipmapAttachment(
 ): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = true;
+  texParams.anisotropyLevels = 1;
+  texParams.wrapS = TextureWrap.ClampToEdge;
+  texParams.wrapT = TextureWrap.ClampToEdge;
   texParams.magFilter = TextureFilter.Linear;
   texParams.minFilter = TextureFilter.LinearMipmapLinear;
   return new TexImage2D(
@@ -251,7 +254,7 @@ export class LayerRenderer {
     }
 
     // clear to black and full alpha.
-    framebuffer.clearState = new ClearState(new Vector3(0, 1, 0.5), 1.0);
+    framebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     framebuffer.clear();
 
     this.layers.forEach((layer) => {
