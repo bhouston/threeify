@@ -193,9 +193,16 @@ export class LayerRenderer {
     const localToWorld = makeMatrix4Scale(new Vector3(this.layerSize.width, this.layerSize.height, 1.0));
 
     // convert from layer pixel space to view space using zoom and pan
-    const worldToViewTranslation = makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, 0.0));
-    const worldToViewScale = makeMatrix4Scale(new Vector3(layerToViewportScale, layerToViewportScale, 1.0));
-    const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
+    let worldToView = new Matrix4();
+    worldToView = makeMatrix4Concatenation(
+      makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, 0.0)),
+      worldToView,
+    );
+    worldToView = makeMatrix4Concatenation(
+      makeMatrix4Scale(new Vector3(layerToViewportScale, layerToViewportScale, 1.0)),
+      worldToView,
+    );
+    // const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
 
     const canvasFramebuffer = this.context.canvasFramebuffer;
     canvasFramebuffer.clearState = new ClearState(new Vector3(1, 0, 0.5), 1.0);
