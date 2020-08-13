@@ -205,6 +205,16 @@ export class LayerCompositor {
       makeMatrix4Scale(new Vector3(layerToViewportScale, layerToViewportScale, 1.0)),
       worldToView,
     );
+    worldToView = makeMatrix4Concatenation(
+      makeMatrix4Translation(
+        new Vector3(
+          this.viewportSize.width * 0.5 - this.layerSize.width * fitScale * 0.5,
+          this.viewportSize.height * 0.5 - this.layerSize.height * fitScale * 0.5,
+          0.0,
+        ),
+      ),
+      worldToView,
+    );
     // const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
 
     const canvasFramebuffer = this.context.canvasFramebuffer;
@@ -254,7 +264,7 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    framebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    framebuffer.clearState = new ClearState(new Vector3(0, 1, 0), 1.0);
     framebuffer.clear();
 
     this.layers.forEach((layer) => {
