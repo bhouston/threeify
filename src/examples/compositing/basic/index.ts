@@ -54,6 +54,7 @@ async function init(): Promise<null> {
   canvas.addEventListener("mousedown", (mouseEvent: MouseEvent) => {
     if (mouseEvent.button === 0) {
       layerCompositor.zoomScale = zoomFactor;
+      layerCompositor.panPosition = new Vector2(-mouseEvent.offsetX, -mouseEvent.offsetY);
     }
   });
   canvas.addEventListener("mouseup", (mouseEvent: MouseEvent) => {
@@ -65,25 +66,20 @@ async function init(): Promise<null> {
   canvas.addEventListener("mousemove", (mouseEvent: MouseEvent) => {
     if (layerCompositor.zoomScale > 1) {
       // console.log(`mouse offset ${mouseEvent.offsetX}, ${mouseEvent.offsetY}`);
-      layerCompositor.panPosition = new Vector2(
-        canvas.width * 0.5 - mouseEvent.offsetX,
-        canvas.height * 0.5 - mouseEvent.offsetY,
-      );
+      layerCompositor.panPosition = new Vector2(-mouseEvent.offsetX, -mouseEvent.offsetY);
       // console.log(layerRenderer.panPosition);
     }
   });
-  canvas.addEventListener("touchstart", () => {
+  canvas.addEventListener("touchstart", (touchEvent: TouchEvent) => {
     layerCompositor.zoomScale = zoomFactor;
+    layerCompositor.panPosition = new Vector2(-touchEvent.touches[0].clientX, -touchEvent.touches[0].clientY);
   });
   canvas.addEventListener("touchend", () => {
     layerCompositor.zoomScale = 1.0;
     layerCompositor.panPosition = new Vector2(0, 0);
   });
   canvas.addEventListener("touchmove", (touchEvent: TouchEvent) => {
-    layerCompositor.panPosition = new Vector2(
-      canvas.width * 0.5 - touchEvent.touches[0].clientX,
-      canvas.height * 0.5 - touchEvent.touches[0].clientY,
-    );
+    layerCompositor.panPosition = new Vector2(-touchEvent.touches[0].clientX, -touchEvent.touches[0].clientY);
   });
 
   return null;

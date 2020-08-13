@@ -198,10 +198,6 @@ export class LayerCompositor {
     // convert from layer pixel space to view space using zoom and pan
     let worldToView = new Matrix4();
     worldToView = makeMatrix4Concatenation(
-      makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, 0.0)),
-      worldToView,
-    );
-    worldToView = makeMatrix4Concatenation(
       makeMatrix4Scale(new Vector3(layerToViewportScale, layerToViewportScale, 1.0)),
       worldToView,
     );
@@ -215,10 +211,14 @@ export class LayerCompositor {
       ),
       worldToView,
     );
+    worldToView = makeMatrix4Concatenation(
+      makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, 0.0)),
+      worldToView,
+    );
     // const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
 
     const canvasFramebuffer = this.context.canvasFramebuffer;
-    canvasFramebuffer.clearState = new ClearState(new Vector3(1, 0, 0.5), 1.0);
+    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0.0), 0.0);
     canvasFramebuffer.clear();
 
     const framebufferColorAttachment = this.framebufferColorAttachment;
@@ -264,7 +264,7 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    framebuffer.clearState = new ClearState(new Vector3(0, 1, 0), 1.0);
+    framebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     framebuffer.clear();
 
     this.layers.forEach((layer) => {
