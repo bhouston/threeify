@@ -46,12 +46,14 @@ async function init(): Promise<null> {
 
   animate();
 
+  const zoomFactor = 2.5;
+
   window.addEventListener("resize", () => {
     layerRenderer.context.canvasFramebuffer.resize();
   });
   canvas.addEventListener("mousedown", (mouseEvent: MouseEvent) => {
     if (mouseEvent.button === 0) {
-      layerRenderer.zoomScale = 4.0;
+      layerRenderer.zoomScale = zoomFactor;
     }
   });
   canvas.addEventListener("mouseup", (mouseEvent: MouseEvent) => {
@@ -69,6 +71,18 @@ async function init(): Promise<null> {
       );
       // console.log(layerRenderer.panPosition);
     }
+  });
+  canvas.addEventListener("touchstart", () => {
+    layerRenderer.zoomScale = zoomFactor;
+  });
+  canvas.addEventListener("touchend", () => {
+    layerRenderer.zoomScale = 1.0;
+  });
+  canvas.addEventListener("touchmove", (touchEvent: TouchEvent) => {
+    layerRenderer.panPosition = new Vector2(
+      canvas.width * 0.5 - touchEvent.touches[0].clientX,
+      canvas.height * 0.5 - touchEvent.touches[0].clientX,
+    );
   });
 
   return null;
