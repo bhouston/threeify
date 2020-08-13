@@ -1,20 +1,16 @@
-import { Matrix4 } from "../../../../lib/math/Matrix4";
-import {
-  makeMatrix4Concatenation,
-  makeMatrix4Scale,
-  makeMatrix4Translation,
-} from "../../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../../lib/math/Vector2";
-import { Vector3 } from "../../../../lib/math/Vector3";
-import { TexImage2D } from "../../../../lib/renderers/webgl/textures/TexImage2D";
-import { LayerRenderer } from "./LayerRenderer";
+import { Matrix4 } from "../../math/Matrix4";
+import { makeMatrix4Concatenation, makeMatrix4Scale, makeMatrix4Translation } from "../../math/Matrix4.Functions";
+import { Vector2 } from "../../math/Vector2";
+import { Vector3 } from "../../math/Vector3";
+import { TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
+import { LayerCompositor } from "./LayerCompositor";
 
 export class Layer {
   disposed = false;
   localToWorld: Matrix4;
 
   constructor(
-    public renderer: LayerRenderer,
+    public compositor: LayerCompositor,
     public url: string,
     public texImage2D: TexImage2D,
     public offset: Vector2,

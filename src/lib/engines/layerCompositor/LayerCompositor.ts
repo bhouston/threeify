@@ -1,34 +1,34 @@
-import { transformGeometry } from "../../../../lib/geometry/Geometry.Functions";
-import { planeGeometry } from "../../../../lib/geometry/primitives/planeGeometry";
-import { Blending } from "../../../../lib/materials/Blending";
-import { ShaderMaterial } from "../../../../lib/materials/ShaderMaterial";
-import { ceilPow2 } from "../../../../lib/math/Functions";
-import { Matrix4 } from "../../../../lib/math/Matrix4";
+import { transformGeometry } from "../../geometry/Geometry.Functions";
+import { planeGeometry } from "../../geometry/primitives/planeGeometry";
+import { Blending } from "../../materials/Blending";
+import { ShaderMaterial } from "../../materials/ShaderMaterial";
+import { ceilPow2 } from "../../math/Functions";
+import { Matrix4 } from "../../math/Matrix4";
 import {
   makeMatrix4Concatenation,
   makeMatrix4Inverse,
   makeMatrix4OrthographicSimple,
   makeMatrix4Scale,
   makeMatrix4Translation,
-} from "../../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../../lib/math/Vector2";
-import { Vector3 } from "../../../../lib/math/Vector3";
-import { blendModeToBlendState, BlendState } from "../../../../lib/renderers/webgl/BlendState";
-import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { ClearState } from "../../../../lib/renderers/webgl/ClearState";
-import { Attachment } from "../../../../lib/renderers/webgl/framebuffers/Attachment";
-import { Framebuffer } from "../../../../lib/renderers/webgl/framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial, Program } from "../../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../../lib/renderers/webgl/RenderingContext";
-import { DataType } from "../../../../lib/renderers/webgl/textures/DataType";
-import { PixelFormat } from "../../../../lib/renderers/webgl/textures/PixelFormat";
-import { makeTexImage2DFromTexture, TexImage2D } from "../../../../lib/renderers/webgl/textures/TexImage2D";
-import { TexParameters } from "../../../../lib/renderers/webgl/textures/TexParameters";
-import { TextureFilter } from "../../../../lib/renderers/webgl/textures/TextureFilter";
-import { TextureTarget } from "../../../../lib/renderers/webgl/textures/TextureTarget";
-import { TextureWrap } from "../../../../lib/renderers/webgl/textures/TextureWrap";
-import { Texture } from "../../../../lib/textures/Texture";
+} from "../../math/Matrix4.Functions";
+import { Vector2 } from "../../math/Vector2";
+import { Vector3 } from "../../math/Vector3";
+import { blendModeToBlendState, BlendState } from "../../renderers/webgl/BlendState";
+import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
+import { ClearState } from "../../renderers/webgl/ClearState";
+import { Attachment } from "../../renderers/webgl/framebuffers/Attachment";
+import { Framebuffer } from "../../renderers/webgl/framebuffers/Framebuffer";
+import { renderBufferGeometry } from "../../renderers/webgl/framebuffers/VirtualFramebuffer";
+import { makeProgramFromShaderMaterial, Program } from "../../renderers/webgl/programs/Program";
+import { RenderingContext } from "../../renderers/webgl/RenderingContext";
+import { DataType } from "../../renderers/webgl/textures/DataType";
+import { PixelFormat } from "../../renderers/webgl/textures/PixelFormat";
+import { makeTexImage2DFromTexture, TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
+import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
+import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
+import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
+import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
+import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
 import vertexSource from "./vertex.glsl";
@@ -58,7 +58,7 @@ export function makeColorMipmapAttachment(
   );
 }
 
-export class LayerRenderer {
+export class LayerCompositor {
   context: RenderingContext;
   texImage2DCache: TexImage2DMap = {};
   #bufferGeometry: BufferGeometry;
