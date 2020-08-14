@@ -28,7 +28,7 @@ import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
 import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
 import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
 import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
-import { fetchImage, fetchImageBitmap } from "../../textures/loaders/Image";
+import { fetchImage, fetchImageBitmap, isImageBitmapSupported } from "../../textures/loaders/Image";
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
@@ -166,8 +166,9 @@ export class LayerCompositor {
         // console.log(texImage2D);
         return texImage2D;
       }
+      const imageBitmapSupported = isImageBitmapSupported();
       if (image === undefined) {
-        if ("createImageBitmap" in window) {
+        if (imageBitmapSupported) {
           fetchImageBitmap(url).then((imageBitmap: ImageBitmap) => {
             return resolve(createTexture(this, imageBitmap));
           });
@@ -178,7 +179,7 @@ export class LayerCompositor {
         }
       }
       if (image instanceof HTMLImageElement) {
-        if ("createImageBitmap" in window) {
+        if (imageBitmapSupported) {
           const imageBitmapPromise = createImageBitmap(image);
           imageBitmapPromise.then((imageBitmap) => {
             return resolve(createTexture(this, imageBitmap));
