@@ -41,7 +41,7 @@ void main() {
 
   vec3 outgoingRadiance;
 
-  for( int i = 0; i < punctualLightType.length(); i ++ ) {
+  for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i ++ ) {
 
     if( i >= numPunctualLights ) break;
 

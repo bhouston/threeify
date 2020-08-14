@@ -1,8 +1,8 @@
 import { IDisposable } from "../core/types";
 import { Euler, EulerOrder } from "../math/Euler";
+import { degToRad } from "../math/Functions";
 import { Quaternion } from "../math/Quaternion";
 import { makeQuaternionFromAxisAngle, makeQuaternionFromEuler } from "../math/Quaternion.Functions";
-import { degToRad } from "../math/Utilities";
 import { Vector3 } from "../math/Vector3";
 
 const zAxis = new Vector3(0, 0, 1);

@@ -33,7 +33,7 @@ void main() {
   vec3 normal = normalize( v_viewSurfaceNormal );
   vec3 viewDirection = normalize( -v_viewSurfacePosition );
 
-  mat3 tangentToView = tangentToViewFromPositionNormalUV( surface.position, surface.normal, v_uv0 );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
 
   PunctualLight punctualLight;
   punctualLight.position = spotLightViewPosition;
