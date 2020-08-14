@@ -15,6 +15,10 @@ async function init(): Promise<null> {
   const splatImage = await fetchImage(splatUrl);
   const splatTexImage2D = await layerCompositor.loadTexImage2D(splatUrl, splatImage);
 
+  const shirtUrl = "/assets/textures/test/moireShirt.png";
+  const shirtImage = await fetchImage(shirtUrl);
+  const shirtTexImage2D = await layerCompositor.loadTexImage2D(shirtUrl, shirtImage);
+
   const radialUrl = "/assets/textures/test/moireRadial.png";
   const radialImage = await fetchImage(radialUrl);
   const radialTexImage2D = await layerCompositor.loadTexImage2D(radialUrl, radialImage);
@@ -29,11 +33,12 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const layers: Layer[] = [];
+    layers.push(new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(0, 0)));
     layers.push(new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(750, 1000)));
-    layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 0)));
-    layers.push(new Layer(layerCompositor, concentricUrl, concentricTexImage2D, new Vector2(0, 200)));
-    layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 400)));
-    layers.push(new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 1000)));
+    // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 0)));
+    // layers.push(new Layer(layerCompositor, concentricUrl, concentricTexImage2D, new Vector2(0, 200)));
+    // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 400)));
+    layers.push(new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250)));
 
     // const now = Date.now();
     // layerRenderer.zoomScale = Math.sin(now * 0.0001) + 2.0;

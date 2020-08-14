@@ -139,29 +139,42 @@ export class LayerCompositor {
     }
   }
 
-  loadTexImage2D(key: string, image: HTMLImageElement | ImageBitmap): Promise<TexImage2D> {
+  loadTexImage2D(key: string, image: HTMLImageElement): Promise<TexImage2D> {
     return new Promise<TexImage2D>((resolve) => {
       // check for texture in cache.
       const cachedTexImage2D = this.texImage2DCache[key];
       if (cachedTexImage2D !== undefined && !cachedTexImage2D.disposed) {
         return resolve(cachedTexImage2D);
       }
-      // console.log(image, key);
-      // create texture
-      const texture = new Texture(image);
-      texture.wrapS = TextureWrap.ClampToEdge;
-      texture.wrapT = TextureWrap.ClampToEdge;
-      texture.minFilter = TextureFilter.Nearest;
-      texture.generateMipmaps = false;
-      texture.anisotropicLevels = 1;
-      texture.name = key;
 
-      // console.log(texture);
-      // load texture onto the GPU
-      const texImage2D = makeTexImage2DFromTexture(this.context, texture);
-      this.texImage2DCache[key] = texImage2D;
-      // console.log(texImage2D);
-      return resolve(texImage2D);
+      function createTexture(compositor: LayerCompositor, image: HTMLImageElement | ImageBitmap): TexImage2D {
+        // console.log(image, key);
+        // create texture
+        const texture = new Texture(image);
+        texture.wrapS = TextureWrap.ClampToEdge;
+        texture.wrapT = TextureWrap.ClampToEdge;
+        texture.minFilter = TextureFilter.Nearest;
+        texture.generateMipmaps = false;
+        texture.anisotropicLevels = 1;
+        texture.name = key;
+
+        // console.log(texture);
+        // load texture onto the GPU
+        const texImage2D = makeTexImage2DFromTexture(compositor.context, texture);
+        compositor.texImage2DCache[key] = texImage2D;
+        // console.log(texImage2D);
+        return texImage2D;
+      }
+
+      if ("createImageBitmap" in window) {
+        console.log("using createImageBitmap");
+        const imageBitmapPromise = createImageBitmap(image);
+        imageBitmapPromise.then((imageBitmap) => {
+          return resolve(createTexture(this, imageBitmap));
+        });
+      } else {
+        return resolve(createTexture(this, image));
+      }
     });
   }
 
