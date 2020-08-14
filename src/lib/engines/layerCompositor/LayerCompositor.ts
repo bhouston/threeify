@@ -28,6 +28,7 @@ import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
 import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
 import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
 import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
+import { fetchImage, fetchImageBitmap } from "../../textures/loaders/Image";
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
@@ -139,10 +140,10 @@ export class LayerCompositor {
     }
   }
 
-  loadTexImage2D(key: string, image: HTMLImageElement): Promise<TexImage2D> {
+  loadTexImage2D(url: string, image: HTMLImageElement | ImageBitmap | undefined): Promise<TexImage2D> {
     return new Promise<TexImage2D>((resolve) => {
       // check for texture in cache.
-      const cachedTexImage2D = this.texImage2DCache[key];
+      const cachedTexImage2D = this.texImage2DCache[url];
       if (cachedTexImage2D !== undefined && !cachedTexImage2D.disposed) {
         return resolve(cachedTexImage2D);
       }
@@ -156,23 +157,36 @@ export class LayerCompositor {
         texture.minFilter = TextureFilter.Nearest;
         texture.generateMipmaps = false;
         texture.anisotropicLevels = 1;
-        texture.name = key;
+        texture.name = url;
 
         // console.log(texture);
         // load texture onto the GPU
         const texImage2D = makeTexImage2DFromTexture(compositor.context, texture);
-        compositor.texImage2DCache[key] = texImage2D;
+        compositor.texImage2DCache[url] = texImage2D;
         // console.log(texImage2D);
         return texImage2D;
       }
-
-      if ("createImageBitmap" in window) {
-        console.log("using createImageBitmap");
-        const imageBitmapPromise = createImageBitmap(image);
-        imageBitmapPromise.then((imageBitmap) => {
-          return resolve(createTexture(this, imageBitmap));
-        });
-      } else {
+      if (image === undefined) {
+        if ("createImageBitmap" in window) {
+          fetchImageBitmap(url).then((imageBitmap: ImageBitmap) => {
+            return resolve(createTexture(this, imageBitmap));
+          });
+        } else {
+          fetchImage(url).then((image: HTMLImageElement) => {
+            return resolve(createTexture(this, image));
+          });
+        }
+      }
+      if (image instanceof HTMLImageElement) {
+        if ("createImageBitmap" in window) {
+          const imageBitmapPromise = createImageBitmap(image);
+          imageBitmapPromise.then((imageBitmap) => {
+            return resolve(createTexture(this, imageBitmap));
+          });
+        } else {
+          return resolve(createTexture(this, image));
+        }
+      } else if (image instanceof ImageBitmap) {
         return resolve(createTexture(this, image));
       }
     });

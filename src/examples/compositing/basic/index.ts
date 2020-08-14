@@ -2,7 +2,6 @@ import { Layer } from "../../../lib/engines/layerCompositor/Layer";
 import { LayerCompositor } from "../../../lib/engines/layerCompositor/LayerCompositor";
 import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
 
 const canvas = document.getElementById("framebuffer") as HTMLCanvasElement;
 
@@ -12,20 +11,16 @@ async function init(): Promise<null> {
   layerCompositor.layerSize = new Vector2(2048, 2048);
 
   const splatUrl = "/assets/textures/decals/splat.png";
-  const splatImage = await fetchImage(splatUrl);
-  const splatTexImage2D = await layerCompositor.loadTexImage2D(splatUrl, splatImage);
+  const splatTexImage2D = await layerCompositor.loadTexImage2D(splatUrl);
 
   const shirtUrl = "/assets/textures/test/moireShirt.png";
-  const shirtImage = await fetchImage(shirtUrl);
-  const shirtTexImage2D = await layerCompositor.loadTexImage2D(shirtUrl, shirtImage);
+  const shirtTexImage2D = await layerCompositor.loadTexImage2D(shirtUrl);
 
   const radialUrl = "/assets/textures/test/moireRadial.png";
-  const radialImage = await fetchImage(radialUrl);
-  const radialTexImage2D = await layerCompositor.loadTexImage2D(radialUrl, radialImage);
+  const radialTexImage2D = await layerCompositor.loadTexImage2D(radialUrl);
 
   const concentricUrl = "/assets/textures/test/moireConcentric.png";
-  const concentricImage = await fetchImage(concentricUrl);
-  const concentricTexImage2D = await layerCompositor.loadTexImage2D(concentricUrl, concentricImage);
+  const concentricTexImage2D = await layerCompositor.loadTexImage2D(concentricUrl);
 
   layerCompositor.clearState.color = new Vector3(0.2, 0.2, 0.2);
 
