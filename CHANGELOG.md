@@ -1,3 +1,27 @@
+# [1.66.0](https://github.com/threeify/threeify/compare/v1.65.0...v1.66.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* camera aspect ratio in layer renderer. ([83dc18a](https://github.com/threeify/threeify/commit/83dc18a6605360275fa728086234f553393c7c40))
+* center composite ([c8d6703](https://github.com/threeify/threeify/commit/c8d67035a78b48615bccb132eccc3bad4e7bd702))
+* clamp to edge on layer textures. ([1cb3e51](https://github.com/threeify/threeify/commit/1cb3e519f163d58d2081f8fe62bd2b4304275f72))
+* fix local->world space layer transform ([091bfcd](https://github.com/threeify/threeify/commit/091bfcdc425c3b7c071017010badf0a39d3d3ccf))
+* fix various bugs from refactoring in examples. ([31de989](https://github.com/threeify/threeify/commit/31de989dfb1f1912397cb3fa253a6a8248a30ed5))
+* leaked abstraction of WebGL ([4e69485](https://github.com/threeify/threeify/commit/4e69485a4e17d4554878e7925bf7306b81a37bd5))
+* world->view and view->screen transforms for layer renderer ([6a946b2](https://github.com/threeify/threeify/commit/6a946b2b7d52645867590dd102d8bac1120e2855))
+
+
+### Features
+
+* add shirt sample ([f7082f7](https://github.com/threeify/threeify/commit/f7082f75363fd035e96846104b75c247a8bf8ff0))
+* add touch event handling to compositor example ([bcf424b](https://github.com/threeify/threeify/commit/bcf424bb503078f4c5642f13174bc89a239b1a62))
+* enable direct image loading in LayerCompositor for max speed ([bd1fc0a](https://github.com/threeify/threeify/commit/bd1fc0a04087ab881a4c5684454d00e411baeefd))
+* fetchImageBitmap - ultra fast image loading for TexImage2D ([3267f4c](https://github.com/threeify/threeify/commit/3267f4c1b87f2ed0e08ae6d975ebf32ae795d2cd))
+* layer compositor ([5ae20da](https://github.com/threeify/threeify/commit/5ae20da85d5748bd3bf47a9855fd3a1540ae1a18))
+* layer engine - zoom ([9a7703d](https://github.com/threeify/threeify/commit/9a7703d9cee94dba5a3bf290a2af59541c6e5c59))
+* layer renderer ([1852ea9](https://github.com/threeify/threeify/commit/1852ea973aadbcd67b03b82af4fafe5d48cbf474))
+
 # [1.65.0](https://github.com/threeify/threeify/compare/v1.64.0...v1.65.0) (2020-07-29)
 
 
