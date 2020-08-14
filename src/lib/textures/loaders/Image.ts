@@ -24,3 +24,32 @@ export async function fetchCubeImages(urlPattern: string): Promise<HTMLImageElem
   });
   return Promise.all(fetchPromises);
 }
+
+export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
+  return new Promise<ImageBitmap>((resolve, reject) => {
+    fetch(url)
+      .then((response: Response) => {
+        if (response.status === 200) {
+          return response.blob();
+        }
+        reject(`Unable to load resource with url ${url}`);
+      })
+
+      // Turn it into an ImageBitmap.
+      .then((blobData: Blob | undefined) => {
+        if (blobData !== undefined) {
+          return createImageBitmap(blobData);
+        }
+      })
+
+      // Post it back to main thread.
+      .then(
+        (imageBitmap) => {
+          return resolve(imageBitmap);
+        },
+        (err) => {
+          reject(err);
+        },
+      );
+  });
+}
