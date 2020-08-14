@@ -25,6 +25,9 @@ export async function fetchCubeImages(urlPattern: string): Promise<HTMLImageElem
   return Promise.all(fetchPromises);
 }
 
+export function isImageBitmapSupported(): boolean {
+  return "createImageBitmap" in window;
+}
 export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
   return new Promise<ImageBitmap>((resolve, reject) => {
     fetch(url)

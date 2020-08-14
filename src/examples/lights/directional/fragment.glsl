@@ -37,7 +37,7 @@ void main() {
   punctualLight.intensity = directionalLightColor;
 
   DirectLight directLight;
-  directionalLightToDirectLight( position, punctualLight, directLight );
+  directionalLightToDirectLight( punctualLight, directLight );
 
   float dotNL = saturate( dot( directLight.direction, normal ) );
 
