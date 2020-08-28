@@ -20,6 +20,7 @@ void main() {
   outputColor += sRGBToLinear( layerColor.rgb );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
+ // gl_FragColor.rgb *= layerColor.a;  - do not currently do this.  Assume images are already in pre-multiplied form.
   gl_FragColor.a = layerColor.a;
 
 }
