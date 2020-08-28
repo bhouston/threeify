@@ -94,6 +94,41 @@ export class LayerCompositor {
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
     this.#blendState = blendModeToBlendState(Blending.Over, true);
+
+    const that = this;
+    this.context.canvas.addEventListener(
+      "webglcontextlost",
+      function (event) {
+        event.preventDefault();
+        that.onContextRestored();
+      },
+      false,
+    );
+    this.context.canvas.addEventListener(
+      "webglcontextrestored",
+      function () {
+        that.onContextRestored();
+      },
+      false,
+    );
+  }
+
+  onContextLost(): void {}
+  onContextRestored(): void {
+    if (this.framebuffer !== undefined) {
+      // reload framebuffer
+      this.framebuffer.dispose();
+      this.framebuffer = undefined;
+      this.updateFramebuffer();
+
+      // reload layer textures
+      this.layers.forEach((layer) => {
+        layer.texImage2D.dispose();
+        this.loadTexImage2D(layer.url).then((texImage2D) => {
+          layer.texImage2D = texImage2D;
+        });
+      });
+    }
   }
 
   updateFramebuffer(): void {
