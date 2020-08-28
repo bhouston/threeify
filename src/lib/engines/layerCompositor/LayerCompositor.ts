@@ -93,7 +93,7 @@ export class LayerCompositor {
     transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, -1.0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
-    this.#blendState = blendModeToBlendState(Blending.Over, false);
+    this.#blendState = blendModeToBlendState(Blending.Over, true);
   }
 
   updateFramebuffer(): void {
