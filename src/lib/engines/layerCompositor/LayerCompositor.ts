@@ -3,6 +3,7 @@ import { planeGeometry } from "../../geometry/primitives/planeGeometry";
 import { Blending } from "../../materials/Blending";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { ceilPow2 } from "../../math/Functions";
+import { makeMatrix3Scale } from "../../math/Matrix3.Functions";
 import { Matrix4 } from "../../math/Matrix4";
 import {
   makeMatrix4Concatenation,
@@ -140,7 +141,7 @@ export class LayerCompositor {
     }
   }
 
-  loadTexImage2D(url: string, image: HTMLImageElement | ImageBitmap | undefined): Promise<TexImage2D> {
+  loadTexImage2D(url: string, image: HTMLImageElement | ImageBitmap | undefined = undefined): Promise<TexImage2D> {
     return new Promise<TexImage2D>((resolve) => {
       // check for texture in cache.
       const cachedTexImage2D = this.texImage2DCache[url];
@@ -259,7 +260,7 @@ export class LayerCompositor {
       worldToView: worldToView,
       localToWorld: localToWorld,
       layerMap: framebufferColorAttachment,
-      layerUVScale: layerUVScale,
+      uvToTexture: makeMatrix3Scale(layerUVScale),
       mipmapBias: 0.25,
     };
 
@@ -302,7 +303,7 @@ export class LayerCompositor {
         worldToView: new Matrix4(),
         localToWorld: layer.localToWorld,
         layerMap: layer.texImage2D,
-        layerUVScale: new Vector2(1.0, 1.0),
+        uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
       };
 

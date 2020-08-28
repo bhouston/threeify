@@ -152,7 +152,7 @@ export function makeHSLFromColor3(c: Vector3, target: HSL): HSL {
 /*
 
 	getStyle: function () {
-
+makeMatrix3Concatenation
 		return 'rgb(' + ( ( this.r * 255 ) | 0 ) + ',' + ( ( this.g * 255 ) | 0 ) + ',' + ( ( this.b * 255 ) | 0 ) + ')';
 
 	},

@@ -1,3 +1,4 @@
+import { Matrix3 } from "../Matrix3";
 import { Matrix4 } from "../Matrix4";
 import { Quaternion } from "../Quaternion";
 import { Vector2 } from "../Vector2";
@@ -41,6 +42,14 @@ export function linearizeQuaternionFloatArray(array: Quaternion[]): Float32Array
   const result = new Float32Array(array.length * 4);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 4);
+  }
+  return result;
+}
+
+export function linearizeMatrix3FloatArray(array: Matrix3[]): Float32Array {
+  const result = new Float32Array(array.length * 9);
+  for (let i = 0; i < array.length; i++) {
+    array[i].toArray(result, i * 9);
   }
   return result;
 }

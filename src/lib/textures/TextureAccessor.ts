@@ -1,6 +1,11 @@
 import { IVersionable } from "../core/types";
 import { Matrix3 } from "../math/Matrix3";
-import { makeMatrix3RotationFromAngle, makeMatrix3Scale, makeMatrix3Translation } from "../math/Matrix3.Functions";
+import {
+  makeMatrix3Concatenation,
+  makeMatrix3RotationFromAngle,
+  makeMatrix3Scale,
+  makeMatrix3Translation,
+} from "../math/Matrix3.Functions";
 import { Vector2 } from "../math/Vector2";
 import { Texture } from "./Texture";
 
@@ -20,8 +25,16 @@ export class TextureAccessor implements IVersionable {
   get uvTransform(): Matrix3 {
     if (this.#uvTransformVersion < this.version) {
       this.#uvTransform = makeMatrix3Translation(this.uvTranslation, this.#uvTransform);
-      this.#uvTransform.multiply(makeMatrix3RotationFromAngle(this.uvRotation));
-      this.#uvTransform.multiply(makeMatrix3Scale(this.uvScale));
+      this.#uvTransform = makeMatrix3Concatenation(
+        this.#uvTransform,
+        makeMatrix3RotationFromAngle(this.uvRotation),
+        this.#uvTransform,
+      );
+      this.#uvTransform = makeMatrix3Concatenation(
+        this.#uvTransform,
+        makeMatrix3Scale(this.uvScale),
+        this.#uvTransform,
+      );
       this.#uvTransformVersion = this.version;
     }
     return this.#uvTransform;

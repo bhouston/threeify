@@ -1,6 +1,46 @@
 import { Matrix3 } from "./Matrix3";
 import { Vector2 } from "./Vector2";
 
+export function makeMatrix3Concatenation(a: Matrix3, b: Matrix3, result = new Matrix3()): Matrix3 {
+  const ae = a.elements;
+  const be = b.elements;
+  const te = result.elements;
+
+  const a11 = ae[0],
+    a12 = ae[3],
+    a13 = ae[6];
+  const a21 = ae[1],
+    a22 = ae[4],
+    a23 = ae[7];
+  const a31 = ae[2],
+    a32 = ae[5],
+    a33 = ae[8];
+
+  const b11 = be[0],
+    b12 = be[3],
+    b13 = be[6];
+  const b21 = be[1],
+    b22 = be[4],
+    b23 = be[7];
+  const b31 = be[2],
+    b32 = be[5],
+    b33 = be[8];
+
+  te[0] = a11 * b11 + a12 * b21 + a13 * b31;
+  te[3] = a11 * b12 + a12 * b22 + a13 * b32;
+  te[6] = a11 * b13 + a12 * b23 + a13 * b33;
+
+  te[1] = a21 * b11 + a22 * b21 + a23 * b31;
+  te[4] = a21 * b12 + a22 * b22 + a23 * b32;
+  te[7] = a21 * b13 + a22 * b23 + a23 * b33;
+
+  te[2] = a31 * b11 + a32 * b21 + a33 * b31;
+  te[5] = a31 * b12 + a32 * b22 + a33 * b32;
+  te[8] = a31 * b13 + a32 * b23 + a33 * b33;
+
+  return result;
+}
+
 export function matrix3Determinant(m: Matrix3): number {
   const te = m.elements;
 

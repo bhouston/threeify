@@ -1,8 +1,10 @@
 import {
+  linearizeMatrix3FloatArray,
   linearizeMatrix4FloatArray,
   linearizeVector2FloatArray,
   linearizeVector3FloatArray,
 } from "../../../math/arrays/Linearizers";
+import { Matrix3 } from "../../../math/Matrix3";
 import { Matrix4 } from "../../../math/Matrix4";
 import { Vector2 } from "../../../math/Vector2";
 import { Vector3 } from "../../../math/Vector3";
@@ -16,6 +18,7 @@ export type UniformValue =
   | number
   | Vector2
   | Vector3
+  | Matrix3
   | Matrix4
   | TexImage2D
   | number[]
@@ -146,7 +149,22 @@ export class ProgramUniform {
       // case UniformType.FloatMat2x3:
       // case UniformType.FloatMat2x4:
       // case UniformType.FloatMat3x2:
-      // case UniformType.FloatMat3:
+      case UniformType.FloatMat3:
+        if (value instanceof Matrix3) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniformMatrix3fv(this.glLocation, false, value.elements);
+            this.valueHashCode = hashCode;
+          }
+          return this;
+        }
+        if (value instanceof Array && value.length > 0 && value[0] instanceof Matrix4) {
+          const array = linearizeMatrix3FloatArray(value as Matrix3[]);
+          gl.uniformMatrix4fv(this.glLocation, false, array);
+          this.valueHashCode = -1;
+          return this;
+        }
+        break;
       // case UniformType.FloatMat3x4:
       // case UniformType.FloatMat4x2:
       // case UniformType.FloatMat4x3:
