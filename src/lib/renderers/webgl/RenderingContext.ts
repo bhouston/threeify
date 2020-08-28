@@ -53,15 +53,17 @@ export class RenderingContext {
   #maskState: MaskState = new MaskState();
   #cullingState: CullingState = new CullingState();
 
-  constructor(public canvas: HTMLCanvasElement) {
-    const options: WebGLContextAttributes = {};
-    options.alpha = true;
-    options.antialias = true;
-    options.depth = true;
-    options.premultipliedAlpha = true;
-    options.stencil = true;
+  constructor(public canvas: HTMLCanvasElement, attributes: WebGLContextAttributes | undefined = undefined) {
+    if (attributes === undefined) {
+      attributes = {};
+      attributes.alpha = true;
+      attributes.antialias = true;
+      attributes.depth = true;
+      attributes.premultipliedAlpha = true;
+      attributes.stencil = true;
+    }
     {
-      const gl = canvas.getContext("webgl", options);
+      const gl = canvas.getContext("webgl", attributes);
       if (gl === null) {
         throw new Error("webgl not supported");
       }

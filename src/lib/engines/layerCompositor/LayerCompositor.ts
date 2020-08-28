@@ -82,7 +82,13 @@ export class LayerCompositor {
   framebufferScreenToView = new Matrix4();
 
   constructor(canvas: HTMLCanvasElement) {
-    this.context = new RenderingContext(canvas);
+    this.context = new RenderingContext(canvas, {
+      alpha: true,
+      antialias: false,
+      depth: false,
+      premultipliedAlpha: true,
+      stencil: false,
+    });
     const plane = planeGeometry(1, 1, 1, 1);
     transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, -1.0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);

@@ -30,4 +30,5 @@ export class Layer {
     const uvToTextureScale = makeMatrix3Scale(this.uvScale);
     const uvToTextureTranslation = makeMatrix3Translation(this.uvOffset);
     this.uvToTexture = makeMatrix3Concatenation(uvToTextureTranslation, uvToTextureScale);
+  }
 }
