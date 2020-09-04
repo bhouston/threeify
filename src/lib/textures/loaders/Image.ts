@@ -8,6 +8,7 @@
 export function fetchImage(url: string): Promise<HTMLImageElement> {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
+    image.crossOrigin = "anonymous";
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", () => {
       reject(new Error(`failed to load image: ${url}`));
