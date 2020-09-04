@@ -219,8 +219,7 @@ export class LayerCompositor {
             return resolve(createTexture(this, image));
           });
         }
-      }
-      if (image instanceof HTMLImageElement) {
+      } else if (image instanceof HTMLImageElement) {
         if (imageBitmapSupported) {
           const imageBitmapPromise = createImageBitmap(image);
           imageBitmapPromise.then((imageBitmap) => {
