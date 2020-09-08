@@ -9,7 +9,7 @@ import { LayerCompositor } from "./LayerCompositor";
 
 export class Layer {
   disposed = false;
-  localToWorld: Matrix4;
+  layerToImage: Matrix4;
   uvToTexture: Matrix3;
 
   constructor(
@@ -17,18 +17,16 @@ export class Layer {
     public url: string,
     public texImage2D: TexImage2D,
     public offset: Vector2,
-    public uvScale = new Vector2(1, -1),
+    public uvScaleFactor = new Vector2(1, -1),
     public uvOffset = new Vector2(0, 1),
   ) {
     // world space is assumed to be in layer pixel space
-    const localToWorldScale = makeMatrix4Scale(
-      new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1.0),
-    );
-    const localToWorldTranslation = makeMatrix4Translation(new Vector3(this.offset.x, this.offset.y, 0.0));
-    this.localToWorld = makeMatrix4Concatenation(localToWorldTranslation, localToWorldScale);
+    const layerScale = makeMatrix4Scale(new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1.0));
+    const layerTranslation = makeMatrix4Translation(new Vector3(this.offset.x, this.offset.y, 0.0));
+    this.layerToImage = makeMatrix4Concatenation(layerTranslation, layerScale);
 
-    const uvToTextureScale = makeMatrix3Scale(this.uvScale);
-    const uvToTextureTranslation = makeMatrix3Translation(this.uvOffset);
-    this.uvToTexture = makeMatrix3Concatenation(uvToTextureTranslation, uvToTextureScale);
+    const uvScale = makeMatrix3Scale(this.uvScaleFactor);
+    const uvTranslation = makeMatrix3Translation(this.uvOffset);
+    this.uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
   }
 }

@@ -66,20 +66,20 @@ export class LayerCompositor {
   #bufferGeometry: BufferGeometry;
   #program: Program;
   #blendState: BlendState;
-  screenToView = new Matrix4();
-  viewToScreen = new Matrix4();
-  viewportSize = new Vector2();
-  layerSize = new Vector2(0, 0);
+  canvasToImage = new Matrix4();
+  imageToCanvas = new Matrix4();
+  canvasSize = new Vector2();
+  imageSize = new Vector2(0, 0);
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
   layers: Layer[] = [];
   firstRender = true;
   clearState = new ClearState(new Vector3(1, 1, 1), 1.0);
-  framebuffer: Framebuffer | undefined;
-  framebufferSize = new Vector2(0, 0);
-  framebufferColorAttachment: TexImage2D | undefined;
-  framebufferViewToScreen = new Matrix4();
-  framebufferScreenToView = new Matrix4();
+  offscreenFramebuffer: Framebuffer | undefined;
+  offscreenSize = new Vector2(0, 0);
+  offscreenColorAttachment: TexImage2D | undefined;
+  imageToOffscreen = new Matrix4();
+  offscreenToImage = new Matrix4();
 
   constructor(canvas: HTMLCanvasElement) {
     this.context = new RenderingContext(canvas, {
@@ -90,7 +90,7 @@ export class LayerCompositor {
       stencil: false,
     });
     const plane = planeGeometry(1, 1, 1, 1);
-    transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, -1.0)));
+    transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, 0.0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
     this.#blendState = blendModeToBlendState(Blending.Over, true);
@@ -115,11 +115,11 @@ export class LayerCompositor {
 
   onContextLost(): void {}
   onContextRestored(): void {
-    if (this.framebuffer !== undefined) {
+    if (this.offscreenFramebuffer !== undefined) {
       // reload framebuffer
-      this.framebuffer.dispose();
-      this.framebuffer = undefined;
-      this.updateFramebuffer();
+      this.offscreenFramebuffer.dispose();
+      this.offscreenFramebuffer = undefined;
+      this.updateOffscreen();
 
       // reload layer textures
       this.layers.forEach((layer) => {
@@ -131,54 +131,54 @@ export class LayerCompositor {
     }
   }
 
-  updateFramebuffer(): void {
+  updateOffscreen(): void {
     // but to enable mipmaps (for filtering) we need it to be up-rounded to a power of 2 in width/height.
-    const framebufferSize = new Vector2(ceilPow2(this.layerSize.x), ceilPow2(this.layerSize.y));
-    if (this.framebuffer === undefined || !this.framebufferSize.equals(framebufferSize)) {
+    const offscreenSize = new Vector2(ceilPow2(this.imageSize.x), ceilPow2(this.imageSize.y));
+    if (this.offscreenFramebuffer === undefined || !this.offscreenSize.equals(offscreenSize)) {
       // console.log("updating framebuffer");
 
-      if (this.framebuffer !== undefined) {
-        this.framebuffer.dispose();
-        this.framebuffer = undefined;
+      if (this.offscreenFramebuffer !== undefined) {
+        this.offscreenFramebuffer.dispose();
+        this.offscreenFramebuffer = undefined;
       }
-      this.framebufferColorAttachment = makeColorMipmapAttachment(this.context, framebufferSize);
-      this.framebuffer = new Framebuffer(this.context);
-      this.framebuffer.attach(Attachment.Color0, this.framebufferColorAttachment);
+      this.offscreenColorAttachment = makeColorMipmapAttachment(this.context, offscreenSize);
+      this.offscreenFramebuffer = new Framebuffer(this.context);
+      this.offscreenFramebuffer.attach(Attachment.Color0, this.offscreenColorAttachment);
 
       // frame buffer is pixel aligned with layer images.
       // framebuffer view is [ (0,0)-(framebuffer.with, framebuffer.height) ].
 
-      const aspectRatio = framebufferSize.width / framebufferSize.height;
-      this.framebufferViewToScreen = makeMatrix4OrthographicSimple(
-        framebufferSize.height,
-        framebufferSize.clone().multiplyByScalar(0.5),
-        0.1,
-        3,
+      const offscreenAspectRatio = offscreenSize.width / offscreenSize.height;
+      this.imageToOffscreen = makeMatrix4OrthographicSimple(
+        offscreenSize.height,
+        offscreenSize.clone().multiplyByScalar(0.5),
+        -1,
         1,
-        aspectRatio,
+        1,
+        offscreenAspectRatio,
       );
-      this.framebufferScreenToView = makeMatrix4Inverse(this.framebufferViewToScreen);
-      this.framebufferSize.copy(framebufferSize);
+      this.offscreenToImage = makeMatrix4Inverse(this.imageToOffscreen);
+      this.offscreenSize.copy(offscreenSize);
     }
   }
 
   // have a sizeChanged function (for when the div changes size.)
-  updateViewport(): void {
+  updateCanvas(): void {
     const canvasFramebuffer = this.context.canvasFramebuffer;
-    const viewportSize = canvasFramebuffer.size;
-    if (!viewportSize.equals(this.viewportSize)) {
+    const canvasSize = canvasFramebuffer.size;
+    if (!canvasSize.equals(this.canvasSize)) {
       // console.log(`resizing canvas framebuffer to (${renderSize.x} ${renderSize.y})`);
-      const renderAspectRatio = viewportSize.width / viewportSize.height;
-      this.viewToScreen = makeMatrix4OrthographicSimple(
-        viewportSize.height,
-        viewportSize.clone().multiplyByScalar(0.5),
-        0.1,
-        3,
+      const canvasAspectRatio = canvasSize.width / canvasSize.height;
+      this.imageToCanvas = makeMatrix4OrthographicSimple(
+        canvasSize.height,
+        canvasSize.clone().multiplyByScalar(0.5),
+        -1,
         1,
-        renderAspectRatio,
+        1,
+        canvasAspectRatio,
       );
-      this.screenToView = makeMatrix4Inverse(this.viewToScreen);
-      this.viewportSize.copy(viewportSize);
+      this.canvasToImage = makeMatrix4Inverse(this.imageToCanvas);
+      this.canvasSize.copy(canvasSize);
     }
   }
 
@@ -223,18 +223,18 @@ export class LayerCompositor {
   // draw() - makes things fit with size of div assuming pixels are square
   render(): void {
     // framebuffer.clear();
-    this.updateViewport();
+    this.updateCanvas();
     this.renderLayersToFramebuffer();
 
     const layerUVScale = new Vector2(
-      this.layerSize.width / this.framebufferSize.width,
-      this.layerSize.height / this.framebufferSize.height,
+      this.imageSize.width / this.offscreenSize.width,
+      this.imageSize.height / this.offscreenSize.height,
     );
 
     // shrink to fit within render target
     const fitScale = Math.min(
-      this.viewportSize.width / this.layerSize.width,
-      this.viewportSize.height / this.layerSize.height,
+      this.canvasSize.width / this.imageSize.width,
+      this.canvasSize.height / this.imageSize.height,
     );
     const layerToViewportScale = fitScale * this.zoomScale;
     /* if (this.firstRender) {
@@ -246,7 +246,7 @@ export class LayerCompositor {
       console.log("layerUVScale", layerUVScale);
     }*/
 
-    const localToWorld = makeMatrix4Scale(new Vector3(this.layerSize.width, this.layerSize.height, 1.0));
+    const localToWorld = makeMatrix4Scale(new Vector3(this.imageSize.width, this.imageSize.height, 1.0));
 
     // convert from layer pixel space to view space using zoom and pan
     let worldToView = new Matrix4();
@@ -257,8 +257,8 @@ export class LayerCompositor {
     worldToView = makeMatrix4Concatenation(
       makeMatrix4Translation(
         new Vector3(
-          this.viewportSize.width * 0.5 - this.layerSize.width * fitScale * 0.5,
-          this.viewportSize.height * 0.5 - this.layerSize.height * fitScale * 0.5,
+          this.canvasSize.width * 0.5 - this.imageSize.width * fitScale * 0.5,
+          this.canvasSize.height * 0.5 - this.imageSize.height * fitScale * 0.5,
           0.0,
         ),
       ),
@@ -274,16 +274,16 @@ export class LayerCompositor {
     canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0.0), 0.0);
     canvasFramebuffer.clear();
 
-    const framebufferColorAttachment = this.framebufferColorAttachment;
-    if (framebufferColorAttachment === undefined) {
+    const offscreenColorAttachment = this.offscreenColorAttachment;
+    if (offscreenColorAttachment === undefined) {
       return;
     }
     const uniforms = {
-      screenToView: this.screenToView,
-      viewToScreen: this.viewToScreen,
+      screenToView: this.canvasToImage,
+      viewToScreen: this.imageToCanvas,
       worldToView: worldToView,
       localToWorld: localToWorld,
-      layerMap: framebufferColorAttachment,
+      layerMap: offscreenColorAttachment,
       uvToTexture: makeMatrix3Scale(layerUVScale),
       mipmapBias: 0.25,
     };
@@ -310,22 +310,22 @@ export class LayerCompositor {
   }
 
   renderLayersToFramebuffer(): void {
-    this.updateFramebuffer();
-    const framebuffer = this.framebuffer;
-    if (framebuffer === undefined) {
+    this.updateOffscreen();
+    const offscreenFramebuffer = this.offscreenFramebuffer;
+    if (offscreenFramebuffer === undefined) {
       return;
     }
 
     // clear to black and full alpha.
-    framebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
-    framebuffer.clear();
+    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    offscreenFramebuffer.clear();
 
     this.layers.forEach((layer) => {
       const uniforms = {
-        screenToView: this.framebufferScreenToView,
-        viewToScreen: this.framebufferViewToScreen,
+        screenToView: this.offscreenToImage,
+        viewToScreen: this.imageToOffscreen,
         worldToView: new Matrix4(),
-        localToWorld: layer.localToWorld,
+        localToWorld: layer.layerToImage,
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
@@ -348,12 +348,19 @@ export class LayerCompositor {
       }*/
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry(framebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, this.#blendState);
+      renderBufferGeometry(
+        offscreenFramebuffer,
+        this.#program,
+        uniforms,
+        this.#bufferGeometry,
+        undefined,
+        this.#blendState,
+      );
     });
     // this.firstRender = false;
 
     // generate mipmaps.
-    const colorAttachment = this.framebufferColorAttachment;
+    const colorAttachment = this.offscreenColorAttachment;
     if (colorAttachment !== undefined) {
       colorAttachment.generateMipmaps();
     }

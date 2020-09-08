@@ -8,7 +8,7 @@ const canvas = document.getElementById("framebuffer") as HTMLCanvasElement;
 async function init(): Promise<null> {
   const layerCompositor = new LayerCompositor(canvas);
 
-  layerCompositor.layerSize = new Vector2(2048, 2048);
+  layerCompositor.imageSize = new Vector2(2048, 2048);
 
   const splatUrl = "/assets/textures/decals/splat.png";
   const splatTexImage2D = await layerCompositor.loadTexImage2D(splatUrl);
