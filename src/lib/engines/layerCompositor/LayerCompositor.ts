@@ -29,7 +29,7 @@ import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
 import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
 import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
 import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
-import { fetchImage, fetchImageBitmap, isImageBitmapSupported } from "../../textures/loaders/Image";
+import { fetchImage } from "../../textures/loaders/Image";
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
@@ -208,27 +208,11 @@ export class LayerCompositor {
         // console.log(texImage2D);
         return texImage2D;
       }
-      const imageBitmapSupported = isImageBitmapSupported();
       if (image === undefined) {
-        if (imageBitmapSupported) {
-          fetchImageBitmap(url).then((imageBitmap: ImageBitmap) => {
-            return resolve(createTexture(this, imageBitmap));
-          });
-        } else {
-          fetchImage(url).then((image: HTMLImageElement) => {
-            return resolve(createTexture(this, image));
-          });
-        }
-      } else if (image instanceof HTMLImageElement) {
-        if (imageBitmapSupported) {
-          const imageBitmapPromise = createImageBitmap(image);
-          imageBitmapPromise.then((imageBitmap) => {
-            return resolve(createTexture(this, imageBitmap));
-          });
-        } else {
+        fetchImage(url).then((image: HTMLImageElement | ImageBitmap) => {
           return resolve(createTexture(this, image));
-        }
-      } else if (image instanceof ImageBitmap) {
+        });
+      } else if (image instanceof HTMLImageElement || image instanceof ImageBitmap) {
         return resolve(createTexture(this, image));
       }
     });
@@ -236,7 +220,7 @@ export class LayerCompositor {
 
   // ask how much memory is used
   // set max size
-  // draw() - makes things fit with size of div assuming piframebufferToLayerUVScalels are square
+  // draw() - makes things fit with size of div assuming pixels are square
   render(): void {
     // framebuffer.clear();
     this.updateViewport();

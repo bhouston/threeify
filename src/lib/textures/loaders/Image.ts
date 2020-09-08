@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-export function fetchImage(url: string): Promise<HTMLImageElement> {
+export function fetchImageElement(url: string): Promise<HTMLImageElement> {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
     image.crossOrigin = "anonymous";
@@ -17,18 +17,6 @@ export function fetchImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-export async function fetchCubeImages(urlPattern: string): Promise<HTMLImageElement[]> {
-  const cubeMapFaces = ["px", "nx", "py", "ny", "pz", "nz"];
-  const fetchPromises: Promise<HTMLImageElement>[] = [];
-  cubeMapFaces.forEach((face) => {
-    fetchPromises.push(fetchImage(urlPattern.replace("*", face)));
-  });
-  return Promise.all(fetchPromises);
-}
-
-export function isImageBitmapSupported(): boolean {
-  return "createImageBitmap" in window;
-}
 export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
   return new Promise<ImageBitmap>((resolve, reject) => {
     fetch(url)
@@ -56,4 +44,26 @@ export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
         },
       );
   });
+}
+
+export function isImageBitmapSupported(): boolean {
+  return "createImageBitmap" in window;
+}
+
+export type Image = HTMLImageElement | ImageBitmap;
+
+export function fetchImage(url: string): Promise<Image> {
+  if (isImageBitmapSupported()) {
+    return fetchImageBitmap(url);
+  }
+  return fetchImageElement(url);
+}
+
+export async function fetchCubeImages(urlPattern: string): Promise<Image[]> {
+  const cubeMapFaces = ["px", "nx", "py", "ny", "pz", "nz"];
+  const fetchPromises: Promise<Image>[] = [];
+  cubeMapFaces.forEach((face) => {
+    fetchPromises.push(fetchImage(urlPattern.replace("*", face)));
+  });
+  return Promise.all(fetchPromises);
 }
