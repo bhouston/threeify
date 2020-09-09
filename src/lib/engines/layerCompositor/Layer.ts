@@ -9,7 +9,7 @@ import { LayerCompositor } from "./LayerCompositor";
 
 export class Layer {
   disposed = false;
-  layerToImage: Matrix4;
+  planeToImage: Matrix4;
   uvToTexture: Matrix3;
 
   constructor(
@@ -20,10 +20,12 @@ export class Layer {
     public uvScaleFactor = new Vector2(1, -1),
     public uvOffset = new Vector2(0, 1),
   ) {
+    console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
+
     // world space is assumed to be in layer pixel space
-    const layerScale = makeMatrix4Scale(new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1.0));
-    const layerTranslation = makeMatrix4Translation(new Vector3(this.offset.x, this.offset.y, 0.0));
-    this.layerToImage = makeMatrix4Concatenation(layerTranslation, layerScale);
+    const planeToLayer = makeMatrix4Scale(new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1.0));
+    const layerToImage = makeMatrix4Translation(new Vector3(this.offset.x, this.offset.y, 0.0));
+    this.planeToImage = makeMatrix4Concatenation(layerToImage, planeToLayer);
 
     const uvScale = makeMatrix3Scale(this.uvScaleFactor);
     const uvTranslation = makeMatrix3Translation(this.uvOffset);

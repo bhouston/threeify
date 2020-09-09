@@ -2,6 +2,7 @@ precision highp float;
 
 uniform sampler2D layerMap;
 uniform float mipmapBias;
+uniform int premultipledAlpha;
 
 uniform vec2 layerUVScale;
 
@@ -20,7 +21,9 @@ void main() {
   outputColor += sRGBToLinear( layerColor.rgb );
 
   gl_FragColor.rgb = linearTosRGB( outputColor );
-  gl_FragColor.rgb *= layerColor.a;
+  if( premultipledAlpha == 1 ) {
+    gl_FragColor.rgb *= layerColor.a;
+  }
   gl_FragColor.a = layerColor.a;
 
 }

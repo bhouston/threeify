@@ -3,16 +3,17 @@ import { planeGeometry } from "../../geometry/primitives/planeGeometry";
 import { Blending } from "../../materials/Blending";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { ceilPow2 } from "../../math/Functions";
-import { makeMatrix3Scale } from "../../math/Matrix3.Functions";
+import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from "../../math/Matrix3.Functions";
 import { Matrix4 } from "../../math/Matrix4";
 import {
-  makeMatrix4Concatenation,
   makeMatrix4Inverse,
+  makeMatrix4Orthographic,
   makeMatrix4OrthographicSimple,
   makeMatrix4Scale,
   makeMatrix4Translation,
 } from "../../math/Matrix4.Functions";
 import { Vector2 } from "../../math/Vector2";
+import { makeVector2Fit } from "../../math/Vector2.Functions";
 import { Vector3 } from "../../math/Vector3";
 import { blendModeToBlendState, BlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
@@ -66,9 +67,6 @@ export class LayerCompositor {
   #bufferGeometry: BufferGeometry;
   #program: Program;
   #blendState: BlendState;
-  canvasToImage = new Matrix4();
-  imageToCanvas = new Matrix4();
-  canvasSize = new Vector2();
   imageSize = new Vector2(0, 0);
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
@@ -78,8 +76,6 @@ export class LayerCompositor {
   offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vector2(0, 0);
   offscreenColorAttachment: TexImage2D | undefined;
-  imageToOffscreen = new Matrix4();
-  offscreenToImage = new Matrix4();
 
   constructor(canvas: HTMLCanvasElement) {
     this.context = new RenderingContext(canvas, {
@@ -148,37 +144,7 @@ export class LayerCompositor {
       // frame buffer is pixel aligned with layer images.
       // framebuffer view is [ (0,0)-(framebuffer.with, framebuffer.height) ].
 
-      const offscreenAspectRatio = offscreenSize.width / offscreenSize.height;
-      this.imageToOffscreen = makeMatrix4OrthographicSimple(
-        offscreenSize.height,
-        offscreenSize.clone().multiplyByScalar(0.5),
-        -1,
-        1,
-        1,
-        offscreenAspectRatio,
-      );
-      this.offscreenToImage = makeMatrix4Inverse(this.imageToOffscreen);
       this.offscreenSize.copy(offscreenSize);
-    }
-  }
-
-  // have a sizeChanged function (for when the div changes size.)
-  updateCanvas(): void {
-    const canvasFramebuffer = this.context.canvasFramebuffer;
-    const canvasSize = canvasFramebuffer.size;
-    if (!canvasSize.equals(this.canvasSize)) {
-      // console.log(`resizing canvas framebuffer to (${renderSize.x} ${renderSize.y})`);
-      const canvasAspectRatio = canvasSize.width / canvasSize.height;
-      this.imageToCanvas = makeMatrix4OrthographicSimple(
-        canvasSize.height,
-        canvasSize.clone().multiplyByScalar(0.5),
-        -1,
-        1,
-        1,
-        canvasAspectRatio,
-      );
-      this.canvasToImage = makeMatrix4Inverse(this.imageToCanvas);
-      this.canvasSize.copy(canvasSize);
     }
   }
 
@@ -222,8 +188,29 @@ export class LayerCompositor {
   // set max size
   // draw() - makes things fit with size of div assuming pixels are square
   render(): void {
-    // framebuffer.clear();
-    this.updateCanvas();
+    const canvasFramebuffer = this.context.canvasFramebuffer;
+    const canvasSize = canvasFramebuffer.size;
+    const canvasAspectRatio = canvasSize.width / canvasSize.height;
+
+    const scaledImageSize = makeVector2Fit(canvasSize, this.imageSize);
+    const scaledImageCenter = scaledImageSize.clone().multiplyByScalar(0.5);
+
+    const imageToCanvas = makeMatrix4OrthographicSimple(
+      canvasSize.height,
+      scaledImageCenter,
+      -1,
+      1,
+      1,
+      canvasAspectRatio,
+    );
+    console.log(
+      `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
+    );
+
+    const canvasToImage = makeMatrix4Inverse(imageToCanvas);
+
+    const planeToImage = makeMatrix4Scale(new Vector3(scaledImageSize.width, scaledImageSize.height, 1.0));
+
     this.renderLayersToFramebuffer();
 
     const layerUVScale = new Vector2(
@@ -231,47 +218,18 @@ export class LayerCompositor {
       this.imageSize.height / this.offscreenSize.height,
     );
 
+    // layerUVScale.y *= -1;
+
+    const uvScale = makeMatrix3Scale(layerUVScale);
+    const uvTranslation = makeMatrix3Translation(
+      new Vector2(0, (this.offscreenSize.height - this.imageSize.height) / this.offscreenSize.height),
+    );
+    const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
+
     // shrink to fit within render target
-    const fitScale = Math.min(
-      this.canvasSize.width / this.imageSize.width,
-      this.canvasSize.height / this.imageSize.height,
-    );
-    const layerToViewportScale = fitScale * this.zoomScale;
-    /* if (this.firstRender) {
-      console.log("viewportSize", this.viewportSize);
-      console.log("layerSize", this.layerSize);
-      console.log("fitScale", fitScale);
-      console.log("zoomScale", this.zoomScale);
-      console.log("layerToViewportScale", layerToViewportScale);
-      console.log("layerUVScale", layerUVScale);
-    }*/
+    // const fitScale = Math.min(canvasSize.width / this.imageSize.width, canvasSize.height / this.imageSize.height);
 
-    const localToWorld = makeMatrix4Scale(new Vector3(this.imageSize.width, this.imageSize.height, 1.0));
-
-    // convert from layer pixel space to view space using zoom and pan
-    let worldToView = new Matrix4();
-    worldToView = makeMatrix4Concatenation(
-      makeMatrix4Scale(new Vector3(layerToViewportScale, layerToViewportScale, 1.0)),
-      worldToView,
-    );
-    worldToView = makeMatrix4Concatenation(
-      makeMatrix4Translation(
-        new Vector3(
-          this.canvasSize.width * 0.5 - this.imageSize.width * fitScale * 0.5,
-          this.canvasSize.height * 0.5 - this.imageSize.height * fitScale * 0.5,
-          0.0,
-        ),
-      ),
-      worldToView,
-    );
-    worldToView = makeMatrix4Concatenation(
-      makeMatrix4Translation(new Vector3(this.panPosition.x, this.panPosition.y, 0.0)),
-      worldToView,
-    );
-    // const worldToView = makeMatrix4Concatenation(worldToViewScale, worldToViewTranslation);
-
-    const canvasFramebuffer = this.context.canvasFramebuffer;
-    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0.0), 0.0);
+    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 1, 0.0), 1.0);
     canvasFramebuffer.clear();
 
     const offscreenColorAttachment = this.offscreenColorAttachment;
@@ -279,13 +237,14 @@ export class LayerCompositor {
       return;
     }
     const uniforms = {
-      screenToView: this.canvasToImage,
-      viewToScreen: this.imageToCanvas,
-      worldToView: worldToView,
-      localToWorld: localToWorld,
+      viewToScreen: imageToCanvas,
+      screenToView: canvasToImage,
+      worldToView: new Matrix4(),
+      localToWorld: planeToImage,
       layerMap: offscreenColorAttachment,
-      uvToTexture: makeMatrix3Scale(layerUVScale),
+      uvToTexture: uvToTexture,
       mipmapBias: 0.25,
+      premultipledAlpha: 0,
     };
 
     /*
@@ -317,18 +276,26 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    offscreenFramebuffer.clearState = new ClearState(new Vector3(1, 0, 0), 1.0);
     offscreenFramebuffer.clear();
+
+    const offscreenCenter = this.imageSize.clone().multiplyByScalar(0.5);
+    const imageToOffscreen = makeMatrix4Orthographic(0, this.offscreenSize.width, 0, this.offscreenSize.height, -1, 1);
+    console.log(
+      `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
+    );
+    const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
 
     this.layers.forEach((layer) => {
       const uniforms = {
-        screenToView: this.offscreenToImage,
-        viewToScreen: this.imageToOffscreen,
+        viewToScreen: imageToOffscreen,
+        screenToView: offscreenToImage,
         worldToView: new Matrix4(),
-        localToWorld: layer.layerToImage,
+        localToWorld: layer.planeToImage,
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
+        premultipledAlpha: 1,
       };
 
       /* if (this.firstRender) {
