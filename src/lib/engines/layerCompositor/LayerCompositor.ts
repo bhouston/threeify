@@ -203,9 +203,9 @@ export class LayerCompositor {
       1,
       canvasAspectRatio,
     );
-    console.log(
+    /* console.log(
       `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
-    );
+    );*/
 
     const canvasToImage = makeMatrix4Inverse(imageToCanvas);
 
@@ -281,9 +281,9 @@ export class LayerCompositor {
 
     const offscreenCenter = this.imageSize.clone().multiplyByScalar(0.5);
     const imageToOffscreen = makeMatrix4Orthographic(0, this.offscreenSize.width, 0, this.offscreenSize.height, -1, 1);
-    console.log(
+    /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
-    );
+    );*/
     const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
 
     this.layers.forEach((layer) => {

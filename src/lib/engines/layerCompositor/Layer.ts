@@ -20,7 +20,7 @@ export class Layer {
     public uvScaleFactor = new Vector2(1, -1),
     public uvOffset = new Vector2(0, 1),
   ) {
-    console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
+    // console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
 
     // world space is assumed to be in layer pixel space
     const planeToLayer = makeMatrix4Scale(new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1.0));
