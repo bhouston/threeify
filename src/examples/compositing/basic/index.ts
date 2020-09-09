@@ -30,14 +30,17 @@ async function init(): Promise<null> {
     const layers: Layer[] = [];
     layers.push(new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(0, 0), undefined, undefined, false));
     layers.push(
+      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250), undefined, undefined, false),
+    );
+    layers.push(
+      new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(600, 600), undefined, undefined, false),
+    );
+    layers.push(
       new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(750, 1000), undefined, undefined, false),
     );
     // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 0)));
     // layers.push(new Layer(layerCompositor, concentricUrl, concentricTexImage2D, new Vector2(0, 200)));
     // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 400)));
-    layers.push(
-      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250), undefined, undefined, false),
-    );
 
     // const now = Date.now();
     // layerRenderer.zoomScale = Math.sin(now * 0.0001) + 2.0;
