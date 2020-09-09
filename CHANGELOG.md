@@ -1,3 +1,10 @@
+# [1.68.0](https://github.com/threeify/threeify/compare/v1.67.0...v1.68.0) (2020-09-09)
+
+
+### Features
+
+* layer compositor now obey's device pixel ratio. ([421519f](https://github.com/threeify/threeify/commit/421519f8a3f63ff6a30fd7b7ab9e32a33830b924))
+
 # [1.67.0](https://github.com/threeify/threeify/compare/v1.66.0...v1.67.0) (2020-09-09)
 
 
