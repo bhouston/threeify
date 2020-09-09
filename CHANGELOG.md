@@ -1,3 +1,25 @@
+# [1.67.0](https://github.com/threeify/threeify/compare/v1.66.0...v1.67.0) (2020-09-09)
+
+
+### Bug Fixes
+
+* allow all images to set at 0 depth rather than -1. ([c0d0121](https://github.com/threeify/threeify/commit/c0d012163f1f4792d43d3c46b9d8567040b9030c))
+* improved handling when ImageBitmap not available. ([c7b7e90](https://github.com/threeify/threeify/commit/c7b7e90a574e71cfe52ebca70ccecbcf583425ab))
+* multioutput sample ([6b6cd72](https://github.com/threeify/threeify/commit/6b6cd72a5d03b4134fab9682a6648e1d7163c7c8))
+* pre-multiplied assumption in layer compositor. ([2038a22](https://github.com/threeify/threeify/commit/2038a2291d7294fb28b4934f0d74a9cd188b0f7a))
+* premultiplied alpha only once in Compositor ([ed34326](https://github.com/threeify/threeify/commit/ed343266d488a8f97d9ee1e3d5d9695fa96ef84a))
+
+
+### Features
+
+* add lost context to layer compositor ([50e68e2](https://github.com/threeify/threeify/commit/50e68e2426e129cd0684a0885ab9a76c65730efc))
+* add support for variable premultipliedAlpha on a per layer basis ([dde2b70](https://github.com/threeify/threeify/commit/dde2b70afeff5bbc506898309591d30cd1498224))
+* allow specifying WebGLContextAttributes when creating RenderingContext ([254afb9](https://github.com/threeify/threeify/commit/254afb952765d0d94804888e037535dd6d5e64a7))
+* layer compositor assumes pre-multiplied alpha ([1ad50d5](https://github.com/threeify/threeify/commit/1ad50d5c8458c103a2a144c83c31380f9680a1ce))
+* support strict Safari CORS on image loading. ([ed9ac04](https://github.com/threeify/threeify/commit/ed9ac049934cacfa515494f1a19b1ebbd06f640f))
+* support that = this, simplifies event listeners. ([2208c65](https://github.com/threeify/threeify/commit/2208c655c0cb202e22e4f95ec24af256ff49d12d))
+* Vector2 fit and fill functions w/ tests ([cc225b4](https://github.com/threeify/threeify/commit/cc225b4b5e918e016b7b9b1133c4616f075b108e))
+
 # [1.66.0](https://github.com/threeify/threeify/compare/v1.65.0...v1.66.0) (2020-08-14)
 
 
