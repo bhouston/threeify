@@ -11,8 +11,8 @@ import { VirtualFramebuffer } from "./VirtualFramebuffer";
 
 export class CanvasFramebuffer extends VirtualFramebuffer {
   public readonly canvas: HTMLCanvasElement | OffscreenCanvas;
-  devicePixelRatio = 1.0;
   public autoLayoutMode = true;
+  public devicePixelRatio = 1.0;
 
   constructor(context: RenderingContext) {
     super(context);

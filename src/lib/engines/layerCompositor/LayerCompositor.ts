@@ -85,6 +85,8 @@ export class LayerCompositor {
       premultipliedAlpha: true,
       stencil: false,
     });
+    this.context.canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
+    this.context.canvasFramebuffer.resize();
     const plane = planeGeometry(1, 1, 1, 1);
     transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, 0.0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
