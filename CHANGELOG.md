@@ -1,3 +1,11 @@
+# [1.69.0](https://github.com/threeify/threeify/compare/v1.68.0...v1.69.0) (2020-09-09)
+
+
+### Features
+
+* add support for texture sizes of svgs ([322479f](https://github.com/threeify/threeify/commit/322479f69c392ac32396bc0355b0b7c290445ec4))
+* support for SVG texture loading. ([5189b44](https://github.com/threeify/threeify/commit/5189b44cfda5327b4d5be87db5494f5f27699ed7))
+
 # [1.68.0](https://github.com/threeify/threeify/compare/v1.67.0...v1.68.0) (2020-09-09)
 
 
