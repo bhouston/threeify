@@ -53,7 +53,7 @@ export function isImageBitmapSupported(): boolean {
 export type Image = HTMLImageElement | ImageBitmap;
 
 export function fetchImage(url: string): Promise<Image> {
-  if (isImageBitmapSupported()) {
+  if (isImageBitmapSupported() && !url.includes(".svg")) {
     return fetchImageBitmap(url);
   }
   return fetchImageElement(url);

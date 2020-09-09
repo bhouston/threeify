@@ -9,6 +9,7 @@
 import { IDisposable } from "../../../core/types";
 import { passGeometry } from "../../../geometry/primitives/passGeometry";
 import { ShaderMaterial } from "../../../materials/ShaderMaterial";
+import { isPow2 } from "../../../math/Functions";
 import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
 import { cubeFaceTargets, CubeMapTexture } from "../../../textures/CubeTexture";
@@ -78,7 +79,9 @@ export class TexImage2D implements IDisposable {
     }
 
     if (texParameters.generateMipmaps) {
-      gl.generateMipmap(this.target);
+      if (isPow2(this.size.width) && isPow2(this.size.height)) {
+        gl.generateMipmap(this.target);
+      }
     }
 
     gl.bindTexture(this.target, null);
