@@ -229,7 +229,7 @@ export class LayerCompositor {
     // shrink to fit within render target
     // const fitScale = Math.min(canvasSize.width / this.imageSize.width, canvasSize.height / this.imageSize.height);
 
-    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 1, 0.0), 1.0);
+    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
     const offscreenColorAttachment = this.offscreenColorAttachment;
@@ -276,10 +276,10 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Vector3(1, 0, 0), 1.0);
+    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     offscreenFramebuffer.clear();
 
-    const offscreenCenter = this.imageSize.clone().multiplyByScalar(0.5);
+    // const offscreenCenter = this.imageSize.clone().multiplyByScalar(0.5);
     const imageToOffscreen = makeMatrix4Orthographic(0, this.offscreenSize.width, 0, this.offscreenSize.height, -1, 1);
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
@@ -295,7 +295,7 @@ export class LayerCompositor {
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
-        premultipledAlpha: 1,
+        premultipledAlpha: layer.premultipliedAlpha ? 1 : 0,
       };
 
       /* if (this.firstRender) {
