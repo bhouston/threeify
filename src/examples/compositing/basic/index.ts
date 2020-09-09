@@ -8,7 +8,7 @@ const canvas = document.getElementById("framebuffer") as HTMLCanvasElement;
 async function init(): Promise<null> {
   const layerCompositor = new LayerCompositor(canvas);
 
-  layerCompositor.layerSize = new Vector2(2048, 2048);
+  layerCompositor.imageSize = new Vector2(2048, 2048);
 
   const splatUrl = "/assets/textures/decals/splat.png";
   const splatTexImage2D = await layerCompositor.loadTexImage2D(splatUrl);
@@ -28,12 +28,19 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const layers: Layer[] = [];
-    layers.push(new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(0, 0)));
-    layers.push(new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(750, 1000)));
+    layers.push(new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(0, 0), undefined, undefined, false));
+    layers.push(
+      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250), undefined, undefined, false),
+    );
+    layers.push(
+      new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(600, 600), undefined, undefined, false),
+    );
+    layers.push(
+      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(750, 1000), undefined, undefined, false),
+    );
     // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 0)));
     // layers.push(new Layer(layerCompositor, concentricUrl, concentricTexImage2D, new Vector2(0, 200)));
     // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 400)));
-    layers.push(new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250)));
 
     // const now = Date.now();
     // layerRenderer.zoomScale = Math.sin(now * 0.0001) + 2.0;

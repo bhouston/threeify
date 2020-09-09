@@ -8,7 +8,7 @@ uniform sampler2D equirectangularMap;
 varying vec4 v_homogeneousVertexPosition;
 
 #pragma include <color/spaces/srgb>
-#pragma include <cubemaps/equirectangular>
+#pragma include <cubemaps/latLong>
 
 void main() {
 
