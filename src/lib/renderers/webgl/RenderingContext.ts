@@ -157,11 +157,7 @@ export class RenderingContext {
   }
   set blendState(bs: BlendState) {
     if (!this.#blendState.equals(bs)) {
-      if (bs.enabled) {
-        this.gl.enable(GL.BLEND);
-      } else {
-        this.gl.disable(GL.BLEND);
-      }
+      this.gl.enable(GL.BLEND);
       this.gl.blendEquation(bs.equation);
       this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
       this.#blendState.copy(bs);

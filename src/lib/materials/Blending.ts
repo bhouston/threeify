@@ -6,7 +6,6 @@
 //
 
 export enum Blending {
-  None,
   Over,
   Add,
   Subtract,
