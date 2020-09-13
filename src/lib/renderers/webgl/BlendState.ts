@@ -171,7 +171,7 @@ export function blendModeToBlendState(blending: Blending, premultiplied = true):
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Add:
-        return new BlendState(true, BlendFunc.SourceAlpha, BlendFunc.SourceAlpha, BlendFunc.One, BlendFunc.One);
+        return new BlendState(true, BlendFunc.SourceAlpha, BlendFunc.One, BlendFunc.SourceAlpha, BlendFunc.One);
       case Blending.Subtract:
         return new BlendState(
           true,
@@ -181,7 +181,7 @@ export function blendModeToBlendState(blending: Blending, premultiplied = true):
           BlendFunc.OneMinusSourceColor,
         );
       case Blending.Multiply:
-        return new BlendState(true, BlendFunc.Zero, BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.SourceColor);
+        return new BlendState(true, BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceColor);
     }
   }
 }
