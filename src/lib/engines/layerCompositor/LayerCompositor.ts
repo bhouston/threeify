@@ -15,7 +15,7 @@ import {
 import { Vector2 } from "../../math/Vector2";
 import { makeVector2Fit } from "../../math/Vector2.Functions";
 import { Vector3 } from "../../math/Vector3";
-import { blendModeToBlendState, BlendState } from "../../renderers/webgl/BlendState";
+import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../renderers/webgl/ClearState";
 import { Attachment } from "../../renderers/webgl/framebuffers/Attachment";
@@ -66,7 +66,6 @@ export class LayerCompositor {
   texImage2DCache: TexImage2DMap = {};
   #bufferGeometry: BufferGeometry;
   #program: Program;
-  #blendState: BlendState;
   imageSize = new Vector2(0, 0);
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
@@ -91,7 +90,6 @@ export class LayerCompositor {
     transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, 0.0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
-    this.#blendState = blendModeToBlendState(Blending.Over, true);
 
     const that = this;
     this.context.canvas.addEventListener(
@@ -220,20 +218,16 @@ export class LayerCompositor {
       this.imageSize.height / this.offscreenSize.height,
     );
 
-    // layerUVScale.y *= -1;
-
     const uvScale = makeMatrix3Scale(layerUVScale);
     const uvTranslation = makeMatrix3Translation(
       new Vector2(0, (this.offscreenSize.height - this.imageSize.height) / this.offscreenSize.height),
     );
     const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
 
-    // shrink to fit within render target
-    // const fitScale = Math.min(canvasSize.width / this.imageSize.width, canvasSize.height / this.imageSize.height);
-
     canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
+    const premultipliedAlpha = false;
     const offscreenColorAttachment = this.offscreenColorAttachment;
     if (offscreenColorAttachment === undefined) {
       return;
@@ -246,28 +240,13 @@ export class LayerCompositor {
       layerMap: offscreenColorAttachment,
       uvToTexture: uvToTexture,
       mipmapBias: 0.25,
-      premultipledAlpha: 0,
+      premultipledAlpha: 0, // premultipliedAlpha ? 1 : 0,
     };
 
-    /*
-    if (this.firstRender) {
-      const localTopLeft = new Vector3(0, 0, 0);
-      const localBottomRight = new Vector3(1, 1, 0);
-      console.log("  local:", localTopLeft, localBottomRight);
-      const worldTopLeft = transformPoint(localTopLeft, uniforms.localToWorld);
-      const worldBottomRight = transformPoint(localBottomRight, uniforms.localToWorld);
-      console.log("  world:", worldTopLeft, worldBottomRight);
-      const viewTopLeft = transformPoint(worldTopLeft, uniforms.worldToView);
-      const viewBottomRight = transformPoint(worldBottomRight, uniforms.worldToView);
-      console.log("  view:", viewTopLeft, viewBottomRight);
-      const screenTopLeft = transformPoint(viewTopLeft, uniforms.viewToScreen);
-      const screenBottomRight = transformPoint(viewBottomRight, uniforms.viewToScreen);
-      console.log("  screen:", screenTopLeft, screenBottomRight);
-      this.firstRender = false;
-    }*/
+    const blendState = blendModeToBlendState(Blending.Over, true);
 
     // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-    renderBufferGeometry(canvasFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, this.#blendState);
+    renderBufferGeometry(canvasFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);
   }
 
   renderLayersToFramebuffer(): void {
@@ -281,7 +260,6 @@ export class LayerCompositor {
     offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     offscreenFramebuffer.clear();
 
-    // const offscreenCenter = this.imageSize.clone().multiplyByScalar(0.5);
     const imageToOffscreen = makeMatrix4Orthographic(0, this.offscreenSize.width, 0, this.offscreenSize.height, -1, 1);
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
@@ -300,33 +278,11 @@ export class LayerCompositor {
         premultipledAlpha: layer.premultipliedAlpha ? 1 : 0,
       };
 
-      /* if (this.firstRender) {
-        const localTopLeft = new Vector3(0, 0, 0);
-        const localBottomRight = new Vector3(1, 1, 0);
-        console.log("  local:", localTopLeft, localBottomRight);
-        const worldTopLeft = transformPoint(localTopLeft, uniforms.localToWorld);
-        const worldBottomRight = transformPoint(localBottomRight, uniforms.localToWorld);
-        console.log("  world:", worldTopLeft, worldBottomRight);
-        const viewTopLeft = transformPoint(worldTopLeft, uniforms.worldToView);
-        const viewBottomRight = transformPoint(worldBottomRight, uniforms.worldToView);
-        console.log("  view:", viewTopLeft, viewBottomRight);
-        const screenTopLeft = transformPoint(viewTopLeft, uniforms.viewToScreen);
-        const screenBottomRight = transformPoint(viewBottomRight, uniforms.viewToScreen);
-        console.log("  screen:", screenTopLeft, screenBottomRight);
-        console.log(uniforms);
-      }*/
+      const blendState = blendModeToBlendState(Blending.Over, layer.premultipliedAlpha);
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry(
-        offscreenFramebuffer,
-        this.#program,
-        uniforms,
-        this.#bufferGeometry,
-        undefined,
-        this.#blendState,
-      );
+      renderBufferGeometry(offscreenFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);
     });
-    // this.firstRender = false;
 
     // generate mipmaps.
     const colorAttachment = this.offscreenColorAttachment;
