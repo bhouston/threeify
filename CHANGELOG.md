@@ -1,3 +1,10 @@
+## [1.70.1](https://github.com/threeify/threeify/compare/v1.70.0...v1.70.1) (2020-09-13)
+
+
+### Bug Fixes
+
+* fix blending bug for Add mode in non-premultiplied Alpha. ([23bd048](https://github.com/threeify/threeify/commit/23bd0482f431cf73796fe0509d91b11ad0b0c0af))
+
 # [1.70.0](https://github.com/threeify/threeify/compare/v1.69.0...v1.70.0) (2020-09-13)
 
 
