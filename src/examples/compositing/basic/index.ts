@@ -25,18 +25,16 @@ async function init(): Promise<null> {
   layerCompositor.clearState.color = new Vector3(0.2, 0.2, 0.2);
 
   function animate(): void {
-    requestAnimationFrame(animate);
-
     const layers: Layer[] = [];
-    layers.push(new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(0, 0), undefined, undefined, false));
+    layers.push(new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(0, 0), undefined, undefined, true));
     layers.push(
-      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250), undefined, undefined, false),
+      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(250, 250), undefined, undefined, true),
     );
     layers.push(
-      new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(600, 600), undefined, undefined, false),
+      new Layer(layerCompositor, shirtUrl, shirtTexImage2D, new Vector2(600, 600), undefined, undefined, true),
     );
     layers.push(
-      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(750, 1000), undefined, undefined, false),
+      new Layer(layerCompositor, splatUrl, splatTexImage2D, new Vector2(750, 1000), undefined, undefined, true),
     );
     // layers.push(new Layer(layerCompositor, radialUrl, radialTexImage2D, new Vector2(825, 0)));
     // layers.push(new Layer(layerCompositor, concentricUrl, concentricTexImage2D, new Vector2(0, 200)));
@@ -57,17 +55,20 @@ async function init(): Promise<null> {
 
   window.addEventListener("resize", () => {
     layerCompositor.context.canvasFramebuffer.resize();
+    requestAnimationFrame(animate);
   });
   canvas.addEventListener("mousedown", (mouseEvent: MouseEvent) => {
     if (mouseEvent.button === 0) {
       layerCompositor.zoomScale = zoomFactor;
       layerCompositor.panPosition = new Vector2(-mouseEvent.offsetX, -mouseEvent.offsetY);
+      requestAnimationFrame(animate);
     }
   });
   canvas.addEventListener("mouseup", (mouseEvent: MouseEvent) => {
     if (mouseEvent.button === 0) {
       layerCompositor.zoomScale = 1.0;
       layerCompositor.panPosition = new Vector2(0, 0);
+      requestAnimationFrame(animate);
     }
   });
   canvas.addEventListener("mousemove", (mouseEvent: MouseEvent) => {
@@ -75,18 +76,22 @@ async function init(): Promise<null> {
       // console.log(`mouse offset ${mouseEvent.offsetX}, ${mouseEvent.offsetY}`);
       layerCompositor.panPosition = new Vector2(-mouseEvent.offsetX, -mouseEvent.offsetY);
       // console.log(layerRenderer.panPosition);
+      requestAnimationFrame(animate);
     }
   });
   canvas.addEventListener("touchstart", (touchEvent: TouchEvent) => {
     layerCompositor.zoomScale = zoomFactor;
     layerCompositor.panPosition = new Vector2(-touchEvent.touches[0].clientX, -touchEvent.touches[0].clientY);
+    requestAnimationFrame(animate);
   });
   canvas.addEventListener("touchend", () => {
     layerCompositor.zoomScale = 1.0;
     layerCompositor.panPosition = new Vector2(0, 0);
+    requestAnimationFrame(animate);
   });
   canvas.addEventListener("touchmove", (touchEvent: TouchEvent) => {
     layerCompositor.panPosition = new Vector2(-touchEvent.touches[0].clientX, -touchEvent.touches[0].clientY);
+    requestAnimationFrame(animate);
   });
 
   return null;
