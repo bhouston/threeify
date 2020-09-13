@@ -1,3 +1,11 @@
+## [1.70.2](https://github.com/threeify/threeify/compare/v1.70.1...v1.70.2) (2020-09-13)
+
+
+### Bug Fixes
+
+* make macOS Safari and Ubuntu Chrome behave the same in LayerCompositor ([a98b954](https://github.com/threeify/threeify/commit/a98b954a99d079c09ba696c1a85a928d0624fe93))
+* premultipled alpha works the same as non-premultipled alpha in blend states ([504383d](https://github.com/threeify/threeify/commit/504383de7f713372a994a7a8e1ba5eaf77f29679))
+
 ## [1.70.1](https://github.com/threeify/threeify/compare/v1.70.0...v1.70.1) (2020-09-13)
 
 
