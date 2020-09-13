@@ -92,7 +92,6 @@ export enum BlendFunc {
 export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState> {
   // TODO: Should be intialized to default WebGL states
   constructor(
-    public enabled = false,
     public sourceRGBFactor = BlendFunc.One,
     public destRGBFactor = BlendFunc.Zero,
     public sourceAlphaFactor = BlendFunc.One,
@@ -102,7 +101,6 @@ export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState
 
   clone(): BlendState {
     return new BlendState(
-      this.enabled,
       this.sourceRGBFactor,
       this.destRGBFactor,
       this.sourceAlphaFactor,
@@ -112,7 +110,6 @@ export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState
   }
 
   copy(bs: BlendState): void {
-    this.enabled = bs.enabled;
     this.sourceRGBFactor = bs.sourceRGBFactor;
     this.destRGBFactor = bs.destRGBFactor;
     this.sourceAlphaFactor = bs.sourceAlphaFactor;
@@ -122,7 +119,6 @@ export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState
 
   equals(bs: BlendState): boolean {
     return (
-      this.enabled === bs.enabled &&
       this.sourceRGBFactor === bs.sourceRGBFactor &&
       this.destRGBFactor === bs.destRGBFactor &&
       this.sourceAlphaFactor === bs.sourceAlphaFactor &&
@@ -135,53 +131,45 @@ export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState
 export function blendModeToBlendState(blending: Blending, premultiplied = true): BlendState {
   if (premultiplied) {
     switch (blending) {
-      case Blending.None:
-        return new BlendState(false);
       case Blending.Over:
         return new BlendState(
-          true,
           BlendFunc.One,
           BlendFunc.OneMinusSourceAlpha,
           BlendFunc.One,
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Add:
-        return new BlendState(true, BlendFunc.One, BlendFunc.One, BlendFunc.One, BlendFunc.One);
+        return new BlendState(BlendFunc.One, BlendFunc.One, BlendFunc.One, BlendFunc.One);
       case Blending.Subtract:
         return new BlendState(
-          true,
           BlendFunc.Zero,
           BlendFunc.Zero,
           BlendFunc.OneMinusSourceColor,
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Multiply:
-        return new BlendState(true, BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceAlpha);
+        return new BlendState(BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceAlpha);
     }
   } else {
     switch (blending) {
-      case Blending.None:
-        return new BlendState(false);
       case Blending.Over:
         return new BlendState(
-          true,
           BlendFunc.SourceAlpha,
           BlendFunc.OneMinusSourceAlpha,
           BlendFunc.One,
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Add:
-        return new BlendState(true, BlendFunc.SourceAlpha, BlendFunc.One, BlendFunc.SourceAlpha, BlendFunc.One);
+        return new BlendState(BlendFunc.SourceAlpha, BlendFunc.One, BlendFunc.One, BlendFunc.One);
       case Blending.Subtract:
         return new BlendState(
-          true,
           BlendFunc.Zero,
           BlendFunc.Zero,
           BlendFunc.OneMinusSourceColor,
           BlendFunc.OneMinusSourceColor,
         );
       case Blending.Multiply:
-        return new BlendState(true, BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceColor);
+        return new BlendState(BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceColor);
     }
   }
 }

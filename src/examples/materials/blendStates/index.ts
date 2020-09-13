@@ -33,9 +33,6 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
-  const blendings = [Blending.None, Blending.Over, Blending.Add, Blending.Subtract, Blending.Multiply];
-  const premultipliedAlphas = [false, true];
-
   const program = makeProgramFromShaderMaterial(context, material);
   const bgUniforms = {
     localToWorld: new Matrix4(),
@@ -53,24 +50,16 @@ async function init(): Promise<null> {
   const geometry = planeGeometry(1, 1, 1, 1);
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
-  let lastNow = Date.now();
-  let averageDelta = -1;
-  let time = 0;
+  const blendings = [Blending.Over, Blending.Add, Blending.Subtract, Blending.Multiply];
+  const premultipliedAlphas = [false, true];
 
   function animate(): void {
-    const now = Date.now();
-    if (averageDelta < 0) {
-      averageDelta = lastNow - now;
-    } else {
-      averageDelta = averageDelta * 0.9 + (lastNow - now) * 0.1;
-    }
-    time += averageDelta;
-    lastNow = now;
+    const time = Date.now();
 
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {
       blendings.forEach((blending, bIndex) => {
-        let localToWorld = makeMatrix4Translation(new Vector3(-0.5 + bIndex / 5, pIndex / 5, 0));
-        localToWorld = makeMatrix4Concatenation(localToWorld, makeMatrix4Scale(new Vector3(0.2, 0.2, 0)));
+        let localToWorld = makeMatrix4Translation(new Vector3(-0.5 + bIndex / 4, pIndex / 3, 0));
+        localToWorld = makeMatrix4Concatenation(localToWorld, makeMatrix4Scale(new Vector3(0.25, 0.25, 0)));
 
         bgUniforms.localToWorld = localToWorld;
         bgUniforms.premultipliedAlpha = premultipliedAlpha ? 1 : 0;
