@@ -1,3 +1,10 @@
+# [1.70.0](https://github.com/threeify/threeify/compare/v1.69.0...v1.70.0) (2020-09-13)
+
+
+### Features
+
+* add blend-state & premultiplied alpha example ([816fb25](https://github.com/threeify/threeify/commit/816fb25b8553c63975ea288704c2b41fb618884e))
+
 # [1.69.0](https://github.com/threeify/threeify/compare/v1.68.0...v1.69.0) (2020-09-09)
 
 
