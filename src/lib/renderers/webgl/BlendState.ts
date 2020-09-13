@@ -143,8 +143,8 @@ export function blendModeToBlendState(blending: Blending, premultiplied = true):
       case Blending.Subtract:
         return new BlendState(
           BlendFunc.Zero,
+          BlendFunc.OneMinusSourceAlpha,
           BlendFunc.Zero,
-          BlendFunc.OneMinusSourceColor,
           BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Multiply:
@@ -164,9 +164,9 @@ export function blendModeToBlendState(blending: Blending, premultiplied = true):
       case Blending.Subtract:
         return new BlendState(
           BlendFunc.Zero,
+          BlendFunc.OneMinusSourceAlpha, // alpha only, as rgb + alpha can not be replicated across pre/post multiplied alpha.
           BlendFunc.Zero,
-          BlendFunc.OneMinusSourceColor,
-          BlendFunc.OneMinusSourceColor,
+          BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Multiply:
         return new BlendState(BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceColor);

@@ -15,7 +15,7 @@ import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
 import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImageElement } from "../../../lib/textures/loaders/Image";
+import { fetchImage, fetchImageElement } from "../../../lib/textures/loaders/Image";
 import { Texture } from "../../../lib/textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
@@ -25,6 +25,7 @@ async function init(): Promise<null> {
   const fgTexture = new Texture(
     await fetchImageElement("/assets/textures/alphaCompositing/fg.svg", new Vector2(1024, 1024)),
   );
+  const fgSplatTexture = new Texture(await fetchImage("/assets/textures/decals/splat.png"));
   const bgTexture = new Texture(
     await fetchImageElement("/assets/textures/alphaCompositing/bg.svg", new Vector2(1024, 1024)),
   );
@@ -33,18 +34,22 @@ async function init(): Promise<null> {
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
+  const fgMap = makeTexImage2DFromTexture(context, fgTexture);
+  const fgSplatMap = makeTexImage2DFromTexture(context, fgSplatTexture);
+  const bgMap = makeTexImage2DFromTexture(context, bgTexture);
+
   const program = makeProgramFromShaderMaterial(context, material);
   const bgUniforms = {
     localToWorld: new Matrix4(),
     premultipliedAlpha: 0,
     alpha: 1,
-    map: makeTexImage2DFromTexture(context, bgTexture),
+    map: bgMap,
   };
   const fgUniforms = {
     localToWorld: new Matrix4(),
     premultipliedAlpha: 0,
     alpha: 1,
-    map: makeTexImage2DFromTexture(context, fgTexture),
+    map: fgMap,
   };
 
   const geometry = planeGeometry(1, 1, 1, 1);
@@ -52,25 +57,29 @@ async function init(): Promise<null> {
 
   const blendings = [Blending.Over, Blending.Add, Blending.Subtract, Blending.Multiply];
   const premultipliedAlphas = [false, true];
+  const fgMaps = [fgMap, fgSplatMap];
 
   function animate(): void {
     const time = Date.now();
 
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {
-      blendings.forEach((blending, bIndex) => {
-        let localToWorld = makeMatrix4Translation(new Vector3(-0.5 + bIndex / 4, pIndex / 3, 0));
-        localToWorld = makeMatrix4Concatenation(localToWorld, makeMatrix4Scale(new Vector3(0.25, 0.25, 0)));
+      fgMaps.forEach((fgMap, mIndex) => {
+        blendings.forEach((blending, bIndex) => {
+          let localToWorld = makeMatrix4Translation(new Vector3(-0.5 + bIndex / 4, (pIndex + mIndex * 2) / 4, 0));
+          localToWorld = makeMatrix4Concatenation(localToWorld, makeMatrix4Scale(new Vector3(0.25, 0.25, 0)));
 
-        bgUniforms.localToWorld = localToWorld;
-        bgUniforms.premultipliedAlpha = premultipliedAlpha ? 1 : 0;
-        canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, premultipliedAlpha);
-        renderBufferGeometry(canvasFramebuffer, program, bgUniforms, bufferGeometry);
+          bgUniforms.localToWorld = localToWorld;
+          bgUniforms.premultipliedAlpha = premultipliedAlpha ? 1 : 0;
+          canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, premultipliedAlpha);
+          renderBufferGeometry(canvasFramebuffer, program, bgUniforms, bufferGeometry);
 
-        fgUniforms.localToWorld = localToWorld;
-        fgUniforms.premultipliedAlpha = premultipliedAlpha ? 1 : 0;
-        fgUniforms.alpha = Math.cos(time * 0.001) * 0.5 + 0.5;
-        canvasFramebuffer.blendState = blendModeToBlendState(blending, premultipliedAlpha);
-        renderBufferGeometry(canvasFramebuffer, program, fgUniforms, bufferGeometry);
+          fgUniforms.localToWorld = localToWorld;
+          fgUniforms.premultipliedAlpha = premultipliedAlpha ? 1 : 0;
+          fgUniforms.alpha = Math.cos(time * 0.001) * 0.5 + 0.5;
+          fgUniforms.map = fgMap;
+          canvasFramebuffer.blendState = blendModeToBlendState(blending, premultipliedAlpha);
+          renderBufferGeometry(canvasFramebuffer, program, fgUniforms, bufferGeometry);
+        });
       });
     });
 
