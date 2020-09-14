@@ -61,13 +61,16 @@ async function init(): Promise<null> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
+  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+
   function animate(): void {
     const time = Date.now();
 
     if (Math.floor((time * 0.0005) / Math.PI) % 2 === 0) {
-      canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+      canvasFramebuffer.clearState = blackClearState;
     } else {
-      canvasFramebuffer.clearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+      canvasFramebuffer.clearState = whiteClearState;
     }
     canvasFramebuffer.clear(BufferBit.All);
 
