@@ -605,7 +605,8 @@ export function makeMatrix4OrthographicSimple(
   aspectRatio = 1.0,
   result = new Matrix4(),
 ): Matrix4 {
-  const width = (height * aspectRatio) / zoom;
+  height /= zoom;
+  const width = height * aspectRatio;
 
   const left = -width * 0.5 + center.x;
   const right = left + width;
