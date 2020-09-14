@@ -11,6 +11,8 @@ import { Vector2 } from "../../../lib/math/Vector2";
 import { Vector3 } from "../../../lib/math/Vector3";
 import { blendModeToBlendState } from "../../../lib/renderers/webgl/BlendState";
 import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
+import { ClearState } from "../../../lib/renderers/webgl/ClearState";
+import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
 import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
 import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
@@ -61,6 +63,13 @@ async function init(): Promise<null> {
 
   function animate(): void {
     const time = Date.now();
+
+    if (Math.floor((time * 0.0005) / Math.PI) % 2 === 0) {
+      canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+    } else {
+      canvasFramebuffer.clearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+    }
+    canvasFramebuffer.clear(BufferBit.All);
 
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {
       fgMaps.forEach((fgMap, mIndex) => {
