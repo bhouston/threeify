@@ -1,3 +1,15 @@
+# [1.72.0](https://github.com/threeify/threeify/compare/v1.71.0...v1.72.0) (2020-09-14)
+
+
+### Bug Fixes
+
+* makeMatrix4OrthographicSimple zoom. ([2f55ecf](https://github.com/threeify/threeify/commit/2f55ecfe00bdd1c68ef77667240a06c162e4f10f))
+
+
+### Features
+
+* centered zoom for layer compositor. ([38b0b8a](https://github.com/threeify/threeify/commit/38b0b8abac65bb7278d58378400b4a930edca4ea))
+
 # [1.71.0](https://github.com/threeify/threeify/compare/v1.70.2...v1.71.0) (2020-09-14)
 
 
