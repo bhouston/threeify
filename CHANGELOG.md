@@ -1,3 +1,10 @@
+# [1.71.0](https://github.com/threeify/threeify/compare/v1.70.2...v1.71.0) (2020-09-14)
+
+
+### Features
+
+* add switching between black and white bg. ([78bacd1](https://github.com/threeify/threeify/commit/78bacd1427c49999244e66cdd8dcf6acd1e8cb07))
+
 ## [1.70.2](https://github.com/threeify/threeify/compare/v1.70.1...v1.70.2) (2020-09-13)
 
 
