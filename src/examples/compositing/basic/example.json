@@ -1,8 +1,0 @@
-{
-  "slug": "compositing_layers",
-  "en": {
-    "name": "Layered Compositor",
-    "description": "A layered renderer which takes a set of layers and renders them back to front.",
-    "keywords": ["compositing", "layers"]
-  }
-}

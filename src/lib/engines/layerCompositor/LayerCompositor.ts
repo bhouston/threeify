@@ -192,15 +192,35 @@ export class LayerCompositor {
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
 
-    const scaledImageSize = makeVector2Fit(canvasSize, this.imageSize);
-    const scaledImageCenter = scaledImageSize.clone().multiplyByScalar(0.5);
+    const canvasImageSize = makeVector2Fit(canvasSize, this.imageSize);
+    const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
+
+    if (this.zoomScale > 1.0) {
+      // convert from canvas space to image space
+      const imagePanPosition = this.panPosition.clone().multiplyByScalar(this.imageSize.width / canvasImageSize.width);
+      const imageCanvasSize = canvasSize.clone().multiplyByScalar(this.imageSize.width / canvasImageSize.width);
+
+      // center pan
+      const imagePanOffset = imagePanPosition.clone().sub(imageCanvasSize.clone().multiplyByScalar(0.5));
+      // clamp to within image.
+      imagePanOffset.x = Math.sign(imagePanOffset.x) * Math.min(Math.abs(imagePanOffset.x), this.imageSize.x * 0.5);
+      imagePanOffset.y = Math.sign(imagePanOffset.y) * Math.min(Math.abs(imagePanOffset.y), this.imageSize.y * 0.5);
+
+      // convert back to
+      const canvasPanOffset = imagePanOffset.clone().multiplyByScalar(canvasImageSize.width / this.imageSize.width);
+
+      // ensure zoom is at point of contact, not center of screen.
+      const centeredCanvasPanOffset = canvasPanOffset.clone().multiplyByScalar(1 - 1 / this.zoomScale);
+
+      canvasImageCenter.add(centeredCanvasPanOffset);
+    }
 
     const imageToCanvas = makeMatrix4OrthographicSimple(
       canvasSize.height,
-      scaledImageCenter,
+      canvasImageCenter,
       -1,
       1,
-      1,
+      this.zoomScale,
       canvasAspectRatio,
     );
     /* console.log(
@@ -209,7 +229,7 @@ export class LayerCompositor {
 
     const canvasToImage = makeMatrix4Inverse(imageToCanvas);
 
-    const planeToImage = makeMatrix4Scale(new Vector3(scaledImageSize.width, scaledImageSize.height, 1.0));
+    const planeToImage = makeMatrix4Scale(new Vector3(canvasImageSize.width, canvasImageSize.height, 1.0));
 
     this.renderLayersToFramebuffer();
 
@@ -227,7 +247,6 @@ export class LayerCompositor {
     canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
-    const premultipliedAlpha = false;
     const offscreenColorAttachment = this.offscreenColorAttachment;
     if (offscreenColorAttachment === undefined) {
       return;
@@ -240,7 +259,7 @@ export class LayerCompositor {
       layerMap: offscreenColorAttachment,
       uvToTexture: uvToTexture,
       mipmapBias: 0.25,
-      premultipledAlpha: 0, // premultipliedAlpha ? 1 : 0,
+      premultipliedAlpha: 0,
     };
 
     const blendState = blendModeToBlendState(Blending.Over, true);
@@ -275,7 +294,7 @@ export class LayerCompositor {
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
-        premultipledAlpha: layer.premultipliedAlpha ? 1 : 0,
+        premultipliedAlpha: layer.premultipliedAlpha ? 1 : 0,
       };
 
       const blendState = blendModeToBlendState(Blending.Over, layer.premultipliedAlpha);
