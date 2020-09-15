@@ -2,6 +2,7 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler,
+  fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
@@ -16,8 +17,7 @@ import {
   Texture,
   TextureFilter,
   TextureWrap,
-} from "../../../lib";
-import { fetchImage } from "../../../lib/textures/loaders";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

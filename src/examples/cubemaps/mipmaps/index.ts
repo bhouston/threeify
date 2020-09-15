@@ -3,6 +3,7 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler,
+  fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeMatrix4PerspectiveFov,
@@ -15,8 +16,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Vector3,
-} from "../../../lib";
-import { fetchImage } from "../../../lib/textures/loaders";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

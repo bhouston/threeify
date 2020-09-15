@@ -5,6 +5,7 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler,
+  fetchImage,
   Framebuffer,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
@@ -23,8 +24,7 @@ import {
   TextureFilter,
   Vector2,
   Vector3,
-} from "../../../lib";
-import { fetchImage } from "../../../lib/textures/loaders";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import { patternMaterial } from "./pattern/PatternMaterial";
 import vertexSource from "./vertex.glsl";

@@ -3,6 +3,8 @@ import {
   blendModeToBlendState,
   BufferBit,
   ClearState,
+  fetchImage,
+  fetchImageElement,
   makeBufferGeometryFromGeometry,
   makeMatrix4Concatenation,
   makeMatrix4Scale,
@@ -17,8 +19,7 @@ import {
   Texture,
   Vector2,
   Vector3,
-} from "../../../lib";
-import { fetchImage, fetchImageElement } from "../../../lib/textures/loaders";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

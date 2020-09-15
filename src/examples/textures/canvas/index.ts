@@ -20,7 +20,7 @@ import {
   Texture,
   Vector2,
   Vector3,
-} from "../../../lib";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

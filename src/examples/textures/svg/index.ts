@@ -10,7 +10,7 @@ import {
   ShaderMaterial,
   Texture,
   Vector2,
-} from "../../../lib";
+} from "../../../lib/index";
 import { fetchImageElement } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";

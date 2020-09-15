@@ -17,7 +17,7 @@ import {
   Vector2,
   Vector2View,
   Vector3,
-} from "../../../lib";
+} from "../../../lib/index";
 import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
