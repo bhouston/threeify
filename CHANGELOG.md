@@ -1,3 +1,10 @@
+## [1.75.1](https://github.com/threeify/threeify/compare/v1.75.0...v1.75.1) (2020-09-15)
+
+
+### Bug Fixes
+
+* fix imports of images for examples. ([932d2cc](https://github.com/threeify/threeify/commit/932d2cce60319d80b1880ee869f1d0978c1601d0))
+
 # [1.75.0](https://github.com/threeify/threeify/compare/v1.74.0...v1.75.0) (2020-09-15)
 
 
