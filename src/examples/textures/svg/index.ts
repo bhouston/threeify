@@ -1,6 +1,7 @@
 import {
   Blending,
   blendModeToBlendState,
+  fetchImageElement,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
@@ -11,7 +12,6 @@ import {
   Texture,
   Vector2,
 } from "../../../lib/index";
-import { fetchImageElement } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

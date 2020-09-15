@@ -1,6 +1,7 @@
 import {
   BufferBit,
   ClearState,
+  fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4OrthographicSimple,
   makeMatrix4Translation,
@@ -18,7 +19,6 @@ import {
   Vector2View,
   Vector3,
 } from "../../../lib/index";
-import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

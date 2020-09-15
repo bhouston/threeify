@@ -25,7 +25,8 @@ import { makeProgramFromShaderMaterial, Program } from "../../renderers/webgl/pr
 import { RenderingContext } from "../../renderers/webgl/RenderingContext";
 import { DataType } from "../../renderers/webgl/textures/DataType";
 import { PixelFormat } from "../../renderers/webgl/textures/PixelFormat";
-import { makeTexImage2DFromTexture, TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
+import { TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
+import { makeTexImage2DFromTexture } from "../../renderers/webgl/textures/TexImage2D.Functions";
 import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
 import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
 import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
