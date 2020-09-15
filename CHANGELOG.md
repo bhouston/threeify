@@ -1,3 +1,11 @@
+# [1.74.0](https://github.com/threeify/threeify/compare/v1.73.0...v1.74.0) (2020-09-15)
+
+
+### Features
+
+* add .npmignore ([9540b1b](https://github.com/threeify/threeify/commit/9540b1b8a5634f2d839efa8882c9c44043d6f0b9))
+* proper npm publishing ([a296b2a](https://github.com/threeify/threeify/commit/a296b2a436a4e9b162ab2fda2da276b6c545ac7d))
+
 # [1.73.0](https://github.com/threeify/threeify/compare/v1.72.0...v1.73.0) (2020-09-15)
 
 
