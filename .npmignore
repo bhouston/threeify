@@ -1,0 +1,5 @@
+assets
+dist/examples
+lib/src/examples
+node_modules
+*.tgz
