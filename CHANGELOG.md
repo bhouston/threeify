@@ -1,3 +1,15 @@
+# [1.75.0](https://github.com/threeify/threeify/compare/v1.74.0...v1.75.0) (2020-09-15)
+
+
+### Bug Fixes
+
+* proper npm names for compiled lib ([17979d3](https://github.com/threeify/threeify/commit/17979d3604666d497d843fb34eec15bab8273f6e))
+
+
+### Features
+
+* adopt proper index.ts imports for the whole library ([2af4131](https://github.com/threeify/threeify/commit/2af4131fea2106b076781f20718fc16f18df7e42))
+
 # [1.74.0](https://github.com/threeify/threeify/compare/v1.73.0...v1.74.0) (2020-09-15)
 
 
