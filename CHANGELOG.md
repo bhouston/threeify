@@ -1,3 +1,10 @@
+# [1.73.0](https://github.com/threeify/threeify/compare/v1.72.0...v1.73.0) (2020-09-15)
+
+
+### Features
+
+* cache offscreen composite, update only when layers change. ([10638be](https://github.com/threeify/threeify/commit/10638be577c112aea2b4af41da97d0aa0035aa9a))
+
 # [1.72.0](https://github.com/threeify/threeify/compare/v1.71.0...v1.72.0) (2020-09-14)
 
 
