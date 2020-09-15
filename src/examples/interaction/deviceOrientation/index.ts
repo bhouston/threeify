@@ -1,22 +1,23 @@
-import { DeviceOrientation } from "../../../lib/controllers/DeviceOrientation";
-import { boxGeometry } from "../../../lib/geometry/primitives/boxGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
+  boxGeometry,
+  DepthTestFunc,
+  DepthTestState,
+  DeviceOrientation,
+  makeBufferGeometryFromGeometry,
   makeMatrix4Inverse,
   makeMatrix4Perspective,
   makeMatrix4RotationFromQuaternion,
   makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
+  Matrix4,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  Vector3,
+} from "../../../lib";
+import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

@@ -1,21 +1,22 @@
-import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Vector2 } from "../../../lib/math/Vector2";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { ClearState } from "../../../lib/renderers/webgl/ClearState";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
-import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
 import {
+  Attachment,
+  BufferBit,
+  ClearState,
+  DepthTestFunc,
+  DepthTestState,
   Framebuffer,
+  makeBufferGeometryFromGeometry,
   makeColorAttachment,
   makeDepthAttachment,
+  makeProgramFromShaderMaterial,
+  passGeometry,
   readPixelsFromFramebuffer,
-} from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Vector2,
+  Vector3,
+} from "../../../lib";
 import vertexSource from "../../../lib/shaders/includes/tests/vertex.glsl";
 import { glslTestSuites } from "../../../lib/shaders/testSuites";
 

@@ -1,30 +1,29 @@
-import { boxGeometry } from "../../../lib/geometry/primitives/boxGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler } from "../../../lib/math/Euler";
-import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
+  Attachment,
+  boxGeometry,
+  BufferBit,
+  ClearState,
+  DepthTestFunc,
+  DepthTestState,
+  Euler,
+  Framebuffer,
+  makeBufferGeometryFromGeometry,
+  makeColorAttachment,
+  makeDepthAttachment,
   makeMatrix4OrthographicSimple,
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../lib/math/Vector2";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { ClearState } from "../../../lib/renderers/webgl/ClearState";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
-import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
-import {
-  Framebuffer,
-  makeColorAttachment,
-  makeDepthAttachment,
-} from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
+  Matrix4,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  Vector2,
+  Vector3,
+} from "../../../lib";
+import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

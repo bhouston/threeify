@@ -1,17 +1,21 @@
-import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Matrix4 } from "../../../lib/math/Matrix4";
-import { makeMatrix4PerspectiveFov, makeMatrix4Translation } from "../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../lib/math/Vector2";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromEquirectangularTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+import {
+  DepthTestFunc,
+  DepthTestState,
+  icosahedronGeometry,
+  makeBufferGeometryFromGeometry,
+  makeMatrix4PerspectiveFov,
+  makeMatrix4Translation,
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromEquirectangularTexture,
+  Matrix4,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  Vector2,
+  Vector3,
+} from "../../../lib";
+import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

@@ -1,24 +1,24 @@
-import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
-import { Blending } from "../../../lib/materials/Blending";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
+  Blending,
+  blendModeToBlendState,
+  BufferBit,
+  ClearState,
+  makeBufferGeometryFromGeometry,
   makeMatrix4Concatenation,
   makeMatrix4Scale,
   makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../lib/math/Vector2";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { blendModeToBlendState } from "../../../lib/renderers/webgl/BlendState";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { ClearState } from "../../../lib/renderers/webgl/ClearState";
-import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImage, fetchImageElement } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
+  Matrix4,
+  planeGeometry,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  Vector2,
+  Vector3,
+} from "../../../lib";
+import { fetchImage, fetchImageElement } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

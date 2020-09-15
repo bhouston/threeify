@@ -1,7 +1,7 @@
+import { transformNormal3, transformPoint3 } from "..";
 import { makeVector3View } from "../math/arrays/PrimitiveView";
 import { Matrix4 } from "../math/Matrix4";
 import { Vector3 } from "../math/Vector3";
-import { transformNormal, transformPoint } from "../math/Vector3Matrix4.Functions";
 import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
 import { Geometry } from "./Geometry";
@@ -152,7 +152,7 @@ export function transformGeometry(geometry: Geometry, m: Matrix4): void {
   const v = new Vector3();
   for (let i = 0; i < positions.count; i++) {
     positions.get(i, v);
-    transformPoint(v, m, v);
+    transformPoint3(v, m, v);
     positions.set(i, v);
   }
 
@@ -161,7 +161,7 @@ export function transformGeometry(geometry: Geometry, m: Matrix4): void {
     const normals = makeVector3View(normalAttribute);
     for (let i = 0; i < normals.count; i++) {
       normals.get(i, v);
-      transformNormal(v, m, v);
+      transformNormal3(v, m, v);
       normals.set(i, v);
     }
   }

@@ -1,24 +1,26 @@
-import { transformGeometry } from "../../../lib/geometry/Geometry.Functions";
-import { fetchOBJ } from "../../../lib/geometry/loaders/OBJ";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler, EulerOrder } from "../../../lib/math/Euler";
-import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
+  BufferBit,
+  ClearState,
+  CullingState,
+  DepthTestFunc,
+  DepthTestState,
+  Euler,
+  EulerOrder,
+  fetchOBJ,
+  makeBufferGeometryFromGeometry,
   makeMatrix4Concatenation,
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
   makeMatrix4Scale,
   makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { ClearState } from "../../../lib/renderers/webgl/ClearState";
-import { CullingState } from "../../../lib/renderers/webgl/CullingState";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { BufferBit } from "../../../lib/renderers/webgl/framebuffers/BufferBit";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
+  makeProgramFromShaderMaterial,
+  Matrix4,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  transformGeometry,
+  Vector3,
+} from "../../../lib";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
