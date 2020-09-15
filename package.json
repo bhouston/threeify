@@ -1,6 +1,6 @@
 {
   "name": "threeify",
-  "version": "1.73.1",
+  "version": "1.73.2",
   "description": "Typescript 3D Library loosely based on three.js",
   "keywords": [
     "threeify",
@@ -14,12 +14,12 @@
     "url": "https://github.com/threeify/threeify/issues"
   },
   "license": "ISC",
-  "main": "dist/src/index.js",
+  "main": "dist/lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/threeify/threeify"
   },
-  "typings": "dist/src/index.d.ts",
+  "typings": "dist/lib/index.d.ts",
   "scripts": {
     "build": "tgt & tsc",
     "dev": "npm run watch & npm start",
