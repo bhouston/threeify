@@ -69,7 +69,9 @@ export class LayerCompositor {
   imageSize = new Vector2(0, 0);
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
-  layers: Layer[] = [];
+  #layers: Layer[] = [];
+  #layerVersion = 0;
+  #offlineLayerVersion = -1;
   firstRender = true;
   clearState = new ClearState(new Vector3(1, 1, 1), 1.0);
   offscreenFramebuffer: Framebuffer | undefined;
@@ -90,43 +92,12 @@ export class LayerCompositor {
     transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, 0.0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
-
-    const that = this;
-    this.context.canvas.addEventListener(
-      "webglcontextlost",
-      function (event) {
-        event.preventDefault();
-        that.onContextRestored();
-      },
-      false,
-    );
-    this.context.canvas.addEventListener(
-      "webglcontextrestored",
-      function () {
-        that.onContextRestored();
-      },
-      false,
-    );
   }
 
-  onContextLost(): void {}
-  onContextRestored(): void {
-    if (this.offscreenFramebuffer !== undefined) {
-      // reload framebuffer
-      this.offscreenFramebuffer.dispose();
-      this.offscreenFramebuffer = undefined;
-      this.updateOffscreen();
-
-      // reload layer textures
-      this.layers.forEach((layer) => {
-        layer.texImage2D.dispose();
-        this.loadTexImage2D(layer.url).then((texImage2D) => {
-          layer.texImage2D = texImage2D;
-        });
-      });
-    }
+  set layers(layers: Layer[]) {
+    this.#layers = layers;
+    this.#layerVersion++;
   }
-
   updateOffscreen(): void {
     // but to enable mipmaps (for filtering) we need it to be up-rounded to a power of 2 in width/height.
     const offscreenSize = new Vector2(ceilPow2(this.imageSize.x), ceilPow2(this.imageSize.y));
@@ -270,6 +241,12 @@ export class LayerCompositor {
 
   renderLayersToFramebuffer(): void {
     this.updateOffscreen();
+
+    if (this.#offlineLayerVersion >= this.#layerVersion) {
+      return;
+    }
+    this.#offlineLayerVersion = this.#layerVersion;
+
     const offscreenFramebuffer = this.offscreenFramebuffer;
     if (offscreenFramebuffer === undefined) {
       return;
@@ -285,7 +262,7 @@ export class LayerCompositor {
     );*/
     const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
 
-    this.layers.forEach((layer) => {
+    this.#layers.forEach((layer) => {
       const uniforms = {
         viewToScreen: imageToOffscreen,
         screenToView: offscreenToImage,
