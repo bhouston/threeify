@@ -4,7 +4,7 @@ import { Matrix4 } from "./Matrix4";
 import { getMaxScaleOnAxis } from "./Matrix4.Functions";
 import { Sphere } from "./Sphere";
 import { Vector3 } from "./Vector3";
-import { transformPoint } from "./Vector3Matrix4.Functions";
+import { transformPoint3 } from "./Vector3Matrix4.Functions";
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
 export function makeBoundingSphereFromBox(box: Box3, result = new Sphere()): Sphere {
@@ -52,7 +52,7 @@ export function clampPointToSphere(sphere: Sphere, point: Vector3): Vector3 {
 }
 
 export function transformSphere(s: Sphere, m: Matrix4, result = new Sphere()): Sphere {
-  transformPoint(s.center, m, result.center);
+  transformPoint3(s.center, m, result.center);
   result.radius = s.radius * getMaxScaleOnAxis(m);
   return result;
 }

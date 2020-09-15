@@ -1,22 +1,23 @@
-import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler } from "../../../lib/math/Euler";
-import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
+  DepthTestFunc,
+  DepthTestState,
+  Euler,
+  makeBufferGeometryFromGeometry,
   makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
-} from "../../../lib/math/Matrix4.Functions";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
-import { TextureWrap } from "../../../lib/renderers/webgl/textures/TextureWrap";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
+  Matrix4,
+  passGeometry,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  TextureFilter,
+  TextureWrap,
+} from "../../../lib";
+import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

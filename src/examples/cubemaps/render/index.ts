@@ -1,28 +1,30 @@
-import { passGeometry } from "../../../lib/geometry/primitives/passGeometry";
-import { icosahedronGeometry } from "../../../lib/geometry/primitives/polyhedronGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { Euler } from "../../../lib/math/Euler";
-import { Matrix4 } from "../../../lib/math/Matrix4";
 import {
+  Attachment,
+  cubeFaceTargets,
+  CubeMapTexture,
+  DepthTestFunc,
+  DepthTestState,
+  Euler,
+  Framebuffer,
+  icosahedronGeometry,
+  makeBufferGeometryFromGeometry,
+  makeColor3FromHSL,
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation,
-} from "../../../lib/math/Matrix4.Functions";
-import { Vector2 } from "../../../lib/math/Vector2";
-import { Vector3 } from "../../../lib/math/Vector3";
-import { makeColor3FromHSL } from "../../../lib/math/Vector3.Functions";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { DepthTestFunc, DepthTestState } from "../../../lib/renderers/webgl/DepthTestState";
-import { Attachment } from "../../../lib/renderers/webgl/framebuffers/Attachment";
-import { Framebuffer } from "../../../lib/renderers/webgl/framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromCubeTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
-import { cubeFaceTargets, CubeMapTexture } from "../../../lib/textures/CubeTexture";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromCubeTexture,
+  Matrix4,
+  passGeometry,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  TextureFilter,
+  Vector2,
+  Vector3,
+} from "../../../lib";
+import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import { patternMaterial } from "./pattern/PatternMaterial";
 import vertexSource from "./vertex.glsl";

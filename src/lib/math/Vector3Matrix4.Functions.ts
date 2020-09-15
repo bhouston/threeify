@@ -1,7 +1,7 @@
 import { Matrix4 } from "./Matrix4";
 import { Vector3 } from "./Vector3";
 
-export function transformPoint(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
+export function transformPoint3(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
   const x = v.x,
     y = v.y,
     z = v.z;
@@ -16,7 +16,7 @@ export function transformPoint(v: Vector3, m: Matrix4, result = new Vector3()): 
   return result;
 }
 
-export function transformNormal(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
+export function transformNormal3(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
   const x = v.x,
     y = v.y,
     z = v.z;

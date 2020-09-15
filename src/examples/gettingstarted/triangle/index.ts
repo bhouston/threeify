@@ -1,10 +1,13 @@
-import { makeFloat32Attribute, makeUint8Attribute } from "../../../lib/geometry/Attribute";
-import { Geometry } from "../../../lib/geometry/Geometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
+import {
+  Geometry,
+  makeBufferGeometryFromGeometry,
+  makeFloat32Attribute,
+  makeProgramFromShaderMaterial,
+  makeUint8Attribute,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+} from "../../../lib";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

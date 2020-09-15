@@ -1,12 +1,14 @@
-import { planeGeometry } from "../../../lib/geometry/primitives/planeGeometry";
-import { ShaderMaterial } from "../../../lib/materials/ShaderMaterial";
-import { makeBufferGeometryFromGeometry } from "../../../lib/renderers/webgl/buffers/BufferGeometry";
-import { renderBufferGeometry } from "../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../../../lib/renderers/webgl/programs/Program";
-import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext";
-import { makeTexImage2DFromTexture } from "../../../lib/renderers/webgl/textures/TexImage2D";
-import { fetchImage } from "../../../lib/textures/loaders/Image";
-import { Texture } from "../../../lib/textures/Texture";
+import {
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
+  planeGeometry,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+} from "../../../lib";
+import { fetchImage } from "../../../lib/textures/loaders";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

@@ -4,7 +4,7 @@ import { Box3 } from "./Box3";
 import { Matrix4 } from "./Matrix4";
 import { Sphere } from "./Sphere";
 import { Vector3 } from "./Vector3";
-import { transformPoint } from "./Vector3Matrix4.Functions";
+import { transformPoint3 } from "./Vector3Matrix4.Functions";
 
 export function makeBox3FromArray(array: Float32Array, result = new Box3()): Box3 {
   let minX = +Infinity;
@@ -171,15 +171,15 @@ export function transformBox3(b: Box3, m: Matrix4, result = new Box3()): Box3 {
   // NOTE: I am using a binary pattern to specify all 2^3 combinations below
   const v = new Vector3();
 
-  result.expandByPoint(transformPoint(v.set(b.min.x, b.min.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint(v.set(b.min.x, b.min.y, b.max.z), m, v));
-  result.expandByPoint(transformPoint(v.set(b.min.x, b.max.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint(v.set(b.min.x, b.max.y, b.max.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.min.x, b.min.y, b.min.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.min.x, b.min.y, b.max.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.min.x, b.max.y, b.min.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.min.x, b.max.y, b.max.z), m, v));
 
-  result.expandByPoint(transformPoint(v.set(b.max.x, b.min.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint(v.set(b.max.x, b.min.y, b.max.z), m, v));
-  result.expandByPoint(transformPoint(v.set(b.max.x, b.max.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint(v.set(b.max.x, b.max.y, b.max.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.max.x, b.min.y, b.min.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.max.x, b.min.y, b.max.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.max.x, b.max.y, b.min.z), m, v));
+  result.expandByPoint(transformPoint3(v.set(b.max.x, b.max.y, b.max.z), m, v));
 
   return result;
 }
