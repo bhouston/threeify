@@ -7,30 +7,16 @@
 //
 
 import { IDisposable } from "../../../core/types";
-import { passGeometry } from "../../../geometry/primitives/passGeometry";
-import { ShaderMaterial } from "../../../materials/ShaderMaterial";
 import { isPow2 } from "../../../math/Functions";
 import { Vector2 } from "../../../math/Vector2";
 import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
-import { cubeFaceTargets, CubeMapTexture } from "../../../textures/CubeTexture";
-import { Texture } from "../../../textures/Texture";
 import { TextureSource } from "../../../textures/VirtualTexture";
-import { Pool } from "../../Pool";
-import { makeBufferGeometryFromGeometry } from "../buffers/BufferGeometry";
-import { Attachment } from "../framebuffers/Attachment";
-import { Framebuffer } from "../framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../framebuffers/VirtualFramebuffer";
 import { GL } from "../GL";
-import { makeProgramFromShaderMaterial } from "../programs/Program";
 import { RenderingContext } from "../RenderingContext";
-import { TextureFilter } from "../textures/TextureFilter";
-import cubeFaceFragmentSource from "./cubeFaces/fragment.glsl";
-import cubeFaceVertexSource from "./cubeFaces/vertex.glsl";
 import { DataType } from "./DataType";
 import { PixelFormat } from "./PixelFormat";
 import { TexParameters } from "./TexParameters";
 import { TextureTarget } from "./TextureTarget";
-import { TextureWrap } from "./TextureWrap";
 
 export class TexImage2D implements IDisposable {
   readonly id: number;
@@ -147,7 +133,7 @@ export class TexImage2D implements IDisposable {
         null,
       );
       if (level === 0) {
-        this.size.copy(image);
+        this.size.set(image.width, image.height);
       }
     } else if (image instanceof ArrayBufferImage) {
       gl.texImage2D(
@@ -171,102 +157,7 @@ export class TexImage2D implements IDisposable {
   }
 }
 
-export function makeTexImage2DFromTexture(
-  context: RenderingContext,
-  texture: Texture,
-  internalFormat: PixelFormat = PixelFormat.RGBA,
-): TexImage2D {
-  const params = new TexParameters();
-  params.anisotropyLevels = texture.anisotropicLevels;
-  params.generateMipmaps = texture.generateMipmaps;
-  params.magFilter = texture.magFilter;
-  params.minFilter = texture.minFilter;
-  params.wrapS = texture.wrapS;
-  params.wrapT = texture.wrapT;
-  return new TexImage2D(
-    context,
-    [texture.image],
-    texture.pixelFormat,
-    texture.dataType,
-    internalFormat,
-    TextureTarget.Texture2D,
-    params,
-  );
-}
-
-export function makeTexImage2DFromCubeTexture(
-  context: RenderingContext,
-  texture: CubeMapTexture,
-  internalFormat: PixelFormat = PixelFormat.RGBA,
-): TexImage2D {
-  const params = new TexParameters();
-  params.anisotropyLevels = texture.anisotropicLevels;
-  params.generateMipmaps = texture.generateMipmaps;
-  params.magFilter = texture.magFilter;
-  params.minFilter = texture.minFilter;
-  params.wrapS = TextureWrap.ClampToEdge;
-  params.wrapT = TextureWrap.ClampToEdge;
-  return new TexImage2D(
-    context,
-    texture.images,
-    texture.pixelFormat,
-    texture.dataType,
-    internalFormat,
-    TextureTarget.TextureCubeMap,
-    params,
-  );
-}
-
-export function makeTexImage2DFromEquirectangularTexture(
-  context: RenderingContext,
-  latLongTexture: Texture,
-  faceSize = new Vector2(512, 512),
-  generateMipmaps = true,
-): TexImage2D {
-  // required for proper reading.
-  latLongTexture.wrapS = TextureWrap.Repeat;
-  latLongTexture.wrapT = TextureWrap.ClampToEdge;
-  latLongTexture.minFilter = TextureFilter.Linear;
-
-  const cubeTexture = new CubeMapTexture([faceSize, faceSize, faceSize, faceSize, faceSize, faceSize]);
-  cubeTexture.generateMipmaps = generateMipmaps;
-
-  const latLongMap = makeTexImage2DFromTexture(context, latLongTexture);
-  const cubeFaceGeometry = passGeometry();
-  const cubeFaceMaterial = new ShaderMaterial(cubeFaceVertexSource, cubeFaceFragmentSource);
-  const cubeFaceProgram = makeProgramFromShaderMaterial(context, cubeFaceMaterial);
-  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(context, cubeFaceGeometry);
-  const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
-
-  const cubeFaceFramebuffer = new Framebuffer(context);
-
-  const cubeFaceUniforms = {
-    map: latLongMap,
-    faceIndex: 0,
-  };
-
-  cubeFaceTargets.forEach((target, index) => {
-    cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
-    cubeFaceUniforms.faceIndex = index;
-    renderBufferGeometry(cubeFaceFramebuffer, cubeFaceProgram, cubeFaceUniforms, cubeFaceBufferGeometry);
-  });
-
-  if (generateMipmaps) {
-    cubeMap.generateMipmaps();
-  }
-
-  cubeFaceFramebuffer.flush();
-  cubeFaceFramebuffer.finish();
-
-  cubeFaceFramebuffer.dispose();
-  // cubeFaceBufferGeometry.dispose(); - causes crashes.  Huh?
-  cubeFaceProgram.dispose();
-  cubeFaceGeometry.dispose();
-  latLongMap.dispose();
-
-  return cubeMap;
-}
-
+/*
 export class TexImage2DPool extends Pool<Texture, TexImage2D> {
   constructor(context: RenderingContext) {
     super(context, (context: RenderingContext, texture: Texture, texImage2D: TexImage2D | undefined) => {
@@ -279,3 +170,4 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
     });
   }
 }
+*/

@@ -1,7 +1,7 @@
-import { transformNormal3, transformPoint3 } from "..";
 import { makeVector3View } from "../math/arrays/PrimitiveView";
 import { Matrix4 } from "../math/Matrix4";
 import { Vector3 } from "../math/Vector3";
+import { transformNormal3, transformPoint3 } from "../math/Vector3Matrix4.Functions";
 import { Attribute, makeFloat32Attribute } from "./Attribute";
 import { AttributeData } from "./AttributeData";
 import { Geometry } from "./Geometry";

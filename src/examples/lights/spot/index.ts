@@ -4,6 +4,7 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
+  fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4PerspectiveFov,
   makeMatrix4Translation,
@@ -16,8 +17,7 @@ import {
   ShaderMaterial,
   Texture,
   Vector3,
-} from "../../../lib";
-import { fetchImage } from "../../../lib/textures/loaders";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 

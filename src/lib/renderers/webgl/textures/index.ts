@@ -1,6 +1,7 @@
 export * from "./DataType";
 export * from "./PixelFormat";
 export * from "./TexImage2D";
+export * from "./TexImage2D.Functions";
 export * from "./TexParameters";
 export * from "./TextureFilter";
 export * from "./TextureSourceType";

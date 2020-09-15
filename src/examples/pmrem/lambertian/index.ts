@@ -20,7 +20,7 @@ import { RenderingContext } from "../../../lib/renderers/webgl/RenderingContext"
 import {
   makeTexImage2DFromCubeTexture,
   makeTexImage2DFromEquirectangularTexture,
-} from "../../../lib/renderers/webgl/textures/TexImage2D";
+} from "../../../lib/renderers/webgl/textures/TexImage2D.Functions";
 import { TextureFilter } from "../../../lib/renderers/webgl/textures/TextureFilter";
 import { TextureWrap } from "../../../lib/renderers/webgl/textures/TextureWrap";
 import { cubeFaceTargets, CubeMapTexture } from "../../../lib/textures/CubeTexture";

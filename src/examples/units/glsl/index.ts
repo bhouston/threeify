@@ -16,7 +16,7 @@ import {
   ShaderMaterial,
   Vector2,
   Vector3,
-} from "../../../lib";
+} from "../../../lib/index";
 import vertexSource from "../../../lib/shaders/includes/tests/vertex.glsl";
 import { glslTestSuites } from "../../../lib/shaders/testSuites";
 

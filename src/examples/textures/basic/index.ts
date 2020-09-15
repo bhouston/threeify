@@ -1,4 +1,5 @@
 import {
+  fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
@@ -7,8 +8,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-} from "../../../lib";
-import { fetchImage } from "../../../lib/textures/loaders";
+} from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
