@@ -16,8 +16,6 @@ export class ProgramAttribute {
   glLocation: number; // attributes are indexed
 
   constructor(public program: Program, public index: number) {
-    this.name = name;
-
     const gl = program.context.gl;
 
     // look up uniform locations
