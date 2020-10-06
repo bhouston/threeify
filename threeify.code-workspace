@@ -8,6 +8,9 @@
     },
     {
       "path": "../threeify-glsl-transpiler"
+    },
+    {
+      "path": "../threeify-examples"
     }
   ],
   "extensions": {
@@ -84,6 +87,7 @@
       "threeify",
       "threeifydev",
       "transpiler",
+      "typedoc",
       "unprojection",
       "usemap",
       "usemtl",
