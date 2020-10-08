@@ -1,3 +1,10 @@
+## [1.75.2](https://github.com/threeify/threeify/compare/v1.75.1...v1.75.2) (2020-10-08)
+
+
+### Bug Fixes
+
+* fill height on compositor. ([b069acd](https://github.com/threeify/threeify/commit/b069acd8bf4f93487f8a899720a79e6122919d18))
+
 ## [1.75.1](https://github.com/threeify/threeify/compare/v1.75.0...v1.75.1) (2020-09-15)
 
 
