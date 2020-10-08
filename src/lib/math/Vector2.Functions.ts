@@ -19,6 +19,13 @@ export function makeVector2Fit(frame: Vector2, target: Vector2, result = new Vec
   return result;
 }
 
+export function makeVector2FillHeight(frame: Vector2, target: Vector2, result = new Vector2()): Vector2 {
+  result.copy(target);
+  const fitScale = frame.height / result.height;
+  result.multiplyByScalar(fitScale);
+  return result;
+}
+
 export function makeVector2Fill(frame: Vector2, target: Vector2, result = new Vector2()): Vector2 {
   result.copy(target);
   const fitScale = Math.max(frame.width / result.width, frame.height / result.height);

@@ -13,7 +13,7 @@ import {
   makeMatrix4Translation,
 } from "../../math/Matrix4.Functions";
 import { Vector2 } from "../../math/Vector2";
-import { makeVector2Fit } from "../../math/Vector2.Functions";
+import { makeVector2FillHeight } from "../../math/Vector2.Functions";
 import { Vector3 } from "../../math/Vector3";
 import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
@@ -164,7 +164,7 @@ export class LayerCompositor {
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
 
-    const canvasImageSize = makeVector2Fit(canvasSize, this.imageSize);
+    const canvasImageSize = makeVector2FillHeight(canvasSize, this.imageSize);
     const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
 
     if (this.zoomScale > 1.0) {
