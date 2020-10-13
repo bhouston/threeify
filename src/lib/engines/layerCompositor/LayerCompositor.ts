@@ -86,6 +86,7 @@ export class LayerCompositor {
       depth: false,
       premultipliedAlpha: true,
       stencil: false,
+      preserveDrawingBuffer: true,
     });
     this.context.canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
     this.context.canvasFramebuffer.resize();
@@ -95,6 +96,13 @@ export class LayerCompositor {
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
   }
 
+  snapshot(mimeFormat = "image/jpeg", quality = 1.0): string {
+    const canvas = this.context.canvasFramebuffer.canvas;
+    if (canvas instanceof HTMLCanvasElement) {
+      return canvas.toDataURL(mimeFormat, quality);
+    }
+    throw new Error("snapshot not supported");
+  }
   set layers(layers: Layer[]) {
     this.#layers = layers;
     this.#layerVersion++;
