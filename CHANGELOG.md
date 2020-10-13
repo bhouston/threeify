@@ -1,3 +1,10 @@
+# [1.76.0](https://github.com/threeify/threeify/compare/v1.75.2...v1.76.0) (2020-10-13)
+
+
+### Features
+
+* add support for layerCompositor.snapshot() ([324ec31](https://github.com/threeify/threeify/commit/324ec310123bcfe0e322ce6e0626f6a90866af38))
+
 ## [1.75.2](https://github.com/threeify/threeify/compare/v1.75.1...v1.75.2) (2020-10-08)
 
 
