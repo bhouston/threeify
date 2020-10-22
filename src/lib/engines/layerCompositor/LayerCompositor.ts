@@ -74,7 +74,7 @@ export class LayerCompositor {
   #layerVersion = 0;
   #offlineLayerVersion = -1;
   firstRender = true;
-  clearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+  clearState = new ClearState(new Vector3(1, 1, 1), 0.0);
   offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vector2(0, 0);
   offscreenColorAttachment: TexImage2D | undefined;
@@ -224,7 +224,7 @@ export class LayerCompositor {
     );
     const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
 
-    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    canvasFramebuffer.clearState = this.clearState; // new ClearState(new Vector3(1, 1, 1), 0.0);
     canvasFramebuffer.clear();
 
     const offscreenColorAttachment = this.offscreenColorAttachment;
