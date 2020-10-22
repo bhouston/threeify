@@ -1,3 +1,10 @@
+## [1.76.1](https://github.com/threeify/threeify/compare/v1.76.0...v1.76.1) (2020-10-22)
+
+
+### Bug Fixes
+
+* support clearState properly, avoid black fringes. ([8e77d45](https://github.com/threeify/threeify/commit/8e77d451d86568c612995d19b2148e823a898f28))
+
 # [1.76.0](https://github.com/threeify/threeify/compare/v1.75.2...v1.76.0) (2020-10-13)
 
 
