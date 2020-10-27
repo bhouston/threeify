@@ -224,7 +224,7 @@ export class LayerCompositor {
     );
     const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
 
-    canvasFramebuffer.clearState = this.clearState; // new ClearState(new Vector3(1, 1, 1), 0.0);
+    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
     const offscreenColorAttachment = this.offscreenColorAttachment;
@@ -280,10 +280,10 @@ export class LayerCompositor {
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
-        premultipliedAlpha: layer.premultipliedAlpha ? 1 : 0,
+        premultipliedAlpha: 0,
       };
 
-      const blendState = blendModeToBlendState(Blending.Over, layer.premultipliedAlpha);
+      const blendState = blendModeToBlendState(Blending.Over, true);
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
       renderBufferGeometry(offscreenFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);

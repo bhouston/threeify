@@ -19,7 +19,6 @@ export class Layer {
     public offset: Vector2,
     public uvScaleFactor = new Vector2(1, -1),
     public uvOffset = new Vector2(0, 1),
-    public premultipliedAlpha = true,
   ) {
     // console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
 
