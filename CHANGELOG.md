@@ -1,3 +1,10 @@
+## [1.76.2](https://github.com/threeify/threeify/compare/v1.76.1...v1.76.2) (2020-10-27)
+
+
+### Bug Fixes
+
+* fix black fringes: V-Ray PNGs are actually premultipled alpha against PNG spec. ([e74490d](https://github.com/threeify/threeify/commit/e74490d297cf34bb815a11189f7e0f5322d5d1cd))
+
 ## [1.76.1](https://github.com/threeify/threeify/compare/v1.76.0...v1.76.1) (2020-10-22)
 
 
