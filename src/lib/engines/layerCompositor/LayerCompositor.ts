@@ -177,7 +177,10 @@ export class LayerCompositor {
 
     if (this.zoomScale > 1.0) {
       // convert from canvas space to image space
-      const imagePanPosition = this.panPosition.clone().multiplyByScalar(this.imageSize.width / canvasImageSize.width);
+      const imagePanPosition = this.panPosition
+        .clone()
+        .multiplyByScalar(this.imageSize.width / canvasImageSize.width)
+        .multiplyByScalar(this.context.canvasFramebuffer.devicePixelRatio);
       const imageCanvasSize = canvasSize.clone().multiplyByScalar(this.imageSize.width / canvasImageSize.width);
 
       // center pan
