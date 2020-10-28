@@ -238,7 +238,7 @@ export class LayerCompositor {
       localToWorld: planeToImage,
       layerMap: offscreenColorAttachment,
       uvToTexture: uvToTexture,
-      mipmapBias: 0.25,
+      mipmapBias: 0.0,
       premultipliedAlpha: 0,
     };
 
