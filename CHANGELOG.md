@@ -1,3 +1,10 @@
+## [1.76.3](https://github.com/threeify/threeify/compare/v1.76.2...v1.76.3) (2020-10-28)
+
+
+### Bug Fixes
+
+* adjust pan position based on pixelDisplayRatio ([630a7fc](https://github.com/threeify/threeify/commit/630a7fc4d164af11314af1f694b53f74f7582d66))
+
 ## [1.76.2](https://github.com/threeify/threeify/compare/v1.76.1...v1.76.2) (2020-10-27)
 
 
