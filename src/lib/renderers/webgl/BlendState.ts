@@ -90,7 +90,7 @@ export enum BlendFunc {
 }
 
 export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState> {
-  // TODO: Should be intialized to default WebGL states
+  // TODO: Should be initialized to default WebGL states
   constructor(
     public sourceRGBFactor = BlendFunc.One,
     public destRGBFactor = BlendFunc.Zero,
