@@ -1,3 +1,4 @@
+import { IDisposable } from "../../core/types";
 import { transformGeometry } from "../../geometry/Geometry.Functions";
 import { planeGeometry } from "../../geometry/primitives/planeGeometry";
 import { Blending } from "../../materials/Blending";
@@ -37,7 +38,34 @@ import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
 import vertexSource from "./vertex.glsl";
 
-export type TexImage2DMap = { [key: string]: TexImage2D | undefined };
+export class LayerImage implements IDisposable {
+  disposed = false;
+  constructor(
+    readonly url: string,
+    public texImage2D: TexImage2D,
+    public image: ImageBitmap | HTMLImageElement | undefined,
+  ) {
+    // console.log(`layerImage.load: ${this.url}`);
+  }
+
+  dispose(): void {
+    if (!this.disposed) {
+      this.texImage2D.dispose();
+      if (this.image !== undefined) {
+        if (this.image instanceof ImageBitmap) {
+          this.image.close();
+          this.image = undefined;
+        }
+        // if HTMLImageElement do nothing, just ensure there are no references to it.
+        this.image = undefined;
+      }
+      this.disposed = true;
+      // console.log(`layerImage.dispose: ${this.url}`);
+    }
+  }
+}
+
+export type LayerImageMap = { [key: string]: LayerImage | undefined };
 
 export function makeColorMipmapAttachment(
   context: RenderingContext,
@@ -64,7 +92,7 @@ export function makeColorMipmapAttachment(
 
 export class LayerCompositor {
   context: RenderingContext;
-  texImage2DCache: TexImage2DMap = {};
+  layerImageCache: LayerImageMap = {};
   #bufferGeometry: BufferGeometry;
   #program: Program;
   imageSize = new Vector2(0, 0);
@@ -131,9 +159,9 @@ export class LayerCompositor {
   loadTexImage2D(url: string, image: HTMLImageElement | ImageBitmap | undefined = undefined): Promise<TexImage2D> {
     return new Promise<TexImage2D>((resolve) => {
       // check for texture in cache.
-      const cachedTexImage2D = this.texImage2DCache[url];
-      if (cachedTexImage2D !== undefined && !cachedTexImage2D.disposed) {
-        return resolve(cachedTexImage2D);
+      const layerImage = this.layerImageCache[url];
+      if (layerImage !== undefined && !layerImage.disposed) {
+        return resolve(layerImage.texImage2D);
       }
 
       function createTexture(compositor: LayerCompositor, image: HTMLImageElement | ImageBitmap): TexImage2D {
@@ -150,8 +178,7 @@ export class LayerCompositor {
         // console.log(texture);
         // load texture onto the GPU
         const texImage2D = makeTexImage2DFromTexture(compositor.context, texture);
-        compositor.texImage2DCache[url] = texImage2D;
-        // console.log(texImage2D);
+        compositor.layerImageCache[url] = new LayerImage(url, texImage2D, image);
         return texImage2D;
       }
       if (image === undefined) {
@@ -162,6 +189,17 @@ export class LayerCompositor {
         return resolve(createTexture(this, image));
       }
     });
+  }
+
+  discardTexImage2D(url: string): boolean {
+    // check for texture in cache.
+    const layerImage = this.layerImageCache[url];
+    if (layerImage !== undefined) {
+      layerImage.dispose();
+      delete this.layerImageCache[url];
+      return true;
+    }
+    return false;
   }
 
   // ask how much memory is used
