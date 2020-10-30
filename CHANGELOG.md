@@ -1,3 +1,15 @@
+# [1.77.0](https://github.com/threeify/threeify/compare/v1.76.3...v1.77.0) (2020-10-30)
+
+
+### Bug Fixes
+
+* spelling mistake in comments ([049724c](https://github.com/threeify/threeify/commit/049724c277b72498e42140959418a8d15da3e283))
+
+
+### Features
+
+* add ability to discard layer data (images + WebGL memory allocations) ([0d61826](https://github.com/threeify/threeify/commit/0d61826ee763764d727501a8173b2f717e9b4cc6))
+
 ## [1.76.3](https://github.com/threeify/threeify/compare/v1.76.2...v1.76.3) (2020-10-28)
 
 
