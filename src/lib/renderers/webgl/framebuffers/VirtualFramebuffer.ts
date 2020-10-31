@@ -146,5 +146,6 @@ export function renderPass(
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
+  throw new Error("Not implemented");
   // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
 }
