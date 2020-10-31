@@ -16,6 +16,7 @@ import {
 import { Vector2 } from "../../math/Vector2";
 import { makeVector2FillHeight } from "../../math/Vector2.Functions";
 import { Vector3 } from "../../math/Vector3";
+import { isFirefox, isiOS, isMacOS } from "../../platform/Detection";
 import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../renderers/webgl/ClearState";
@@ -32,7 +33,7 @@ import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
 import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
 import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
 import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
-import { fetchImage } from "../../textures/loaders/Image";
+import { fetchImage, isImageBitmapSupported } from "../../textures/loaders/Image";
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer } from "./Layer";
@@ -52,7 +53,7 @@ export class LayerImage implements IDisposable {
     if (!this.disposed) {
       this.texImage2D.dispose();
       if (this.image !== undefined) {
-        if (this.image instanceof ImageBitmap) {
+        if (isImageBitmapSupported() && this.image instanceof ImageBitmap) {
           this.image.close();
           this.image = undefined;
         }
@@ -280,7 +281,7 @@ export class LayerCompositor {
       layerMap: offscreenColorAttachment,
       uvToTexture: uvToTexture,
       mipmapBias: 0.0,
-      premultipliedAlpha: 0,
+      convertToPremultipliedAlpha: 0,
     };
 
     const blendState = blendModeToBlendState(Blending.Over, true);
@@ -312,6 +313,12 @@ export class LayerCompositor {
     );*/
     const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
 
+    // Ben on 2020-10-31
+    // - does not understand why this is necessary.
+    // - this means it may be working around a bug, and thus this will break in the future.
+    // - the bug would be in chrome as it seems to be the inverse of the current query
+    const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox()) ? 0 : 1;
+
     this.#layers.forEach((layer) => {
       const uniforms = {
         viewToScreen: imageToOffscreen,
@@ -321,7 +328,7 @@ export class LayerCompositor {
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
         mipmapBias: 0,
-        premultipliedAlpha: 0,
+        convertToPremultipliedAlpha,
       };
 
       const blendState = blendModeToBlendState(Blending.Over, true);

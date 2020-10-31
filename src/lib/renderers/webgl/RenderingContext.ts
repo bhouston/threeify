@@ -6,9 +6,7 @@
 //
 
 import { Box2 } from "../../math/Box2";
-import { Camera } from "../../nodes/cameras/Camera";
-import { Node } from "../../nodes/Node";
-import { BlendState } from "./BlendState";
+import { BlendEquation, BlendFunc, BlendState } from "./BlendState";
 import { Buffer } from "./buffers/Buffer";
 import { ClearState } from "./ClearState";
 import { CullingState } from "./CullingState";
@@ -22,7 +20,6 @@ import { GL } from "./GL";
 import { MaskState } from "./MaskState";
 import { getParameterAsString } from "./Parameters";
 import { Program } from "./programs/Program";
-import { UniformValueMap } from "./programs/ProgramUniform";
 import { Renderbuffer } from "./Renderbuffer";
 import { Shader } from "./shaders/Shader";
 import { TexImage2D } from "./textures/TexImage2D";
@@ -160,6 +157,11 @@ export class RenderingContext {
       this.gl.enable(GL.BLEND);
       this.gl.blendEquation(bs.equation);
       this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
+      console.log(
+        `Blend ${BlendEquation[bs.equation]} srcRGB ${BlendFunc[bs.sourceRGBFactor]} destRGB ${
+          BlendFunc[bs.destRGBFactor]
+        } srcA ${BlendFunc[bs.sourceAlphaFactor]} destA ${BlendFunc[bs.destAlphaFactor]}`,
+      );
       this.#blendState.copy(bs);
     }
   }
@@ -217,14 +219,5 @@ export class RenderingContext {
       this.gl.cullFace(cs.sides);
       this.#cullingState.copy(cs);
     }
-  }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderPass(program: Program, uniforms: UniformValueMap): void {
-    throw new Error("not implemented");
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  render(node: Node, camera: Camera): void {
-    throw new Error("not implemented");
   }
 }

@@ -2,7 +2,7 @@ precision highp float;
 
 uniform sampler2D layerMap;
 uniform float mipmapBias;
-uniform int premultipliedAlpha;
+uniform int convertToPremultipliedAlpha;
 
 uniform vec2 layerUVScale;
 
@@ -22,10 +22,9 @@ void main() {
   vec4 layerColor = texture2D( layerMap, texelUv, mipmapBias );
 
   // premultiply alpha in output as the source PNG is not premultiplied
-  if( premultipliedAlpha == 1 ) {
+  if( convertToPremultipliedAlpha == 1 ) {
     layerColor.rgb *= layerColor.a;
   }
-
   gl_FragColor = layerColor;
 
 }

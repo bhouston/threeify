@@ -54,7 +54,8 @@ export abstract class VirtualFramebuffer implements IDisposable {
     if (clear) {
       this.clear();
     }
-    this.context.render(node, camera);
+    throw new Error("Not implemented");
+    //    this.context.render(node, camera);
   }
 
   flush(): void {
@@ -145,5 +146,6 @@ export function renderPass(
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
-  context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
+  throw new Error("Not implemented");
+  // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
 }
