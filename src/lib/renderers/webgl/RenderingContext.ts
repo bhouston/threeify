@@ -6,7 +6,7 @@
 //
 
 import { Box2 } from "../../math/Box2";
-import { BlendEquation, BlendFunc, BlendState } from "./BlendState";
+import { BlendState } from "./BlendState";
 import { Buffer } from "./buffers/Buffer";
 import { ClearState } from "./ClearState";
 import { CullingState } from "./CullingState";
@@ -157,11 +157,11 @@ export class RenderingContext {
       this.gl.enable(GL.BLEND);
       this.gl.blendEquation(bs.equation);
       this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
-      console.log(
+      /* console.log(
         `Blend ${BlendEquation[bs.equation]} srcRGB ${BlendFunc[bs.sourceRGBFactor]} destRGB ${
           BlendFunc[bs.destRGBFactor]
         } srcA ${BlendFunc[bs.sourceAlphaFactor]} destA ${BlendFunc[bs.destAlphaFactor]}`,
-      );
+      );*/
       this.#blendState.copy(bs);
     }
   }
