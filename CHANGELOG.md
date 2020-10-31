@@ -1,3 +1,10 @@
+## [1.77.1](https://github.com/threeify/threeify/compare/v1.77.0...v1.77.1) (2020-10-31)
+
+
+### Bug Fixes
+
+* work around PNG loading bug on Chrome? ([02fb217](https://github.com/threeify/threeify/commit/02fb217f98e4a5a93e0fcc21e2ecfa6e0d64a0f9))
+
 # [1.77.0](https://github.com/threeify/threeify/compare/v1.76.3...v1.77.0) (2020-10-30)
 
 
