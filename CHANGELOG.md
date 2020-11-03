@@ -1,3 +1,10 @@
+# [1.78.0](https://github.com/threeify/threeify/compare/v1.77.1...v1.78.0) (2020-11-03)
+
+
+### Features
+
+* auto discard feature on layer compositor ([64ef9f0](https://github.com/threeify/threeify/commit/64ef9f0f04c9c6d86fcbb0302a2a1c1a9955371d))
+
 ## [1.77.1](https://github.com/threeify/threeify/compare/v1.77.0...v1.77.1) (2020-10-31)
 
 
