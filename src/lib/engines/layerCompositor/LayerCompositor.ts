@@ -41,6 +41,8 @@ import vertexSource from "./vertex.glsl";
 
 export class LayerImage implements IDisposable {
   disposed = false;
+  renderId = -1;
+
   constructor(
     readonly url: string,
     public texImage2D: TexImage2D,
@@ -107,6 +109,8 @@ export class LayerCompositor {
   offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vector2(0, 0);
   offscreenColorAttachment: TexImage2D | undefined;
+  renderId = 0;
+  autoDiscard = false;
 
   constructor(canvas: HTMLCanvasElement) {
     this.context = new RenderingContext(canvas, {
@@ -196,6 +200,7 @@ export class LayerCompositor {
     // check for texture in cache.
     const layerImage = this.layerImageCache[url];
     if (layerImage !== undefined) {
+      // console.log(`discarding: ${url}`);
       layerImage.dispose();
       delete this.layerImageCache[url];
       return true;
@@ -207,6 +212,9 @@ export class LayerCompositor {
   // set max size
   // draw() - makes things fit with size of div assuming pixels are square
   render(): void {
+    this.renderId++;
+    // console.log(`render id: ${this.renderId}`);
+
     const canvasFramebuffer = this.context.canvasFramebuffer;
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
@@ -288,6 +296,15 @@ export class LayerCompositor {
 
     // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry(canvasFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);
+
+    if (this.autoDiscard) {
+      for (const url in this.layerImageCache) {
+        const layerImage = this.layerImageCache[url];
+        if (layerImage !== undefined && layerImage.renderId < this.renderId) {
+          this.discardTexImage2D(url);
+        }
+      }
+    }
   }
 
   renderLayersToFramebuffer(): void {
@@ -320,6 +337,10 @@ export class LayerCompositor {
     const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox()) ? 0 : 1;
 
     this.#layers.forEach((layer) => {
+      const layerImage = this.layerImageCache[layer.url];
+      if (layerImage !== undefined) {
+        layerImage.renderId = this.renderId;
+      }
       const uniforms = {
         viewToScreen: imageToOffscreen,
         screenToView: offscreenToImage,
