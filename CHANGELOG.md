@@ -1,3 +1,10 @@
+# [1.79.0](https://github.com/threeify/threeify/compare/v1.78.0...v1.79.0) (2020-11-07)
+
+
+### Features
+
+* allow for non-leaking concurrent loads ([41ea58a](https://github.com/threeify/threeify/commit/41ea58a5173b6dbb26b22ae88a563bbd84f04711))
+
 # [1.78.0](https://github.com/threeify/threeify/compare/v1.77.1...v1.78.0) (2020-11-03)
 
 
