@@ -71,7 +71,7 @@ export class LayerImage implements IDisposable {
 }
 
 export type LayerImageMap = { [key: string]: LayerImage | undefined };
-export type LayerImagePromiseMap = { [key: string]: Promise<TexImage2D> | undefined };
+export type TexImage2DPromiseMap = { [key: string]: Promise<TexImage2D> | undefined };
 
 export function makeColorMipmapAttachment(
   context: RenderingContext,
@@ -99,7 +99,7 @@ export function makeColorMipmapAttachment(
 export class LayerCompositor {
   context: RenderingContext;
   layerImageCache: LayerImageMap = {};
-  texImage2DPromiseCache: LayerImagePromiseMap = {};
+  texImage2DPromiseCache: TexImage2DPromiseMap = {};
   #bufferGeometry: BufferGeometry;
   #program: Program;
   imageSize = new Vector2(0, 0);
@@ -171,13 +171,11 @@ export class LayerCompositor {
       return layerImagePromise;
     }
 
-    const promise = new Promise<TexImage2D>((resolve) => {
+    return (this.texImage2DPromiseCache[url] = new Promise<TexImage2D>((resolve) => {
       // check for texture in cache.
       const layerImage = this.layerImageCache[url];
       if (layerImage !== undefined && !layerImage.disposed) {
-        if (this.texImage2DPromiseCache[url] !== undefined) {
-          delete this.texImage2DPromiseCache[url];
-        }
+        delete this.texImage2DPromiseCache[url];
         return resolve(layerImage.texImage2D);
       }
 
@@ -196,11 +194,8 @@ export class LayerCompositor {
         // console.log(`loading: ${url}`);
         // load texture onto the GPU
         const texImage2D = makeTexImage2DFromTexture(compositor.context, texture);
-        if (compositor.texImage2DPromiseCache[url] !== undefined) {
-          delete compositor.texImage2DPromiseCache[url];
-        }
-        compositor.layerImageCache[url] = new LayerImage(url, texImage2D, image);
-        return texImage2D;
+        delete compositor.texImage2DPromiseCache[url];
+        return (compositor.layerImageCache[url] = new LayerImage(url, texImage2D, image)).texImage2D;
       }
 
       if (image === undefined) {
@@ -210,10 +205,7 @@ export class LayerCompositor {
       } else if (image instanceof HTMLImageElement || image instanceof ImageBitmap) {
         return resolve(createTexture(this, image));
       }
-    });
-
-    this.texImage2DPromiseCache[url] = promise;
-    return promise;
+    }));
   }
 
   discardTexImage2D(url: string): boolean {
