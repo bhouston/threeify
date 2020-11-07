@@ -174,7 +174,7 @@ export class LayerCompositor {
     return (this.texImage2DPromiseCache[url] = new Promise<TexImage2D>((resolve) => {
       // check for texture in cache.
       const layerImage = this.layerImageCache[url];
-      if (layerImage !== undefined && !layerImage.disposed) {
+      if (layerImage !== undefined) {
         delete this.texImage2DPromiseCache[url];
         return resolve(layerImage.texImage2D);
       }
