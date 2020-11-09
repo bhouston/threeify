@@ -1,3 +1,10 @@
+## [1.79.1](https://github.com/threeify/threeify/compare/v1.79.0...v1.79.1) (2020-11-09)
+
+
+### Bug Fixes
+
+* promise order in layer compositor ([207b899](https://github.com/threeify/threeify/commit/207b89936778c6ddb67b10a2279454f02485753f))
+
 # [1.79.0](https://github.com/threeify/threeify/compare/v1.78.0...v1.79.0) (2020-11-07)
 
 
