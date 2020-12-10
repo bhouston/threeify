@@ -40,10 +40,8 @@ import { Layer } from "./Layer";
 import vertexSource from "./vertex.glsl";
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
-  if (image instanceof ImageBitmap) {
-    if (isImageBitmapSupported() && image instanceof ImageBitmap) {
-      image.close();
-    }
+  if (isImageBitmapSupported() && image instanceof ImageBitmap) {
+    image.close();
   }
   // if HTMLImageElement do nothing, just ensure there are no references to it.
 }
