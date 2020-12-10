@@ -1,3 +1,10 @@
+## [1.79.2](https://github.com/threeify/threeify/compare/v1.79.1...v1.79.2) (2020-12-10)
+
+
+### Bug Fixes
+
+* better Safari support ([9be6bfe](https://github.com/threeify/threeify/commit/9be6bfe990e5e7e0202b3743b3d7c60371109d1a))
+
 ## [1.79.1](https://github.com/threeify/threeify/compare/v1.79.0...v1.79.1) (2020-11-09)
 
 
