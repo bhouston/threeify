@@ -17,11 +17,5 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
-  "typedocOptions": {
-    "mode": "modules",
-    "out": "./docs",
-    "gaID": "UA-172098276-1",
-    "gaID": "threeify.org"
-  }
+  ]
 }

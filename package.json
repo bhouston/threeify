@@ -21,20 +21,25 @@
   },
   "typings": "dist/lib/index.d.ts",
   "scripts": {
-    "build": "tgt & tsc",
-    "dev": "npm run watch & npm start",
+    "build": "npx tgt && npx ",
+    "dev": "npm run watch && npm start",
     "lint": "eslint ./src/",
-    "start": "es-dev-server --node-resolve --watch",
+    "start": "web-dev-server --node-resolve --open --app-index examples",
     "watch": "tsc --watch & tgt --watch"
   },
   "devDependencies": {
+    "@web/dev-server": "^0.1.8",
     "threeify-glsl-transpiler": "1.1.13",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.9"
   },
   "engines": {
     "node": "^15.8.0"
   },
   "engineStrict": true,
   "module": "index.ts",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@types/jest": "^26.0.20"
+  }
 }

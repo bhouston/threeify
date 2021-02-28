@@ -24,7 +24,6 @@
   <body>
     <code id="text" classname="text"></code>
       </p>   <canvas class="framebuffer" id="framebuffer" ></canvas>
-      <script src="https://greggman.github.io/webgl-helpers/webgl-gl-error-check.js"></script>
       <!-- <script src="https://greggman.github.io/webgl-helpers/webgl-show-draw-calls.js"></script> -->
 
     <script>
@@ -32,7 +31,7 @@
       let scriptUrl = urlParams.get("scriptUrl");
       const name = urlParams.get("name");
       if (name !== null) {
-        scriptUrl = `dist/examples/${name}/index.js`;
+        scriptUrl = `/dist/examples/${name}/index.js`;
       }
       var script = document.createElement("script");
       script.setAttribute("type", "module");
