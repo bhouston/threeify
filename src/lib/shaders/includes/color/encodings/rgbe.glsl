@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <lib/shaders/includes/math/math>
 
 vec3 rgbeToLinear( in vec4 value ) {
 	return vec3( value.rgb * exp2( value.a * 255. - 128. ) );

@@ -14,14 +14,14 @@ uniform float displacementScale;
 uniform int fragmentOutputs;
 uniform int time;
 
-#pragma include <lighting/punctual>
-#pragma include <brdfs/ambient/basic>
-#pragma include <brdfs/diffuse/lambert>
-#pragma include <brdfs/specular/ggx>
-#pragma include <color/spaces/srgb>
-#pragma include <normals/normalPacking>
-#pragma include <normals/tangentSpace>
-#pragma include <materials/outputChannels>
+#pragma include <lib/shaders/includes/lighting/punctual>
+#pragma include <lib/shaders/includes/brdfs/ambient/basic>
+#pragma include <lib/shaders/includes/brdfs/diffuse/lambert>
+#pragma include <lib/shaders/includes/brdfs/specular/ggx>
+#pragma include <lib/shaders/includes/color/spaces/srgb>
+#pragma include <lib/shaders/includes/normals/normalPacking>
+#pragma include <lib/shaders/includes/normals/tangentSpace>
+#pragma include <lib/shaders/includes/materials/outputChannels>
 
 void main() {
 

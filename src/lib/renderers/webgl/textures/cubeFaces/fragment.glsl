@@ -6,8 +6,8 @@ varying vec2 v_uv;
 uniform sampler2D map;
 uniform int faceIndex;
 
-#pragma include <cubemaps/cubeFaces>
-#pragma include <cubemaps/latLong>
+#pragma include <lib/shaders/includes/cubemaps/cubeFaces>
+#pragma include <lib/shaders/includes/cubemaps/latLong>
 
 void main() {
 

@@ -1,6 +1,6 @@
-#pragma include <tests/fragment>
+#pragma include <lib/shaders/includes/tests/fragment>
 #pragma include "mat4"
-#pragma include <math/math>
+#pragma include <lib/shaders/includes/math/math>
 
 void testMatEquals( inout TestSuite suite, int id, mat4 m, mat4 target ) {
   for( int i = 0; i < 4; i ++ ) {

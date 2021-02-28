@@ -1,10 +1,10 @@
 
 
-#pragma include <math/math>
-#pragma include <math/sampling/hammersley.glsl>
-#pragma include <brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
-#pragma include <brdfs/sheen/d_charlie>
-#pragma include <normals/tangentSpace.glsl>
+#pragma include <lib/shaders/includes/math/math>
+#pragma include <lib/shaders/includes/math/sampling/hammersley.glsl>
+#pragma include <lib/shaders/includes/brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
+#pragma include <lib/shaders/includes/brdfs/sheen/d_charlie>
+#pragma include <lib/shaders/includes/normals/tangentSpace.glsl>
 
 #define NUM_SAMPLES 1024
 #define LOD_BIAS 1
@@ -186,8 +186,8 @@ vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWid
 }
 
 */
-#pragma include <brdfs/specular/v_ggx_smithcorrelated>  // NOTE: takes alpha, original versions here took roughness
-#pragma include <brdfs/sheen/v_charlie>
+#pragma include <lib/shaders/includes/brdfs/specular/v_ggx_smithcorrelated>  // NOTE: takes alpha, original versions here took roughness
+#pragma include <lib/shaders/includes/brdfs/sheen/v_charlie>
 
 // Compute LUT for GGX distribution.
 // See https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf

@@ -13,13 +13,13 @@ uniform sampler2D albedoMap;
 uniform sampler2D clearCoatBumpMap;
 
 
-#pragma include <lighting/punctual>
-#pragma include <brdfs/ambient/basic>
-#pragma include <brdfs/diffuse/lambert>
-#pragma include <brdfs/specular/ggx>
-#pragma include <color/spaces/srgb>
-#pragma include <normals/bumpMapping>
-#pragma include <normals/tangentSpace>
+#pragma include <lib/shaders/includes/lighting/punctual>
+#pragma include <lib/shaders/includes/brdfs/ambient/basic>
+#pragma include <lib/shaders/includes/brdfs/diffuse/lambert>
+#pragma include <lib/shaders/includes/brdfs/specular/ggx>
+#pragma include <lib/shaders/includes/color/spaces/srgb>
+#pragma include <lib/shaders/includes/normals/bumpMapping>
+#pragma include <lib/shaders/includes/normals/tangentSpace>
 
 void main() {
 

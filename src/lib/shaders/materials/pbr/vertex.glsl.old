@@ -14,7 +14,7 @@ varying vec2 v_uv2;
 uniform mat4 localToView;  // geometry
 uniform mat4 viewToScreen; // camera
 
-#pragma include <math/mat4>
+#pragma include <lib/shaders/includes/math/mat4>
 
 void main() {
 

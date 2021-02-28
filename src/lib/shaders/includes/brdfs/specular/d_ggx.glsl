@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <lib/shaders/includes/math/math>
 
 
 // The following equation(s) model the distribution of microfacet normals across the area being drawn (aka D())

@@ -6,8 +6,8 @@ varying vec2 v_uv;
 uniform samplerCube envCubeMap;
 uniform int faceIndex;
 
-#pragma include <cubemaps/cubeFaces>
-#pragma include <brdfs/diffuse/lambertSampler>
+#pragma include <lib/shaders/includes/cubemaps/cubeFaces>
+#pragma include <lib/shaders/includes/brdfs/diffuse/lambertSampler>
 
 vec4 sampleIBL( vec3 direction, float lod ) {
   return textureCube( envCubeMap, direction, lod );

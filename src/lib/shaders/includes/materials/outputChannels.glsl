@@ -1,6 +1,6 @@
 #pragma once
-#pragma include <normals/normalPacking>
-#pragma include <math/unitIntervalPacking>
+#pragma include <lib/shaders/includes/normals/normalPacking>
+#pragma include <lib/shaders/includes/math/unitIntervalPacking>
 
 #define OUTPUT_CHANNEL_BEAUTY  0
 

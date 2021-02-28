@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <lib/shaders/includes/math/math>
 
 vec3 sRGBToLinear( in vec3 value ) {
 	return vec3( mix( pow( value.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), value.rgb * 0.0773993808, vec3( lessThanEqual( value.rgb, vec3( 0.04045 ) ) ) ) );

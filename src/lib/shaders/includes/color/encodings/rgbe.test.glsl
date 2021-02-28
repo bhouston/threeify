@@ -1,4 +1,4 @@
-#pragma include <tests/fragment>
+#pragma include <lib/shaders/includes/tests/fragment>
 #pragma include "rgbe"
 
 void testEquivalency( inout TestSuite suite, in int testId, in vec3 linear ) {

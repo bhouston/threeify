@@ -10,7 +10,7 @@ varying vec3 v_viewSurfacePosition;
 varying vec3 v_viewSurfaceNormal;
 varying vec2 v_uv0;
 
-#pragma include <math/mat4>
+#pragma include <lib/shaders/includes/math/mat4>
 
 void main() {
 

@@ -12,9 +12,9 @@ uniform vec3 albedoModulator;
 uniform sampler2D albedoMap;
 
 
-#pragma include <lighting/punctual>
-#pragma include <brdfs/diffuse/lambert>
-#pragma include <color/spaces/srgb>
+#pragma include <lib/shaders/includes/lighting/punctual>
+#pragma include <lib/shaders/includes/brdfs/diffuse/lambert>
+#pragma include <lib/shaders/includes/color/spaces/srgb>
 
 void main() {
 

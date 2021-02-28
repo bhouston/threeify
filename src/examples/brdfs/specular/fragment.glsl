@@ -16,10 +16,10 @@ uniform float     specularRoughnessModulator;
 uniform sampler2D specularRoughnessMap;
 
 
-#pragma include <lighting/punctual>
-#pragma include <brdfs/diffuse/lambert>
-#pragma include <brdfs/specular/ggx>
-#pragma include <color/spaces/srgb>
+#pragma include <lib/shaders/includes/lighting/punctual>
+#pragma include <lib/shaders/includes/brdfs/diffuse/lambert>
+#pragma include <lib/shaders/includes/brdfs/specular/ggx>
+#pragma include <lib/shaders/includes/color/spaces/srgb>
 
 void main() {
 

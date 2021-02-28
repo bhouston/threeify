@@ -1,4 +1,4 @@
-#pragma include <tests/fragment>
+#pragma include <lib/shaders/includes/tests/fragment>
 #include "lambert"
 
 void tests( inout TestSuite suite ) {

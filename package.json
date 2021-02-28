@@ -25,75 +25,16 @@
     "dev": "npm run watch & npm start",
     "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
-    "docs": "typedoc",
-    "watch": "tsc --watch & tgt --watch",
-    "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
+    "watch": "tsc --watch & tgt --watch"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/git": "^9.0.0",
-    "@semantic-release/release-notes-generator": "^9.0.1",
-    "@types/jest": "^26.0.0",
-    "@typescript-eslint/eslint-plugin": "^3.1.0",
-    "@typescript-eslint/parser": "^3.1.0",
-    "commitizen": "^4.1.2",
-    "cz-conventional-changelog": "^3.2.0",
-    "es-dev-server": "^1.53.0",
-    "eslint": "^7.1.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-import-resolver-typescript": "^2.0.0",
-    "eslint-plugin-cflint": "^1.0.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-prettier": "^3.1.3",
-    "jest": "^26.0.1",
-    "prettier": "^2.0.5",
-    "semantic-release": "^17.0.8",
     "threeify-glsl-transpiler": "1.1.13",
-    "ts-jest": "^26.1.0",
-    "typedoc": "^0.17.8",
     "typescript": "^3.9.3"
   },
   "engines": {
-    "node": "^12.13.0"
+    "node": "^15.8.0"
   },
   "engineStrict": true,
-  "prettier": {
-    "trailingComma": "all",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": false
-  },
   "module": "index.ts",
-  "type": "module",
-  "release": {
-    "branches": [
-      "master"
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogFile": "CHANGELOG.md"
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "CHANGELOG.md"
-          ]
-        }
-      ]
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }
+  "type": "module"
 }

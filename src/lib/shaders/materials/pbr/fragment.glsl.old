@@ -10,7 +10,7 @@ uniform mat4 u_localToView;  // geometry
 uniform mat4 u_viewToScreen; // camera
 
 // material
-#pragma include <materials/material_input>
+#pragma include <lib/shaders/includes/materials/material_input>
 uniform MaterialInputV3 u_normal;
 uniform MaterialInputV3 u_ambientOcclusion;
 uniform MaterialInputV3 u_albedo;
@@ -25,7 +25,7 @@ uniform MaterialInputV3 u_subsurface;
 uniform MaterialInputV3 u_subsurfaceThickness;
 
 // punctual lights
-#pragma include <lighting/punctual>
+#pragma include <lib/shaders/includes/lighting/punctual>
 uniform PunctualLight u_PunctualLights[LIGHT_COUNT];
 
 // image-based lights
@@ -39,8 +39,8 @@ uniform sampler2D u_charlieLUT;
 // output
 uniform int umaterialOutputs;  // MaterialOutputs
 
-#pragma include <materials/material_outputs>
-#pragma include <brdfs/old/brdf_specular_ggx>
+#pragma include <lib/shaders/includes/materials/material_outputs>
+#pragma include <lib/shaders/includes/brdfs/old/brdf_specular_ggx>
 
 void main() {
 

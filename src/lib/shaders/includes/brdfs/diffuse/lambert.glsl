@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <lib/shaders/includes/math/math>
 
 
 // three.js

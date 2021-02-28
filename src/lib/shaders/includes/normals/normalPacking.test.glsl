@@ -1,4 +1,4 @@
-#pragma include <tests/fragment>
+#pragma include <lib/shaders/includes/tests/fragment>
 #pragma include "normalPacking"
 
 void testEquivalency( inout TestSuite suite, in int testId, in vec3 normal ) {

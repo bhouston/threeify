@@ -7,7 +7,7 @@ uniform samplerCube cubeMap;
 uniform float perceptualRoughness;
 uniform int mipCount;
 
-#pragma include <color/encodings/rgbd>
+#pragma include <lib/shaders/includes/color/encodings/rgbd>
 
 void main() {
 

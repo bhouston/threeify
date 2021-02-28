@@ -12,14 +12,14 @@ uniform float     specularAnisotropicScale;
 uniform sampler2D specularAnisotropicFlowMap;
 
 
-#pragma include <lighting/punctual>
-#pragma include <brdfs/diffuse/lambert>
-#pragma include <brdfs/specular/ggx>
-#pragma include <brdfs/specular/anisotropy>
-#pragma include <color/spaces/srgb>
-#pragma include <normals/tangentSpace>
-#pragma include <math/mat2>
-#pragma include <math/mat3>
+#pragma include <lib/shaders/includes/lighting/punctual>
+#pragma include <lib/shaders/includes/brdfs/diffuse/lambert>
+#pragma include <lib/shaders/includes/brdfs/specular/ggx>
+#pragma include <lib/shaders/includes/brdfs/specular/anisotropy>
+#pragma include <lib/shaders/includes/color/spaces/srgb>
+#pragma include <lib/shaders/includes/normals/tangentSpace>
+#pragma include <lib/shaders/includes/math/mat2>
+#pragma include <lib/shaders/includes/math/mat3>
 
 void main() {
 
