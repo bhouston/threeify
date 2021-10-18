@@ -94,6 +94,11 @@ export function makeColorMipmapAttachment(
   );
 }
 
+export enum ImageFitMode {
+  FitWidth = "fitWidth",
+  FitHeight = "fitHeight",
+}
+
 export class LayerCompositor {
   context: RenderingContext;
   layerImageCache: LayerImageMap = {};
@@ -101,6 +106,7 @@ export class LayerCompositor {
   #bufferGeometry: BufferGeometry;
   #program: Program;
   imageSize = new Vector2(0, 0);
+  imageFitMode: ImageFitMode = ImageFitMode.FitHeight;
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
   #layers: Layer[] = [];
@@ -232,7 +238,11 @@ export class LayerCompositor {
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
 
-    const imageToCanvasScale = canvasSize.height / this.imageSize.height;
+    const imageToCanvasScale =
+      this.imageFitMode === ImageFitMode.FitWidth
+        ? canvasSize.width / this.imageSize.width
+        : canvasSize.height / this.imageSize.height;
+
     const canvasImageSize = this.imageSize.clone().multiplyByScalar(imageToCanvasScale);
     const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
 
