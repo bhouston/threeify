@@ -232,16 +232,17 @@ export class LayerCompositor {
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
 
-    const canvasImageSize = makeVector2FillHeight(canvasSize, this.imageSize);
+    const imageToCanvasScale = canvasSize.height / this.imageSize.height;
+    const canvasImageSize = this.imageSize.clone().multiplyByScalar(imageToCanvasScale);
     const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
 
     if (this.zoomScale > 1.0) {
       // convert from canvas space to image space
       const imagePanPosition = this.panPosition
         .clone()
-        .multiplyByScalar(this.imageSize.width / canvasImageSize.width)
+        .multiplyByScalar(this.imageSize.width / (this.imageSize.width * imageToCanvasScale))
         .multiplyByScalar(this.context.canvasFramebuffer.devicePixelRatio);
-      const imageCanvasSize = canvasSize.clone().multiplyByScalar(this.imageSize.width / canvasImageSize.width);
+      const imageCanvasSize = canvasSize.clone().multiplyByScalar(this.imageSize.width / (this.imageSize.width * imageToCanvasScale));
 
       // center pan
       const imagePanOffset = imagePanPosition.clone().sub(imageCanvasSize.clone().multiplyByScalar(0.5));
@@ -250,7 +251,7 @@ export class LayerCompositor {
       imagePanOffset.y = Math.sign(imagePanOffset.y) * Math.min(Math.abs(imagePanOffset.y), this.imageSize.y * 0.5);
 
       // convert back to
-      const canvasPanOffset = imagePanOffset.clone().multiplyByScalar(canvasImageSize.width / this.imageSize.width);
+      const canvasPanOffset = imagePanOffset.clone().multiplyByScalar((this.imageSize.width * imageToCanvasScale) / this.imageSize.width);
 
       // ensure zoom is at point of contact, not center of screen.
       const centeredCanvasPanOffset = canvasPanOffset.clone().multiplyByScalar(1 - 1 / this.zoomScale);
