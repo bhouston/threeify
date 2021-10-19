@@ -95,8 +95,8 @@ export function makeColorMipmapAttachment(
 }
 
 export enum ImageFitMode {
-  FitWidth = "fitWidth",
-  FitHeight = "fitHeight",
+  FitWidth,
+  FitHeight,
 }
 
 export class LayerCompositor {
