@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/random>
+#pragma include <math/sampling/random>
 
 // based on https://www.shadertoy.com/view/MslGR8
 vec3 dithering( vec3 color ) {

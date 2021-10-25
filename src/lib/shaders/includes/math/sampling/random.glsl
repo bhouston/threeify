@@ -1,5 +1,5 @@
 #pragma once
-#pragma include "math"
+#pragma include <math/math>
 
 // expects values in the range of [0,1]x[0,1], returns values in the [0,1] range.
 // do not collapse into a single function per: http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/

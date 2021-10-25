@@ -1,3 +1,4 @@
+import { Spherical } from "./Spherical";
 import { Vector3 } from "./Vector3";
 
 export function crossFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3, result = new Vector3()): Vector3 {
@@ -9,6 +10,22 @@ export function crossFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3, resu
 
 export function makeVector3FromDelta(a: Vector3, b: Vector3, result = new Vector3()): Vector3 {
   return result.copy(a).sub(b);
+}
+
+export function makeVector3FromSpherical( s: Spherical ): Vector3 {
+
+  return makeVector3FromSphericalCoords( s.radius, s.phi, s.theta );
+
+}
+
+export function makeVector3FromSphericalCoords( radius: number, phi: number, theta: number ): Vector3 {
+
+  const sinPhiRadius = Math.sin( phi ) * radius;
+
+  return new Vector3( sinPhiRadius * Math.sin( theta ),
+    Math.cos( phi ) * radius,
+    sinPhiRadius * Math.cos( theta ) );
+
 }
 
 // static/instance method to calculate barycentric coordinates

@@ -29,7 +29,6 @@
     "watch": "tsc --watch & tgt --watch",
     "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
   },
-  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",

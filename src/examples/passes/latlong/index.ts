@@ -1,3 +1,4 @@
+import { Orbit } from "../../../lib/controllers/Orbit";
 import {
   DepthTestFunc,
   DepthTestState,
@@ -7,6 +8,7 @@ import {
   makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
+  makeMatrix4RotationFromQuaternion,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Matrix4,
@@ -14,6 +16,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  TexImage2D,
   Texture,
   TextureFilter,
   TextureWrap,
@@ -24,27 +27,37 @@ import vertexSource from "./vertex.glsl";
 async function init(): Promise<null> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
-  const garageTexture = new Texture(await fetchImage("/assets/textures/cube/garage/latLong.jpg"));
-  garageTexture.wrapS = TextureWrap.Repeat;
-  garageTexture.wrapT = TextureWrap.ClampToEdge;
-  garageTexture.minFilter = TextureFilter.Linear;
-  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/latLong.png"));
-  debugTexture.wrapS = TextureWrap.Repeat;
-  debugTexture.wrapT = TextureWrap.ClampToEdge;
-  debugTexture.minFilter = TextureFilter.Linear;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+
+  const images = [];
+  const textures: Texture[] = [];
+  const texImage2Ds: TexImage2D[] = [];
+  for (let i = 0; i < 5; i++) {
+    images.push( fetchImage(`/assets/textures/cube/kitchen/kitchenb_${i+1}.jpg`).then( (image)=> {
+         const texture = new Texture( image );
+         texture.wrapS = TextureWrap.ClampToEdge;
+         texture.wrapT = TextureWrap.ClampToEdge;
+         texture.minFilter = TextureFilter.Linear;
+        textures[i] = texture;
+
+        texImage2Ds[i] = makeTexImage2DFromTexture(context, texture);
+      }) );
+  }
+
+  await Promise.all( images );
+
   const canvasFramebuffer = context.canvasFramebuffer;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
-  const garageMap = makeTexImage2DFromTexture(context, garageTexture);
-  const debugMap = makeTexImage2DFromTexture(context, debugTexture);
+  const orbit = new Orbit( context.canvas );
+
 
   const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
   const passUniforms = {
     viewToWorld: new Matrix4(),
-    screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(45, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
-    latLongMap: garageMap,
+    screenToView: makeMatrix4Inverse(makeMatrix4PerspectiveFov(30, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio)),
+    equirectangularMap: texImage2Ds[0],
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -53,10 +66,8 @@ async function init(): Promise<null> {
 
     const now = Date.now();
 
-    passUniforms.viewToWorld = makeMatrix4Inverse(
-      makeMatrix4RotationFromEuler(new Euler(Math.sin(now * 0.0003), now * 0.0004, 0)),
-    );
-    passUniforms.latLongMap = Math.floor(now / 5000) % 2 === 0 ? garageMap : debugMap;
+    passUniforms.viewToWorld = makeMatrix4Inverse( makeMatrix4RotationFromQuaternion( orbit.orientation ) );
+    passUniforms.equirectangularMap = texImage2Ds[ Math.floor(now / 1000) % images.length ];
 
     renderBufferGeometry(canvasFramebuffer, passProgram, passUniforms, bufferGeometry, depthTestState);
   }

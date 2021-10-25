@@ -32,7 +32,7 @@
       let scriptUrl = urlParams.get("scriptUrl");
       const name = urlParams.get("name");
       if (name !== null) {
-        scriptUrl = `dist/examples/${name}/index.js`;
+        scriptUrl = `/dist/examples/${name}/index.js`;
       }
       var script = document.createElement("script");
       script.setAttribute("type", "module");
