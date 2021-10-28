@@ -1,3 +1,10 @@
+# [1.80.0](https://github.com/threeify/threeify/compare/v1.79.2...v1.80.0) (2021-10-28)
+
+
+### Features
+
+* added option to fit the width, rather than the height, to LayeredTranslator ([9715552](https://github.com/threeify/threeify/commit/97155522d9dbf822879cf32d37be4f0fbbd64be7))
+
 ## [1.79.2](https://github.com/threeify/threeify/compare/v1.79.1...v1.79.2) (2020-12-10)
 
 
