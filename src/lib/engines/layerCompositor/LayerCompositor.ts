@@ -94,6 +94,11 @@ export function makeColorMipmapAttachment(
   );
 }
 
+export enum ImageFitMode {
+  FitWidth,
+  FitHeight,
+}
+
 export class LayerCompositor {
   context: RenderingContext;
   layerImageCache: LayerImageMap = {};
@@ -101,6 +106,7 @@ export class LayerCompositor {
   #bufferGeometry: BufferGeometry;
   #program: Program;
   imageSize = new Vector2(0, 0);
+  imageFitMode: ImageFitMode = ImageFitMode.FitHeight;
   zoomScale = 1.0; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
   #layers: Layer[] = [];
@@ -232,16 +238,21 @@ export class LayerCompositor {
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
 
-    const canvasImageSize = makeVector2FillHeight(canvasSize, this.imageSize);
+    const imageToCanvasScale =
+      this.imageFitMode === ImageFitMode.FitWidth
+        ? canvasSize.width / this.imageSize.width
+        : canvasSize.height / this.imageSize.height;
+
+    const canvasImageSize = this.imageSize.clone().multiplyByScalar(imageToCanvasScale);
     const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
 
     if (this.zoomScale > 1.0) {
       // convert from canvas space to image space
       const imagePanPosition = this.panPosition
         .clone()
-        .multiplyByScalar(this.imageSize.width / canvasImageSize.width)
+        .multiplyByScalar(1 / imageToCanvasScale)
         .multiplyByScalar(this.context.canvasFramebuffer.devicePixelRatio);
-      const imageCanvasSize = canvasSize.clone().multiplyByScalar(this.imageSize.width / canvasImageSize.width);
+      const imageCanvasSize = canvasSize.clone().multiplyByScalar(1 / imageToCanvasScale);
 
       // center pan
       const imagePanOffset = imagePanPosition.clone().sub(imageCanvasSize.clone().multiplyByScalar(0.5));
@@ -250,7 +261,7 @@ export class LayerCompositor {
       imagePanOffset.y = Math.sign(imagePanOffset.y) * Math.min(Math.abs(imagePanOffset.y), this.imageSize.y * 0.5);
 
       // convert back to
-      const canvasPanOffset = imagePanOffset.clone().multiplyByScalar(canvasImageSize.width / this.imageSize.width);
+      const canvasPanOffset = imagePanOffset.clone().multiplyByScalar(imageToCanvasScale);
 
       // ensure zoom is at point of contact, not center of screen.
       const centeredCanvasPanOffset = canvasPanOffset.clone().multiplyByScalar(1 - 1 / this.zoomScale);
