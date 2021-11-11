@@ -26,8 +26,7 @@
     "lint": "eslint ./src/",
     "start": "es-dev-server --node-resolve --watch",
     "docs": "typedoc",
-    "watch": "tsc --watch & tgt --watch",
-    "postinstall": "cp --remove-destination ./hooks/prepare-commit-msg ./.git/hooks/prepare-commit-msg && chmod +x ./.git/hooks/prepare-commit-msg"
+    "watch": "tsc --watch & tgt --watch"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
@@ -56,7 +55,7 @@
     "typescript": "^3.9.3"
   },
   "engines": {
-    "node": "^12.13.0"
+    "node": "^16.0.0"
   },
   "engineStrict": true,
   "prettier": {

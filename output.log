@@ -1,0 +1,7 @@
+yarn run v1.22.10
+$ tsc --watch & tgt --watch
+165 files transpile successfully.
+c8:29:52 PM - Starting compilation in watch mode...
+
+
+8:29:54 PM - Found 0 errors. Watching for file changes.
