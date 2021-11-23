@@ -1,5 +1,5 @@
 {
-  "slug": "pmrem_lambertian",
+  "slug": "pass_latlong",
   "en": {
     "name": "Lambertian PMREM Generation",
     "description": "This takes as input an latlong image (AKA lat-long image), converts it to a cubemap and then  as a background without converting it to a cubemap.",

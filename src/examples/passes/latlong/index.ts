@@ -24,11 +24,14 @@ import {
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
+
 async function init(): Promise<null> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+
+  let imageIndex = 0;
 
   const images = [];
   const textures: Texture[] = [];
@@ -67,14 +70,42 @@ async function init(): Promise<null> {
     const now = Date.now();
 
     passUniforms.viewToWorld = makeMatrix4Inverse( makeMatrix4RotationFromQuaternion( orbit.orientation ) );
-    passUniforms.equirectangularMap = texImage2Ds[ Math.floor(now / 1000) % images.length ];
+    passUniforms.screenToView = makeMatrix4Inverse(makeMatrix4PerspectiveFov((15 * ( 1 - orbit.zoom ) ) + 15, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio));
+    passUniforms.equirectangularMap = texImage2Ds[ imageIndex ];
 
     renderBufferGeometry(canvasFramebuffer, passProgram, passUniforms, bufferGeometry, depthTestState);
+
+    orbit.update();
   }
 
   animate();
+
+  window.addEventListener("keydown", function (event) {
+    if (event.key !== undefined) {
+      imageIndex = ( event.key.charCodeAt(0) - '0'.charCodeAt(0) ) % images.length;
+      // Handle the event with KeyboardEvent.key and set handled true.
+    }
+  }, true);
 
   return null;
 }
 
 init();
+
+window.addEventListener("keydown", function (event) {
+  if (event.defaultPrevented) {
+    return; // Should do nothing if the default action has been cancelled
+  }
+
+  var handled = false;
+  if (event.key !== undefined) {
+    // Handle the event with KeyboardEvent.key and set handled true.
+  } else if (event.keyCode !== undefined) {
+    // Handle the event with KeyboardEvent.keyCode and set handled true.
+  }
+
+  if (handled) {
+    // Suppress "double action" if event handled
+    event.preventDefault();
+  }
+}, true);

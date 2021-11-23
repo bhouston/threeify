@@ -1,5 +1,5 @@
 {
-  "slug": "pass_latlong",
+  "slug": "pmrem_lambertian",
   "en": {
     "name": "Equirectangular Background Pass",
     "description": "Uses a latlong image (AKA lat-long image) as a background without converting it to a cubemap.",
