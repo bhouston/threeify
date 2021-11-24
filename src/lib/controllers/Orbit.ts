@@ -50,7 +50,7 @@ export class Orbit implements IDisposable {
     }
 
     onPointerDown(pe: PointerEvent) {
-        console.log("pointer down");
+        //console.log("pointer down");
         this.domElement.setPointerCapture(pe.pointerId);
         this.domElement.addEventListener('pointermove', this.onPointerMoveHandler, false);
         this.domElement.addEventListener('pointerup', this.onPointerUpHandler, false);
@@ -59,19 +59,19 @@ export class Orbit implements IDisposable {
     }
 
     onPointerUp(pe: PointerEvent) {
-        console.log("pointer up");
+        //console.log("pointer up");
         this.domElement.releasePointerCapture(pe.pointerId);
         this.domElement.removeEventListener('pointermove', this.onPointerMoveHandler);
         this.domElement.removeEventListener('pointerup', this.onPointerUpHandler);
     }
 
     onMouseWheel(we: WheelEvent) {
-        console.log("wheel");
+        //console.log("wheel");
         this.zoomMomentum += we.deltaY * this.damping * 0.002;
     }
 
     onPointerMove(pe: PointerEvent) {
-        console.log("pointer move", pe);
+        //console.log("pointer move", pe);
         const pointerClient = new Vector2( pe.clientX, pe.clientY );
         const pointerClientDelta = pointerClient.clone().sub( this.lastPointerClient );
 
@@ -100,7 +100,7 @@ export class Orbit implements IDisposable {
     }
 
     onPointerCancel(pe: PointerEvent) {
-        console.log("pointer cancel");
+        //console.log("pointer cancel");
     }
 
 

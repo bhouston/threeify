@@ -633,24 +633,20 @@
             }
         }
         onPointerDown(pe) {
-            console.log("pointer down");
             this.domElement.setPointerCapture(pe.pointerId);
             this.domElement.addEventListener('pointermove', this.onPointerMoveHandler, false);
             this.domElement.addEventListener('pointerup', this.onPointerUpHandler, false);
             this.lastPointerClient.set(pe.clientX, pe.clientY);
         }
         onPointerUp(pe) {
-            console.log("pointer up");
             this.domElement.releasePointerCapture(pe.pointerId);
             this.domElement.removeEventListener('pointermove', this.onPointerMoveHandler);
             this.domElement.removeEventListener('pointerup', this.onPointerUpHandler);
         }
         onMouseWheel(we) {
-            console.log("wheel");
             this.zoomMomentum += we.deltaY * this.damping * 0.002;
         }
         onPointerMove(pe) {
-            console.log("pointer move", pe);
             const pointerClient = new Vector2(pe.clientX, pe.clientY);
             const pointerClientDelta = pointerClient.clone().sub(this.lastPointerClient);
             pointerClientDelta.x /= this.domElement.clientWidth;
@@ -670,7 +666,6 @@
             this.zoom = Math.min(1, Math.max(0, this.zoom));
         }
         onPointerCancel(pe) {
-            console.log("pointer cancel");
         }
     }
 
