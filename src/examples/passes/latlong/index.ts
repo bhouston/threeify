@@ -1,5 +1,5 @@
-import { Orbit } from "../../../lib/controllers/Orbit";
 import {
+  Orbit,
   DepthTestFunc,
   DepthTestState,
   Euler,

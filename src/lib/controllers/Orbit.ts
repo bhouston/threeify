@@ -1,4 +1,10 @@
-import { Euler, IDisposable, makeQuaternionFromEuler, makeVector3FromSpherical, Quaternion, Spherical, Vector2 } from "..";
+import { IDisposable } from "../core/types";
+import { Euler } from "../math/Euler";
+import { degToRad } from "../math/Functions";
+import { Quaternion } from "../math/Quaternion";
+import { makeQuaternionFromAxisAngle, makeQuaternionFromEuler } from "../math/Quaternion.Functions";
+import { Vector2 } from "../math/Vector2";
+import { Vector3 } from "../math/Vector3";
 
 export class Orbit implements IDisposable {
 
