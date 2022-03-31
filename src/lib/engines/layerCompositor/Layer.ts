@@ -7,7 +7,7 @@ import { Vector3 } from "../../math/Vector3";
 import { TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
 import { LayerCompositor } from "./LayerCompositor";
 
-export class Layer {
+class LayerTexture {
   disposed = false;
   planeToImage: Matrix4;
   uvToTexture: Matrix3;
@@ -30,5 +30,41 @@ export class Layer {
     const uvScale = makeMatrix3Scale(this.uvScaleFactor);
     const uvTranslation = makeMatrix3Translation(this.uvOffset);
     this.uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
+  }
+}
+
+export enum LayerMaskMode {
+  None = 0,
+  Alpha = 1,
+  Luminance = 2,
+  InverseAlpha = 3,
+  InverseLuminance = 4,
+}
+
+export class LayerMask extends LayerTexture {
+  constructor(
+    compositor: LayerCompositor,
+    url: string,
+    texImage2D: TexImage2D,
+    offset: Vector2,
+    public mode: LayerMaskMode = LayerMaskMode.Alpha,
+    uvScaleFactor = new Vector2(1, -1),
+    uvOffset = new Vector2(0, 1),
+  ) {
+    super(compositor, url, texImage2D, offset, uvScaleFactor, uvOffset);
+  }
+}
+
+export class Layer extends LayerTexture {
+  constructor(
+    compositor: LayerCompositor,
+    url: string,
+    texImage2D: TexImage2D,
+    offset: Vector2,
+    public mask?: LayerMask,
+    uvScaleFactor = new Vector2(1, -1),
+    uvOffset = new Vector2(0, 1),
+  ) {
+    super(compositor, url, texImage2D, offset, uvScaleFactor, uvOffset);
   }
 }

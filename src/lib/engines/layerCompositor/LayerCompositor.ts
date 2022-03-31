@@ -14,9 +14,9 @@ import {
   makeMatrix4Translation,
 } from "../../math/Matrix4.Functions";
 import { Vector2 } from "../../math/Vector2";
-import { makeVector2FillHeight } from "../../math/Vector2.Functions";
 import { Vector3 } from "../../math/Vector3";
 import { isFirefox, isiOS, isMacOS } from "../../platform/Detection";
+import { UniformValueMap } from "../../renderers";
 import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../renderers/webgl/ClearState";
@@ -312,6 +312,7 @@ export class LayerCompositor {
       localToWorld: planeToImage,
       layerMap: offscreenColorAttachment,
       uvToTexture: uvToTexture,
+      maskMode: 0,
       mipmapBias: 0.0,
       convertToPremultipliedAlpha: 0,
     };
@@ -365,16 +366,30 @@ export class LayerCompositor {
       if (layerImage !== undefined) {
         layerImage.renderId = this.renderId;
       }
-      const uniforms = {
+
+      const mask = layer.mask;
+      const maskImage = mask && this.layerImageCache[mask.url];
+      if (maskImage !== undefined) {
+        maskImage.renderId = this.renderId;
+      }
+
+      const uniforms: UniformValueMap = {
         viewToScreen: imageToOffscreen,
         screenToView: offscreenToImage,
         worldToView: new Matrix4(),
         localToWorld: layer.planeToImage,
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,
+        maskMode: 0,
         mipmapBias: 0,
         convertToPremultipliedAlpha,
       };
+
+      if (mask) {
+        uniforms.maskMap = mask.texImage2D;
+        uniforms.uvToMaskTexture = mask.uvToTexture;
+        uniforms.maskMode = mask.mode;
+      }
 
       const blendState = blendModeToBlendState(Blending.Over, true);
 
