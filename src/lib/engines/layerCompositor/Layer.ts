@@ -41,6 +41,38 @@ export enum LayerMaskMode {
   InverseLuminance = 4,
 }
 
+export enum LayerBlendMode {
+  Clear = 0,
+  Src = 1,
+  Dst = 2,
+  SrcOver = 3,
+  DstOver = 4,
+  SrcIn = 5,
+  DstIn = 6,
+  SrcOut = 7,
+  DstOut = 8,
+  SrcAtop = 9,
+  DstAtop = 10,
+  Xor = 11,
+  Add = 12,
+  Multiply = 13,
+  Screen = 14,
+  Overlay = 15,
+  Lighten = 16,
+  Darken = 17,
+  // Available in canvases, but not implemented.
+  // Dodge = 18,
+  // Burn = 19,
+  // HardLight = 20,
+  // SoftLight = 21,
+  // Difference = 22,
+  // Exclusion = 23,
+  Hue = 24,
+  Saturation = 25,
+  Color = 26,
+  Luminosity = 27,
+}
+
 export class LayerMask extends LayerTexture {
   constructor(
     compositor: LayerCompositor,
@@ -62,6 +94,7 @@ export class Layer extends LayerTexture {
     texImage2D: TexImage2D,
     offset: Vector2,
     public mask?: LayerMask,
+    public blendMode: LayerBlendMode = LayerBlendMode.SrcOver,
     uvScaleFactor = new Vector2(1, -1),
     uvOffset = new Vector2(0, 1),
   ) {

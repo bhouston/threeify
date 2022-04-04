@@ -3,6 +3,7 @@ import { transformGeometry } from "../../geometry/Geometry.Functions";
 import { planeGeometry } from "../../geometry/primitives/planeGeometry";
 import { Blending } from "../../materials/Blending";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
+import { Matrix3 } from "../../math";
 import { ceilPow2 } from "../../math/Functions";
 import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from "../../math/Matrix3.Functions";
 import { Matrix4 } from "../../math/Matrix4";
@@ -17,7 +18,7 @@ import { Vector2 } from "../../math/Vector2";
 import { Vector3 } from "../../math/Vector3";
 import { isFirefox, isiOS, isMacOS } from "../../platform/Detection";
 import { UniformValueMap } from "../../renderers";
-import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
+import { BlendFunc, blendModeToBlendState, BlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../renderers/webgl/ClearState";
 import { Attachment } from "../../renderers/webgl/framebuffers/Attachment";
@@ -36,7 +37,7 @@ import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
 import { fetchImage, isImageBitmapSupported } from "../../textures/loaders/Image";
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
-import { Layer } from "./Layer";
+import { Layer, LayerBlendMode } from "./Layer";
 import vertexSource from "./vertex.glsl";
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
@@ -114,9 +115,11 @@ export class LayerCompositor {
   #offlineLayerVersion = -1;
   firstRender = true;
   clearState = new ClearState(new Vector3(1, 1, 1), 0.0);
-  offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vector2(0, 0);
-  offscreenColorAttachment: TexImage2D | undefined;
+  offscreenWriteFramebuffer: Framebuffer | undefined;
+  offscreenWriteColorAttachment: TexImage2D | undefined;
+  offscreenReadFramebuffer: Framebuffer | undefined;
+  offscreenReadColorAttachment: TexImage2D | undefined;
   renderId = 0;
   autoDiscard = false;
 
@@ -151,16 +154,30 @@ export class LayerCompositor {
   updateOffscreen(): void {
     // but to enable mipmaps (for filtering) we need it to be up-rounded to a power of 2 in width/height.
     const offscreenSize = new Vector2(ceilPow2(this.imageSize.x), ceilPow2(this.imageSize.y));
-    if (this.offscreenFramebuffer === undefined || !this.offscreenSize.equals(offscreenSize)) {
+    if (
+      this.offscreenWriteFramebuffer === undefined ||
+      this.offscreenReadFramebuffer === undefined ||
+      !this.offscreenSize.equals(offscreenSize)
+    ) {
       // console.log("updating framebuffer");
 
-      if (this.offscreenFramebuffer !== undefined) {
-        this.offscreenFramebuffer.dispose();
-        this.offscreenFramebuffer = undefined;
+      if (this.offscreenWriteFramebuffer !== undefined) {
+        this.offscreenWriteFramebuffer.dispose();
+        this.offscreenWriteFramebuffer = undefined;
       }
-      this.offscreenColorAttachment = makeColorMipmapAttachment(this.context, offscreenSize);
-      this.offscreenFramebuffer = new Framebuffer(this.context);
-      this.offscreenFramebuffer.attach(Attachment.Color0, this.offscreenColorAttachment);
+
+      this.offscreenWriteColorAttachment = makeColorMipmapAttachment(this.context, offscreenSize);
+      this.offscreenWriteFramebuffer = new Framebuffer(this.context);
+      this.offscreenWriteFramebuffer.attach(Attachment.Color0, this.offscreenWriteColorAttachment);
+
+      if (this.offscreenReadFramebuffer !== undefined) {
+        this.offscreenReadFramebuffer.dispose();
+        this.offscreenReadFramebuffer = undefined;
+      }
+
+      this.offscreenReadColorAttachment = makeColorMipmapAttachment(this.context, offscreenSize);
+      this.offscreenReadFramebuffer = new Framebuffer(this.context);
+      this.offscreenReadFramebuffer.attach(Attachment.Color0, this.offscreenReadColorAttachment);
 
       // frame buffer is pixel aligned with layer images.
       // framebuffer view is [ (0,0)-(framebuffer.with, framebuffer.height) ].
@@ -301,7 +318,7 @@ export class LayerCompositor {
     canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
-    const offscreenColorAttachment = this.offscreenColorAttachment;
+    const offscreenColorAttachment = this.offscreenReadColorAttachment;
     if (offscreenColorAttachment === undefined) {
       return;
     }
@@ -315,6 +332,8 @@ export class LayerCompositor {
       maskMode: 0,
       mipmapBias: 0.0,
       convertToPremultipliedAlpha: 0,
+
+      blendMode: LayerBlendMode.Src,
     };
 
     const blendState = blendModeToBlendState(Blending.Over, true);
@@ -340,20 +359,23 @@ export class LayerCompositor {
     }
     this.#offlineLayerVersion = this.#layerVersion;
 
-    const offscreenFramebuffer = this.offscreenFramebuffer;
-    if (offscreenFramebuffer === undefined) {
+    const offscreenWriteFramebuffer = this.offscreenWriteFramebuffer;
+    const offscreenReadFramebuffer = this.offscreenReadFramebuffer;
+    if (offscreenWriteFramebuffer === undefined || offscreenReadFramebuffer === undefined) {
       return;
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
-    offscreenFramebuffer.clear();
+    offscreenWriteFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    offscreenWriteFramebuffer.clear();
+
+    offscreenReadFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    offscreenReadFramebuffer.clear();
 
     const imageToOffscreen = makeMatrix4Orthographic(0, this.offscreenSize.width, 0, this.offscreenSize.height, -1, 1);
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
     );*/
-    const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
 
     // Ben on 2020-10-31
     // - does not understand why this is necessary.
@@ -361,7 +383,7 @@ export class LayerCompositor {
     // - the bug would be in chrome as it seems to be the inverse of the current query
     const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox()) ? 0 : 1;
 
-    this.#layers.forEach((layer) => {
+    this.#layers.forEach((layer, idx) => {
       const layerImage = this.layerImageCache[layer.url];
       if (layerImage !== undefined) {
         layerImage.renderId = this.renderId;
@@ -374,8 +396,11 @@ export class LayerCompositor {
       }
 
       const uniforms: UniformValueMap = {
+        imgMap: this.offscreenReadColorAttachment!,
+        imgSize: offscreenReadFramebuffer.size,
+        layerSize: layer.texImage2D.size,
+        layerPos: layer.offset,
         viewToScreen: imageToOffscreen,
-        screenToView: offscreenToImage,
         worldToView: new Matrix4(),
         localToWorld: layer.planeToImage,
         layerMap: layer.texImage2D,
@@ -383,6 +408,8 @@ export class LayerCompositor {
         maskMode: 0,
         mipmapBias: 0,
         convertToPremultipliedAlpha,
+
+        blendMode: layer.blendMode,
       };
 
       if (mask) {
@@ -391,16 +418,36 @@ export class LayerCompositor {
         uniforms.maskMode = mask.mode;
       }
 
-      const blendState = blendModeToBlendState(Blending.Over, true);
+      const blendState = new BlendState(BlendFunc.One, BlendFunc.Zero, BlendFunc.One, BlendFunc.Zero);
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry(offscreenFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);
+      renderBufferGeometry(
+        offscreenWriteFramebuffer,
+        this.#program,
+        uniforms,
+        this.#bufferGeometry,
+        undefined,
+        blendState,
+      );
+
+      const readSize = this.offscreenReadFramebuffer!.size;
+      uniforms.imgMap = this.offscreenWriteColorAttachment!;
+      uniforms.localToWorld = makeMatrix4Scale(new Vector3(readSize.width, readSize.height, 1.0));
+      uniforms.layerMap = this.offscreenWriteColorAttachment!;
+      uniforms.uvToTexture = new Matrix3();
+      uniforms.maskMode = 0;
+      uniforms.blendMode = LayerBlendMode.Src;
+
+      renderBufferGeometry(
+        offscreenReadFramebuffer,
+        this.#program,
+        uniforms,
+        this.#bufferGeometry,
+        undefined,
+        blendState,
+      );
     });
 
-    // generate mipmaps.
-    const colorAttachment = this.offscreenColorAttachment;
-    if (colorAttachment !== undefined) {
-      colorAttachment.generateMipmaps();
-    }
+    this.offscreenWriteColorAttachment!.generateMipmaps();
   }
 }
