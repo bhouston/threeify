@@ -3,6 +3,7 @@ import { Matrix4 } from "../../math/Matrix4";
 import { makeMatrix4Concatenation, makeMatrix4Scale, makeMatrix4Translation } from "../../math/Matrix4.Functions";
 import { Vector2 } from "../../math/Vector2";
 import { Vector3 } from "../../math/Vector3";
+import { BlendFunc, BlendState } from "../../renderers";
 import { TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
 import { LayerCompositor } from "./LayerCompositor";
 import { makeMatrix3FromViewToLayerUv } from "./makeMatrix3FromViewToLayerUv";
@@ -75,6 +76,25 @@ export enum LayerBlendMode {
   Luminosity = 27,
 }
 
+const { Zero, One, SourceAlpha: SA, DestAlpha: DA, OneMinusSourceAlpha: InvSA, OneMinusDestAlpha: InvDA } = BlendFunc;
+const layerBlendModeBlendState: { [mode in LayerBlendMode]?: BlendState } = {
+  [LayerBlendMode.Clear]: new BlendState(Zero, Zero, Zero, Zero),
+  [LayerBlendMode.Src]: new BlendState(One, Zero, One, Zero),
+  [LayerBlendMode.Dst]: new BlendState(Zero, One, Zero, One),
+  [LayerBlendMode.SrcOver]: new BlendState(One, InvSA, One, InvSA),
+  [LayerBlendMode.DstOver]: new BlendState(InvDA, One, InvDA, One),
+  [LayerBlendMode.SrcIn]: new BlendState(DA, Zero, DA, Zero),
+  [LayerBlendMode.DstIn]: new BlendState(Zero, SA, Zero, SA),
+  [LayerBlendMode.SrcOut]: new BlendState(InvDA, Zero, InvDA, Zero),
+  [LayerBlendMode.DstOut]: new BlendState(Zero, InvSA, Zero, InvSA),
+  [LayerBlendMode.SrcAtop]: new BlendState(DA, InvSA, Zero, One),
+  [LayerBlendMode.DstAtop]: new BlendState(InvDA, SA, One, Zero),
+  [LayerBlendMode.Xor]: new BlendState(InvDA, InvSA, InvDA, InvSA),
+  [LayerBlendMode.Add]: new BlendState(One, One, One, One),
+};
+
+export const copySourceBlendState = layerBlendModeBlendState[LayerBlendMode.Src]!;
+
 export class LayerMask extends LayerTexture {
   constructor(
     compositor: LayerCompositor,
@@ -101,5 +121,17 @@ export class Layer extends LayerTexture {
     uvOffset = new Vector2(0, 1),
   ) {
     super(compositor, url, texImage2D, offset, uvScaleFactor, uvOffset);
+  }
+
+  public get isTriviallyBlended(): boolean {
+    return layerBlendModeBlendState[this.blendMode] != null;
+  }
+
+  public get blendModeUniformValue(): number {
+    return this.isTriviallyBlended ? 0 : this.blendMode;
+  }
+
+  public get blendModeBlendState(): BlendState {
+    return layerBlendModeBlendState[this.blendMode] ?? copySourceBlendState;
   }
 }

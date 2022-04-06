@@ -1,7 +1,6 @@
 import { IDisposable } from "../../core/types";
 import { transformGeometry } from "../../geometry/Geometry.Functions";
 import { planeGeometry } from "../../geometry/primitives/planeGeometry";
-import { Blending } from "../../materials/Blending";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
 import { ceilPow2 } from "../../math/Functions";
 import {
@@ -14,7 +13,6 @@ import { Vector2 } from "../../math/Vector2";
 import { Vector3 } from "../../math/Vector3";
 import { isFirefox, isiOS, isMacOS } from "../../platform/Detection";
 import { UniformValueMap } from "../../renderers";
-import { BlendFunc, blendModeToBlendState, BlendState } from "../../renderers/webgl/BlendState";
 import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
 import { ClearState } from "../../renderers/webgl/ClearState";
 import { Attachment } from "../../renderers/webgl/framebuffers/Attachment";
@@ -33,7 +31,7 @@ import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
 import { fetchImage, isImageBitmapSupported } from "../../textures/loaders/Image";
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
-import { Layer, LayerBlendMode } from "./Layer";
+import { copySourceBlendState, Layer, LayerBlendMode, LayerMask } from "./Layer";
 import { makeMatrix3FromViewToLayerUv } from "./makeMatrix3FromViewToLayerUv";
 import vertexSource from "./vertex.glsl";
 
@@ -318,17 +316,22 @@ export class LayerCompositor {
       mipmapBias: 0,
       convertToPremultipliedAlpha: 0,
 
-      layerMap: offscreenColorAttachment,
+      layerMap: offscreenColorAttachment!,
       viewToLayerUv,
 
       maskMode: 0,
-      blendMode: LayerBlendMode.Src,
+      blendMode: 0,
     };
 
-    const blendState = blendModeToBlendState(Blending.Over, true);
-
     //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-    renderBufferGeometry(canvasFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);
+    renderBufferGeometry(
+      canvasFramebuffer,
+      this.#program,
+      uniforms,
+      this.#bufferGeometry,
+      undefined,
+      copySourceBlendState,
+    );
 
     if (this.autoDiscard) {
       for (const url in this.layerImageCache) {
@@ -372,7 +375,7 @@ export class LayerCompositor {
     // - the bug would be in chrome as it seems to be the inverse of the current query
     const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox()) ? 0 : 1;
 
-    const offscreenLocalToView = makeMatrix4Scale(new Vector3(this.offscreenSize.x, this.offscreenSize.y, 1.0));
+    // const offscreenLocalToView = makeMatrix4Scale(new Vector3(this.offscreenSize.x, this.offscreenSize.y, 1.0));
     const viewToImageUv = makeMatrix3FromViewToLayerUv(this.offscreenSize, undefined, true);
 
     this.#layers.forEach((layer, idx) => {
@@ -387,70 +390,76 @@ export class LayerCompositor {
         maskImage.renderId = this.renderId;
       }
 
-      let uniforms: UniformValueMap;
-      uniforms = {
-        localToView: layer.planeToImage,
-        viewToScreen: imageToOffscreen,
+      // Can't be accomplished with blendState alone, so we need to copy a section of the writeBuffer to the read buffer
+      if (!layer.isTriviallyBlended) {
+        const uniforms: UniformValueMap = {
+          // Only copies the section the layer needs for compositing
+          localToView: layer.planeToImage,
+          viewToScreen: imageToOffscreen,
 
-        mipmapBias: 0,
-        convertToPremultipliedAlpha,
+          mipmapBias: 0,
+          convertToPremultipliedAlpha,
 
-        imageMap: this.offscreenReadColorAttachment!,
-        viewToImageUv,
+          imageMap: this.offscreenWriteColorAttachment!, // Not used, but avoids framebuffer loop
+          viewToImageUv,
 
-        layerMap: layer.texImage2D,
-        viewToLayerUv: layer.viewToLayerUv,
+          layerMap: this.offscreenWriteColorAttachment!,
+          viewToLayerUv: viewToImageUv,
 
-        maskMode: 0,
-        blendMode: layer.blendMode,
-      };
-
-      if (mask) {
-        uniforms = {
-          ...uniforms,
-          maskMode: mask.mode,
-          maskMap: mask.texImage2D,
-          viewToMaskUv: mask.viewToLayerUv,
+          maskMode: 0,
+          blendMode: 0,
         };
+        offscreenReadFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+        offscreenReadFramebuffer.clear();
+
+        renderBufferGeometry(
+          this.offscreenReadFramebuffer!,
+          this.#program,
+          uniforms,
+          this.#bufferGeometry,
+          undefined,
+          copySourceBlendState,
+        );
       }
 
-      const blendState = new BlendState(BlendFunc.One, BlendFunc.Zero, BlendFunc.One, BlendFunc.Zero);
+      // Layering
+      {
+        let uniforms: UniformValueMap = {
+          localToView: layer.planeToImage,
+          viewToScreen: imageToOffscreen,
 
-      // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry(
-        this.offscreenWriteFramebuffer!,
-        this.#program,
-        uniforms,
-        this.#bufferGeometry,
-        undefined,
-        blendState,
-      );
+          mipmapBias: 0,
+          convertToPremultipliedAlpha,
 
-      uniforms = {
-        localToView: offscreenLocalToView,
-        viewToScreen: imageToOffscreen,
+          imageMap: this.offscreenReadColorAttachment!,
+          viewToImageUv,
 
-        mipmapBias: 0,
-        convertToPremultipliedAlpha,
+          layerMap: layer.texImage2D,
+          viewToLayerUv: layer.viewToLayerUv,
 
-        imageMap: this.offscreenWriteColorAttachment!, // Not used, but avoids framebuffer loop
-        viewToImageUv,
+          maskMode: 0,
+          blendMode: layer.blendModeUniformValue,
+        };
 
-        layerMap: this.offscreenWriteColorAttachment!,
-        viewToLayerUv: viewToImageUv,
+        if (mask) {
+          uniforms = {
+            ...uniforms,
+            maskMode: mask.mode,
+            maskMap: mask.texImage2D,
+            viewToMaskUv: mask.viewToLayerUv,
+          };
+        }
 
-        maskMode: 0,
-        blendMode: LayerBlendMode.Src,
-      };
-
-      renderBufferGeometry(
-        this.offscreenReadFramebuffer!,
-        this.#program,
-        uniforms,
-        this.#bufferGeometry,
-        undefined,
-        blendState,
-      );
+        // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
+        renderBufferGeometry(
+          this.offscreenWriteFramebuffer!,
+          this.#program,
+          uniforms,
+          this.#bufferGeometry,
+          undefined,
+          layer.blendModeBlendState,
+        );
+      }
     });
 
     this.offscreenWriteColorAttachment!.generateMipmaps();
