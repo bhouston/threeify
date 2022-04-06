@@ -3,12 +3,8 @@ import { transformGeometry } from "../../geometry/Geometry.Functions";
 import { planeGeometry } from "../../geometry/primitives/planeGeometry";
 import { Blending } from "../../materials/Blending";
 import { ShaderMaterial } from "../../materials/ShaderMaterial";
-import { Matrix3 } from "../../math";
 import { ceilPow2 } from "../../math/Functions";
-import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from "../../math/Matrix3.Functions";
-import { Matrix4 } from "../../math/Matrix4";
 import {
-  makeMatrix4Inverse,
   makeMatrix4Orthographic,
   makeMatrix4OrthographicSimple,
   makeMatrix4Scale,
@@ -38,6 +34,7 @@ import { fetchImage, isImageBitmapSupported } from "../../textures/loaders/Image
 import { Texture } from "../../textures/Texture";
 import fragmentSource from "./fragment.glsl";
 import { Layer, LayerBlendMode } from "./Layer";
+import { makeMatrix3FromViewToLayerUv } from "./makeMatrix3FromViewToLayerUv";
 import vertexSource from "./vertex.glsl";
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
@@ -251,6 +248,13 @@ export class LayerCompositor {
     this.renderId++;
     // console.log(`render id: ${this.renderId}`);
 
+    this.renderLayersToFramebuffer();
+
+    const offscreenColorAttachment = this.offscreenWriteColorAttachment;
+    if (offscreenColorAttachment === undefined) {
+      return;
+    }
+
     const canvasFramebuffer = this.context.canvasFramebuffer;
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
@@ -298,47 +302,32 @@ export class LayerCompositor {
       `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
     );*/
 
-    const canvasToImage = makeMatrix4Inverse(imageToCanvas);
-
     const planeToImage = makeMatrix4Scale(new Vector3(canvasImageSize.width, canvasImageSize.height, 1.0));
 
-    this.renderLayersToFramebuffer();
-
-    const layerUVScale = new Vector2(
-      this.imageSize.width / this.offscreenSize.width,
-      this.imageSize.height / this.offscreenSize.height,
-    );
-
-    const uvScale = makeMatrix3Scale(layerUVScale);
-    const uvTranslation = makeMatrix3Translation(
-      new Vector2(0, (this.offscreenSize.height - this.imageSize.height) / this.offscreenSize.height),
-    );
-    const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
+    const offscreenScaledSize = this.offscreenSize.clone().multiplyByScalar(imageToCanvasScale);
+    const viewToLayerUv = makeMatrix3FromViewToLayerUv(offscreenScaledSize, undefined, true);
 
     canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
-    const offscreenColorAttachment = this.offscreenReadColorAttachment;
-    if (offscreenColorAttachment === undefined) {
-      return;
-    }
-    const uniforms = {
+    let uniforms: UniformValueMap;
+    uniforms = {
+      localToView: planeToImage,
       viewToScreen: imageToCanvas,
-      screenToView: canvasToImage,
-      worldToView: new Matrix4(),
-      localToWorld: planeToImage,
-      layerMap: offscreenColorAttachment,
-      uvToTexture: uvToTexture,
-      maskMode: 0,
-      mipmapBias: 0.0,
+
+      mipmapBias: 0,
       convertToPremultipliedAlpha: 0,
 
+      layerMap: offscreenColorAttachment,
+      viewToLayerUv,
+
+      maskMode: 0,
       blendMode: LayerBlendMode.Src,
     };
 
     const blendState = blendModeToBlendState(Blending.Over, true);
 
-    // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
+    //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry(canvasFramebuffer, this.#program, uniforms, this.#bufferGeometry, undefined, blendState);
 
     if (this.autoDiscard) {
@@ -383,6 +372,9 @@ export class LayerCompositor {
     // - the bug would be in chrome as it seems to be the inverse of the current query
     const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox()) ? 0 : 1;
 
+    const offscreenLocalToView = makeMatrix4Scale(new Vector3(this.offscreenSize.x, this.offscreenSize.y, 1.0));
+    const viewToImageUv = makeMatrix3FromViewToLayerUv(this.offscreenSize, undefined, true);
+
     this.#layers.forEach((layer, idx) => {
       const layerImage = this.layerImageCache[layer.url];
       if (layerImage !== undefined) {
@@ -395,34 +387,38 @@ export class LayerCompositor {
         maskImage.renderId = this.renderId;
       }
 
-      const uniforms: UniformValueMap = {
-        imgMap: this.offscreenReadColorAttachment!,
-        imgSize: offscreenReadFramebuffer.size,
-        layerSize: layer.texImage2D.size,
-        layerPos: layer.offset,
+      let uniforms: UniformValueMap;
+      uniforms = {
+        localToView: layer.planeToImage,
         viewToScreen: imageToOffscreen,
-        worldToView: new Matrix4(),
-        localToWorld: layer.planeToImage,
-        layerMap: layer.texImage2D,
-        uvToTexture: layer.uvToTexture,
-        maskMode: 0,
+
         mipmapBias: 0,
         convertToPremultipliedAlpha,
 
+        imageMap: this.offscreenReadColorAttachment!,
+        viewToImageUv,
+
+        layerMap: layer.texImage2D,
+        viewToLayerUv: layer.viewToLayerUv,
+
+        maskMode: 0,
         blendMode: layer.blendMode,
       };
 
       if (mask) {
-        uniforms.maskMap = mask.texImage2D;
-        uniforms.uvToMaskTexture = mask.uvToTexture;
-        uniforms.maskMode = mask.mode;
+        uniforms = {
+          ...uniforms,
+          maskMode: mask.mode,
+          maskMap: mask.texImage2D,
+          viewToMaskUv: mask.viewToLayerUv,
+        };
       }
 
       const blendState = new BlendState(BlendFunc.One, BlendFunc.Zero, BlendFunc.One, BlendFunc.Zero);
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
       renderBufferGeometry(
-        offscreenWriteFramebuffer,
+        this.offscreenWriteFramebuffer!,
         this.#program,
         uniforms,
         this.#bufferGeometry,
@@ -430,16 +426,25 @@ export class LayerCompositor {
         blendState,
       );
 
-      const readSize = this.offscreenReadFramebuffer!.size;
-      uniforms.imgMap = this.offscreenWriteColorAttachment!;
-      uniforms.localToWorld = makeMatrix4Scale(new Vector3(readSize.width, readSize.height, 1.0));
-      uniforms.layerMap = this.offscreenWriteColorAttachment!;
-      uniforms.uvToTexture = new Matrix3();
-      uniforms.maskMode = 0;
-      uniforms.blendMode = LayerBlendMode.Src;
+      uniforms = {
+        localToView: offscreenLocalToView,
+        viewToScreen: imageToOffscreen,
+
+        mipmapBias: 0,
+        convertToPremultipliedAlpha,
+
+        imageMap: this.offscreenWriteColorAttachment!, // Not used, but avoids framebuffer loop
+        viewToImageUv,
+
+        layerMap: this.offscreenWriteColorAttachment!,
+        viewToLayerUv: viewToImageUv,
+
+        maskMode: 0,
+        blendMode: LayerBlendMode.Src,
+      };
 
       renderBufferGeometry(
-        offscreenReadFramebuffer,
+        this.offscreenReadFramebuffer!,
         this.#program,
         uniforms,
         this.#bufferGeometry,
