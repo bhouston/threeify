@@ -5,6 +5,10 @@ vec4 compositeColors(vec4 src, vec4 dst) {
 
   vec3 Sc = src.rgb;
   vec3 Dc = dst.rgb;
+  float Sa = src.a;
+  float ISa = 1.0 - Sa;
+  float Da = dst.a;
+  float IDa = 1.0 - Da;
 
   vec3 blend;
 
@@ -48,11 +52,6 @@ vec4 compositeColors(vec4 src, vec4 dst) {
       else   /* blendMode == 27 */  blend = mixLCHFast( Sc, Dc );
     }
   }
-
-  float Sa = src.a;
-  float ISa = 1.0 - Sa;
-  float Da = dst.a;
-  float IDa = 1.0 - Da;
 
   return vec4(
     IDa * Sc + ISa * Dc + Sa * Da * blend,

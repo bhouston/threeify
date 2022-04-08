@@ -373,7 +373,9 @@ export class LayerCompositor {
     // - does not understand why this is necessary.
     // - this means it may be working around a bug, and thus this will break in the future.
     // - the bug would be in chrome as it seems to be the inverse of the current query
-    const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox()) ? 0 : 1;
+    // Antoine on 2022-04-08
+    // - Firefox now also sends premultiplied textures to the shader, which seems to indicate the problem rests with the IOS/Mac implementation
+    const convertToPremultipliedAlpha = isMacOS() || isiOS() ? 1 : 0;
 
     // const offscreenLocalToView = makeMatrix4Scale(new Vector3(this.offscreenSize.x, this.offscreenSize.y, 1.0));
     const viewToImageUv = makeMatrix3FromViewToLayerUv(this.offscreenSize, undefined, true);
@@ -398,7 +400,7 @@ export class LayerCompositor {
           viewToScreen: imageToOffscreen,
 
           mipmapBias: 0,
-          convertToPremultipliedAlpha,
+          convertToPremultipliedAlpha: 0,
 
           imageMap: this.offscreenWriteColorAttachment!, // Not used, but avoids framebuffer loop
           viewToImageUv,
@@ -409,8 +411,6 @@ export class LayerCompositor {
           maskMode: 0,
           blendMode: 0,
         };
-        offscreenReadFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
-        offscreenReadFramebuffer.clear();
 
         renderBufferGeometry(
           this.offscreenReadFramebuffer!,
