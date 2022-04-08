@@ -101,7 +101,7 @@ export class LayerMask extends LayerTexture {
     url: string,
     texImage2D: TexImage2D,
     offset: Vector2,
-    public mode: LayerMaskMode = LayerMaskMode.Alpha,
+    public mode: LayerMaskMode = LayerMaskMode.Luminance,
     uvScaleFactor = new Vector2(1, -1),
     uvOffset = new Vector2(0, 1),
   ) {
