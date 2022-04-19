@@ -28,13 +28,22 @@ void main() {
   vec4 outputColor = layerColor;
 
   if( maskMode != 0 ){
-    vec4 maskColor = texture2D( maskMap, v_mask_uv, mipmapBias );
-    // premultiply alpha as the source PNG is not premultiplied
-    if( convertToPremultipliedAlpha == 1 ) {
-      maskColor.rgb *= maskColor.a;
-    }
 
-    outputColor *= getMaskValue( maskColor );
+    // Check if we're in the [ 0.0, 1.0 ] UV range for masking. Otherwise, we'll get clamping artifacts.
+    vec2 gt0 = step( 0., v_mask_uv );
+    vec2 lt1 = 1.0 - step( 1., v_mask_uv );
+    bool isMasked = dot( gt0, lt1 ) == 2.0;
+
+    if( isMasked ) {
+
+      vec4 maskColor = texture2D( maskMap, v_mask_uv, mipmapBias );
+      // premultiply alpha as the source PNG is not premultiplied
+      if( convertToPremultipliedAlpha == 1 ) {
+        maskColor.rgb *= maskColor.a;
+      }
+
+      outputColor *= getMaskValue( maskColor );
+    }
   }
 
   if( blendMode != 0){
