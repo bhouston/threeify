@@ -184,7 +184,7 @@ export class LayerCompositor {
   loadTexImage2D(url: string, image: HTMLImageElement | ImageBitmap | undefined = undefined): Promise<TexImage2D> {
     const layerImagePromise = this.texImage2DPromiseCache[url];
     if (layerImagePromise !== undefined) {
-      console.log(`loading: ${url} (reusing promise)`);
+      // console.log(`loading: ${url} (reusing promise)`);
       return layerImagePromise;
     }
 
@@ -207,7 +207,7 @@ export class LayerCompositor {
         texture.anisotropicLevels = 1;
         texture.name = url;
 
-        console.log(`loading: ${url}`);
+        // console.log(`loading: ${url}`);
         // load texture onto the GPU
         const texImage2D = makeTexImage2DFromTexture(compositor.context, texture);
         delete compositor.texImage2DPromiseCache[url];
@@ -231,7 +231,7 @@ export class LayerCompositor {
     // check for texture in cache.
     const layerImage = this.layerImageCache[url];
     if (layerImage !== undefined) {
-      console.log(`discarding: ${url}`);
+      // console.log(`discarding: ${url}`);
       layerImage.dispose();
       delete this.layerImageCache[url];
       return true;
