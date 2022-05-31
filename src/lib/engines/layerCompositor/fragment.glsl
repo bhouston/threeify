@@ -36,7 +36,7 @@ void main() {
     // Check ( v >= lower && v <= upper). Rework into (v >= lower && -v >= -upper), which combines to (v,-v) >= (lower, -upper)
     const vec4 comboBounds = vec4( lowerBound, -upperBound );
     vec4 comboValue = vec4( v_mask_uv, -v_mask_uv);
-    bvec4 inBounds = greaterThanEqual(comboValue, vec4(0.,0.,-1.,-1.));
+    bvec4 inBounds = greaterThanEqual(comboValue, comboBounds);
     bool hasMaskData = all(inBounds);
 
     vec4 maskColor = hasMaskData ? texture2D( maskMap, v_mask_uv, mipmapBias ) : vec4(0.);
