@@ -71,12 +71,16 @@ export function makeColorMipmapAttachment(
   context: RenderingContext,
   size: Vector2,
   dataType: DataType | undefined = undefined,
+  options: {
+    wrapS?: TextureWrap;
+    wrapT?: TextureWrap;
+  } = {},
 ): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = true;
   texParams.anisotropyLevels = 1;
-  texParams.wrapS = TextureWrap.ClampToEdge;
-  texParams.wrapT = TextureWrap.ClampToEdge;
+  texParams.wrapS = options.wrapS ?? TextureWrap.ClampToEdge;
+  texParams.wrapT = options.wrapT ?? TextureWrap.ClampToEdge;
   texParams.magFilter = TextureFilter.Linear;
   texParams.minFilter = TextureFilter.LinearMipmapLinear;
   return new TexImage2D(
@@ -154,6 +158,7 @@ export class LayerCompositor {
       this.offscreenReadFramebuffer === undefined ||
       !this.offscreenSize.equals(offscreenSize)
     ) {
+      this.offscreenSize.copy(offscreenSize);
       // console.log("updating framebuffer");
 
       if (this.offscreenWriteFramebuffer !== undefined) {
@@ -161,7 +166,7 @@ export class LayerCompositor {
         this.offscreenWriteFramebuffer = undefined;
       }
 
-      this.offscreenWriteColorAttachment = makeColorMipmapAttachment(this.context, offscreenSize);
+      this.offscreenWriteColorAttachment = this.makeColorMipmapAttachment();
       this.offscreenWriteFramebuffer = new Framebuffer(this.context);
       this.offscreenWriteFramebuffer.attach(Attachment.Color0, this.offscreenWriteColorAttachment);
 
@@ -170,15 +175,16 @@ export class LayerCompositor {
         this.offscreenReadFramebuffer = undefined;
       }
 
-      this.offscreenReadColorAttachment = makeColorMipmapAttachment(this.context, offscreenSize);
+      this.offscreenReadColorAttachment = this.makeColorMipmapAttachment();
       this.offscreenReadFramebuffer = new Framebuffer(this.context);
       this.offscreenReadFramebuffer.attach(Attachment.Color0, this.offscreenReadColorAttachment);
 
       // frame buffer is pixel aligned with layer images.
       // framebuffer view is [ (0,0)-(framebuffer.with, framebuffer.height) ].
-
-      this.offscreenSize.copy(offscreenSize);
     }
+  }
+  makeColorMipmapAttachment() {
+    return makeColorMipmapAttachment(this.context, this.offscreenSize);
   }
 
   loadTexImage2D(url: string, image: HTMLImageElement | ImageBitmap | undefined = undefined): Promise<TexImage2D> {
