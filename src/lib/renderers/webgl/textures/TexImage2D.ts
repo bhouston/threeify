@@ -46,7 +46,7 @@ export class TexImage2D implements IDisposable {
     this.loadImages(images);
 
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
-    gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
+    gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapT);
 
     gl.texParameteri(this.target, GL.TEXTURE_MAG_FILTER, texParameters.magFilter);
     gl.texParameteri(this.target, GL.TEXTURE_MIN_FILTER, texParameters.minFilter);
