@@ -18,9 +18,9 @@ import {
   Vector2,
   Vector2View,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1.0, 0.5);
@@ -35,11 +35,11 @@ async function init(): Promise<null> {
     }
   }
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const clickToPlayTexture = new Texture(await fetchImage("/assets/textures/videos/ClickToPlay.png"));
+  const clickToPlayTexture = new Texture(await fetchImage('/assets/textures/videos/ClickToPlay.png'));
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
   const clickToPlayMap = makeTexImage2DFromTexture(context, clickToPlayTexture);
@@ -51,18 +51,18 @@ async function init(): Promise<null> {
     map: clickToPlayMap,
   };
 
-  const video = document.createElement("video");
-  const source = document.createElement("source");
-  source.type = "video/mp4";
-  source.src = "/assets/textures/videos/sintel.mp4";
+  const video = document.createElement('video');
+  const source = document.createElement('source');
+  source.type = 'video/mp4';
+  source.src = '/assets/textures/videos/sintel.mp4';
   video.appendChild(source);
 
   let videoTexture: Texture | undefined;
   let videoMap: TexImage2D | undefined;
 
-  const body = document.getElementsByTagName("body")[0];
+  const body = document.getElementsByTagName('body')[0];
   body.addEventListener(
-    "click",
+    'click',
     async (): Promise<void> => {
       if (videoTexture === undefined) {
         await video.play();

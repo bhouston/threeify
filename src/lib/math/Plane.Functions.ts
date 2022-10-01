@@ -1,8 +1,8 @@
-import { Plane } from "./Plane";
-import { Sphere } from "./Sphere";
-import { Triangle } from "./Triangle";
-import { Vector3 } from "./Vector3";
-import { crossFromCoplanarPoints } from "./Vector3.Functions";
+import { Plane } from './Plane';
+import { Sphere } from './Sphere';
+import { Triangle } from './Triangle';
+import { Vector3 } from './Vector3';
+import { crossFromCoplanarPoints } from './Vector3.Functions';
 
 export function makePlaneFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3, result = new Plane()): Plane {
   crossFromCoplanarPoints(a, b, c, result.normal);

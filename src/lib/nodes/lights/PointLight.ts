@@ -8,9 +8,9 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { Light } from "./Light";
-import { LightType } from "./LightType";
+import { Vector3 } from '../../math/Vector3';
+import { Light } from './Light';
+import { LightType } from './LightType';
 
 /**
  * Point lights emit light in all directions from their position in space; rotation and

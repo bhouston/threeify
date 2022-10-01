@@ -20,12 +20,12 @@ import {
   ShaderMaterial,
   transformGeometry,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = (await fetchOBJ("/assets/models/cloth/cloth.obj"))[0];
+  const geometry = (await fetchOBJ('/assets/models/cloth/cloth.obj'))[0];
   transformGeometry(
     geometry,
     makeMatrix4Concatenation(
@@ -35,9 +35,9 @@ async function init(): Promise<null> {
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

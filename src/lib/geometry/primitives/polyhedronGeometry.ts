@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
-import { makeFloat32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
-import { computeVertexNormals } from "../Geometry.Functions";
+import { Vector2 } from '../../math/Vector2';
+import { Vector3 } from '../../math/Vector3';
+import { makeFloat32Attribute } from '../Attribute';
+import { Geometry } from '../Geometry';
+import { computeVertexNormals } from '../Geometry.Functions';
 
 export function tetrahedronGeometry(radius = 1, detail = 0): Geometry {
   const vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];

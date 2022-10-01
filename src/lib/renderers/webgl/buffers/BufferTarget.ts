@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL';
 
 export enum BufferTarget {
   /**

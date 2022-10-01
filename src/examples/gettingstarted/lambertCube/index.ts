@@ -16,18 +16,18 @@ import {
   ShaderMaterial,
   Texture,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
+  const texture = new Texture(await fetchImage('/assets/textures/uv_grid_opengl.jpg'));
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

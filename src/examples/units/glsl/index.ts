@@ -16,16 +16,16 @@ import {
   ShaderMaterial,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import vertexSource from "../../../lib/shaders/includes/tests/vertex.glsl";
-import { glslTestSuites } from "../../../lib/shaders/testSuites";
+} from '../../../lib/index';
+import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
+import { glslTestSuites } from '../../../lib/shaders/testSuites';
 
 async function init(): Promise<null> {
   const geometry = passGeometry();
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const unitUniforms = {};
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -77,7 +77,7 @@ async function init(): Promise<null> {
     } catch (e) {
       totalFailures++;
       const err = e as Error;
-      compileError = err.message !== undefined ? err.message : "unknown";
+      compileError = err.message !== undefined ? err.message : 'unknown';
     }
 
     totalPasses += passIds.length;
@@ -88,23 +88,23 @@ async function init(): Promise<null> {
     if (compileError !== undefined) {
       output.push(`  COMPILE FAILED: ${compileError}`);
     } else if (failureIds.length === 0 && duplicateIds.length === 0) {
-      output.push("  ALL PASSED");
+      output.push('  ALL PASSED');
     }
     if (failureIds.length > 0) {
-      output.push(`  ${failureIds.length} FAILED: ${failureIds.join(" ")}`);
+      output.push(`  ${failureIds.length} FAILED: ${failureIds.join(' ')}`);
     }
     if (duplicateIds.length > 0) {
-      output.push(`  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(" ")}`);
+      output.push(`  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(' ')}`);
     }
-    output.push("");
+    output.push('');
   });
 
-  output.push("");
+  output.push('');
   output.push(`SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`);
 
-  const textElement = document.getElementById("text");
+  const textElement = document.getElementById('text');
   if (textElement !== null) {
-    textElement.innerHTML = output.join("<br/>");
+    textElement.innerHTML = output.join('<br/>');
   }
 
   return null;

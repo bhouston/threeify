@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL';
 
 // from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
 export enum DataType {

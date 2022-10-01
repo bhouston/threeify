@@ -1,11 +1,11 @@
-import { Matrix3 } from "../../math/Matrix3";
-import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from "../../math/Matrix3.Functions";
-import { Matrix4 } from "../../math/Matrix4";
-import { makeMatrix4Concatenation, makeMatrix4Scale, makeMatrix4Translation } from "../../math/Matrix4.Functions";
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
-import { TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
-import { LayerCompositor } from "./LayerCompositor";
+import { Matrix3 } from '../../math/Matrix3';
+import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from '../../math/Matrix3.Functions';
+import { Matrix4 } from '../../math/Matrix4';
+import { makeMatrix4Concatenation, makeMatrix4Scale, makeMatrix4Translation } from '../../math/Matrix4.Functions';
+import { Vector2 } from '../../math/Vector2';
+import { Vector3 } from '../../math/Vector3';
+import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
+import { LayerCompositor } from './LayerCompositor';
 
 export class Layer {
   disposed = false;

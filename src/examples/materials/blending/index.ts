@@ -19,23 +19,23 @@ import {
   Texture,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const fgTexture = new Texture(
-    await fetchImageElement("/assets/textures/alphaCompositing/fg.svg", new Vector2(1024, 1024)),
+    await fetchImageElement('/assets/textures/alphaCompositing/fg.svg', new Vector2(1024, 1024)),
   );
-  const fgSplatTexture = new Texture(await fetchImage("/assets/textures/decals/splat.png"));
+  const fgSplatTexture = new Texture(await fetchImage('/assets/textures/decals/splat.png'));
   const bgTexture = new Texture(
-    await fetchImageElement("/assets/textures/alphaCompositing/bg.svg", new Vector2(1024, 1024)),
+    await fetchImageElement('/assets/textures/alphaCompositing/bg.svg', new Vector2(1024, 1024)),
   );
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const fgMap = makeTexImage2DFromTexture(context, fgTexture);
   const fgSplatMap = makeTexImage2DFromTexture(context, fgSplatTexture);

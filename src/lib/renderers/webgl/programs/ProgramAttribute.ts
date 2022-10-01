@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { BufferAccessor } from "../buffers/BufferAccessor";
-import { GL } from "../GL";
-import { Program } from "./Program";
+import { BufferAccessor } from '../buffers/BufferAccessor';
+import { GL } from '../GL';
+import { Program } from './Program';
 
 export class ProgramAttribute {
   name: string;

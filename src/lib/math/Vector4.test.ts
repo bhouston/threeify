@@ -1,7 +1,7 @@
-import { Vector4 } from "./Vector4";
+import { Vector4 } from './Vector4';
 
-describe("Vector4", () => {
-  test("constructor defaults", () => {
+describe('Vector4', () => {
+  test('constructor defaults', () => {
     const a = new Vector4();
     expect(a.x).toBe(0);
     expect(a.y).toBe(0);
@@ -9,14 +9,14 @@ describe("Vector4", () => {
     expect(a.w).toBe(0);
   });
 
-  test("constructor values", () => {
+  test('constructor values', () => {
     const b = new Vector4(1, 2, 3, 4);
     expect(b.x).toBe(1);
     expect(b.y).toBe(2);
     expect(b.z).toBe(3);
     expect(b.w).toBe(4);
   });
-  test("clone", () => {
+  test('clone', () => {
     const b = new Vector4(1, 2, 3, 4);
     const c = b.clone();
     expect(c.x).toBe(1);
@@ -24,7 +24,7 @@ describe("Vector4", () => {
     expect(c.z).toBe(3);
     expect(c.w).toBe(4);
   });
-  test("copy", () => {
+  test('copy', () => {
     const b = new Vector4(1, 2, 3, 4);
     const d = new Vector4().copy(b);
     expect(d.x).toBe(1);

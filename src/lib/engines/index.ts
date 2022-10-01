@@ -1,1 +1,1 @@
-export * from "./layerCompositor/index";
+export * from './layerCompositor/index';

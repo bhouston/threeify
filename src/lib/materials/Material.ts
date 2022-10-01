@@ -1,11 +1,11 @@
-import { generateUUID } from "../core/generateUuid";
-import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
+import { generateUUID } from '../core/generateUuid';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types';
 
 export class Material implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;
   readonly uuid: string = generateUUID();
   version = 0;
-  name = "";
+  name = '';
 
   dirty(): void {
     this.version++;

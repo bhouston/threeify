@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { Node } from "../Node";
-import { LightType } from "./LightType";
+import { Vector3 } from '../../math/Vector3';
+import { Node } from '../Node';
+import { LightType } from './LightType';
 
 export class Light extends Node {
   /**

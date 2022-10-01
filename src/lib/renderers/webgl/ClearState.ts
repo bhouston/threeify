@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../core/types";
-import { Vector3 } from "../../math/Vector3";
+import { ICloneable, IEquatable } from '../../core/types';
+import { Vector3 } from '../../math/Vector3';
 
 export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState> {
   // TODO: Should be intialized to default WebGL states

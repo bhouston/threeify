@@ -1,4 +1,4 @@
-import { GL } from "../GL";
+import { GL } from '../GL';
 
 export enum UniformType {
   Bool = GL.BOOL,

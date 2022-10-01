@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { ComponentType, componentTypeSizeOf } from "../renderers/webgl/buffers/ComponentType";
-import { AttributeData } from "./AttributeData";
+import { ComponentType, componentTypeSizeOf } from '../renderers/webgl/buffers/ComponentType';
+import { AttributeData } from './AttributeData';
 
 export class Attribute {
   count: number;

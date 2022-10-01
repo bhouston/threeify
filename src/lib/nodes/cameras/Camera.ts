@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Matrix4 } from "../../math/Matrix4";
-import { Node } from "../Node";
+import { Matrix4 } from '../../math/Matrix4';
+import { Node } from '../Node';
 
 export abstract class Camera extends Node {
   pixelAspectRatio = 1.0;

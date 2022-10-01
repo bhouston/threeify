@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { Vector2 } from '../../math/Vector2';
+import { Vector3 } from '../../math/Vector3';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
+import { Geometry } from '../Geometry';
 
 export function cylinderGeometry(
   radius = 0.5,

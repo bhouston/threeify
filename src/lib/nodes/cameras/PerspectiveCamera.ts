@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Matrix4 } from "../../math/Matrix4";
-import { makeMatrix4PerspectiveFov } from "../../math/Matrix4.Functions";
-import { Camera } from "./Camera";
+import { Matrix4 } from '../../math/Matrix4';
+import { makeMatrix4PerspectiveFov } from '../../math/Matrix4.Functions';
+import { Camera } from './Camera';
 
 export class PerspectiveCamera extends Camera {
   constructor(public verticalFov: number, public near: number, public far: number, public zoom = 1.0) {

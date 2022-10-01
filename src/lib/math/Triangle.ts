@@ -1,6 +1,6 @@
-import { hashFloat3 } from "../core/hash";
-import { ICloneable, IEquatable, IHashable } from "../core/types";
-import { Vector3 } from "./Vector3";
+import { hashFloat3 } from '../core/hash';
+import { ICloneable, IEquatable, IHashable } from '../core/types';
+import { Vector3 } from './Vector3';
 
 export class Triangle implements ICloneable<Triangle>, IEquatable<Triangle>, IHashable {
   constructor(public a = new Vector3(), public b = new Vector3(), public c = new Vector3()) {}

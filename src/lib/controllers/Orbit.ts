@@ -1,8 +1,8 @@
-import { IDisposable } from "../core/types";
-import { Euler } from "../math/Euler";
-import { Quaternion } from "../math/Quaternion";
-import { makeQuaternionFromEuler } from "../math/Quaternion.Functions";
-import { Vector2 } from "../math/Vector2";
+import { IDisposable } from '../core/types';
+import { Euler } from '../math/Euler';
+import { Quaternion } from '../math/Quaternion';
+import { makeQuaternionFromEuler } from '../math/Quaternion.Functions';
+import { Vector2 } from '../math/Vector2';
 
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vector2();
@@ -31,25 +31,25 @@ export class Orbit implements IDisposable {
     this.onPointerMoveHandler = this.onPointerMove.bind(this);
     this.onMouseWheelHandler = this.onMouseWheel.bind(this);
 
-    this.domElement.style.touchAction = "none"; // disable touch scroll
-    this.domElement.addEventListener("pointerdown", this.onPointerDownHandler, false);
-    this.domElement.addEventListener("pointercancel", this.onPointerCancelHandler, false);
-    this.domElement.addEventListener("wheel", this.onMouseWheelHandler, false);
+    this.domElement.style.touchAction = 'none'; // disable touch scroll
+    this.domElement.addEventListener('pointerdown', this.onPointerDownHandler, false);
+    this.domElement.addEventListener('pointercancel', this.onPointerCancelHandler, false);
+    this.domElement.addEventListener('wheel', this.onMouseWheelHandler, false);
   }
 
   dispose() {
     if (!this.disposed) {
       this.disposed = true;
-      this.domElement.removeEventListener("pointerdown", this.onPointerDownHandler);
-      this.domElement.removeEventListener("pointercancel", this.onPointerCancelHandler);
+      this.domElement.removeEventListener('pointerdown', this.onPointerDownHandler);
+      this.domElement.removeEventListener('pointercancel', this.onPointerCancelHandler);
     }
   }
 
   onPointerDown(pe: PointerEvent) {
     // console.log("pointer down");
     this.domElement.setPointerCapture(pe.pointerId);
-    this.domElement.addEventListener("pointermove", this.onPointerMoveHandler, false);
-    this.domElement.addEventListener("pointerup", this.onPointerUpHandler, false);
+    this.domElement.addEventListener('pointermove', this.onPointerMoveHandler, false);
+    this.domElement.addEventListener('pointerup', this.onPointerUpHandler, false);
 
     this.lastPointerClient.set(pe.clientX, pe.clientY);
   }
@@ -57,8 +57,8 @@ export class Orbit implements IDisposable {
   onPointerUp(pe: PointerEvent) {
     // console.log("pointer up");
     this.domElement.releasePointerCapture(pe.pointerId);
-    this.domElement.removeEventListener("pointermove", this.onPointerMoveHandler);
-    this.domElement.removeEventListener("pointerup", this.onPointerUpHandler);
+    this.domElement.removeEventListener('pointermove', this.onPointerMoveHandler);
+    this.domElement.removeEventListener('pointerup', this.onPointerUpHandler);
   }
 
   onMouseWheel(we: WheelEvent) {

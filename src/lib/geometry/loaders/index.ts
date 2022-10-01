@@ -1,1 +1,1 @@
-export * from "./OBJ";
+export * from './OBJ';

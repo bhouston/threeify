@@ -1,9 +1,9 @@
-import { Euler, EulerOrder } from "./Euler";
-import { Matrix4 } from "./Matrix4";
-import { Quaternion } from "./Quaternion";
-import { makeQuaternionFromRotationMatrix4 } from "./Quaternion.Functions";
-import { Vector2 } from "./Vector2";
-import { Vector3 } from "./Vector3";
+import { Euler, EulerOrder } from './Euler';
+import { Matrix4 } from './Matrix4';
+import { Quaternion } from './Quaternion';
+import { makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions';
+import { Vector2 } from './Vector2';
+import { Vector3 } from './Vector3';
 
 export function makeMatrix4Concatenation(a: Matrix4, b: Matrix4, result = new Matrix4()): Matrix4 {
   const ae = a.elements;
@@ -150,7 +150,7 @@ export function makeMatrix4Inverse(m: Matrix4, result = new Matrix4()): Matrix4 
   const det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 
   if (det === 0) {
-    throw new Error("can not invert degenerate matrix");
+    throw new Error('can not invert degenerate matrix');
   }
 
   const detInv = 1 / det;

@@ -5,21 +5,21 @@
 // * @bhouston
 //
 
-import { generateUUID } from "../core/generateUuid";
-import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
-import { Euler } from "../math/Euler";
-import { Matrix4 } from "../math/Matrix4";
-import { composeMatrix4, makeMatrix4Inverse } from "../math/Matrix4.Functions";
-import { makeQuaternionFromEuler } from "../math/Quaternion.Functions";
-import { Vector3 } from "../math/Vector3";
-import { NodeCollection } from "./NodeCollection";
+import { generateUUID } from '../core/generateUuid';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types';
+import { Euler } from '../math/Euler';
+import { Matrix4 } from '../math/Matrix4';
+import { composeMatrix4, makeMatrix4Inverse } from '../math/Matrix4.Functions';
+import { makeQuaternionFromEuler } from '../math/Quaternion.Functions';
+import { Vector3 } from '../math/Vector3';
+import { NodeCollection } from './NodeCollection';
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;
   readonly uuid: string = generateUUID();
   version = 0;
   parent: Node | undefined = undefined;
-  name = "";
+  name = '';
   children: NodeCollection;
   position: Vector3 = new Vector3();
   rotation: Euler = new Euler();

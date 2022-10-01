@@ -1,7 +1,7 @@
-import { Euler, EulerOrder } from "./Euler";
-import { Matrix4 } from "./Matrix4";
-import { Quaternion } from "./Quaternion";
-import { Vector3 } from "./Vector3";
+import { Euler, EulerOrder } from './Euler';
+import { Matrix4 } from './Matrix4';
+import { Quaternion } from './Quaternion';
+import { Vector3 } from './Vector3';
 
 export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Quaternion {
   const { x } = e;
@@ -70,7 +70,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
       );
 
     default:
-      throw new Error("unsupported euler order");
+      throw new Error('unsupported euler order');
   }
 }
 

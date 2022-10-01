@@ -1,6 +1,6 @@
-import { IDisposable } from "../../core/types";
-import { ClearState } from "./ClearState";
-import { RenderingContext } from "./RenderingContext";
+import { IDisposable } from '../../core/types';
+import { ClearState } from './ClearState';
+import { RenderingContext } from './RenderingContext';
 
 export class Renderbuffer implements IDisposable {
   readonly id: number;
@@ -14,7 +14,7 @@ export class Renderbuffer implements IDisposable {
     {
       const glRenderbuffer = gl.createRenderbuffer();
       if (glRenderbuffer === null) {
-        throw new Error("createRenderbuffer failed");
+        throw new Error('createRenderbuffer failed');
       }
 
       this.glRenderbuffer = glRenderbuffer;

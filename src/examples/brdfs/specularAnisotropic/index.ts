@@ -20,21 +20,21 @@ import {
   ShaderMaterial,
   Texture,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = diskGeometry(0.5, 64);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const anisotropicFlow1Texture = new Texture(
-    await fetchImage("/assets/textures/anisotropic/radialSmallOverlapping.jpg"),
+    await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg'),
   );
-  const anisotropicFlow2Texture = new Texture(await fetchImage("/assets/textures/anisotropic/radialLarge.jpg"));
+  const anisotropicFlow2Texture = new Texture(await fetchImage('/assets/textures/anisotropic/radialLarge.jpg'));
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const anisotropicFlow1Map = makeTexImage2DFromTexture(context, anisotropicFlow1Texture);
   const anisotropicFlow2Map = makeTexImage2DFromTexture(context, anisotropicFlow2Texture);

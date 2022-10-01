@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { Vector3 } from '../../math/Vector3';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
+import { Geometry } from '../Geometry';
 
 export function boxGeometry(
   width = 1,

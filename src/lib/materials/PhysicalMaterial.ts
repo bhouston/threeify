@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../math/Vector3";
-import { TextureAccessor } from "../textures/TextureAccessor";
-import { Blending } from "./Blending";
-import { Material } from "./Material";
-import { OutputChannels } from "./OutputChannels";
+import { Vector3 } from '../math/Vector3';
+import { TextureAccessor } from '../textures/TextureAccessor';
+import { Blending } from './Blending';
+import { Material } from './Material';
+import { OutputChannels } from './OutputChannels';
 
 export class PhysicalMaterial extends Material {
   version = 0;

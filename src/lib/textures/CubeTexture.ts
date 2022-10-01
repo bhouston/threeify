@@ -5,16 +5,16 @@
 // * @bhouston
 //
 
-import { Matrix4 } from "../math/Matrix4";
-import { makeMatrix4LookAt } from "../math/Matrix4.Functions";
-import { Vector2 } from "../math/Vector2";
-import { Vector3 } from "../math/Vector3";
-import { IPoolUser } from "../renderers/Pool";
-import { DataType } from "../renderers/webgl/textures/DataType";
-import { PixelFormat } from "../renderers/webgl/textures/PixelFormat";
-import { TextureFilter } from "../renderers/webgl/textures/TextureFilter";
-import { TextureTarget } from "../renderers/webgl/textures/TextureTarget";
-import { TextureSource, VirtualTexture } from "./VirtualTexture";
+import { Matrix4 } from '../math/Matrix4';
+import { makeMatrix4LookAt } from '../math/Matrix4.Functions';
+import { Vector2 } from '../math/Vector2';
+import { Vector3 } from '../math/Vector3';
+import { IPoolUser } from '../renderers/Pool';
+import { DataType } from '../renderers/webgl/textures/DataType';
+import { PixelFormat } from '../renderers/webgl/textures/PixelFormat';
+import { TextureFilter } from '../renderers/webgl/textures/TextureFilter';
+import { TextureTarget } from '../renderers/webgl/textures/TextureTarget';
+import { TextureSource, VirtualTexture } from './VirtualTexture';
 
 export class CubeMapTexture extends VirtualTexture implements IPoolUser {
   constructor(
@@ -35,7 +35,7 @@ export class CubeMapTexture extends VirtualTexture implements IPoolUser {
   }
 }
 
-export const cubeFaceNames = ["right", "left", "top", "bottom", "back", "front"];
+export const cubeFaceNames = ['right', 'left', 'top', 'bottom', 'back', 'front'];
 
 export const cubeFaceTargets = [
   TextureTarget.CubeMapPositiveX,

@@ -5,22 +5,22 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { Box2 } from "../../../math/Box2";
-import { Vector2 } from "../../../math/Vector2";
-import { Camera } from "../../../nodes/cameras/Camera";
-import { Node } from "../../../nodes/Node";
-import { BlendState } from "../BlendState";
-import { BufferGeometry } from "../buffers/BufferGeometry";
-import { ClearState } from "../ClearState";
-import { CullingState } from "../CullingState";
-import { DepthTestState } from "../DepthTestState";
-import { MaskState } from "../MaskState";
-import { Program } from "../programs/Program";
-import { UniformValueMap } from "../programs/ProgramUniform";
-import { RenderingContext } from "../RenderingContext";
-import { VertexArrayObject } from "../VertexArrayObject";
-import { BufferBit } from "./BufferBit";
+import { IDisposable } from '../../../core/types';
+import { Box2 } from '../../../math/Box2';
+import { Vector2 } from '../../../math/Vector2';
+import { Camera } from '../../../nodes/cameras/Camera';
+import { Node } from '../../../nodes/Node';
+import { BlendState } from '../BlendState';
+import { BufferGeometry } from '../buffers/BufferGeometry';
+import { ClearState } from '../ClearState';
+import { CullingState } from '../CullingState';
+import { DepthTestState } from '../DepthTestState';
+import { MaskState } from '../MaskState';
+import { Program } from '../programs/Program';
+import { UniformValueMap } from '../programs/ProgramUniform';
+import { RenderingContext } from '../RenderingContext';
+import { VertexArrayObject } from '../VertexArrayObject';
+import { BufferBit } from './BufferBit';
 
 const GL = WebGLRenderingContext;
 
@@ -52,7 +52,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     if (clear) {
       this.clear();
     }
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
     //    this.context.render(node, camera);
   }
 
@@ -144,6 +144,6 @@ export function renderPass(
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
-  throw new Error("Not implemented");
+  throw new Error('Not implemented');
   // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
 }

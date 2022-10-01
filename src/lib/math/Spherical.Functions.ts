@@ -1,5 +1,5 @@
-import { Spherical } from "./Spherical";
-import { Vector3 } from "./Vector3";
+import { Spherical } from './Spherical';
+import { Vector3 } from './Vector3';
 
 export function makeSphericalFromVector3(v: Vector3, result = new Spherical()): Spherical {
   result.radius = v.length();

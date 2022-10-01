@@ -5,21 +5,21 @@
 //
 //
 
-import { floatsToNormalizedBytes, normalizedByteToFloats } from "../../math/arrays/Conversions";
-import { linearToRgbdArray, rgbeToLinearArray } from "../../math/Vector4.Functions";
-import { DataType } from "../../renderers/webgl/textures/DataType";
-import { ArrayBufferImage } from "../ArrayBufferImage";
-import { PixelEncoding } from "../PixelEncoding";
+import { floatsToNormalizedBytes, normalizedByteToFloats } from '../../math/arrays/Conversions';
+import { linearToRgbdArray, rgbeToLinearArray } from '../../math/Vector4.Functions';
+import { DataType } from '../../renderers/webgl/textures/DataType';
+import { ArrayBufferImage } from '../ArrayBufferImage';
+import { PixelEncoding } from '../PixelEncoding';
 
 class Buffer {
   constructor(public data: Uint8Array, public position: number) {}
 }
 
 export async function fetchCubeHDRs(urlPattern: string): Promise<ArrayBufferImage[]> {
-  const cubeMapFaces = ["px", "nx", "py", "ny", "pz", "nz"];
+  const cubeMapFaces = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
   const fetchPromises: Promise<ArrayBufferImage>[] = [];
   cubeMapFaces.forEach((face) => {
-    fetchPromises.push(fetchHDR(urlPattern.replace("*", face)));
+    fetchPromises.push(fetchHDR(urlPattern.replace('*', face)));
   });
   return Promise.all(fetchPromises);
 }
@@ -46,7 +46,7 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
 }
 
 function stringFromCharCodes(unicode: Uint16Array): string {
-  let result = "";
+  let result = '';
   for (let i = 0; i < unicode.length; i++) {
     result += String.fromCharCode(unicode[i]);
   }
@@ -58,9 +58,9 @@ function fgets(buffer: Buffer, lineLimit = 0, consume = true): string | undefine
   let p = buffer.position;
   let i = -1;
   let len = 0;
-  let s = "";
+  let s = '';
   let chunk = stringFromCharCodes(new Uint16Array(buffer.data.subarray(p, p + chunkSize)));
-  while ((i = chunk.indexOf("\n")) < 0 && len < lineLimit && p < buffer.data.byteLength) {
+  while ((i = chunk.indexOf('\n')) < 0 && len < lineLimit && p < buffer.data.byteLength) {
     s += chunk;
     len += chunk.length;
     p += chunkSize;
@@ -79,10 +79,10 @@ function fgets(buffer: Buffer, lineLimit = 0, consume = true): string | undefine
 
 class Header {
   valid = 0; /* indicate which fields are valid */
-  string = ""; /* the actual header string */
-  comments = ""; /* comments found in header */
-  programType = "RGBE"; /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */
-  format = ""; /* RGBE format, default 32-bit_rle_rgbe */
+  string = ''; /* the actual header string */
+  comments = ''; /* comments found in header */
+  programType = 'RGBE'; /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */
+  format = ''; /* RGBE format, default 32-bit_rle_rgbe */
   gamma = 1.0; /* image has already been gamma corrected with given gamma. defaults to 1.0 (no correction) */
   exposure = 1.0; /* a value of 1.0 in an image corresponds to <exposure> watts/steradian/m^2. defaults to 1.0 */
   width = 0;
@@ -107,12 +107,12 @@ function readHeader(buffer: Buffer): Header {
   const header = new Header();
 
   if (buffer.position >= buffer.data.byteLength || (line = fgets(buffer)) === undefined) {
-    throw new Error("hrd: no header found");
+    throw new Error('hrd: no header found');
   }
 
   /* if you want to require the magic token then uncomment the next line */
   if ((match = line.match(magicTokenRegex)) === null) {
-    throw new Error("hrd: bad initial token");
+    throw new Error('hrd: bad initial token');
   }
 
   header.valid |= RGBE_VALID_PROGRAMTYPE;
@@ -123,7 +123,7 @@ function readHeader(buffer: Buffer): Header {
 
     header.string += `${line}\n`;
 
-    if (line.charAt(0) === "#") {
+    if (line.charAt(0) === '#') {
       header.comments += `${line}\n`;
       continue; // comment line
     }
@@ -153,11 +153,11 @@ function readHeader(buffer: Buffer): Header {
   }
 
   if ((header.valid & RGBE_VALID_FORMAT) === 0) {
-    throw new Error("hrd: missing format specifier");
+    throw new Error('hrd: missing format specifier');
   }
 
   if ((header.valid & RGBE_VALID_DIMENSIONS) === 0) {
-    throw new Error("hdr: missing image size specifier");
+    throw new Error('hdr: missing image size specifier');
   }
 
   return header;
@@ -177,7 +177,7 @@ function readRLEPixelData(byteArray: Uint8Array, width: number, height: number):
   }
 
   if (width !== ((byteArray[2] << 8) | byteArray[3])) {
-    throw new Error("hdr: wrong scanline width");
+    throw new Error('hdr: wrong scanline width');
   }
 
   const dataRgba = new Uint8Array(4 * width * height);
@@ -191,7 +191,7 @@ function readRLEPixelData(byteArray: Uint8Array, width: number, height: number):
   // read in each successive scanline
   while (height > 0 && pos < byteArray.byteLength) {
     if (pos + 4 > byteArray.byteLength) {
-      throw new Error("hdr: read error");
+      throw new Error('hdr: read error');
     }
 
     rgbeStart[0] = byteArray[pos++];
@@ -200,7 +200,7 @@ function readRLEPixelData(byteArray: Uint8Array, width: number, height: number):
     rgbeStart[3] = byteArray[pos++];
 
     if (rgbeStart[0] !== 2 || rgbeStart[1] !== 2 || ((rgbeStart[2] << 8) | rgbeStart[3]) !== width) {
-      throw new Error("hdr: bad rgbe scanline format");
+      throw new Error('hdr: bad rgbe scanline format');
     }
 
     // read each of the four channels for the scanline into the buffer
@@ -214,7 +214,7 @@ function readRLEPixelData(byteArray: Uint8Array, width: number, height: number):
       }
 
       if (count === 0 || ptr + count > ptrEnd) {
-        throw new Error("hdr: bad scanline data");
+        throw new Error('hdr: bad scanline data');
       }
 
       if (isEncodedRun) {

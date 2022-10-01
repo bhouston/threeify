@@ -1,10 +1,10 @@
-import { makeVector3View } from "../math/arrays/PrimitiveView";
-import { Matrix4 } from "../math/Matrix4";
-import { Vector3 } from "../math/Vector3";
-import { transformNormal3, transformPoint3 } from "../math/Vector3Matrix4.Functions";
-import { Attribute, makeFloat32Attribute } from "./Attribute";
-import { AttributeData } from "./AttributeData";
-import { Geometry } from "./Geometry";
+import { makeVector3View } from '../math/arrays/PrimitiveView';
+import { Matrix4 } from '../math/Matrix4';
+import { Vector3 } from '../math/Vector3';
+import { transformNormal3, transformPoint3 } from '../math/Vector3Matrix4.Functions';
+import { Attribute, makeFloat32Attribute } from './Attribute';
+import { AttributeData } from './AttributeData';
+import { Geometry } from './Geometry';
 
 function copyBytesUsingStride(
   dest: ArrayBuffer,
@@ -73,7 +73,7 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   const positionAttribute = attributes.position;
   if (positionAttribute === undefined) {
-    throw new Error("missing position attribute");
+    throw new Error('missing position attribute');
   }
   let normalAttribute = attributes.normal;
   if (normalAttribute === undefined) {
@@ -145,7 +145,7 @@ export function computeVertexNormals(geometry: Geometry): void {
 export function transformGeometry(geometry: Geometry, m: Matrix4): void {
   const positionAttribute = geometry.attributes.position;
   if (positionAttribute === undefined) {
-    throw new Error("missing position attribute");
+    throw new Error('missing position attribute');
   }
   const positions = makeVector3View(positionAttribute);
 

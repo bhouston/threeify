@@ -15,19 +15,19 @@ import {
   Texture,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const debugTexture = new Texture(await fetchImage("/assets/textures/cube/debug/latLong.png"));
+  const debugTexture = new Texture(await fetchImage('/assets/textures/cube/debug/latLong.png'));
 
   const geometry = icosahedronGeometry(0.75, 4);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const cubeMap = makeTexImage2DFromEquirectangularTexture(context, debugTexture, new Vector2(1024, 1024));
 

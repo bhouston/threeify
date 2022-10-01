@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { IDisposable, IVersionable } from "../core/types";
-import { PrimitiveType } from "../renderers/webgl/buffers/PrimitiveType";
-import { Attribute } from "./Attribute";
+import { IDisposable, IVersionable } from '../core/types';
+import { PrimitiveType } from '../renderers/webgl/buffers/PrimitiveType';
+import { Attribute } from './Attribute';
 
 export class Geometry implements IVersionable, IDisposable {
   disposed = false;

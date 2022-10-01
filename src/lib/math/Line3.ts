@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from "../core/hash";
-import { ICloneable, IEquatable, IHashable } from "../core/types";
-import { Vector3 } from "./Vector3";
+import { hashFloat2 } from '../core/hash';
+import { ICloneable, IEquatable, IHashable } from '../core/types';
+import { Vector3 } from './Vector3';
 
 export class Line3 implements ICloneable<Line3>, IEquatable<Line3>, IHashable {
   constructor(public start = new Vector3(), public end = new Vector3()) {}

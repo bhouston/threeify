@@ -1,5 +1,5 @@
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
+import { Geometry } from '../Geometry';
 
 export async function fetchOBJ(url: string): Promise<Geometry[]> {
   const response = await fetch(url);
@@ -59,7 +59,7 @@ export function parseOBJ(text: string): Geometry[] {
     workingUvs = [];
   }
 
-  text.split("\n").forEach((line: string) => {
+  text.split('\n').forEach((line: string) => {
     const vMatch = line.match(vRegexp);
     if (vMatch !== null) {
       workingPositions.push(parseFloat(vMatch[1]), parseFloat(vMatch[2]), parseFloat(vMatch[3]));

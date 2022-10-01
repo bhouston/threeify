@@ -5,17 +5,17 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { ShaderMaterial } from "../../../materials/ShaderMaterial";
-import { Pool } from "../../Pool";
-import { BufferGeometry } from "../buffers/BufferGeometry";
-import { RenderingContext } from "../RenderingContext";
-import { Shader } from "../shaders/Shader";
-import { ShaderType } from "../shaders/ShaderType";
-import { VertexArrayObject } from "../VertexArrayObject";
-import { ProgramAttribute } from "./ProgramAttribute";
-import { ProgramUniform, UniformValueMap } from "./ProgramUniform";
-import { numTextureUnits } from "./UniformType";
+import { IDisposable } from '../../../core/types';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial';
+import { Pool } from '../../Pool';
+import { BufferGeometry } from '../buffers/BufferGeometry';
+import { RenderingContext } from '../RenderingContext';
+import { Shader } from '../shaders/Shader';
+import { ShaderType } from '../shaders/ShaderType';
+import { VertexArrayObject } from '../VertexArrayObject';
+import { ProgramAttribute } from './ProgramAttribute';
+import { ProgramUniform, UniformValueMap } from './ProgramUniform';
+import { numTextureUnits } from './UniformType';
 
 export type UniformMap = { [key: string]: ProgramUniform | undefined };
 export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
@@ -47,7 +47,7 @@ export class Program implements IDisposable {
     {
       const glProgram = gl.createProgram();
       if (glProgram === null) {
-        throw new Error("createProgram failed");
+        throw new Error('createProgram failed');
       }
 
       this.glProgram = glProgram;
@@ -164,7 +164,7 @@ export class Program implements IDisposable {
       const vao = buffers as VertexArrayObject;
       glxVAO.bindVertexArrayOES(vao.glVertexArrayObject);
     } else {
-      throw new Error("not implemented");
+      throw new Error('not implemented');
     }
 
     return this;

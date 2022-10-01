@@ -1,2 +1,2 @@
-export * from "./HDR";
-export * from "./Image";
+export * from './HDR';
+export * from './Image';

@@ -1,9 +1,9 @@
-import { IDisposable } from "../../../core/types";
-import { AttributeData } from "../../../geometry/AttributeData";
-import { Pool } from "../../Pool";
-import { RenderingContext } from "../RenderingContext";
-import { BufferTarget } from "./BufferTarget";
-import { BufferUsage } from "./BufferUsage";
+import { IDisposable } from '../../../core/types';
+import { AttributeData } from '../../../geometry/AttributeData';
+import { Pool } from '../../Pool';
+import { RenderingContext } from '../RenderingContext';
+import { BufferTarget } from './BufferTarget';
+import { BufferUsage } from './BufferUsage';
 
 export class Buffer implements IDisposable {
   readonly id: number;
@@ -21,7 +21,7 @@ export class Buffer implements IDisposable {
     {
       const glBuffer = gl.createBuffer();
       if (glBuffer === null) {
-        throw new Error("createBuffer failed");
+        throw new Error('createBuffer failed');
       }
 
       this.glBuffer = glBuffer;

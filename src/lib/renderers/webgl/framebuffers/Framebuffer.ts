@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../../math/Vector2";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { TexImage2D } from "../textures/TexImage2D";
-import { Attachment } from "./Attachment";
-import { VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Vector2 } from '../../../math/Vector2';
+import { GL } from '../GL';
+import { RenderingContext } from '../RenderingContext';
+import { TexImage2D } from '../textures/TexImage2D';
+import { Attachment } from './Attachment';
+import { VirtualFramebuffer } from './VirtualFramebuffer';
 
 export type AttachmentMap = { [point: number]: TexImage2D | undefined };
 
@@ -28,7 +28,7 @@ export class Framebuffer extends VirtualFramebuffer {
     {
       const glFramebuffer = gl.createFramebuffer();
       if (glFramebuffer === null) {
-        throw new Error("createFramebuffer failed");
+        throw new Error('createFramebuffer failed');
       }
 
       this.glFramebuffer = glFramebuffer;

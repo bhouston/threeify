@@ -1,4 +1,4 @@
-import { Vector3 } from "./Vector3";
+import { Vector3 } from './Vector3';
 
 export class Sphere {
   constructor(public center = new Vector3(), public radius = -1) {}

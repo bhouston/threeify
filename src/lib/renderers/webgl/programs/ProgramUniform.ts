@@ -3,16 +3,16 @@ import {
   linearizeMatrix4FloatArray,
   linearizeVector2FloatArray,
   linearizeVector3FloatArray,
-} from "../../../math/arrays/Linearizers";
-import { Matrix3 } from "../../../math/Matrix3";
-import { Matrix4 } from "../../../math/Matrix4";
-import { Vector2 } from "../../../math/Vector2";
-import { Vector3 } from "../../../math/Vector3";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { TexImage2D } from "../textures/TexImage2D";
-import { Program } from "./Program";
-import { UniformType } from "./UniformType";
+} from '../../../math/arrays/Linearizers';
+import { Matrix3 } from '../../../math/Matrix3';
+import { Matrix4 } from '../../../math/Matrix4';
+import { Vector2 } from '../../../math/Vector2';
+import { Vector3 } from '../../../math/Vector3';
+import { GL } from '../GL';
+import { RenderingContext } from '../RenderingContext';
+import { TexImage2D } from '../textures/TexImage2D';
+import { Program } from './Program';
+import { UniformType } from './UniformType';
 
 export type UniformValue =
   | number
@@ -80,14 +80,14 @@ export class ProgramUniform {
       // case UniformType.BoolVec3:
       // case UniformType.BoolVec4:
       case UniformType.Int:
-        if (typeof value === "number") {
+        if (typeof value === 'number') {
           if (value !== this.valueHashCode) {
             gl.uniform1i(this.glLocation, value);
             this.valueHashCode = value;
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && typeof value[0] === "number") {
+        if (value instanceof Array && value.length > 0 && typeof value[0] === 'number') {
           // const array = linearizeNumberInt32Array(value as number[]);
           gl.uniform1iv(this.glLocation, value as number[]);
           this.valueHashCode = -1;
@@ -98,14 +98,14 @@ export class ProgramUniform {
       // case UniformType.IntVec3:
       // case UniformType.IntVec4:
       case UniformType.Float:
-        if (typeof value === "number") {
+        if (typeof value === 'number') {
           if (value !== this.valueHashCode) {
             gl.uniform1f(this.glLocation, value);
             this.valueHashCode = value;
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && typeof value[0] === "number") {
+        if (value instanceof Array && value.length > 0 && typeof value[0] === 'number') {
           // const array = linearizeNumberFloatArray(value as number[]);
           gl.uniform1fv(this.glLocation, value as number[]);
           this.valueHashCode = -1;

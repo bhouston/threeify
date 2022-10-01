@@ -8,10 +8,10 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { eulerToNegativeZDirection, negativeZDirectionToEuler } from "./Direction";
-import { Light } from "./Light";
-import { LightType } from "./LightType";
+import { Vector3 } from '../../math/Vector3';
+import { eulerToNegativeZDirection, negativeZDirectionToEuler } from './Direction';
+import { Light } from './Light';
+import { LightType } from './LightType';
 
 /**
  * Spot lights emit light in a cone in the direction of the local -z axis. The angle and

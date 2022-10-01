@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../core/types";
-import { GL } from "./GL";
+import { ICloneable, IEquatable } from '../../core/types';
+import { GL } from './GL';
 
 export enum DepthTestFunc {
   /**

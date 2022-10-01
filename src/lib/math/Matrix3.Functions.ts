@@ -1,5 +1,5 @@
-import { Matrix3 } from "./Matrix3";
-import { Vector2 } from "./Vector2";
+import { Matrix3 } from './Matrix3';
+import { Vector2 } from './Vector2';
 
 export function makeMatrix3Concatenation(a: Matrix3, b: Matrix3, result = new Matrix3()): Matrix3 {
   const ae = a.elements;
@@ -93,7 +93,7 @@ export function makeMatrix3Inverse(m: Matrix3, result = new Matrix3()): Matrix3 
   const det = n11 * t11 + n21 * t12 + n31 * t13;
 
   if (det === 0) {
-    throw new Error("can not invert degenerate matrix");
+    throw new Error('can not invert degenerate matrix');
   }
 
   const detInv = 1 / det;

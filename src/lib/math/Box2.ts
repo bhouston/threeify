@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from "../core/hash";
-import { ICloneable, IEquatable, IHashable } from "../core/types";
-import { Vector2 } from "./Vector2";
+import { hashFloat2 } from '../core/hash';
+import { ICloneable, IEquatable, IHashable } from '../core/types';
+import { Vector2 } from './Vector2';
 
 export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   constructor(public min = new Vector2(+Infinity, +Infinity), public max = new Vector2(+Infinity, +Infinity)) {}

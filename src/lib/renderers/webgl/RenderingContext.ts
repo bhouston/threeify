@@ -5,25 +5,25 @@
 // * @bhouston
 //
 
-import { Box2 } from "../../math/Box2";
-import { BlendState } from "./BlendState";
-import { Buffer } from "./buffers/Buffer";
-import { ClearState } from "./ClearState";
-import { CullingState } from "./CullingState";
-import { DepthTestState } from "./DepthTestState";
-import { Extensions } from "./extensions/Extensions";
-import { OptionalExtensions } from "./extensions/OptionalExtensions";
-import { CanvasFramebuffer } from "./framebuffers/CanvasFramebuffer";
-import { Framebuffer } from "./framebuffers/Framebuffer";
-import { VirtualFramebuffer } from "./framebuffers/VirtualFramebuffer";
-import { GL } from "./GL";
-import { MaskState } from "./MaskState";
-import { getParameterAsString } from "./Parameters";
-import { Program } from "./programs/Program";
-import { Renderbuffer } from "./Renderbuffer";
-import { Shader } from "./shaders/Shader";
-import { TexImage2D } from "./textures/TexImage2D";
-import { VertexArrayObject } from "./VertexArrayObject";
+import { Box2 } from '../../math/Box2';
+import { BlendState } from './BlendState';
+import { Buffer } from './buffers/Buffer';
+import { ClearState } from './ClearState';
+import { CullingState } from './CullingState';
+import { DepthTestState } from './DepthTestState';
+import { Extensions } from './extensions/Extensions';
+import { OptionalExtensions } from './extensions/OptionalExtensions';
+import { CanvasFramebuffer } from './framebuffers/CanvasFramebuffer';
+import { Framebuffer } from './framebuffers/Framebuffer';
+import { VirtualFramebuffer } from './framebuffers/VirtualFramebuffer';
+import { GL } from './GL';
+import { MaskState } from './MaskState';
+import { getParameterAsString } from './Parameters';
+import { Program } from './programs/Program';
+import { Renderbuffer } from './Renderbuffer';
+import { Shader } from './shaders/Shader';
+import { TexImage2D } from './textures/TexImage2D';
+import { VertexArrayObject } from './VertexArrayObject';
 
 export type Resource = VertexArrayObject | TexImage2D | Program | Shader | Framebuffer | Buffer | Renderbuffer;
 export type ResourceMap = { [id: number]: Resource };
@@ -60,9 +60,9 @@ export class RenderingContext {
       attributes.stencil = true;
     }
     {
-      const gl = canvas.getContext("webgl", attributes);
+      const gl = canvas.getContext('webgl', attributes);
       if (gl === null) {
-        throw new Error("webgl not supported");
+        throw new Error('webgl not supported');
       }
       this.gl = gl;
     }
@@ -89,13 +89,13 @@ export class RenderingContext {
   get debugVendor(): string {
     // Note: this is a big performance hit to call, this only return if asked
     const dri = this.glxo.WEBGL_debug_renderer_info;
-    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL) : "";
+    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL) : '';
   }
 
   get debugRenderer(): string {
     // Note: this is a big performance hit to call, this only return if asked
     const dri = this.glxo.WEBGL_debug_renderer_info;
-    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL) : "";
+    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL) : '';
   }
 
   set program(program: Program | undefined) {

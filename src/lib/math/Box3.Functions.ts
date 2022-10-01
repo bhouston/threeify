@@ -1,10 +1,10 @@
-import { Attribute } from "../geometry/Attribute";
-import { Vector3View } from "./arrays/PrimitiveView";
-import { Box3 } from "./Box3";
-import { Matrix4 } from "./Matrix4";
-import { Sphere } from "./Sphere";
-import { Vector3 } from "./Vector3";
-import { transformPoint3 } from "./Vector3Matrix4.Functions";
+import { Attribute } from '../geometry/Attribute';
+import { Vector3View } from './arrays/PrimitiveView';
+import { Box3 } from './Box3';
+import { Matrix4 } from './Matrix4';
+import { Sphere } from './Sphere';
+import { Vector3 } from './Vector3';
+import { transformPoint3 } from './Vector3Matrix4.Functions';
 
 export function makeBox3FromArray(array: Float32Array, result = new Box3()): Box3 {
   let minX = +Infinity;

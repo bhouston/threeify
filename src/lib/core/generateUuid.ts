@@ -1,7 +1,7 @@
 const _lut: string[] = [];
 
 for (let i = 0; i < 256; i++) {
-  _lut[i] = (i < 16 ? "0" : "") + i.toString(16);
+  _lut[i] = (i < 16 ? '0' : '') + i.toString(16);
 }
 
 export function generateUUID(): string {

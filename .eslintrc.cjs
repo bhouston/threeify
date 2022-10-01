@@ -27,7 +27,7 @@ module.exports = {
     'unused-imports',
     'simple-import-sort',
   ],
-  ignorePatterns: ['dist/*', '*.glsl', 'package.json', "*.json", "*.md", "*.js", '*.old'],
+  ignorePatterns: ['dist/*', '*.glsl', 'package.json', '*.json', '*.md', '*.js', '*.old', '*.xts', "*.html"],
   rules: {
     "@typescript-eslint/ban-types": 1,
     "@typescript-eslint/explicit-function-return-type": 0,
@@ -83,7 +83,7 @@ module.exports = {
     "no-invalid-this": 1,
     "no-var": 2,
     "no-unused-expressions": 2,
-    quotes: ["error", "double"],
+    quotes: ['error', 'single'],
     "sort-imports": [
       0,
       {

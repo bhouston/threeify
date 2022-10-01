@@ -1,10 +1,10 @@
-import { IArrayable } from "../../core/types";
-import { Attribute } from "../../geometry/Attribute";
-import { Matrix3 } from "../Matrix3";
-import { Matrix4 } from "../Matrix4";
-import { Quaternion } from "../Quaternion";
-import { Vector2 } from "../Vector2";
-import { Vector3 } from "../Vector3";
+import { IArrayable } from '../../core/types';
+import { Attribute } from '../../geometry/Attribute';
+import { Matrix3 } from '../Matrix3';
+import { Matrix4 } from '../Matrix4';
+import { Quaternion } from '../Quaternion';
+import { Vector2 } from '../Vector2';
+import { Vector3 } from '../Vector3';
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
 
@@ -20,10 +20,10 @@ export class PrimitiveView<P extends IArrayable> {
   ) {
     if (dataArray instanceof Attribute) {
       if (this.floatStride >= 0) {
-        throw new Error("can not specify explicit byteStride when using Attribute argument");
+        throw new Error('can not specify explicit byteStride when using Attribute argument');
       }
       if (this.floatOffset >= 0) {
-        throw new Error("can not specify explicit byteOffset when using Attribute argument");
+        throw new Error('can not specify explicit byteOffset when using Attribute argument');
       }
       this.floatOffset = dataArray.byteOffset / 4;
       this.floatStride = dataArray.vertexStride / 4;
@@ -33,10 +33,10 @@ export class PrimitiveView<P extends IArrayable> {
     } else if (dataArray instanceof ArrayBuffer) {
       this.floatArray = new Float32Array(dataArray);
     } else {
-      throw new Error("unsupported value");
+      throw new Error('unsupported value');
     }
     if (floatPerPrimitive < 0) {
-      throw new Error("must specify bytesPerPrimitive or provide an Attribute argument");
+      throw new Error('must specify bytesPerPrimitive or provide an Attribute argument');
     }
     if (this.floatStride < 0) {
       this.floatStride = floatPerPrimitive;

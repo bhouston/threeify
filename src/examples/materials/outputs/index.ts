@@ -25,12 +25,12 @@ import {
   transformGeometry,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = (await fetchOBJ("/assets/models/ninjaHead/ninjaHead.obj"))[0];
+  const geometry = (await fetchOBJ('/assets/models/ninjaHead/ninjaHead.obj'))[0];
   transformGeometry(
     geometry,
     makeMatrix4Concatenation(
@@ -39,12 +39,12 @@ async function init(): Promise<null> {
     ),
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const displacementTexture = new Texture(await fetchImage("/assets/models/ninjaHead/displacement.jpg"));
-  const normalTexture = new Texture(await fetchImage("/assets/models/ninjaHead/normal.png"));
+  const displacementTexture = new Texture(await fetchImage('/assets/models/ninjaHead/displacement.jpg'));
+  const normalTexture = new Texture(await fetchImage('/assets/models/ninjaHead/normal.png'));
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const displacementMap = makeTexImage2DFromTexture(context, displacementTexture);
   const normalMap = makeTexImage2DFromTexture(context, normalTexture);

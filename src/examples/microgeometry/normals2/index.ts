@@ -21,19 +21,19 @@ import {
   Texture,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
-  const normalsTexture = new Texture(await fetchImage("/assets/textures/normalMap.png"));
+  const normalsTexture = new Texture(await fetchImage('/assets/textures/normalMap.png'));
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);

@@ -1,14 +1,14 @@
-import { Vector2 } from "../../../math/Vector2";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { DataType, sizeOfDataType } from "../textures/DataType";
-import { numPixelFormatComponents, PixelFormat } from "../textures/PixelFormat";
-import { TexImage2D } from "../textures/TexImage2D";
-import { TexParameters } from "../textures/TexParameters";
-import { TextureFilter } from "../textures/TextureFilter";
-import { TextureTarget } from "../textures/TextureTarget";
-import { Attachment } from "./Attachment";
-import { Framebuffer } from "./Framebuffer";
+import { Vector2 } from '../../../math/Vector2';
+import { GL } from '../GL';
+import { RenderingContext } from '../RenderingContext';
+import { DataType, sizeOfDataType } from '../textures/DataType';
+import { numPixelFormatComponents, PixelFormat } from '../textures/PixelFormat';
+import { TexImage2D } from '../textures/TexImage2D';
+import { TexParameters } from '../textures/TexParameters';
+import { TextureFilter } from '../textures/TextureFilter';
+import { TextureTarget } from '../textures/TextureTarget';
+import { Attachment } from './Attachment';
+import { Framebuffer } from './Framebuffer';
 
 export function readPixelsFromFramebuffer(
   framebuffer: Framebuffer,
@@ -26,7 +26,7 @@ export function readPixelsFromFramebuffer(
 
   const texImage2D = framebuffer.getAttachment(Attachment.Color0);
   if (texImage2D === undefined) {
-    throw new Error("no attachment on Color0");
+    throw new Error('no attachment on Color0');
   }
 
   const pixelByteLength = sizeOfDataType(texImage2D.dataType)

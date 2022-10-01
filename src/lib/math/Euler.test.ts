@@ -1,7 +1,7 @@
-import { Euler, EulerOrder } from "./Euler";
-import { makeEulerFromQuaternion, makeEulerFromRotationMatrix4 } from "./Euler.Functions";
-import { makeMatrix4RotationFromEuler } from "./Matrix4.Functions";
-import { makeQuaternionFromEuler } from "./Quaternion.Functions";
+import { Euler, EulerOrder } from './Euler';
+import { makeEulerFromQuaternion, makeEulerFromRotationMatrix4 } from './Euler.Functions';
+import { makeMatrix4RotationFromEuler } from './Matrix4.Functions';
+import { makeQuaternionFromEuler } from './Quaternion.Functions';
 
 const testOrders = [EulerOrder.XYZ, EulerOrder.YXZ, EulerOrder.ZXY, EulerOrder.ZYX, EulerOrder.YZX, EulerOrder.XZY];
 const e0 = new Euler();
@@ -19,8 +19,8 @@ function delta(a: Euler, b: Euler): number {
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z);
 }
 
-describe("Euler", () => {
-  test("constructor defaults", () => {
+describe('Euler', () => {
+  test('constructor defaults', () => {
     const a = new Euler();
     expect(a.x).toBe(0);
     expect(a.y).toBe(0);
@@ -28,7 +28,7 @@ describe("Euler", () => {
     expect(a.order).toBe(EulerOrder.Default);
   });
 
-  test("constructor values", () => {
+  test('constructor values', () => {
     const b = new Euler(1, 2, 3, EulerOrder.ZXY);
     expect(b.x).toBe(1);
     expect(b.y).toBe(2);
@@ -36,7 +36,7 @@ describe("Euler", () => {
     expect(b.order).toBe(EulerOrder.ZXY);
   });
 
-  test("clone", () => {
+  test('clone', () => {
     const b = new Euler(1, 2, 3, EulerOrder.ZXY);
     const c = b.clone();
     expect(c.x).toBe(1);
@@ -45,7 +45,7 @@ describe("Euler", () => {
     expect(c.order).toBe(EulerOrder.ZXY);
   });
 
-  test("copy", () => {
+  test('copy', () => {
     const b = new Euler(1, 2, 3, EulerOrder.ZXY);
     const d = new Euler().copy(b);
     expect(d.x).toBe(1);
@@ -55,7 +55,7 @@ describe("Euler", () => {
   });
 });
 
-describe("Euler-Quaternion", () => {
+describe('Euler-Quaternion', () => {
   testValues.forEach((euler, ei) => {
     testOrders.forEach((order, oi) => {
       test(`e ${ei} order ${oi}`, () => {
@@ -70,7 +70,7 @@ describe("Euler-Quaternion", () => {
   });
 });
 
-describe("Euler-Matrix4", () => {
+describe('Euler-Matrix4', () => {
   testValues.forEach((euler, ei) => {
     testOrders.forEach((order, oi) => {
       test(`e ${ei} order ${oi}`, () => {

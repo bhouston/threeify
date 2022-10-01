@@ -6,12 +6,12 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { Geometry } from "../../../geometry/Geometry";
-import { RenderingContext } from "../RenderingContext";
-import { BufferAccessor, makeBufferAccessorFromAttribute } from "./BufferAccessor";
-import { BufferTarget } from "./BufferTarget";
-import { PrimitiveType } from "./PrimitiveType";
+import { IDisposable } from '../../../core/types';
+import { Geometry } from '../../../geometry/Geometry';
+import { RenderingContext } from '../RenderingContext';
+import { BufferAccessor, makeBufferAccessorFromAttribute } from './BufferAccessor';
+import { BufferTarget } from './BufferTarget';
+import { PrimitiveType } from './PrimitiveType';
 
 export class BufferGeometry implements IDisposable {
   disposed = false;
@@ -23,7 +23,7 @@ export class BufferGeometry implements IDisposable {
   constructor(public context: RenderingContext) {}
 
   dispose(): void {
-    console.warn("This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.");
+    console.warn('This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.');
     if (!this.disposed) {
       for (const name in this.bufferAccessors) {
         const bufferAccessor = this.bufferAccessors[name];

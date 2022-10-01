@@ -1,10 +1,10 @@
-import { Box3 } from "./Box3";
-import { makeBox3FromPoints } from "./Box3.Functions";
-import { Matrix4 } from "./Matrix4";
-import { getMaxScaleOnAxis } from "./Matrix4.Functions";
-import { Sphere } from "./Sphere";
-import { Vector3 } from "./Vector3";
-import { transformPoint3 } from "./Vector3Matrix4.Functions";
+import { Box3 } from './Box3';
+import { makeBox3FromPoints } from './Box3.Functions';
+import { Matrix4 } from './Matrix4';
+import { getMaxScaleOnAxis } from './Matrix4.Functions';
+import { Sphere } from './Sphere';
+import { Vector3 } from './Vector3';
+import { transformPoint3 } from './Vector3Matrix4.Functions';
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
 export function makeBoundingSphereFromBox(box: Box3, result = new Sphere()): Sphere {

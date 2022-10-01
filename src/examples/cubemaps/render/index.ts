@@ -24,10 +24,10 @@ import {
   TextureFilter,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import { patternMaterial } from "./pattern/PatternMaterial";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import { patternMaterial } from './pattern/PatternMaterial';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.
@@ -40,9 +40,9 @@ async function init(): Promise<null> {
   cubeTexture.minFilter = TextureFilter.Linear;
   cubeTexture.generateMipmaps = false;
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const patternGeometry = passGeometry();
   const patternProgram = makeProgramFromShaderMaterial(context, patternMaterial);

@@ -1,5 +1,5 @@
-import { Matrix4 } from "./Matrix4";
-import { Vector3 } from "./Vector3";
+import { Matrix4 } from './Matrix4';
+import { Vector3 } from './Vector3';
 
 export function transformPoint3(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
   const { x } = v;

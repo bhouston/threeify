@@ -1,6 +1,6 @@
-import { Plane } from "./Plane";
-import { planePointDistance } from "./Plane.Functions";
-import { Ray } from "./Ray";
+import { Plane } from './Plane';
+import { planePointDistance } from './Plane.Functions';
+import { Ray } from './Ray';
 
 export function rayDistanceToPlane(ray: Ray, plane: Plane): number {
   const denominator = plane.normal.dot(ray.direction);

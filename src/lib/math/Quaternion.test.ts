@@ -1,8 +1,8 @@
-import { EulerOrder } from "./Euler";
-import { makeEulerFromQuaternion } from "./Euler.Functions";
-import { makeMatrix4RotationFromQuaternion } from "./Matrix4.Functions";
-import { Quaternion } from "./Quaternion";
-import { makeQuaternionFromEuler, makeQuaternionFromRotationMatrix4 } from "./Quaternion.Functions";
+import { EulerOrder } from './Euler';
+import { makeEulerFromQuaternion } from './Euler.Functions';
+import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions';
+import { Quaternion } from './Quaternion';
+import { makeQuaternionFromEuler, makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions';
 
 const qX = new Quaternion(1, 0, 0).normalize();
 const qY = new Quaternion(0, 1, 0).normalize();
@@ -19,8 +19,8 @@ const qXZW = new Quaternion(0.5, 0, 1, 0.25).normalize();
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
 const testOrders = [EulerOrder.XYZ, EulerOrder.YXZ, EulerOrder.ZXY, EulerOrder.ZYX, EulerOrder.YZX, EulerOrder.XZY];
 
-describe("Quaternionr", () => {
-  test("constructor defaults", () => {
+describe('Quaternionr', () => {
+  test('constructor defaults', () => {
     const a = new Quaternion();
     expect(a.x).toBe(0);
     expect(a.y).toBe(0);
@@ -28,7 +28,7 @@ describe("Quaternionr", () => {
     expect(a.w).toBe(1);
   });
 
-  test("constructor Values", () => {
+  test('constructor Values', () => {
     const b = new Quaternion(1, 2, 3, 4);
     expect(b.x).toBe(1);
     expect(b.y).toBe(2);
@@ -36,7 +36,7 @@ describe("Quaternionr", () => {
     expect(b.w).toBe(4);
   });
 
-  test("clone", () => {
+  test('clone', () => {
     const b = new Quaternion(1, 2, 3, 4);
     const c = b.clone();
     expect(c.x).toBe(1);
@@ -45,7 +45,7 @@ describe("Quaternionr", () => {
     expect(c.w).toBe(4);
   });
 
-  test("copy", () => {
+  test('copy', () => {
     const b = new Quaternion(1, 2, 3, 4);
     const d = new Quaternion().copy(b);
     expect(d.x).toBe(1);
@@ -55,7 +55,7 @@ describe("Quaternionr", () => {
   });
 });
 
-describe("Quaternion-Euler ", () => {
+describe('Quaternion-Euler ', () => {
   testValues.forEach((q, qi) => {
     testOrders.forEach((eulerOrder, ei) => {
       test(`q${qi} order ${ei}`, () => {
@@ -67,7 +67,7 @@ describe("Quaternion-Euler ", () => {
   });
 });
 
-describe("Quaternion-Matrix4", () => {
+describe('Quaternion-Matrix4', () => {
   testValues.forEach((q, qi) => {
     test(`q ${qi}`, () => {
       const m = makeMatrix4RotationFromQuaternion(q);

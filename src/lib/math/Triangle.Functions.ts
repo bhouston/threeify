@@ -1,6 +1,6 @@
-import { Triangle } from "./Triangle";
-import { Vector3 } from "./Vector3";
-import { crossFromCoplanarPoints, pointToBaryCoords } from "./Vector3.Functions";
+import { Triangle } from './Triangle';
+import { Vector3 } from './Vector3';
+import { crossFromCoplanarPoints, pointToBaryCoords } from './Vector3.Functions';
 
 export function makeTriangleFromPointsAndIndices(
   points: Vector3[],

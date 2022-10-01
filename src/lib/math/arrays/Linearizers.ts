@@ -1,8 +1,8 @@
-import { Matrix3 } from "../Matrix3";
-import { Matrix4 } from "../Matrix4";
-import { Quaternion } from "../Quaternion";
-import { Vector2 } from "../Vector2";
-import { Vector3 } from "../Vector3";
+import { Matrix3 } from '../Matrix3';
+import { Matrix4 } from '../Matrix4';
+import { Quaternion } from '../Quaternion';
+import { Vector2 } from '../Vector2';
+import { Vector3 } from '../Vector3';
 
 export function linearizeNumberInt32Array(array: number[]): Int32Array {
   const result = new Int32Array(array.length);

@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../../math/Vector2";
-import { RenderingContext } from "../RenderingContext";
-import { VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Vector2 } from '../../../math/Vector2';
+import { RenderingContext } from '../RenderingContext';
+import { VirtualFramebuffer } from './VirtualFramebuffer';
 
 export class CanvasFramebuffer extends VirtualFramebuffer {
   public readonly canvas: HTMLCanvasElement | OffscreenCanvas;

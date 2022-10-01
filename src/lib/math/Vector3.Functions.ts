@@ -1,5 +1,5 @@
-import { Spherical } from "./Spherical";
-import { Vector3 } from "./Vector3";
+import { Spherical } from './Spherical';
+import { Vector3 } from './Vector3';
 
 export function crossFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3, result = new Vector3()): Vector3 {
   // TODO: replace with just number math, no classes?  Or just use temporary Vector3 objects

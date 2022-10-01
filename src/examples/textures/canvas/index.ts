@@ -20,9 +20,9 @@ import {
   Texture,
   Vector2,
   Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number): void {
   if (ctx === null) {
@@ -35,27 +35,27 @@ function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number)
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, 256, 256);
 
-  ctx.fillStyle = "black";
-  ctx.textAlign = "center";
-  ctx.font = "30px Arial";
-  ctx.fillText("Canvas Texture", 128, 100);
+  ctx.fillStyle = 'black';
+  ctx.textAlign = 'center';
+  ctx.font = '30px Arial';
+  ctx.fillText('Canvas Texture', 128, 100);
   ctx.fillText(`Frame #${frameNumber}`, 128, 156);
 }
 async function init(): Promise<null> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
 
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = 256;
   canvas.height = 256;
-  canvas.style.display = "none";
-  const ctx = canvas.getContext("2d");
+  canvas.style.display = 'none';
+  const ctx = canvas.getContext('2d');
 
   const texture = new Texture(canvas);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);

@@ -1,9 +1,9 @@
-import { IDisposable } from "../core/types";
-import { Euler, EulerOrder } from "../math/Euler";
-import { degToRad } from "../math/Functions";
-import { Quaternion } from "../math/Quaternion";
-import { makeQuaternionFromAxisAngle, makeQuaternionFromEuler } from "../math/Quaternion.Functions";
-import { Vector3 } from "../math/Vector3";
+import { IDisposable } from '../core/types';
+import { Euler, EulerOrder } from '../math/Euler';
+import { degToRad } from '../math/Functions';
+import { Quaternion } from '../math/Quaternion';
+import { makeQuaternionFromAxisAngle, makeQuaternionFromEuler } from '../math/Quaternion.Functions';
+import { Vector3 } from '../math/Vector3';
 
 const zAxis = new Vector3(0, 0, 1);
 // - PI/2 around the x-axis
@@ -27,7 +27,7 @@ export class DeviceOrientation implements IDisposable {
       );
     };
     const onOrientationChange = (): void => {
-      console.log("orientation", window.orientation);
+      console.log('orientation', window.orientation);
       this.screenOrientation = -degToRad(window.orientation as number);
     };
 
@@ -49,13 +49,13 @@ export class DeviceOrientation implements IDisposable {
           throw new Error("DeviceOrientation API not available.");
         });
     } else { */
-    window.addEventListener("orientationchange", onOrientationChange, false);
-    window.addEventListener("deviceorientation", onDeviceOrientation, false);
+    window.addEventListener('orientationchange', onOrientationChange, false);
+    window.addEventListener('deviceorientation', onDeviceOrientation, false);
     // }
 
     this.onDispose = (): void => {
-      window.removeEventListener("orientationchange", onOrientationChange, false);
-      window.removeEventListener("deviceorientation", onDeviceOrientation, false);
+      window.removeEventListener('orientationchange', onOrientationChange, false);
+      window.removeEventListener('deviceorientation', onDeviceOrientation, false);
     };
   }
 

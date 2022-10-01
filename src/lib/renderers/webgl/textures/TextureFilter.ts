@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL';
 
 export enum TextureFilter {
   LinearMipmapLinear = GL.LINEAR_MIPMAP_LINEAR,

@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { generateUUID } from "../core/generateUuid";
-import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
-import { IPoolUser } from "../renderers/Pool";
-import { BufferTarget } from "../renderers/webgl/buffers/BufferTarget";
+import { generateUUID } from '../core/generateUuid';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types';
+import { IPoolUser } from '../renderers/Pool';
+import { BufferTarget } from '../renderers/webgl/buffers/BufferTarget';
 
 export class AttributeData implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
   disposed = false;

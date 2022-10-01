@@ -1,5 +1,5 @@
-import { Box2 } from "./Box2";
-import { Vector2 } from "./Vector2";
+import { Box2 } from './Box2';
+import { Vector2 } from './Vector2';
 
 export function makeBox2FromPoints(points: Vector2[], result = new Box2()): Box2 {
   result.makeEmpty();

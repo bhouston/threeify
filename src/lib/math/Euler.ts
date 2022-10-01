@@ -1,5 +1,5 @@
-import { hashFloat4 } from "../core/hash";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloat4 } from '../core/hash';
+import { IPrimitive } from './IPrimitive';
 
 export enum EulerOrder {
   XYZ,

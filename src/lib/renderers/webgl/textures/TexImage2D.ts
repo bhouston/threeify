@@ -6,17 +6,17 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { isPow2 } from "../../../math/Functions";
-import { Vector2 } from "../../../math/Vector2";
-import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
-import { TextureSource } from "../../../textures/VirtualTexture";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { DataType } from "./DataType";
-import { PixelFormat } from "./PixelFormat";
-import { TexParameters } from "./TexParameters";
-import { TextureTarget } from "./TextureTarget";
+import { IDisposable } from '../../../core/types';
+import { isPow2 } from '../../../math/Functions';
+import { Vector2 } from '../../../math/Vector2';
+import { ArrayBufferImage } from '../../../textures/ArrayBufferImage';
+import { TextureSource } from '../../../textures/VirtualTexture';
+import { GL } from '../GL';
+import { RenderingContext } from '../RenderingContext';
+import { DataType } from './DataType';
+import { PixelFormat } from './PixelFormat';
+import { TexParameters } from './TexParameters';
+import { TextureTarget } from './TextureTarget';
 
 export class TexImage2D implements IDisposable {
   public readonly id: number;
@@ -38,7 +38,7 @@ export class TexImage2D implements IDisposable {
     {
       const glTexture = gl.createTexture();
       if (glTexture === null) {
-        throw new Error("createTexture failed");
+        throw new Error('createTexture failed');
       }
       this.glTexture = glTexture;
     }
@@ -113,7 +113,7 @@ export class TexImage2D implements IDisposable {
         }
       }
     } else {
-      throw new Error("Unsupported number of images");
+      throw new Error('Unsupported number of images');
     }
   }
 

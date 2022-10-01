@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from "../core/hash";
-import { ICloneable, IEquatable, IHashable } from "../core/types";
+import { hashFloat3 } from '../core/hash';
+import { ICloneable, IEquatable, IHashable } from '../core/types';
 
 export class Spherical implements ICloneable<Spherical>, IEquatable<Spherical>, IHashable {
   constructor(public radius = 1.0, public phi = 0.0, public theta = 0.0) {}

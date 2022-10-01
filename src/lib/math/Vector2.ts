@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from "../core/hash";
-import { clamp } from "./Functions";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloat2 } from '../core/hash';
+import { clamp } from './Functions';
+import { IPrimitive } from './IPrimitive';
 
 export class Vector2 implements IPrimitive<Vector2> {
   constructor(public x = 0, public y = 0) {}

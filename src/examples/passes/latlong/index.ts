@@ -18,15 +18,15 @@ import {
   Texture,
   TextureFilter,
   TextureWrap,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+} from '../../../lib/index';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
 
   let imageIndex = 0;
 
@@ -48,7 +48,7 @@ async function init(): Promise<null> {
   await Promise.all(images);
 
   const { canvasFramebuffer } = context;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const orbit = new Orbit(context.canvas);
 
@@ -76,9 +76,9 @@ async function init(): Promise<null> {
 
   animate();
 
-  window.addEventListener("keydown", (event) => {
+  window.addEventListener('keydown', (event) => {
     if (event.key !== undefined) {
-      imageIndex = (event.key.charCodeAt(0) - "0".charCodeAt(0)) % images.length;
+      imageIndex = (event.key.charCodeAt(0) - '0'.charCodeAt(0)) % images.length;
       // Handle the event with KeyboardEvent.key and set handled true.
     }
   }, true);
@@ -88,7 +88,7 @@ async function init(): Promise<null> {
 
 init();
 
-window.addEventListener("keydown", (event) => {
+window.addEventListener('keydown', (event) => {
   if (event.defaultPrevented) {
     return; // Should do nothing if the default action has been cancelled
   }

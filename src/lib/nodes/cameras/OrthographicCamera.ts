@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { Matrix4 } from "../../math/Matrix4";
-import { makeMatrix4OrthographicSimple } from "../../math/Matrix4.Functions";
-import { Vector2 } from "../../math/Vector2";
-import { Camera } from "./Camera";
+import { Matrix4 } from '../../math/Matrix4';
+import { makeMatrix4OrthographicSimple } from '../../math/Matrix4.Functions';
+import { Vector2 } from '../../math/Vector2';
+import { Camera } from './Camera';
 
 export class OrthographicCamera extends Camera {
   constructor(

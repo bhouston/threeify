@@ -1,42 +1,42 @@
-import { IDisposable } from "../../core/types";
-import { transformGeometry } from "../../geometry/Geometry.Functions";
-import { planeGeometry } from "../../geometry/primitives/planeGeometry";
-import { Blending } from "../../materials/Blending";
-import { ShaderMaterial } from "../../materials/ShaderMaterial";
-import { ceilPow2 } from "../../math/Functions";
-import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from "../../math/Matrix3.Functions";
-import { Matrix4 } from "../../math/Matrix4";
+import { IDisposable } from '../../core/types';
+import { transformGeometry } from '../../geometry/Geometry.Functions';
+import { planeGeometry } from '../../geometry/primitives/planeGeometry';
+import { Blending } from '../../materials/Blending';
+import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { ceilPow2 } from '../../math/Functions';
+import { makeMatrix3Concatenation, makeMatrix3Scale, makeMatrix3Translation } from '../../math/Matrix3.Functions';
+import { Matrix4 } from '../../math/Matrix4';
 import {
   makeMatrix4Inverse,
   makeMatrix4Orthographic,
   makeMatrix4OrthographicSimple,
   makeMatrix4Scale,
   makeMatrix4Translation,
-} from "../../math/Matrix4.Functions";
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
-import { isFirefox, isiOS, isMacOS } from "../../platform/Detection";
-import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
-import { BufferGeometry, makeBufferGeometryFromGeometry } from "../../renderers/webgl/buffers/BufferGeometry";
-import { ClearState } from "../../renderers/webgl/ClearState";
-import { Attachment } from "../../renderers/webgl/framebuffers/Attachment";
-import { Framebuffer } from "../../renderers/webgl/framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../../renderers/webgl/framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial, Program } from "../../renderers/webgl/programs/Program";
-import { RenderingContext } from "../../renderers/webgl/RenderingContext";
-import { DataType } from "../../renderers/webgl/textures/DataType";
-import { PixelFormat } from "../../renderers/webgl/textures/PixelFormat";
-import { TexImage2D } from "../../renderers/webgl/textures/TexImage2D";
-import { makeTexImage2DFromTexture } from "../../renderers/webgl/textures/TexImage2D.Functions";
-import { TexParameters } from "../../renderers/webgl/textures/TexParameters";
-import { TextureFilter } from "../../renderers/webgl/textures/TextureFilter";
-import { TextureTarget } from "../../renderers/webgl/textures/TextureTarget";
-import { TextureWrap } from "../../renderers/webgl/textures/TextureWrap";
-import { fetchImage, isImageBitmapSupported } from "../../textures/loaders/Image";
-import { Texture } from "../../textures/Texture";
-import fragmentSource from "./fragment.glsl";
-import { Layer } from "./Layer";
-import vertexSource from "./vertex.glsl";
+} from '../../math/Matrix4.Functions';
+import { Vector2 } from '../../math/Vector2';
+import { Vector3 } from '../../math/Vector3';
+import { isFirefox, isiOS, isMacOS } from '../../platform/Detection';
+import { blendModeToBlendState } from '../../renderers/webgl/BlendState';
+import { BufferGeometry, makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
+import { ClearState } from '../../renderers/webgl/ClearState';
+import { Attachment } from '../../renderers/webgl/framebuffers/Attachment';
+import { Framebuffer } from '../../renderers/webgl/framebuffers/Framebuffer';
+import { renderBufferGeometry } from '../../renderers/webgl/framebuffers/VirtualFramebuffer';
+import { makeProgramFromShaderMaterial, Program } from '../../renderers/webgl/programs/Program';
+import { RenderingContext } from '../../renderers/webgl/RenderingContext';
+import { DataType } from '../../renderers/webgl/textures/DataType';
+import { PixelFormat } from '../../renderers/webgl/textures/PixelFormat';
+import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
+import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
+import { TexParameters } from '../../renderers/webgl/textures/TexParameters';
+import { TextureFilter } from '../../renderers/webgl/textures/TextureFilter';
+import { TextureTarget } from '../../renderers/webgl/textures/TextureTarget';
+import { TextureWrap } from '../../renderers/webgl/textures/TextureWrap';
+import { fetchImage, isImageBitmapSupported } from '../../textures/loaders/Image';
+import { Texture } from '../../textures/Texture';
+import fragmentSource from './fragment.glsl';
+import { Layer } from './Layer';
+import vertexSource from './vertex.glsl';
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
   if (isImageBitmapSupported() && image instanceof ImageBitmap) {
@@ -136,12 +136,12 @@ export class LayerCompositor {
     this.#program = makeProgramFromShaderMaterial(this.context, new ShaderMaterial(vertexSource, fragmentSource));
   }
 
-  snapshot(mimeFormat = "image/jpeg", quality = 1.0): string {
+  snapshot(mimeFormat = 'image/jpeg', quality = 1.0): string {
     const { canvas } = this.context.canvasFramebuffer;
     if (canvas instanceof HTMLCanvasElement) {
       return canvas.toDataURL(mimeFormat, quality);
     }
-    throw new Error("snapshot not supported");
+    throw new Error('snapshot not supported');
   }
 
   set layers(layers: Layer[]) {
