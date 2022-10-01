@@ -31,7 +31,6 @@
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
     "eslint": "^8.20.0",
-    "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.0",
     "eslint-plugin-react": "^7.30.1",
@@ -53,5 +52,4 @@
     "test": "jest ./src",
     "watch": "tsc --watch --preserveWatchOutput & tgt --watch"
   }
- 
 }
