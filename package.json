@@ -50,6 +50,7 @@
     "start": "tsc --watch --preserveWatchOutput & web-dev-server --node-resolve --watch --open --app-index ./examples/index.html",
     "docs": "typedoc",
     "test": "jest ./src",
-    "watch": "tsc --watch --preserveWatchOutput & tgt --watch"
+    "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
+    "prepare": "npm run build"
   }
 }
