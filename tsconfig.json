@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "es2015",
+    "target": "es2020",
+    "module": "esnext",
     "declaration": true,
     "sourceMap": true,
     "declarationMap": true,
@@ -13,7 +13,8 @@
     "moduleResolution": "node",
     "removeComments": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false
   },
   "include": [
     "src/**/*.ts"

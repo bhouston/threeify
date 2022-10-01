@@ -2,6 +2,13 @@
   "name": "threeify",
   "version": "1.87.0",
   "description": "Typescript 3D Library loosely based on three.js",
+  "type": "module",
+  "module": "src/lib/index.ts",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "threeify",
     "webgl",
@@ -14,20 +21,9 @@
     "url": "https://github.com/threeify/threeify/issues"
   },
   "license": "ISC",
-  "main": "dist/lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/threeify/threeify"
-  },
-  "typings": "dist/lib/index.d.ts",
-  "scripts": {
-    "build": "tgt & tsc",
-    "dev": "npm run watch & npm start",
-    "lint": "eslint \"src/**\"",
-    "lint:fix": "npm run lint -- --fix",
-   "start": "tsc --watch --preserveWatchOutput & web-dev-server --node-resolve --watch --open --app-index ./examples/index.html",
-    "docs": "typedoc",
-    "watch": "tsc --watch --preserveWatchOutput & tgt --watch"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
@@ -47,12 +43,15 @@
     "typedoc": "^0.23.15",
     "typescript": "^4.8.4"
   },
-  "module": "index.ts",
-  "type": "module",
-  "release": {
-    "branches": [
-      "master"
-    ]
-  },
-  "config": {}
+  "scripts": {
+    "build": "tgt & tsc",
+    "dev": "npm run watch & npm start",
+    "lint": "eslint \"src/**\"",
+    "lint:fix": "npm run lint -- --fix",
+    "start": "tsc --watch --preserveWatchOutput & web-dev-server --node-resolve --watch --open --app-index ./examples/index.html",
+    "docs": "typedoc",
+    "test": "jest ./src",
+    "watch": "tsc --watch --preserveWatchOutput & tgt --watch"
+  }
+ 
 }
