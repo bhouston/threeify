@@ -19,7 +19,7 @@ export function expandBox2ByPoint(b: Box2, point: Vector2): Box2 {
 }
 
 export function box2ContainsVector2(b: Box2, point: Vector2): boolean {
-  return point.x < b.min.x || point.x > b.max.x || point.y < b.min.y || point.y > b.max.y ? false : true;
+  return !(point.x < b.min.x || point.x > b.max.x || point.y < b.min.y || point.y > b.max.y);
 }
 
 export function box2ContainsBox2(b: Box2, otherBox: Box2): boolean {

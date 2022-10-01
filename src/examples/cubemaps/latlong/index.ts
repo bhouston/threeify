@@ -26,7 +26,7 @@ async function init(): Promise<null> {
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const cubeMap = makeTexImage2DFromEquirectangularTexture(context, debugTexture, new Vector2(1024, 1024));
@@ -36,7 +36,7 @@ async function init(): Promise<null> {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
-    cubeMap: cubeMap,
+    cubeMap,
     mipCount: cubeMap.mipCount,
     perceptualRoughness: 0,
   };
@@ -50,7 +50,7 @@ async function init(): Promise<null> {
     /* uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld,
-    );*/
+    ); */
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
 
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);

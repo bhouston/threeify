@@ -5,7 +5,7 @@ function getRequiredExtension<T>(gl: WebGLRenderingContext, extensionName: strin
   if (ext === null) {
     throw new Error(`required extension ${extensionName} not available.`);
   }
-  return ext;
+  return ext as T;
 }
 
 /* eslint-disable @typescript-eslint/naming-convention */

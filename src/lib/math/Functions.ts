@@ -15,9 +15,9 @@ export function isPow2(value: number): boolean {
 }
 
 export function ceilPow2(value: number): number {
-  return Math.pow(2, Math.ceil(Math.log(value) / Math.LN2));
+  return 2 ** Math.ceil(Math.log(value) / Math.LN2);
 }
 
 export function floorPow2(value: number): number {
-  return Math.pow(2, Math.floor(Math.log(value) / Math.LN2));
+  return 2 ** Math.floor(Math.log(value) / Math.LN2);
 }

@@ -2,7 +2,7 @@ import { clamp } from "./Functions";
 import { Vector4 } from "./Vector4";
 
 export function rgbeToLinear(source: Vector4, result = new Vector4()): Vector4 {
-  const s = Math.pow(2.0, source.a * 255.0 - 128.0);
+  const s = 2.0 ** (source.a * 255.0 - 128.0);
   return result.set(source.r * s, source.g * s, source.b * s, 1.0);
 }
 

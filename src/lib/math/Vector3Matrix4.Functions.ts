@@ -2,9 +2,9 @@ import { Matrix4 } from "./Matrix4";
 import { Vector3 } from "./Vector3";
 
 export function transformPoint3(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
-  const x = v.x,
-    y = v.y,
-    z = v.z;
+  const { x } = v;
+  const { y } = v;
+  const { z } = v;
   const e = m.elements;
 
   const w = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]);
@@ -17,9 +17,9 @@ export function transformPoint3(v: Vector3, m: Matrix4, result = new Vector3()):
 }
 
 export function transformNormal3(v: Vector3, m: Matrix4, result = new Vector3()): Vector3 {
-  const x = v.x,
-    y = v.y,
-    z = v.z;
+  const { x } = v;
+  const { y } = v;
+  const { z } = v;
   const e = m.elements;
 
   result.x = e[0] * x + e[4] * y + e[8] * z;

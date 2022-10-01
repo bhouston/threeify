@@ -69,16 +69,16 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
 
 export function computeVertexNormals(geometry: Geometry): void {
   const indicesAttribute = geometry.indices;
-  const attributes = geometry.attributes;
+  const { attributes } = geometry;
 
-  const positionAttribute = attributes["position"];
+  const positionAttribute = attributes.position;
   if (positionAttribute === undefined) {
     throw new Error("missing position attribute");
   }
-  let normalAttribute = attributes["normal"];
+  let normalAttribute = attributes.normal;
   if (normalAttribute === undefined) {
     normalAttribute = makeFloat32Attribute(new Float32Array(positionAttribute.count * 3), 3);
-    geometry.attributes["normal"] = normalAttribute;
+    geometry.attributes.normal = normalAttribute;
   }
 
   // reset existing normals to zero
@@ -143,7 +143,7 @@ export function computeVertexNormals(geometry: Geometry): void {
 }
 
 export function transformGeometry(geometry: Geometry, m: Matrix4): void {
-  const positionAttribute = geometry.attributes["position"];
+  const positionAttribute = geometry.attributes.position;
   if (positionAttribute === undefined) {
     throw new Error("missing position attribute");
   }
@@ -156,7 +156,7 @@ export function transformGeometry(geometry: Geometry, m: Matrix4): void {
     positions.set(i, v);
   }
 
-  const normalAttribute = geometry.attributes["normal"];
+  const normalAttribute = geometry.attributes.normal;
   if (normalAttribute !== undefined) {
     const normals = makeVector3View(normalAttribute);
     for (let i = 0; i < normals.count; i++) {

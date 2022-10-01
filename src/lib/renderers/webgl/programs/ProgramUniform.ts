@@ -43,7 +43,7 @@ export class ProgramUniform {
   constructor(public program: Program, public index: number) {
     this.context = program.context;
 
-    const gl = program.context.gl;
+    const { gl } = program.context;
 
     // look up uniform locations
     {
@@ -73,7 +73,7 @@ export class ProgramUniform {
   }
 
   set(value: UniformValue): ProgramUniform {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     switch (this.uniformType) {
       // case UniformType.Bool:
       // case UniformType.BoolVec2:

@@ -109,6 +109,7 @@ export class RenderingContext {
       this.#program = program;
     }
   }
+
   get program(): Program | undefined {
     return this.#program;
   }
@@ -123,6 +124,7 @@ export class RenderingContext {
       this.#framebuffer = framebuffer;
     }
   }
+
   get framebuffer(): VirtualFramebuffer {
     return this.#framebuffer;
   }
@@ -131,6 +133,7 @@ export class RenderingContext {
   get scissor(): Box2 {
     return this.#scissor.clone();
   }
+
   set scissor(s: Box2) {
     if (!this.#scissor.equals(s)) {
       this.gl.scissor(s.x, s.y, s.width, s.height);
@@ -142,6 +145,7 @@ export class RenderingContext {
   get viewport(): Box2 {
     return this.#viewport.clone();
   }
+
   set viewport(v: Box2) {
     if (!this.#viewport.equals(v)) {
       this.gl.viewport(v.x, v.y, v.width, v.height);
@@ -152,6 +156,7 @@ export class RenderingContext {
   get blendState(): BlendState {
     return this.#blendState.clone();
   }
+
   set blendState(bs: BlendState) {
     if (!this.#blendState.equals(bs)) {
       this.gl.enable(GL.BLEND);
@@ -161,7 +166,7 @@ export class RenderingContext {
         `Blend ${BlendEquation[bs.equation]} srcRGB ${BlendFunc[bs.sourceRGBFactor]} destRGB ${
           BlendFunc[bs.destRGBFactor]
         } srcA ${BlendFunc[bs.sourceAlphaFactor]} destA ${BlendFunc[bs.destAlphaFactor]}`,
-      );*/
+      ); */
       this.#blendState.copy(bs);
     }
   }
@@ -169,6 +174,7 @@ export class RenderingContext {
   get depthTestState(): DepthTestState {
     return this.#depthTestState.clone();
   }
+
   set depthTestState(dts: DepthTestState) {
     if (!this.#depthTestState.equals(dts)) {
       if (dts.enabled) {
@@ -184,6 +190,7 @@ export class RenderingContext {
   get clearState(): ClearState {
     return this.#clearState.clone();
   }
+
   set clearState(cs: ClearState) {
     if (!this.#clearState.equals(cs)) {
       this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
@@ -196,6 +203,7 @@ export class RenderingContext {
   get maskState(): MaskState {
     return this.#maskState.clone();
   }
+
   set maskState(ms: MaskState) {
     if (!this.#maskState.equals(ms)) {
       this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
@@ -208,6 +216,7 @@ export class RenderingContext {
   get cullingState(): CullingState {
     return this.#cullingState.clone();
   }
+
   set cullingState(cs: CullingState) {
     if (!this.#cullingState.equals(cs)) {
       if (cs.enabled) {

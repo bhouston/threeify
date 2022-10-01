@@ -12,20 +12,18 @@ export function makeVector3FromDelta(a: Vector3, b: Vector3, result = new Vector
   return result.copy(a).sub(b);
 }
 
-export function makeVector3FromSpherical( s: Spherical ): Vector3 {
-
-  return makeVector3FromSphericalCoords( s.radius, s.phi, s.theta );
-
+export function makeVector3FromSpherical(s: Spherical): Vector3 {
+  return makeVector3FromSphericalCoords(s.radius, s.phi, s.theta);
 }
 
-export function makeVector3FromSphericalCoords( radius: number, phi: number, theta: number ): Vector3 {
+export function makeVector3FromSphericalCoords(radius: number, phi: number, theta: number): Vector3 {
+  const sinPhiRadius = Math.sin(phi) * radius;
 
-  const sinPhiRadius = Math.sin( phi ) * radius;
-
-  return new Vector3( sinPhiRadius * Math.sin( theta ),
-    Math.cos( phi ) * radius,
-    sinPhiRadius * Math.cos( theta ) );
-
+  return new Vector3(
+    sinPhiRadius * Math.sin(theta),
+    Math.cos(phi) * radius,
+    sinPhiRadius * Math.cos(theta),
+  );
 }
 
 // static/instance method to calculate barycentric coordinates
@@ -119,21 +117,21 @@ export function makeHexFromColor3(c: Vector3): number {
 }
 
 export function makeHexStringFromColor3(c: Vector3): string {
-  return ("000000" + makeHexFromColor3(c).toString(16)).slice(-6);
+  return (`000000${makeHexFromColor3(c).toString(16)}`).slice(-6);
 }
 
 type HSL = { h: number; s: number; l: number };
 export function makeHSLFromColor3(c: Vector3, target: HSL): HSL {
   // h,s,l ranges are in 0.0 - 1.0
-  const r = c.r,
-    g = c.g,
-    b = c.b;
+  const { r } = c;
+  const { g } = c;
+  const { b } = c;
 
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
 
-  let hue = 0,
-    saturation = 0;
+  let hue = 0;
+  let saturation = 0;
   const lightness = (min + max) / 2.0;
 
   if (min === max) {

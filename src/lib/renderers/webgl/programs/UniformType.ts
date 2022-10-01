@@ -51,10 +51,10 @@ export function numTextureUnits(uniformType: UniformType): number {
       // case UniformType.Sampler2DShadow:
       return 1;
 
-    // case UniformType.Sampler3D:
-    // case UniformType.IntSampler3D:
-    // case UniformType.UnsignedIntSampler3D:
-    //  return 1;
+      // case UniformType.Sampler3D:
+      // case UniformType.IntSampler3D:
+      // case UniformType.UnsignedIntSampler3D:
+      //  return 1;
 
     case UniformType.SamplerCube:
       // case UniformType.IntSamplerCube:
@@ -62,11 +62,11 @@ export function numTextureUnits(uniformType: UniformType): number {
       // case UniformType.SamplerCubeShadow:
       return 1; // cube textures only take one slot
 
-    // case UniformType.Sampler2DArray:
-    // case UniformType.IntSampler2DArray:
-    // case UniformType.UnsignedIntSampler2DArray:
-    // case UniformType.Sampler2DArrayShadow:
-    //  return 1;
+      // case UniformType.Sampler2DArray:
+      // case UniformType.IntSampler2DArray:
+      // case UniformType.UnsignedIntSampler2DArray:
+      // case UniformType.Sampler2DArrayShadow:
+      //  return 1;
 
     default:
       return 0;

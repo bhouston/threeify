@@ -33,7 +33,7 @@ async function init(): Promise<null> {
   cubeTexture.generateMipmaps = false;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);

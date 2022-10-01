@@ -340,9 +340,9 @@ export function polyhedronGeometry(vertices: number[], indices: number[], radius
   // build non-indexed geometry
 
   const geometry = new Geometry();
-  geometry.attributes["position"] = makeFloat32Attribute(vertexBuffer, 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(vertexBuffer.slice(), 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvBuffer, 2);
+  geometry.attributes.position = makeFloat32Attribute(vertexBuffer, 3);
+  geometry.attributes.normal = makeFloat32Attribute(vertexBuffer.slice(), 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvBuffer, 2);
 
   computeVertexNormals(geometry);
 
@@ -369,7 +369,7 @@ export function polyhedronGeometry(vertices: number[], indices: number[], radius
   }
 
   function subdivideFace(a: Vector3, b: Vector3, c: Vector3, detail: number): void {
-    const cols = Math.pow(2, detail);
+    const cols = 2 ** detail;
 
     // we use this multidimensional array as a data structure for creating the subdivision
 

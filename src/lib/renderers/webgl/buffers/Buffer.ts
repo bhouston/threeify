@@ -16,7 +16,7 @@ export class Buffer implements IDisposable {
     public target: BufferTarget = BufferTarget.Array,
     public usage: BufferUsage = BufferUsage.StaticDraw,
   ) {
-    const gl = context.gl;
+    const { gl } = context;
     // Create a buffer and put three 2d clip space points in it
     {
       const glBuffer = gl.createBuffer();
@@ -46,7 +46,7 @@ export class Buffer implements IDisposable {
     this.target = target;
     this.usage = usage;
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
     gl.bindBuffer(this.target, this.glBuffer);

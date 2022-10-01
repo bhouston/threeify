@@ -41,15 +41,13 @@ export abstract class VirtualFramebuffer implements IDisposable {
     attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
     clearState: ClearState | undefined = undefined,
   ): void {
-    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
-    const gl = this.context.gl;
+    const { gl } = this.context;
     gl.clear(attachmentBits);
   }
 
   render(node: Node, camera: Camera, clear = false): void {
-    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     if (clear) {
       this.clear();
@@ -79,7 +77,7 @@ export function renderBufferGeometry(
   maskState: MaskState | undefined = undefined,
   cullingState: CullingState | undefined = undefined,
 ): void {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
   context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
@@ -92,7 +90,7 @@ export function renderBufferGeometry(
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
   // draw
-  const gl = context.gl;
+  const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
     gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
   } else {
@@ -110,7 +108,7 @@ export function renderVertexArrayObject(
   maskState: MaskState | undefined = undefined,
   cullingState: CullingState | undefined = undefined,
 ): void {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
   context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
@@ -122,7 +120,7 @@ export function renderVertexArrayObject(
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
   // draw
-  const gl = context.gl;
+  const { gl } = context;
   gl.drawArrays(vao.primitive, vao.offset, vao.count);
 }
 
@@ -135,7 +133,7 @@ export function renderPass(
   maskState: MaskState | undefined = undefined,
   cullingState: CullingState | undefined = undefined,
 ): void {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
   context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;

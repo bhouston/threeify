@@ -60,9 +60,9 @@ export function diskGeometry(radius = 0.5, segments = 8, thetaStart = 0, thetaLe
 
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute(indices);
-  geometry.attributes["position"] = makeFloat32Attribute(vertices, 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
+  geometry.attributes.position = makeFloat32Attribute(vertices, 3);
+  geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
 
   return geometry;
 }

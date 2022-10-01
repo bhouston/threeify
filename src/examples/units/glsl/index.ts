@@ -24,7 +24,7 @@ async function init(): Promise<null> {
   const geometry = passGeometry();
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const unitUniforms = {};
@@ -48,7 +48,7 @@ async function init(): Promise<null> {
     const passIds = [];
     const failureIds = [];
     const duplicateIds = [];
-    let compileError = undefined;
+    let compileError;
 
     try {
       const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
@@ -76,8 +76,8 @@ async function init(): Promise<null> {
       }
     } catch (e) {
       totalFailures++;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      compileError = e.message !== undefined ? e.message : "unknown";
+      const err = e as Error;
+      compileError = err.message !== undefined ? err.message : "unknown";
     }
 
     totalPasses += passIds.length;

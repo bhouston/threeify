@@ -9,7 +9,7 @@ export class Renderbuffer implements IDisposable {
   #clearState: ClearState = new ClearState();
 
   constructor(public context: RenderingContext) {
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     {
       const glRenderbuffer = gl.createRenderbuffer();
@@ -25,7 +25,7 @@ export class Renderbuffer implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
-      const gl = this.context.gl;
+      const { gl } = this.context;
       gl.deleteRenderbuffer(this.glRenderbuffer);
       this.context.disposeResource(this);
       this.disposed = true;

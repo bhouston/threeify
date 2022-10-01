@@ -27,7 +27,7 @@ async function init(): Promise<null> {
   const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const map = makeTexImage2DFromTexture(context, texture);
@@ -60,7 +60,7 @@ async function init(): Promise<null> {
     /* uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
       uniforms.localToWorld,
-    );*/
+    ); */
     uniforms.spotLightInnerCos = Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0023));
     uniforms.spotLightOuterCos = uniforms.spotLightInnerCos * Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0017));
     uniforms.spotLightViewPosition = new Vector3(Math.cos(now * 0.001) * 0.5, Math.cos(now * 0.00087) * 0.5, 1.5);

@@ -4,7 +4,7 @@ import { Geometry } from "../Geometry";
 export async function fetchOBJ(url: string): Promise<Geometry[]> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("response error: " + response.status + ":" + response.statusText);
+    throw new Error(`response error: ${response.status}:${response.statusText}`);
   }
   return parseOBJ(await response.text());
 }
@@ -40,9 +40,9 @@ export function parseOBJ(text: string): Geometry[] {
     }
     const geometry = new Geometry();
     geometry.indices = makeUint32Attribute(indices);
-    geometry.attributes["position"] = makeFloat32Attribute(positions, 3);
-    geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
-    geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
+    geometry.attributes.position = makeFloat32Attribute(positions, 3);
+    geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+    geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
 
     indices = [];
     positions = [];
@@ -59,7 +59,7 @@ export function parseOBJ(text: string): Geometry[] {
     workingUvs = [];
   }
 
-  text.split("\n").forEach(function parseLine(line: string) {
+  text.split("\n").forEach((line: string) => {
     const vMatch = line.match(vRegexp);
     if (vMatch !== null) {
       workingPositions.push(parseFloat(vMatch[1]), parseFloat(vMatch[2]), parseFloat(vMatch[3]));
@@ -126,7 +126,7 @@ export function parseOBJ(text: string): Geometry[] {
       // not supported
     } else if (useMapRegexp.test(line)) {
       // not supported
-    }*/
+    } */
   });
 
   commitObject();

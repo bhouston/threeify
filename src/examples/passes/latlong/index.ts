@@ -1,17 +1,15 @@
 import {
-  Orbit,
   DepthTestFunc,
   DepthTestState,
-  Euler,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4Inverse,
   makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
   makeMatrix4RotationFromQuaternion,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Matrix4,
+  Orbit,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -23,7 +21,6 @@ import {
 } from "../../../lib/index";
 import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
-
 
 async function init(): Promise<null> {
   const geometry = passGeometry();
@@ -37,24 +34,23 @@ async function init(): Promise<null> {
   const textures: Texture[] = [];
   const texImage2Ds: TexImage2D[] = [];
   for (let i = 0; i < 5; i++) {
-    images.push( fetchImage(`/assets/textures/cube/kitchen/kitchenb_${i+1}.jpg`).then( (image)=> {
-         const texture = new Texture( image );
-         texture.wrapS = TextureWrap.ClampToEdge;
-         texture.wrapT = TextureWrap.ClampToEdge;
-         texture.minFilter = TextureFilter.Linear;
-        textures[i] = texture;
+    images.push(fetchImage(`/assets/textures/cube/kitchen/kitchenb_${i + 1}.jpg`).then((image) => {
+      const texture = new Texture(image);
+      texture.wrapS = TextureWrap.ClampToEdge;
+      texture.wrapT = TextureWrap.ClampToEdge;
+      texture.minFilter = TextureFilter.Linear;
+      textures[i] = texture;
 
-        texImage2Ds[i] = makeTexImage2DFromTexture(context, texture);
-      }) );
+      texImage2Ds[i] = makeTexImage2DFromTexture(context, texture);
+    }));
   }
 
-  await Promise.all( images );
+  await Promise.all(images);
 
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
-  const orbit = new Orbit( context.canvas );
-
+  const orbit = new Orbit(context.canvas);
 
   const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
   const passUniforms = {
@@ -69,9 +65,9 @@ async function init(): Promise<null> {
 
     const now = Date.now();
 
-    passUniforms.viewToWorld = makeMatrix4Inverse( makeMatrix4RotationFromQuaternion( orbit.orientation ) );
-    passUniforms.screenToView = makeMatrix4Inverse(makeMatrix4PerspectiveFov((15 * ( 1 - orbit.zoom ) ) + 15, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio));
-    passUniforms.equirectangularMap = texImage2Ds[ imageIndex ];
+    passUniforms.viewToWorld = makeMatrix4Inverse(makeMatrix4RotationFromQuaternion(orbit.orientation));
+    passUniforms.screenToView = makeMatrix4Inverse(makeMatrix4PerspectiveFov((15 * (1 - orbit.zoom)) + 15, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio));
+    passUniforms.equirectangularMap = texImage2Ds[imageIndex];
 
     renderBufferGeometry(canvasFramebuffer, passProgram, passUniforms, bufferGeometry, depthTestState);
 
@@ -80,9 +76,9 @@ async function init(): Promise<null> {
 
   animate();
 
-  window.addEventListener("keydown", function (event) {
+  window.addEventListener("keydown", (event) => {
     if (event.key !== undefined) {
-      imageIndex = ( event.key.charCodeAt(0) - '0'.charCodeAt(0) ) % images.length;
+      imageIndex = (event.key.charCodeAt(0) - "0".charCodeAt(0)) % images.length;
       // Handle the event with KeyboardEvent.key and set handled true.
     }
   }, true);
@@ -92,12 +88,12 @@ async function init(): Promise<null> {
 
 init();
 
-window.addEventListener("keydown", function (event) {
+window.addEventListener("keydown", (event) => {
   if (event.defaultPrevented) {
     return; // Should do nothing if the default action has been cancelled
   }
 
-  var handled = false;
+  const handled = false;
   if (event.key !== undefined) {
     // Handle the event with KeyboardEvent.key and set handled true.
   } else if (event.keyCode !== undefined) {

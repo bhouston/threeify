@@ -1,19 +1,19 @@
-// eslint-disable-next-line no-undef
 module.exports = {
-  parser: "@typescript-eslint/parser",
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+    jest: true,
+  },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: "./tsconfig.json",
-    ecmaVersion: 2020,
-    sourceType: "module",
+    project: './tsconfig.json',
+    ecmaVersion: 'latest',
+    sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
     },
-  },
-  plugins: ["@typescript-eslint", "cflint", "import"],
-  settings: {
-    "import/resolver": {
-      typescript: {},
-    },
+    sourceType: 'module',
   },
   extends: [
     "eslint:recommended",
@@ -21,14 +21,16 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended",
   ],
-  ignorePatterns: ["*.md", "*.js"],
+  plugins: [
+    '@typescript-eslint',
+    'unused-imports',
+    'simple-import-sort',
+  ],
+  ignorePatterns: ['dist/*', '*.glsl', 'package.json', "*.json", "*.md", "*.js", '*.old'],
   rules: {
     "@typescript-eslint/ban-types": 1,
-    "@typescript-eslint/explicit-function-return-type": 2,
-    "@typescript-eslint/member-ordering": 2,
+    "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/naming-convention": [
       2,
       {
@@ -59,11 +61,13 @@ module.exports = {
         format: ["PascalCase"],
       },
     ],
-    "@typescript-eslint/no-unnecessary-condition": 1,
+    "@typescript-eslint/no-unnecessary-condition": 0,
     "@typescript-eslint/no-unsafe-call": 2,
     "@typescript-eslint/no-unsafe-member-access": 1,
     "@typescript-eslint/no-unsafe-return": 2,
-    "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/no-unused-vars": 0,
+    "@typescript-eslint/no-unused-expressions": 0,
+    "@typescript-eslint/no-unused-conditions": 0,
     "@typescript-eslint/prefer-nullish-coalescing": 2,
     "@typescript-eslint/strict-boolean-expressions": [
       2,
@@ -74,7 +78,7 @@ module.exports = {
     curly: [2, "all"],
     eqeqeq: "error",
     "import/newline-after-import": ["error", { count: 1 }],
-    "max-len": [2, 120],
+    "max-len": [2, 200],
     "no-alert": 2,
     "no-invalid-this": 1,
     "no-var": 2,
@@ -90,5 +94,12 @@ module.exports = {
       },
     ],
     "spaced-comment": 2,
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
   },
 };

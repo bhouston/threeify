@@ -8,6 +8,7 @@ export class Triangle implements ICloneable<Triangle>, IEquatable<Triangle>, IHa
   getHashCode(): number {
     return hashFloat3(this.a.getHashCode(), this.b.getHashCode(), this.c.getHashCode());
   }
+
   set(a: Vector3, b: Vector3, c: Vector3): this {
     this.a.copy(a);
     this.b.copy(b);

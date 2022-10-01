@@ -113,24 +113,22 @@ export function makeBox3FromSphereBounds(s: Sphere, result = new Box3()): Box3 {
 }
 
 export function box3ContainsPoint(box: Box3, point: Vector3): boolean {
-  return point.x < box.min.x ||
-    point.x > box.max.x ||
-    point.y < box.min.y ||
-    point.y > box.max.y ||
-    point.z < box.min.z ||
-    point.z > box.max.z
-    ? false
-    : true;
+  return !(point.x < box.min.x
+    || point.x > box.max.x
+    || point.y < box.min.y
+    || point.y > box.max.y
+    || point.z < box.min.z
+    || point.z > box.max.z);
 }
 
 export function box3ContainsBox(box: Box3, queryBox: Box3): boolean {
   return (
-    box.min.x <= queryBox.min.x &&
-    queryBox.max.x <= box.max.x &&
-    box.min.y <= queryBox.min.y &&
-    queryBox.max.y <= box.max.y &&
-    box.min.z <= queryBox.min.z &&
-    queryBox.max.z <= box.max.z
+    box.min.x <= queryBox.min.x
+    && queryBox.max.x <= box.max.x
+    && box.min.y <= queryBox.min.y
+    && queryBox.max.y <= box.max.y
+    && box.min.z <= queryBox.min.z
+    && queryBox.max.z <= box.max.z
   );
 }
 

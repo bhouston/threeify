@@ -33,7 +33,7 @@ async function init(): Promise<null> {
   const anisotropicFlow2Texture = new Texture(await fetchImage("/assets/textures/anisotropic/radialLarge.jpg"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const anisotropicFlow1Map = makeTexImage2DFromTexture(context, anisotropicFlow1Texture);

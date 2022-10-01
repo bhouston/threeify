@@ -4,10 +4,10 @@ import { Quaternion } from "./Quaternion";
 import { Vector3 } from "./Vector3";
 
 export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Quaternion {
-  const x = e.x,
-    y = e.y,
-    z = e.z,
-    order = e.order;
+  const { x } = e;
+  const { y } = e;
+  const { z } = e;
+  const { order } = e;
 
   // eslint-disable-next-line max-len
   // http://www.mathworks.com/matlabcentral/fileexchange/20696-function-to-convert-between-dcm-euler-angles-quaternions-and-euler-vectors/content/SpinCalc.m
@@ -81,17 +81,17 @@ export function makeQuaternionFromRotationMatrix4(m: Matrix4, result = new Quate
 
   // TODO, allocate x, y, z, w and only set q.* at the end.
 
-  const te = m.elements,
-    m11 = te[0],
-    m12 = te[4],
-    m13 = te[8],
-    m21 = te[1],
-    m22 = te[5],
-    m23 = te[9],
-    m31 = te[2],
-    m32 = te[6],
-    m33 = te[10],
-    trace = m11 + m22 + m33;
+  const te = m.elements;
+  const m11 = te[0];
+  const m12 = te[4];
+  const m13 = te[8];
+  const m21 = te[1];
+  const m22 = te[5];
+  const m23 = te[9];
+  const m31 = te[2];
+  const m32 = te[6];
+  const m33 = te[10];
+  const trace = m11 + m22 + m33;
 
   if (trace > 0) {
     const s = 0.5 / Math.sqrt(trace + 1.0);
@@ -119,8 +119,8 @@ export function makeQuaternionFromAxisAngle(axis: Vector3, angle: number, result
 
   // assumes axis is normalized
 
-  const halfAngle = angle / 2,
-    s = Math.sin(halfAngle);
+  const halfAngle = angle / 2;
+  const s = Math.sin(halfAngle);
 
   return result.set(axis.x * s, axis.y * s, axis.z * s, Math.cos(halfAngle));
 }

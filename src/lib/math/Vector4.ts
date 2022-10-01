@@ -14,6 +14,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get r(): number {
     return this.x;
   }
+
   set r(r: number) {
     this.x = r;
   }
@@ -21,6 +22,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get g(): number {
     return this.y;
   }
+
   set g(g: number) {
     this.y = g;
   }
@@ -28,6 +30,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get b(): number {
     return this.z;
   }
+
   set b(b: number) {
     this.z = b;
   }
@@ -35,6 +38,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get a(): number {
     return this.w;
   }
+
   set a(a: number) {
     this.w = a;
   }
@@ -104,15 +108,14 @@ export class Vector4 implements IPrimitive<Vector4> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } else if (index === 1) {
+    } if (index === 1) {
       return this.y;
-    } else if (index === 2) {
+    } if (index === 2) {
       return this.z;
-    } else if (index === 3) {
+    } if (index === 3) {
       return this.w;
-    } else {
-      throw new Error(`index of our range: ${index}`);
     }
+    throw new Error(`index of our range: ${index}`);
   }
 
   setComponent(index: number, value: number): this {

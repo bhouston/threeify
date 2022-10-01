@@ -23,7 +23,7 @@ export class Framebuffer extends VirtualFramebuffer {
   constructor(context: RenderingContext) {
     super(context);
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     {
       const glFramebuffer = gl.createFramebuffer();
@@ -38,7 +38,7 @@ export class Framebuffer extends VirtualFramebuffer {
   }
 
   attach(attachmentPoint: Attachment, texImage2D: TexImage2D, target = texImage2D.target, level = 0): void {
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
     gl.framebufferTexture2D(GL.FRAMEBUFFER, attachmentPoint, target, texImage2D.glTexture, level);
@@ -57,7 +57,7 @@ export class Framebuffer extends VirtualFramebuffer {
 
   dispose(): void {
     if (!this.disposed) {
-      const gl = this.context.gl;
+      const { gl } = this.context;
       gl.deleteFramebuffer(this.glFramebuffer);
       this.context.disposeResource(this);
       this.disposed = true;

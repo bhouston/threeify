@@ -16,9 +16,7 @@ export class ProgramAttribute {
   glLocation: number; // attributes are indexed
 
   constructor(public program: Program, public index: number) {
-    this.name = name;
-
-    const gl = program.context.gl;
+    const { gl } = program.context;
 
     // look up uniform locations
     {
@@ -41,7 +39,7 @@ export class ProgramAttribute {
   }
 
   setBuffer(bufferAccessor: BufferAccessor): this {
-    const gl = this.program.context.gl;
+    const { gl } = this.program.context;
     gl.enableVertexAttribArray(this.glLocation);
     // Bind the position buffer.
     gl.bindBuffer(GL.ARRAY_BUFFER, bufferAccessor.buffer.glBuffer);

@@ -31,7 +31,7 @@ export class DeviceOrientation implements IDisposable {
       this.screenOrientation = -degToRad(window.orientation as number);
     };
 
-    if (
+    /* if (
       // iOS 13+
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       window.DeviceOrientationEvent !== undefined &&
@@ -48,10 +48,10 @@ export class DeviceOrientation implements IDisposable {
         .catch(() => {
           throw new Error("DeviceOrientation API not available.");
         });
-    } else {
-      window.addEventListener("orientationchange", onOrientationChange, false);
-      window.addEventListener("deviceorientation", onDeviceOrientation, false);
-    }
+    } else { */
+    window.addEventListener("orientationchange", onOrientationChange, false);
+    window.addEventListener("deviceorientation", onDeviceOrientation, false);
+    // }
 
     this.onDispose = (): void => {
       window.removeEventListener("orientationchange", onOrientationChange, false);

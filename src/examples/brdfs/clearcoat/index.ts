@@ -31,7 +31,7 @@ async function init(): Promise<null> {
   const scratchesTexture = new Texture(await fetchImage("/assets/textures/golfball/scratches.png"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const albedoMap = makeTexImage2DFromTexture(context, texture);
@@ -49,7 +49,7 @@ async function init(): Promise<null> {
     pointLightRange: 6.0,
 
     // materials
-    albedoMap: albedoMap,
+    albedoMap,
 
     clearCoatBumpModulator: 1.0,
     clearCoatBumpMap: bumpMap,

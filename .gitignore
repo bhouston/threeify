@@ -36,3 +36,6 @@ src/examples/layering/basic/index.ts
 src/examples/materials/blending/index.ts
 src/lib/engines/layerCompositor/fragment.glsl
 src/lib/engines/layerCompositor/LayerCompositor.ts
+
+.DS_Store
+src/examples/passes/latlong/workspace.code-workspace

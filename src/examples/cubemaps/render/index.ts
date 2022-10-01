@@ -31,7 +31,7 @@ import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.
-  const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
+  // const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const geometry = icosahedronGeometry(0.75, 4);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
@@ -41,7 +41,7 @@ async function init(): Promise<null> {
   cubeTexture.generateMipmaps = false;
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const patternGeometry = passGeometry();
@@ -60,7 +60,7 @@ async function init(): Promise<null> {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
     viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
-    cubeMap: cubeMap,
+    cubeMap,
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);

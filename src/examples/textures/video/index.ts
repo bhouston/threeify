@@ -24,7 +24,7 @@ import vertexSource from "./vertex.glsl";
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1.0, 0.5);
-  const uvs = geometry.attributes["uv"];
+  const uvs = geometry.attributes.uv;
   if (uvs !== undefined) {
     const uvView = new Vector2View(uvs.attributeData.arrayBuffer);
     const uv = new Vector2();
@@ -38,7 +38,7 @@ async function init(): Promise<null> {
   const clickToPlayTexture = new Texture(await fetchImage("/assets/textures/videos/ClickToPlay.png"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
@@ -57,13 +57,13 @@ async function init(): Promise<null> {
   source.src = "/assets/textures/videos/sintel.mp4";
   video.appendChild(source);
 
-  let videoTexture: Texture | undefined = undefined;
-  let videoMap: TexImage2D | undefined = undefined;
+  let videoTexture: Texture | undefined;
+  let videoMap: TexImage2D | undefined;
 
   const body = document.getElementsByTagName("body")[0];
   body.addEventListener(
     "click",
-    async function (): Promise<void> {
+    async (): Promise<void> => {
       if (videoTexture === undefined) {
         await video.play();
         video.currentTime = 3; // jump ahead to content

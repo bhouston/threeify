@@ -14,7 +14,6 @@ import {
   makeMatrix4Translation,
 } from "../../math/Matrix4.Functions";
 import { Vector2 } from "../../math/Vector2";
-import { makeVector2FillHeight } from "../../math/Vector2.Functions";
 import { Vector3 } from "../../math/Vector3";
 import { isFirefox, isiOS, isMacOS } from "../../platform/Detection";
 import { blendModeToBlendState } from "../../renderers/webgl/BlendState";
@@ -138,16 +137,18 @@ export class LayerCompositor {
   }
 
   snapshot(mimeFormat = "image/jpeg", quality = 1.0): string {
-    const canvas = this.context.canvasFramebuffer.canvas;
+    const { canvas } = this.context.canvasFramebuffer;
     if (canvas instanceof HTMLCanvasElement) {
       return canvas.toDataURL(mimeFormat, quality);
     }
     throw new Error("snapshot not supported");
   }
+
   set layers(layers: Layer[]) {
     this.#layers = layers;
     this.#layerVersion++;
   }
+
   updateOffscreen(): void {
     // but to enable mipmaps (for filtering) we need it to be up-rounded to a power of 2 in width/height.
     const offscreenSize = new Vector2(ceilPow2(this.imageSize.x), ceilPow2(this.imageSize.y));
@@ -203,9 +204,7 @@ export class LayerCompositor {
       }
 
       if (image === undefined) {
-        fetchImage(url).then((image: HTMLImageElement | ImageBitmap) => {
-          return resolve(createTexture(this, image));
-        });
+        fetchImage(url).then((image: HTMLImageElement | ImageBitmap) => resolve(createTexture(this, image)));
       } else if (image instanceof HTMLImageElement || image instanceof ImageBitmap) {
         return resolve(createTexture(this, image));
       }
@@ -234,14 +233,13 @@ export class LayerCompositor {
     this.renderId++;
     // console.log(`render id: ${this.renderId}`);
 
-    const canvasFramebuffer = this.context.canvasFramebuffer;
+    const { canvasFramebuffer } = this.context;
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.width / canvasSize.height;
 
-    const imageToCanvasScale =
-      this.imageFitMode === ImageFitMode.FitWidth
-        ? canvasSize.width / this.imageSize.width
-        : canvasSize.height / this.imageSize.height;
+    const imageToCanvasScale = this.imageFitMode === ImageFitMode.FitWidth
+      ? canvasSize.width / this.imageSize.width
+      : canvasSize.height / this.imageSize.height;
 
     const canvasImageSize = this.imageSize.clone().multiplyByScalar(imageToCanvasScale);
     const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
@@ -279,7 +277,7 @@ export class LayerCompositor {
     );
     /* console.log(
       `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
-    );*/
+    ); */
 
     const canvasToImage = makeMatrix4Inverse(imageToCanvas);
 
@@ -301,7 +299,7 @@ export class LayerCompositor {
     canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
     canvasFramebuffer.clear();
 
-    const offscreenColorAttachment = this.offscreenColorAttachment;
+    const { offscreenColorAttachment } = this;
     if (offscreenColorAttachment === undefined) {
       return;
     }
@@ -311,7 +309,7 @@ export class LayerCompositor {
       worldToView: new Matrix4(),
       localToWorld: planeToImage,
       layerMap: offscreenColorAttachment,
-      uvToTexture: uvToTexture,
+      uvToTexture,
       mipmapBias: 0.0,
       convertToPremultipliedAlpha: 0,
     };
@@ -339,7 +337,7 @@ export class LayerCompositor {
     }
     this.#offlineLayerVersion = this.#layerVersion;
 
-    const offscreenFramebuffer = this.offscreenFramebuffer;
+    const { offscreenFramebuffer } = this;
     if (offscreenFramebuffer === undefined) {
       return;
     }
@@ -351,7 +349,7 @@ export class LayerCompositor {
     const imageToOffscreen = makeMatrix4Orthographic(0, this.offscreenSize.width, 0, this.offscreenSize.height, -1, 1);
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
-    );*/
+    ); */
     const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
 
     // Ben on 2020-10-31

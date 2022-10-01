@@ -33,12 +33,12 @@ export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
 
   equals(ms: MaskState): boolean {
     return (
-      this.red === ms.red &&
-      this.green === ms.green &&
-      this.blue === ms.blue &&
-      this.alpha === ms.alpha &&
-      this.depth === ms.depth &&
-      this.stencil === ms.stencil
+      this.red === ms.red
+      && this.green === ms.green
+      && this.blue === ms.blue
+      && this.alpha === ms.alpha
+      && this.depth === ms.depth
+      && this.stencil === ms.stencil
     );
   }
 }

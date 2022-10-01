@@ -42,7 +42,7 @@ async function init(): Promise<null> {
   const normalTexture = new Texture(await fetchImage("/assets/models/ninjaHead/normal.png"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const displacementMap = makeTexImage2DFromTexture(context, displacementTexture);
@@ -60,9 +60,9 @@ async function init(): Promise<null> {
     pointLightRange: 12.0,
 
     // materials
-    normalMap: normalMap,
+    normalMap,
     normalScale: new Vector2(-1, 1),
-    displacementMap: displacementMap,
+    displacementMap,
     displacementScale: 1.0,
   };
 

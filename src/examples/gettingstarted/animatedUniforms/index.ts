@@ -14,13 +14,13 @@ import fragmentSource from "./fragment.glsl";
 import vertexSource from "./vertex.glsl";
 
 const geometry = new Geometry();
-geometry.attributes["position"] = makeFloat32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
+geometry.attributes.position = makeFloat32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
 geometry.indices = makeUint32Attribute([0, 1, 2], 1);
 
 const material = new ShaderMaterial(vertexSource, fragmentSource);
 
 const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-const canvasFramebuffer = context.canvasFramebuffer;
+const { canvasFramebuffer } = context;
 window.addEventListener("resize", () => canvasFramebuffer.resize());
 
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);

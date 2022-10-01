@@ -62,6 +62,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
     }
     return this.#localToParent;
   }
+
   get parentToLocalTransform(): Matrix4 {
     if (this.#localToParentVersion !== this.version) {
       makeMatrix4Inverse(this.localToParentTransform, this.#parentToLocal);

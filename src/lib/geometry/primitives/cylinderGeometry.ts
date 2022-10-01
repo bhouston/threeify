@@ -101,9 +101,9 @@ export function cylinderGeometry(
 
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute(indicesTop.concat(indicesBottom).concat(indicesSide));
-  geometry.attributes["position"] = makeFloat32Attribute(verticesTop.concat(verticesBottom).concat(verticesSide), 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normalsTop.concat(normalsBottom).concat(normalsSide), 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvsTop.concat(uvsBottom).concat(uvsSide), 2);
+  geometry.attributes.position = makeFloat32Attribute(verticesTop.concat(verticesBottom).concat(verticesSide), 3);
+  geometry.attributes.normal = makeFloat32Attribute(normalsTop.concat(normalsBottom).concat(normalsSide), 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvsTop.concat(uvsBottom).concat(uvsSide), 2);
 
   return geometry;
 }

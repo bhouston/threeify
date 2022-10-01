@@ -15,6 +15,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get width(): number {
     return this.x;
   }
+
   set width(width: number) {
     this.x = width;
   }
@@ -22,6 +23,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get height(): number {
     return this.y;
   }
+
   set height(height: number) {
     this.y = height;
   }
@@ -29,6 +31,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get depth(): number {
     return this.z;
   }
+
   set depth(depth: number) {
     this.z = depth;
   }
@@ -36,6 +39,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get r(): number {
     return this.x;
   }
+
   set r(r: number) {
     this.x = r;
   }
@@ -43,6 +47,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get g(): number {
     return this.y;
   }
+
   set g(g: number) {
     this.y = g;
   }
@@ -50,6 +55,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get b(): number {
     return this.z;
   }
+
   set b(b: number) {
     this.z = b;
   }
@@ -130,13 +136,12 @@ export class Vector3 implements IPrimitive<Vector3> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } else if (index === 1) {
+    } if (index === 1) {
       return this.y;
-    } else if (index === 2) {
+    } if (index === 2) {
       return this.z;
-    } else {
-      throw new Error(`index of our range: ${index}`);
     }
+    throw new Error(`index of our range: ${index}`);
   }
 
   setComponent(index: number, value: number): this {
@@ -158,12 +163,12 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   cross(v: Vector3): this {
-    const ax = this.x,
-      ay = this.y,
-      az = this.z;
-    const bx = v.x,
-      by = v.y,
-      bz = v.z;
+    const ax = this.x;
+    const ay = this.y;
+    const az = this.z;
+    const bx = v.x;
+    const by = v.y;
+    const bz = v.z;
 
     this.x = ay * bz - az * by;
     this.y = az * bx - ax * bz;

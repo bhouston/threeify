@@ -96,6 +96,7 @@ export class Matrix3 implements IPrimitive<Matrix3> {
 
     return this;
   }
+
   equals(m: Matrix3): boolean {
     for (let i = 0; i < 16; i++) {
       if (m.elements[i] !== this.elements[i]) {

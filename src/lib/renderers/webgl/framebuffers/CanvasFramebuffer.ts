@@ -25,7 +25,7 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
    * taking into account the device pixel ratio.
    */
   resize(): void {
-    const canvas = this.canvas;
+    const { canvas } = this;
     if (canvas instanceof HTMLCanvasElement) {
       const width = Math.floor(canvas.clientWidth * this.devicePixelRatio);
       const height = Math.floor(canvas.clientHeight * this.devicePixelRatio);

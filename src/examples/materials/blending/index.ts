@@ -34,7 +34,7 @@ async function init(): Promise<null> {
   );
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const fgMap = makeTexImage2DFromTexture(context, fgTexture);

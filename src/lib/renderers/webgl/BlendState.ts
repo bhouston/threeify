@@ -119,11 +119,11 @@ export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState
 
   equals(bs: BlendState): boolean {
     return (
-      this.sourceRGBFactor === bs.sourceRGBFactor &&
-      this.destRGBFactor === bs.destRGBFactor &&
-      this.sourceAlphaFactor === bs.sourceAlphaFactor &&
-      this.destAlphaFactor === bs.destAlphaFactor &&
-      this.equation === bs.equation
+      this.sourceRGBFactor === bs.sourceRGBFactor
+      && this.destRGBFactor === bs.destRGBFactor
+      && this.sourceAlphaFactor === bs.sourceAlphaFactor
+      && this.destAlphaFactor === bs.destAlphaFactor
+      && this.equation === bs.equation
     );
   }
 }

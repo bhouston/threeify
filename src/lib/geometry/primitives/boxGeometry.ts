@@ -122,9 +122,9 @@ export function boxGeometry(
 
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute(indices);
-  geometry.attributes["position"] = makeFloat32Attribute(vertices, 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
+  geometry.attributes.position = makeFloat32Attribute(vertices, 3);
+  geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
 
   return geometry;
 }

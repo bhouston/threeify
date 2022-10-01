@@ -15,24 +15,31 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   get x(): number {
     return this.min.x;
   }
+
   get y(): number {
     return this.min.y;
   }
+
   get left(): number {
     return this.min.x;
   }
+
   get top(): number {
     return this.min.y;
   }
+
   get width(): number {
     return this.max.x - this.min.x;
   }
+
   get height(): number {
     return this.max.y - this.min.y;
   }
+
   get bottom(): number {
     return this.max.y;
   }
+
   get right(): number {
     return this.max.x;
   }

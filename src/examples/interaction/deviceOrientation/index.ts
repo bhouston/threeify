@@ -27,7 +27,7 @@ async function init(): Promise<null> {
   const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
@@ -41,7 +41,7 @@ async function init(): Promise<null> {
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
-  let deviceOrientation: DeviceOrientation | undefined = undefined;
+  let deviceOrientation: DeviceOrientation | undefined;
 
   const body = document.getElementsByTagName("body")[0];
   body.addEventListener(

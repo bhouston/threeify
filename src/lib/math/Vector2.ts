@@ -15,6 +15,7 @@ export class Vector2 implements IPrimitive<Vector2> {
   get width(): number {
     return this.x;
   }
+
   set width(width: number) {
     this.x = width;
   }
@@ -22,6 +23,7 @@ export class Vector2 implements IPrimitive<Vector2> {
   get height(): number {
     return this.y;
   }
+
   set height(height: number) {
     this.y = height;
   }
@@ -88,11 +90,10 @@ export class Vector2 implements IPrimitive<Vector2> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } else if (index === 1) {
+    } if (index === 1) {
       return this.y;
-    } else {
-      throw new Error(`index of our range: ${index}`);
     }
+    throw new Error(`index of our range: ${index}`);
   }
 
   setComponent(index: number, value: number): this {

@@ -6,25 +6,25 @@ export function makeMatrix3Concatenation(a: Matrix3, b: Matrix3, result = new Ma
   const be = b.elements;
   const te = result.elements;
 
-  const a11 = ae[0],
-    a12 = ae[3],
-    a13 = ae[6];
-  const a21 = ae[1],
-    a22 = ae[4],
-    a23 = ae[7];
-  const a31 = ae[2],
-    a32 = ae[5],
-    a33 = ae[8];
+  const a11 = ae[0];
+  const a12 = ae[3];
+  const a13 = ae[6];
+  const a21 = ae[1];
+  const a22 = ae[4];
+  const a23 = ae[7];
+  const a31 = ae[2];
+  const a32 = ae[5];
+  const a33 = ae[8];
 
-  const b11 = be[0],
-    b12 = be[3],
-    b13 = be[6];
-  const b21 = be[1],
-    b22 = be[4],
-    b23 = be[7];
-  const b31 = be[2],
-    b32 = be[5],
-    b33 = be[8];
+  const b11 = be[0];
+  const b12 = be[3];
+  const b13 = be[6];
+  const b21 = be[1];
+  const b22 = be[4];
+  const b23 = be[7];
+  const b31 = be[2];
+  const b32 = be[5];
+  const b33 = be[8];
 
   te[0] = a11 * b11 + a12 * b21 + a13 * b31;
   te[3] = a11 * b12 + a12 * b22 + a13 * b32;
@@ -44,15 +44,15 @@ export function makeMatrix3Concatenation(a: Matrix3, b: Matrix3, result = new Ma
 export function matrix3Determinant(m: Matrix3): number {
   const te = m.elements;
 
-  const a = te[0],
-    b = te[1],
-    c = te[2],
-    d = te[3],
-    e = te[4],
-    f = te[5],
-    g = te[6],
-    h = te[7],
-    i = te[8];
+  const a = te[0];
+  const b = te[1];
+  const c = te[2];
+  const d = te[3];
+  const e = te[4];
+  const f = te[5];
+  const g = te[6];
+  const h = te[7];
+  const i = te[8];
 
   return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
 }
@@ -78,19 +78,19 @@ export function makeMatrix3Transpose(m: Matrix3, result = new Matrix3()): Matrix
 export function makeMatrix3Inverse(m: Matrix3, result = new Matrix3()): Matrix3 {
   const e = m.elements;
 
-  const n11 = e[0],
-    n21 = e[1],
-    n31 = e[2],
-    n12 = e[3],
-    n22 = e[4],
-    n32 = e[5],
-    n13 = e[6],
-    n23 = e[7],
-    n33 = e[8],
-    t11 = n33 * n22 - n32 * n23,
-    t12 = n32 * n13 - n33 * n12,
-    t13 = n23 * n12 - n22 * n13,
-    det = n11 * t11 + n21 * t12 + n31 * t13;
+  const n11 = e[0];
+  const n21 = e[1];
+  const n31 = e[2];
+  const n12 = e[3];
+  const n22 = e[4];
+  const n32 = e[5];
+  const n13 = e[6];
+  const n23 = e[7];
+  const n33 = e[8];
+  const t11 = n33 * n22 - n32 * n23;
+  const t12 = n32 * n13 - n33 * n12;
+  const t13 = n23 * n12 - n22 * n13;
+  const det = n11 * t11 + n21 * t12 + n31 * t13;
 
   if (det === 0) {
     throw new Error("can not invert degenerate matrix");

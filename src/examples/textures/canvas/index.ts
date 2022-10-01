@@ -29,8 +29,8 @@ function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number)
     return;
   }
   const grd = ctx.createLinearGradient(0, 0, 256, frameNumber % 256);
-  grd.addColorStop(0, "#" + makeHexStringFromColor3(makeColor3FromHSL(frameNumber / 256, 0.5, 0.5)));
-  grd.addColorStop(1, "#" + makeHexStringFromColor3(makeColor3FromHSL(frameNumber / 193, 0.5, 0.5)));
+  grd.addColorStop(0, `#${makeHexStringFromColor3(makeColor3FromHSL(frameNumber / 256, 0.5, 0.5))}`);
+  grd.addColorStop(1, `#${makeHexStringFromColor3(makeColor3FromHSL(frameNumber / 193, 0.5, 0.5))}`);
 
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, 256, 256);
@@ -46,7 +46,7 @@ async function init(): Promise<null> {
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);

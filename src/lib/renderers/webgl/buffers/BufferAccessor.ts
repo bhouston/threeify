@@ -28,7 +28,7 @@ export function makeBufferAccessorFromAttribute(
   attribute: Attribute,
   bufferTarget: BufferTarget | undefined = undefined,
 ): BufferAccessor {
-  const attributeData = attribute.attributeData;
+  const { attributeData } = attribute;
 
   const target = bufferTarget !== undefined ? bufferTarget : attributeData.target;
   const buffer = new Buffer(context, attributeData.arrayBuffer, target);

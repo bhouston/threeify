@@ -55,8 +55,8 @@ export class SpotLight extends Light {
    * luminous power, AKA luminious flux (lm)
    */
   set power(value: number) {
-    // devide by solid angles
-    this.intensity / (4 * Math.PI);
+    // divide by solid angles
+    this.intensity = value / (4 * Math.PI);
   }
 
   /**

@@ -27,7 +27,7 @@ async function init(): Promise<null> {
   const cubeTexture = new CubeMapTexture(await fetchCubeHDRs("/assets/textures/cube/pisa/*.hdr"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);

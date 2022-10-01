@@ -14,10 +14,10 @@ export function readPixelsFromFramebuffer(
   framebuffer: Framebuffer,
   pixelBuffer: ArrayBufferView | undefined = undefined,
 ): ArrayBufferView {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
   context.framebuffer = framebuffer;
 
-  const gl = context.gl;
+  const { gl } = context;
 
   const status = gl.checkFramebufferStatus(GL.FRAMEBUFFER);
   if (status !== GL.FRAMEBUFFER_COMPLETE) {
@@ -29,11 +29,10 @@ export function readPixelsFromFramebuffer(
     throw new Error("no attachment on Color0");
   }
 
-  const pixelByteLength =
-    sizeOfDataType(texImage2D.dataType) *
-    numPixelFormatComponents(texImage2D.pixelFormat) *
-    texImage2D.size.width *
-    texImage2D.size.height;
+  const pixelByteLength = sizeOfDataType(texImage2D.dataType)
+    * numPixelFormatComponents(texImage2D.pixelFormat)
+    * texImage2D.size.width
+    * texImage2D.size.height;
   if (pixelBuffer === undefined) {
     pixelBuffer = new Uint8Array(pixelByteLength);
   }

@@ -27,7 +27,7 @@ export async function fetchCubeHDRs(urlPattern: string): Promise<ArrayBufferImag
 export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("response error: " + response.status + ":" + response.statusText);
+    throw new Error(`response error: ${response.status}:${response.statusText}`);
   }
   return parseHDR(await response.arrayBuffer());
 }
@@ -55,20 +55,20 @@ function stringFromCharCodes(unicode: Uint16Array): string {
 function fgets(buffer: Buffer, lineLimit = 0, consume = true): string | undefined {
   lineLimit = lineLimit === 0 ? 1024 : lineLimit;
   const chunkSize = 128;
-  let p = buffer.position,
-    i = -1,
-    len = 0,
-    s = "",
-    chunk = stringFromCharCodes(new Uint16Array(buffer.data.subarray(p, p + chunkSize)));
-  while (0 > (i = chunk.indexOf("\n")) && len < lineLimit && p < buffer.data.byteLength) {
+  let p = buffer.position;
+  let i = -1;
+  let len = 0;
+  let s = "";
+  let chunk = stringFromCharCodes(new Uint16Array(buffer.data.subarray(p, p + chunkSize)));
+  while ((i = chunk.indexOf("\n")) < 0 && len < lineLimit && p < buffer.data.byteLength) {
     s += chunk;
     len += chunk.length;
     p += chunkSize;
     chunk += stringFromCharCodes(new Uint16Array(buffer.data.subarray(p, p + chunkSize)));
   }
 
-  if (-1 < i) {
-    if (false !== consume) {
+  if (i > -1) {
+    if (consume !== false) {
       buffer.position += len + i + 1;
     }
     return s + chunk.slice(0, i);
@@ -95,13 +95,14 @@ function readHeader(buffer: Buffer): Header {
   const RGBE_VALID_FORMAT = 2;
   const RGBE_VALID_DIMENSIONS = 4;
 
-  let line, match;
+  let line; let
+    match;
   // regexes to parse header info fields
   const magicTokenRegex = /^#\?(\S+)$/;
   const gammaRegex = /^\s*GAMMA\s*=\s*(\d+(\.\d+)?)\s*$/;
   const exposureRegex = /^\s*EXPOSURE\s*=\s*(\d+(\.\d+)?)\s*$/;
   const formatRegex = /^\s*FORMAT=(\S+)\s*$/;
-  const dimensionsRegex = /^\s*\-Y\s+(\d+)\s+\+X\s+(\d+)\s*$/;
+  const dimensionsRegex = /^\s*-Y\s+(\d+)\s+\+X\s+(\d+)\s*$/;
   // RGBE format header struct
   const header = new Header();
 
@@ -116,17 +117,14 @@ function readHeader(buffer: Buffer): Header {
 
   header.valid |= RGBE_VALID_PROGRAMTYPE;
   header.programType = match[1];
-  header.string += line + "\n";
+  header.string += `${line}\n`;
 
-  while (true) {
-    line = fgets(buffer);
-    if (undefined === line) {
-      break;
-    }
-    header.string += line + "\n";
+  while ( (line = fgets(buffer) ) !== undefined) {
 
-    if ("#" === line.charAt(0)) {
-      header.comments += line + "\n";
+    header.string += `${line}\n`;
+
+    if (line.charAt(0) === "#") {
+      header.comments += `${line}\n`;
       continue; // comment line
     }
 
@@ -167,12 +165,12 @@ function readHeader(buffer: Buffer): Header {
 function readRLEPixelData(byteArray: Uint8Array, width: number, height: number): Uint8Array {
   if (
     // run length encoding is not allowed so read flat
-    width < 8 ||
-    width > 0x7fff ||
+    width < 8
+    || width > 0x7fff
     // this file is not run length encoded
-    2 !== byteArray[0] ||
-    2 !== byteArray[1] ||
-    (byteArray[2] & 0x80) !== 0
+    || byteArray[0] !== 2
+    || byteArray[1] !== 2
+    || (byteArray[2] & 0x80) !== 0
   ) {
     // return the flat buffer
     return byteArray;
@@ -201,7 +199,7 @@ function readRLEPixelData(byteArray: Uint8Array, width: number, height: number):
     rgbeStart[2] = byteArray[pos++];
     rgbeStart[3] = byteArray[pos++];
 
-    if (2 !== rgbeStart[0] || 2 !== rgbeStart[1] || ((rgbeStart[2] << 8) | rgbeStart[3]) !== width) {
+    if (rgbeStart[0] !== 2 || rgbeStart[1] !== 2 || ((rgbeStart[2] << 8) | rgbeStart[3]) !== width) {
       throw new Error("hdr: bad rgbe scanline format");
     }
 
@@ -215,7 +213,7 @@ function readRLEPixelData(byteArray: Uint8Array, width: number, height: number):
         count -= 128;
       }
 
-      if (0 === count || ptr + count > ptrEnd) {
+      if (count === 0 || ptr + count > ptrEnd) {
         throw new Error("hdr: bad scanline data");
       }
 

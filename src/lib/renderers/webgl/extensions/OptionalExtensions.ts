@@ -31,8 +31,7 @@ export class OptionalExtensions {
     this.EXT_shader_texture_lod = gl.getExtension("EXT_shader_texture_lod");
     // this.EXT_sRGB = gl.getExtension("EXT_sRGB");
     this.EXT_texture_filter_anisotropic = gl.getExtension("EXT_texture_filter_anisotropic");
-    this.KHR_parallel_shader_compile =
-      gl.getExtension("KHR_parallel_shader_compile") !== null ? new KHR_parallel_shader_compile() : null;
+    this.KHR_parallel_shader_compile = gl.getExtension("KHR_parallel_shader_compile") !== null ? new KHR_parallel_shader_compile() : null;
     // this.OES_texture_float = gl.getExtension("OES_texture_float");
     // this.OES_texture_float_linear = gl.getExtension("OES_texture_float_linear");
     // this.OES_texture_half_float = gl.getExtension("OES_texture_half_float");

@@ -19,10 +19,10 @@ import { TexParameters } from "./TexParameters";
 import { TextureTarget } from "./TextureTarget";
 
 export class TexImage2D implements IDisposable {
-  readonly id: number;
-  disposed = false;
-  glTexture: WebGLTexture;
-  size = new Vector2();
+  public readonly id: number;
+  public disposed = false;
+  public glTexture: WebGLTexture;
+  public size = new Vector2();
 
   constructor(
     public context: RenderingContext,
@@ -33,7 +33,7 @@ export class TexImage2D implements IDisposable {
     public target = TextureTarget.Texture2D,
     public texParameters = new TexParameters(),
   ) {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     // Create a texture.
     {
       const glTexture = gl.createTexture();
@@ -76,7 +76,7 @@ export class TexImage2D implements IDisposable {
   }
 
   generateMipmaps(): void {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     gl.bindTexture(this.target, this.glTexture);
     gl.generateMipmap(this.target);
     gl.bindTexture(this.target, null);
@@ -99,7 +99,7 @@ export class TexImage2D implements IDisposable {
   }
 
   public loadImages(images: TextureSource[]): void {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     gl.bindTexture(this.target, this.glTexture);
     if (images.length === 1) {
       this.loadImage(images[0]);
@@ -118,7 +118,7 @@ export class TexImage2D implements IDisposable {
   }
 
   private loadImage(image: TextureSource, target: TextureTarget | undefined = undefined, level = 0): void {
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     if (image instanceof Vector2) {
       gl.texImage2D(

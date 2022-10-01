@@ -43,6 +43,7 @@ export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
       // Post it back to main thread.
       .then(
         (imageBitmap) => {
+          if (imageBitmap === undefined) {throw new Error("imageBitmap is undfined!");}
           return resolve(imageBitmap);
         },
         (err) => {

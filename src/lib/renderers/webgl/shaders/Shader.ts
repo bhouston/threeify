@@ -88,7 +88,7 @@ export class Shader implements IDisposable {
     public shaderType: ShaderType,
     public glslVersion = 300,
   ) {
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     // Create the shader object
     {
@@ -105,13 +105,13 @@ export class Shader implements IDisposable {
       prefix.push("#version 300 es");
     }
     if (shaderType === ShaderType.Fragment) {
-      const glxo = context.glxo;
+      const { glxo } = context;
       if (glxo.EXT_shader_texture_lod !== null) {
         prefix.push("#extension GL_EXT_shader_texture_lod : enable");
       }
       prefix.push("#extension GL_OES_standard_derivatives : enable");
     }
-    const combinedSource = prefix.join("\n") + "\n" + source;
+    const combinedSource = `${prefix.join("\n")}\n${source}`;
 
     this.finalSource = removeDeadCode(combinedSource);
 
@@ -139,7 +139,7 @@ export class Shader implements IDisposable {
     }
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
-    const gl = this.context.gl;
+    const { gl } = this.context;
     // Check if it compiled
     const compileStatus = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions

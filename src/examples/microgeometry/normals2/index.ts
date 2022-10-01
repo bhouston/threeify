@@ -32,7 +32,7 @@ async function init(): Promise<null> {
   const normalsTexture = new Texture(await fetchImage("/assets/textures/normalMap.png"));
 
   const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
+  const { canvasFramebuffer } = context;
   window.addEventListener("resize", () => canvasFramebuffer.resize());
 
   const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);

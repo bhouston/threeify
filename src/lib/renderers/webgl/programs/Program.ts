@@ -41,7 +41,7 @@ export class Program implements IDisposable {
     this.vertexShader = new Shader(this.context, vertexShaderCode, ShaderType.Vertex, glslVersion);
     this.fragmentShader = new Shader(this.context, fragmentShaderCode, ShaderType.Fragment, glslVersion);
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     // create a program.
     {
@@ -73,7 +73,7 @@ export class Program implements IDisposable {
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
     // Check if it linked.
     const psc = this.context.glxo.KHR_parallel_shader_compile;
     if (psc !== null) {
@@ -102,7 +102,7 @@ export class Program implements IDisposable {
   get uniforms(): UniformMap {
     if (!this.#uniformsInitialized) {
       let textureUnitCount = 0;
-      const gl = this.context.gl;
+      const { gl } = this.context;
 
       const numActiveUniforms = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS);
       for (let i = 0; i < numActiveUniforms; ++i) {
@@ -117,9 +117,10 @@ export class Program implements IDisposable {
     }
     return this.#uniforms;
   }
+
   get attributes(): AttributeMap {
     if (!this.#attributesInitialized) {
-      const gl = this.context.gl;
+      const { gl } = this.context;
       const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
       for (let i = 0; i < numActiveAttributes; ++i) {
         const attribute = new ProgramAttribute(this, i);
@@ -145,7 +146,7 @@ export class Program implements IDisposable {
   setAttributeBuffers(vao: VertexArrayObject): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     const glxVAO = this.context.glx.OES_vertex_array_object;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
