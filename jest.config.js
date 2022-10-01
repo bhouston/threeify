@@ -1,8 +1,10 @@
-module.exports = {
-  // [...]
-  // Replace `ts-jest` with the preset you want to use
-  // from the above list
-  preset: "ts-jest",
-  coveragePathIgnorePatterns: ["/node_modules/", "/dist/"],
-  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
+export default {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  collectCoverageFrom: [
+    '/src/**/*.{js,jsx,ts}',
+    '!**/node_modules/**',
+    '!**/vendor/**',
+  ],
+  rootDir: './src'
 };
