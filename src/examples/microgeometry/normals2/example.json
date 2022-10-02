@@ -4,6 +4,13 @@
   "en": {
     "name": "Normal Map Microgeometry Reference",
     "description": "",
-    "keywords": [ "microgeometry", "normal", "map", "perturbation", "mapping", "reference" ]
+    "keywords": [
+      "microgeometry",
+      "normal",
+      "map",
+      "perturbation",
+      "mapping",
+      "reference"
+    ]
   }
 }
