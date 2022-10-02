@@ -1,5 +1,5 @@
 export default {
-  name: "threeify",
+  name: 'threeify',
   preset: 'ts-jest',
   testEnvironment: 'node',
   rootDir: './src'

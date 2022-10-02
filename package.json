@@ -45,6 +45,6 @@
     "docs": "typedoc",
     "test": "jest ./src",
     "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
-    "prettier-format": "prettier --config .prettierrc \"src/**/*.{ts,json}\" --write"
+    "prettier-format": "prettier --config .prettierrc \"src/**/*.{ts,json,html}\" --write"
   }
 }

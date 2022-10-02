@@ -16,9 +16,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false
   },
-  "include": [
-    "src/**/*.ts"
-  ],
+  "include": ["src/**/*.ts"],
   "typedocOptions": {
     "mode": "modules",
     "out": "./docs",

@@ -1,13 +1,10 @@
 {
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.organizeImports": true
-  },
-  "eslint.validate": [
-    "javascript",
-  ],
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+  "json.format.enable": false,
+  "html.format.enable": false,
   "cSpell.words": [
     "equirectangular",
     "glsl",
@@ -70,5 +67,6 @@
     "versionable",
     "webgl",
     "webgpu"
-  ]
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
