@@ -33,7 +33,8 @@
     "prettier": "^2.7.1",
     "ts-jest": "^29.0.3",
     "typedoc": "^0.23.15",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "threeify-glsl-transpiler": "^2.0.6"
   },
   "scripts": {
     "build": "tgt; tsc",
@@ -43,7 +44,6 @@
     "docs": "typedoc",
     "test": "jest ./src",
     "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "prepare": "npm run prettier-format; npm run build"
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   }
 }
