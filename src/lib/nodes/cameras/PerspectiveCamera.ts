@@ -10,7 +10,12 @@ import { makeMatrix4PerspectiveFov } from '../../math/Matrix4.Functions';
 import { Camera } from './Camera';
 
 export class PerspectiveCamera extends Camera {
-  constructor(public verticalFov: number, public near: number, public far: number, public zoom = 1.0) {
+  constructor(
+    public verticalFov: number,
+    public near: number,
+    public far: number,
+    public zoom = 1.0
+  ) {
     super();
   }
 
@@ -21,7 +26,7 @@ export class PerspectiveCamera extends Camera {
       this.far,
       this.zoom,
       this.pixelAspectRatio * viewAspectRatio,
-      result,
+      result
     );
   }
 }

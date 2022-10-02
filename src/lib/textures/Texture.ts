@@ -23,9 +23,17 @@ export class Texture extends VirtualTexture {
     pixelFormat = PixelFormat.RGBA,
     dataType = DataType.UnsignedByte,
     generateMipmaps = true,
-    anisotropicLevels = 1,
+    anisotropicLevels = 1
   ) {
-    super(level, magFilter, minFilter, pixelFormat, dataType, generateMipmaps, anisotropicLevels);
+    super(
+      level,
+      magFilter,
+      minFilter,
+      pixelFormat,
+      dataType,
+      generateMipmaps,
+      anisotropicLevels
+    );
     this.size = new Vector2(image.width, image.height);
   }
 }
@@ -41,6 +49,6 @@ export function makeTextureFromVideoElement(video: HTMLVideoElement): Texture {
     PixelFormat.RGB,
     DataType.UnsignedByte,
     false,
-    0,
+    0
   );
 }

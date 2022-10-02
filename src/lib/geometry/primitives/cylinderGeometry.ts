@@ -15,7 +15,7 @@ export function cylinderGeometry(
   height = 1,
   segments = 8,
   thetaStart = 0,
-  thetaLength = Math.PI * 2,
+  thetaLength = Math.PI * 2
 ): Geometry {
   const indicesTop: number[] = [];
   const verticesTop: number[] = [];
@@ -100,10 +100,21 @@ export function cylinderGeometry(
   // build geometry
 
   const geometry = new Geometry();
-  geometry.indices = makeUint32Attribute(indicesTop.concat(indicesBottom).concat(indicesSide));
-  geometry.attributes.position = makeFloat32Attribute(verticesTop.concat(verticesBottom).concat(verticesSide), 3);
-  geometry.attributes.normal = makeFloat32Attribute(normalsTop.concat(normalsBottom).concat(normalsSide), 3);
-  geometry.attributes.uv = makeFloat32Attribute(uvsTop.concat(uvsBottom).concat(uvsSide), 2);
+  geometry.indices = makeUint32Attribute(
+    indicesTop.concat(indicesBottom).concat(indicesSide)
+  );
+  geometry.attributes.position = makeFloat32Attribute(
+    verticesTop.concat(verticesBottom).concat(verticesSide),
+    3
+  );
+  geometry.attributes.normal = makeFloat32Attribute(
+    normalsTop.concat(normalsBottom).concat(normalsSide),
+    3
+  );
+  geometry.attributes.uv = makeFloat32Attribute(
+    uvsTop.concat(uvsBottom).concat(uvsSide),
+    2
+  );
 
   return geometry;
 }

@@ -9,7 +9,10 @@
 //
 
 import { Vector3 } from '../../math/Vector3';
-import { eulerToNegativeZDirection, negativeZDirectionToEuler } from './Direction';
+import {
+  eulerToNegativeZDirection,
+  negativeZDirectionToEuler
+} from './Direction';
 import { Light } from './Light';
 import { LightType } from './LightType';
 
@@ -38,7 +41,7 @@ export class SpotLight extends Light {
     intensity = 1.0,
     public range = -1,
     public innerConeAngle = 0,
-    public outerConeAngle = Math.PI / 4.0,
+    public outerConeAngle = Math.PI / 4.0
   ) {
     super(LightType.Spot, color, intensity);
   }

@@ -7,9 +7,9 @@ import { Vector2 } from '../math/Vector2';
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vector2();
   public orientation = new Quaternion();
-  public onPointerDownHandler: ( ev: PointerEvent) => any;
-  public onPointerCancelHandler: ( ev: PointerEvent) => any;
-  public onPointerUpHandler: ( ev: PointerEvent) => any;
+  public onPointerDownHandler: (ev: PointerEvent) => any;
+  public onPointerCancelHandler: (ev: PointerEvent) => any;
+  public onPointerUpHandler: (ev: PointerEvent) => any;
   public onPointerMoveHandler: (ev: PointerEvent) => any;
   public onMouseWheelHandler: (ev: WheelEvent) => any;
   public disposed = false;
@@ -32,24 +32,46 @@ export class Orbit implements IDisposable {
     this.onMouseWheelHandler = this.onMouseWheel.bind(this);
 
     this.domElement.style.touchAction = 'none'; // disable touch scroll
-    this.domElement.addEventListener('pointerdown', this.onPointerDownHandler, false);
-    this.domElement.addEventListener('pointercancel', this.onPointerCancelHandler, false);
+    this.domElement.addEventListener(
+      'pointerdown',
+      this.onPointerDownHandler,
+      false
+    );
+    this.domElement.addEventListener(
+      'pointercancel',
+      this.onPointerCancelHandler,
+      false
+    );
     this.domElement.addEventListener('wheel', this.onMouseWheelHandler, false);
   }
 
   dispose() {
     if (!this.disposed) {
       this.disposed = true;
-      this.domElement.removeEventListener('pointerdown', this.onPointerDownHandler);
-      this.domElement.removeEventListener('pointercancel', this.onPointerCancelHandler);
+      this.domElement.removeEventListener(
+        'pointerdown',
+        this.onPointerDownHandler
+      );
+      this.domElement.removeEventListener(
+        'pointercancel',
+        this.onPointerCancelHandler
+      );
     }
   }
 
   onPointerDown(pe: PointerEvent) {
     // console.log("pointer down");
     this.domElement.setPointerCapture(pe.pointerId);
-    this.domElement.addEventListener('pointermove', this.onPointerMoveHandler, false);
-    this.domElement.addEventListener('pointerup', this.onPointerUpHandler, false);
+    this.domElement.addEventListener(
+      'pointermove',
+      this.onPointerMoveHandler,
+      false
+    );
+    this.domElement.addEventListener(
+      'pointerup',
+      this.onPointerUpHandler,
+      false
+    );
 
     this.lastPointerClient.set(pe.clientX, pe.clientY);
   }
@@ -57,7 +79,10 @@ export class Orbit implements IDisposable {
   onPointerUp(pe: PointerEvent) {
     // console.log("pointer up");
     this.domElement.releasePointerCapture(pe.pointerId);
-    this.domElement.removeEventListener('pointermove', this.onPointerMoveHandler);
+    this.domElement.removeEventListener(
+      'pointermove',
+      this.onPointerMoveHandler
+    );
     this.domElement.removeEventListener('pointerup', this.onPointerUpHandler);
   }
 
@@ -69,14 +94,16 @@ export class Orbit implements IDisposable {
   onPointerMove(pe: PointerEvent) {
     // console.log("pointer move", pe);
     const pointerClient = new Vector2(pe.clientX, pe.clientY);
-    const pointerClientDelta = pointerClient.clone().sub(this.lastPointerClient);
+    const pointerClientDelta = pointerClient
+      .clone()
+      .sub(this.lastPointerClient);
 
     // convert to relative
     pointerClientDelta.x /= this.domElement.clientWidth;
     pointerClientDelta.y /= this.domElement.clientHeight;
 
-    this.eulerMomentum.x += (pointerClientDelta.y * Math.PI) * this.damping;
-    this.eulerMomentum.y += (pointerClientDelta.x * Math.PI) * this.damping;
+    this.eulerMomentum.x += pointerClientDelta.y * Math.PI * this.damping;
+    this.eulerMomentum.y += pointerClientDelta.x * Math.PI * this.damping;
 
     this.lastPointerClient.copy(pointerClient);
   }
@@ -84,13 +111,13 @@ export class Orbit implements IDisposable {
   update() {
     this.euler.x += this.eulerMomentum.x;
     this.euler.y += this.eulerMomentum.y;
-    this.eulerMomentum.x *= (1 - this.damping);
-    this.eulerMomentum.y *= (1 - this.damping);
+    this.eulerMomentum.x *= 1 - this.damping;
+    this.eulerMomentum.y *= 1 - this.damping;
 
     this.orientation = makeQuaternionFromEuler(this.euler, this.orientation);
 
     this.zoom += this.zoomMomentum;
-    this.zoomMomentum *= (1 - this.damping);
+    this.zoomMomentum *= 1 - this.damping;
     this.zoom = Math.min(1, Math.max(0, this.zoom));
   }
 

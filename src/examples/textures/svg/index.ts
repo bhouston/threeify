@@ -10,21 +10,29 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector2,
+  Vector2
 } from '../../../lib/index';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const fgTexture = new Texture(
-    await fetchImageElement('/assets/textures/alphaCompositing/fg75.svg', new Vector2(1024, 1024)),
+    await fetchImageElement(
+      '/assets/textures/alphaCompositing/fg75.svg',
+      new Vector2(1024, 1024)
+    )
   );
   const bgTexture = new Texture(
-    await fetchImageElement('/assets/textures/alphaCompositing/bg.svg', new Vector2(1024, 1024)),
+    await fetchImageElement(
+      '/assets/textures/alphaCompositing/bg.svg',
+      new Vector2(1024, 1024)
+    )
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
-  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 

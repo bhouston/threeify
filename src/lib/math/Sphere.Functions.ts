@@ -7,7 +7,10 @@ import { Vector3 } from './Vector3';
 import { transformPoint3 } from './Vector3Matrix4.Functions';
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
-export function makeBoundingSphereFromBox(box: Box3, result = new Sphere()): Sphere {
+export function makeBoundingSphereFromBox(
+  box: Box3,
+  result = new Sphere()
+): Sphere {
   box.getCenter(result.center);
   result.radius = box.min.distanceTo(box.max) * 0.5;
   return result;
@@ -16,7 +19,7 @@ export function makeBoundingSphereFromBox(box: Box3, result = new Sphere()): Sph
 export function makeSphereFromPoints(
   points: Vector3[],
   optionalCenter: Vector3 | undefined,
-  result = new Sphere(),
+  result = new Sphere()
 ): Sphere {
   if (optionalCenter !== undefined) {
     result.center.copy(optionalCenter);
@@ -25,7 +28,10 @@ export function makeSphereFromPoints(
   }
   let maxRadiusSq = 0;
   for (let i = 0, il = points.length; i < il; i++) {
-    maxRadiusSq = Math.max(maxRadiusSq, result.center.distanceToSquared(points[i]));
+    maxRadiusSq = Math.max(
+      maxRadiusSq,
+      result.center.distanceToSquared(points[i])
+    );
   }
   result.radius = Math.sqrt(maxRadiusSq);
 
@@ -33,7 +39,9 @@ export function makeSphereFromPoints(
 }
 
 export function sphereContainsPoint(sphere: Sphere, point: Vector3): boolean {
-  return point.distanceToSquared(sphere.center) <= sphere.radius * sphere.radius;
+  return (
+    point.distanceToSquared(sphere.center) <= sphere.radius * sphere.radius
+  );
 }
 
 export function sphereDistanceToPoint(sphere: Sphere, point: Vector3): number {
@@ -51,19 +59,31 @@ export function clampPointToSphere(sphere: Sphere, point: Vector3): Vector3 {
   return point;
 }
 
-export function transformSphere(s: Sphere, m: Matrix4, result = new Sphere()): Sphere {
+export function transformSphere(
+  s: Sphere,
+  m: Matrix4,
+  result = new Sphere()
+): Sphere {
   transformPoint3(s.center, m, result.center);
   result.radius = s.radius * getMaxScaleOnAxis(m);
   return result;
 }
 
-export function translateSphere(s: Sphere, offset: Vector3, result = new Sphere()): Sphere {
+export function translateSphere(
+  s: Sphere,
+  offset: Vector3,
+  result = new Sphere()
+): Sphere {
   result.copy(s);
   result.center.add(offset);
   return result;
 }
 
-export function scaleSphere(s: Sphere, scale: number, result = new Sphere()): Sphere {
+export function scaleSphere(
+  s: Sphere,
+  scale: number,
+  result = new Sphere()
+): Sphere {
   result.copy(s);
   result.radius *= scale;
   return result;

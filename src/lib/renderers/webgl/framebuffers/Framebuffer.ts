@@ -37,11 +37,22 @@ export class Framebuffer extends VirtualFramebuffer {
     this.id = this.context.registerResource(this);
   }
 
-  attach(attachmentPoint: Attachment, texImage2D: TexImage2D, target = texImage2D.target, level = 0): void {
+  attach(
+    attachmentPoint: Attachment,
+    texImage2D: TexImage2D,
+    target = texImage2D.target,
+    level = 0
+  ): void {
     const { gl } = this.context;
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
-    gl.framebufferTexture2D(GL.FRAMEBUFFER, attachmentPoint, target, texImage2D.glTexture, level);
+    gl.framebufferTexture2D(
+      GL.FRAMEBUFFER,
+      attachmentPoint,
+      target,
+      texImage2D.glTexture,
+      level
+    );
     this._attachments[attachmentPoint] = texImage2D;
     this.size.copy(texImage2D.size);
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);

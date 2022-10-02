@@ -19,18 +19,31 @@ import {
   ShaderMaterial,
   Texture,
   Vector2,
-  Vector3,
+  Vector3
 } from '../../../lib/index';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number): void {
+function updateCanvas(
+  ctx: CanvasRenderingContext2D | null,
+  frameNumber: number
+): void {
   if (ctx === null) {
     return;
   }
   const grd = ctx.createLinearGradient(0, 0, 256, frameNumber % 256);
-  grd.addColorStop(0, `#${makeHexStringFromColor3(makeColor3FromHSL(frameNumber / 256, 0.5, 0.5))}`);
-  grd.addColorStop(1, `#${makeHexStringFromColor3(makeColor3FromHSL(frameNumber / 193, 0.5, 0.5))}`);
+  grd.addColorStop(
+    0,
+    `#${makeHexStringFromColor3(
+      makeColor3FromHSL(frameNumber / 256, 0.5, 0.5)
+    )}`
+  );
+  grd.addColorStop(
+    1,
+    `#${makeHexStringFromColor3(
+      makeColor3FromHSL(frameNumber / 193, 0.5, 0.5)
+    )}`
+  );
 
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, 256, 256);
@@ -45,7 +58,9 @@ async function init(): Promise<null> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
-  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -62,9 +77,16 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4OrthographicSimple(1.5, new Vector2(), 0.1, 2.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4OrthographicSimple(
+      1.5,
+      new Vector2(),
+      0.1,
+      2.0,
+      1.0,
+      canvasFramebuffer.aspectRatio
+    ),
     viewLightPosition: new Vector3(0, 0, 0),
-    map: uvTestTexture,
+    map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -76,14 +98,20 @@ async function init(): Promise<null> {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(now * 0.001, now * 0.0033, now * 0.00077),
-      uniforms.localToWorld,
+      uniforms.localToWorld
     );
     updateCanvas(ctx, frameNumber);
     uvTestTexture.loadImages([canvas]);
     uniforms.map = uvTestTexture;
 
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(
+      canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry,
+      depthTestState
+    );
 
     requestAnimationFrame(animate);
   }

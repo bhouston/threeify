@@ -15,7 +15,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Vector2,
-  Vector3,
+  Vector3
 } from '../../../lib/index';
 import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from '../../../lib/shaders/testSuites';
@@ -23,7 +23,9 @@ import { glslTestSuites } from '../../../lib/shaders/testSuites';
 async function init(): Promise<null> {
   const geometry = passGeometry();
 
-  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -32,8 +34,14 @@ async function init(): Promise<null> {
 
   const framebufferSize = new Vector2(1024, 1);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attach(Attachment.Color0, makeColorAttachment(context, framebufferSize));
-  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, framebufferSize));
+  framebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(context, framebufferSize)
+  );
+  framebuffer.attach(
+    Attachment.Depth,
+    makeDepthAttachment(context, framebufferSize)
+  );
 
   framebuffer.clearState = new ClearState(new Vector3(0.5, 0.5, 0.5), 0.5);
   framebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -51,11 +59,19 @@ async function init(): Promise<null> {
     let compileError;
 
     try {
-      const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
+      const passMaterial = new ShaderMaterial(
+        vertexSource,
+        glslUnitTest.source
+      );
       const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
 
       framebuffer.clear(BufferBit.All);
-      renderBufferGeometry(framebuffer, unitProgram, unitUniforms, bufferGeometry);
+      renderBufferGeometry(
+        framebuffer,
+        unitProgram,
+        unitUniforms,
+        bufferGeometry
+      );
 
       const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
 
@@ -84,7 +100,11 @@ async function init(): Promise<null> {
     totalFailures += failureIds.length;
     totalDuplicates += duplicateIds.length;
 
-    output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
+    output.push(
+      `${glslUnitTest.name}.test.glsl: ${
+        passIds.length + failureIds.length + duplicateIds.length
+      } tests`
+    );
     if (compileError !== undefined) {
       output.push(`  COMPILE FAILED: ${compileError}`);
     } else if (failureIds.length === 0 && duplicateIds.length === 0) {
@@ -94,13 +114,17 @@ async function init(): Promise<null> {
       output.push(`  ${failureIds.length} FAILED: ${failureIds.join(' ')}`);
     }
     if (duplicateIds.length > 0) {
-      output.push(`  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(' ')}`);
+      output.push(
+        `  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(' ')}`
+      );
     }
     output.push('');
   });
 
   output.push('');
-  output.push(`SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`);
+  output.push(
+    `SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`
+  );
 
   const textElement = document.getElementById('text');
   if (textElement !== null) {

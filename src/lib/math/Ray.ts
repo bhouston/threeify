@@ -10,7 +10,10 @@ import { ICloneable, IEquatable, IHashable } from '../core/types';
 import { Vector3 } from './Vector3';
 
 export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
-  constructor(public origin = new Vector3(), public direction = new Vector3(0, 0, -1)) {}
+  constructor(
+    public origin = new Vector3(),
+    public direction = new Vector3(0, 0, -1)
+  ) {}
 
   getHashCode(): number {
     return hashFloat2(this.origin.getHashCode(), this.direction.getHashCode());

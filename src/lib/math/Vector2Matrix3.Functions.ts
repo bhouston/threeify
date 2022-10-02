@@ -1,7 +1,11 @@
 import { Matrix3 } from './Matrix3';
 import { Vector2 } from './Vector2';
 
-export function transformPoint2(v: Vector2, m: Matrix3, result = new Vector2()): Vector2 {
+export function transformPoint2(
+  v: Vector2,
+  m: Matrix3,
+  result = new Vector2()
+): Vector2 {
   const { x } = v;
   const { y } = v;
   const e = m.elements;
@@ -14,7 +18,11 @@ export function transformPoint2(v: Vector2, m: Matrix3, result = new Vector2()):
   return result;
 }
 
-export function transformDirection2(v: Vector2, m: Matrix3, result = new Vector2()): Vector2 {
+export function transformDirection2(
+  v: Vector2,
+  m: Matrix3,
+  result = new Vector2()
+): Vector2 {
   const { x } = v;
   const { y } = v;
   const e = m.elements;

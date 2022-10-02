@@ -20,7 +20,7 @@ import {
   ShaderMaterial,
   Texture,
   Vector2,
-  Vector3,
+  Vector3
 } from '../../../lib/index';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -29,9 +29,13 @@ async function init(): Promise<null> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
-  const normalsTexture = new Texture(await fetchImage('/assets/textures/normalMap.png'));
+  const normalsTexture = new Texture(
+    await fetchImage('/assets/textures/normalMap.png')
+  );
 
-  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -41,7 +45,13 @@ async function init(): Promise<null> {
     // vertices
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4PerspectiveFov(
+      25,
+      0.1,
+      4.0,
+      1.0,
+      canvasFramebuffer.aspectRatio
+    ),
 
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
@@ -50,10 +60,13 @@ async function init(): Promise<null> {
 
     // materials
     normalModulator: new Vector2(-1, 1),
-    normalMap: normalsMap,
+    normalMap: normalsMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = new DepthTestState(
+    true,
+    DepthTestFunc.Less
+  );
   canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
   canvasFramebuffer.cullingState = new CullingState(true);
 
@@ -62,11 +75,17 @@ async function init(): Promise<null> {
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0, 0, now * 0.0002, EulerOrder.XZY),
-      uniforms.localToWorld,
+      uniforms.localToWorld
     );
     // Q: Why is this one -1 required?  Is the tangent space from UV calculation incorrect?
-    uniforms.normalModulator = new Vector2(-1, 1).multiplyByScalar(Math.cos(now * 0.001) * 0.5 + 0.5);
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, Math.sin(now * 0.003) * 3.0, 1.5);
+    uniforms.normalModulator = new Vector2(-1, 1).multiplyByScalar(
+      Math.cos(now * 0.001) * 0.5 + 0.5
+    );
+    uniforms.pointLightViewPosition = new Vector3(
+      Math.cos(now * 0.001) * 3.0,
+      Math.sin(now * 0.003) * 3.0,
+      1.5
+    );
 
     canvasFramebuffer.clear(BufferBit.All);
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);

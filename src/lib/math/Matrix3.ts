@@ -27,7 +27,7 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     n23: number,
     n31: number,
     n32: number,
-    n33: number,
+    n33: number
   ): this {
     const te = this.elements;
 

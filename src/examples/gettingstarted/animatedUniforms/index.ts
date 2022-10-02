@@ -8,18 +8,23 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Vector3,
+  Vector3
 } from '../../../lib/index';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 const geometry = new Geometry();
-geometry.attributes.position = makeFloat32Attribute([0, 0.5, 0.5, -0.5, -0.5, -0.5], 2);
+geometry.attributes.position = makeFloat32Attribute(
+  [0, 0.5, 0.5, -0.5, -0.5, -0.5],
+  2
+);
 geometry.indices = makeUint32Attribute([0, 1, 2], 1);
 
 const material = new ShaderMaterial(vertexSource, fragmentSource);
 
-const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+const context = new RenderingContext(
+  document.getElementById('framebuffer') as HTMLCanvasElement
+);
 const { canvasFramebuffer } = context;
 window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -31,7 +36,12 @@ function animate(): void {
   requestAnimationFrame(animate);
 
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
-  uniforms.color = makeColor3FromHSL(Date.now() * 0.001, 1.0, 0.5, uniforms.color);
+  uniforms.color = makeColor3FromHSL(
+    Date.now() * 0.001,
+    1.0,
+    0.5,
+    uniforms.color
+  );
 
   renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 }

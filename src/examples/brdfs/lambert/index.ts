@@ -19,7 +19,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector3,
+  Vector3
 } from '../../../lib/index';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -27,9 +27,13 @@ import vertexSource from './vertex.glsl';
 async function init(): Promise<null> {
   const geometry = icosahedronGeometry(0.75, 5);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const texture = new Texture(await fetchImage('/assets/textures/planets/jupiter_2k.jpg'));
+  const texture = new Texture(
+    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
+  );
 
-  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -38,7 +42,13 @@ async function init(): Promise<null> {
     // vertices
     localToWorld: new Matrix4(),
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    viewToScreen: makeMatrix4PerspectiveFov(
+      25,
+      0.1,
+      4.0,
+      1.0,
+      canvasFramebuffer.aspectRatio
+    ),
 
     // lights
     pointLightViewPosition: new Vector3(1, 0, -0.5),
@@ -47,10 +57,13 @@ async function init(): Promise<null> {
 
     // materials
     albedoModulator: new Vector3(1, 1, 1),
-    albedoMap: makeTexImage2DFromTexture(context, texture),
+    albedoMap: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = new DepthTestState(
+    true,
+    DepthTestFunc.Less
+  );
   canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
   canvasFramebuffer.cullingState = new CullingState(true);
 
@@ -59,10 +72,20 @@ async function init(): Promise<null> {
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
       new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
-      uniforms.localToWorld,
+      uniforms.localToWorld
     );
-    uniforms.viewToScreen = makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio);
-    uniforms.pointLightViewPosition = new Vector3(Math.cos(now * 0.001) * 3.0, 2.0, 0.5);
+    uniforms.viewToScreen = makeMatrix4PerspectiveFov(
+      25,
+      0.1,
+      4.0,
+      1.0,
+      canvasFramebuffer.aspectRatio
+    );
+    uniforms.pointLightViewPosition = new Vector3(
+      Math.cos(now * 0.001) * 3.0,
+      2.0,
+      0.5
+    );
 
     canvasFramebuffer.clear(BufferBit.All);
 

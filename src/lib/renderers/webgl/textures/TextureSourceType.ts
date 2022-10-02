@@ -4,5 +4,5 @@ export enum TextureSourceType {
   HTMLImageElement,
   HTMLCanvasElement,
   HTMLVideoElement,
-  ImageBitmap,
+  ImageBitmap
 }

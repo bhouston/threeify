@@ -16,7 +16,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector3,
+  Vector3
 } from '../../../lib/index';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -24,9 +24,13 @@ import vertexSource from './vertex.glsl';
 async function init(): Promise<null> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const texture = new Texture(await fetchImage('/assets/textures/uv_grid_opengl.jpg'));
+  const texture = new Texture(
+    await fetchImage('/assets/textures/uv_grid_opengl.jpg')
+  );
 
-  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement);
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -36,7 +40,7 @@ async function init(): Promise<null> {
     worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
     viewToScreen: makeMatrix4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4.0),
     viewLightPosition: new Vector3(0, 0, 0),
-    map: makeTexImage2DFromTexture(context, texture),
+    map: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -51,16 +55,24 @@ async function init(): Promise<null> {
         deviceOrientation = new DeviceOrientation();
       }
     },
-    false,
+    false
   );
 
   function animate(): void {
     requestAnimationFrame(animate);
 
     if (deviceOrientation !== undefined) {
-      uniforms.localToWorld = makeMatrix4Inverse(makeMatrix4RotationFromQuaternion(deviceOrientation.orientation));
+      uniforms.localToWorld = makeMatrix4Inverse(
+        makeMatrix4RotationFromQuaternion(deviceOrientation.orientation)
+      );
     }
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(
+      canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry,
+      depthTestState
+    );
   }
 
   animate();

@@ -7,7 +7,10 @@
 
 import { Vector2 } from '../../math/Vector2';
 
-export function fetchImageElement(url: string, size = new Vector2()): Promise<HTMLImageElement> {
+export function fetchImageElement(
+  url: string,
+  size = new Vector2()
+): Promise<HTMLImageElement> {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
     if (size.x > 0 || size.y > 0) {
@@ -43,12 +46,14 @@ export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
       // Post it back to main thread.
       .then(
         (imageBitmap) => {
-          if (imageBitmap === undefined) {throw new Error('imageBitmap is undfined!');}
+          if (imageBitmap === undefined) {
+            throw new Error('imageBitmap is undfined!');
+          }
           return resolve(imageBitmap);
         },
         (err) => {
           reject(err);
-        },
+        }
       );
   });
 }

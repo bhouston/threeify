@@ -13,7 +13,12 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
   constructor(public normal = new Vector3(), public constant = 0) {}
 
   getHashCode(): number {
-    return hashFloat4(this.normal.x, this.normal.y, this.normal.z, this.constant);
+    return hashFloat4(
+      this.normal.x,
+      this.normal.y,
+      this.normal.z,
+      this.constant
+    );
   }
 
   set(normal: Vector3, constant: number): this {

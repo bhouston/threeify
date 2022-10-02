@@ -5,7 +5,11 @@ import { makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions';
 import { Vector2 } from './Vector2';
 import { Vector3 } from './Vector3';
 
-export function makeMatrix4Concatenation(a: Matrix4, b: Matrix4, result = new Matrix4()): Matrix4 {
+export function makeMatrix4Concatenation(
+  a: Matrix4,
+  b: Matrix4,
+  result = new Matrix4()
+): Matrix4 {
   const ae = a.elements;
   const be = b.elements;
   const te = result.elements;
@@ -87,15 +91,42 @@ export function matrix4Determinant(m: Matrix4): number {
   const n24 = me[13];
   const n34 = me[14];
   const n44 = me[15];
-  const t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44;
-  const t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44;
-  const t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44;
-  const t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
+  const t11 =
+    n23 * n34 * n42 -
+    n24 * n33 * n42 +
+    n24 * n32 * n43 -
+    n22 * n34 * n43 -
+    n23 * n32 * n44 +
+    n22 * n33 * n44;
+  const t12 =
+    n14 * n33 * n42 -
+    n13 * n34 * n42 -
+    n14 * n32 * n43 +
+    n12 * n34 * n43 +
+    n13 * n32 * n44 -
+    n12 * n33 * n44;
+  const t13 =
+    n13 * n24 * n42 -
+    n14 * n23 * n42 +
+    n14 * n22 * n43 -
+    n12 * n24 * n43 -
+    n13 * n22 * n44 +
+    n12 * n23 * n44;
+  const t14 =
+    n14 * n23 * n32 -
+    n13 * n24 * n32 -
+    n14 * n22 * n33 +
+    n12 * n24 * n33 +
+    n13 * n22 * n34 -
+    n12 * n23 * n34;
 
   return n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 }
 
-export function makeMatrix4Transpose(m: Matrix4, result = new Matrix4()): Matrix4 {
+export function makeMatrix4Transpose(
+  m: Matrix4,
+  result = new Matrix4()
+): Matrix4 {
   const re = result.copy(m).elements;
   let tmp;
 
@@ -123,7 +154,10 @@ export function makeMatrix4Transpose(m: Matrix4, result = new Matrix4()): Matrix
   return result;
 }
 
-export function makeMatrix4Inverse(m: Matrix4, result = new Matrix4()): Matrix4 {
+export function makeMatrix4Inverse(
+  m: Matrix4,
+  result = new Matrix4()
+): Matrix4 {
   // based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
   const me = m.elements;
   const n11 = me[0];
@@ -142,10 +176,34 @@ export function makeMatrix4Inverse(m: Matrix4, result = new Matrix4()): Matrix4 
   const n24 = me[13];
   const n34 = me[14];
   const n44 = me[15];
-  const t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44;
-  const t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44;
-  const t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44;
-  const t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
+  const t11 =
+    n23 * n34 * n42 -
+    n24 * n33 * n42 +
+    n24 * n32 * n43 -
+    n22 * n34 * n43 -
+    n23 * n32 * n44 +
+    n22 * n33 * n44;
+  const t12 =
+    n14 * n33 * n42 -
+    n13 * n34 * n42 -
+    n14 * n32 * n43 +
+    n12 * n34 * n43 +
+    n13 * n32 * n44 -
+    n12 * n33 * n44;
+  const t13 =
+    n13 * n24 * n42 -
+    n14 * n23 * n42 +
+    n14 * n22 * n43 -
+    n12 * n24 * n43 -
+    n13 * n22 * n44 +
+    n12 * n23 * n44;
+  const t14 =
+    n14 * n23 * n32 -
+    n13 * n24 * n32 -
+    n14 * n22 * n33 +
+    n12 * n24 * n33 +
+    n13 * n22 * n34 -
+    n12 * n23 * n34;
 
   const det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 
@@ -158,45 +216,124 @@ export function makeMatrix4Inverse(m: Matrix4, result = new Matrix4()): Matrix4 
   // TODO: replace with a set
   const re = result.elements;
   re[0] = t11 * detInv;
-  re[1] = (n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44)
-    * detInv;
-  re[2] = (n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 - n22 * n31 * n44 + n21 * n32 * n44)
-    * detInv;
-  re[3] = (n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 + n22 * n31 * n43 - n21 * n32 * n43)
-    * detInv;
+  re[1] =
+    (n24 * n33 * n41 -
+      n23 * n34 * n41 -
+      n24 * n31 * n43 +
+      n21 * n34 * n43 +
+      n23 * n31 * n44 -
+      n21 * n33 * n44) *
+    detInv;
+  re[2] =
+    (n22 * n34 * n41 -
+      n24 * n32 * n41 +
+      n24 * n31 * n42 -
+      n21 * n34 * n42 -
+      n22 * n31 * n44 +
+      n21 * n32 * n44) *
+    detInv;
+  re[3] =
+    (n23 * n32 * n41 -
+      n22 * n33 * n41 -
+      n23 * n31 * n42 +
+      n21 * n33 * n42 +
+      n22 * n31 * n43 -
+      n21 * n32 * n43) *
+    detInv;
 
   re[4] = t12 * detInv;
-  re[5] = (n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 - n13 * n31 * n44 + n11 * n33 * n44)
-    * detInv;
-  re[6] = (n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 + n12 * n31 * n44 - n11 * n32 * n44)
-    * detInv;
-  re[7] = (n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 - n12 * n31 * n43 + n11 * n32 * n43)
-    * detInv;
+  re[5] =
+    (n13 * n34 * n41 -
+      n14 * n33 * n41 +
+      n14 * n31 * n43 -
+      n11 * n34 * n43 -
+      n13 * n31 * n44 +
+      n11 * n33 * n44) *
+    detInv;
+  re[6] =
+    (n14 * n32 * n41 -
+      n12 * n34 * n41 -
+      n14 * n31 * n42 +
+      n11 * n34 * n42 +
+      n12 * n31 * n44 -
+      n11 * n32 * n44) *
+    detInv;
+  re[7] =
+    (n12 * n33 * n41 -
+      n13 * n32 * n41 +
+      n13 * n31 * n42 -
+      n11 * n33 * n42 -
+      n12 * n31 * n43 +
+      n11 * n32 * n43) *
+    detInv;
 
   re[8] = t13 * detInv;
-  re[9] = (n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 + n13 * n21 * n44 - n11 * n23 * n44)
-    * detInv;
-  re[10] = (n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 - n12 * n21 * n44 + n11 * n22 * n44)
-    * detInv;
-  re[11] = (n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43)
-    * detInv;
+  re[9] =
+    (n14 * n23 * n41 -
+      n13 * n24 * n41 -
+      n14 * n21 * n43 +
+      n11 * n24 * n43 +
+      n13 * n21 * n44 -
+      n11 * n23 * n44) *
+    detInv;
+  re[10] =
+    (n12 * n24 * n41 -
+      n14 * n22 * n41 +
+      n14 * n21 * n42 -
+      n11 * n24 * n42 -
+      n12 * n21 * n44 +
+      n11 * n22 * n44) *
+    detInv;
+  re[11] =
+    (n13 * n22 * n41 -
+      n12 * n23 * n41 -
+      n13 * n21 * n42 +
+      n11 * n23 * n42 +
+      n12 * n21 * n43 -
+      n11 * n22 * n43) *
+    detInv;
 
   re[12] = t14 * detInv;
-  re[13] = (n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 - n13 * n21 * n34 + n11 * n23 * n34)
-    * detInv;
-  re[14] = (n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 + n12 * n21 * n34 - n11 * n22 * n34)
-    * detInv;
-  re[15] = (n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33)
-    * detInv;
+  re[13] =
+    (n13 * n24 * n31 -
+      n14 * n23 * n31 +
+      n14 * n21 * n33 -
+      n11 * n24 * n33 -
+      n13 * n21 * n34 +
+      n11 * n23 * n34) *
+    detInv;
+  re[14] =
+    (n14 * n22 * n31 -
+      n12 * n24 * n31 -
+      n14 * n21 * n32 +
+      n11 * n24 * n32 +
+      n12 * n21 * n34 -
+      n11 * n22 * n34) *
+    detInv;
+  re[15] =
+    (n12 * n23 * n31 -
+      n13 * n22 * n31 +
+      n13 * n21 * n32 -
+      n11 * n23 * n32 -
+      n12 * n21 * n33 +
+      n11 * n22 * n33) *
+    detInv;
 
   return result;
 }
 
-export function makeMatrix4Translation(t: Vector3, result = new Matrix4()): Matrix4 {
+export function makeMatrix4Translation(
+  t: Vector3,
+  result = new Matrix4()
+): Matrix4 {
   return result.set(1, 0, 0, t.x, 0, 1, 0, t.y, 0, 0, 1, t.z, 0, 0, 0, 1);
 }
 
-export function makeMatrix4RotationFromAngleAxis(axis: Vector3, angle: number, result = new Matrix4()): Matrix4 {
+export function makeMatrix4RotationFromAngleAxis(
+  axis: Vector3,
+  angle: number,
+  result = new Matrix4()
+): Matrix4 {
   // Based on http://www.gamedev.net/reference/articles/article1199.asp
 
   const c = Math.cos(angle);
@@ -224,11 +361,16 @@ export function makeMatrix4RotationFromAngleAxis(axis: Vector3, angle: number, r
     0,
     0,
     0,
-    1,
+    1
   );
 }
 
-export function makeMatrix4LookAt(eye: Vector3, target: Vector3, up: Vector3, result = new Matrix4()): Matrix4 {
+export function makeMatrix4LookAt(
+  eye: Vector3,
+  target: Vector3,
+  up: Vector3,
+  result = new Matrix4()
+): Matrix4 {
   const te = result.elements;
 
   const look = eye.clone().sub(target);
@@ -273,7 +415,10 @@ export function makeMatrix4LookAt(eye: Vector3, target: Vector3, up: Vector3, re
   return result;
 }
 
-export function makeMatrix4RotationFromEuler(euler: Euler, result = new Matrix4()): Matrix4 {
+export function makeMatrix4RotationFromEuler(
+  euler: Euler,
+  result = new Matrix4()
+): Matrix4 {
   const te = result.elements;
 
   const { x } = euler;
@@ -405,7 +550,10 @@ export function makeMatrix4RotationFromEuler(euler: Euler, result = new Matrix4(
   return result;
 }
 
-export function makeMatrix4RotationFromQuaternion(q: Quaternion, result = new Matrix4()): Matrix4 {
+export function makeMatrix4RotationFromQuaternion(
+  q: Quaternion,
+  result = new Matrix4()
+): Matrix4 {
   return composeMatrix4(new Vector3(), q, new Vector3(1, 1, 1), result);
 }
 
@@ -413,7 +561,12 @@ export function makeMatrix4Scale(s: Vector3, result = new Matrix4()): Matrix4 {
   return result.set(s.x, 0, 0, 0, 0, s.y, 0, 0, 0, 0, s.z, 0, 0, 0, 0, 1);
 }
 
-export function makeMatrix4Shear(x: number, y: number, z: number, result = new Matrix4()): Matrix4 {
+export function makeMatrix4Shear(
+  x: number,
+  y: number,
+  z: number,
+  result = new Matrix4()
+): Matrix4 {
   return result.set(1, y, z, 0, x, 1, z, 0, x, y, 1, 0, 0, 0, 0, 1);
 }
 
@@ -431,7 +584,7 @@ export function composeMatrix4(
   position: Vector3,
   rotation: Quaternion,
   scale: Vector3,
-  result = new Matrix4(),
+  result = new Matrix4()
 ): Matrix4 {
   const { x } = rotation;
   const { y } = rotation;
@@ -471,11 +624,16 @@ export function composeMatrix4(
     0,
     0,
     0,
-    1,
+    1
   );
 }
 
-export function decomposeMatrix4(m: Matrix4, position: Vector3, rotation: Quaternion, scale: Vector3): Matrix4 {
+export function decomposeMatrix4(
+  m: Matrix4,
+  position: Vector3,
+  rotation: Quaternion,
+  scale: Vector3
+): Matrix4 {
   const te = m.elements;
 
   let sx = new Vector3(te[0], te[1], te[2]).length();
@@ -528,7 +686,7 @@ export function makeMatrix4Perspective(
   bottom: number,
   near: number,
   far: number,
-  result = new Matrix4(),
+  result = new Matrix4()
 ): Matrix4 {
   const x = (2 * near) / (right - left);
   const y = (2 * near) / (top - bottom);
@@ -547,9 +705,10 @@ export function makeMatrix4PerspectiveFov(
   far: number,
   zoom: number,
   aspectRatio: number,
-  result = new Matrix4(),
+  result = new Matrix4()
 ): Matrix4 {
-  const height = (2.0 * near * Math.tan((verticalFov * Math.PI) / 180.0)) / zoom;
+  const height =
+    (2.0 * near * Math.tan((verticalFov * Math.PI) / 180.0)) / zoom;
   const width = height * aspectRatio;
 
   // NOTE: OpenGL screen coordinates are -bottomt to +top, -left to +right.
@@ -571,7 +730,7 @@ export function makeMatrix4Orthographic(
   bottom: number,
   near: number,
   far: number,
-  result = new Matrix4(),
+  result = new Matrix4()
 ): Matrix4 {
   const w = 1.0 / (right - left);
   const h = 1.0 / (top - bottom);
@@ -581,7 +740,24 @@ export function makeMatrix4Orthographic(
   const y = (top + bottom) * h;
   const z = (far + near) * p;
 
-  return result.set(2 * w, 0, 0, -x, 0, 2 * h, 0, -y, 0, 0, -2 * p, -z, 0, 0, 0, 1);
+  return result.set(
+    2 * w,
+    0,
+    0,
+    -x,
+    0,
+    2 * h,
+    0,
+    -y,
+    0,
+    0,
+    -2 * p,
+    -z,
+    0,
+    0,
+    0,
+    1
+  );
 }
 
 export function makeMatrix4OrthographicSimple(
@@ -591,7 +767,7 @@ export function makeMatrix4OrthographicSimple(
   far: number,
   zoom: number,
   aspectRatio = 1.0,
-  result = new Matrix4(),
+  result = new Matrix4()
 ): Matrix4 {
   height /= zoom;
   const width = height * aspectRatio;

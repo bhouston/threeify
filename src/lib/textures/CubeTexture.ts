@@ -25,17 +25,34 @@ export class CubeMapTexture extends VirtualTexture implements IPoolUser {
     pixelFormat = PixelFormat.RGBA,
     dataType = DataType.UnsignedByte,
     generateMipmaps = true,
-    anisotropicLevels = 1,
+    anisotropicLevels = 1
   ) {
-    super(level, magFilter, minFilter, pixelFormat, dataType, generateMipmaps, anisotropicLevels);
+    super(
+      level,
+      magFilter,
+      minFilter,
+      pixelFormat,
+      dataType,
+      generateMipmaps,
+      anisotropicLevels
+    );
     if (this.images.length % 6 !== 0 || this.images.length === 0) {
-      throw new Error(`images.length (${this.images.length}) must be a positive multiple of 6`);
+      throw new Error(
+        `images.length (${this.images.length}) must be a positive multiple of 6`
+      );
     }
     this.size = new Vector2(images[0].width, images[0].height);
   }
 }
 
-export const cubeFaceNames = ['right', 'left', 'top', 'bottom', 'back', 'front'];
+export const cubeFaceNames = [
+  'right',
+  'left',
+  'top',
+  'bottom',
+  'back',
+  'front'
+];
 
 export const cubeFaceTargets = [
   TextureTarget.CubeMapPositiveX,
@@ -43,7 +60,7 @@ export const cubeFaceTargets = [
   TextureTarget.CubeMapPositiveY,
   TextureTarget.CubeMapNegativeY,
   TextureTarget.CubeMapPositiveZ,
-  TextureTarget.CubeMapNegativeZ,
+  TextureTarget.CubeMapNegativeZ
 ];
 
 export const cubeFaceLooks = [
@@ -52,7 +69,7 @@ export const cubeFaceLooks = [
   new Vector3(0, 1, 0),
   new Vector3(0, -1, 0),
   new Vector3(0, 0, 1),
-  new Vector3(0, 0, -1),
+  new Vector3(0, 0, -1)
 ];
 
 export const cubeFaceUps = [
@@ -61,11 +78,20 @@ export const cubeFaceUps = [
   new Vector3(0, 0, 1),
   new Vector3(0, 0, -1),
   new Vector3(0, 1, 0),
-  new Vector3(0, -1, 0),
+  new Vector3(0, -1, 0)
 ];
 
-export function makeMatrix4CubeMapTransform(position: Vector3, faceIndex: number, result = new Matrix4()): Matrix4 {
-  return makeMatrix4LookAt(position, position.clone().add(cubeFaceLooks[faceIndex]), cubeFaceUps[faceIndex], result);
+export function makeMatrix4CubeMapTransform(
+  position: Vector3,
+  faceIndex: number,
+  result = new Matrix4()
+): Matrix4 {
+  return makeMatrix4LookAt(
+    position,
+    position.clone().add(cubeFaceLooks[faceIndex]),
+    cubeFaceUps[faceIndex],
+    result
+  );
 }
 
 /*

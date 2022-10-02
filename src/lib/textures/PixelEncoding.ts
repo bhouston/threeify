@@ -3,5 +3,5 @@ export enum PixelEncoding {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   sRGB,
   RGBE,
-  RGBD,
+  RGBD
 }

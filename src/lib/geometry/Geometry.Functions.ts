@@ -1,7 +1,10 @@
 import { makeVector3View } from '../math/arrays/PrimitiveView';
 import { Matrix4 } from '../math/Matrix4';
 import { Vector3 } from '../math/Vector3';
-import { transformNormal3, transformPoint3 } from '../math/Vector3Matrix4.Functions';
+import {
+  transformNormal3,
+  transformPoint3
+} from '../math/Vector3Matrix4.Functions';
 import { Attribute, makeFloat32Attribute } from './Attribute';
 import { AttributeData } from './AttributeData';
 import { Geometry } from './Geometry';
@@ -11,7 +14,7 @@ function copyBytesUsingStride(
   source: ArrayBuffer,
   bytesPerVertex: number,
   byteStridePerVertex: number,
-  attributeOffset: number,
+  attributeOffset: number
 ): void {
   const destBytes = new Int8Array(dest);
   const sourceBytes = new Int8Array(source);
@@ -50,7 +53,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.attributeData.arrayBuffer,
         attribute.bytesPerVertex,
         byteStridePerVertex,
-        byteOffset,
+        byteOffset
       );
 
       interleavedGeometry.attributes[name] = new Attribute(
@@ -59,7 +62,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.componentType,
         byteStridePerVertex,
         byteOffset,
-        attribute.normalized,
+        attribute.normalized
       );
       byteOffset += Math.max(attribute.bytesPerVertex, 4);
     }
@@ -77,7 +80,10 @@ export function computeVertexNormals(geometry: Geometry): void {
   }
   let normalAttribute = attributes.normal;
   if (normalAttribute === undefined) {
-    normalAttribute = makeFloat32Attribute(new Float32Array(positionAttribute.count * 3), 3);
+    normalAttribute = makeFloat32Attribute(
+      new Float32Array(positionAttribute.count * 3),
+      3
+    );
     geometry.attributes.normal = normalAttribute;
   }
 

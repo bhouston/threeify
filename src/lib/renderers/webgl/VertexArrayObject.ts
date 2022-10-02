@@ -18,7 +18,10 @@ export class VertexArrayObject implements IDisposable {
   offset = 0;
   count = -1;
 
-  constructor(public readonly program: Program, bufferGeometry: BufferGeometry) {
+  constructor(
+    public readonly program: Program,
+    bufferGeometry: BufferGeometry
+  ) {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 

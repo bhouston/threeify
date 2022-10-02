@@ -14,7 +14,7 @@ export class Buffer implements IDisposable {
     public context: RenderingContext,
     arrayBuffer: ArrayBuffer,
     public target: BufferTarget = BufferTarget.Array,
-    public usage: BufferUsage = BufferUsage.StaticDraw,
+    public usage: BufferUsage = BufferUsage.StaticDraw
   ) {
     const { gl } = context;
     // Create a buffer and put three 2d clip space points in it
@@ -41,7 +41,7 @@ export class Buffer implements IDisposable {
   update(
     arrayBuffer: ArrayBuffer,
     target: BufferTarget = BufferTarget.Array,
-    usage: BufferUsage = BufferUsage.StaticDraw,
+    usage: BufferUsage = BufferUsage.StaticDraw
   ): void {
     this.target = target;
     this.usage = usage;
@@ -66,12 +66,19 @@ export class Buffer implements IDisposable {
 
 export class BufferPool extends Pool<AttributeData, Buffer> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, attribute: AttributeData, buffer: Buffer | undefined) => {
-      if (buffer === undefined) {
-        return new Buffer(context, attribute.arrayBuffer, attribute.target);
+    super(
+      context,
+      (
+        context: RenderingContext,
+        attribute: AttributeData,
+        buffer: Buffer | undefined
+      ) => {
+        if (buffer === undefined) {
+          return new Buffer(context, attribute.arrayBuffer, attribute.target);
+        }
+        buffer.update(attribute.arrayBuffer, attribute.target);
+        return buffer;
       }
-      buffer.update(attribute.arrayBuffer, attribute.target);
-      return buffer;
-    });
+    );
   }
 }

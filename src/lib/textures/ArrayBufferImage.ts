@@ -7,6 +7,6 @@ export class ArrayBufferImage {
     public width: number,
     public height: number,
     public dataType = DataType.UnsignedByte,
-    public pixelEncoding = PixelEncoding.sRGB,
+    public pixelEncoding = PixelEncoding.sRGB
   ) {}
 }

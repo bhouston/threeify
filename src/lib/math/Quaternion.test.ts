@@ -2,7 +2,10 @@ import { EulerOrder } from './Euler';
 import { makeEulerFromQuaternion } from './Euler.Functions';
 import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions';
 import { Quaternion } from './Quaternion';
-import { makeQuaternionFromEuler, makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions';
+import {
+  makeQuaternionFromEuler,
+  makeQuaternionFromRotationMatrix4
+} from './Quaternion.Functions';
 
 const qX = new Quaternion(1, 0, 0).normalize();
 const qY = new Quaternion(0, 1, 0).normalize();
@@ -17,7 +20,14 @@ const qYZW = new Quaternion(0, 1, 0.5, 0.25).normalize();
 const qXZW = new Quaternion(0.5, 0, 1, 0.25).normalize();
 
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
-const testOrders = [EulerOrder.XYZ, EulerOrder.YXZ, EulerOrder.ZXY, EulerOrder.ZYX, EulerOrder.YZX, EulerOrder.XZY];
+const testOrders = [
+  EulerOrder.XYZ,
+  EulerOrder.YXZ,
+  EulerOrder.ZXY,
+  EulerOrder.ZYX,
+  EulerOrder.YZX,
+  EulerOrder.XZY
+];
 
 describe('Quaternionr', () => {
   test('constructor defaults', () => {

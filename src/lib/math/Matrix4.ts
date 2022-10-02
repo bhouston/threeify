@@ -31,7 +31,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     n41: number,
     n42: number,
     n43: number,
-    n44: number,
+    n44: number
   ): this {
     const te = this.elements;
 
@@ -77,7 +77,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
       me[3],
       me[7],
       me[11],
-      me[15],
+      me[15]
     );
   }
 

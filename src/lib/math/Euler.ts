@@ -8,17 +8,27 @@ export enum EulerOrder {
   ZYX,
   YZX,
   XZY,
-  Default = EulerOrder.XYZ,
+  Default = EulerOrder.XYZ
 }
 
 export class Euler implements IPrimitive<Euler> {
-  constructor(public x = 0, public y = 0, public z = 0, public order: EulerOrder = EulerOrder.Default) {}
+  constructor(
+    public x = 0,
+    public y = 0,
+    public z = 0,
+    public order: EulerOrder = EulerOrder.Default
+  ) {}
 
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.order as number);
   }
 
-  set(x: number, y: number, z: number, order: EulerOrder = EulerOrder.Default): this {
+  set(
+    x: number,
+    y: number,
+    z: number,
+    order: EulerOrder = EulerOrder.Default
+  ): this {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -36,7 +46,12 @@ export class Euler implements IPrimitive<Euler> {
   }
 
   equals(e: Euler): boolean {
-    return e.x === this.x && e.y === this.y && e.z === this.z && e.order === this.order;
+    return (
+      e.x === this.x &&
+      e.y === this.y &&
+      e.z === this.z &&
+      e.order === this.order
+    );
   }
 
   setFromArray(array: Float32Array, offset: number): void {

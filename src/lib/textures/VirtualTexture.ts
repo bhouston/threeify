@@ -29,7 +29,7 @@ export class VirtualTexture {
     public pixelFormat = PixelFormat.RGBA,
     public dataType = DataType.UnsignedByte,
     public generateMipmaps = true,
-    public anisotropicLevels = 1,
+    public anisotropicLevels = 1
   ) {}
 
   get mipCount(): number {

@@ -20,54 +20,54 @@ type GLSLTestSuite = {
 export const glslTestSuites: Array<GLSLTestSuite> = [
   {
     name: 'lambert',
-    source: lambertTests,
+    source: lambertTests
   },
   {
     name: 'rgbd',
-    source: rgbdTests,
+    source: rgbdTests
   },
   {
     name: 'rgbe',
-    source: rgbeTests,
+    source: rgbeTests
   },
   {
     name: 'srgb',
-    source: srgbTests,
+    source: srgbTests
   },
   {
     name: 'latLong',
-    source: latLongTests,
+    source: latLongTests
   },
   {
     name: 'cubeFaces',
-    source: cubeFacesTests,
+    source: cubeFacesTests
   },
   {
     name: 'structs',
-    source: structsTests,
+    source: structsTests
   },
   {
     name: 'math',
-    source: mathTests,
+    source: mathTests
   },
   {
     name: 'mat2',
-    source: mat2Tests,
+    source: mat2Tests
   },
   {
     name: 'mat3',
-    source: mat3Tests,
+    source: mat3Tests
   },
   {
     name: 'mat4',
-    source: mat4Tests,
+    source: mat4Tests
   },
   {
     name: 'normalPacking',
-    source: normalPackingTests,
+    source: normalPackingTests
   },
   {
     name: 'unitIntervalPacking',
-    source: unitIntervalPackingTests,
-  },
+    source: unitIntervalPackingTests
+  }
 ];

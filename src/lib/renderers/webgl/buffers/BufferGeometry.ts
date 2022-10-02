@@ -9,7 +9,10 @@
 import { IDisposable } from '../../../core/types';
 import { Geometry } from '../../../geometry/Geometry';
 import { RenderingContext } from '../RenderingContext';
-import { BufferAccessor, makeBufferAccessorFromAttribute } from './BufferAccessor';
+import {
+  BufferAccessor,
+  makeBufferAccessorFromAttribute
+} from './BufferAccessor';
 import { BufferTarget } from './BufferTarget';
 import { PrimitiveType } from './PrimitiveType';
 
@@ -23,7 +26,9 @@ export class BufferGeometry implements IDisposable {
   constructor(public context: RenderingContext) {}
 
   dispose(): void {
-    console.warn('This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.');
+    console.warn(
+      'This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.'
+    );
     if (!this.disposed) {
       for (const name in this.bufferAccessors) {
         const bufferAccessor = this.bufferAccessors[name];
@@ -39,17 +44,27 @@ export class BufferGeometry implements IDisposable {
   }
 }
 
-export function makeBufferGeometryFromGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
+export function makeBufferGeometryFromGeometry(
+  context: RenderingContext,
+  geometry: Geometry
+): BufferGeometry {
   const bufferGeometry = new BufferGeometry(context);
   if (geometry.indices !== undefined) {
-    bufferGeometry.indices = makeBufferAccessorFromAttribute(context, geometry.indices, BufferTarget.ElementArray);
+    bufferGeometry.indices = makeBufferAccessorFromAttribute(
+      context,
+      geometry.indices,
+      BufferTarget.ElementArray
+    );
     bufferGeometry.count = geometry.indices.count;
   }
 
   for (const name in geometry.attributes) {
     const attribute = geometry.attributes[name];
     if (attribute !== undefined) {
-      bufferGeometry.bufferAccessors[name] = makeBufferAccessorFromAttribute(context, attribute);
+      bufferGeometry.bufferAccessors[name] = makeBufferAccessorFromAttribute(
+        context,
+        attribute
+      );
       if (bufferGeometry.count === -1) {
         bufferGeometry.count = attribute.count;
       }

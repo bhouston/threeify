@@ -31,7 +31,7 @@ export class TexImage2D implements IDisposable {
     public dataType = DataType.UnsignedByte,
     public pixelFormat = PixelFormat.RGBA,
     public target = TextureTarget.Texture2D,
-    public texParameters = new TexParameters(),
+    public texParameters = new TexParameters()
   ) {
     const { gl } = this.context;
     // Create a texture.
@@ -48,18 +48,28 @@ export class TexImage2D implements IDisposable {
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
 
-    gl.texParameteri(this.target, GL.TEXTURE_MAG_FILTER, texParameters.magFilter);
-    gl.texParameteri(this.target, GL.TEXTURE_MIN_FILTER, texParameters.minFilter);
+    gl.texParameteri(
+      this.target,
+      GL.TEXTURE_MAG_FILTER,
+      texParameters.magFilter
+    );
+    gl.texParameteri(
+      this.target,
+      GL.TEXTURE_MIN_FILTER,
+      texParameters.minFilter
+    );
 
     if (texParameters.anisotropyLevels > 1) {
       const tfa = this.context.glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
         // TODO: Cache this at some point for speed improvements
-        const maxAllowableAnisotropy = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+        const maxAllowableAnisotropy = gl.getParameter(
+          tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT
+        );
         gl.texParameterf(
           this.target,
           tfa.TEXTURE_MAX_ANISOTROPY_EXT,
-          Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy),
+          Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy)
         );
       }
     }
@@ -117,7 +127,11 @@ export class TexImage2D implements IDisposable {
     }
   }
 
-  private loadImage(image: TextureSource, target: TextureTarget | undefined = undefined, level = 0): void {
+  private loadImage(
+    image: TextureSource,
+    target: TextureTarget | undefined = undefined,
+    level = 0
+  ): void {
     const { gl } = this.context;
 
     if (image instanceof Vector2) {
@@ -130,7 +144,7 @@ export class TexImage2D implements IDisposable {
         0,
         this.pixelFormat,
         this.dataType,
-        null,
+        null
       );
       if (level === 0) {
         this.size.set(image.width, image.height);
@@ -145,13 +159,20 @@ export class TexImage2D implements IDisposable {
         0,
         this.pixelFormat,
         this.dataType,
-        new Uint8Array(image.data),
+        new Uint8Array(image.data)
       );
       if (level === 0) {
         this.size.set(image.width, image.height);
       }
     } else {
-      gl.texImage2D(target ?? this.target, level, this.internalFormat, this.pixelFormat, this.dataType, image);
+      gl.texImage2D(
+        target ?? this.target,
+        level,
+        this.internalFormat,
+        this.pixelFormat,
+        this.dataType,
+        image
+      );
       this.size.set(image.width, image.height);
     }
   }

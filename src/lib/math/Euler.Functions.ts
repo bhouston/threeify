@@ -7,7 +7,7 @@ import { Quaternion } from './Quaternion';
 export function makeEulerFromRotationMatrix4(
   m: Matrix4,
   order: EulerOrder = EulerOrder.Default,
-  result = new Euler(),
+  result = new Euler()
 ): Euler {
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
@@ -109,7 +109,11 @@ export function makeEulerFromRotationMatrix4(
   return result.set(x, y, z, order);
 }
 
-export function makeEulerFromQuaternion(q: Quaternion, order: EulerOrder, result = new Euler()): Euler {
+export function makeEulerFromQuaternion(
+  q: Quaternion,
+  order: EulerOrder,
+  result = new Euler()
+): Euler {
   const m = makeMatrix4RotationFromQuaternion(q);
   return makeEulerFromRotationMatrix4(m, order, result);
 }

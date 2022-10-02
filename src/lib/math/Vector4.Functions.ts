@@ -6,7 +6,11 @@ export function rgbeToLinear(source: Vector4, result = new Vector4()): Vector4 {
   return result.set(source.r * s, source.g * s, source.b * s, 1.0);
 }
 
-export function linearToRgbd(source: Vector4, maxRange: number, result = new Vector4()): Vector4 {
+export function linearToRgbd(
+  source: Vector4,
+  maxRange: number,
+  result = new Vector4()
+): Vector4 {
   const maxRGB = Math.max(source.r, source.g, source.b);
   const realD = Math.max(maxRange / maxRGB, 1.0);
   const normalizedD = clamp(Math.floor(realD) / 255.0, 0.0, 1.0);
@@ -14,7 +18,10 @@ export function linearToRgbd(source: Vector4, maxRange: number, result = new Vec
   return result.set(source.r * s, source.g * s, source.b * s, normalizedD);
 }
 
-export function linearToRgbd16(source: Vector4, result = new Vector4()): Vector4 {
+export function linearToRgbd16(
+  source: Vector4,
+  result = new Vector4()
+): Vector4 {
   return linearToRgbd(source, 16, result);
 }
 
@@ -23,7 +30,7 @@ export function linearToRgbd16(source: Vector4, result = new Vector4()): Vector4
 
 export function rgbeToLinearArray(
   sourceArray: Float32Array,
-  result: Float32Array | undefined = undefined,
+  result: Float32Array | undefined = undefined
 ): Float32Array {
   const sourceColor = new Vector4();
   const destColor = new Vector4();
@@ -41,7 +48,7 @@ export function rgbeToLinearArray(
 export function linearToRgbdArray(
   sourceArray: Float32Array,
   maxRange: number,
-  result: Float32Array | undefined = undefined,
+  result: Float32Array | undefined = undefined
 ): Float32Array {
   const sourceColor = new Vector4();
   const destColor = new Vector4();

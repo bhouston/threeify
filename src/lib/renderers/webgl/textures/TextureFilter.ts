@@ -13,5 +13,5 @@ export enum TextureFilter {
   Linear = GL.LINEAR,
   Nearest = GL.NEAREST,
   NearestMipmapLinear = GL.NEAREST_MIPMAP_LINEAR,
-  NearestMipmapNearest = GL.NEAREST_MIPMAP_NEAREST,
+  NearestMipmapNearest = GL.NEAREST_MIPMAP_NEAREST
 }

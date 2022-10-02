@@ -39,10 +39,11 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   clear(
     attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
-    clearState: ClearState | undefined = undefined,
+    clearState: ClearState | undefined = undefined
   ): void {
     this.context.framebuffer = this;
-    this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
+    this.context.clearState =
+      clearState ?? this.clearState ?? this.context.clearState;
     const { gl } = this.context;
     gl.clear(attachmentBits);
   }
@@ -75,15 +76,18 @@ export function renderBufferGeometry(
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined
 ): void {
   const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
-  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState =
+    blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState =
+    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState =
+    cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.program.setAttributeBuffers(bufferGeometry);
@@ -92,7 +96,12 @@ export function renderBufferGeometry(
   // draw
   const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
-    gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
+    gl.drawElements(
+      bufferGeometry.primitive,
+      bufferGeometry.count,
+      bufferGeometry.indices.componentType,
+      0
+    );
   } else {
     gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
   }
@@ -106,15 +115,18 @@ export function renderVertexArrayObject(
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined
 ): void {
   const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
-  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState =
+    blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState =
+    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState =
+    cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
@@ -131,15 +143,18 @@ export function renderPass(
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined
 ): void {
   const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
-  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState =
+    blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState =
+    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState =
+    cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);

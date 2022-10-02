@@ -1,13 +1,16 @@
 import { Triangle } from './Triangle';
 import { Vector3 } from './Vector3';
-import { crossFromCoplanarPoints, pointToBaryCoords } from './Vector3.Functions';
+import {
+  crossFromCoplanarPoints,
+  pointToBaryCoords
+} from './Vector3.Functions';
 
 export function makeTriangleFromPointsAndIndices(
   points: Vector3[],
   i0: number,
   i1: number,
   i2: number,
-  triangle: Triangle = new Triangle(),
+  triangle: Triangle = new Triangle()
 ): Triangle {
   triangle.set(points[i0], points[i1], points[i2]);
   return triangle;
@@ -31,6 +34,10 @@ export function triangleNormal(t: Triangle, result = new Vector3()): Vector3 {
   return crossFromCoplanarPoints(t.a, t.b, t.c, result).normalize();
 }
 
-export function trianglePointToBaryCoords(t: Triangle, point: Vector3, result = new Vector3()): Vector3 {
+export function trianglePointToBaryCoords(
+  t: Triangle,
+  point: Vector3,
+  result = new Vector3()
+): Vector3 {
   return pointToBaryCoords(point, t.a, t.b, t.c, result);
 }

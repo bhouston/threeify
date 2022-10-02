@@ -108,11 +108,14 @@ export class Vector4 implements IPrimitive<Vector4> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } if (index === 1) {
+    }
+    if (index === 1) {
       return this.y;
-    } if (index === 2) {
+    }
+    if (index === 2) {
       return this.z;
-    } if (index === 3) {
+    }
+    if (index === 3) {
       return this.w;
     }
     throw new Error(`index of our range: ${index}`);
@@ -143,7 +146,9 @@ export class Vector4 implements IPrimitive<Vector4> {
   }
 
   lengthSquared(): number {
-    return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
+    return (
+      this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
+    );
   }
 
   equals(v: Vector4): boolean {

@@ -128,7 +128,9 @@ export class Quaternion implements IPrimitive<Quaternion> {
   }
 
   length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+    return Math.sqrt(
+      this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
+    );
   }
 
   normalize(): this {

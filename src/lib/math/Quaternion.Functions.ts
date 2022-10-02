@@ -3,7 +3,10 @@ import { Matrix4 } from './Matrix4';
 import { Quaternion } from './Quaternion';
 import { Vector3 } from './Vector3';
 
-export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Quaternion {
+export function makeQuaternionFromEuler(
+  e: Euler,
+  result = new Quaternion()
+): Quaternion {
   const { x } = e;
   const { y } = e;
   const { z } = e;
@@ -26,7 +29,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
         c1 * c2 * s3 + s1 * s2 * c3,
-        c1 * c2 * c3 - s1 * s2 * s3,
+        c1 * c2 * c3 - s1 * s2 * s3
       );
 
     case EulerOrder.YXZ:
@@ -34,7 +37,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
         c1 * c2 * s3 - s1 * s2 * c3,
-        c1 * c2 * c3 + s1 * s2 * s3,
+        c1 * c2 * c3 + s1 * s2 * s3
       );
 
     case EulerOrder.ZXY:
@@ -42,7 +45,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
         c1 * c2 * s3 + s1 * s2 * c3,
-        c1 * c2 * c3 - s1 * s2 * s3,
+        c1 * c2 * c3 - s1 * s2 * s3
       );
 
     case EulerOrder.ZYX:
@@ -50,7 +53,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
         c1 * c2 * s3 - s1 * s2 * c3,
-        c1 * c2 * c3 + s1 * s2 * s3,
+        c1 * c2 * c3 + s1 * s2 * s3
       );
 
     case EulerOrder.YZX:
@@ -58,7 +61,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
         c1 * c2 * s3 - s1 * s2 * c3,
-        c1 * c2 * c3 - s1 * s2 * s3,
+        c1 * c2 * c3 - s1 * s2 * s3
       );
 
     case EulerOrder.XZY:
@@ -66,7 +69,7 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
         c1 * c2 * s3 + s1 * s2 * c3,
-        c1 * c2 * c3 + s1 * s2 * s3,
+        c1 * c2 * c3 + s1 * s2 * s3
       );
 
     default:
@@ -74,7 +77,10 @@ export function makeQuaternionFromEuler(e: Euler, result = new Quaternion()): Qu
   }
 }
 
-export function makeQuaternionFromRotationMatrix4(m: Matrix4, result = new Quaternion()): Quaternion {
+export function makeQuaternionFromRotationMatrix4(
+  m: Matrix4,
+  result = new Quaternion()
+): Quaternion {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
@@ -96,25 +102,49 @@ export function makeQuaternionFromRotationMatrix4(m: Matrix4, result = new Quate
   if (trace > 0) {
     const s = 0.5 / Math.sqrt(trace + 1.0);
 
-    return result.set((m32 - m23) * s, (m13 - m31) * s, (m21 - m12) * s, 0.25 / s);
+    return result.set(
+      (m32 - m23) * s,
+      (m13 - m31) * s,
+      (m21 - m12) * s,
+      0.25 / s
+    );
   }
   if (m11 > m22 && m11 > m33) {
     const s = 2.0 * Math.sqrt(1.0 + m11 - m22 - m33);
 
-    return result.set(0.25 * s, (m12 + m21) / s, (m13 + m31) / s, (m32 - m23) / s);
+    return result.set(
+      0.25 * s,
+      (m12 + m21) / s,
+      (m13 + m31) / s,
+      (m32 - m23) / s
+    );
   }
   if (m22 > m33) {
     const s = 2.0 * Math.sqrt(1.0 + m22 - m11 - m33);
 
-    return result.set((m12 + m21) / s, 0.25 * s, (m23 + m32) / s, (m13 - m31) / s);
+    return result.set(
+      (m12 + m21) / s,
+      0.25 * s,
+      (m23 + m32) / s,
+      (m13 - m31) / s
+    );
   }
 
   const s = 2.0 * Math.sqrt(1.0 + m33 - m11 - m22);
 
-  return result.set((m13 + m31) / s, (m23 + m32) / s, 0.25 * s, (m21 - m12) / s);
+  return result.set(
+    (m13 + m31) / s,
+    (m23 + m32) / s,
+    0.25 * s,
+    (m21 - m12) / s
+  );
 }
 
-export function makeQuaternionFromAxisAngle(axis: Vector3, angle: number, result = new Quaternion()): Quaternion {
+export function makeQuaternionFromAxisAngle(
+  axis: Vector3,
+  angle: number,
+  result = new Quaternion()
+): Quaternion {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
 
   // assumes axis is normalized
@@ -130,13 +160,13 @@ export function makeQuaternionFromBaryCoordWeights(
   a: Quaternion,
   b: Quaternion,
   c: Quaternion,
-  result = new Quaternion(),
+  result = new Quaternion()
 ): Quaternion {
   const v = baryCoord;
   return result.set(
     a.x * v.x + b.x * v.y + c.x * v.z,
     a.y * v.x + b.y * v.y + c.y * v.z,
     a.z * v.x + b.z * v.y + c.z * v.z,
-    a.w * v.x + b.w * v.y + c.w * v.z,
+    a.w * v.x + b.w * v.y + c.w * v.z
   );
 }

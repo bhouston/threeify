@@ -51,7 +51,7 @@ export class ProgramAttribute {
       bufferAccessor.componentType,
       bufferAccessor.normalized,
       bufferAccessor.vertexStride,
-      bufferAccessor.byteOffset,
+      bufferAccessor.byteOffset
     );
     return this;
   }

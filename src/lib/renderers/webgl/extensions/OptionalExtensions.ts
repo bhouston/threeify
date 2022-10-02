@@ -30,14 +30,21 @@ export class OptionalExtensions {
     // this.EXT_frag_depth = gl.getExtension("EXT_frag_depth");
     this.EXT_shader_texture_lod = gl.getExtension('EXT_shader_texture_lod');
     // this.EXT_sRGB = gl.getExtension("EXT_sRGB");
-    this.EXT_texture_filter_anisotropic = gl.getExtension('EXT_texture_filter_anisotropic');
-    this.KHR_parallel_shader_compile = gl.getExtension('KHR_parallel_shader_compile') !== null ? new KHR_parallel_shader_compile() : null;
+    this.EXT_texture_filter_anisotropic = gl.getExtension(
+      'EXT_texture_filter_anisotropic'
+    );
+    this.KHR_parallel_shader_compile =
+      gl.getExtension('KHR_parallel_shader_compile') !== null
+        ? new KHR_parallel_shader_compile()
+        : null;
     // this.OES_texture_float = gl.getExtension("OES_texture_float");
     // this.OES_texture_float_linear = gl.getExtension("OES_texture_float_linear");
     // this.OES_texture_half_float = gl.getExtension("OES_texture_half_float");
     // this.OES_texture_half_float_linear = gl.getExtension("OES_texture_half_float_linear");
     // this.WEBGL_color_buffer_float = gl.getExtension("WEBGL_color_buffer_float");
-    this.WEBGL_debug_renderer_info = gl.getExtension('WEBGL_debug_renderer_info');
+    this.WEBGL_debug_renderer_info = gl.getExtension(
+      'WEBGL_debug_renderer_info'
+    );
     this.WEBGL_debug_shaders = gl.getExtension('WEBGL_debug_shaders');
     // this.WEBGL_draw_buffers = gl.getExtension("WEBGL_draw_buffers");
     // this.WEBGL_compressed_texture_astc = gl.getExtension("WEBGL_compressed_texture_astc");

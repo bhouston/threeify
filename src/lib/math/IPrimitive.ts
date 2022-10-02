@@ -5,8 +5,10 @@
 // * @bhouston
 //
 
-import {
-  IArrayable, ICloneable, IEquatable, IHashable,
-} from '../core/types';
+import { IArrayable, ICloneable, IEquatable, IHashable } from '../core/types';
 
-export interface IPrimitive<T> extends ICloneable<T>, IEquatable<T>, IHashable, IArrayable {}
+export interface IPrimitive<T>
+  extends ICloneable<T>,
+    IEquatable<T>,
+    IHashable,
+    IArrayable {}

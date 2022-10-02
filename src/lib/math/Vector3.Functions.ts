@@ -1,14 +1,23 @@
 import { Spherical } from './Spherical';
 import { Vector3 } from './Vector3';
 
-export function crossFromCoplanarPoints(a: Vector3, b: Vector3, c: Vector3, result = new Vector3()): Vector3 {
+export function crossFromCoplanarPoints(
+  a: Vector3,
+  b: Vector3,
+  c: Vector3,
+  result = new Vector3()
+): Vector3 {
   // TODO: replace with just number math, no classes?  Or just use temporary Vector3 objects
   result.copy(c).sub(b);
   const v = a.clone().sub(b);
   return result.cross(v);
 }
 
-export function makeVector3FromDelta(a: Vector3, b: Vector3, result = new Vector3()): Vector3 {
+export function makeVector3FromDelta(
+  a: Vector3,
+  b: Vector3,
+  result = new Vector3()
+): Vector3 {
   return result.copy(a).sub(b);
 }
 
@@ -16,19 +25,29 @@ export function makeVector3FromSpherical(s: Spherical): Vector3 {
   return makeVector3FromSphericalCoords(s.radius, s.phi, s.theta);
 }
 
-export function makeVector3FromSphericalCoords(radius: number, phi: number, theta: number): Vector3 {
+export function makeVector3FromSphericalCoords(
+  radius: number,
+  phi: number,
+  theta: number
+): Vector3 {
   const sinPhiRadius = Math.sin(phi) * radius;
 
   return new Vector3(
     sinPhiRadius * Math.sin(theta),
     Math.cos(phi) * radius,
-    sinPhiRadius * Math.cos(theta),
+    sinPhiRadius * Math.cos(theta)
   );
 }
 
 // static/instance method to calculate barycentric coordinates
 // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-export function pointToBaryCoords(a: Vector3, b: Vector3, c: Vector3, point: Vector3, result = new Vector3()): Vector3 {
+export function pointToBaryCoords(
+  a: Vector3,
+  b: Vector3,
+  c: Vector3,
+  point: Vector3,
+  result = new Vector3()
+): Vector3 {
   const v0 = makeVector3FromDelta(c, b);
   const v1 = makeVector3FromDelta(b, a);
   const v2 = makeVector3FromDelta(point, a);
@@ -61,19 +80,26 @@ export function makeVector3FromBaryCoordWeights(
   a: Vector3,
   b: Vector3,
   c: Vector3,
-  result = new Vector3(),
+  result = new Vector3()
 ): Vector3 {
   const v = baryCoord;
   return result.set(
     a.x * v.x + b.x * v.y + c.x * v.z,
     a.y * v.x + b.y * v.y + c.y * v.z,
-    a.z * v.x + b.z * v.y + c.z * v.z,
+    a.z * v.x + b.z * v.y + c.z * v.z
   );
 }
 
-export function makeColor3FromHex(hex: number, result = new Vector3()): Vector3 {
+export function makeColor3FromHex(
+  hex: number,
+  result = new Vector3()
+): Vector3 {
   hex = Math.floor(hex);
-  return result.set(((hex >> 16) & 255) / 255, ((hex >> 8) & 255) / 255, (hex & 255) / 255);
+  return result.set(
+    ((hex >> 16) & 255) / 255,
+    ((hex >> 8) & 255) / 255,
+    (hex & 255) / 255
+  );
 }
 
 function hue2rgb(p: number, q: number, t: number): number {
@@ -96,7 +122,12 @@ function hue2rgb(p: number, q: number, t: number): number {
   return p;
 }
 
-export function makeColor3FromHSL(h: number, s: number, l: number, result = new Vector3()): Vector3 {
+export function makeColor3FromHSL(
+  h: number,
+  s: number,
+  l: number,
+  result = new Vector3()
+): Vector3 {
   // h,s,l ranges are in 0.0 - 1.0
   h = ((h % 1.0) + 1.0) % 1.0; // euclidean modulo
   s = Math.min(Math.max(s, 0.0), 1.0);
@@ -109,7 +140,11 @@ export function makeColor3FromHSL(h: number, s: number, l: number, result = new 
   const p = l <= 0.5 ? l * (1.0 + s) : l + s - l * s;
   const q = 2.0 * l - p;
 
-  return result.set(hue2rgb(q, p, h + 1.0 / 3.0), hue2rgb(q, p, h), hue2rgb(q, p, h - 1.0 / 3.0));
+  return result.set(
+    hue2rgb(q, p, h + 1.0 / 3.0),
+    hue2rgb(q, p, h),
+    hue2rgb(q, p, h - 1.0 / 3.0)
+  );
 }
 
 export function makeHexFromColor3(c: Vector3): number {
@@ -117,7 +152,7 @@ export function makeHexFromColor3(c: Vector3): number {
 }
 
 export function makeHexStringFromColor3(c: Vector3): string {
-  return (`000000${makeHexFromColor3(c).toString(16)}`).slice(-6);
+  return `000000${makeHexFromColor3(c).toString(16)}`.slice(-6);
 }
 
 type HSL = { h: number; s: number; l: number };
@@ -140,7 +175,8 @@ export function makeHSLFromColor3(c: Vector3, target: HSL): HSL {
   } else {
     const delta = max - min;
 
-    saturation = lightness <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
+    saturation =
+      lightness <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
 
     switch (max) {
       case r:

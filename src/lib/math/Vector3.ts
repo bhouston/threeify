@@ -136,9 +136,11 @@ export class Vector3 implements IPrimitive<Vector3> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } if (index === 1) {
+    }
+    if (index === 1) {
       return this.y;
-    } if (index === 2) {
+    }
+    if (index === 2) {
       return this.z;
     }
     throw new Error(`index of our range: ${index}`);

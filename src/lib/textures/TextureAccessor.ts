@@ -4,7 +4,7 @@ import {
   makeMatrix3Concatenation,
   makeMatrix3RotationFromAngle,
   makeMatrix3Scale,
-  makeMatrix3Translation,
+  makeMatrix3Translation
 } from '../math/Matrix3.Functions';
 import { Vector2 } from '../math/Vector2';
 import { Texture } from './Texture';
@@ -19,21 +19,24 @@ export class TextureAccessor implements IVersionable {
     public uvIndex = 0,
     public uvScale: Vector2 = new Vector2(1, 1),
     public uvRotation = 0,
-    public uvTranslation: Vector2 = new Vector2(),
+    public uvTranslation: Vector2 = new Vector2()
   ) {}
 
   get uvTransform(): Matrix3 {
     if (this.#uvTransformVersion < this.version) {
-      this.#uvTransform = makeMatrix3Translation(this.uvTranslation, this.#uvTransform);
+      this.#uvTransform = makeMatrix3Translation(
+        this.uvTranslation,
+        this.#uvTransform
+      );
       this.#uvTransform = makeMatrix3Concatenation(
         this.#uvTransform,
         makeMatrix3RotationFromAngle(this.uvRotation),
-        this.#uvTransform,
+        this.#uvTransform
       );
       this.#uvTransform = makeMatrix3Concatenation(
         this.#uvTransform,
         makeMatrix3Scale(this.uvScale),
-        this.#uvTransform,
+        this.#uvTransform
       );
       this.#uvTransformVersion = this.version;
     }

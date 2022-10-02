@@ -1,9 +1,19 @@
 import { Euler, EulerOrder } from './Euler';
-import { makeEulerFromQuaternion, makeEulerFromRotationMatrix4 } from './Euler.Functions';
+import {
+  makeEulerFromQuaternion,
+  makeEulerFromRotationMatrix4
+} from './Euler.Functions';
 import { makeMatrix4RotationFromEuler } from './Matrix4.Functions';
 import { makeQuaternionFromEuler } from './Quaternion.Functions';
 
-const testOrders = [EulerOrder.XYZ, EulerOrder.YXZ, EulerOrder.ZXY, EulerOrder.ZYX, EulerOrder.YZX, EulerOrder.XZY];
+const testOrders = [
+  EulerOrder.XYZ,
+  EulerOrder.YXZ,
+  EulerOrder.ZXY,
+  EulerOrder.ZYX,
+  EulerOrder.YZX,
+  EulerOrder.XZY
+];
 const e0 = new Euler();
 const eX = new Euler(1, 0, 0);
 const eY = new Euler(0, 1, 0);

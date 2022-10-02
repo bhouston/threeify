@@ -2,7 +2,7 @@ import {
   linearizeMatrix3FloatArray,
   linearizeMatrix4FloatArray,
   linearizeVector2FloatArray,
-  linearizeVector3FloatArray,
+  linearizeVector3FloatArray
 } from '../../../math/arrays/Linearizers';
 import { Matrix3 } from '../../../math/Matrix3';
 import { Matrix4 } from '../../../math/Matrix4';
@@ -87,7 +87,11 @@ export class ProgramUniform {
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && typeof value[0] === 'number') {
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          typeof value[0] === 'number'
+        ) {
           // const array = linearizeNumberInt32Array(value as number[]);
           gl.uniform1iv(this.glLocation, value as number[]);
           this.valueHashCode = -1;
@@ -105,7 +109,11 @@ export class ProgramUniform {
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && typeof value[0] === 'number') {
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          typeof value[0] === 'number'
+        ) {
           // const array = linearizeNumberFloatArray(value as number[]);
           gl.uniform1fv(this.glLocation, value as number[]);
           this.valueHashCode = -1;
@@ -121,7 +129,11 @@ export class ProgramUniform {
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && value[0] instanceof Vector2) {
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Vector2
+        ) {
           const array = linearizeVector2FloatArray(value as Vector2[]);
           gl.uniform2fv(this.glLocation, array);
           this.valueHashCode = -1;
@@ -137,7 +149,11 @@ export class ProgramUniform {
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && value[0] instanceof Vector3) {
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Vector3
+        ) {
           const array = linearizeVector3FloatArray(value as Vector3[]);
           gl.uniform3fv(this.glLocation, array);
           this.valueHashCode = -1;
@@ -158,7 +174,11 @@ export class ProgramUniform {
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && value[0] instanceof Matrix4) {
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Matrix4
+        ) {
           const array = linearizeMatrix3FloatArray(value as Matrix3[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
@@ -177,7 +197,11 @@ export class ProgramUniform {
           }
           return this;
         }
-        if (value instanceof Array && value.length > 0 && value[0] instanceof Matrix4) {
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Matrix4
+        ) {
           const array = linearizeMatrix4FloatArray(value as Matrix4[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
@@ -206,9 +230,9 @@ export class ProgramUniform {
         break;
     }
     throw new Error(
-      `unsupported uniform type - value mismatch: ${UniformType[this.uniformType]}(${this.uniformType}) on '${
-        this.name
-      }'`,
+      `unsupported uniform type - value mismatch: ${
+        UniformType[this.uniformType]
+      }(${this.uniformType}) on '${this.name}'`
     );
   }
 }

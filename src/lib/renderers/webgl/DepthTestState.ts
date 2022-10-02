@@ -41,10 +41,12 @@ export enum DepthTestFunc {
   /**
    * Always pass.
    */
-  Always = GL.ALWAYS,
+  Always = GL.ALWAYS
 }
 
-export class DepthTestState implements ICloneable<DepthTestState>, IEquatable<DepthTestState> {
+export class DepthTestState
+  implements ICloneable<DepthTestState>, IEquatable<DepthTestState>
+{
   // TODO: Should be intialized to default WebGL states
   constructor(public enabled = false, public func = DepthTestFunc.Less) {}
 

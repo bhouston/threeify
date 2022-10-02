@@ -36,10 +36,20 @@ export class Program implements IDisposable {
     public context: RenderingContext,
     vertexShaderCode: string,
     fragmentShaderCode: string,
-    glslVersion: number,
+    glslVersion: number
   ) {
-    this.vertexShader = new Shader(this.context, vertexShaderCode, ShaderType.Vertex, glslVersion);
-    this.fragmentShader = new Shader(this.context, fragmentShaderCode, ShaderType.Fragment, glslVersion);
+    this.vertexShader = new Shader(
+      this.context,
+      vertexShaderCode,
+      ShaderType.Vertex,
+      glslVersion
+    );
+    this.fragmentShader = new Shader(
+      this.context,
+      fragmentShaderCode,
+      ShaderType.Fragment,
+      glslVersion
+    );
 
     const { gl } = this.context;
 
@@ -104,7 +114,10 @@ export class Program implements IDisposable {
       let textureUnitCount = 0;
       const { gl } = this.context;
 
-      const numActiveUniforms = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS);
+      const numActiveUniforms = gl.getProgramParameter(
+        this.glProgram,
+        gl.ACTIVE_UNIFORMS
+      );
       for (let i = 0; i < numActiveUniforms; ++i) {
         const uniform = new ProgramUniform(this, i);
         if (numTextureUnits(uniform.uniformType) > 0) {
@@ -121,7 +134,10 @@ export class Program implements IDisposable {
   get attributes(): AttributeMap {
     if (!this.#attributesInitialized) {
       const { gl } = this.context;
-      const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
+      const numActiveAttributes = gl.getProgramParameter(
+        this.glProgram,
+        gl.ACTIVE_ATTRIBUTES
+      );
       for (let i = 0; i < numActiveAttributes; ++i) {
         const attribute = new ProgramAttribute(this, i);
         this.#attributes[attribute.name] = attribute;
@@ -158,7 +174,10 @@ export class Program implements IDisposable {
         }
       }
       if (bufferGeometry.indices !== undefined) {
-        gl.bindBuffer(bufferGeometry.indices.buffer.target, bufferGeometry.indices.buffer.glBuffer);
+        gl.bindBuffer(
+          bufferGeometry.indices.buffer.target,
+          bufferGeometry.indices.buffer.glBuffer
+        );
       }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
@@ -181,22 +200,32 @@ export class Program implements IDisposable {
   }
 }
 
-export function makeProgramFromShaderMaterial(context: RenderingContext, shaderMaterial: ShaderMaterial): Program {
+export function makeProgramFromShaderMaterial(
+  context: RenderingContext,
+  shaderMaterial: ShaderMaterial
+): Program {
   return new Program(
     context,
     shaderMaterial.vertexShaderCode,
     shaderMaterial.fragmentShaderCode,
-    shaderMaterial.glslVersion,
+    shaderMaterial.glslVersion
   );
 }
 
 export class ProgramPool extends Pool<ShaderMaterial, Program> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderMaterial, program: Program | undefined) => {
-      if (program !== undefined) {
-        program.dispose();
+    super(
+      context,
+      (
+        context: RenderingContext,
+        shaderCodeMaterial: ShaderMaterial,
+        program: Program | undefined
+      ) => {
+        if (program !== undefined) {
+          program.dispose();
+        }
+        return makeProgramFromShaderMaterial(context, shaderCodeMaterial);
       }
-      return makeProgramFromShaderMaterial(context, shaderCodeMaterial);
-    });
+    );
   }
 }

@@ -1,7 +1,11 @@
 import { Matrix3 } from './Matrix3';
 import { Vector2 } from './Vector2';
 
-export function makeMatrix3Concatenation(a: Matrix3, b: Matrix3, result = new Matrix3()): Matrix3 {
+export function makeMatrix3Concatenation(
+  a: Matrix3,
+  b: Matrix3,
+  result = new Matrix3()
+): Matrix3 {
   const ae = a.elements;
   const be = b.elements;
   const te = result.elements;
@@ -57,7 +61,10 @@ export function matrix3Determinant(m: Matrix3): number {
   return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
 }
 
-export function makeMatrix3Transpose(m: Matrix3, result = new Matrix3()): Matrix3 {
+export function makeMatrix3Transpose(
+  m: Matrix3,
+  result = new Matrix3()
+): Matrix3 {
   let tmp;
   const me = result.copy(m).elements;
 
@@ -75,7 +82,10 @@ export function makeMatrix3Transpose(m: Matrix3, result = new Matrix3()): Matrix
   return result;
 }
 
-export function makeMatrix3Inverse(m: Matrix3, result = new Matrix3()): Matrix3 {
+export function makeMatrix3Inverse(
+  m: Matrix3,
+  result = new Matrix3()
+): Matrix3 {
   const e = m.elements;
 
   const n11 = e[0];
@@ -116,11 +126,17 @@ export function makeMatrix3Inverse(m: Matrix3, result = new Matrix3()): Matrix3 
   return result;
 }
 
-export function makeMatrix3Translation(t: Vector2, result = new Matrix3()): Matrix3 {
+export function makeMatrix3Translation(
+  t: Vector2,
+  result = new Matrix3()
+): Matrix3 {
   return result.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
 }
 
-export function makeMatrix3RotationFromAngle(angle: number, result = new Matrix3()): Matrix3 {
+export function makeMatrix3RotationFromAngle(
+  angle: number,
+  result = new Matrix3()
+): Matrix3 {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
 

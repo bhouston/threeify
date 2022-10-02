@@ -15,7 +15,7 @@ export enum PixelFormat {
   Luminance = GL.LUMINANCE,
   Alpha = GL.ALPHA,
   DepthComponent = GL.DEPTH_COMPONENT,
-  DepthStencil = GL.DEPTH_STENCIL,
+  DepthStencil = GL.DEPTH_STENCIL
 }
 
 export function numPixelFormatComponents(pixelFormat: PixelFormat): number {

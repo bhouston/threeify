@@ -8,7 +8,9 @@
 import { hashFloat3 } from '../core/hash';
 import { ICloneable, IEquatable, IHashable } from '../core/types';
 
-export class Spherical implements ICloneable<Spherical>, IEquatable<Spherical>, IHashable {
+export class Spherical
+  implements ICloneable<Spherical>, IEquatable<Spherical>, IHashable
+{
   constructor(public radius = 1.0, public phi = 0.0, public theta = 0.0) {}
 
   getHashCode(): number {
@@ -44,6 +46,8 @@ export class Spherical implements ICloneable<Spherical>, IEquatable<Spherical>, 
   }
 
   equals(s: Spherical): boolean {
-    return s.radius === this.radius && s.phi === this.phi && s.theta === this.theta;
+    return (
+      s.radius === this.radius && s.phi === this.phi && s.theta === this.theta
+    );
   }
 }

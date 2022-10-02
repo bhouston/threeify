@@ -8,5 +8,5 @@ export enum TextureTarget {
   CubeMapPositiveY = GL.TEXTURE_CUBE_MAP_POSITIVE_Y,
   CubeMapNegativeY = GL.TEXTURE_CUBE_MAP_NEGATIVE_Y,
   CubeMapPositiveZ = GL.TEXTURE_CUBE_MAP_POSITIVE_Z,
-  CubeMapNegativeZ = GL.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+  CubeMapNegativeZ = GL.TEXTURE_CUBE_MAP_NEGATIVE_Z
 }

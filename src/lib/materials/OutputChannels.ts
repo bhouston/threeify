@@ -22,5 +22,5 @@ export enum OutputChannels {
   Specular = 10,
 
   DepthPacked = 11,
-  MetalnessRoughnessOcclusion = 12,
+  MetalnessRoughnessOcclusion = 12
 }

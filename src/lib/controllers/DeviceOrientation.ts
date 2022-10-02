@@ -2,7 +2,10 @@ import { IDisposable } from '../core/types';
 import { Euler, EulerOrder } from '../math/Euler';
 import { degToRad } from '../math/Functions';
 import { Quaternion } from '../math/Quaternion';
-import { makeQuaternionFromAxisAngle, makeQuaternionFromEuler } from '../math/Quaternion.Functions';
+import {
+  makeQuaternionFromAxisAngle,
+  makeQuaternionFromEuler
+} from '../math/Quaternion.Functions';
 import { Vector3 } from '../math/Vector3';
 
 const zAxis = new Vector3(0, 0, 1);
@@ -23,7 +26,7 @@ export class DeviceOrientation implements IDisposable {
         degToRad(event.beta ?? 0),
         degToRad(event.alpha ?? 0 - 180.0),
         -degToRad(event.gamma ?? 0),
-        EulerOrder.YXZ,
+        EulerOrder.YXZ
       );
     };
     const onOrientationChange = (): void => {
@@ -54,8 +57,16 @@ export class DeviceOrientation implements IDisposable {
     // }
 
     this.onDispose = (): void => {
-      window.removeEventListener('orientationchange', onOrientationChange, false);
-      window.removeEventListener('deviceorientation', onDeviceOrientation, false);
+      window.removeEventListener(
+        'orientationchange',
+        onOrientationChange,
+        false
+      );
+      window.removeEventListener(
+        'deviceorientation',
+        onDeviceOrientation,
+        false
+      );
     };
   }
 
@@ -64,7 +75,9 @@ export class DeviceOrientation implements IDisposable {
     // camera looks out the back of the device, not the top
     result.multiply(q1);
     // adjust for screen orientation
-    result.multiply(makeQuaternionFromAxisAngle(zAxis, this.screenOrientation, this.tempValue));
+    result.multiply(
+      makeQuaternionFromAxisAngle(zAxis, this.screenOrientation, this.tempValue)
+    );
 
     return result;
   }

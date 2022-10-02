@@ -25,7 +25,14 @@ import { Shader } from './shaders/Shader';
 import { TexImage2D } from './textures/TexImage2D';
 import { VertexArrayObject } from './VertexArrayObject';
 
-export type Resource = VertexArrayObject | TexImage2D | Program | Shader | Framebuffer | Buffer | Renderbuffer;
+export type Resource =
+  | VertexArrayObject
+  | TexImage2D
+  | Program
+  | Shader
+  | Framebuffer
+  | Buffer
+  | Renderbuffer;
 export type ResourceMap = { [id: number]: Resource };
 
 export class RenderingContext {
@@ -50,7 +57,10 @@ export class RenderingContext {
   #maskState: MaskState = new MaskState();
   #cullingState: CullingState = new CullingState();
 
-  constructor(public canvas: HTMLCanvasElement, attributes: WebGLContextAttributes | undefined = undefined) {
+  constructor(
+    public canvas: HTMLCanvasElement,
+    attributes: WebGLContextAttributes | undefined = undefined
+  ) {
     if (attributes === undefined) {
       attributes = {};
       attributes.alpha = true;
@@ -89,13 +99,17 @@ export class RenderingContext {
   get debugVendor(): string {
     // Note: this is a big performance hit to call, this only return if asked
     const dri = this.glxo.WEBGL_debug_renderer_info;
-    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL) : '';
+    return dri !== null
+      ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL)
+      : '';
   }
 
   get debugRenderer(): string {
     // Note: this is a big performance hit to call, this only return if asked
     const dri = this.glxo.WEBGL_debug_renderer_info;
-    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL) : '';
+    return dri !== null
+      ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL)
+      : '';
   }
 
   set program(program: Program | undefined) {
@@ -161,7 +175,12 @@ export class RenderingContext {
     if (!this.#blendState.equals(bs)) {
       this.gl.enable(GL.BLEND);
       this.gl.blendEquation(bs.equation);
-      this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
+      this.gl.blendFuncSeparate(
+        bs.sourceRGBFactor,
+        bs.destRGBFactor,
+        bs.sourceAlphaFactor,
+        bs.destAlphaFactor
+      );
       /* console.log(
         `Blend ${BlendEquation[bs.equation]} srcRGB ${BlendFunc[bs.sourceRGBFactor]} destRGB ${
           BlendFunc[bs.destRGBFactor]

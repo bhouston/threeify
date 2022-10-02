@@ -56,7 +56,7 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
         this.position,
         makeQuaternionFromEuler(this.rotation),
         this.scale,
-        this.#localToParent,
+        this.#localToParent
       );
       this.#parentToLocalVersion = this.version;
     }
@@ -74,21 +74,30 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
 
 // visitors
 
-export function depthFirstVisitor(node: Node, callback: (node: Node) => void): void {
+export function depthFirstVisitor(
+  node: Node,
+  callback: (node: Node) => void
+): void {
   node.children.forEach((child) => {
     depthFirstVisitor(child, callback);
   });
   callback(node);
 }
 
-export function rootLastVisitor(node: Node, callback: (node: Node) => void): void {
+export function rootLastVisitor(
+  node: Node,
+  callback: (node: Node) => void
+): void {
   callback(node);
   if (node.parent !== undefined) {
     rootLastVisitor(node.parent, callback);
   }
 }
 
-export function rootFirstVisitor(node: Node, callback: (node: Node) => void): void {
+export function rootFirstVisitor(
+  node: Node,
+  callback: (node: Node) => void
+): void {
   if (node.parent !== undefined) {
     rootFirstVisitor(node.parent, callback);
   }

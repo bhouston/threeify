@@ -10,7 +10,10 @@ import { ICloneable, IEquatable, IHashable } from '../core/types';
 import { Vector2 } from './Vector2';
 
 export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
-  constructor(public min = new Vector2(+Infinity, +Infinity), public max = new Vector2(+Infinity, +Infinity)) {}
+  constructor(
+    public min = new Vector2(+Infinity, +Infinity),
+    public max = new Vector2(+Infinity, +Infinity)
+  ) {}
 
   get x(): number {
     return this.min.x;
@@ -67,7 +70,10 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   }
 
   getCenter(v: Vector2): Vector2 {
-    return v.set((this.min.x + this.max.x) * 0.5, (this.min.y + this.max.y) * 0.5);
+    return v.set(
+      (this.min.x + this.max.x) * 0.5,
+      (this.min.y + this.max.y) * 0.5
+    );
   }
 
   makeEmpty(): this {

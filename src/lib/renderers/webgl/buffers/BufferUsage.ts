@@ -12,7 +12,7 @@ export enum BufferUsage {
    * application, and used many times as the source for WebGL drawing and image
    * specification commands.
    */
-  DynamicDraw = GL.DYNAMIC_DRAW,
+  DynamicDraw = GL.DYNAMIC_DRAW
   /**
    * The contents are intended to be specified once by the application, and
    * used at most a few times as the source for WebGL drawing and image

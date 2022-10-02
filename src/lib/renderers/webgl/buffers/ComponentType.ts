@@ -35,7 +35,7 @@ export enum ComponentType {
   /**
    * 32-bit IEEE floating point number
    */
-  Float = GL.FLOAT,
+  Float = GL.FLOAT
   /**
    * 16-bit IEEE floating point number
    */

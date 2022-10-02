@@ -16,7 +16,7 @@ export class OrthographicCamera extends Camera {
     public near: number,
     public far: number,
     public center = new Vector2(),
-    public zoom = 1,
+    public zoom = 1
   ) {
     super();
   }
@@ -29,7 +29,7 @@ export class OrthographicCamera extends Camera {
       this.far,
       this.zoom,
       viewAspectRatio * this.pixelAspectRatio,
-      result,
+      result
     );
   }
 }

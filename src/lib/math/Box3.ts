@@ -12,7 +12,7 @@ import { Vector3 } from './Vector3';
 export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
   constructor(
     public min = new Vector3(+Infinity, +Infinity, +Infinity),
-    public max = new Vector3(+Infinity, +Infinity, +Infinity),
+    public max = new Vector3(+Infinity, +Infinity, +Infinity)
   ) {}
 
   getHashCode(): number {
@@ -41,7 +41,7 @@ export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
     return result.set(
       (this.min.x + this.max.x) * 0.5,
       (this.min.y + this.max.y) * 0.5,
-      (this.min.z + this.max.z) * 0.5,
+      (this.min.z + this.max.z) * 0.5
     );
   }
 
@@ -56,7 +56,11 @@ export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
     // this is a more robust check for empty than ( volume <= 0 ) because
     // volume can get positive with two negative axes
 
-    return this.max.x < this.min.x || this.max.y < this.min.y || this.max.z < this.min.z;
+    return (
+      this.max.x < this.min.x ||
+      this.max.y < this.min.y ||
+      this.max.z < this.min.z
+    );
   }
 
   expandByPoint(point: Vector3): this {

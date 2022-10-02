@@ -16,7 +16,7 @@ export enum DataType {
   Int = GL.INT,
   UnsignedInt = GL.UNSIGNED_INT,
   // HalfFloat = GL.HALF_FLOAT,
-  Float = GL.FLOAT,
+  Float = GL.FLOAT
 }
 
 export function sizeOfDataType(dataType: DataType): number {

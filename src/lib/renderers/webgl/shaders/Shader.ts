@@ -86,7 +86,7 @@ export class Shader implements IDisposable {
     public context: RenderingContext,
     public source: string,
     public shaderType: ShaderType,
-    public glslVersion = 300,
+    public glslVersion = 300
   ) {
     const { gl } = this.context;
 
@@ -141,7 +141,10 @@ export class Shader implements IDisposable {
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
     const { gl } = this.context;
     // Check if it compiled
-    const compileStatus = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
+    const compileStatus = gl.getShaderParameter(
+      this.glShader,
+      GL.COMPILE_STATUS
+    );
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!compileStatus) {
       // Something went wrong during compilation; get the error

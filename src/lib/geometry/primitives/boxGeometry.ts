@@ -15,7 +15,7 @@ export function boxGeometry(
   depth = 1,
   widthSegments = 1,
   heightSegments = 1,
-  depthSegments = 1,
+  depthSegments = 1
 ): Geometry {
   // buffers
 
@@ -38,7 +38,7 @@ export function boxGeometry(
     height: number,
     depth: number,
     gridX: number,
-    gridY: number,
+    gridY: number
   ): void {
     const segmentWidth = width / gridX;
     const segmentHeight = height / gridY;
@@ -111,12 +111,67 @@ export function boxGeometry(
 
   // build each side of the box geometry
 
-  buildPlane(2, 1, 0, -1, -1, depth, height, width, depthSegments, heightSegments); // px
-  buildPlane(2, 1, 0, 1, -1, depth, height, -width, depthSegments, heightSegments); // nx
+  buildPlane(
+    2,
+    1,
+    0,
+    -1,
+    -1,
+    depth,
+    height,
+    width,
+    depthSegments,
+    heightSegments
+  ); // px
+  buildPlane(
+    2,
+    1,
+    0,
+    1,
+    -1,
+    depth,
+    height,
+    -width,
+    depthSegments,
+    heightSegments
+  ); // nx
   buildPlane(0, 2, 1, 1, 1, width, depth, height, widthSegments, depthSegments); // py
-  buildPlane(0, 2, 1, 1, -1, width, depth, -height, widthSegments, depthSegments); // ny
-  buildPlane(0, 1, 2, 1, -1, width, height, depth, widthSegments, heightSegments); // pz
-  buildPlane(0, 1, 2, -1, -1, width, height, -depth, widthSegments, heightSegments); // nz
+  buildPlane(
+    0,
+    2,
+    1,
+    1,
+    -1,
+    width,
+    depth,
+    -height,
+    widthSegments,
+    depthSegments
+  ); // ny
+  buildPlane(
+    0,
+    1,
+    2,
+    1,
+    -1,
+    width,
+    height,
+    depth,
+    widthSegments,
+    heightSegments
+  ); // pz
+  buildPlane(
+    0,
+    1,
+    2,
+    -1,
+    -1,
+    width,
+    height,
+    -depth,
+    widthSegments,
+    heightSegments
+  ); // nz
 
   // build geometry
 

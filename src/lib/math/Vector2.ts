@@ -90,7 +90,8 @@ export class Vector2 implements IPrimitive<Vector2> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } if (index === 1) {
+    }
+    if (index === 1) {
       return this.y;
     }
     throw new Error(`index of our range: ${index}`);

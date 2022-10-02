@@ -21,7 +21,7 @@ import { TextureWrap } from './TextureWrap';
 export function makeTexImage2DFromTexture(
   context: RenderingContext,
   texture: Texture,
-  internalFormat: PixelFormat = PixelFormat.RGBA,
+  internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
   const params = new TexParameters();
   params.anisotropyLevels = texture.anisotropicLevels;
@@ -37,14 +37,14 @@ export function makeTexImage2DFromTexture(
     texture.dataType,
     internalFormat,
     TextureTarget.Texture2D,
-    params,
+    params
   );
 }
 
 export function makeTexImage2DFromCubeTexture(
   context: RenderingContext,
   texture: CubeMapTexture,
-  internalFormat: PixelFormat = PixelFormat.RGBA,
+  internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
   const params = new TexParameters();
   params.anisotropyLevels = texture.anisotropicLevels;
@@ -60,7 +60,7 @@ export function makeTexImage2DFromCubeTexture(
     texture.dataType,
     internalFormat,
     TextureTarget.TextureCubeMap,
-    params,
+    params
   );
 }
 
@@ -68,34 +68,55 @@ export function makeTexImage2DFromEquirectangularTexture(
   context: RenderingContext,
   latLongTexture: Texture,
   faceSize = new Vector2(512, 512),
-  generateMipmaps = true,
+  generateMipmaps = true
 ): TexImage2D {
   // required for proper reading.
   latLongTexture.wrapS = TextureWrap.Repeat;
   latLongTexture.wrapT = TextureWrap.ClampToEdge;
   latLongTexture.minFilter = TextureFilter.Linear;
 
-  const cubeTexture = new CubeMapTexture([faceSize, faceSize, faceSize, faceSize, faceSize, faceSize]);
+  const cubeTexture = new CubeMapTexture([
+    faceSize,
+    faceSize,
+    faceSize,
+    faceSize,
+    faceSize,
+    faceSize
+  ]);
   cubeTexture.generateMipmaps = generateMipmaps;
 
   const latLongMap = makeTexImage2DFromTexture(context, latLongTexture);
   const cubeFaceGeometry = passGeometry();
-  const cubeFaceMaterial = new ShaderMaterial(cubeFaceVertexSource, cubeFaceFragmentSource);
-  const cubeFaceProgram = makeProgramFromShaderMaterial(context, cubeFaceMaterial);
-  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(context, cubeFaceGeometry);
+  const cubeFaceMaterial = new ShaderMaterial(
+    cubeFaceVertexSource,
+    cubeFaceFragmentSource
+  );
+  const cubeFaceProgram = makeProgramFromShaderMaterial(
+    context,
+    cubeFaceMaterial
+  );
+  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(
+    context,
+    cubeFaceGeometry
+  );
   const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
 
   const cubeFaceUniforms = {
     map: latLongMap,
-    faceIndex: 0,
+    faceIndex: 0
   };
 
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
-    renderBufferGeometry(cubeFaceFramebuffer, cubeFaceProgram, cubeFaceUniforms, cubeFaceBufferGeometry);
+    renderBufferGeometry(
+      cubeFaceFramebuffer,
+      cubeFaceProgram,
+      cubeFaceUniforms,
+      cubeFaceBufferGeometry
+    );
   });
 
   if (generateMipmaps) {

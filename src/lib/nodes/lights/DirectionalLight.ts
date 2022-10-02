@@ -9,7 +9,10 @@
 //
 
 import { Vector3 } from '../../math/Vector3';
-import { eulerToNegativeZDirection, negativeZDirectionToEuler } from './Direction';
+import {
+  eulerToNegativeZDirection,
+  negativeZDirectionToEuler
+} from './Direction';
 import { Light } from './Light';
 import { LightType } from './LightType';
 
