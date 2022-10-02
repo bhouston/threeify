@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "CommonJS",
+    "target": "ES2020",
+    "module": "ES2020",
     "declaration": true,
     "sourceMap": true,
     "declarationMap": true,

@@ -1,8 +1,8 @@
 {
   "name": "threeify",
-  "version": "1.87.0",
-  "description": "Typescript 3D Library loosely based on three.js",
+  "version": "2.0.2",
   "type": "module",
+  "description": "Typescript 3D Library loosely based on three.js",
   "main": "dist/lib",
   "types": "dist/lib/index.d.ts",
   "files": [
