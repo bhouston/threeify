@@ -4,7 +4,7 @@ import {
   ClearState,
   DepthTestFunc,
   DepthTestState,
-  Euler,
+  Euler3,
   makeBufferGeometryFromGeometry,
   makeColor3FromHSL,
   makeHexStringFromColor3,
@@ -97,7 +97,7 @@ async function init(): Promise<null> {
     frameNumber++;
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.001, now * 0.0033, now * 0.00077),
+      new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld
     );
     updateCanvas(ctx, frameNumber);

@@ -2,8 +2,8 @@ import { hashFloat3 } from '../core/hash';
 import { ICloneable, IEquatable, IHashable } from '../core/types';
 import { Vector3 } from './Vector3';
 
-export class Triangle
-  implements ICloneable<Triangle>, IEquatable<Triangle>, IHashable
+export class Triangle3
+  implements ICloneable<Triangle3>, IEquatable<Triangle3>, IHashable
 {
   constructor(
     public a = new Vector3(),
@@ -27,15 +27,15 @@ export class Triangle
     return this;
   }
 
-  clone(): Triangle {
-    return new Triangle().copy(this);
+  clone(): Triangle3 {
+    return new Triangle3().copy(this);
   }
 
-  copy(t: Triangle): this {
+  copy(t: Triangle3): this {
     return this.set(t.a, t.b, t.c);
   }
 
-  equals(t: Triangle): boolean {
+  equals(t: Triangle3): boolean {
     return t.a.equals(this.a) && t.b.equals(this.b) && t.c.equals(this.c);
   }
 }

@@ -1,22 +1,22 @@
 import { hashFloat4 } from '../core/hash';
 import { IPrimitive } from './IPrimitive';
 
-export enum EulerOrder {
+export enum EulerOrder3 {
   XYZ,
   YXZ,
   ZXY,
   ZYX,
   YZX,
   XZY,
-  Default = EulerOrder.XYZ
+  Default = EulerOrder3.XYZ
 }
 
-export class Euler implements IPrimitive<Euler> {
+export class Euler3 implements IPrimitive<Euler3> {
   constructor(
     public x = 0,
     public y = 0,
     public z = 0,
-    public order: EulerOrder = EulerOrder.Default
+    public order: EulerOrder3 = EulerOrder3.Default
   ) {}
 
   getHashCode(): number {
@@ -27,7 +27,7 @@ export class Euler implements IPrimitive<Euler> {
     x: number,
     y: number,
     z: number,
-    order: EulerOrder = EulerOrder.Default
+    order: EulerOrder3 = EulerOrder3.Default
   ): this {
     this.x = x;
     this.y = y;
@@ -37,15 +37,15 @@ export class Euler implements IPrimitive<Euler> {
     return this;
   }
 
-  clone(): Euler {
-    return new Euler().copy(this);
+  clone(): Euler3 {
+    return new Euler3().copy(this);
   }
 
-  copy(e: Euler): this {
+  copy(e: Euler3): this {
     return this.set(e.x, e.y, e.z, e.order);
   }
 
-  equals(e: Euler): boolean {
+  equals(e: Euler3): boolean {
     return (
       e.x === this.x &&
       e.y === this.y &&
@@ -58,7 +58,7 @@ export class Euler implements IPrimitive<Euler> {
     this.x = array[offset + 0];
     this.y = array[offset + 1];
     this.z = array[offset + 2];
-    this.order = array[offset + 3] as EulerOrder;
+    this.order = array[offset + 3] as EulerOrder3;
   }
 
   toArray(array: Float32Array, offset: number): void {

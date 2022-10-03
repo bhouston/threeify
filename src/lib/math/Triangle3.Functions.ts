@@ -1,4 +1,4 @@
-import { Triangle } from './Triangle';
+import { Triangle3 } from './Triangle3';
 import { Vector3 } from './Vector3';
 import {
   crossFromCoplanarPoints,
@@ -10,18 +10,21 @@ export function makeTriangleFromPointsAndIndices(
   i0: number,
   i1: number,
   i2: number,
-  triangle: Triangle = new Triangle()
-): Triangle {
+  triangle: Triangle3 = new Triangle3()
+): Triangle3 {
   triangle.set(points[i0], points[i1], points[i2]);
   return triangle;
 }
 
-export function triangleArea(t: Triangle): number {
+export function triangleArea(t: Triangle3): number {
   // TODO: replace with just number math, no classes?  Or just use temporary Vector3 objects
   return crossFromCoplanarPoints(t.a, t.b, t.c).length() * 0.5;
 }
 
-export function triangleMidpoint(t: Triangle, result = new Vector3()): Vector3 {
+export function triangleMidpoint(
+  t: Triangle3,
+  result = new Vector3()
+): Vector3 {
   return result
     .copy(t.a)
     .add(t.b)
@@ -29,13 +32,13 @@ export function triangleMidpoint(t: Triangle, result = new Vector3()): Vector3 {
     .multiplyByScalar(1 / 3);
 }
 
-export function triangleNormal(t: Triangle, result = new Vector3()): Vector3 {
+export function triangleNormal(t: Triangle3, result = new Vector3()): Vector3 {
   // TODO: replace with just number math, no classes?  Or just use temporary Vector3 objects
   return crossFromCoplanarPoints(t.a, t.b, t.c, result).normalize();
 }
 
 export function trianglePointToBaryCoords(
-  t: Triangle,
+  t: Triangle3,
   point: Vector3,
   result = new Vector3()
 ): Vector3 {

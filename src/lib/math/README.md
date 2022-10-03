@@ -36,7 +36,7 @@ Each math class should have the following:
 
 ## Changes from Three.js
 
-- Removed event emitters from Quaternion and Euler. This causes unnecessary complexity. We can change the update structure in the Node class to compensate.
+- Removed event emitters from Quaternion and Euler3. This causes unnecessary complexity. We can change the update structure in the Node class to compensate.
 
 # Matrix4
 

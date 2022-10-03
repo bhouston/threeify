@@ -1,13 +1,13 @@
-import { Euler, EulerOrder } from '../../math/Euler';
-import { makeEulerFromRotationMatrix4 } from '../../math/Euler.Functions';
+import { Euler3, EulerOrder3 } from '../../math/Euler3';
+import { makeEulerFromRotationMatrix4 } from '../../math/Euler3.Functions';
 import { Matrix4 } from '../../math/Matrix4';
 import { makeMatrix4RotationFromEuler } from '../../math/Matrix4.Functions';
 import { Vector3 } from '../../math/Vector3';
 
 export function negativeZDirectionToEuler(
   d: Vector3,
-  result = new Euler()
-): Euler {
+  result = new Euler3()
+): Euler3 {
   // NOTE: This has never been tested.  It may not work.
   // found on stackoverflow.
   console.warn('This has never been tested.');
@@ -41,11 +41,11 @@ export function negativeZDirectionToEuler(
   te[11] = 0;
   te[15] = 1;
 
-  return makeEulerFromRotationMatrix4(m, EulerOrder.Default, result);
+  return makeEulerFromRotationMatrix4(m, EulerOrder3.Default, result);
 }
 
 export function eulerToNegativeZDirection(
-  e: Euler,
+  e: Euler3,
   result = new Vector3()
 ): Vector3 {
   console.warn('This has never been tested.');

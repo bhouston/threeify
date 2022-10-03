@@ -1,5 +1,5 @@
 import { IDisposable } from '../core/types';
-import { Euler } from '../math/Euler';
+import { Euler3 } from '../math/Euler3';
 import { Quaternion } from '../math/Quaternion';
 import { makeQuaternionFromEuler } from '../math/Quaternion.Functions';
 import { Vector2 } from '../math/Vector2';
@@ -15,8 +15,8 @@ export class Orbit implements IDisposable {
   public disposed = false;
 
   // public spherical = new Spherical( 1.0, Math.PI * 0.5, 0.0 );
-  public euler = new Euler();
-  public eulerMomentum = new Euler();
+  public euler = new Euler3();
+  public eulerMomentum = new Euler3();
 
   public zoom = 0;
   public zoomMomentum = 0;

@@ -2,7 +2,7 @@ import {
   boxGeometry,
   DepthTestFunc,
   DepthTestState,
-  Euler,
+  Euler3,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4Perspective,
@@ -49,7 +49,7 @@ async function init(): Promise<null> {
 
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.001, now * 0.0033, now * 0.00077),
+      new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld
     );
     renderBufferGeometry(

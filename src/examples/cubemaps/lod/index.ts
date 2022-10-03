@@ -3,7 +3,7 @@ import {
   CubeMapTexture,
   DepthTestFunc,
   DepthTestState,
-  Euler,
+  Euler3,
   fetchCubeImages,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
@@ -56,7 +56,7 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
+      new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;

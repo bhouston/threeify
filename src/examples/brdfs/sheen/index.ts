@@ -4,8 +4,8 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
-  Euler,
-  EulerOrder,
+  Euler3,
+  EulerOrder3,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
   makeMatrix4Concatenation,
@@ -76,7 +76,7 @@ async function init(): Promise<null> {
     const now = Date.now();
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
+      new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
     uniforms.sheenRoughness = Math.cos(now * 0.0003) * 0.5 + 0.5;

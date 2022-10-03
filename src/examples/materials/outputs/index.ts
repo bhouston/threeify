@@ -4,8 +4,8 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
-  Euler,
-  EulerOrder,
+  Euler3,
+  EulerOrder3,
   fetchImage,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
@@ -118,7 +118,7 @@ async function init(): Promise<null> {
 
     uniforms.time += averageDelta;
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(0.15 * Math.PI, now * 0.0002, 0, EulerOrder.XZY),
+      new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
 

@@ -4,8 +4,8 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
-  Euler,
-  EulerOrder,
+  Euler3,
+  EulerOrder3,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4PerspectiveFov,
@@ -74,7 +74,7 @@ async function init(): Promise<null> {
     const now = Date.now();
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(0, 0, now * 0.0002, EulerOrder.XZY),
+      new Euler3(0, 0, now * 0.0002, EulerOrder3.XZY),
       uniforms.localToWorld
     );
     // Q: Why is this one -1 required?  Is the tangent space from UV calculation incorrect?

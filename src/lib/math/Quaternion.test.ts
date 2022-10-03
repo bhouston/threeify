@@ -1,5 +1,5 @@
-import { EulerOrder } from './Euler';
-import { makeEulerFromQuaternion } from './Euler.Functions';
+import { EulerOrder3 } from './Euler3';
+import { makeEulerFromQuaternion } from './Euler3.Functions';
 import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions';
 import { Quaternion } from './Quaternion';
 import {
@@ -21,12 +21,12 @@ const qXZW = new Quaternion(0.5, 0, 1, 0.25).normalize();
 
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
 const testOrders = [
-  EulerOrder.XYZ,
-  EulerOrder.YXZ,
-  EulerOrder.ZXY,
-  EulerOrder.ZYX,
-  EulerOrder.YZX,
-  EulerOrder.XZY
+  EulerOrder3.XYZ,
+  EulerOrder3.YXZ,
+  EulerOrder3.ZXY,
+  EulerOrder3.ZYX,
+  EulerOrder3.YZX,
+  EulerOrder3.XZY
 ];
 
 describe('Quaternionr', () => {
@@ -65,7 +65,7 @@ describe('Quaternionr', () => {
   });
 });
 
-describe('Quaternion-Euler ', () => {
+describe('Quaternion-Euler3 ', () => {
   testValues.forEach((q, qi) => {
     testOrders.forEach((eulerOrder, ei) => {
       test(`q${qi} order ${ei}`, () => {

@@ -1,7 +1,7 @@
 import { passGeometry } from '../../../lib/geometry/primitives/passGeometry';
 import { icosahedronGeometry } from '../../../lib/geometry/primitives/polyhedronGeometry';
 import { ShaderMaterial } from '../../../lib/materials/ShaderMaterial';
-import { Euler } from '../../../lib/math/Euler';
+import { Euler3 } from '../../../lib/math/Euler3';
 import { Matrix4 } from '../../../lib/math/Matrix4';
 import {
   makeMatrix4PerspectiveFov,
@@ -123,7 +123,7 @@ async function init(): Promise<null> {
 
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
+      new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
     renderBufferGeometry(

@@ -1,4 +1,4 @@
-import { Euler, EulerOrder } from './Euler';
+import { Euler3, EulerOrder3 } from './Euler3';
 import { clamp } from './Functions';
 import { Matrix4 } from './Matrix4';
 import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions';
@@ -6,9 +6,9 @@ import { Quaternion } from './Quaternion';
 
 export function makeEulerFromRotationMatrix4(
   m: Matrix4,
-  order: EulerOrder = EulerOrder.Default,
-  result = new Euler()
-): Euler {
+  order: EulerOrder3 = EulerOrder3.Default,
+  result = new Euler3()
+): Euler3 {
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
   const te = m.elements;
@@ -27,7 +27,7 @@ export function makeEulerFromRotationMatrix4(
   let z = 0;
 
   switch (order) {
-    case EulerOrder.XYZ:
+    case EulerOrder3.XYZ:
       y = Math.asin(clamp(m13, -1, 1));
 
       if (Math.abs(m13) < 0.9999999) {
@@ -40,7 +40,7 @@ export function makeEulerFromRotationMatrix4(
 
       break;
 
-    case EulerOrder.YXZ:
+    case EulerOrder3.YXZ:
       x = Math.asin(-clamp(m23, -1, 1));
 
       if (Math.abs(m23) < 0.9999999) {
@@ -53,7 +53,7 @@ export function makeEulerFromRotationMatrix4(
 
       break;
 
-    case EulerOrder.ZXY:
+    case EulerOrder3.ZXY:
       x = Math.asin(clamp(m32, -1, 1));
 
       if (Math.abs(m32) < 0.9999999) {
@@ -66,7 +66,7 @@ export function makeEulerFromRotationMatrix4(
 
       break;
 
-    case EulerOrder.ZYX:
+    case EulerOrder3.ZYX:
       y = Math.asin(-clamp(m31, -1, 1));
 
       if (Math.abs(m31) < 0.9999999) {
@@ -79,7 +79,7 @@ export function makeEulerFromRotationMatrix4(
 
       break;
 
-    case EulerOrder.YZX:
+    case EulerOrder3.YZX:
       z = Math.asin(clamp(m21, -1, 1));
 
       if (Math.abs(m21) < 0.9999999) {
@@ -92,7 +92,7 @@ export function makeEulerFromRotationMatrix4(
 
       break;
 
-    case EulerOrder.XZY:
+    case EulerOrder3.XZY:
       z = Math.asin(-clamp(m12, -1, 1));
 
       if (Math.abs(m12) < 0.9999999) {
@@ -111,9 +111,9 @@ export function makeEulerFromRotationMatrix4(
 
 export function makeEulerFromQuaternion(
   q: Quaternion,
-  order: EulerOrder,
-  result = new Euler()
-): Euler {
+  order: EulerOrder3,
+  result = new Euler3()
+): Euler3 {
   const m = makeMatrix4RotationFromQuaternion(q);
   return makeEulerFromRotationMatrix4(m, order, result);
 }

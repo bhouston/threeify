@@ -39,18 +39,18 @@
     return hash;
   }
 
-  var EulerOrder;
-  (function (EulerOrder) {
-    EulerOrder[(EulerOrder['XYZ'] = 0)] = 'XYZ';
-    EulerOrder[(EulerOrder['YXZ'] = 1)] = 'YXZ';
-    EulerOrder[(EulerOrder['ZXY'] = 2)] = 'ZXY';
-    EulerOrder[(EulerOrder['ZYX'] = 3)] = 'ZYX';
-    EulerOrder[(EulerOrder['YZX'] = 4)] = 'YZX';
-    EulerOrder[(EulerOrder['XZY'] = 5)] = 'XZY';
-    EulerOrder[(EulerOrder['Default'] = 0)] = 'Default';
-  })(EulerOrder || (EulerOrder = {}));
-  class Euler {
-    constructor(x = 0, y = 0, z = 0, order = EulerOrder.Default) {
+  var EulerOrder3;
+  (function (EulerOrder3) {
+    EulerOrder3[(EulerOrder3['XYZ'] = 0)] = 'XYZ';
+    EulerOrder3[(EulerOrder3['YXZ'] = 1)] = 'YXZ';
+    EulerOrder3[(EulerOrder3['ZXY'] = 2)] = 'ZXY';
+    EulerOrder3[(EulerOrder3['ZYX'] = 3)] = 'ZYX';
+    EulerOrder3[(EulerOrder3['YZX'] = 4)] = 'YZX';
+    EulerOrder3[(EulerOrder3['XZY'] = 5)] = 'XZY';
+    EulerOrder3[(EulerOrder3['Default'] = 0)] = 'Default';
+  })(EulerOrder3 || (EulerOrder3 = {}));
+  class Euler3 {
+    constructor(x = 0, y = 0, z = 0, order = EulerOrder3.Default) {
       this.x = x;
       this.y = y;
       this.z = z;
@@ -59,7 +59,7 @@
     getHashCode() {
       return hashFloat4(this.x, this.y, this.z, this.order);
     }
-    set(x, y, z, order = EulerOrder.Default) {
+    set(x, y, z, order = EulerOrder3.Default) {
       this.x = x;
       this.y = y;
       this.z = z;
@@ -67,7 +67,7 @@
       return this;
     }
     clone() {
-      return new Euler().copy(this);
+      return new Euler3().copy(this);
     }
     copy(e) {
       return this.set(e.x, e.y, e.z, e.order);
@@ -302,42 +302,42 @@
     const s2 = Math.sin(y / 2);
     const s3 = Math.sin(z / 2);
     switch (order) {
-      case EulerOrder.XYZ:
+      case EulerOrder3.XYZ:
         return result.set(
           s1 * c2 * c3 + c1 * s2 * s3,
           c1 * s2 * c3 - s1 * c2 * s3,
           c1 * c2 * s3 + s1 * s2 * c3,
           c1 * c2 * c3 - s1 * s2 * s3
         );
-      case EulerOrder.YXZ:
+      case EulerOrder3.YXZ:
         return result.set(
           s1 * c2 * c3 + c1 * s2 * s3,
           c1 * s2 * c3 - s1 * c2 * s3,
           c1 * c2 * s3 - s1 * s2 * c3,
           c1 * c2 * c3 + s1 * s2 * s3
         );
-      case EulerOrder.ZXY:
+      case EulerOrder3.ZXY:
         return result.set(
           s1 * c2 * c3 - c1 * s2 * s3,
           c1 * s2 * c3 + s1 * c2 * s3,
           c1 * c2 * s3 + s1 * s2 * c3,
           c1 * c2 * c3 - s1 * s2 * s3
         );
-      case EulerOrder.ZYX:
+      case EulerOrder3.ZYX:
         return result.set(
           s1 * c2 * c3 - c1 * s2 * s3,
           c1 * s2 * c3 + s1 * c2 * s3,
           c1 * c2 * s3 - s1 * s2 * c3,
           c1 * c2 * c3 + s1 * s2 * s3
         );
-      case EulerOrder.YZX:
+      case EulerOrder3.YZX:
         return result.set(
           s1 * c2 * c3 + c1 * s2 * s3,
           c1 * s2 * c3 + s1 * c2 * s3,
           c1 * c2 * s3 - s1 * s2 * c3,
           c1 * c2 * c3 - s1 * s2 * s3
         );
-      case EulerOrder.XZY:
+      case EulerOrder3.XZY:
         return result.set(
           s1 * c2 * c3 - c1 * s2 * s3,
           c1 * s2 * c3 - s1 * c2 * s3,
@@ -654,8 +654,8 @@
       this.lastPointerClient = new Vector2();
       this.orientation = new Quaternion();
       this.disposed = false;
-      this.euler = new Euler();
-      this.eulerMomentum = new Euler();
+      this.euler = new Euler3();
+      this.eulerMomentum = new Euler3();
       this.zoom = 0;
       this.zoomMomentum = 0;
       this.damping = 0.1;

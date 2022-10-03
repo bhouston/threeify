@@ -9,7 +9,7 @@ import { hashFloat2 } from '../core/hash';
 import { ICloneable, IEquatable, IHashable } from '../core/types';
 import { Vector3 } from './Vector3';
 
-export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
+export class Ray3 implements ICloneable<Ray3>, IEquatable<Ray3>, IHashable {
   constructor(
     public origin = new Vector3(),
     public direction = new Vector3(0, 0, -1)
@@ -26,11 +26,11 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
     return this;
   }
 
-  clone(): Ray {
-    return new Ray().copy(this);
+  clone(): Ray3 {
+    return new Ray3().copy(this);
   }
 
-  copy(r: Ray): this {
+  copy(r: Ray3): this {
     this.origin.copy(r.origin);
     this.direction.copy(r.direction);
 
@@ -47,7 +47,7 @@ export class Ray implements ICloneable<Ray>, IEquatable<Ray>, IHashable {
     return this;
   }
 
-  equals(r: Ray): boolean {
+  equals(r: Ray3): boolean {
     return r.origin.equals(this.origin) && r.direction.equals(this.direction);
   }
 }

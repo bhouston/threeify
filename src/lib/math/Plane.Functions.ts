@@ -1,6 +1,6 @@
 import { Plane } from './Plane';
 import { Sphere } from './Sphere';
-import { Triangle } from './Triangle';
+import { Triangle3 } from './Triangle3';
 import { Vector3 } from './Vector3';
 import { crossFromCoplanarPoints } from './Vector3.Functions';
 
@@ -16,7 +16,7 @@ export function makePlaneFromCoplanarPoints(
 }
 
 export function makePlaneFromTriangle(
-  t: Triangle,
+  t: Triangle3,
   result = new Plane()
 ): Plane {
   return makePlaneFromCoplanarPoints(t.a, t.b, t.c, result);

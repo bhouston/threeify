@@ -1,10 +1,10 @@
-import { Euler, EulerOrder } from './Euler';
+import { Euler3, EulerOrder3 } from './Euler3';
 import { Matrix4 } from './Matrix4';
 import { Quaternion } from './Quaternion';
 import { Vector3 } from './Vector3';
 
 export function makeQuaternionFromEuler(
-  e: Euler,
+  e: Euler3,
   result = new Quaternion()
 ): Quaternion {
   const { x } = e;
@@ -24,7 +24,7 @@ export function makeQuaternionFromEuler(
   const s3 = Math.sin(z / 2);
 
   switch (order) {
-    case EulerOrder.XYZ:
+    case EulerOrder3.XYZ:
       return result.set(
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
@@ -32,7 +32,7 @@ export function makeQuaternionFromEuler(
         c1 * c2 * c3 - s1 * s2 * s3
       );
 
-    case EulerOrder.YXZ:
+    case EulerOrder3.YXZ:
       return result.set(
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
@@ -40,7 +40,7 @@ export function makeQuaternionFromEuler(
         c1 * c2 * c3 + s1 * s2 * s3
       );
 
-    case EulerOrder.ZXY:
+    case EulerOrder3.ZXY:
       return result.set(
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
@@ -48,7 +48,7 @@ export function makeQuaternionFromEuler(
         c1 * c2 * c3 - s1 * s2 * s3
       );
 
-    case EulerOrder.ZYX:
+    case EulerOrder3.ZYX:
       return result.set(
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
@@ -56,7 +56,7 @@ export function makeQuaternionFromEuler(
         c1 * c2 * c3 + s1 * s2 * s3
       );
 
-    case EulerOrder.YZX:
+    case EulerOrder3.YZX:
       return result.set(
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
@@ -64,7 +64,7 @@ export function makeQuaternionFromEuler(
         c1 * c2 * c3 - s1 * s2 * s3
       );
 
-    case EulerOrder.XZY:
+    case EulerOrder3.XZY:
       return result.set(
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,

@@ -1,5 +1,5 @@
 import { IDisposable } from '../core/types';
-import { Euler, EulerOrder } from '../math/Euler';
+import { Euler3, EulerOrder3 } from '../math/Euler3';
 import { degToRad } from '../math/Functions';
 import { Quaternion } from '../math/Quaternion';
 import {
@@ -14,7 +14,7 @@ const q1 = new Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5));
 
 export class DeviceOrientation implements IDisposable {
   disposed = false;
-  private deviceOrientation = new Euler(0, 0, 0, EulerOrder.YXZ);
+  private deviceOrientation = new Euler3(0, 0, 0, EulerOrder3.YXZ);
   private screenOrientation = 0;
   private onDispose: () => void;
   private tempValue = new Quaternion();
@@ -26,7 +26,7 @@ export class DeviceOrientation implements IDisposable {
         degToRad(event.beta ?? 0),
         degToRad(event.alpha ?? 0 - 180.0),
         -degToRad(event.gamma ?? 0),
-        EulerOrder.YXZ
+        EulerOrder3.YXZ
       );
     };
     const onOrientationChange = (): void => {

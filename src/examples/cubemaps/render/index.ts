@@ -4,7 +4,7 @@ import {
   CubeMapTexture,
   DepthTestFunc,
   DepthTestState,
-  Euler,
+  Euler3,
   fetchImage,
   Framebuffer,
   icosahedronGeometry,
@@ -107,7 +107,7 @@ async function init(): Promise<null> {
     });
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
+      new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
     renderBufferGeometry(

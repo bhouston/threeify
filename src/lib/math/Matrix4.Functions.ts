@@ -1,4 +1,4 @@
-import { Euler, EulerOrder } from './Euler';
+import { Euler3, EulerOrder3 } from './Euler3';
 import { Matrix4 } from './Matrix4';
 import { Quaternion } from './Quaternion';
 import { makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions';
@@ -416,7 +416,7 @@ export function makeMatrix4LookAt(
 }
 
 export function makeMatrix4RotationFromEuler(
-  euler: Euler,
+  euler: Euler3,
   result = new Matrix4()
 ): Matrix4 {
   const te = result.elements;
@@ -432,7 +432,7 @@ export function makeMatrix4RotationFromEuler(
   const f = Math.sin(z);
 
   // TODO: Replace smart code that compacts all of these orders into one
-  if (euler.order === EulerOrder.XYZ) {
+  if (euler.order === EulerOrder3.XYZ) {
     const ae = a * e;
     const af = a * f;
     const be = b * e;
@@ -449,7 +449,7 @@ export function makeMatrix4RotationFromEuler(
     te[2] = bf - ae * d;
     te[6] = be + af * d;
     te[10] = a * c;
-  } else if (euler.order === EulerOrder.YXZ) {
+  } else if (euler.order === EulerOrder3.YXZ) {
     const ce = c * e;
     const cf = c * f;
     const de = d * e;
@@ -466,7 +466,7 @@ export function makeMatrix4RotationFromEuler(
     te[2] = cf * b - de;
     te[6] = df + ce * b;
     te[10] = a * c;
-  } else if (euler.order === EulerOrder.ZXY) {
+  } else if (euler.order === EulerOrder3.ZXY) {
     const ce = c * e;
     const cf = c * f;
     const de = d * e;
@@ -483,7 +483,7 @@ export function makeMatrix4RotationFromEuler(
     te[2] = -a * d;
     te[6] = b;
     te[10] = a * c;
-  } else if (euler.order === EulerOrder.ZYX) {
+  } else if (euler.order === EulerOrder3.ZYX) {
     const ae = a * e;
     const af = a * f;
     const be = b * e;
@@ -500,7 +500,7 @@ export function makeMatrix4RotationFromEuler(
     te[2] = -d;
     te[6] = b * c;
     te[10] = a * c;
-  } else if (euler.order === EulerOrder.YZX) {
+  } else if (euler.order === EulerOrder3.YZX) {
     const ac = a * c;
     const ad = a * d;
     const bc = b * c;
@@ -517,7 +517,7 @@ export function makeMatrix4RotationFromEuler(
     te[2] = -d * e;
     te[6] = ad * f + bc;
     te[10] = ac - bd * f;
-  } else if (euler.order === EulerOrder.XZY) {
+  } else if (euler.order === EulerOrder3.XZY) {
     const ac = a * c;
     const ad = a * d;
     const bc = b * c;

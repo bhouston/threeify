@@ -5,8 +5,8 @@ import {
   DepthTestFunc,
   DepthTestState,
   diskGeometry,
-  Euler,
-  EulerOrder,
+  Euler3,
+  EulerOrder3,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMatrix4PerspectiveFov,
@@ -82,7 +82,7 @@ async function init(): Promise<null> {
     const now = Date.now();
 
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(-0.3 * Math.PI, 0, now * 0.0006, EulerOrder.YXZ),
+      new Euler3(-0.3 * Math.PI, 0, now * 0.0006, EulerOrder3.YXZ),
       uniforms.localToWorld
     );
     uniforms.specularAnisotropicFlowMap =
