@@ -1,4 +1,5 @@
 import {
+  Color3,
   Geometry,
   makeBufferGeometryFromGeometry,
   makeColor3FromHSL,
@@ -30,7 +31,7 @@ window.addEventListener('resize', () => canvasFramebuffer.resize());
 
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
-const uniforms = { scale: 1.0, color: new Vector3() };
+const uniforms = { scale: 1.0, color: new Color3() };
 
 function animate(): void {
   requestAnimationFrame(animate);

@@ -4,6 +4,7 @@ export * from './Box2.Functions';
 export * from './Box3';
 export * from './Box3.Functions';
 export * from './Color3';
+export * from './Color3.Functions';
 export * from './Euler3';
 export * from './Euler3.Functions';
 export * from './Functions';

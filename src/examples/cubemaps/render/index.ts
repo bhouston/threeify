@@ -1,5 +1,6 @@
 import {
   Attachment,
+  Color3,
   cubeFaceTargets,
   CubeMapTexture,
   DepthTestFunc,
@@ -59,7 +60,7 @@ async function init(): Promise<null> {
     patternMaterial
   );
   const patternUniforms = {
-    color: new Vector3(1, 0, 0)
+    color: new Color3(1, 0, 0)
   };
 
   const patternBufferGeometry = makeBufferGeometryFromGeometry(

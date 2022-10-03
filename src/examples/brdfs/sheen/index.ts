@@ -1,6 +1,7 @@
 import {
   BufferBit,
   ClearState,
+  Color3,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -56,12 +57,12 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightIntensity: new Vector3(1, 1, 1).multiplyByScalar(30.0),
+    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(30.0),
     pointLightRange: 6.0,
 
     // materials
     sheenIntensity: 1.0,
-    sheenColor: new Vector3(0.3, 0.3, 1.0),
+    sheenColor: new Color3(0.3, 0.3, 1.0),
     sheenRoughness: 0.5
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);

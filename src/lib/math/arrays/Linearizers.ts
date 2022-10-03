@@ -1,3 +1,4 @@
+import { Color3 } from '../Color3';
 import { Matrix3 } from '../Matrix3';
 import { Matrix4 } from '../Matrix4';
 import { Quaternion } from '../Quaternion';
@@ -18,6 +19,14 @@ export function linearizeNumberFloatArray(array: number[]): Float32Array {
   const result = new Float32Array(array.length);
   for (let i = 0; i < array.length; i++) {
     result[i] = array[i];
+  }
+  return result;
+}
+
+export function linearizeColor3FloatArray(array: Color3[]): Float32Array {
+  const result = new Float32Array(array.length * 3);
+  for (let i = 0; i < array.length; i++) {
+    array[i].toArray(result, i * 3);
   }
   return result;
 }

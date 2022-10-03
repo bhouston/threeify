@@ -1,6 +1,7 @@
 import {
   BufferBit,
   ClearState,
+  Color3,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -53,7 +54,7 @@ async function init(): Promise<null> {
 
     // lights
     directionalLightViewDirection: new Vector3(0.0, 0, -1.0),
-    directionalLightColor: new Vector3(1, 1, 1).multiplyByScalar(5.0),
+    directionalLightColor: new Color3(1, 1, 1).multiplyByScalar(5.0),
 
     // materials
     albedoMap: map

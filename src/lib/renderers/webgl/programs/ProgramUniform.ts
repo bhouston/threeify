@@ -1,4 +1,6 @@
+import { Color3 } from '../../../math';
 import {
+  linearizeColor3FloatArray,
   linearizeMatrix3FloatArray,
   linearizeMatrix4FloatArray,
   linearizeVector2FloatArray,
@@ -18,12 +20,14 @@ export type UniformValue =
   | number
   | Vector2
   | Vector3
+  | Color3
   | Matrix3
   | Matrix4
   | TexImage2D
   | number[]
   | Vector2[]
   | Vector3[]
+  | Color3[]
   | Matrix4[];
 export type UniformValueMap = { [key: string]: UniformValue };
 
@@ -149,12 +153,30 @@ export class ProgramUniform {
           }
           return this;
         }
+        if (value instanceof Color3) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniform3f(this.glLocation, value.r, value.g, value.b);
+            this.valueHashCode = hashCode;
+          }
+          return this;
+        }
         if (
           value instanceof Array &&
           value.length > 0 &&
           value[0] instanceof Vector3
         ) {
           const array = linearizeVector3FloatArray(value as Vector3[]);
+          gl.uniform3fv(this.glLocation, array);
+          this.valueHashCode = -1;
+          return this;
+        }
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Color3
+        ) {
+          const array = linearizeColor3FloatArray(value as Color3[]);
           gl.uniform3fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;

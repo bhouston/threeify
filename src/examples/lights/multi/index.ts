@@ -1,6 +1,7 @@
 import {
   BufferBit,
   ClearState,
+  Color3,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -65,9 +66,9 @@ async function init(): Promise<null> {
       new Vector3(0.0, -1.0, -1.0).normalize()
     ],
     punctualLightColor: [
-      new Vector3(60, 4, 4),
-      new Vector3(4, 30, 4),
-      new Vector3(0.1, 0.1, 1)
+      new Color3(60, 4, 4),
+      new Color3(4, 30, 4),
+      new Color3(0.1, 0.1, 1)
     ],
     punctualLightRange: [15.0, 15.0, 0],
     punctualLightInnerCos: [0, 0.95, 0],

@@ -1,6 +1,7 @@
 import {
   BufferBit,
   ClearState,
+  Color3,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -52,7 +53,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vector3(1, 0, -0.5),
-    pointLightIntensity: new Vector3(1, 1, 1).multiplyByScalar(40.0),
+    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(40.0),
     pointLightRange: 6.0,
 
     // materials
