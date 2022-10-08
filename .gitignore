@@ -12,12 +12,6 @@ package-lock.json
 # docker environment variables
 .env
 
-# Ben is using this as a reference.  Remove after 0.1 release
-three.js
-src/lib/renderers/webgl2/webgl2_fundamentals.js
-
-examples/gettingstarted/threejs_gettingstarted.js
-src/learning_ts.ts
 bundle*.js
 bundle*.js.zip
 bundle.terserjs.zip
@@ -25,17 +19,5 @@ bundle.terserjs.zip
 www
 output.txt
 docs
-
-src/examples/compositing/kashiyama
-src/examples/layering/kashiyama/index.ts
 .gitignore
-src/examples/compositing/basic/example.json
-src/examples/compositing/basic/index.ts
-src/examples/layering/basic/example.json
-src/examples/layering/basic/index.ts
-src/examples/materials/blending/index.ts
-src/lib/engines/layerCompositor/fragment.glsl
-src/lib/engines/layerCompositor/LayerCompositor.ts
-
 .DS_Store
-src/examples/passes/latlong/workspace.code-workspace
