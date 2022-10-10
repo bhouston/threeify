@@ -39,6 +39,7 @@
     "prettier": "^2.7.1",
     "threeify-glsl-transpiler": "^2.0.7",
     "ts-jest": "^29.0.3",
+    "ts-jest-resolver": "^2.0.0",
     "typedoc": "^0.23.15",
     "typescript": "^4.8.4"
   },

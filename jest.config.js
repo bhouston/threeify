@@ -2,5 +2,6 @@ export default {
   name: 'threeify',
   preset: 'ts-jest',
   testEnvironment: 'node',
-  rootDir: './src'
+  rootDir: './src',
+  resolver: "ts-jest-resolver"
 };
