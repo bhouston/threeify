@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from '../../core/types';
+import { ICloneable, IEquatable } from '../../core/types.js';
 
 export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
   // TODO: Should be intialized to default WebGL states

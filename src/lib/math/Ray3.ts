@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from '../core/hash';
-import { ICloneable, IEquatable, IHashable } from '../core/types';
-import { Vector3 } from './Vector3';
+import { hashFloat2 } from '../core/hash.js';
+import { ICloneable, IEquatable, IHashable } from '../core/types.js';
+import { Vector3 } from './Vector3.js';
 
 export class Ray3 implements ICloneable<Ray3>, IEquatable<Ray3>, IHashable {
   constructor(

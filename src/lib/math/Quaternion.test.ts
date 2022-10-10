@@ -1,11 +1,11 @@
-import { EulerOrder3 } from './Euler3';
-import { makeEulerFromQuaternion } from './Euler3.Functions';
-import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions';
-import { Quaternion } from './Quaternion';
+import { makeEulerFromQuaternion } from './Euler3.Functions.js';
+import { EulerOrder3 } from './Euler3.js';
+import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions.js';
 import {
   makeQuaternionFromEuler,
   makeQuaternionFromRotationMatrix4
-} from './Quaternion.Functions';
+} from './Quaternion.Functions.js';
+import { Quaternion } from './Quaternion.js';
 
 const qX = new Quaternion(1, 0, 0).normalize();
 const qY = new Quaternion(0, 1, 0).normalize();

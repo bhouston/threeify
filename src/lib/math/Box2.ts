@@ -5,14 +5,20 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from '../core/hash';
-import { ICloneable, IEquatable, IHashable } from '../core/types';
-import { Vector2 } from './Vector2';
+import { hashFloat2 } from '../core/hash.js';
+import { ICloneable, IEquatable, IHashable } from '../core/types.js';
+import { Vector2 } from './Vector2.js';
 
 export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   constructor(
-    public min = new Vector2(+Infinity, +Infinity),
-    public max = new Vector2(+Infinity, +Infinity)
+    public min = new Vector2(
+      +Number.POSITIVE_INFINITY,
+      +Number.POSITIVE_INFINITY
+    ),
+    public max = new Vector2(
+      +Number.POSITIVE_INFINITY,
+      +Number.POSITIVE_INFINITY
+    )
   ) {}
 
   get x(): number {
@@ -77,8 +83,8 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   }
 
   makeEmpty(): this {
-    this.min.x = this.min.y = +Infinity;
-    this.max.x = this.max.y = -Infinity;
+    this.min.x = this.min.y = +Number.POSITIVE_INFINITY;
+    this.max.x = this.max.y = Number.NEGATIVE_INFINITY;
 
     return this;
   }

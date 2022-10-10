@@ -1,8 +1,8 @@
-import { Euler3, EulerOrder3 } from './Euler3';
-import { clamp } from './Functions';
-import { Matrix4 } from './Matrix4';
-import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions';
-import { Quaternion } from './Quaternion';
+import { Euler3, EulerOrder3 } from './Euler3.js';
+import { clamp } from './Functions.js';
+import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions.js';
+import { Matrix4 } from './Matrix4.js';
+import { Quaternion } from './Quaternion.js';
 
 export function makeEulerFromRotationMatrix4(
   m: Matrix4,

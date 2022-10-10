@@ -1,13 +1,13 @@
-import { IVersionable } from '../core/types';
-import { Matrix3 } from '../math/Matrix3';
+import { IVersionable } from '../core/types.js';
 import {
   makeMatrix3Concatenation,
   makeMatrix3RotationFromAngle,
   makeMatrix3Scale,
   makeMatrix3Translation
-} from '../math/Matrix3.Functions';
-import { Vector2 } from '../math/Vector2';
-import { Texture } from './Texture';
+} from '../math/Matrix3.Functions.js';
+import { Matrix3 } from '../math/Matrix3.js';
+import { Vector2 } from '../math/Vector2.js';
+import { Texture } from './Texture.js';
 
 export class TextureAccessor implements IVersionable {
   version = 0;

@@ -1,5 +1,5 @@
-import { Vector2 } from './Vector2';
-import { makeVector2Fill, makeVector2Fit } from './Vector2.Functions';
+import { makeVector2Fill, makeVector2Fit } from './Vector2.Functions.js';
+import { Vector2 } from './Vector2.js';
 
 describe('Vector2', () => {
   test('constructor defaults', () => {

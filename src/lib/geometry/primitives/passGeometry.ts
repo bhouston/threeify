@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2';
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
-import { Geometry } from '../Geometry';
+import { Vector2 } from '../../math/Vector2.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 /**
  * A 2D pass geometry

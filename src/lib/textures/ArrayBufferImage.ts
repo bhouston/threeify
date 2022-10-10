@@ -1,5 +1,5 @@
-import { DataType } from '../renderers/webgl/textures/DataType';
-import { PixelEncoding } from './PixelEncoding';
+import { DataType } from '../renderers/webgl/textures/DataType.js';
+import { PixelEncoding } from './PixelEncoding.js';
 
 export class ArrayBufferImage {
   constructor(

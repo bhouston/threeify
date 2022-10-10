@@ -1,22 +1,25 @@
-import { passGeometry } from '../../../geometry/primitives/passGeometry';
-import { ShaderMaterial } from '../../../materials/ShaderMaterial';
-import { Vector2 } from '../../../math/Vector2';
-import { cubeFaceTargets, CubeMapTexture } from '../../../textures/CubeTexture';
-import { Texture } from '../../../textures/Texture';
-import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry';
-import { Attachment } from '../framebuffers/Attachment';
-import { Framebuffer } from '../framebuffers/Framebuffer';
-import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer';
-import { makeProgramFromShaderMaterial } from '../programs/Program';
-import { RenderingContext } from '../RenderingContext';
+import { passGeometry } from '../../../geometry/primitives/passGeometry.js';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import {
+  cubeFaceTargets,
+  CubeMapTexture
+} from '../../../textures/CubeTexture.js';
+import { Texture } from '../../../textures/Texture.js';
+import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry.js';
+import { Attachment } from '../framebuffers/Attachment.js';
+import { Framebuffer } from '../framebuffers/Framebuffer.js';
+import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer.js';
+import { makeProgramFromShaderMaterial } from '../programs/Program.js';
+import { RenderingContext } from '../RenderingContext.js';
 import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
-import { PixelFormat } from './PixelFormat';
-import { TexImage2D } from './TexImage2D';
-import { TexParameters } from './TexParameters';
-import { TextureFilter } from './TextureFilter';
-import { TextureTarget } from './TextureTarget';
-import { TextureWrap } from './TextureWrap';
+import { PixelFormat } from './PixelFormat.js';
+import { TexImage2D } from './TexImage2D.js';
+import { TexParameters } from './TexParameters.js';
+import { TextureFilter } from './TextureFilter.js';
+import { TextureTarget } from './TextureTarget.js';
+import { TextureWrap } from './TextureWrap.js';
 
 export function makeTexImage2DFromTexture(
   context: RenderingContext,

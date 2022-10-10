@@ -1,14 +1,17 @@
-import { Vector2 } from '../../../math/Vector2';
-import { GL } from '../GL';
-import { RenderingContext } from '../RenderingContext';
-import { DataType, sizeOfDataType } from '../textures/DataType';
-import { numPixelFormatComponents, PixelFormat } from '../textures/PixelFormat';
-import { TexImage2D } from '../textures/TexImage2D';
-import { TexParameters } from '../textures/TexParameters';
-import { TextureFilter } from '../textures/TextureFilter';
-import { TextureTarget } from '../textures/TextureTarget';
-import { Attachment } from './Attachment';
-import { Framebuffer } from './Framebuffer';
+import { Vector2 } from '../../../math/Vector2.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { DataType, sizeOfDataType } from '../textures/DataType.js';
+import {
+  numPixelFormatComponents,
+  PixelFormat
+} from '../textures/PixelFormat.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { TexParameters } from '../textures/TexParameters.js';
+import { TextureFilter } from '../textures/TextureFilter.js';
+import { TextureTarget } from '../textures/TextureTarget.js';
+import { Attachment } from './Attachment.js';
+import { Framebuffer } from './Framebuffer.js';
 
 export function readPixelsFromFramebuffer(
   framebuffer: Framebuffer,

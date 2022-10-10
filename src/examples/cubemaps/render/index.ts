@@ -6,7 +6,6 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
-  fetchImage,
   Framebuffer,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
@@ -21,13 +20,12 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
   TextureFilter,
   Vector2,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
-import { patternMaterial } from './pattern/PatternMaterial';
+import { patternMaterial } from './pattern/PatternMaterial.js';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
@@ -74,12 +72,12 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
     viewToScreen: makeMatrix4PerspectiveFov(
       25,
       0.1,
-      4.0,
-      1.0,
+      4,
+      1,
       canvasFramebuffer.aspectRatio
     ),
     cubeMap

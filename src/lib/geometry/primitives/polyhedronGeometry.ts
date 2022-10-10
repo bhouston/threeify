@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2';
-import { Vector3 } from '../../math/Vector3';
-import { makeFloat32Attribute } from '../Attribute';
-import { Geometry } from '../Geometry';
-import { computeVertexNormals } from '../Geometry.Functions';
+import { Vector2 } from '../../math/Vector2.js';
+import { Vector3 } from '../../math/Vector3.js';
+import { makeFloat32Attribute } from '../Attribute.js';
+import { computeVertexNormals } from '../Geometry.Functions.js';
+import { Geometry } from '../Geometry.js';
 
 export function tetrahedronGeometry(radius = 1, detail = 0): Geometry {
   const vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];
@@ -366,7 +366,7 @@ export function polyhedronGeometry(
         .copy(a)
         .add(b)
         .add(c)
-        .multiplyByScalar(1.0 / 3);
+        .multiplyByScalar(1 / 3);
 
       const azi = azimuth(centroid);
 

@@ -5,25 +5,25 @@
 // * @bhouston
 //
 
-import { Box2 } from '../../math/Box2';
-import { BlendState } from './BlendState';
-import { Buffer } from './buffers/Buffer';
-import { ClearState } from './ClearState';
-import { CullingState } from './CullingState';
-import { DepthTestState } from './DepthTestState';
-import { Extensions } from './extensions/Extensions';
-import { OptionalExtensions } from './extensions/OptionalExtensions';
-import { CanvasFramebuffer } from './framebuffers/CanvasFramebuffer';
-import { Framebuffer } from './framebuffers/Framebuffer';
-import { VirtualFramebuffer } from './framebuffers/VirtualFramebuffer';
-import { GL } from './GL';
-import { MaskState } from './MaskState';
-import { getParameterAsString } from './Parameters';
-import { Program } from './programs/Program';
-import { Renderbuffer } from './Renderbuffer';
-import { Shader } from './shaders/Shader';
-import { TexImage2D } from './textures/TexImage2D';
-import { VertexArrayObject } from './VertexArrayObject';
+import { Box2 } from '../../math/Box2.js';
+import { BlendState } from './BlendState.js';
+import { Buffer } from './buffers/Buffer.js';
+import { ClearState } from './ClearState.js';
+import { CullingState } from './CullingState.js';
+import { DepthTestState } from './DepthTestState.js';
+import { Extensions } from './extensions/Extensions.js';
+import { OptionalExtensions } from './extensions/OptionalExtensions.js';
+import { CanvasFramebuffer } from './framebuffers/CanvasFramebuffer.js';
+import { Framebuffer } from './framebuffers/Framebuffer.js';
+import { VirtualFramebuffer } from './framebuffers/VirtualFramebuffer.js';
+import { GL } from './GL.js';
+import { MaskState } from './MaskState.js';
+import { getParameterAsString } from './Parameters.js';
+import { Program } from './programs/Program.js';
+import { Renderbuffer } from './Renderbuffer.js';
+import { Shader } from './shaders/Shader.js';
+import { TexImage2D } from './textures/TexImage2D.js';
+import { VertexArrayObject } from './VertexArrayObject.js';
 
 export type Resource =
   | VertexArrayObject

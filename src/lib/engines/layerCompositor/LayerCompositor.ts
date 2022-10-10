@@ -1,54 +1,54 @@
-import { IDisposable } from '../../core/types';
-import { transformGeometry } from '../../geometry/Geometry.Functions';
-import { planeGeometry } from '../../geometry/primitives/planeGeometry';
-import { Blending } from '../../materials/Blending';
-import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { ceilPow2 } from '../../math/Functions';
+import { IDisposable } from '../../core/types.js';
+import { transformGeometry } from '../../geometry/Geometry.Functions.js';
+import { planeGeometry } from '../../geometry/primitives/planeGeometry.js';
+import { Blending } from '../../materials/Blending.js';
+import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
+import { ceilPow2 } from '../../math/Functions.js';
 import {
   makeMatrix3Concatenation,
   makeMatrix3Scale,
   makeMatrix3Translation
-} from '../../math/Matrix3.Functions';
-import { Matrix4 } from '../../math/Matrix4';
+} from '../../math/Matrix3.Functions.js';
 import {
   makeMatrix4Inverse,
   makeMatrix4Orthographic,
   makeMatrix4OrthographicSimple,
   makeMatrix4Scale,
   makeMatrix4Translation
-} from '../../math/Matrix4.Functions';
-import { Vector2 } from '../../math/Vector2';
-import { Vector3 } from '../../math/Vector3';
-import { isFirefox, isiOS, isMacOS } from '../../platform/Detection';
-import { blendModeToBlendState } from '../../renderers/webgl/BlendState';
+} from '../../math/Matrix4.Functions.js';
+import { Matrix4 } from '../../math/Matrix4.js';
+import { Vector2 } from '../../math/Vector2.js';
+import { Vector3 } from '../../math/Vector3.js';
+import { isFirefox, isiOS, isMacOS } from '../../platform/Detection.js';
+import { blendModeToBlendState } from '../../renderers/webgl/BlendState.js';
 import {
   BufferGeometry,
   makeBufferGeometryFromGeometry
-} from '../../renderers/webgl/buffers/BufferGeometry';
-import { ClearState } from '../../renderers/webgl/ClearState';
-import { Attachment } from '../../renderers/webgl/framebuffers/Attachment';
-import { Framebuffer } from '../../renderers/webgl/framebuffers/Framebuffer';
-import { renderBufferGeometry } from '../../renderers/webgl/framebuffers/VirtualFramebuffer';
+} from '../../renderers/webgl/buffers/BufferGeometry.js';
+import { ClearState } from '../../renderers/webgl/ClearState.js';
+import { Attachment } from '../../renderers/webgl/framebuffers/Attachment.js';
+import { Framebuffer } from '../../renderers/webgl/framebuffers/Framebuffer.js';
+import { renderBufferGeometry } from '../../renderers/webgl/framebuffers/VirtualFramebuffer.js';
 import {
   makeProgramFromShaderMaterial,
   Program
-} from '../../renderers/webgl/programs/Program';
-import { RenderingContext } from '../../renderers/webgl/RenderingContext';
-import { DataType } from '../../renderers/webgl/textures/DataType';
-import { PixelFormat } from '../../renderers/webgl/textures/PixelFormat';
-import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
-import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
-import { TexParameters } from '../../renderers/webgl/textures/TexParameters';
-import { TextureFilter } from '../../renderers/webgl/textures/TextureFilter';
-import { TextureTarget } from '../../renderers/webgl/textures/TextureTarget';
-import { TextureWrap } from '../../renderers/webgl/textures/TextureWrap';
+} from '../../renderers/webgl/programs/Program.js';
+import { RenderingContext } from '../../renderers/webgl/RenderingContext.js';
+import { DataType } from '../../renderers/webgl/textures/DataType.js';
+import { PixelFormat } from '../../renderers/webgl/textures/PixelFormat.js';
+import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions.js';
+import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D.js';
+import { TexParameters } from '../../renderers/webgl/textures/TexParameters.js';
+import { TextureFilter } from '../../renderers/webgl/textures/TextureFilter.js';
+import { TextureTarget } from '../../renderers/webgl/textures/TextureTarget.js';
+import { TextureWrap } from '../../renderers/webgl/textures/TextureWrap.js';
 import {
   fetchImage,
   isImageBitmapSupported
-} from '../../textures/loaders/Image';
-import { Texture } from '../../textures/Texture';
+} from '../../textures/loaders/Image.js';
+import { Texture } from '../../textures/Texture.js';
 import fragmentSource from './fragment.glsl';
-import { Layer } from './Layer';
+import { Layer } from './Layer.js';
 import vertexSource from './vertex.glsl';
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
@@ -121,13 +121,13 @@ export class LayerCompositor {
   #program: Program;
   imageSize = new Vector2(0, 0);
   imageFitMode: ImageFitMode = ImageFitMode.FitHeight;
-  zoomScale = 1.0; // no zoom
+  zoomScale = 1; // no zoom
   panPosition: Vector2 = new Vector2(0.5, 0.5); // center
   #layers: Layer[] = [];
   #layerVersion = 0;
   #offlineLayerVersion = -1;
   firstRender = true;
-  clearState = new ClearState(new Vector3(1, 1, 1), 0.0);
+  clearState = new ClearState(new Vector3(1, 1, 1), 0);
   offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vector2(0, 0);
   offscreenColorAttachment: TexImage2D | undefined;
@@ -146,10 +146,7 @@ export class LayerCompositor {
     this.context.canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
     this.context.canvasFramebuffer.resize();
     const plane = planeGeometry(1, 1, 1, 1);
-    transformGeometry(
-      plane,
-      makeMatrix4Translation(new Vector3(0.5, 0.5, 0.0))
-    );
+    transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, 0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(
       this.context,
@@ -157,7 +154,7 @@ export class LayerCompositor {
     );
   }
 
-  snapshot(mimeFormat = 'image/jpeg', quality = 1.0): string {
+  snapshot(mimeFormat = 'image/jpeg', quality = 1): string {
     const { canvas } = this.context.canvasFramebuffer;
     if (canvas instanceof HTMLCanvasElement) {
       return canvas.toDataURL(mimeFormat, quality);
@@ -300,7 +297,7 @@ export class LayerCompositor {
       .multiplyByScalar(imageToCanvasScale);
     const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
 
-    if (this.zoomScale > 1.0) {
+    if (this.zoomScale > 1) {
       // convert from canvas space to image space
       const imagePanPosition = this.panPosition
         .clone()
@@ -350,7 +347,7 @@ export class LayerCompositor {
     const canvasToImage = makeMatrix4Inverse(imageToCanvas);
 
     const planeToImage = makeMatrix4Scale(
-      new Vector3(canvasImageSize.width, canvasImageSize.height, 1.0)
+      new Vector3(canvasImageSize.width, canvasImageSize.height, 1)
     );
 
     this.renderLayersToFramebuffer();
@@ -370,7 +367,7 @@ export class LayerCompositor {
     );
     const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
 
-    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0);
     canvasFramebuffer.clear();
 
     const { offscreenColorAttachment } = this;
@@ -384,7 +381,7 @@ export class LayerCompositor {
       localToWorld: planeToImage,
       layerMap: offscreenColorAttachment,
       uvToTexture,
-      mipmapBias: 0.0,
+      mipmapBias: 0,
       convertToPremultipliedAlpha: 0
     };
 
@@ -424,7 +421,7 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0.0);
+    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0);
     offscreenFramebuffer.clear();
 
     const imageToOffscreen = makeMatrix4Orthographic(

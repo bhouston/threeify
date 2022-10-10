@@ -1,4 +1,4 @@
-import { Color3 } from './Color3';
+import { Color3 } from './Color3.js';
 
 export function makeColor3FromHex(hex: number, result = new Color3()): Color3 {
   hex = Math.floor(hex);
@@ -36,21 +36,21 @@ export function makeColor3FromHSL(
   result = new Color3()
 ): Color3 {
   // h,s,l ranges are in 0.0 - 1.0
-  h = ((h % 1.0) + 1.0) % 1.0; // euclidean modulo
-  s = Math.min(Math.max(s, 0.0), 1.0);
-  l = Math.min(Math.max(l, 0.0), 1.0);
+  h = ((h % 1) + 1) % 1; // euclidean modulo
+  s = Math.min(Math.max(s, 0), 1);
+  l = Math.min(Math.max(l, 0), 1);
 
   if (s === 0) {
     return result.set(1, 1, 1);
   }
 
-  const p = l <= 0.5 ? l * (1.0 + s) : l + s - l * s;
-  const q = 2.0 * l - p;
+  const p = l <= 0.5 ? l * (1 + s) : l + s - l * s;
+  const q = 2 * l - p;
 
   return result.set(
-    hue2rgb(q, p, h + 1.0 / 3.0),
+    hue2rgb(q, p, h + 1 / 3),
     hue2rgb(q, p, h),
-    hue2rgb(q, p, h - 1.0 / 3.0)
+    hue2rgb(q, p, h - 1 / 3)
   );
 }
 
@@ -74,7 +74,7 @@ export function makeHSLFromColor3(c: Color3, target: HSL): HSL {
 
   let hue = 0;
   let saturation = 0;
-  const lightness = (min + max) / 2.0;
+  const lightness = (min + max) / 2;
 
   if (min === max) {
     hue = 0;

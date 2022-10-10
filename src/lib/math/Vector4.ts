@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat4 } from '../core/hash';
-import { IPrimitive } from './IPrimitive';
+import { hashFloat4 } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Vector4 implements IPrimitive<Vector4> {
   constructor(public x = 0, public y = 0, public z = 0, public w = 0) {}
@@ -122,16 +122,30 @@ export class Vector4 implements IPrimitive<Vector4> {
   }
 
   setComponent(index: number, value: number): this {
-    if (index === 0) {
-      this.x = value;
-    } else if (index === 1) {
-      this.y = value;
-    } else if (index === 2) {
-      this.z = value;
-    } else if (index === 3) {
-      this.w = value;
-    } else {
-      throw new Error(`index of our range: ${index}`);
+    switch (index) {
+      case 0: {
+        this.x = value;
+
+        break;
+      }
+      case 1: {
+        this.y = value;
+
+        break;
+      }
+      case 2: {
+        this.z = value;
+
+        break;
+      }
+      case 3: {
+        this.w = value;
+
+        break;
+      }
+      default: {
+        throw new Error(`index of our range: ${index}`);
+      }
     }
 
     return this;

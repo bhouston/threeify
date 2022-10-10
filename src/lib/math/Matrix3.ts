@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloatArray } from '../core/hash';
-import { IPrimitive } from './IPrimitive';
+import { hashFloatArray } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 //
 // NOTE: This is a homogeneous matrix, it is not a 3x3 rotation only.

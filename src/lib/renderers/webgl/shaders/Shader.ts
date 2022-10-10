@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types';
-import { GL } from '../GL';
-import { RenderingContext } from '../RenderingContext';
-import { ShaderType } from './ShaderType';
+import { IDisposable } from '../../../core/types.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { ShaderType } from './ShaderType.js';
 
 function insertLineNumbers(source: string): string {
   const inputLines = source.split('\n');
@@ -23,10 +23,10 @@ function insertLineNumbers(source: string): string {
 
 // This reduces the code bulk when debugging shaders
 function removeDeadCode(source: string): string {
-  const defineRegexp = /^#define +([\w\d_]+)/;
-  const undefRegexp = /^#undef +([\w\d_]+)/;
-  const ifdefRegexp = /^#ifdef +([\w\d_]+)/;
-  const ifndefRegexp = /^#ifndef +([\w\d_]+)/;
+  const defineRegexp = /^#define +(\w+)/;
+  const undefRegexp = /^#undef +(\w+)/;
+  const ifdefRegexp = /^#ifdef +(\w+)/;
+  const ifndefRegexp = /^#ifndef +(\w+)/;
   const endifRegexp = /^#endif.* /;
 
   // state management
@@ -35,7 +35,7 @@ function removeDeadCode(source: string): string {
 
   const outputLines: string[] = [];
   source.split('\n').forEach((line) => {
-    const isLive = liveCodeStack[liveCodeStack.length - 1];
+    const isLive = liveCodeStack.at(-1);
 
     if (isLive) {
       const defineMatch = line.match(defineRegexp);
@@ -51,12 +51,12 @@ function removeDeadCode(source: string): string {
       }
       const ifdefMatch = line.match(ifdefRegexp);
       if (ifdefMatch !== null) {
-        liveCodeStack.push(defines.indexOf(ifdefMatch[1]) >= 0);
+        liveCodeStack.push(defines.includes(ifdefMatch[1]));
         return;
       }
       const ifndefMatch = line.match(ifndefRegexp);
       if (ifndefMatch !== null) {
-        liveCodeStack.push(defines.indexOf(ifndefMatch[1]) < 0);
+        liveCodeStack.push(!defines.includes(ifndefMatch[1]));
         return;
       }
     }
@@ -71,8 +71,8 @@ function removeDeadCode(source: string): string {
   });
   return outputLines
     .join('\n')
-    .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '')
-    .replace(/[\r\n]+/g, '\n');
+    .replace(/\/\*[\S\s]*?\*\/|([^:\\]|^)\/\/.*$/gm, '')
+    .replace(/[\n\r]+/g, '\n');
 }
 
 export class Shader implements IDisposable {

@@ -18,7 +18,7 @@ import {
   Texture,
   TextureFilter,
   TextureWrap
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -62,13 +62,7 @@ async function init(): Promise<null> {
   const passUniforms = {
     viewToWorld: new Matrix4(),
     screenToView: makeMatrix4Inverse(
-      makeMatrix4PerspectiveFov(
-        30,
-        0.1,
-        4.0,
-        1.0,
-        canvasFramebuffer.aspectRatio
-      )
+      makeMatrix4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
     ),
     equirectangularMap: texImage2Ds[0]
   };
@@ -86,8 +80,8 @@ async function init(): Promise<null> {
       makeMatrix4PerspectiveFov(
         15 * (1 - orbit.zoom) + 15,
         0.1,
-        4.0,
-        1.0,
+        4,
+        1,
         canvasFramebuffer.aspectRatio
       )
     );

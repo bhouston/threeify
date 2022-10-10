@@ -6,17 +6,17 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types';
-import { isPow2 } from '../../../math/Functions';
-import { Vector2 } from '../../../math/Vector2';
-import { ArrayBufferImage } from '../../../textures/ArrayBufferImage';
-import { TextureSource } from '../../../textures/VirtualTexture';
-import { GL } from '../GL';
-import { RenderingContext } from '../RenderingContext';
-import { DataType } from './DataType';
-import { PixelFormat } from './PixelFormat';
-import { TexParameters } from './TexParameters';
-import { TextureTarget } from './TextureTarget';
+import { IDisposable } from '../../../core/types.js';
+import { isPow2 } from '../../../math/Functions.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
+import { TextureSource } from '../../../textures/VirtualTexture.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { DataType } from './DataType.js';
+import { PixelFormat } from './PixelFormat.js';
+import { TexParameters } from './TexParameters.js';
+import { TextureTarget } from './TextureTarget.js';
 
 export class TexImage2D implements IDisposable {
   public readonly id: number;

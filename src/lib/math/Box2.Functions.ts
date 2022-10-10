@@ -1,5 +1,5 @@
-import { Box2 } from './Box2';
-import { Vector2 } from './Vector2';
+import { Box2 } from './Box2.js';
+import { Vector2 } from './Vector2.js';
 
 export function makeBox2FromPoints(
   points: Vector2[],

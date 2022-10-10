@@ -1,8 +1,8 @@
-import { IDisposable } from '../core/types';
-import { Euler3 } from '../math/Euler3';
-import { Quaternion } from '../math/Quaternion';
-import { makeQuaternionFromEuler } from '../math/Quaternion.Functions';
-import { Vector2 } from '../math/Vector2';
+import { IDisposable } from '../core/types.js';
+import { Euler3 } from '../math/Euler3.js';
+import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
+import { Quaternion } from '../math/Quaternion.js';
+import { Vector2 } from '../math/Vector2.js';
 
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vector2();

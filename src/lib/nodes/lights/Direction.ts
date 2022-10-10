@@ -1,8 +1,8 @@
-import { Euler3, EulerOrder3 } from '../../math/Euler3';
-import { makeEulerFromRotationMatrix4 } from '../../math/Euler3.Functions';
-import { Matrix4 } from '../../math/Matrix4';
-import { makeMatrix4RotationFromEuler } from '../../math/Matrix4.Functions';
-import { Vector3 } from '../../math/Vector3';
+import { makeEulerFromRotationMatrix4 } from '../../math/Euler3.Functions.js';
+import { Euler3, EulerOrder3 } from '../../math/Euler3.js';
+import { makeMatrix4RotationFromEuler } from '../../math/Matrix4.Functions.js';
+import { Matrix4 } from '../../math/Matrix4.js';
+import { Vector3 } from '../../math/Vector3.js';
 
 export function negativeZDirectionToEuler(
   d: Vector3,
@@ -16,8 +16,8 @@ export function negativeZDirectionToEuler(
   const c1 = d.length();
   const s1 = d.z;
   /* Find cosθ and sinθ; if gimbal lock, choose (1,0) arbitrarily */
-  const c2 = c1 !== 0 ? d.x / c1 : 1.0;
-  const s2 = c1 !== 0 ? d.y / c1 : 0.0;
+  const c2 = c1 !== 0 ? d.x / c1 : 1;
+  const s2 = c1 !== 0 ? d.y / c1 : 0;
 
   const m = new Matrix4();
   const te = m.elements;

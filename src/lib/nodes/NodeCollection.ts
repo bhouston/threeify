@@ -1,4 +1,4 @@
-import { Node } from './Node';
+import { Node } from './Node.js';
 
 export class NodeCollection {
   private array: Array<Node> = [];

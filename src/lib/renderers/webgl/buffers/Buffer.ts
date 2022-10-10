@@ -1,9 +1,9 @@
-import { IDisposable } from '../../../core/types';
-import { AttributeData } from '../../../geometry/AttributeData';
-import { Pool } from '../../Pool';
-import { RenderingContext } from '../RenderingContext';
-import { BufferTarget } from './BufferTarget';
-import { BufferUsage } from './BufferUsage';
+import { IDisposable } from '../../../core/types.js';
+import { AttributeData } from '../../../geometry/AttributeData.js';
+import { Pool } from '../../Pool.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { BufferTarget } from './BufferTarget.js';
+import { BufferUsage } from './BufferUsage.js';
 
 export class Buffer implements IDisposable {
   readonly id: number;

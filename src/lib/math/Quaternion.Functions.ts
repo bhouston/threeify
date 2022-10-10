@@ -1,7 +1,7 @@
-import { Euler3, EulerOrder3 } from './Euler3';
-import { Matrix4 } from './Matrix4';
-import { Quaternion } from './Quaternion';
-import { Vector3 } from './Vector3';
+import { Euler3, EulerOrder3 } from './Euler3.js';
+import { Matrix4 } from './Matrix4.js';
+import { Quaternion } from './Quaternion.js';
+import { Vector3 } from './Vector3.js';
 
 export function makeQuaternionFromEuler(
   e: Euler3,
@@ -100,7 +100,7 @@ export function makeQuaternionFromRotationMatrix4(
   const trace = m11 + m22 + m33;
 
   if (trace > 0) {
-    const s = 0.5 / Math.sqrt(trace + 1.0);
+    const s = 0.5 / Math.sqrt(trace + 1);
 
     return result.set(
       (m32 - m23) * s,
@@ -110,7 +110,7 @@ export function makeQuaternionFromRotationMatrix4(
     );
   }
   if (m11 > m22 && m11 > m33) {
-    const s = 2.0 * Math.sqrt(1.0 + m11 - m22 - m33);
+    const s = 2 * Math.sqrt(1 + m11 - m22 - m33);
 
     return result.set(
       0.25 * s,
@@ -120,7 +120,7 @@ export function makeQuaternionFromRotationMatrix4(
     );
   }
   if (m22 > m33) {
-    const s = 2.0 * Math.sqrt(1.0 + m22 - m11 - m33);
+    const s = 2 * Math.sqrt(1 + m22 - m11 - m33);
 
     return result.set(
       (m12 + m21) / s,
@@ -130,7 +130,7 @@ export function makeQuaternionFromRotationMatrix4(
     );
   }
 
-  const s = 2.0 * Math.sqrt(1.0 + m33 - m11 - m22);
+  const s = 2 * Math.sqrt(1 + m33 - m11 - m22);
 
   return result.set(
     (m13 + m31) / s,

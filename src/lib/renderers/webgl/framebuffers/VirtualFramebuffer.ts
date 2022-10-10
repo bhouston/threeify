@@ -5,22 +5,22 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types';
-import { Box2 } from '../../../math/Box2';
-import { Vector2 } from '../../../math/Vector2';
-import { Camera } from '../../../nodes/cameras/Camera';
-import { Node } from '../../../nodes/Node';
-import { BlendState } from '../BlendState';
-import { BufferGeometry } from '../buffers/BufferGeometry';
-import { ClearState } from '../ClearState';
-import { CullingState } from '../CullingState';
-import { DepthTestState } from '../DepthTestState';
-import { MaskState } from '../MaskState';
-import { Program } from '../programs/Program';
-import { UniformValueMap } from '../programs/ProgramUniform';
-import { RenderingContext } from '../RenderingContext';
-import { VertexArrayObject } from '../VertexArrayObject';
-import { BufferBit } from './BufferBit';
+import { IDisposable } from '../../../core/types.js';
+import { Box2 } from '../../../math/Box2.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import { Camera } from '../../../nodes/cameras/Camera.js';
+import { Node } from '../../../nodes/Node.js';
+import { BlendState } from '../BlendState.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { ClearState } from '../ClearState.js';
+import { CullingState } from '../CullingState.js';
+import { DepthTestState } from '../DepthTestState.js';
+import { MaskState } from '../MaskState.js';
+import { Program } from '../programs/Program.js';
+import { UniformValueMap } from '../programs/ProgramUniform.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { VertexArrayObject } from '../VertexArrayObject.js';
+import { BufferBit } from './BufferBit.js';
 
 const GL = WebGLRenderingContext;
 

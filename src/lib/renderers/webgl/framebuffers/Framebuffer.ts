@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../../math/Vector2';
-import { GL } from '../GL';
-import { RenderingContext } from '../RenderingContext';
-import { TexImage2D } from '../textures/TexImage2D';
-import { Attachment } from './Attachment';
-import { VirtualFramebuffer } from './VirtualFramebuffer';
+import { Vector2 } from '../../../math/Vector2.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { Attachment } from './Attachment.js';
+import { VirtualFramebuffer } from './VirtualFramebuffer.js';
 
 export type AttachmentMap = { [point: number]: TexImage2D | undefined };
 

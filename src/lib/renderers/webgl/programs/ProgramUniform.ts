@@ -1,20 +1,20 @@
-import { Color3 } from '../../../math';
 import {
   linearizeColor3FloatArray,
   linearizeMatrix3FloatArray,
   linearizeMatrix4FloatArray,
   linearizeVector2FloatArray,
   linearizeVector3FloatArray
-} from '../../../math/arrays/Linearizers';
-import { Matrix3 } from '../../../math/Matrix3';
-import { Matrix4 } from '../../../math/Matrix4';
-import { Vector2 } from '../../../math/Vector2';
-import { Vector3 } from '../../../math/Vector3';
-import { GL } from '../GL';
-import { RenderingContext } from '../RenderingContext';
-import { TexImage2D } from '../textures/TexImage2D';
-import { Program } from './Program';
-import { UniformType } from './UniformType';
+} from '../../../math/arrays/Linearizers.js';
+import { Color3 } from '../../../math/index.js';
+import { Matrix3 } from '../../../math/Matrix3.js';
+import { Matrix4 } from '../../../math/Matrix4.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import { Vector3 } from '../../../math/Vector3.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { Program } from './Program.js';
+import { UniformType } from './UniformType.js';
 
 export type UniformValue =
   | number
@@ -31,7 +31,7 @@ export type UniformValue =
   | Matrix4[];
 export type UniformValueMap = { [key: string]: UniformValue };
 
-const array1dRegexp = /^([a-zA-Z_0-9]+)\[[0-9]+\]$/;
+const array1dRegexp = /^(\w+)\[\d+]$/;
 // glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
 
 export class ProgramUniform {

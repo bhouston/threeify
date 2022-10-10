@@ -20,7 +20,7 @@ import {
   Texture,
   Vector2,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -81,8 +81,8 @@ async function init(): Promise<null> {
       1.5,
       new Vector2(),
       0.1,
-      2.0,
-      1.0,
+      2,
+      1,
       canvasFramebuffer.aspectRatio
     ),
     viewLightPosition: new Vector3(0, 0, 0),
@@ -90,7 +90,7 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1);
 
   let frameNumber = 0;
   function animate(): void {

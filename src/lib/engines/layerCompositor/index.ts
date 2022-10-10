@@ -1,2 +1,2 @@
-export * from './Layer';
-export * from './LayerCompositor';
+export * from './Layer.js';
+export * from './LayerCompositor.js';

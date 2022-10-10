@@ -21,7 +21,7 @@ import {
   ShaderMaterial,
   Texture,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -53,22 +53,22 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1.0)),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
     viewToScreen: makeMatrix4PerspectiveFov(
       35,
       0.1,
-      4.0,
-      1.0,
+      4,
+      1,
       canvasFramebuffer.aspectRatio
     ),
 
     // lights
-    pointLightViewPosition: new Vector3(0.0, 0, 0.0),
+    pointLightViewPosition: new Vector3(0, 0, 0),
     pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(0.7),
-    pointLightRange: 12.0,
+    pointLightRange: 12,
 
     // materials
-    specularAnisotropicScale: 1.0,
+    specularAnisotropicScale: 1,
     specularAnisotropicFlowMap: anisotropicFlow1Map
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -76,7 +76,7 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {

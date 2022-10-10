@@ -1,2 +1,2 @@
-export * from './Extensions';
-export * from './OptionalExtensions';
+export * from './Extensions.js';
+export * from './OptionalExtensions.js';

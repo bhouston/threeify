@@ -22,7 +22,7 @@ import {
   Texture,
   Vector2,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -45,19 +45,19 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
     viewToScreen: makeMatrix4PerspectiveFov(
       25,
       0.1,
-      4.0,
-      1.0,
+      4,
+      1,
       canvasFramebuffer.aspectRatio
     ),
 
     // lights
-    pointLightViewPosition: new Vector3(0.0, 0, 0.0),
-    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(30.0),
-    pointLightRange: 12.0,
+    pointLightViewPosition: new Vector3(0, 0, 0),
+    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(30),
+    pointLightRange: 12,
 
     // materials
     normalModulator: new Vector2(-1, 1),
@@ -68,7 +68,7 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
@@ -83,8 +83,8 @@ async function init(): Promise<null> {
       Math.cos(now * 0.001) * 0.5 + 0.5
     );
     uniforms.pointLightViewPosition = new Vector3(
-      Math.cos(now * 0.001) * 3.0,
-      Math.sin(now * 0.003) * 3.0,
+      Math.cos(now * 0.001) * 3,
+      Math.sin(now * 0.003) * 3,
       1.5
     );
 

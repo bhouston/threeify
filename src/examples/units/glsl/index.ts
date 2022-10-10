@@ -16,9 +16,9 @@ import {
   ShaderMaterial,
   Vector2,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
-import { glslTestSuites } from '../../../lib/shaders/testSuites';
+import { glslTestSuites } from '../../../lib/shaders/testSuites.js';
 
 async function init(): Promise<null> {
   const geometry = passGeometry();
@@ -121,8 +121,8 @@ async function init(): Promise<null> {
     output.push('');
   });
 
-  output.push('');
   output.push(
+    '',
     `SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`
   );
 

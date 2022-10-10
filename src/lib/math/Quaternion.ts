@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat4 } from '../core/hash';
-import { IPrimitive } from './IPrimitive';
+import { hashFloat4 } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Quaternion implements IPrimitive<Quaternion> {
   constructor(public x = 0, public y = 0, public z = 0, public w = 1) {}
@@ -182,7 +182,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
       this.copy(qb);
     }
 
-    if (cosHalfTheta >= 1.0) {
+    if (cosHalfTheta >= 1) {
       this.w = w;
       this.x = x;
       this.y = y;
@@ -191,7 +191,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
       return this;
     }
 
-    const sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
+    const sqrSinHalfTheta = 1 - cosHalfTheta * cosHalfTheta;
 
     if (sqrSinHalfTheta <= Number.EPSILON) {
       const s = 1 - t;

@@ -1,4 +1,4 @@
-import { Vector4 } from './Vector4';
+import { Vector4 } from './Vector4.js';
 
 describe('Vector4', () => {
   test('constructor defaults', () => {

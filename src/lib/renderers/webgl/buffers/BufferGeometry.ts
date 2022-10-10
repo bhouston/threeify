@@ -6,15 +6,15 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types';
-import { Geometry } from '../../../geometry/Geometry';
-import { RenderingContext } from '../RenderingContext';
+import { IDisposable } from '../../../core/types.js';
+import { Geometry } from '../../../geometry/Geometry.js';
+import { RenderingContext } from '../RenderingContext.js';
 import {
   BufferAccessor,
   makeBufferAccessorFromAttribute
-} from './BufferAccessor';
-import { BufferTarget } from './BufferTarget';
-import { PrimitiveType } from './PrimitiveType';
+} from './BufferAccessor.js';
+import { BufferTarget } from './BufferTarget.js';
+import { PrimitiveType } from './PrimitiveType.js';
 
 export class BufferGeometry implements IDisposable {
   disposed = false;

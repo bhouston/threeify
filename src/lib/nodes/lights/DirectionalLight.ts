@@ -8,13 +8,13 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../../math/Vector3';
+import { Vector3 } from '../../math/Vector3.js';
 import {
   eulerToNegativeZDirection,
   negativeZDirectionToEuler
-} from './Direction';
-import { Light } from './Light';
-import { LightType } from './LightType';
+} from './Direction.js';
+import { Light } from './Light.js';
+import { LightType } from './LightType.js';
 
 /**
  * Directional lights are light sources that act as though they are infinitely far
@@ -29,7 +29,7 @@ export class DirectionalLight extends Light {
    * @param color - RGB value for light's color in linear space.
    * @param intensity - Illuminance in lux (lm/m2).
    */
-  constructor(color: Vector3 = new Vector3(1, 1, 1), intensity = 1.0) {
+  constructor(color: Vector3 = new Vector3(1, 1, 1), intensity = 1) {
     super(LightType.Directional, color, intensity);
   }
 

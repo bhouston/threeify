@@ -1,39 +1,39 @@
-import { passGeometry } from '../../../lib/geometry/primitives/passGeometry';
-import { icosahedronGeometry } from '../../../lib/geometry/primitives/polyhedronGeometry';
-import { ShaderMaterial } from '../../../lib/materials/ShaderMaterial';
-import { Euler3 } from '../../../lib/math/Euler3';
-import { Matrix4 } from '../../../lib/math/Matrix4';
+import { passGeometry } from '../../../lib/geometry/primitives/passGeometry.js';
+import { icosahedronGeometry } from '../../../lib/geometry/primitives/polyhedronGeometry.js';
+import { ShaderMaterial } from '../../../lib/materials/ShaderMaterial.js';
+import { Euler3 } from '../../../lib/math/Euler3.js';
 import {
   makeMatrix4PerspectiveFov,
   makeMatrix4RotationFromEuler,
   makeMatrix4Translation
-} from '../../../lib/math/Matrix4.Functions';
-import { Vector2 } from '../../../lib/math/Vector2';
-import { Vector3 } from '../../../lib/math/Vector3';
-import { makeBufferGeometryFromGeometry } from '../../../lib/renderers/webgl/buffers/BufferGeometry';
+} from '../../../lib/math/Matrix4.Functions.js';
+import { Matrix4 } from '../../../lib/math/Matrix4.js';
+import { Vector2 } from '../../../lib/math/Vector2.js';
+import { Vector3 } from '../../../lib/math/Vector3.js';
+import { makeBufferGeometryFromGeometry } from '../../../lib/renderers/webgl/buffers/BufferGeometry.js';
 import {
   DepthTestFunc,
   DepthTestState
-} from '../../../lib/renderers/webgl/DepthTestState';
-import { Attachment } from '../../../lib/renderers/webgl/framebuffers/Attachment';
-import { Framebuffer } from '../../../lib/renderers/webgl/framebuffers/Framebuffer';
-import { renderBufferGeometry } from '../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer';
-import { makeProgramFromShaderMaterial } from '../../../lib/renderers/webgl/programs/Program';
-import { RenderingContext } from '../../../lib/renderers/webgl/RenderingContext';
+} from '../../../lib/renderers/webgl/DepthTestState.js';
+import { Attachment } from '../../../lib/renderers/webgl/framebuffers/Attachment.js';
+import { Framebuffer } from '../../../lib/renderers/webgl/framebuffers/Framebuffer.js';
+import { renderBufferGeometry } from '../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer.js';
+import { makeProgramFromShaderMaterial } from '../../../lib/renderers/webgl/programs/Program.js';
+import { RenderingContext } from '../../../lib/renderers/webgl/RenderingContext.js';
 import {
   makeTexImage2DFromCubeTexture,
   makeTexImage2DFromEquirectangularTexture
-} from '../../../lib/renderers/webgl/textures/TexImage2D.Functions';
-import { TextureFilter } from '../../../lib/renderers/webgl/textures/TextureFilter';
-import { TextureWrap } from '../../../lib/renderers/webgl/textures/TextureWrap';
+} from '../../../lib/renderers/webgl/textures/TexImage2D.Functions.js';
+import { TextureFilter } from '../../../lib/renderers/webgl/textures/TextureFilter.js';
+import { TextureWrap } from '../../../lib/renderers/webgl/textures/TextureWrap.js';
 import {
   cubeFaceTargets,
   CubeMapTexture
-} from '../../../lib/textures/CubeTexture';
-import { fetchImage } from '../../../lib/textures/loaders/Image';
-import { Texture } from '../../../lib/textures/Texture';
+} from '../../../lib/textures/CubeTexture.js';
+import { fetchImage } from '../../../lib/textures/loaders/Image.js';
+import { Texture } from '../../../lib/textures/Texture.js';
 import fragmentSource from './fragment.glsl';
-import { samplerMaterial } from './sampler/SamplerMaterial';
+import { samplerMaterial } from './sampler/SamplerMaterial.js';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
@@ -106,12 +106,12 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
     viewToScreen: makeMatrix4PerspectiveFov(
       25,
       0.1,
-      4.0,
-      1.0,
+      4,
+      1,
       canvasFramebuffer.aspectRatio
     ),
     cubeMap: lambertianCubeMap

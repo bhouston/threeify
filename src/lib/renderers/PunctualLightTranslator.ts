@@ -1,9 +1,9 @@
-import { Vector3 } from '../math/Vector3';
-import { DirectionalLight } from '../nodes/lights/DirectionalLight';
-import { Light } from '../nodes/lights/Light';
-import { PointLight } from '../nodes/lights/PointLight';
-import { SpotLight } from '../nodes/lights/SpotLight';
-import { depthFirstVisitor, Node } from '../nodes/Node';
+import { Vector3 } from '../math/Vector3.js';
+import { DirectionalLight } from '../nodes/lights/DirectionalLight.js';
+import { Light } from '../nodes/lights/Light.js';
+import { PointLight } from '../nodes/lights/PointLight.js';
+import { SpotLight } from '../nodes/lights/SpotLight.js';
+import { depthFirstVisitor, Node } from '../nodes/Node.js';
 
 export class PunctualLightUniforms {
   numLights = 0;

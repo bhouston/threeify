@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2';
-import { Vector3 } from '../../math/Vector3';
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
-import { Geometry } from '../Geometry';
+import { Vector2 } from '../../math/Vector2.js';
+import { Vector3 } from '../../math/Vector3.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 export function diskGeometry(
   radius = 0.5,
@@ -59,7 +59,7 @@ export function diskGeometry(
   for (let i = 1; i <= segments; i++) {
     indices.push(i, i + 1, 0);
   }
-  indices.push(indices[indices.length - 1], 1, 0);
+  indices.push(indices.at(-1) ?? 0, 1, 0);
 
   // build geometry
 

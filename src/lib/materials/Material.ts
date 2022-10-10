@@ -1,5 +1,5 @@
-import { generateUUID } from '../core/generateUuid';
-import { IDisposable, IIdentifiable, IVersionable } from '../core/types';
+import { generateUUID } from '../core/generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
 
 export class Material implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;

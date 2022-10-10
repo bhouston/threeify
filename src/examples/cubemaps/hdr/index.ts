@@ -17,7 +17,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -37,12 +37,12 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
     viewToScreen: makeMatrix4PerspectiveFov(
       25,
       0.1,
-      4.0,
-      1.0,
+      4,
+      1,
       canvasFramebuffer.aspectRatio
     ),
     perceptualRoughness: 0,

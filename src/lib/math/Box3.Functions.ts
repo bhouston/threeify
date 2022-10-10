@@ -1,22 +1,22 @@
-import { Attribute } from '../geometry/Attribute';
-import { Vector3View } from './arrays/PrimitiveView';
-import { Box3 } from './Box3';
-import { Matrix4 } from './Matrix4';
-import { Sphere } from './Sphere';
-import { Vector3 } from './Vector3';
-import { transformPoint3 } from './Vector3Matrix4.Functions';
+import { Attribute } from '../geometry/Attribute.js';
+import { Vector3View } from './arrays/PrimitiveView.js';
+import { Box3 } from './Box3.js';
+import { Matrix4 } from './Matrix4.js';
+import { Sphere } from './Sphere.js';
+import { Vector3 } from './Vector3.js';
+import { transformPoint3 } from './Vector3Matrix4.Functions.js';
 
 export function makeBox3FromArray(
   array: Float32Array,
   result = new Box3()
 ): Box3 {
-  let minX = +Infinity;
-  let minY = +Infinity;
-  let minZ = +Infinity;
+  let minX = +Number.POSITIVE_INFINITY;
+  let minY = +Number.POSITIVE_INFINITY;
+  let minZ = +Number.POSITIVE_INFINITY;
 
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let maxZ = -Infinity;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  let maxZ = Number.NEGATIVE_INFINITY;
 
   for (let i = 0, l = array.length; i < l; i += 3) {
     const x = array[i];
@@ -54,13 +54,13 @@ export function makeBox3FromAttribute(
   attribute: Attribute,
   result: Box3
 ): Box3 {
-  let minX = +Infinity;
-  let minY = +Infinity;
-  let minZ = +Infinity;
+  let minX = +Number.POSITIVE_INFINITY;
+  let minY = +Number.POSITIVE_INFINITY;
+  let minZ = +Number.POSITIVE_INFINITY;
 
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let maxZ = -Infinity;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  let maxZ = Number.NEGATIVE_INFINITY;
 
   const v = new Vector3();
   const vectorView = new Vector3View(attribute);

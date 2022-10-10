@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from '../core/hash';
-import { clamp } from './Functions';
-import { IPrimitive } from './IPrimitive';
+import { hashFloat3 } from '../core/hash.js';
+import { clamp } from './Functions.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Color3 implements IPrimitive<Color3> {
   constructor(public r = 0, public g = 0, public b = 0) {}
@@ -86,14 +86,25 @@ export class Color3 implements IPrimitive<Color3> {
   }
 
   setElement(index: number, value: number): this {
-    if (index === 0) {
-      this.r = value;
-    } else if (index === 1) {
-      this.g = value;
-    } else if (index === 2) {
-      this.b = value;
-    } else {
-      throw new Error(`index of our range: ${index}`);
+    switch (index) {
+      case 0: {
+        this.r = value;
+
+        break;
+      }
+      case 1: {
+        this.g = value;
+
+        break;
+      }
+      case 2: {
+        this.b = value;
+
+        break;
+      }
+      default: {
+        throw new Error(`index of our range: ${index}`);
+      }
     }
 
     return this;

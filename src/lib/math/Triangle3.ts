@@ -1,6 +1,6 @@
-import { hashFloat3 } from '../core/hash';
-import { ICloneable, IEquatable, IHashable } from '../core/types';
-import { Vector3 } from './Vector3';
+import { hashFloat3 } from '../core/hash.js';
+import { ICloneable, IEquatable, IHashable } from '../core/types.js';
+import { Vector3 } from './Vector3.js';
 
 export class Triangle3
   implements ICloneable<Triangle3>, IEquatable<Triangle3>, IHashable

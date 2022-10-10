@@ -19,7 +19,7 @@ import {
   Texture,
   Vector2,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -77,17 +77,16 @@ async function init(): Promise<null> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
-  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1.0);
-  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1.0);
+  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1);
+  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1);
 
   function animate(): void {
     const time = Date.now();
 
-    if (Math.floor((time * 0.0005) / Math.PI) % 2 === 0) {
-      canvasFramebuffer.clearState = blackClearState;
-    } else {
-      canvasFramebuffer.clearState = whiteClearState;
-    }
+    canvasFramebuffer.clearState =
+      Math.floor((time * 0.0005) / Math.PI) % 2 === 0
+        ? blackClearState
+        : whiteClearState;
     canvasFramebuffer.clear(BufferBit.All);
 
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {

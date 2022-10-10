@@ -1,10 +1,10 @@
-import { IArrayable } from '../../core/types';
-import { Attribute } from '../../geometry/Attribute';
-import { Matrix3 } from '../Matrix3';
-import { Matrix4 } from '../Matrix4';
-import { Quaternion } from '../Quaternion';
-import { Vector2 } from '../Vector2';
-import { Vector3 } from '../Vector3';
+import { IArrayable } from '../../core/types.js';
+import { Attribute } from '../../geometry/Attribute.js';
+import { Matrix3 } from '../Matrix3.js';
+import { Matrix4 } from '../Matrix4.js';
+import { Quaternion } from '../Quaternion.js';
+import { Vector2 } from '../Vector2.js';
+import { Vector3 } from '../Vector3.js';
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
 
@@ -37,7 +37,7 @@ export class PrimitiveView<P extends IArrayable> {
     } else if (dataArray instanceof ArrayBuffer) {
       this.floatArray = new Float32Array(dataArray);
     } else {
-      throw new Error('unsupported value');
+      throw new TypeError('unsupported value');
     }
     if (floatPerPrimitive < 0) {
       throw new Error(

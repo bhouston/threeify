@@ -8,9 +8,8 @@ import {
   makeUint32Attribute,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial,
-  Vector3
-} from '../../../lib/index';
+  ShaderMaterial
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -31,7 +30,7 @@ window.addEventListener('resize', () => canvasFramebuffer.resize());
 
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
-const uniforms = { scale: 1.0, color: new Color3() };
+const uniforms = { scale: 1, color: new Color3() };
 
 function animate(): void {
   requestAnimationFrame(animate);
@@ -39,7 +38,7 @@ function animate(): void {
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
   uniforms.color = makeColor3FromHSL(
     Date.now() * 0.001,
-    1.0,
+    1,
     0.5,
     uniforms.color
   );

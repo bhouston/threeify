@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../../math/Vector3';
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
-import { Geometry } from '../Geometry';
+import { Vector3 } from '../../math/Vector3.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 export function boxGeometry(
   width = 1,
@@ -82,8 +82,7 @@ export function boxGeometry(
 
         // uvs
 
-        uvs.push(ix / gridX);
-        uvs.push(1 - iy / gridY);
+        uvs.push(ix / gridX, 1 - iy / gridY);
       }
     }
 
@@ -102,8 +101,7 @@ export function boxGeometry(
 
         // faces
 
-        indices.push(a, b, d);
-        indices.push(b, c, d);
+        indices.push(a, b, d, b, c, d);
       }
     }
     numberOfVertices += 4;

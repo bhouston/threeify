@@ -1,5 +1,5 @@
-import { Vector2 } from './Vector2';
-import { Vector3 } from './Vector3';
+import { Vector2 } from './Vector2.js';
+import { Vector3 } from './Vector3.js';
 
 export function makeVector2FromBaryCoordWeights(
   baryCoord: Vector3,

@@ -1,10 +1,10 @@
-import { Box3 } from './Box3';
-import { makeBox3FromPoints } from './Box3.Functions';
-import { Matrix4 } from './Matrix4';
-import { getMaxScaleOnAxis } from './Matrix4.Functions';
-import { Sphere } from './Sphere';
-import { Vector3 } from './Vector3';
-import { transformPoint3 } from './Vector3Matrix4.Functions';
+import { makeBox3FromPoints } from './Box3.Functions.js';
+import { Box3 } from './Box3.js';
+import { getMaxScaleOnAxis } from './Matrix4.Functions.js';
+import { Matrix4 } from './Matrix4.js';
+import { Sphere } from './Sphere.js';
+import { Vector3 } from './Vector3.js';
+import { transformPoint3 } from './Vector3Matrix4.Functions.js';
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
 export function makeBoundingSphereFromBox(

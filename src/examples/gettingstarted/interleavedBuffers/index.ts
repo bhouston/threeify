@@ -8,7 +8,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

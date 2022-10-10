@@ -1,9 +1,9 @@
-import { Color3 } from '../Color3';
-import { Matrix3 } from '../Matrix3';
-import { Matrix4 } from '../Matrix4';
-import { Quaternion } from '../Quaternion';
-import { Vector2 } from '../Vector2';
-import { Vector3 } from '../Vector3';
+import { Color3 } from '../Color3.js';
+import { Matrix3 } from '../Matrix3.js';
+import { Matrix4 } from '../Matrix4.js';
+import { Quaternion } from '../Quaternion.js';
+import { Vector2 } from '../Vector2.js';
+import { Vector3 } from '../Vector3.js';
 
 export function linearizeNumberInt32Array(array: number[]): Int32Array {
   const result = new Int32Array(array.length);

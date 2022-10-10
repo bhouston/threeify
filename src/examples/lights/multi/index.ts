@@ -21,7 +21,7 @@ import {
   ShaderMaterial,
   Texture,
   Vector3
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -43,12 +43,12 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
     viewToScreen: makeMatrix4PerspectiveFov(
       25,
       0.1,
-      4.0,
-      1.0,
+      4,
+      1,
       canvasFramebuffer.aspectRatio
     ),
 
@@ -56,21 +56,21 @@ async function init(): Promise<null> {
     numPunctualLights: 3,
     punctualLightType: [0, 1, 2],
     punctualLightViewPosition: [
-      new Vector3(-1.0, 0, 0.0),
-      new Vector3(0.0, 0, 0.0),
+      new Vector3(-1, 0, 0),
+      new Vector3(0, 0, 0),
       new Vector3()
     ],
     punctualLightViewDirection: [
       new Vector3(),
-      new Vector3(0.0, 0, -1.0),
-      new Vector3(0.0, -1.0, -1.0).normalize()
+      new Vector3(0, 0, -1),
+      new Vector3(0, -1, -1).normalize()
     ],
     punctualLightColor: [
       new Color3(60, 4, 4),
       new Color3(4, 30, 4),
       new Color3(0.1, 0.1, 1)
     ],
-    punctualLightRange: [15.0, 15.0, 0],
+    punctualLightRange: [15, 15, 0],
     punctualLightInnerCos: [0, 0.95, 0],
     punctualLightOuterCos: [0, 0.9, 0],
 
@@ -83,7 +83,7 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1.0);
+  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
@@ -99,11 +99,11 @@ async function init(): Promise<null> {
       Math.cos(now * 0.00045) * 0.5
     ).normalize();
     uniforms.punctualLightViewPosition[0] = new Vector3(
-      Math.cos(now * 0.00097) * 5.0,
-      Math.cos(now * 0.00082) * 5.0,
+      Math.cos(now * 0.00097) * 5,
+      Math.cos(now * 0.00082) * 5,
       1.5
     );
-    uniforms.punctualLightInnerCos[1] = 1.0;
+    uniforms.punctualLightInnerCos[1] = 1;
     uniforms.punctualLightOuterCos[1] = 0.97 + 0.025 * Math.cos(now * 0.0017);
 
     canvasFramebuffer.clear(BufferBit.All);

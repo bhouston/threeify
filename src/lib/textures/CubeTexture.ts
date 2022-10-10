@@ -5,16 +5,16 @@
 // * @bhouston
 //
 
-import { Matrix4 } from '../math/Matrix4';
-import { makeMatrix4LookAt } from '../math/Matrix4.Functions';
-import { Vector2 } from '../math/Vector2';
-import { Vector3 } from '../math/Vector3';
-import { IPoolUser } from '../renderers/Pool';
-import { DataType } from '../renderers/webgl/textures/DataType';
-import { PixelFormat } from '../renderers/webgl/textures/PixelFormat';
-import { TextureFilter } from '../renderers/webgl/textures/TextureFilter';
-import { TextureTarget } from '../renderers/webgl/textures/TextureTarget';
-import { TextureSource, VirtualTexture } from './VirtualTexture';
+import { makeMatrix4LookAt } from '../math/Matrix4.Functions.js';
+import { Matrix4 } from '../math/Matrix4.js';
+import { Vector2 } from '../math/Vector2.js';
+import { Vector3 } from '../math/Vector3.js';
+import { IPoolUser } from '../renderers/Pool.js';
+import { DataType } from '../renderers/webgl/textures/DataType.js';
+import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
+import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
+import { TextureTarget } from '../renderers/webgl/textures/TextureTarget.js';
+import { TextureSource, VirtualTexture } from './VirtualTexture.js';
 
 export class CubeMapTexture extends VirtualTexture implements IPoolUser {
   constructor(

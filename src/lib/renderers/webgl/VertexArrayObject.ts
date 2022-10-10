@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../core/types';
-import { BufferGeometry } from './buffers/BufferGeometry';
-import { PrimitiveType } from './buffers/PrimitiveType';
-import { Program } from './programs/Program';
+import { IDisposable } from '../../core/types.js';
+import { BufferGeometry } from './buffers/BufferGeometry.js';
+import { PrimitiveType } from './buffers/PrimitiveType.js';
+import { Program } from './programs/Program.js';
 
 export class VertexArrayObject implements IDisposable {
   readonly id: number;

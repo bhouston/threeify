@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../math/Vector2';
-import { DataType } from '../renderers/webgl/textures/DataType';
-import { PixelFormat } from '../renderers/webgl/textures/PixelFormat';
-import { TextureFilter } from '../renderers/webgl/textures/TextureFilter';
-import { TextureWrap } from '../renderers/webgl/textures/TextureWrap';
-import { TextureSource, VirtualTexture } from './VirtualTexture';
+import { Vector2 } from '../math/Vector2.js';
+import { DataType } from '../renderers/webgl/textures/DataType.js';
+import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
+import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
+import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
+import { TextureSource, VirtualTexture } from './VirtualTexture.js';
 
 export class Texture extends VirtualTexture {
   constructor(

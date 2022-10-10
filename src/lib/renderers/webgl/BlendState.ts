@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from '../../core/types';
-import { Blending } from '../../materials/Blending';
-import { GL } from './GL';
+import { ICloneable, IEquatable } from '../../core/types.js';
+import { Blending } from '../../materials/Blending.js';
+import { GL } from './GL.js';
 
 export enum BlendEquation {
   /**

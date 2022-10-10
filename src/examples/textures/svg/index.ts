@@ -11,7 +11,7 @@ import {
   ShaderMaterial,
   Texture,
   Vector2
-} from '../../../lib/index';
+} from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

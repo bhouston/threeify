@@ -1,5 +1,5 @@
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
-import { Geometry } from '../Geometry';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 export async function fetchOBJ(url: string): Promise<Geometry[]> {
   const response = await fetch(url);
@@ -13,9 +13,9 @@ export async function fetchOBJ(url: string): Promise<Geometry[]> {
 
 const oRegexp = /^o +(.+)/;
 const gRegexp = /^g +(.+)/;
-const vRegexp = /^v +([\d.+-]+) +([\d.+-]+) +([\d.+-]+)/;
-const vnRegexp = /^vn +([\d.+-]+) +([\d.+-]+) +([\d.+-]+)/;
-const vtRegexp = /^vt +([\d.+-]+) +([\d.+-]+)/;
+const vRegexp = /^v +([\d+.-]+) +([\d+.-]+) +([\d+.-]+)/;
+const vnRegexp = /^vn +([\d+.-]+) +([\d+.-]+) +([\d+.-]+)/;
+const vtRegexp = /^vt +([\d+.-]+) +([\d+.-]+)/;
 const fRegexp =
   /^f( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))?/;
 
@@ -66,24 +66,27 @@ export function parseOBJ(text: string): Geometry[] {
     const vMatch = line.match(vRegexp);
     if (vMatch !== null) {
       workingPositions.push(
-        parseFloat(vMatch[1]),
-        parseFloat(vMatch[2]),
-        parseFloat(vMatch[3])
+        Number.parseFloat(vMatch[1]),
+        Number.parseFloat(vMatch[2]),
+        Number.parseFloat(vMatch[3])
       );
       return;
     }
     const vnMatch = line.match(vnRegexp);
     if (vnMatch !== null) {
       workingNormals.push(
-        parseFloat(vnMatch[1]),
-        parseFloat(vnMatch[2]),
-        parseFloat(vnMatch[3])
+        Number.parseFloat(vnMatch[1]),
+        Number.parseFloat(vnMatch[2]),
+        Number.parseFloat(vnMatch[3])
       );
       return;
     }
     const vtMatch = line.match(vtRegexp);
     if (vtMatch !== null) {
-      workingUvs.push(parseFloat(vtMatch[1]), parseFloat(vtMatch[2]));
+      workingUvs.push(
+        Number.parseFloat(vtMatch[1]),
+        Number.parseFloat(vtMatch[2])
+      );
       return;
     }
     const fMatch = line.match(fRegexp);
@@ -95,7 +98,7 @@ export function parseOBJ(text: string): Geometry[] {
       }
       let baseOffset = 2;
       for (let v = 0; v < numVertices; v++) {
-        let pi = (parseInt(fMatch[baseOffset + 0]) - 1) * 3;
+        let pi = (Number.parseInt(fMatch[baseOffset + 0]) - 1) * 3;
         if (pi < 0) {
           pi += workingPositions.length / 3;
         }
@@ -106,7 +109,7 @@ export function parseOBJ(text: string): Geometry[] {
         );
         const uvIndexToken = fMatch[baseOffset + 1];
         if (uvIndexToken.length > 0) {
-          let uvi = (parseInt(uvIndexToken) - 1) * 2;
+          let uvi = (Number.parseInt(uvIndexToken) - 1) * 2;
           if (uvi < 0) {
             uvi += workingUvs.length / 2;
           }
@@ -114,7 +117,7 @@ export function parseOBJ(text: string): Geometry[] {
         }
         const normalIndexToken = fMatch[baseOffset + 2];
         if (normalIndexToken.length > 0) {
-          let ni = (parseInt(normalIndexToken) - 1) * 3;
+          let ni = (Number.parseInt(normalIndexToken) - 1) * 3;
           if (ni < 0) {
             ni += workingNormals.length / 3;
           }
@@ -127,9 +130,7 @@ export function parseOBJ(text: string): Geometry[] {
         baseOffset += 4;
       }
       for (let i = 0; i < numVertices - 2; i++) {
-        indices.push(startVertex);
-        indices.push(startVertex + i + 1);
-        indices.push(startVertex + i + 2);
+        indices.push(startVertex, startVertex + i + 1, startVertex + i + 2);
       }
     } else if (oRegexp.test(line)) {
       commitObject();

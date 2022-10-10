@@ -1,12 +1,12 @@
-import { IDisposable } from '../core/types';
-import { Euler3, EulerOrder3 } from '../math/Euler3';
-import { degToRad } from '../math/Functions';
-import { Quaternion } from '../math/Quaternion';
+import { IDisposable } from '../core/types.js';
+import { Euler3, EulerOrder3 } from '../math/Euler3.js';
+import { degToRad } from '../math/Functions.js';
 import {
   makeQuaternionFromAxisAngle,
   makeQuaternionFromEuler
-} from '../math/Quaternion.Functions';
-import { Vector3 } from '../math/Vector3';
+} from '../math/Quaternion.Functions.js';
+import { Quaternion } from '../math/Quaternion.js';
+import { Vector3 } from '../math/Vector3.js';
 
 const zAxis = new Vector3(0, 0, 1);
 // - PI/2 around the x-axis
@@ -24,7 +24,7 @@ export class DeviceOrientation implements IDisposable {
     const onDeviceOrientation = (event: DeviceOrientationEvent): void => {
       this.deviceOrientation.set(
         degToRad(event.beta ?? 0),
-        degToRad(event.alpha ?? 0 - 180.0),
+        degToRad(event.alpha ?? 0 - 180),
         -degToRad(event.gamma ?? 0),
         EulerOrder3.YXZ
       );

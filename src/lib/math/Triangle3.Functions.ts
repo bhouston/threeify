@@ -1,9 +1,9 @@
-import { Triangle3 } from './Triangle3';
-import { Vector3 } from './Vector3';
+import { Triangle3 } from './Triangle3.js';
 import {
   crossFromCoplanarPoints,
   pointToBaryCoords
-} from './Vector3.Functions';
+} from './Vector3.Functions.js';
+import { Vector3 } from './Vector3.js';
 
 export function makeTriangleFromPointsAndIndices(
   points: Vector3[],

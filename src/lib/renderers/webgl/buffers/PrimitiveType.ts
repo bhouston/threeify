@@ -1,4 +1,4 @@
-import { GL } from '../GL';
+import { GL } from '../GL.js';
 
 export enum PrimitiveType {
   Points = GL.POINTS,

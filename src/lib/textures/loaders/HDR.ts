@@ -8,14 +8,14 @@
 import {
   floatsToNormalizedBytes,
   normalizedByteToFloats
-} from '../../math/arrays/Conversions';
+} from '../../math/arrays/Conversions.js';
 import {
   linearToRgbdArray,
   rgbeToLinearArray
-} from '../../math/Vector4.Functions';
-import { DataType } from '../../renderers/webgl/textures/DataType';
-import { ArrayBufferImage } from '../ArrayBufferImage';
-import { PixelEncoding } from '../PixelEncoding';
+} from '../../math/Vector4.Functions.js';
+import { DataType } from '../../renderers/webgl/textures/DataType.js';
+import { ArrayBufferImage } from '../ArrayBufferImage.js';
+import { PixelEncoding } from '../PixelEncoding.js';
 
 class Buffer {
   constructor(public data: Uint8Array, public position: number) {}
@@ -115,8 +115,8 @@ class Header {
   programType =
     'RGBE'; /* listed at beginning of file to identify it after "#?". defaults to "RGBE" */
   format = ''; /* RGBE format, default 32-bit_rle_rgbe */
-  gamma = 1.0; /* image has already been gamma corrected with given gamma. defaults to 1.0 (no correction) */
-  exposure = 1.0; /* a value of 1.0 in an image corresponds to <exposure> watts/steradian/m^2. defaults to 1.0 */
+  gamma = 1; /* image has already been gamma corrected with given gamma. defaults to 1.0 (no correction) */
+  exposure = 1; /* a value of 1.0 in an image corresponds to <exposure> watts/steradian/m^2. defaults to 1.0 */
   width = 0;
   height = 0; /* image dimensions, width/height */
 }
@@ -163,11 +163,11 @@ function readHeader(buffer: Buffer): Header {
     }
 
     if ((match = line.match(gammaRegex)) !== null) {
-      header.gamma = parseFloat(match[1]);
+      header.gamma = Number.parseFloat(match[1]);
     }
 
     if ((match = line.match(exposureRegex)) !== null) {
-      header.exposure = parseFloat(match[1]);
+      header.exposure = Number.parseFloat(match[1]);
     }
 
     if ((match = line.match(formatRegex)) !== null) {
@@ -177,8 +177,8 @@ function readHeader(buffer: Buffer): Header {
 
     if ((match = line.match(dimensionsRegex)) !== null) {
       header.valid |= RGBE_VALID_DIMENSIONS;
-      header.height = parseInt(match[1], 10);
-      header.width = parseInt(match[2], 10);
+      header.height = Number.parseInt(match[1], 10);
+      header.width = Number.parseInt(match[2], 10);
     }
 
     if (

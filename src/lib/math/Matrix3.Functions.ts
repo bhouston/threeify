@@ -1,5 +1,5 @@
-import { Matrix3 } from './Matrix3';
-import { Vector2 } from './Vector2';
+import { Matrix3 } from './Matrix3.js';
+import { Vector2 } from './Vector2.js';
 
 export function makeMatrix3Concatenation(
   a: Matrix3,
@@ -144,5 +144,5 @@ export function makeMatrix3RotationFromAngle(
 }
 
 export function makeMatrix3Scale(s: Vector2, result = new Matrix3()): Matrix3 {
-  return result.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1.0);
+  return result.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1);
 }

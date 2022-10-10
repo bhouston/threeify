@@ -1,10 +1,10 @@
-import { Euler3, EulerOrder3 } from './Euler3';
 import {
   makeEulerFromQuaternion,
   makeEulerFromRotationMatrix4
-} from './Euler3.Functions';
-import { makeMatrix4RotationFromEuler } from './Matrix4.Functions';
-import { makeQuaternionFromEuler } from './Quaternion.Functions';
+} from './Euler3.Functions.js';
+import { Euler3, EulerOrder3 } from './Euler3.js';
+import { makeMatrix4RotationFromEuler } from './Matrix4.Functions.js';
+import { makeQuaternionFromEuler } from './Quaternion.Functions.js';
 
 const testOrders = [
   EulerOrder3.XYZ,

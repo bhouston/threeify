@@ -5,14 +5,17 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../core/generateUuid';
-import { IDisposable, IIdentifiable, IVersionable } from '../core/types';
-import { Euler3 } from '../math/Euler3';
-import { Matrix4 } from '../math/Matrix4';
-import { composeMatrix4, makeMatrix4Inverse } from '../math/Matrix4.Functions';
-import { makeQuaternionFromEuler } from '../math/Quaternion.Functions';
-import { Vector3 } from '../math/Vector3';
-import { NodeCollection } from './NodeCollection';
+import { generateUUID } from '../core/generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
+import { Euler3 } from '../math/Euler3.js';
+import {
+  composeMatrix4,
+  makeMatrix4Inverse
+} from '../math/Matrix4.Functions.js';
+import { Matrix4 } from '../math/Matrix4.js';
+import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
+import { Vector3 } from '../math/Vector3.js';
+import { NodeCollection } from './NodeCollection.js';
 
 export class Node implements IIdentifiable, IVersionable, IDisposable {
   disposed = false;

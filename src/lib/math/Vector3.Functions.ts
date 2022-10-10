@@ -1,5 +1,5 @@
-import { Spherical } from './Spherical';
-import { Vector3 } from './Vector3';
+import { Spherical } from './Spherical.js';
+import { Vector3 } from './Vector3.js';
 
 export function crossFromCoplanarPoints(
   a: Vector3,

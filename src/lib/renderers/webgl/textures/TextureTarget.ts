@@ -1,4 +1,4 @@
-import { GL } from '../GL';
+import { GL } from '../GL.js';
 
 export enum TextureTarget {
   Texture2D = GL.TEXTURE_2D,

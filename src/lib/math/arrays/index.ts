@@ -1,3 +1,3 @@
-export * from './Conversions';
-export * from './Linearizers';
-export * from './PrimitiveView';
+export * from './Conversions.js';
+export * from './Linearizers.js';
+export * from './PrimitiveView.js';

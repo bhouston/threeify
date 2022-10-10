@@ -1,9 +1,9 @@
-import { Euler3, EulerOrder3 } from './Euler3';
-import { Matrix4 } from './Matrix4';
-import { Quaternion } from './Quaternion';
-import { makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions';
-import { Vector2 } from './Vector2';
-import { Vector3 } from './Vector3';
+import { Euler3, EulerOrder3 } from './Euler3.js';
+import { Matrix4 } from './Matrix4.js';
+import { makeQuaternionFromRotationMatrix4 } from './Quaternion.Functions.js';
+import { Quaternion } from './Quaternion.js';
+import { Vector2 } from './Vector2.js';
+import { Vector3 } from './Vector3.js';
 
 export function makeMatrix4Concatenation(
   a: Matrix4,
@@ -377,9 +377,9 @@ export function makeMatrix4LookAt(
 
   const lookLength = look.length();
   if (lookLength === 0) {
-    look.z = 1.0;
+    look.z = 1;
   } else {
-    look.multiplyByScalar(1.0 / lookLength);
+    look.multiplyByScalar(1 / lookLength);
   }
 
   const right = up.clone().cross(look);
@@ -397,7 +397,7 @@ export function makeMatrix4LookAt(
     up.normalize();
     right.cross(up);
   } else {
-    right.multiplyByScalar(1.0 / rightLength);
+    right.multiplyByScalar(1 / rightLength);
   }
 
   const up2 = look.clone().cross(right);
@@ -432,108 +432,128 @@ export function makeMatrix4RotationFromEuler(
   const f = Math.sin(z);
 
   // TODO: Replace smart code that compacts all of these orders into one
-  if (euler.order === EulerOrder3.XYZ) {
-    const ae = a * e;
-    const af = a * f;
-    const be = b * e;
-    const bf = b * f;
+  switch (euler.order) {
+    case EulerOrder3.XYZ: {
+      const ae = a * e;
+      const af = a * f;
+      const be = b * e;
+      const bf = b * f;
 
-    te[0] = c * e;
-    te[4] = -c * f;
-    te[8] = d;
+      te[0] = c * e;
+      te[4] = -c * f;
+      te[8] = d;
 
-    te[1] = af + be * d;
-    te[5] = ae - bf * d;
-    te[9] = -b * c;
+      te[1] = af + be * d;
+      te[5] = ae - bf * d;
+      te[9] = -b * c;
 
-    te[2] = bf - ae * d;
-    te[6] = be + af * d;
-    te[10] = a * c;
-  } else if (euler.order === EulerOrder3.YXZ) {
-    const ce = c * e;
-    const cf = c * f;
-    const de = d * e;
-    const df = d * f;
+      te[2] = bf - ae * d;
+      te[6] = be + af * d;
+      te[10] = a * c;
 
-    te[0] = ce + df * b;
-    te[4] = de * b - cf;
-    te[8] = a * d;
+      break;
+    }
+    case EulerOrder3.YXZ: {
+      const ce = c * e;
+      const cf = c * f;
+      const de = d * e;
+      const df = d * f;
 
-    te[1] = a * f;
-    te[5] = a * e;
-    te[9] = -b;
+      te[0] = ce + df * b;
+      te[4] = de * b - cf;
+      te[8] = a * d;
 
-    te[2] = cf * b - de;
-    te[6] = df + ce * b;
-    te[10] = a * c;
-  } else if (euler.order === EulerOrder3.ZXY) {
-    const ce = c * e;
-    const cf = c * f;
-    const de = d * e;
-    const df = d * f;
+      te[1] = a * f;
+      te[5] = a * e;
+      te[9] = -b;
 
-    te[0] = ce - df * b;
-    te[4] = -a * f;
-    te[8] = de + cf * b;
+      te[2] = cf * b - de;
+      te[6] = df + ce * b;
+      te[10] = a * c;
 
-    te[1] = cf + de * b;
-    te[5] = a * e;
-    te[9] = df - ce * b;
+      break;
+    }
+    case EulerOrder3.ZXY: {
+      const ce = c * e;
+      const cf = c * f;
+      const de = d * e;
+      const df = d * f;
 
-    te[2] = -a * d;
-    te[6] = b;
-    te[10] = a * c;
-  } else if (euler.order === EulerOrder3.ZYX) {
-    const ae = a * e;
-    const af = a * f;
-    const be = b * e;
-    const bf = b * f;
+      te[0] = ce - df * b;
+      te[4] = -a * f;
+      te[8] = de + cf * b;
 
-    te[0] = c * e;
-    te[4] = be * d - af;
-    te[8] = ae * d + bf;
+      te[1] = cf + de * b;
+      te[5] = a * e;
+      te[9] = df - ce * b;
 
-    te[1] = c * f;
-    te[5] = bf * d + ae;
-    te[9] = af * d - be;
+      te[2] = -a * d;
+      te[6] = b;
+      te[10] = a * c;
 
-    te[2] = -d;
-    te[6] = b * c;
-    te[10] = a * c;
-  } else if (euler.order === EulerOrder3.YZX) {
-    const ac = a * c;
-    const ad = a * d;
-    const bc = b * c;
-    const bd = b * d;
+      break;
+    }
+    case EulerOrder3.ZYX: {
+      const ae = a * e;
+      const af = a * f;
+      const be = b * e;
+      const bf = b * f;
 
-    te[0] = c * e;
-    te[4] = bd - ac * f;
-    te[8] = bc * f + ad;
+      te[0] = c * e;
+      te[4] = be * d - af;
+      te[8] = ae * d + bf;
 
-    te[1] = f;
-    te[5] = a * e;
-    te[9] = -b * e;
+      te[1] = c * f;
+      te[5] = bf * d + ae;
+      te[9] = af * d - be;
 
-    te[2] = -d * e;
-    te[6] = ad * f + bc;
-    te[10] = ac - bd * f;
-  } else if (euler.order === EulerOrder3.XZY) {
-    const ac = a * c;
-    const ad = a * d;
-    const bc = b * c;
-    const bd = b * d;
+      te[2] = -d;
+      te[6] = b * c;
+      te[10] = a * c;
 
-    te[0] = c * e;
-    te[4] = -f;
-    te[8] = d * e;
+      break;
+    }
+    case EulerOrder3.YZX: {
+      const ac = a * c;
+      const ad = a * d;
+      const bc = b * c;
+      const bd = b * d;
 
-    te[1] = ac * f + bd;
-    te[5] = a * e;
-    te[9] = ad * f - bc;
+      te[0] = c * e;
+      te[4] = bd - ac * f;
+      te[8] = bc * f + ad;
 
-    te[2] = bc * f - ad;
-    te[6] = b * e;
-    te[10] = bd * f + ac;
+      te[1] = f;
+      te[5] = a * e;
+      te[9] = -b * e;
+
+      te[2] = -d * e;
+      te[6] = ad * f + bc;
+      te[10] = ac - bd * f;
+
+      break;
+    }
+    case EulerOrder3.XZY: {
+      const ac = a * c;
+      const ad = a * d;
+      const bc = b * c;
+      const bd = b * d;
+
+      te[0] = c * e;
+      te[4] = -f;
+      te[8] = d * e;
+
+      te[1] = ac * f + bd;
+      te[5] = a * e;
+      te[9] = ad * f - bc;
+
+      te[2] = bc * f - ad;
+      te[6] = b * e;
+      te[10] = bd * f + ac;
+
+      break;
+    }
+    // No default
   }
 
   // bottom row
@@ -707,8 +727,7 @@ export function makeMatrix4PerspectiveFov(
   aspectRatio: number,
   result = new Matrix4()
 ): Matrix4 {
-  const height =
-    (2.0 * near * Math.tan((verticalFov * Math.PI) / 180.0)) / zoom;
+  const height = (2 * near * Math.tan((verticalFov * Math.PI) / 180)) / zoom;
   const width = height * aspectRatio;
 
   // NOTE: OpenGL screen coordinates are -bottomt to +top, -left to +right.
@@ -732,9 +751,9 @@ export function makeMatrix4Orthographic(
   far: number,
   result = new Matrix4()
 ): Matrix4 {
-  const w = 1.0 / (right - left);
-  const h = 1.0 / (top - bottom);
-  const p = 1.0 / (far - near);
+  const w = 1 / (right - left);
+  const h = 1 / (top - bottom);
+  const p = 1 / (far - near);
 
   const x = (right + left) * w;
   const y = (top + bottom) * h;
@@ -766,7 +785,7 @@ export function makeMatrix4OrthographicSimple(
   near: number,
   far: number,
   zoom: number,
-  aspectRatio = 1.0,
+  aspectRatio = 1,
   result = new Matrix4()
 ): Matrix4 {
   height /= zoom;

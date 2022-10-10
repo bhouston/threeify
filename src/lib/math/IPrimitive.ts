@@ -5,7 +5,12 @@
 // * @bhouston
 //
 
-import { IArrayable, ICloneable, IEquatable, IHashable } from '../core/types';
+import {
+  IArrayable,
+  ICloneable,
+  IEquatable,
+  IHashable
+} from '../core/types.js';
 
 export interface IPrimitive<T>
   extends ICloneable<T>,

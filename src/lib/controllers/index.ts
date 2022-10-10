@@ -1,2 +1,2 @@
-export * from './DeviceOrientation';
-export * from './Orbit';
+export * from './DeviceOrientation.js';
+export * from './Orbit.js';

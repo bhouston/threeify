@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from '../core/hash';
-import { clamp } from './Functions';
-import { IPrimitive } from './IPrimitive';
+import { hashFloat3 } from '../core/hash.js';
+import { clamp } from './Functions.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Vector3 implements IPrimitive<Vector3> {
   constructor(public x = 0, public y = 0, public z = 0) {}
@@ -147,14 +147,25 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   setComponent(index: number, value: number): this {
-    if (index === 0) {
-      this.x = value;
-    } else if (index === 1) {
-      this.y = value;
-    } else if (index === 2) {
-      this.z = value;
-    } else {
-      throw new Error(`index of our range: ${index}`);
+    switch (index) {
+      case 0: {
+        this.x = value;
+
+        break;
+      }
+      case 1: {
+        this.y = value;
+
+        break;
+      }
+      case 2: {
+        this.z = value;
+
+        break;
+      }
+      default: {
+        throw new Error(`index of our range: ${index}`);
+      }
     }
 
     return this;
