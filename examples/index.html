@@ -29,7 +29,7 @@
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       let scriptUrl = urlParams.get("scriptUrl");
-      const name = urlParams.get("name");
+      const name = urlParams.get("name") || "brdfs/clearcoat";
       if (name !== null) {
         scriptUrl = `/dist/examples/${name}/index.js`;
       }

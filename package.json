@@ -47,7 +47,7 @@
   "scripts": {
     "build": "tgt && tsc",
     "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
-    "start": "npm run watch & web-dev-server --watch --open --app-index --node-resolve ./examples/index.html",
+    "start": "npm run watch & web-dev-server --watch --app-index examples --node-resolve --open",
     "lint": "npx eslint \"src/**/*.{ts,json}\"",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier \"src/**/*.{ts,json}\" --check",

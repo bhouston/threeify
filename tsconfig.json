@@ -17,6 +17,9 @@
     "esModuleInterop": false
   },
   "include": ["src/**/*.ts"],
+  "exclude": [
+    "**/*.test.ts"
+  ],
   "typedocOptions": {
     "mode": "modules",
     "out": "./docs",
