@@ -15,25 +15,33 @@ import {
   RenderingContext,
   ShaderMaterial,
   Vector2,
-  Vector3,
-} from "../../../lib/index";
-import vertexSource from "../../../lib/shaders/includes/tests/vertex.glsl";
-import { glslTestSuites } from "../../../lib/shaders/testSuites";
+  Vector3
+} from '../../../lib/index.js';
+import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
+import { glslTestSuites } from '../../../lib/shaders/testSuites.js';
 
 async function init(): Promise<null> {
   const geometry = passGeometry();
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
+  const { canvasFramebuffer } = context;
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const unitUniforms = {};
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
   const framebufferSize = new Vector2(1024, 1);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attach(Attachment.Color0, makeColorAttachment(context, framebufferSize));
-  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, framebufferSize));
+  framebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(context, framebufferSize)
+  );
+  framebuffer.attach(
+    Attachment.Depth,
+    makeDepthAttachment(context, framebufferSize)
+  );
 
   framebuffer.clearState = new ClearState(new Vector3(0.5, 0.5, 0.5), 0.5);
   framebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
@@ -48,14 +56,22 @@ async function init(): Promise<null> {
     const passIds = [];
     const failureIds = [];
     const duplicateIds = [];
-    let compileError = undefined;
+    let compileError;
 
     try {
-      const passMaterial = new ShaderMaterial(vertexSource, glslUnitTest.source);
+      const passMaterial = new ShaderMaterial(
+        vertexSource,
+        glslUnitTest.source
+      );
       const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
 
       framebuffer.clear(BufferBit.All);
-      renderBufferGeometry(framebuffer, unitProgram, unitUniforms, bufferGeometry);
+      renderBufferGeometry(
+        framebuffer,
+        unitProgram,
+        unitUniforms,
+        bufferGeometry
+      );
 
       const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
 
@@ -76,35 +92,43 @@ async function init(): Promise<null> {
       }
     } catch (e) {
       totalFailures++;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      compileError = e.message !== undefined ? e.message : "unknown";
+      const err = e as Error;
+      compileError = err.message !== undefined ? err.message : 'unknown';
     }
 
     totalPasses += passIds.length;
     totalFailures += failureIds.length;
     totalDuplicates += duplicateIds.length;
 
-    output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
+    output.push(
+      `${glslUnitTest.name}.test.glsl: ${
+        passIds.length + failureIds.length + duplicateIds.length
+      } tests`
+    );
     if (compileError !== undefined) {
       output.push(`  COMPILE FAILED: ${compileError}`);
     } else if (failureIds.length === 0 && duplicateIds.length === 0) {
-      output.push("  ALL PASSED");
+      output.push('  ALL PASSED');
     }
     if (failureIds.length > 0) {
-      output.push(`  ${failureIds.length} FAILED: ${failureIds.join(" ")}`);
+      output.push(`  ${failureIds.length} FAILED: ${failureIds.join(' ')}`);
     }
     if (duplicateIds.length > 0) {
-      output.push(`  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(" ")}`);
+      output.push(
+        `  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(' ')}`
+      );
     }
-    output.push("");
+    output.push('');
   });
 
-  output.push("");
-  output.push(`SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`);
+  output.push(
+    '',
+    `SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`
+  );
 
-  const textElement = document.getElementById("text");
+  const textElement = document.getElementById('text');
   if (textElement !== null) {
-    textElement.innerHTML = output.join("<br/>");
+    textElement.innerHTML = output.join('<br/>');
   }
 
   return null;

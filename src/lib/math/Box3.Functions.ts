@@ -1,19 +1,22 @@
-import { Attribute } from "../geometry/Attribute";
-import { Vector3View } from "./arrays/PrimitiveView";
-import { Box3 } from "./Box3";
-import { Matrix4 } from "./Matrix4";
-import { Sphere } from "./Sphere";
-import { Vector3 } from "./Vector3";
-import { transformPoint3 } from "./Vector3Matrix4.Functions";
+import { Attribute } from '../geometry/Attribute.js';
+import { Vector3View } from './arrays/PrimitiveView.js';
+import { Box3 } from './Box3.js';
+import { Matrix4 } from './Matrix4.js';
+import { Sphere } from './Sphere.js';
+import { Vector3 } from './Vector3.js';
+import { transformPoint3 } from './Vector3Matrix4.Functions.js';
 
-export function makeBox3FromArray(array: Float32Array, result = new Box3()): Box3 {
-  let minX = +Infinity;
-  let minY = +Infinity;
-  let minZ = +Infinity;
+export function makeBox3FromArray(
+  array: Float32Array,
+  result = new Box3()
+): Box3 {
+  let minX = +Number.POSITIVE_INFINITY;
+  let minY = +Number.POSITIVE_INFINITY;
+  let minZ = +Number.POSITIVE_INFINITY;
 
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let maxZ = -Infinity;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  let maxZ = Number.NEGATIVE_INFINITY;
 
   for (let i = 0, l = array.length; i < l; i += 3) {
     const x = array[i];
@@ -47,14 +50,17 @@ export function makeBox3FromArray(array: Float32Array, result = new Box3()): Box
   return result;
 }
 
-export function makeBox3FromAttribute(attribute: Attribute, result: Box3): Box3 {
-  let minX = +Infinity;
-  let minY = +Infinity;
-  let minZ = +Infinity;
+export function makeBox3FromAttribute(
+  attribute: Attribute,
+  result: Box3
+): Box3 {
+  let minX = +Number.POSITIVE_INFINITY;
+  let minY = +Number.POSITIVE_INFINITY;
+  let minZ = +Number.POSITIVE_INFINITY;
 
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let maxZ = -Infinity;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  let maxZ = Number.NEGATIVE_INFINITY;
 
   const v = new Vector3();
   const vectorView = new Vector3View(attribute);
@@ -89,7 +95,10 @@ export function makeBox3FromAttribute(attribute: Attribute, result: Box3): Box3 
   return result;
 }
 
-export function makeBox3FromPoints(points: Vector3[], result = new Box3()): Box3 {
+export function makeBox3FromPoints(
+  points: Vector3[],
+  result = new Box3()
+): Box3 {
   result.makeEmpty();
   for (let i = 0, il = points.length; i < il; i++) {
     result.expandByPoint(points[i]);
@@ -97,9 +106,21 @@ export function makeBox3FromPoints(points: Vector3[], result = new Box3()): Box3
   return result;
 }
 
-export function makeBox3FromCenterAndSize(center: Vector3, size: Vector3, result = new Box3()): Box3 {
-  result.min.set(center.x - size.x * 0.5, center.y - size.y * 0.5, center.z - size.z * 0.5);
-  result.max.set(center.x + size.x * 0.5, center.y + size.y * 0.5, center.z + size.z * 0.5);
+export function makeBox3FromCenterAndSize(
+  center: Vector3,
+  size: Vector3,
+  result = new Box3()
+): Box3 {
+  result.min.set(
+    center.x - size.x * 0.5,
+    center.y - size.y * 0.5,
+    center.z - size.z * 0.5
+  );
+  result.max.set(
+    center.x + size.x * 0.5,
+    center.y + size.y * 0.5,
+    center.z + size.z * 0.5
+  );
   return result;
 }
 
@@ -113,14 +134,14 @@ export function makeBox3FromSphereBounds(s: Sphere, result = new Box3()): Box3 {
 }
 
 export function box3ContainsPoint(box: Box3, point: Vector3): boolean {
-  return point.x < box.min.x ||
+  return !(
+    point.x < box.min.x ||
     point.x > box.max.x ||
     point.y < box.min.y ||
     point.y > box.max.y ||
     point.z < box.min.z ||
     point.z > box.max.z
-    ? false
-    : true;
+  );
 }
 
 export function box3ContainsBox(box: Box3, queryBox: Box3): boolean {
@@ -134,7 +155,11 @@ export function box3ContainsBox(box: Box3, queryBox: Box3): boolean {
   );
 }
 
-export function box3ClampPoint(box: Box3, point: Vector3, result: Vector3 = new Vector3()): Vector3 {
+export function box3ClampPoint(
+  box: Box3,
+  point: Vector3,
+  result: Vector3 = new Vector3()
+): Vector3 {
   return result.copy(point).clamp(box.min, box.max);
 }
 
@@ -184,7 +209,11 @@ export function transformBox3(b: Box3, m: Matrix4, result = new Box3()): Box3 {
   return result;
 }
 
-export function translateBox3(b: Box3, offset: Vector3, result = new Box3()): Box3 {
+export function translateBox3(
+  b: Box3,
+  offset: Vector3,
+  result = new Box3()
+): Box3 {
   result.copy(b);
   result.min.add(offset);
   result.max.add(offset);

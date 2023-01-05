@@ -5,17 +5,17 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { Vector2 } from '../../math/Vector2.js';
+import { Vector3 } from '../../math/Vector3.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 export function cylinderGeometry(
   radius = 0.5,
   height = 1,
   segments = 8,
   thetaStart = 0,
-  thetaLength = Math.PI * 2,
+  thetaLength = Math.PI * 2
 ): Geometry {
   const indicesTop: number[] = [];
   const verticesTop: number[] = [];
@@ -58,16 +58,28 @@ export function cylinderGeometry(
     verticesTop.push(vertex.x, vertex.y, vertex.z + height * 0.5);
     verticesBottom.push(vertex.x, vertex.y, vertex.z - height * 0.5);
 
-    verticesSide.push(vertex.x, vertex.y, vertex.z + height * 0.5);
-    verticesSide.push(vertex.x, vertex.y, vertex.z - height * 0.5);
+    verticesSide.push(
+      vertex.x,
+      vertex.y,
+      vertex.z + height * 0.5,
+      vertex.x,
+      vertex.y,
+      vertex.z - height * 0.5
+    );
 
     // normal
 
     normalsTop.push(0, 0, 1);
     normalsBottom.push(0, 0, -1);
 
-    normalsSide.push(Math.cos(segment), Math.sin(segment), 0);
-    normalsSide.push(Math.cos(segment), Math.sin(segment), 0);
+    normalsSide.push(
+      Math.cos(segment),
+      Math.sin(segment),
+      0,
+      Math.cos(segment),
+      Math.sin(segment),
+      0
+    );
 
     // uvs
 
@@ -77,8 +89,7 @@ export function cylinderGeometry(
     uvsTop.push(uv.x, uv.y);
     uvsBottom.push(1 - uv.x, 1 - uv.y);
 
-    uvsSide.push(s / segments, 0);
-    uvsSide.push(s / segments, 1);
+    uvsSide.push(s / segments, 0, s / segments, 1);
   }
 
   // indices
@@ -90,20 +101,37 @@ export function cylinderGeometry(
   }
   for (let i = 0; i < segments; i++) {
     const io = i * 2;
-    indicesSide.push(so + io, so + io + 1, so + io + 3);
-    indicesSide.push(so + io, so + io + 3, so + io + 2);
+    indicesSide.push(
+      so + io,
+      so + io + 1,
+      so + io + 3,
+      so + io,
+      so + io + 3,
+      so + io + 2
+    );
   }
 
-  indicesTop.push(indicesTop[indicesTop.length - 1], 1, 0);
-  indicesBottom.push(bo + 1, indicesBottom[indicesBottom.length - 1], bo + 0);
+  indicesTop.push(indicesTop.at(-1) ?? 0, 1, 0);
+  indicesBottom.push(bo + 1, indicesBottom.at(-1) ?? 0, bo + 0);
 
   // build geometry
 
   const geometry = new Geometry();
-  geometry.indices = makeUint32Attribute(indicesTop.concat(indicesBottom).concat(indicesSide));
-  geometry.attributes["position"] = makeFloat32Attribute(verticesTop.concat(verticesBottom).concat(verticesSide), 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normalsTop.concat(normalsBottom).concat(normalsSide), 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvsTop.concat(uvsBottom).concat(uvsSide), 2);
+  geometry.indices = makeUint32Attribute(
+    indicesTop.concat(indicesBottom).concat(indicesSide)
+  );
+  geometry.attributes.position = makeFloat32Attribute(
+    verticesTop.concat(verticesBottom).concat(verticesSide),
+    3
+  );
+  geometry.attributes.normal = makeFloat32Attribute(
+    normalsTop.concat(normalsBottom).concat(normalsSide),
+    3
+  );
+  geometry.attributes.uv = makeFloat32Attribute(
+    uvsTop.concat(uvsBottom).concat(uvsSide),
+    2
+  );
 
   return geometry;
 }

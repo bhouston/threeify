@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { Matrix4 } from "../../math/Matrix4";
-import { Node } from "../Node";
+import { Matrix4 } from '../../math/Matrix4.js';
+import { Node } from '../Node.js';
 
 export abstract class Camera extends Node {
-  pixelAspectRatio = 1.0;
+  pixelAspectRatio = 1;
 
   abstract getProjection(viewAspectRatio: number): Matrix4;
 }

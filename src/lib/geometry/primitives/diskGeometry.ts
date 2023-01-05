@@ -5,12 +5,17 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../math/Vector2";
-import { Vector3 } from "../../math/Vector3";
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { Vector2 } from '../../math/Vector2.js';
+import { Vector3 } from '../../math/Vector3.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
-export function diskGeometry(radius = 0.5, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2): Geometry {
+export function diskGeometry(
+  radius = 0.5,
+  segments = 8,
+  thetaStart = 0,
+  thetaLength = Math.PI * 2
+): Geometry {
   const indices: number[] = [];
   const vertices: number[] = [];
   const normals: number[] = [];
@@ -54,15 +59,15 @@ export function diskGeometry(radius = 0.5, segments = 8, thetaStart = 0, thetaLe
   for (let i = 1; i <= segments; i++) {
     indices.push(i, i + 1, 0);
   }
-  indices.push(indices[indices.length - 1], 1, 0);
+  indices.push(indices.at(-1) ?? 0, 1, 0);
 
   // build geometry
 
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute(indices);
-  geometry.attributes["position"] = makeFloat32Attribute(vertices, 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
+  geometry.attributes.position = makeFloat32Attribute(vertices, 3);
+  geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
 
   return geometry;
 }

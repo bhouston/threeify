@@ -1,17 +1,20 @@
-import { makeVector3View } from "../math/arrays/PrimitiveView";
-import { Matrix4 } from "../math/Matrix4";
-import { Vector3 } from "../math/Vector3";
-import { transformNormal3, transformPoint3 } from "../math/Vector3Matrix4.Functions";
-import { Attribute, makeFloat32Attribute } from "./Attribute";
-import { AttributeData } from "./AttributeData";
-import { Geometry } from "./Geometry";
+import { makeVector3View } from '../math/arrays/PrimitiveView.js';
+import { Matrix4 } from '../math/Matrix4.js';
+import { Vector3 } from '../math/Vector3.js';
+import {
+  transformNormal3,
+  transformPoint3
+} from '../math/Vector3Matrix4.Functions.js';
+import { Attribute, makeFloat32Attribute } from './Attribute.js';
+import { AttributeData } from './AttributeData.js';
+import { Geometry } from './Geometry.js';
 
 function copyBytesUsingStride(
   dest: ArrayBuffer,
   source: ArrayBuffer,
   bytesPerVertex: number,
   byteStridePerVertex: number,
-  attributeOffset: number,
+  attributeOffset: number
 ): void {
   const destBytes = new Int8Array(dest);
   const sourceBytes = new Int8Array(source);
@@ -50,7 +53,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.attributeData.arrayBuffer,
         attribute.bytesPerVertex,
         byteStridePerVertex,
-        byteOffset,
+        byteOffset
       );
 
       interleavedGeometry.attributes[name] = new Attribute(
@@ -59,7 +62,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.componentType,
         byteStridePerVertex,
         byteOffset,
-        attribute.normalized,
+        attribute.normalized
       );
       byteOffset += Math.max(attribute.bytesPerVertex, 4);
     }
@@ -69,16 +72,19 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
 
 export function computeVertexNormals(geometry: Geometry): void {
   const indicesAttribute = geometry.indices;
-  const attributes = geometry.attributes;
+  const { attributes } = geometry;
 
-  const positionAttribute = attributes["position"];
+  const positionAttribute = attributes.position;
   if (positionAttribute === undefined) {
-    throw new Error("missing position attribute");
+    throw new Error('missing position attribute');
   }
-  let normalAttribute = attributes["normal"];
+  let normalAttribute = attributes.normal;
   if (normalAttribute === undefined) {
-    normalAttribute = makeFloat32Attribute(new Float32Array(positionAttribute.count * 3), 3);
-    geometry.attributes["normal"] = normalAttribute;
+    normalAttribute = makeFloat32Attribute(
+      new Float32Array(positionAttribute.count * 3),
+      3
+    );
+    geometry.attributes.normal = normalAttribute;
   }
 
   // reset existing normals to zero
@@ -143,9 +149,9 @@ export function computeVertexNormals(geometry: Geometry): void {
 }
 
 export function transformGeometry(geometry: Geometry, m: Matrix4): void {
-  const positionAttribute = geometry.attributes["position"];
+  const positionAttribute = geometry.attributes.position;
   if (positionAttribute === undefined) {
-    throw new Error("missing position attribute");
+    throw new Error('missing position attribute');
   }
   const positions = makeVector3View(positionAttribute);
 
@@ -156,7 +162,7 @@ export function transformGeometry(geometry: Geometry, m: Matrix4): void {
     positions.set(i, v);
   }
 
-  const normalAttribute = geometry.attributes["normal"];
+  const normalAttribute = geometry.attributes.normal;
   if (normalAttribute !== undefined) {
     const normals = makeVector3View(normalAttribute);
     for (let i = 0; i < normals.count; i++) {

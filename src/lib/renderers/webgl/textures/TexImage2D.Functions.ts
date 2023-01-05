@@ -1,27 +1,30 @@
-import { passGeometry } from "../../../geometry/primitives/passGeometry";
-import { ShaderMaterial } from "../../../materials/ShaderMaterial";
-import { Vector2 } from "../../../math/Vector2";
-import { cubeFaceTargets, CubeMapTexture } from "../../../textures/CubeTexture";
-import { Texture } from "../../../textures/Texture";
-import { makeBufferGeometryFromGeometry } from "../buffers/BufferGeometry";
-import { Attachment } from "../framebuffers/Attachment";
-import { Framebuffer } from "../framebuffers/Framebuffer";
-import { renderBufferGeometry } from "../framebuffers/VirtualFramebuffer";
-import { makeProgramFromShaderMaterial } from "../programs/Program";
-import { RenderingContext } from "../RenderingContext";
-import cubeFaceFragmentSource from "./cubeFaces/fragment.glsl";
-import cubeFaceVertexSource from "./cubeFaces/vertex.glsl";
-import { PixelFormat } from "./PixelFormat";
-import { TexImage2D } from "./TexImage2D";
-import { TexParameters } from "./TexParameters";
-import { TextureFilter } from "./TextureFilter";
-import { TextureTarget } from "./TextureTarget";
-import { TextureWrap } from "./TextureWrap";
+import { passGeometry } from '../../../geometry/primitives/passGeometry.js';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import {
+  cubeFaceTargets,
+  CubeMapTexture
+} from '../../../textures/CubeTexture.js';
+import { Texture } from '../../../textures/Texture.js';
+import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry.js';
+import { Attachment } from '../framebuffers/Attachment.js';
+import { Framebuffer } from '../framebuffers/Framebuffer.js';
+import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer.js';
+import { makeProgramFromShaderMaterial } from '../programs/Program.js';
+import { RenderingContext } from '../RenderingContext.js';
+import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
+import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
+import { PixelFormat } from './PixelFormat.js';
+import { TexImage2D } from './TexImage2D.js';
+import { TexParameters } from './TexParameters.js';
+import { TextureFilter } from './TextureFilter.js';
+import { TextureTarget } from './TextureTarget.js';
+import { TextureWrap } from './TextureWrap.js';
 
 export function makeTexImage2DFromTexture(
   context: RenderingContext,
   texture: Texture,
-  internalFormat: PixelFormat = PixelFormat.RGBA,
+  internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
   const params = new TexParameters();
   params.anisotropyLevels = texture.anisotropicLevels;
@@ -37,14 +40,14 @@ export function makeTexImage2DFromTexture(
     texture.dataType,
     internalFormat,
     TextureTarget.Texture2D,
-    params,
+    params
   );
 }
 
 export function makeTexImage2DFromCubeTexture(
   context: RenderingContext,
   texture: CubeMapTexture,
-  internalFormat: PixelFormat = PixelFormat.RGBA,
+  internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
   const params = new TexParameters();
   params.anisotropyLevels = texture.anisotropicLevels;
@@ -60,7 +63,7 @@ export function makeTexImage2DFromCubeTexture(
     texture.dataType,
     internalFormat,
     TextureTarget.TextureCubeMap,
-    params,
+    params
   );
 }
 
@@ -68,34 +71,55 @@ export function makeTexImage2DFromEquirectangularTexture(
   context: RenderingContext,
   latLongTexture: Texture,
   faceSize = new Vector2(512, 512),
-  generateMipmaps = true,
+  generateMipmaps = true
 ): TexImage2D {
   // required for proper reading.
   latLongTexture.wrapS = TextureWrap.Repeat;
   latLongTexture.wrapT = TextureWrap.ClampToEdge;
   latLongTexture.minFilter = TextureFilter.Linear;
 
-  const cubeTexture = new CubeMapTexture([faceSize, faceSize, faceSize, faceSize, faceSize, faceSize]);
+  const cubeTexture = new CubeMapTexture([
+    faceSize,
+    faceSize,
+    faceSize,
+    faceSize,
+    faceSize,
+    faceSize
+  ]);
   cubeTexture.generateMipmaps = generateMipmaps;
 
   const latLongMap = makeTexImage2DFromTexture(context, latLongTexture);
   const cubeFaceGeometry = passGeometry();
-  const cubeFaceMaterial = new ShaderMaterial(cubeFaceVertexSource, cubeFaceFragmentSource);
-  const cubeFaceProgram = makeProgramFromShaderMaterial(context, cubeFaceMaterial);
-  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(context, cubeFaceGeometry);
+  const cubeFaceMaterial = new ShaderMaterial(
+    cubeFaceVertexSource,
+    cubeFaceFragmentSource
+  );
+  const cubeFaceProgram = makeProgramFromShaderMaterial(
+    context,
+    cubeFaceMaterial
+  );
+  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(
+    context,
+    cubeFaceGeometry
+  );
   const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
 
   const cubeFaceUniforms = {
     map: latLongMap,
-    faceIndex: 0,
+    faceIndex: 0
   };
 
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
-    renderBufferGeometry(cubeFaceFramebuffer, cubeFaceProgram, cubeFaceUniforms, cubeFaceBufferGeometry);
+    renderBufferGeometry(
+      cubeFaceFramebuffer,
+      cubeFaceProgram,
+      cubeFaceUniforms,
+      cubeFaceBufferGeometry
+    );
   });
 
   if (generateMipmaps) {

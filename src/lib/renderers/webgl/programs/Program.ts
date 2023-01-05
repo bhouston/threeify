@@ -5,17 +5,17 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { ShaderMaterial } from "../../../materials/ShaderMaterial";
-import { Pool } from "../../Pool";
-import { BufferGeometry } from "../buffers/BufferGeometry";
-import { RenderingContext } from "../RenderingContext";
-import { Shader } from "../shaders/Shader";
-import { ShaderType } from "../shaders/ShaderType";
-import { VertexArrayObject } from "../VertexArrayObject";
-import { ProgramAttribute } from "./ProgramAttribute";
-import { ProgramUniform, UniformValueMap } from "./ProgramUniform";
-import { numTextureUnits } from "./UniformType";
+import { IDisposable } from '../../../core/types.js';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
+import { Pool } from '../../Pool.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { Shader } from '../shaders/Shader.js';
+import { ShaderType } from '../shaders/ShaderType.js';
+import { VertexArrayObject } from '../VertexArrayObject.js';
+import { ProgramAttribute } from './ProgramAttribute.js';
+import { ProgramUniform, UniformValueMap } from './ProgramUniform.js';
+import { numTextureUnits } from './UniformType.js';
 
 export type UniformMap = { [key: string]: ProgramUniform | undefined };
 export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
@@ -36,18 +36,28 @@ export class Program implements IDisposable {
     public context: RenderingContext,
     vertexShaderCode: string,
     fragmentShaderCode: string,
-    glslVersion: number,
+    glslVersion: number
   ) {
-    this.vertexShader = new Shader(this.context, vertexShaderCode, ShaderType.Vertex, glslVersion);
-    this.fragmentShader = new Shader(this.context, fragmentShaderCode, ShaderType.Fragment, glslVersion);
+    this.vertexShader = new Shader(
+      this.context,
+      vertexShaderCode,
+      ShaderType.Vertex,
+      glslVersion
+    );
+    this.fragmentShader = new Shader(
+      this.context,
+      fragmentShaderCode,
+      ShaderType.Fragment,
+      glslVersion
+    );
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     // create a program.
     {
       const glProgram = gl.createProgram();
       if (glProgram === null) {
-        throw new Error("createProgram failed");
+        throw new Error('createProgram failed');
       }
 
       this.glProgram = glProgram;
@@ -73,7 +83,7 @@ export class Program implements IDisposable {
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
     // Check if it linked.
     const psc = this.context.glxo.KHR_parallel_shader_compile;
     if (psc !== null) {
@@ -102,9 +112,12 @@ export class Program implements IDisposable {
   get uniforms(): UniformMap {
     if (!this.#uniformsInitialized) {
       let textureUnitCount = 0;
-      const gl = this.context.gl;
+      const { gl } = this.context;
 
-      const numActiveUniforms = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS);
+      const numActiveUniforms = gl.getProgramParameter(
+        this.glProgram,
+        gl.ACTIVE_UNIFORMS
+      );
       for (let i = 0; i < numActiveUniforms; ++i) {
         const uniform = new ProgramUniform(this, i);
         if (numTextureUnits(uniform.uniformType) > 0) {
@@ -117,10 +130,14 @@ export class Program implements IDisposable {
     }
     return this.#uniforms;
   }
+
   get attributes(): AttributeMap {
     if (!this.#attributesInitialized) {
-      const gl = this.context.gl;
-      const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
+      const { gl } = this.context;
+      const numActiveAttributes = gl.getProgramParameter(
+        this.glProgram,
+        gl.ACTIVE_ATTRIBUTES
+      );
       for (let i = 0; i < numActiveAttributes; ++i) {
         const attribute = new ProgramAttribute(this, i);
         this.#attributes[attribute.name] = attribute;
@@ -145,7 +162,7 @@ export class Program implements IDisposable {
   setAttributeBuffers(vao: VertexArrayObject): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     const glxVAO = this.context.glx.OES_vertex_array_object;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
@@ -157,13 +174,16 @@ export class Program implements IDisposable {
         }
       }
       if (bufferGeometry.indices !== undefined) {
-        gl.bindBuffer(bufferGeometry.indices.buffer.target, bufferGeometry.indices.buffer.glBuffer);
+        gl.bindBuffer(
+          bufferGeometry.indices.buffer.target,
+          bufferGeometry.indices.buffer.glBuffer
+        );
       }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
       glxVAO.bindVertexArrayOES(vao.glVertexArrayObject);
     } else {
-      throw new Error("not implemented");
+      throw new TypeError('not implemented');
     }
 
     return this;
@@ -180,22 +200,32 @@ export class Program implements IDisposable {
   }
 }
 
-export function makeProgramFromShaderMaterial(context: RenderingContext, shaderMaterial: ShaderMaterial): Program {
+export function makeProgramFromShaderMaterial(
+  context: RenderingContext,
+  shaderMaterial: ShaderMaterial
+): Program {
   return new Program(
     context,
     shaderMaterial.vertexShaderCode,
     shaderMaterial.fragmentShaderCode,
-    shaderMaterial.glslVersion,
+    shaderMaterial.glslVersion
   );
 }
 
 export class ProgramPool extends Pool<ShaderMaterial, Program> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, shaderCodeMaterial: ShaderMaterial, program: Program | undefined) => {
-      if (program !== undefined) {
-        program.dispose();
+    super(
+      context,
+      (
+        context: RenderingContext,
+        shaderCodeMaterial: ShaderMaterial,
+        program: Program | undefined
+      ) => {
+        if (program !== undefined) {
+          program.dispose();
+        }
+        return makeProgramFromShaderMaterial(context, shaderCodeMaterial);
       }
-      return makeProgramFromShaderMaterial(context, shaderCodeMaterial);
-    });
+    );
   }
 }

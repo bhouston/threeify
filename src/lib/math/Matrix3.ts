@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloatArray } from "../core/hash";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloatArray } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 //
 // NOTE: This is a homogeneous matrix, it is not a 3x3 rotation only.
@@ -27,7 +27,7 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     n23: number,
     n31: number,
     n32: number,
-    n33: number,
+    n33: number
   ): this {
     const te = this.elements;
 
@@ -96,6 +96,7 @@ export class Matrix3 implements IPrimitive<Matrix3> {
 
     return this;
   }
+
   equals(m: Matrix3): boolean {
     for (let i = 0; i < 16; i++) {
       if (m.elements[i] !== this.elements[i]) {

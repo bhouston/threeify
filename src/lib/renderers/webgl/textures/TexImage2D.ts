@@ -6,23 +6,23 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { isPow2 } from "../../../math/Functions";
-import { Vector2 } from "../../../math/Vector2";
-import { ArrayBufferImage } from "../../../textures/ArrayBufferImage";
-import { TextureSource } from "../../../textures/VirtualTexture";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { DataType } from "./DataType";
-import { PixelFormat } from "./PixelFormat";
-import { TexParameters } from "./TexParameters";
-import { TextureTarget } from "./TextureTarget";
+import { IDisposable } from '../../../core/types.js';
+import { isPow2 } from '../../../math/Functions.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
+import { TextureSource } from '../../../textures/VirtualTexture.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { DataType } from './DataType.js';
+import { PixelFormat } from './PixelFormat.js';
+import { TexParameters } from './TexParameters.js';
+import { TextureTarget } from './TextureTarget.js';
 
 export class TexImage2D implements IDisposable {
-  readonly id: number;
-  disposed = false;
-  glTexture: WebGLTexture;
-  size = new Vector2();
+  public readonly id: number;
+  public disposed = false;
+  public glTexture: WebGLTexture;
+  public size = new Vector2();
 
   constructor(
     public context: RenderingContext,
@@ -31,14 +31,14 @@ export class TexImage2D implements IDisposable {
     public dataType = DataType.UnsignedByte,
     public pixelFormat = PixelFormat.RGBA,
     public target = TextureTarget.Texture2D,
-    public texParameters = new TexParameters(),
+    public texParameters = new TexParameters()
   ) {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     // Create a texture.
     {
       const glTexture = gl.createTexture();
       if (glTexture === null) {
-        throw new Error("createTexture failed");
+        throw new Error('createTexture failed');
       }
       this.glTexture = glTexture;
     }
@@ -48,18 +48,28 @@ export class TexImage2D implements IDisposable {
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapS);
 
-    gl.texParameteri(this.target, GL.TEXTURE_MAG_FILTER, texParameters.magFilter);
-    gl.texParameteri(this.target, GL.TEXTURE_MIN_FILTER, texParameters.minFilter);
+    gl.texParameteri(
+      this.target,
+      GL.TEXTURE_MAG_FILTER,
+      texParameters.magFilter
+    );
+    gl.texParameteri(
+      this.target,
+      GL.TEXTURE_MIN_FILTER,
+      texParameters.minFilter
+    );
 
     if (texParameters.anisotropyLevels > 1) {
       const tfa = this.context.glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
         // TODO: Cache this at some point for speed improvements
-        const maxAllowableAnisotropy = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+        const maxAllowableAnisotropy = gl.getParameter(
+          tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT
+        );
         gl.texParameterf(
           this.target,
           tfa.TEXTURE_MAX_ANISOTROPY_EXT,
-          Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy),
+          Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy)
         );
       }
     }
@@ -76,7 +86,7 @@ export class TexImage2D implements IDisposable {
   }
 
   generateMipmaps(): void {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     gl.bindTexture(this.target, this.glTexture);
     gl.generateMipmap(this.target);
     gl.bindTexture(this.target, null);
@@ -99,7 +109,7 @@ export class TexImage2D implements IDisposable {
   }
 
   public loadImages(images: TextureSource[]): void {
-    const gl = this.context.gl;
+    const { gl } = this.context;
     gl.bindTexture(this.target, this.glTexture);
     if (images.length === 1) {
       this.loadImage(images[0]);
@@ -113,12 +123,16 @@ export class TexImage2D implements IDisposable {
         }
       }
     } else {
-      throw new Error("Unsupported number of images");
+      throw new Error('Unsupported number of images');
     }
   }
 
-  private loadImage(image: TextureSource, target: TextureTarget | undefined = undefined, level = 0): void {
-    const gl = this.context.gl;
+  private loadImage(
+    image: TextureSource,
+    target: TextureTarget | undefined = undefined,
+    level = 0
+  ): void {
+    const { gl } = this.context;
 
     if (image instanceof Vector2) {
       gl.texImage2D(
@@ -130,7 +144,7 @@ export class TexImage2D implements IDisposable {
         0,
         this.pixelFormat,
         this.dataType,
-        null,
+        null
       );
       if (level === 0) {
         this.size.set(image.width, image.height);
@@ -145,13 +159,20 @@ export class TexImage2D implements IDisposable {
         0,
         this.pixelFormat,
         this.dataType,
-        new Uint8Array(image.data),
+        new Uint8Array(image.data)
       );
       if (level === 0) {
         this.size.set(image.width, image.height);
       }
     } else {
-      gl.texImage2D(target ?? this.target, level, this.internalFormat, this.pixelFormat, this.dataType, image);
+      gl.texImage2D(
+        target ?? this.target,
+        level,
+        this.internalFormat,
+        this.pixelFormat,
+        this.dataType,
+        image
+      );
       this.size.set(image.width, image.height);
     }
   }

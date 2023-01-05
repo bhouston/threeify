@@ -5,16 +5,20 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { Node } from "../Node";
-import { LightType } from "./LightType";
+import { Vector3 } from '../../math/Vector3.js';
+import { Node } from '../Node.js';
+import { LightType } from './LightType.js';
 
 export class Light extends Node {
   /**
    * @param color - RGB value for light's color in linear space.
    * @param intensity - Brightness of light.  Units depend on the light type.
    */
-  constructor(public readonly type: LightType, public color: Vector3 = new Vector3(1, 1, 1), public intensity = 1) {
+  constructor(
+    public readonly type: LightType,
+    public color: Vector3 = new Vector3(1, 1, 1),
+    public intensity = 1
+  ) {
     super();
   }
 }

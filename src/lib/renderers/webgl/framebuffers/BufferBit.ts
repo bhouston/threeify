@@ -1,4 +1,4 @@
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 export enum BufferBit {
   None = 0,
@@ -6,5 +6,5 @@ export enum BufferBit {
   Depth = GL.DEPTH_BUFFER_BIT,
   Stencil = GL.STENCIL_BUFFER_BIT,
   Default = Color | Depth,
-  All = Color | Depth | Stencil,
+  All = Color | Depth | Stencil
 }

@@ -1,10 +1,10 @@
-import { IArrayable } from "../../core/types";
-import { Attribute } from "../../geometry/Attribute";
-import { Matrix3 } from "../Matrix3";
-import { Matrix4 } from "../Matrix4";
-import { Quaternion } from "../Quaternion";
-import { Vector2 } from "../Vector2";
-import { Vector3 } from "../Vector3";
+import { IArrayable } from '../../core/types.js';
+import { Attribute } from '../../geometry/Attribute.js';
+import { Matrix3 } from '../Matrix3.js';
+import { Matrix4 } from '../Matrix4.js';
+import { Quaternion } from '../Quaternion.js';
+import { Vector2 } from '../Vector2.js';
+import { Vector3 } from '../Vector3.js';
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
 
@@ -16,14 +16,18 @@ export class PrimitiveView<P extends IArrayable> {
     dataArray: DataArray,
     floatPerPrimitive = -1,
     public floatStride: number = -1,
-    public floatOffset: number = -1,
+    public floatOffset: number = -1
   ) {
     if (dataArray instanceof Attribute) {
       if (this.floatStride >= 0) {
-        throw new Error("can not specify explicit byteStride when using Attribute argument");
+        throw new Error(
+          'can not specify explicit byteStride when using Attribute argument'
+        );
       }
       if (this.floatOffset >= 0) {
-        throw new Error("can not specify explicit byteOffset when using Attribute argument");
+        throw new Error(
+          'can not specify explicit byteOffset when using Attribute argument'
+        );
       }
       this.floatOffset = dataArray.byteOffset / 4;
       this.floatStride = dataArray.vertexStride / 4;
@@ -33,10 +37,12 @@ export class PrimitiveView<P extends IArrayable> {
     } else if (dataArray instanceof ArrayBuffer) {
       this.floatArray = new Float32Array(dataArray);
     } else {
-      throw new Error("unsupported value");
+      throw new TypeError('unsupported value');
     }
     if (floatPerPrimitive < 0) {
-      throw new Error("must specify bytesPerPrimitive or provide an Attribute argument");
+      throw new Error(
+        'must specify bytesPerPrimitive or provide an Attribute argument'
+      );
     }
     if (this.floatStride < 0) {
       this.floatStride = floatPerPrimitive;
@@ -53,7 +59,10 @@ export class PrimitiveView<P extends IArrayable> {
   }
 
   get(index: number, v: P): P {
-    v.setFromArray(this.floatArray, index * this.floatStride + this.floatOffset);
+    v.setFromArray(
+      this.floatArray,
+      index * this.floatStride + this.floatOffset
+    );
     return v;
   }
 }
@@ -82,22 +91,38 @@ export class Vector3View extends PrimitiveView<Vector3> {
   }
 }
 
-export function makeVector2View(dataArray: DataArray, floatStride = -1, floatOffset = -1): Vector2View {
+export function makeVector2View(
+  dataArray: DataArray,
+  floatStride = -1,
+  floatOffset = -1
+): Vector2View {
   return new Vector2View(dataArray, floatStride, floatOffset);
 }
-export function makeVector3View(dataArray: DataArray, floatStride = -1, floatOffset = -1): Vector3View {
+export function makeVector3View(
+  dataArray: DataArray,
+  floatStride = -1,
+  floatOffset = -1
+): Vector3View {
   return new Vector3View(dataArray, floatStride, floatOffset);
 }
 export function makeQuaternionView(
   dataArray: DataArray,
   floatStride = -1,
-  floatOffset = -1,
+  floatOffset = -1
 ): PrimitiveView<Quaternion> {
   return new PrimitiveView<Quaternion>(dataArray, 4, floatStride, floatOffset);
 }
-export function makeMatrix3View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Matrix3> {
+export function makeMatrix3View(
+  dataArray: DataArray,
+  floatStride = -1,
+  floatOffset = -1
+): PrimitiveView<Matrix3> {
   return new PrimitiveView<Matrix3>(dataArray, 9, floatStride, floatOffset);
 }
-export function makeMatrix4View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Matrix4> {
+export function makeMatrix4View(
+  dataArray: DataArray,
+  floatStride = -1,
+  floatOffset = -1
+): PrimitiveView<Matrix4> {
   return new PrimitiveView<Matrix4>(dataArray, 16, floatStride, floatOffset);
 }

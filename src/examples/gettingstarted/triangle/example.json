@@ -1,8 +1,12 @@
 {
   "slug": "triangle",
   "en": {
-    "name": "Drawing A Triangle",
+    "name": "Drawing A Triangle3",
     "description": "A bare-bones test of drawing geometry directly.",
-    "keywords": ["basics", "geometry", "direct"]
+    "keywords": [
+      "basics",
+      "geometry",
+      "direct"
+    ]
   }
 }

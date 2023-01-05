@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 export enum TextureFilter {
   LinearMipmapLinear = GL.LINEAR_MIPMAP_LINEAR,
@@ -13,5 +13,5 @@ export enum TextureFilter {
   Linear = GL.LINEAR,
   Nearest = GL.NEAREST,
   NearestMipmapLinear = GL.NEAREST_MIPMAP_LINEAR,
-  NearestMipmapNearest = GL.NEAREST_MIPMAP_NEAREST,
+  NearestMipmapNearest = GL.NEAREST_MIPMAP_NEAREST
 }

@@ -5,17 +5,23 @@
 // * @bhouston
 //
 
-import { generateUUID } from "../core/generateUuid";
-import { IDisposable, IIdentifiable, IVersionable } from "../core/types";
-import { IPoolUser } from "../renderers/Pool";
+import { generateUUID } from '../core/generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
+import { IPoolUser } from '../renderers/Pool.js';
 
-export class ShaderMaterial implements IIdentifiable, IVersionable, IDisposable, IPoolUser {
+export class ShaderMaterial
+  implements IIdentifiable, IVersionable, IDisposable, IPoolUser
+{
   uuid: string = generateUUID();
   version = 0;
   disposed = false;
-  name = "";
+  name = '';
 
-  constructor(public vertexShaderCode: string, public fragmentShaderCode: string, public glslVersion = 200) {}
+  constructor(
+    public vertexShaderCode: string,
+    public fragmentShaderCode: string,
+    public glslVersion = 200
+  ) {}
 
   dirty(): void {
     this.version++;

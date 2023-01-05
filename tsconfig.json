@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "es2015",
+    "target": "ES2020",
+    "module": "ES2020",
     "declaration": true,
     "sourceMap": true,
     "declarationMap": true,
@@ -13,10 +13,12 @@
     "moduleResolution": "node",
     "removeComments": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": false
   },
-  "include": [
-    "src/**/*.ts"
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "**/*.test.ts"
   ],
   "typedocOptions": {
     "mode": "modules",

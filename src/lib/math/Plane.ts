@@ -5,15 +5,20 @@
 // * @bhouston
 //
 
-import { hashFloat4 } from "../core/hash";
-import { ICloneable, IEquatable, IHashable } from "../core/types";
-import { Vector3 } from "./Vector3";
+import { hashFloat4 } from '../core/hash.js';
+import { ICloneable, IEquatable, IHashable } from '../core/types.js';
+import { Vector3 } from './Vector3.js';
 
 export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
   constructor(public normal = new Vector3(), public constant = 0) {}
 
   getHashCode(): number {
-    return hashFloat4(this.normal.x, this.normal.y, this.normal.z, this.constant);
+    return hashFloat4(
+      this.normal.x,
+      this.normal.y,
+      this.normal.z,
+      this.constant
+    );
   }
 
   set(normal: Vector3, constant: number): this {
@@ -36,7 +41,7 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
 
   normalize(): this {
     // Note: will lead to a divide by zero if the plane is invalid.
-    const inverseNormalLength = 1.0 / this.normal.length();
+    const inverseNormalLength = 1 / this.normal.length();
     this.normal.multiplyByScalar(inverseNormalLength);
     this.constant *= inverseNormalLength;
 

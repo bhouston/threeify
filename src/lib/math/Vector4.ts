@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat4 } from "../core/hash";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloat4 } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Vector4 implements IPrimitive<Vector4> {
   constructor(public x = 0, public y = 0, public z = 0, public w = 0) {}
@@ -14,6 +14,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get r(): number {
     return this.x;
   }
+
   set r(r: number) {
     this.x = r;
   }
@@ -21,6 +22,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get g(): number {
     return this.y;
   }
+
   set g(g: number) {
     this.y = g;
   }
@@ -28,6 +30,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get b(): number {
     return this.z;
   }
+
   set b(b: number) {
     this.z = b;
   }
@@ -35,6 +38,7 @@ export class Vector4 implements IPrimitive<Vector4> {
   get a(): number {
     return this.w;
   }
+
   set a(a: number) {
     this.w = a;
   }
@@ -104,28 +108,44 @@ export class Vector4 implements IPrimitive<Vector4> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } else if (index === 1) {
-      return this.y;
-    } else if (index === 2) {
-      return this.z;
-    } else if (index === 3) {
-      return this.w;
-    } else {
-      throw new Error(`index of our range: ${index}`);
     }
+    if (index === 1) {
+      return this.y;
+    }
+    if (index === 2) {
+      return this.z;
+    }
+    if (index === 3) {
+      return this.w;
+    }
+    throw new Error(`index of our range: ${index}`);
   }
 
   setComponent(index: number, value: number): this {
-    if (index === 0) {
-      this.x = value;
-    } else if (index === 1) {
-      this.y = value;
-    } else if (index === 2) {
-      this.z = value;
-    } else if (index === 3) {
-      this.w = value;
-    } else {
-      throw new Error(`index of our range: ${index}`);
+    switch (index) {
+      case 0: {
+        this.x = value;
+
+        break;
+      }
+      case 1: {
+        this.y = value;
+
+        break;
+      }
+      case 2: {
+        this.z = value;
+
+        break;
+      }
+      case 3: {
+        this.w = value;
+
+        break;
+      }
+      default: {
+        throw new Error(`index of our range: ${index}`);
+      }
     }
 
     return this;
@@ -140,7 +160,9 @@ export class Vector4 implements IPrimitive<Vector4> {
   }
 
   lengthSquared(): number {
-    return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
+    return (
+      this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
+    );
   }
 
   equals(v: Vector4): boolean {

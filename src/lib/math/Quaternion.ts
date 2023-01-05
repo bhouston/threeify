@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat4 } from "../core/hash";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloat4 } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Quaternion implements IPrimitive<Quaternion> {
   constructor(public x = 0, public y = 0, public z = 0, public w = 1) {}
@@ -94,14 +94,14 @@ export class Quaternion implements IPrimitive<Quaternion> {
   multiply(q: Quaternion): this {
     // from http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/index.htm
 
-    const qax = this.x,
-      qay = this.y,
-      qaz = this.z,
-      qaw = this.w;
-    const qbx = q.x,
-      qby = q.y,
-      qbz = q.z,
-      qbw = q.w;
+    const qax = this.x;
+    const qay = this.y;
+    const qaz = this.z;
+    const qaw = this.w;
+    const qbx = q.x;
+    const qby = q.y;
+    const qbz = q.z;
+    const qbw = q.w;
 
     this.x = qax * qbw + qaw * qbx + qay * qbz - qaz * qby;
     this.y = qay * qbw + qaw * qby + qaz * qbx - qax * qbz;
@@ -128,7 +128,9 @@ export class Quaternion implements IPrimitive<Quaternion> {
   }
 
   length(): number {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+    return Math.sqrt(
+      this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w
+    );
   }
 
   normalize(): this {
@@ -159,10 +161,10 @@ export class Quaternion implements IPrimitive<Quaternion> {
       return this.copy(qb);
     }
 
-    const x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+    const { x } = this;
+    const { y } = this;
+    const { z } = this;
+    const { w } = this;
 
     // http://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/slerp/
     // TODO, allocate x, y, z, w and only set this.* at the end.
@@ -180,7 +182,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
       this.copy(qb);
     }
 
-    if (cosHalfTheta >= 1.0) {
+    if (cosHalfTheta >= 1) {
       this.w = w;
       this.x = x;
       this.y = y;
@@ -189,7 +191,7 @@ export class Quaternion implements IPrimitive<Quaternion> {
       return this;
     }
 
-    const sqrSinHalfTheta = 1.0 - cosHalfTheta * cosHalfTheta;
+    const sqrSinHalfTheta = 1 - cosHalfTheta * cosHalfTheta;
 
     if (sqrSinHalfTheta <= Number.EPSILON) {
       const s = 1 - t;
@@ -205,8 +207,8 @@ export class Quaternion implements IPrimitive<Quaternion> {
 
     const sinHalfTheta = Math.sqrt(sqrSinHalfTheta);
     const halfTheta = Math.atan2(sinHalfTheta, cosHalfTheta);
-    const ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta,
-      ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
+    const ratioA = Math.sin((1 - t) * halfTheta) / sinHalfTheta;
+    const ratioB = Math.sin(t * halfTheta) / sinHalfTheta;
 
     this.w = w * ratioA + this.w * ratioB;
     this.x = x * ratioA + this.x * ratioB;

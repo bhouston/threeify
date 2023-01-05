@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../core/types";
-import { BufferGeometry } from "./buffers/BufferGeometry";
-import { PrimitiveType } from "./buffers/PrimitiveType";
-import { Program } from "./programs/Program";
+import { IDisposable } from '../../core/types.js';
+import { BufferGeometry } from './buffers/BufferGeometry.js';
+import { PrimitiveType } from './buffers/PrimitiveType.js';
+import { Program } from './programs/Program.js';
 
 export class VertexArrayObject implements IDisposable {
   readonly id: number;
@@ -18,7 +18,10 @@ export class VertexArrayObject implements IDisposable {
   offset = 0;
   count = -1;
 
-  constructor(public readonly program: Program, bufferGeometry: BufferGeometry) {
+  constructor(
+    public readonly program: Program,
+    bufferGeometry: BufferGeometry
+  ) {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 
@@ -28,7 +31,7 @@ export class VertexArrayObject implements IDisposable {
       // Create a vertex array object (attribute state)
       const vao = glxVAO.createVertexArrayOES();
       if (vao === null) {
-        throw new Error("createVertexArray failed");
+        throw new Error('createVertexArray failed');
       }
       this.glVertexArrayObject = vao;
     }

@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../../math/Vector2";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { TexImage2D } from "../textures/TexImage2D";
-import { Attachment } from "./Attachment";
-import { VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Vector2 } from '../../../math/Vector2.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { Attachment } from './Attachment.js';
+import { VirtualFramebuffer } from './VirtualFramebuffer.js';
 
 export type AttachmentMap = { [point: number]: TexImage2D | undefined };
 
@@ -23,12 +23,12 @@ export class Framebuffer extends VirtualFramebuffer {
   constructor(context: RenderingContext) {
     super(context);
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     {
       const glFramebuffer = gl.createFramebuffer();
       if (glFramebuffer === null) {
-        throw new Error("createFramebuffer failed");
+        throw new Error('createFramebuffer failed');
       }
 
       this.glFramebuffer = glFramebuffer;
@@ -37,11 +37,22 @@ export class Framebuffer extends VirtualFramebuffer {
     this.id = this.context.registerResource(this);
   }
 
-  attach(attachmentPoint: Attachment, texImage2D: TexImage2D, target = texImage2D.target, level = 0): void {
-    const gl = this.context.gl;
+  attach(
+    attachmentPoint: Attachment,
+    texImage2D: TexImage2D,
+    target = texImage2D.target,
+    level = 0
+  ): void {
+    const { gl } = this.context;
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
-    gl.framebufferTexture2D(GL.FRAMEBUFFER, attachmentPoint, target, texImage2D.glTexture, level);
+    gl.framebufferTexture2D(
+      GL.FRAMEBUFFER,
+      attachmentPoint,
+      target,
+      texImage2D.glTexture,
+      level
+    );
     this._attachments[attachmentPoint] = texImage2D;
     this.size.copy(texImage2D.size);
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);
@@ -57,7 +68,7 @@ export class Framebuffer extends VirtualFramebuffer {
 
   dispose(): void {
     if (!this.disposed) {
-      const gl = this.context.gl;
+      const { gl } = this.context;
       gl.deleteFramebuffer(this.glFramebuffer);
       this.context.disposeResource(this);
       this.disposed = true;

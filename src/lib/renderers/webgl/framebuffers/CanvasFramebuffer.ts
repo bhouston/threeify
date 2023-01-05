@@ -5,14 +5,14 @@
 // * @bhouston
 //
 
-import { Vector2 } from "../../../math/Vector2";
-import { RenderingContext } from "../RenderingContext";
-import { VirtualFramebuffer } from "./VirtualFramebuffer";
+import { Vector2 } from '../../../math/Vector2.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { VirtualFramebuffer } from './VirtualFramebuffer.js';
 
 export class CanvasFramebuffer extends VirtualFramebuffer {
   public readonly canvas: HTMLCanvasElement | OffscreenCanvas;
   public autoLayoutMode = true;
-  public devicePixelRatio = 1.0;
+  public devicePixelRatio = 1;
 
   constructor(context: RenderingContext) {
     super(context);
@@ -25,7 +25,7 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
    * taking into account the device pixel ratio.
    */
   resize(): void {
-    const canvas = this.canvas;
+    const { canvas } = this;
     if (canvas instanceof HTMLCanvasElement) {
       const width = Math.floor(canvas.clientWidth * this.devicePixelRatio);
       const height = Math.floor(canvas.clientHeight * this.devicePixelRatio);
@@ -37,11 +37,16 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
   }
 
   get size(): Vector2 {
-    return new Vector2(this.context.gl.drawingBufferWidth, this.context.gl.drawingBufferHeight);
+    return new Vector2(
+      this.context.gl.drawingBufferWidth,
+      this.context.gl.drawingBufferHeight
+    );
   }
 
   get aspectRatio(): number {
-    return this.context.gl.drawingBufferWidth / this.context.gl.drawingBufferHeight;
+    return (
+      this.context.gl.drawingBufferWidth / this.context.gl.drawingBufferHeight
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

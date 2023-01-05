@@ -1,9 +1,9 @@
-import { IDisposable } from "../../../core/types";
-import { AttributeData } from "../../../geometry/AttributeData";
-import { Pool } from "../../Pool";
-import { RenderingContext } from "../RenderingContext";
-import { BufferTarget } from "./BufferTarget";
-import { BufferUsage } from "./BufferUsage";
+import { IDisposable } from '../../../core/types.js';
+import { AttributeData } from '../../../geometry/AttributeData.js';
+import { Pool } from '../../Pool.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { BufferTarget } from './BufferTarget.js';
+import { BufferUsage } from './BufferUsage.js';
 
 export class Buffer implements IDisposable {
   readonly id: number;
@@ -14,14 +14,14 @@ export class Buffer implements IDisposable {
     public context: RenderingContext,
     arrayBuffer: ArrayBuffer,
     public target: BufferTarget = BufferTarget.Array,
-    public usage: BufferUsage = BufferUsage.StaticDraw,
+    public usage: BufferUsage = BufferUsage.StaticDraw
   ) {
-    const gl = context.gl;
+    const { gl } = context;
     // Create a buffer and put three 2d clip space points in it
     {
       const glBuffer = gl.createBuffer();
       if (glBuffer === null) {
-        throw new Error("createBuffer failed");
+        throw new Error('createBuffer failed');
       }
 
       this.glBuffer = glBuffer;
@@ -41,12 +41,12 @@ export class Buffer implements IDisposable {
   update(
     arrayBuffer: ArrayBuffer,
     target: BufferTarget = BufferTarget.Array,
-    usage: BufferUsage = BufferUsage.StaticDraw,
+    usage: BufferUsage = BufferUsage.StaticDraw
   ): void {
     this.target = target;
     this.usage = usage;
 
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
     gl.bindBuffer(this.target, this.glBuffer);
@@ -66,12 +66,19 @@ export class Buffer implements IDisposable {
 
 export class BufferPool extends Pool<AttributeData, Buffer> {
   constructor(context: RenderingContext) {
-    super(context, (context: RenderingContext, attribute: AttributeData, buffer: Buffer | undefined) => {
-      if (buffer === undefined) {
-        return new Buffer(context, attribute.arrayBuffer, attribute.target);
+    super(
+      context,
+      (
+        context: RenderingContext,
+        attribute: AttributeData,
+        buffer: Buffer | undefined
+      ) => {
+        if (buffer === undefined) {
+          return new Buffer(context, attribute.arrayBuffer, attribute.target);
+        }
+        buffer.update(attribute.arrayBuffer, attribute.target);
+        return buffer;
       }
-      buffer.update(attribute.arrayBuffer, attribute.target);
-      return buffer;
-    });
+    );
   }
 }

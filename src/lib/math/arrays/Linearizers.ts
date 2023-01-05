@@ -1,8 +1,9 @@
-import { Matrix3 } from "../Matrix3";
-import { Matrix4 } from "../Matrix4";
-import { Quaternion } from "../Quaternion";
-import { Vector2 } from "../Vector2";
-import { Vector3 } from "../Vector3";
+import { Color3 } from '../Color3.js';
+import { Matrix3 } from '../Matrix3.js';
+import { Matrix4 } from '../Matrix4.js';
+import { Quaternion } from '../Quaternion.js';
+import { Vector2 } from '../Vector2.js';
+import { Vector3 } from '../Vector3.js';
 
 export function linearizeNumberInt32Array(array: number[]): Int32Array {
   const result = new Int32Array(array.length);
@@ -18,6 +19,14 @@ export function linearizeNumberFloatArray(array: number[]): Float32Array {
   const result = new Float32Array(array.length);
   for (let i = 0; i < array.length; i++) {
     result[i] = array[i];
+  }
+  return result;
+}
+
+export function linearizeColor3FloatArray(array: Color3[]): Float32Array {
+  const result = new Float32Array(array.length * 3);
+  for (let i = 0; i < array.length; i++) {
+    array[i].toArray(result, i * 3);
   }
   return result;
 }
@@ -38,7 +47,9 @@ export function linearizeVector3FloatArray(array: Vector3[]): Float32Array {
   return result;
 }
 
-export function linearizeQuaternionFloatArray(array: Quaternion[]): Float32Array {
+export function linearizeQuaternionFloatArray(
+  array: Quaternion[]
+): Float32Array {
   const result = new Float32Array(array.length * 4);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 4);

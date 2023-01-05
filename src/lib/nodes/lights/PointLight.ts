@@ -8,9 +8,9 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { Light } from "./Light";
-import { LightType } from "./LightType";
+import { Vector3 } from '../../math/Vector3.js';
+import { Light } from './Light.js';
+import { LightType } from './LightType.js';
 
 /**
  * Point lights emit light in all directions from their position in space; rotation and
@@ -25,7 +25,11 @@ export class PointLight extends Light {
    * @param intensity - Luminous intensity in candela (lm/sr)
    * @param range - The distance cutoff at which the light's intensity reaches zero.  If <= 0, assumed to be infinite.
    */
-  constructor(color: Vector3 = new Vector3(1, 1, 1), intensity = 1.0, public range = -1) {
+  constructor(
+    color: Vector3 = new Vector3(1, 1, 1),
+    intensity = 1,
+    public range = -1
+  ) {
     super(LightType.Point, color, intensity);
   }
 

@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { BufferAccessor } from "../buffers/BufferAccessor";
-import { GL } from "../GL";
-import { Program } from "./Program";
+import { BufferAccessor } from '../buffers/BufferAccessor.js';
+import { GL } from '../GL.js';
+import { Program } from './Program.js';
 
 export class ProgramAttribute {
   name: string;
@@ -16,9 +16,7 @@ export class ProgramAttribute {
   glLocation: number; // attributes are indexed
 
   constructor(public program: Program, public index: number) {
-    this.name = name;
-
-    const gl = program.context.gl;
+    const { gl } = program.context;
 
     // look up uniform locations
     {
@@ -41,7 +39,7 @@ export class ProgramAttribute {
   }
 
   setBuffer(bufferAccessor: BufferAccessor): this {
-    const gl = this.program.context.gl;
+    const { gl } = this.program.context;
     gl.enableVertexAttribArray(this.glLocation);
     // Bind the position buffer.
     gl.bindBuffer(GL.ARRAY_BUFFER, bufferAccessor.buffer.glBuffer);
@@ -53,7 +51,7 @@ export class ProgramAttribute {
       bufferAccessor.componentType,
       bufferAccessor.normalized,
       bufferAccessor.vertexStride,
-      bufferAccessor.byteOffset,
+      bufferAccessor.byteOffset
     );
     return this;
   }

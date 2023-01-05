@@ -1,4 +1,4 @@
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 export enum PrimitiveType {
   Points = GL.POINTS,
@@ -6,5 +6,5 @@ export enum PrimitiveType {
   LineStrip = GL.LINE_STRIP,
   Triangles = GL.TRIANGLES,
   TriangleFan = GL.TRIANGLE_FAN,
-  TriangleStrip = GL.TRIANGLE_STRIP,
+  TriangleStrip = GL.TRIANGLE_STRIP
 }

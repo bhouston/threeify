@@ -9,5 +9,5 @@ export enum Blending {
   Over,
   Add,
   Subtract,
-  Multiply,
+  Multiply
 }

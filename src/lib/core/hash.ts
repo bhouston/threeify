@@ -27,7 +27,12 @@ export function hashFloat3(v0: number, v1: number, v2: number): number {
   return (hash * 397) ^ (intArray[2] | 0);
 }
 
-export function hashFloat4(v0: number, v1: number, v2: number, v3: number): number {
+export function hashFloat4(
+  v0: number,
+  v1: number,
+  v2: number,
+  v3: number
+): number {
   floatArray[0] = v0;
   floatArray[1] = v1;
   floatArray[2] = v2;

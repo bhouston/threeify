@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { Vector3 } from '../../math/Vector3.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 export function boxGeometry(
   width = 1,
@@ -15,7 +15,7 @@ export function boxGeometry(
   depth = 1,
   widthSegments = 1,
   heightSegments = 1,
-  depthSegments = 1,
+  depthSegments = 1
 ): Geometry {
   // buffers
 
@@ -38,7 +38,7 @@ export function boxGeometry(
     height: number,
     depth: number,
     gridX: number,
-    gridY: number,
+    gridY: number
   ): void {
     const segmentWidth = width / gridX;
     const segmentHeight = height / gridY;
@@ -82,8 +82,7 @@ export function boxGeometry(
 
         // uvs
 
-        uvs.push(ix / gridX);
-        uvs.push(1 - iy / gridY);
+        uvs.push(ix / gridX, 1 - iy / gridY);
       }
     }
 
@@ -102,8 +101,7 @@ export function boxGeometry(
 
         // faces
 
-        indices.push(a, b, d);
-        indices.push(b, c, d);
+        indices.push(a, b, d, b, c, d);
       }
     }
     numberOfVertices += 4;
@@ -111,20 +109,75 @@ export function boxGeometry(
 
   // build each side of the box geometry
 
-  buildPlane(2, 1, 0, -1, -1, depth, height, width, depthSegments, heightSegments); // px
-  buildPlane(2, 1, 0, 1, -1, depth, height, -width, depthSegments, heightSegments); // nx
+  buildPlane(
+    2,
+    1,
+    0,
+    -1,
+    -1,
+    depth,
+    height,
+    width,
+    depthSegments,
+    heightSegments
+  ); // px
+  buildPlane(
+    2,
+    1,
+    0,
+    1,
+    -1,
+    depth,
+    height,
+    -width,
+    depthSegments,
+    heightSegments
+  ); // nx
   buildPlane(0, 2, 1, 1, 1, width, depth, height, widthSegments, depthSegments); // py
-  buildPlane(0, 2, 1, 1, -1, width, depth, -height, widthSegments, depthSegments); // ny
-  buildPlane(0, 1, 2, 1, -1, width, height, depth, widthSegments, heightSegments); // pz
-  buildPlane(0, 1, 2, -1, -1, width, height, -depth, widthSegments, heightSegments); // nz
+  buildPlane(
+    0,
+    2,
+    1,
+    1,
+    -1,
+    width,
+    depth,
+    -height,
+    widthSegments,
+    depthSegments
+  ); // ny
+  buildPlane(
+    0,
+    1,
+    2,
+    1,
+    -1,
+    width,
+    height,
+    depth,
+    widthSegments,
+    heightSegments
+  ); // pz
+  buildPlane(
+    0,
+    1,
+    2,
+    -1,
+    -1,
+    width,
+    height,
+    -depth,
+    widthSegments,
+    heightSegments
+  ); // nz
 
   // build geometry
 
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute(indices);
-  geometry.attributes["position"] = makeFloat32Attribute(vertices, 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
+  geometry.attributes.position = makeFloat32Attribute(vertices, 3);
+  geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
 
   return geometry;
 }

@@ -1,6 +1,25 @@
 {
-    "cSpell.words": [
-        "Mipmaps",
-        "glsl"
-    ]
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "json"
+  ],
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": true,
+  "cSpell.words": [
+    "GLTF",
+    "interruptible",
+    "lerp",
+    "Nullary",
+    "reserialization",
+    "reserialized",
+    "Slerp",
+    "threeify"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": [
+    "source.formatDocument",
+    "source.fixAll.eslint"
+  ]
 }

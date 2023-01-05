@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloatArray } from "../core/hash";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloatArray } from '../core/hash.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Matrix4 implements IPrimitive<Matrix4> {
   elements: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
@@ -31,7 +31,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     n41: number,
     n42: number,
     n43: number,
-    n44: number,
+    n44: number
   ): this {
     const te = this.elements;
 
@@ -77,7 +77,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
       me[3],
       me[7],
       me[11],
-      me[15],
+      me[15]
     );
   }
 

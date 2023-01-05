@@ -1,5 +1,5 @@
-import { Vector2 } from "../math/Vector2";
-import { Vector3 } from "../math/Vector3";
+import { Vector2 } from '../math/Vector2.js';
+import { Vector3 } from '../math/Vector3.js';
 
 // Reference:
 // https://learnopengl.com/Getting-started/Coordinate-Systems

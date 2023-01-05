@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from "../core/hash";
-import { clamp } from "./Functions";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloat3 } from '../core/hash.js';
+import { clamp } from './Functions.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Vector3 implements IPrimitive<Vector3> {
   constructor(public x = 0, public y = 0, public z = 0) {}
@@ -15,6 +15,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get width(): number {
     return this.x;
   }
+
   set width(width: number) {
     this.x = width;
   }
@@ -22,6 +23,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get height(): number {
     return this.y;
   }
+
   set height(height: number) {
     this.y = height;
   }
@@ -29,6 +31,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get depth(): number {
     return this.z;
   }
+
   set depth(depth: number) {
     this.z = depth;
   }
@@ -36,6 +39,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get r(): number {
     return this.x;
   }
+
   set r(r: number) {
     this.x = r;
   }
@@ -43,6 +47,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get g(): number {
     return this.y;
   }
+
   set g(g: number) {
     this.y = g;
   }
@@ -50,6 +55,7 @@ export class Vector3 implements IPrimitive<Vector3> {
   get b(): number {
     return this.z;
   }
+
   set b(b: number) {
     this.z = b;
   }
@@ -130,24 +136,36 @@ export class Vector3 implements IPrimitive<Vector3> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } else if (index === 1) {
-      return this.y;
-    } else if (index === 2) {
-      return this.z;
-    } else {
-      throw new Error(`index of our range: ${index}`);
     }
+    if (index === 1) {
+      return this.y;
+    }
+    if (index === 2) {
+      return this.z;
+    }
+    throw new Error(`index of our range: ${index}`);
   }
 
   setComponent(index: number, value: number): this {
-    if (index === 0) {
-      this.x = value;
-    } else if (index === 1) {
-      this.y = value;
-    } else if (index === 2) {
-      this.z = value;
-    } else {
-      throw new Error(`index of our range: ${index}`);
+    switch (index) {
+      case 0: {
+        this.x = value;
+
+        break;
+      }
+      case 1: {
+        this.y = value;
+
+        break;
+      }
+      case 2: {
+        this.z = value;
+
+        break;
+      }
+      default: {
+        throw new Error(`index of our range: ${index}`);
+      }
     }
 
     return this;
@@ -158,12 +176,12 @@ export class Vector3 implements IPrimitive<Vector3> {
   }
 
   cross(v: Vector3): this {
-    const ax = this.x,
-      ay = this.y,
-      az = this.z;
-    const bx = v.x,
-      by = v.y,
-      bz = v.z;
+    const ax = this.x;
+    const ay = this.y;
+    const az = this.z;
+    const bx = v.x;
+    const by = v.y;
+    const bz = v.z;
 
     this.x = ay * bz - az * by;
     this.y = az * bx - ax * bz;

@@ -1,4 +1,4 @@
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 export enum TextureTarget {
   Texture2D = GL.TEXTURE_2D,
@@ -8,5 +8,5 @@ export enum TextureTarget {
   CubeMapPositiveY = GL.TEXTURE_CUBE_MAP_POSITIVE_Y,
   CubeMapNegativeY = GL.TEXTURE_CUBE_MAP_NEGATIVE_Y,
   CubeMapPositiveZ = GL.TEXTURE_CUBE_MAP_POSITIVE_Z,
-  CubeMapNegativeZ = GL.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+  CubeMapNegativeZ = GL.TEXTURE_CUBE_MAP_NEGATIVE_Z
 }

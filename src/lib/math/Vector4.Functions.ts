@@ -1,20 +1,27 @@
-import { clamp } from "./Functions";
-import { Vector4 } from "./Vector4";
+import { clamp } from './Functions.js';
+import { Vector4 } from './Vector4.js';
 
 export function rgbeToLinear(source: Vector4, result = new Vector4()): Vector4 {
-  const s = Math.pow(2.0, source.a * 255.0 - 128.0);
-  return result.set(source.r * s, source.g * s, source.b * s, 1.0);
+  const s = 2 ** (source.a * 255 - 128);
+  return result.set(source.r * s, source.g * s, source.b * s, 1);
 }
 
-export function linearToRgbd(source: Vector4, maxRange: number, result = new Vector4()): Vector4 {
+export function linearToRgbd(
+  source: Vector4,
+  maxRange: number,
+  result = new Vector4()
+): Vector4 {
   const maxRGB = Math.max(source.r, source.g, source.b);
-  const realD = Math.max(maxRange / maxRGB, 1.0);
-  const normalizedD = clamp(Math.floor(realD) / 255.0, 0.0, 1.0);
-  const s = normalizedD * (255.0 / maxRange);
+  const realD = Math.max(maxRange / maxRGB, 1);
+  const normalizedD = clamp(Math.floor(realD) / 255, 0, 1);
+  const s = normalizedD * (255 / maxRange);
   return result.set(source.r * s, source.g * s, source.b * s, normalizedD);
 }
 
-export function linearToRgbd16(source: Vector4, result = new Vector4()): Vector4 {
+export function linearToRgbd16(
+  source: Vector4,
+  result = new Vector4()
+): Vector4 {
   return linearToRgbd(source, 16, result);
 }
 
@@ -23,7 +30,7 @@ export function linearToRgbd16(source: Vector4, result = new Vector4()): Vector4
 
 export function rgbeToLinearArray(
   sourceArray: Float32Array,
-  result: Float32Array | undefined = undefined,
+  result: Float32Array | undefined = undefined
 ): Float32Array {
   const sourceColor = new Vector4();
   const destColor = new Vector4();
@@ -41,7 +48,7 @@ export function rgbeToLinearArray(
 export function linearToRgbdArray(
   sourceArray: Float32Array,
   maxRange: number,
-  result: Float32Array | undefined = undefined,
+  result: Float32Array | undefined = undefined
 ): Float32Array {
   const sourceColor = new Vector4();
   const destColor = new Vector4();

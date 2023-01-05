@@ -1,9 +1,9 @@
-import { Vector3 } from "../math/Vector3";
-import { DirectionalLight } from "../nodes/lights/DirectionalLight";
-import { Light } from "../nodes/lights/Light";
-import { PointLight } from "../nodes/lights/PointLight";
-import { SpotLight } from "../nodes/lights/SpotLight";
-import { depthFirstVisitor, Node } from "../nodes/Node";
+import { Vector3 } from '../math/Vector3.js';
+import { DirectionalLight } from '../nodes/lights/DirectionalLight.js';
+import { Light } from '../nodes/lights/Light.js';
+import { PointLight } from '../nodes/lights/PointLight.js';
+import { SpotLight } from '../nodes/lights/SpotLight.js';
+import { depthFirstVisitor, Node } from '../nodes/Node.js';
 
 export class PunctualLightUniforms {
   numLights = 0;
@@ -16,7 +16,9 @@ export class PunctualLightUniforms {
   lightOuterConeCos: number[] = [];
 }
 
-export function punctualLightsTranslator(rootNode: Node): PunctualLightUniforms {
+export function punctualLightsTranslator(
+  rootNode: Node
+): PunctualLightUniforms {
   // create a list of uniforms for them.
   const result = new PunctualLightUniforms();
 
@@ -28,7 +30,9 @@ export function punctualLightsTranslator(rootNode: Node): PunctualLightUniforms 
     result.numLights++;
     result.lightTypes.push(light.type);
     result.lightPositions.push(light.position);
-    result.lightColors.push(light.color.clone().multiplyByScalar(light.intensity));
+    result.lightColors.push(
+      light.color.clone().multiplyByScalar(light.intensity)
+    );
 
     if (node instanceof PointLight) {
       const pointLight = node as PointLight;

@@ -5,22 +5,22 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { Box2 } from "../../../math/Box2";
-import { Vector2 } from "../../../math/Vector2";
-import { Camera } from "../../../nodes/cameras/Camera";
-import { Node } from "../../../nodes/Node";
-import { BlendState } from "../BlendState";
-import { BufferGeometry } from "../buffers/BufferGeometry";
-import { ClearState } from "../ClearState";
-import { CullingState } from "../CullingState";
-import { DepthTestState } from "../DepthTestState";
-import { MaskState } from "../MaskState";
-import { Program } from "../programs/Program";
-import { UniformValueMap } from "../programs/ProgramUniform";
-import { RenderingContext } from "../RenderingContext";
-import { VertexArrayObject } from "../VertexArrayObject";
-import { BufferBit } from "./BufferBit";
+import { IDisposable } from '../../../core/types.js';
+import { Box2 } from '../../../math/Box2.js';
+import { Vector2 } from '../../../math/Vector2.js';
+import { Camera } from '../../../nodes/cameras/Camera.js';
+import { Node } from '../../../nodes/Node.js';
+import { BlendState } from '../BlendState.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { ClearState } from '../ClearState.js';
+import { CullingState } from '../CullingState.js';
+import { DepthTestState } from '../DepthTestState.js';
+import { MaskState } from '../MaskState.js';
+import { Program } from '../programs/Program.js';
+import { UniformValueMap } from '../programs/ProgramUniform.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { VertexArrayObject } from '../VertexArrayObject.js';
+import { BufferBit } from './BufferBit.js';
 
 const GL = WebGLRenderingContext;
 
@@ -39,22 +39,21 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   clear(
     attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
-    clearState: ClearState | undefined = undefined,
+    clearState: ClearState | undefined = undefined
   ): void {
-    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
-    this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
-    const gl = this.context.gl;
+    this.context.clearState =
+      clearState ?? this.clearState ?? this.context.clearState;
+    const { gl } = this.context;
     gl.clear(attachmentBits);
   }
 
   render(node: Node, camera: Camera, clear = false): void {
-    // eslint-disable-next-line cflint/no-this-assignment
     this.context.framebuffer = this;
     if (clear) {
       this.clear();
     }
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
     //    this.context.render(node, camera);
   }
 
@@ -77,24 +76,32 @@ export function renderBufferGeometry(
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined
 ): void {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
-  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState =
+    blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState =
+    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState =
+    cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.program.setAttributeBuffers(bufferGeometry);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
   // draw
-  const gl = context.gl;
+  const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
-    gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
+    gl.drawElements(
+      bufferGeometry.primitive,
+      bufferGeometry.count,
+      bufferGeometry.indices.componentType,
+      0
+    );
   } else {
     gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
   }
@@ -108,21 +115,24 @@ export function renderVertexArrayObject(
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined
 ): void {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
-  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState =
+    blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState =
+    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState =
+    cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
   // draw
-  const gl = context.gl;
+  const { gl } = context;
   gl.drawArrays(vao.primitive, vao.offset, vao.count);
 }
 
@@ -133,19 +143,22 @@ export function renderPass(
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined,
+  cullingState: CullingState | undefined = undefined
 ): void {
-  const context = framebuffer.context;
+  const { context } = framebuffer;
 
   context.framebuffer = framebuffer;
-  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState =
+    blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState =
+    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState =
+    cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.viewport = new Box2(new Vector2(), framebuffer.size);
 
-  throw new Error("Not implemented");
+  throw new Error('Not implemented');
   // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
 }

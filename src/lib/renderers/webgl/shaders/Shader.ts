@@ -5,28 +5,28 @@
 // * @bhouston
 //
 
-import { IDisposable } from "../../../core/types";
-import { GL } from "../GL";
-import { RenderingContext } from "../RenderingContext";
-import { ShaderType } from "./ShaderType";
+import { IDisposable } from '../../../core/types.js';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { ShaderType } from './ShaderType.js';
 
 function insertLineNumbers(source: string): string {
-  const inputLines = source.split("\n");
-  const outputLines = ["\n"];
+  const inputLines = source.split('\n');
+  const outputLines = ['\n'];
   const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
   for (let l = 0; l < inputLines.length; l++) {
     const lAsString = `000000${l + 1}`.slice(-maxLineCharacters - 1);
     outputLines.push(`${lAsString}: ${inputLines[l]}`);
   }
-  return outputLines.join("\n");
+  return outputLines.join('\n');
 }
 
 // This reduces the code bulk when debugging shaders
 function removeDeadCode(source: string): string {
-  const defineRegexp = /^#define +([\w\d_]+)/;
-  const undefRegexp = /^#undef +([\w\d_]+)/;
-  const ifdefRegexp = /^#ifdef +([\w\d_]+)/;
-  const ifndefRegexp = /^#ifndef +([\w\d_]+)/;
+  const defineRegexp = /^#define +(\w+)/;
+  const undefRegexp = /^#undef +(\w+)/;
+  const ifdefRegexp = /^#ifdef +(\w+)/;
+  const ifndefRegexp = /^#ifndef +(\w+)/;
   const endifRegexp = /^#endif.* /;
 
   // state management
@@ -34,8 +34,8 @@ function removeDeadCode(source: string): string {
   const liveCodeStack: boolean[] = [true];
 
   const outputLines: string[] = [];
-  source.split("\n").forEach((line) => {
-    const isLive = liveCodeStack[liveCodeStack.length - 1];
+  source.split('\n').forEach((line) => {
+    const isLive = liveCodeStack.at(-1);
 
     if (isLive) {
       const defineMatch = line.match(defineRegexp);
@@ -51,12 +51,12 @@ function removeDeadCode(source: string): string {
       }
       const ifdefMatch = line.match(ifdefRegexp);
       if (ifdefMatch !== null) {
-        liveCodeStack.push(defines.indexOf(ifdefMatch[1]) >= 0);
+        liveCodeStack.push(defines.includes(ifdefMatch[1]));
         return;
       }
       const ifndefMatch = line.match(ifndefRegexp);
       if (ifndefMatch !== null) {
-        liveCodeStack.push(defines.indexOf(ifndefMatch[1]) < 0);
+        liveCodeStack.push(!defines.includes(ifndefMatch[1]));
         return;
       }
     }
@@ -70,9 +70,9 @@ function removeDeadCode(source: string): string {
     }
   });
   return outputLines
-    .join("\n")
-    .replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "")
-    .replace(/[\r\n]+/g, "\n");
+    .join('\n')
+    .replace(/\/\*[\S\s]*?\*\/|([^:\\]|^)\/\/.*$/gm, '')
+    .replace(/[\n\r]+/g, '\n');
 }
 
 export class Shader implements IDisposable {
@@ -86,15 +86,15 @@ export class Shader implements IDisposable {
     public context: RenderingContext,
     public source: string,
     public shaderType: ShaderType,
-    public glslVersion = 300,
+    public glslVersion = 300
   ) {
-    const gl = this.context.gl;
+    const { gl } = this.context;
 
     // Create the shader object
     {
       const glShader = gl.createShader(shaderType);
       if (glShader === null) {
-        throw new Error("createShader failed");
+        throw new Error('createShader failed');
       }
 
       this.glShader = glShader;
@@ -102,16 +102,16 @@ export class Shader implements IDisposable {
 
     const prefix = [];
     if (glslVersion === 300) {
-      prefix.push("#version 300 es");
+      prefix.push('#version 300 es');
     }
     if (shaderType === ShaderType.Fragment) {
-      const glxo = context.glxo;
+      const { glxo } = context;
       if (glxo.EXT_shader_texture_lod !== null) {
-        prefix.push("#extension GL_EXT_shader_texture_lod : enable");
+        prefix.push('#extension GL_EXT_shader_texture_lod : enable');
       }
-      prefix.push("#extension GL_OES_standard_derivatives : enable");
+      prefix.push('#extension GL_OES_standard_derivatives : enable');
     }
-    const combinedSource = prefix.join("\n") + "\n" + source;
+    const combinedSource = `${prefix.join('\n')}\n${source}`;
 
     this.finalSource = removeDeadCode(combinedSource);
 
@@ -130,7 +130,7 @@ export class Shader implements IDisposable {
     if (ds !== null) {
       return ds.getTranslatedShaderSource(this.glShader);
     }
-    return "";
+    return '';
   }
 
   validate(): void {
@@ -139,9 +139,12 @@ export class Shader implements IDisposable {
     }
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
-    const gl = this.context.gl;
+    const { gl } = this.context;
     // Check if it compiled
-    const compileStatus = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
+    const compileStatus = gl.getShaderParameter(
+      this.glShader,
+      GL.COMPILE_STATUS
+    );
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!compileStatus) {
       // Something went wrong during compilation; get the error

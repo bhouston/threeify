@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from "../core/hash";
-import { clamp } from "./Functions";
-import { IPrimitive } from "./IPrimitive";
+import { hashFloat2 } from '../core/hash.js';
+import { clamp } from './Functions.js';
+import { IPrimitive } from './IPrimitive.js';
 
 export class Vector2 implements IPrimitive<Vector2> {
   constructor(public x = 0, public y = 0) {}
@@ -15,6 +15,7 @@ export class Vector2 implements IPrimitive<Vector2> {
   get width(): number {
     return this.x;
   }
+
   set width(width: number) {
     this.x = width;
   }
@@ -22,6 +23,7 @@ export class Vector2 implements IPrimitive<Vector2> {
   get height(): number {
     return this.y;
   }
+
   set height(height: number) {
     this.y = height;
   }
@@ -88,11 +90,11 @@ export class Vector2 implements IPrimitive<Vector2> {
   getComponent(index: number): number {
     if (index === 0) {
       return this.x;
-    } else if (index === 1) {
-      return this.y;
-    } else {
-      throw new Error(`index of our range: ${index}`);
     }
+    if (index === 1) {
+      return this.y;
+    }
+    throw new Error(`index of our range: ${index}`);
   }
 
   setComponent(index: number, value: number): this {

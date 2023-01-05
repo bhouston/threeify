@@ -1,20 +1,23 @@
-import { Euler, EulerOrder } from "../../math/Euler";
-import { makeEulerFromRotationMatrix4 } from "../../math/Euler.Functions";
-import { Matrix4 } from "../../math/Matrix4";
-import { makeMatrix4RotationFromEuler } from "../../math/Matrix4.Functions";
-import { Vector3 } from "../../math/Vector3";
+import { makeEulerFromRotationMatrix4 } from '../../math/Euler3.Functions.js';
+import { Euler3, EulerOrder3 } from '../../math/Euler3.js';
+import { makeMatrix4RotationFromEuler } from '../../math/Matrix4.Functions.js';
+import { Matrix4 } from '../../math/Matrix4.js';
+import { Vector3 } from '../../math/Vector3.js';
 
-export function negativeZDirectionToEuler(d: Vector3, result = new Euler()): Euler {
+export function negativeZDirectionToEuler(
+  d: Vector3,
+  result = new Euler3()
+): Euler3 {
   // NOTE: This has never been tested.  It may not work.
   // found on stackoverflow.
-  console.warn("This has never been tested.");
+  console.warn('This has never been tested.');
 
   /* Find cosφ and sinφ */
   const c1 = d.length();
   const s1 = d.z;
   /* Find cosθ and sinθ; if gimbal lock, choose (1,0) arbitrarily */
-  const c2 = c1 !== 0 ? d.x / c1 : 1.0;
-  const s2 = c1 !== 0 ? d.y / c1 : 0.0;
+  const c2 = c1 !== 0 ? d.x / c1 : 1;
+  const s2 = c1 !== 0 ? d.y / c1 : 0;
 
   const m = new Matrix4();
   const te = m.elements;
@@ -38,11 +41,14 @@ export function negativeZDirectionToEuler(d: Vector3, result = new Euler()): Eul
   te[11] = 0;
   te[15] = 1;
 
-  return makeEulerFromRotationMatrix4(m, EulerOrder.Default, result);
+  return makeEulerFromRotationMatrix4(m, EulerOrder3.Default, result);
 }
 
-export function eulerToNegativeZDirection(e: Euler, result = new Vector3()): Vector3 {
-  console.warn("This has never been tested.");
+export function eulerToNegativeZDirection(
+  e: Euler3,
+  result = new Vector3()
+): Vector3 {
+  console.warn('This has never been tested.');
   const m = makeMatrix4RotationFromEuler(e);
   const te = m.elements;
   return result.set(te[2], te[6], te[10]);

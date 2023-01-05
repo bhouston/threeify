@@ -1,8 +1,7 @@
-module.exports = {
-  // [...]
-  // Replace `ts-jest` with the preset you want to use
-  // from the above list
-  preset: "ts-jest",
-  coveragePathIgnorePatterns: ["/node_modules/", "/dist/"],
-  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
+export default {
+  name: 'threeify',
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  rootDir: './src',
+  resolver: "ts-jest-resolver"
 };

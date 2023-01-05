@@ -1,3 +1,3 @@
-export * from "./Pool";
-export * from "./PunctualLightTranslator";
-export * from "./webgl/index";
+export * from './Pool.js';
+export * from './PunctualLightTranslator.js';
+export * from './webgl/index.js';

@@ -1,4 +1,4 @@
-import { Node } from "./Node";
+import { Node } from './Node.js';
 
 export function* traverse(root: Node): Generator<Node, void, void> {
   const stack = [];

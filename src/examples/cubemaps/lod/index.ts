@@ -3,7 +3,7 @@ import {
   CubeMapTexture,
   DepthTestFunc,
   DepthTestState,
-  Euler,
+  Euler3,
   fetchCubeImages,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
@@ -16,28 +16,38 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Vector3,
-} from "../../../lib/index";
-import fragmentSource from "./fragment.glsl";
-import vertexSource from "./vertex.glsl";
+  Vector3
+} from '../../../lib/index.js';
+import fragmentSource from './fragment.glsl';
+import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const cubeTexture = new CubeMapTexture(await fetchCubeImages("/assets/textures/cube/pisa/*.png"));
+  const cubeTexture = new CubeMapTexture(
+    await fetchCubeImages('/assets/textures/cube/pisa/*.png')
+  );
 
-  const context = new RenderingContext(document.getElementById("framebuffer") as HTMLCanvasElement);
-  const canvasFramebuffer = context.canvasFramebuffer;
-  window.addEventListener("resize", () => canvasFramebuffer.resize());
+  const context = new RenderingContext(
+    document.getElementById('framebuffer') as HTMLCanvasElement
+  );
+  const { canvasFramebuffer } = context;
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3.0)),
-    viewToScreen: makeMatrix4PerspectiveFov(25, 0.1, 4.0, 1.0, canvasFramebuffer.aspectRatio),
+    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
+    viewToScreen: makeMatrix4PerspectiveFov(
+      25,
+      0.1,
+      4,
+      1,
+      canvasFramebuffer.aspectRatio
+    ),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount,
-    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
+    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture)
   };
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -46,11 +56,17 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = makeMatrix4RotationFromEuler(
-      new Euler(now * 0.0001, now * 0.00033, now * 0.000077),
-      uniforms.localToWorld,
+      new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
+      uniforms.localToWorld
     );
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry, depthTestState);
+    renderBufferGeometry(
+      canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry,
+      depthTestState
+    );
 
     requestAnimationFrame(animate);
   }

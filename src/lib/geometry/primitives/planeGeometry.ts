@@ -5,10 +5,15 @@
 // * @bhouston
 //
 
-import { makeFloat32Attribute, makeUint32Attribute } from "../Attribute";
-import { Geometry } from "../Geometry";
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
-export function planeGeometry(width = 1, height = 1, widthSegments = 1, heightSegments = 1): Geometry {
+export function planeGeometry(
+  width = 1,
+  height = 1,
+  widthSegments = 1,
+  heightSegments = 1
+): Geometry {
   const widthHalf = width / 2;
   const heightHalf = height / 2;
 
@@ -59,8 +64,7 @@ export function planeGeometry(width = 1, height = 1, widthSegments = 1, heightSe
 
       // faces
 
-      indices.push(a, b, d);
-      indices.push(b, c, d);
+      indices.push(a, b, d, b, c, d);
     }
   }
 
@@ -68,9 +72,9 @@ export function planeGeometry(width = 1, height = 1, widthSegments = 1, heightSe
 
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute(indices);
-  geometry.attributes["position"] = makeFloat32Attribute(vertices, 3);
-  geometry.attributes["normal"] = makeFloat32Attribute(normals, 3);
-  geometry.attributes["uv"] = makeFloat32Attribute(uvs, 2);
+  geometry.attributes.position = makeFloat32Attribute(vertices, 3);
+  geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+  geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
 
   return geometry;
 }

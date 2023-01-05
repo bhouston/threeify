@@ -1,4 +1,4 @@
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 export enum UniformType {
   Bool = GL.BOOL,
@@ -32,7 +32,7 @@ export enum UniformType {
   // IntSampler3D = GL2.INT_SAMPLER_3D,
   // UnsignedIntSampler3D = GL2.UNSIGNED_INT_SAMPLER_3D,
   // setValueT6
-  SamplerCube = GL.SAMPLER_CUBE,
+  SamplerCube = GL.SAMPLER_CUBE
   // IntSamplerCube = GL2.INT_SAMPLER_CUBE,
   // UnsignedIntSamplerCube = GL2.UNSIGNED_INT_SAMPLER_CUBE,
   // SamplerCubeShadow = GL2.SAMPLER_CUBE_SHADOW,

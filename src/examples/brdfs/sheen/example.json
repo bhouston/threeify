@@ -4,6 +4,6 @@
   "en": {
     "name": "Sheen BRDF",
     "description": "A test of a Charlie-based Sheen BRDF.  Sheen is useful rendering realistic cloth.",
-    "keywords": [ "brdf", "sheen", "fabric", "cloth" ]
+    "keywords": ["brdf", "sheen", "fabric", "cloth"]
   }
 }

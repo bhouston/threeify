@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from "../../core/types";
-import { GL } from "./GL";
+import { ICloneable, IEquatable } from '../../core/types.js';
+import { GL } from './GL.js';
 
 export enum DepthTestFunc {
   /**
@@ -41,10 +41,12 @@ export enum DepthTestFunc {
   /**
    * Always pass.
    */
-  Always = GL.ALWAYS,
+  Always = GL.ALWAYS
 }
 
-export class DepthTestState implements ICloneable<DepthTestState>, IEquatable<DepthTestState> {
+export class DepthTestState
+  implements ICloneable<DepthTestState>, IEquatable<DepthTestState>
+{
   // TODO: Should be intialized to default WebGL states
   constructor(public enabled = false, public func = DepthTestFunc.Less) {}
 

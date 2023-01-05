@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 export enum BufferTarget {
   /**
@@ -16,7 +16,7 @@ export enum BufferTarget {
   /**
    * Buffer used for element indices.
    */
-  ElementArray = GL.ELEMENT_ARRAY_BUFFER,
+  ElementArray = GL.ELEMENT_ARRAY_BUFFER
   /**
    * Buffer for copying from one buffer object to another.
    */

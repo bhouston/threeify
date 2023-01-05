@@ -8,10 +8,13 @@
 // * @bhouston
 //
 
-import { Vector3 } from "../../math/Vector3";
-import { eulerToNegativeZDirection, negativeZDirectionToEuler } from "./Direction";
-import { Light } from "./Light";
-import { LightType } from "./LightType";
+import { Vector3 } from '../../math/Vector3.js';
+import {
+  eulerToNegativeZDirection,
+  negativeZDirectionToEuler
+} from './Direction.js';
+import { Light } from './Light.js';
+import { LightType } from './LightType.js';
 
 /**
  * Spot lights emit light in a cone in the direction of the local -z axis. The angle and
@@ -35,10 +38,10 @@ export class SpotLight extends Light {
    */
   constructor(
     color: Vector3 = new Vector3(1, 1, 1),
-    intensity = 1.0,
+    intensity = 1,
     public range = -1,
     public innerConeAngle = 0,
-    public outerConeAngle = Math.PI / 4.0,
+    public outerConeAngle = Math.PI / 4
   ) {
     super(LightType.Spot, color, intensity);
   }
@@ -55,8 +58,8 @@ export class SpotLight extends Light {
    * luminous power, AKA luminious flux (lm)
    */
   set power(value: number) {
-    // devide by solid angles
-    this.intensity / (4 * Math.PI);
+    // divide by solid angles
+    this.intensity = value / (4 * Math.PI);
   }
 
   /**

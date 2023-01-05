@@ -1,4 +1,4 @@
-import { Node } from "./Node";
+import { Node } from './Node.js';
 
 export class NodeCollection {
   private array: Array<Node> = [];
@@ -20,7 +20,9 @@ export class NodeCollection {
     return this;
   }
 
-  forEach(callbackFn: (value: Node, index: number, array: Node[]) => void): void {
+  forEach(
+    callbackFn: (value: Node, index: number, array: Node[]) => void
+  ): void {
     this.array.forEach(callbackFn);
   }
 

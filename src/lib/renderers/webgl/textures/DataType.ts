@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 // from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
 export enum DataType {
@@ -16,7 +16,7 @@ export enum DataType {
   Int = GL.INT,
   UnsignedInt = GL.UNSIGNED_INT,
   // HalfFloat = GL.HALF_FLOAT,
-  Float = GL.FLOAT,
+  Float = GL.FLOAT
 }
 
 export function sizeOfDataType(dataType: DataType): number {

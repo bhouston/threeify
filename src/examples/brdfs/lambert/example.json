@@ -4,6 +4,6 @@
   "en": {
     "name": "Lambertian Diffuse BRDF",
     "description": "A test of the Lambertian diffuse BRDF in isolation.",
-    "keywords": [ "brdf", "lambert", "lambertian", "diffuse" ]
+    "keywords": ["brdf", "lambert", "lambertian", "diffuse"]
   }
 }

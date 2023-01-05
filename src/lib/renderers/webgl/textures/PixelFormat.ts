@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from "../GL";
+import { GL } from '../GL.js';
 
 // from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
 export enum PixelFormat {
@@ -15,7 +15,7 @@ export enum PixelFormat {
   Luminance = GL.LUMINANCE,
   Alpha = GL.ALPHA,
   DepthComponent = GL.DEPTH_COMPONENT,
-  DepthStencil = GL.DEPTH_STENCIL,
+  DepthStencil = GL.DEPTH_STENCIL
 }
 
 export function numPixelFormatComponents(pixelFormat: PixelFormat): number {
