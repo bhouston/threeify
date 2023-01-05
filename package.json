@@ -28,6 +28,7 @@
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@web/dev-server": "^0.1.35",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -46,7 +47,7 @@
   "scripts": {
     "build": "tgt && tsc",
     "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
-    "start": "npm run watch & web-dev-server --watch --open --app-index ./examples/index.html",
+    "start": "npm run watch & web-dev-server --watch --open --app-index --node-resolve ./examples/index.html",
     "lint": "npx eslint \"src/**/*.{ts,json}\"",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "npx prettier \"src/**/*.{ts,json}\" --check",
