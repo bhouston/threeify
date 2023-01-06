@@ -83,15 +83,20 @@ export class Program implements IDisposable {
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
 
-    const { gl } = this.context;
+    const { gl, glxo } = this.context;
     // Check if it linked.
-    const psc = this.context.glxo.KHR_parallel_shader_compile;
-    if (psc !== null) {
+    /* const { KHR_parallel_shader_compile } = glxo;
+    if (KHR_parallel_shader_compile !== null) {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (!gl.getProgramParameter(this.glProgram, psc.COMPLETION_STATUS_KHR)) {
+      if (
+        !gl.getProgramParameter(
+          this.glProgram,
+          KHR_parallel_shader_compile.COMPLETION_STATUS_KHR
+        )
+      ) {
         return false;
       }
-    }
+    }*/
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {
@@ -162,8 +167,8 @@ export class Program implements IDisposable {
   setAttributeBuffers(vao: VertexArrayObject): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
-    const { gl } = this.context;
-    const glxVAO = this.context.glx.OES_vertex_array_object;
+    const { gl, glx } = this.context;
+    const { OES_vertex_array_object } = glx;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
       for (const name in this.attributes) {
@@ -181,7 +186,7 @@ export class Program implements IDisposable {
       }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
-      glxVAO.bindVertexArrayOES(vao.glVertexArrayObject);
+      OES_vertex_array_object.bindVertexArrayOES(vao.glVertexArrayObject);
     } else {
       throw new TypeError('not implemented');
     }
