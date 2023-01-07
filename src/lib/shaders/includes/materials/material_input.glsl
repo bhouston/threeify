@@ -13,5 +13,5 @@ vec3 getMaterialInputV3( in MaterialInputV3 input, in vec3 uv0, in vec3 uv1, in 
 {
     vec2 uv = uvSelector( input.uvIndex, uv0, uv1, uv2 );
     vec2 transformedUv = put.uvTransform * vec3( uv, 1. ).xy;
-    return input.modulator * texture2D( input.map, transformedUv );
+    return input.modulator * texture( input.map, transformedUv );
 }

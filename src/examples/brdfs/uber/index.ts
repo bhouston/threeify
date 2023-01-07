@@ -20,7 +20,6 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector2,
   Vector3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -29,7 +28,16 @@ import vertexSource from './vertex.glsl';
 async function init(): Promise<null> {
   const geometry = icosahedronGeometry(0.75, 5);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const normalsTexture = new Texture(
+  const texture = new Texture(
+    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
+  );
+  const scratchesTexture = new Texture(
+    await fetchImage('/assets/textures/golfball/scratches.png')
+  );
+  const anisotropicFlow1Texture = new Texture(
+    await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg')
+  );
+  const normalTexture = new Texture(
     await fetchImage('/assets/textures/golfball/normals2.jpg')
   );
 
@@ -39,7 +47,19 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const normalMap = makeTexImage2DFromTexture(context, normalsTexture);
+  const albedoMap = makeTexImage2DFromTexture(context, texture);
+  const clearCoatBumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
+  const specularAnisotropicFlowMap = makeTexImage2DFromTexture(
+    context,
+    anisotropicFlow1Texture
+  );
+  const normalMap = makeTexImage2DFromTexture(context, normalTexture);
+
+  const specularRoughnessMap = clearCoatBumpMap;
+  const displacementMap = clearCoatBumpMap;
+  const clearCoatRoughnessMap = specularRoughnessMap;
+  const sheenMap = specularAnisotropicFlowMap; // not a great choice.
+
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -59,8 +79,32 @@ async function init(): Promise<null> {
     pointLightRange: 6,
 
     // materials
-    normalModulator: new Vector2(1, 1),
-    normalMap
+    featureFlags: 0xffff,
+
+    albedoColor: new Color3(0.9, 0.9, 0.9),
+    albedoMap,
+
+    normalMap,
+
+    displacementScale: 0.1,
+    displacementMap,
+
+    specularRoughnessFactor: 0.5,
+    specularRoughnessMap,
+
+    specularAnisotropicStrength: 0.5,
+    specularAnisotropicFlowMap,
+
+    sheenIntensity: 1,
+    sheenColor: new Color3(0.3, 0.3, 1),
+    sheenMap,
+
+    clearCoatStrength: 0.5,
+    clearCoatTint: new Color3(1, 1, 1),
+    clearCoatBumpMap,
+
+    clearCoatRoughnessFactor: 0.1,
+    clearCoatRoughnessMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(
@@ -79,8 +123,8 @@ async function init(): Promise<null> {
     );
     uniforms.pointLightViewPosition = new Vector3(
       Math.cos(now * 0.001) * 3,
-      Math.cos(now * 0.0007) * 2,
-      1
+      2,
+      0.5
     );
 
     canvasFramebuffer.clear(BufferBit.All);

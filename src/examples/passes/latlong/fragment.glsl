@@ -1,11 +1,13 @@
 precision highp float;
 
+in vec4 v_homogeneousVertexPosition;
+
 uniform mat4 viewToWorld;
 uniform mat4 screenToView;
 
 uniform sampler2D equirectangularMap;
 
-varying vec4 v_homogeneousVertexPosition;
+out vec4 outputColor;
 
 #pragma include <color/spaces/srgb>
 #pragma include <cubemaps/latLong>
@@ -19,9 +21,9 @@ void main() {
   vec2 equirectangularUv = directionToLatLongUV( viewDirection );
 
   vec3 outputColor = vec3(0.);
-  outputColor += sRGBToLinear( texture2D( equirectangularMap, equirectangularUv ).rgb );
+  outputColor += sRGBToLinear( texture( equirectangularMap, equirectangularUv ).rgb );
 
-  gl_FragColor.rgb = linearTosRGB( outputColor );
-  gl_FragColor.a = 1.0;
+  outputColor.rgb = linearTosRGB( outputColor );
+  outputColor.a = 1.0;
 
 }

@@ -1,8 +1,8 @@
-attribute vec3 position;
-attribute vec2 uv;
+in vec3 position;
+in vec2 uv;
 
-varying vec3 v_position;
-varying vec2 v_uv;
+out vec3 v_position;
+out vec2 v_uv;
 
 void main() {
 

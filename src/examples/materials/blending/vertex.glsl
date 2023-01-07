@@ -1,7 +1,7 @@
-attribute vec3 position;
-attribute vec2 uv;
+in vec3 position;
+in vec2 uv;
 
-varying vec2 v_uv;
+out vec2 v_uv;
 
 uniform mat4 localToWorld;
 

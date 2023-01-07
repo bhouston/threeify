@@ -6,6 +6,7 @@ uniform mat4 localToWorld;
 uniform mat4 worldToView;
 uniform mat4 viewToScreen;
 
+uniform int featureFlags;
 uniform sampler2D displacementMap;
 uniform float displacementScale;
 
@@ -19,12 +20,14 @@ out vec2 v_uv0;
 void main() {
 
   mat4 localToView = worldToView * localToWorld;
-  v_viewSurfaceNormal = mat4TransformDirection( localToView, normal );
+  v_viewSurfaceNormal = mat4TransformDirection( localToView, normalize( position ) );
   v_viewSurfacePosition = mat4TransformPosition( localToView, position );
   v_uv0 = uv;
 
-  float displacementAmount = texture( displacementMap, vec2(1.0)- uv ).x * displacementScale;
-  v_viewSurfacePosition = displacePosition( v_viewSurfacePosition, v_viewSurfaceNormal, displacementAmount );
+  if( ( featureFlags & 0x8000 ) != 0 ) {
+    float displacementAmount = texture(displacementMap, vec2(1.0) - uv).x * displacementScale;
+    v_viewSurfacePosition = displacePosition(v_viewSurfacePosition, v_viewSurfaceNormal, displacementAmount);
+  }
 
   gl_Position = viewToScreen * vec4( v_viewSurfacePosition, 1. );
 

@@ -104,13 +104,14 @@ export class Shader implements IDisposable {
     if (glslVersion === 300) {
       prefix.push('#version 300 es');
     }
+    /*
     if (shaderType === ShaderType.Fragment) {
       const { glxo } = context;
       if (glxo.EXT_shader_texture_lod !== null) {
         prefix.push('#extension GL_EXT_shader_texture_lod : enable');
       }
-      prefix.push('#extension GL_OES_standard_derivatives : enable');
-    }
+    }*/
+
     const combinedSource = `${prefix.join('\n')}\n${source}`;
 
     this.finalSource = removeDeadCode(combinedSource);

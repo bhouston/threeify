@@ -1,8 +1,8 @@
 precision highp float;
 
-varying vec3 v_viewSurfacePosition;
-varying vec3 v_viewSurfaceNormal;
-varying vec2 v_uv0;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
+in vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightIntensity;
@@ -12,6 +12,7 @@ uniform vec3 sheenColor;
 uniform float sheenIntensity;
 uniform float sheenRoughness;
 
+out vec4 outputColor;
 
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
@@ -53,7 +54,7 @@ void main() {
   outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
-  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
-  gl_FragColor.a = 1.;
+  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.a = 1.;
 
 }

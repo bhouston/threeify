@@ -1,0 +1,9 @@
+{
+  "slug": "brdf_uber",
+  "theme": "dark",
+  "en": {
+    "name": "Uber BRDF",
+    "description": "A test of a uber BRDF with clearcoat, lambert, anisotropic specular and sheen.",
+    "keywords": ["brdf", "specular", "clearcoat", "lambert", "sheen", "anisotropic", "uber"]
+  }
+}

@@ -86,50 +86,50 @@ vec3 getImportanceSample(uint distributionType, uint sampleIndex, vec3 N, float 
 float BRDF_Specular_GGX_PDF(
   const in vec3 normal,
   const in vec3 viewDirection,
-  const in vec3 halfVector,
+  const in vec3 halfDirection,
   const in float roughness ) {
 
-  float dotVH = saturate( dot( viewDirection, halfVector ) );
-  float dotNH = saturate( dot( normal, halfVector ) );
+  float dotVH = saturate( dot( viewDirection, halfDirection ) );
+  float NdotH = saturate( dot( normal, halfDirection ) );
   float alpha = pow2( roughness );
-  float D = D_GGX( alpha, dotNH );
-  return max( D * dotNH / ( 4. * dotVH ), 0.);
+  float D = D_GGX( alpha, NdotH );
+  return max( D * NdotH / ( 4. * dotVH ), 0.);
 }
 
 float BRDF_Sheen_Charlie_PDF(
   const in vec3 normal,
   const in vec3 viewDirection,
-  const in vec3 halfVector,
+  const in vec3 halfDirection,
   const in float sheenRoughness ) {
 
-  float dotVH = saturate( dot( viewDirection, halfVector ) );
-  float dotNH = saturate( dot( normal, halfVector ) );
-  float D = D_Charlie( sheenRoughness, dotNH );
-  return max( D * dotNH / ( 4. * dotVH ), 0. );
+  float dotVH = saturate( dot( viewDirection, halfDirection ) );
+  float NdotH = saturate( dot( normal, halfDirection ) );
+  float D = D_Charlie( sheenRoughness, NdotH );
+  return max( D * NdotH / ( 4. * dotVH ), 0. );
 }
 
 /*
 float PDF(uint distributionType, vec3 V, vec3 H, vec3 N, vec3 L, float roughness) {
 
   if( distributionType == DISTRIBUTION_LAMBERTIAN ) {
-		float dotNL = dot( N, L );
-		return max( dotNL * RECIPROCAL_PI, 0. );
+		float NdotL = dot( N, L );
+		return max( NdotL * RECIPROCAL_PI, 0. );
 	}
 
   else if( distributionType == DISTRIBUTION_GGX ) {
 		float dotVH = saturate( dot( V, H ) );
-		float dotNH = saturate( dot( N, H ) );
+		float NdotH = saturate( dot( N, H ) );
     float alpha = pow2( roughness );
 
-		float D = D_GGX( alpha, dotNH );
+		float D = D_GGX( alpha, NdotH );
 		return max( D * dotVH / ( 4. * dotVH ), 0.);
 	}
 
   else if( distributionType == DISTRIBUTION_CHARLIE ) {
 		float dotVH = saturate( dot( V, H ) );
-		float dotNH = saturate( dot( N, H ) );
+		float NdotH = saturate( dot( N, H ) );
 
-		float D = D_Charlie( roughness, dotNH );
+		float D = D_Charlie( roughness, NdotH );
 		return max( D * dotVH / ( 4. * dotVH ), 0. );
 	}
 
@@ -151,9 +151,9 @@ vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWid
 		vec3 V = N;
 		vec3 L = normalize(reflect(-V, H));
 
-		float dotNL = dot(N, L);
+		float NdotL = dot(N, L);
 
-		if ( dotNL > 0.0 ) {
+		if ( NdotL > 0.0 ) {
 			float lod = 0.0;
 
 			if ( roughness > 0.0 || distributionType == DISTRIBUTION_LAMBERTIAN ) {
@@ -172,7 +172,7 @@ vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWid
 				color += vec4( sampleIBL( H, lod ), 1.0 );
 			}
 			else {
-				color += vec4( sampleIBL( L, lod ) * dotNL, dotNL );
+				color += vec4( sampleIBL( L, lod ) * NdotL, NdotL );
 			}
 		}
 	}
@@ -214,8 +214,8 @@ vec3 LUT(uint distributionType, float NdotV, float roughness)
 		vec3 H = getImportanceSample(distributionType, i, N, roughness);
 		vec3 L = normalize(reflect(-V, H));
 
-		float dotNL = saturate(L.z);
-		float dotNH = saturate(H.z);
+		float NdotL = saturate(L.z);
+		float NdotH = saturate(H.z);
 		float dotVH = saturate(dot(V, H));
     float alphaRoughness = roughness * roughness;
 
@@ -223,14 +223,14 @@ vec3 LUT(uint distributionType, float NdotV, float roughness)
 		{
 
 			if (distributionType == DISTRIBUTION_GGX)
-			{		float dotVH = saturate( dot( viewDirection, halfVector ) );
-		float dotNH = saturate( dot( normal, halfVector ) );
-		float D = D_Charlie( sheenRoughness, dotNH );
-		return max( D * dotNH / ( 4. * dotVH ), 0. );
+			{		float dotVH = saturate( dot( viewDirection, halfDirection ) );
+		float NdotH = saturate( dot( normal, halfDirection ) );
+		float D = D_Charlie( sheenRoughness, NdotH );
+		return max( D * NdotH / ( 4. * dotVH ), 0. );
 
 				A += 0;
 				B += 0;
-				C += sheenVisibility * sheenDistribution * dotNL * dotVH;
+				C += sheenVisibility * sheenDistribution * NdotL * dotVH;
 			}
 		}
 	}

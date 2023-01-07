@@ -1,8 +1,8 @@
 precision highp float;
 
-varying vec3 v_viewSurfacePosition;
-varying vec3 v_viewSurfaceNormal;
-varying vec2 v_uv0;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
+in vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightIntensity;
@@ -12,6 +12,7 @@ uniform sampler2D albedoMap;
 uniform sampler2D bumpMap;
 uniform sampler2D specularRoughnessMap;
 
+out vec4 outputColor;
 
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
@@ -23,9 +24,9 @@ uniform sampler2D specularRoughnessMap;
 
 void main() {
 
-  vec3 albedo = sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
+  vec3 albedo = sRGBToLinear( texture( albedoMap, v_uv0 ).rgb );
   vec3 specular = vec3(1.);
-  float specularRoughness = texture2D( specularRoughnessMap, v_uv0 ).r;
+  float specularRoughness = texture( specularRoughnessMap, v_uv0 ).r;
   vec3 specularF0 = specularIntensityToF0( specular );
 
   vec3 position = v_viewSurfacePosition;
@@ -52,7 +53,7 @@ void main() {
   outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
-  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
-  gl_FragColor.a = 1.;
+  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.a = 1.;
 
 }

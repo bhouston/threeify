@@ -1,14 +1,14 @@
-attribute vec3 position;
-attribute vec3 normal;
-attribute vec2 uv;
+in vec3 position;
+in vec3 normal;
+in vec2 uv;
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
 uniform mat4 viewToScreen;
 
-varying vec3 v_viewSurfacePosition;
-varying vec3 v_viewSurfaceNormal;
-varying vec2 v_uv0;
+out vec3 v_viewSurfacePosition;
+out vec3 v_viewSurfaceNormal;
+out vec2 v_uv0;
 
 #pragma include <math/mat4>
 

@@ -1,5 +1,11 @@
 #pragma once
 
+
+vec2 decodeDirection(vec2 value) {
+  return value * 2. - 1.;
+}
+
+
 /**
  * Get normal, tangent and bitangent vectors.
  * based on the glTF reference viewer
@@ -32,6 +38,10 @@ mat3 tangentToViewFromNormal( const in vec3 normal ) {
   return  mat3( tangent, bitangent, normal );
 }
 
+
+vec3 transformTangentByFlow(in vec2 flowDirection, const in vec3 tangent, const in vec3 bitangent) {
+  return normalize(flowDirection.x * tangent + flowDirection.y * bitangent);
+}
 
 /*
 /**

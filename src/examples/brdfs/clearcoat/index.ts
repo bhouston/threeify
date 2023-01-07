@@ -42,7 +42,9 @@ async function init(): Promise<null> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const albedoMap = makeTexImage2DFromTexture(context, texture);
-  const bumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
+  const clearCoatBumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
+  const specularRoughnessMap = clearCoatBumpMap;
+  const clearCoatRoughnessMap = specularRoughnessMap;
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -62,10 +64,19 @@ async function init(): Promise<null> {
     pointLightRange: 6,
 
     // materials
+    albedoColor: new Color3(0.9, 0.9, 0.9),
     albedoMap,
 
-    clearCoatBumpModulator: 1,
-    clearCoatBumpMap: bumpMap
+    specularRoughnessFactor: 0.5,
+    specularRoughnessMap,
+
+    clearCoatStrength: 0.5,
+    clearCoatTint: new Color3(1, 1, 1),
+
+    clearCoatBumpMap,
+
+    clearCoatRoughnessFactor: 0.1,
+    clearCoatRoughnessMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(

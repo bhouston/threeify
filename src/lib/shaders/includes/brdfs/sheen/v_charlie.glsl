@@ -18,11 +18,11 @@ float L(float x, float r) {
 
 // https://dassaultsystemes-technology.github.io/EnterprisePBRShadingModel/spec-2021x.md.html#components/sheen
 // https://www.shadertoy.com/view/wl3SWs
-float V_Charlie(float sheenRoughness, float dotNL, float dotNV)
+float V_Charlie(float sheenRoughness, float NdotL, float NdotV)
 {
   float r = sheenRoughness;
-	float visV = dotNV < .5 ? exp(L(dotNV, r)) : exp(2. * L(.5, r) - L(1. - dotNV, r));
-	float visL = dotNL < .5 ? exp(L(dotNL, r)) : exp(2. * L(.5, r) - L(1. - dotNL, r));
+	float visV = NdotV < .5 ? exp(L(NdotV, r)) : exp(2. * L(.5, r) - L(1. - NdotV, r));
+	float visL = NdotL < .5 ? exp(L(NdotL, r)) : exp(2. * L(.5, r) - L(1. - NdotL, r));
 
-	return 1. / ((1. + visV + visL) * (4. * dotNV * dotNL));
+	return 1. / ((1. + visV + visL) * (4. * NdotV * NdotL));
 }

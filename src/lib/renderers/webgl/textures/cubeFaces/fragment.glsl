@@ -14,6 +14,6 @@ void main() {
   vec3 direction = cubeFaceUVToDirection( faceIndex, v_uv );
   vec2 equirectangularUv = directionToLatLongUV( direction );
 
-  gl_FragColor = texture2D( map, equirectangularUv );
+  gl_FragColor = texture( map, equirectangularUv );
 
 }

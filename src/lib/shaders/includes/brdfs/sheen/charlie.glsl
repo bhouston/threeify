@@ -23,12 +23,12 @@ vec3 BRDF_Sheen_Charlie(
 
   float safeSheenRoughness = clamp( sheenRoughness, 0.07, 1. );
 
-	float dotNL = saturate( dot( normal, lightDirection ) );
-	float dotNV = saturate( dot( normal, viewDirection ) );
-	float dotNH = saturate( dot( normal, halfDirection ) );
+	float NdotL = saturate( dot( normal, lightDirection ) );
+	float NdotV = saturate( dot( normal, viewDirection ) );
+	float NdotH = saturate( dot( normal, halfDirection ) );
 
-  float sheenDistribution = D_Charlie( safeSheenRoughness, dotNH );
-  float sheenVisibility = V_Charlie( safeSheenRoughness, dotNL, dotNV );
+  float sheenDistribution = D_Charlie( safeSheenRoughness, NdotH );
+  float sheenVisibility = V_Charlie( safeSheenRoughness, NdotL, NdotV );
 
   return sheenColor * sheenIntensity * sheenDistribution * sheenVisibility;
 

@@ -1,13 +1,15 @@
 precision highp float;
 
-varying vec3 v_viewPosition;
-varying vec3 v_viewNormal;
+in vec3 v_viewPosition;
+in vec3 v_viewNormal;
 
 uniform samplerCube cubeMap;
+
+out vec4 outputColor;
 
 void main() {
 
   vec3 reflectDir = reflect( normalize( v_viewPosition ),normalize(v_viewNormal) );
-  gl_FragColor = textureCube(cubeMap, reflectDir);
+  outputColor = textureCube(cubeMap, reflectDir);
 
 }

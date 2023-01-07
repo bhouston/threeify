@@ -1,8 +1,8 @@
 precision highp float;
 
-varying vec3 v_viewSurfacePosition;
-varying vec3 v_viewSurfaceNormal;
-varying vec2 v_uv0;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
+in vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightIntensity;
@@ -11,6 +11,7 @@ uniform float pointLightRange;
 uniform vec3 albedoModulator;
 uniform sampler2D albedoMap;
 
+out vec4 outputColor;
 
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
@@ -18,7 +19,7 @@ uniform sampler2D albedoMap;
 
 void main() {
 
-  vec3 albedo = albedoModulator * sRGBToLinear( texture2D( albedoMap, v_uv0 ).rgb );
+  vec3 albedo = albedoModulator * sRGBToLinear( texture( albedoMap, v_uv0 ).rgb );
 
   PunctualLight punctualLight;
   punctualLight.type = LightType_Point;
@@ -42,7 +43,7 @@ void main() {
   outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
-  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
-  gl_FragColor.a = 1.;
+  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.a = 1.;
 
 }
