@@ -1,3 +1,3 @@
-OutData layer_direct_dielectric_opaque( in InData inData );
+OutData layer_direct_dielectric_opaque(InData inData) {
   return OutData();
 }

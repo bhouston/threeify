@@ -1,3 +1,3 @@
-OutData layer_direct_specular( in InData inData );
+OutData layer_direct_specular(InData inData) {
   return OutData();
 }

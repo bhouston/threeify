@@ -1,3 +1,3 @@
-OutData layer_indirect_metal( in InData inData );
+OutData layer_indirect_metal(InData inData) {
   return OutData();
 }

@@ -1,3 +1,3 @@
-OutData layer_direct_sheen( in InData inData );
+OutData layer_direct_sheen(InData inData) {
   return OutData();
 }

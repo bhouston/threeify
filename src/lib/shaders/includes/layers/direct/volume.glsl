@@ -1,3 +1,3 @@
-OutData layer_direct_volume( in InData inData );
+OutData layer_direct_volume(InData inData) {
   return OutData();
 }
