@@ -39,7 +39,7 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
+  const normalMap = makeTexImage2DFromTexture(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -60,7 +60,7 @@ async function init(): Promise<null> {
 
     // materials
     normalModulator: new Vector2(1, 1),
-    normalMap: normalsMap
+    normalMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(

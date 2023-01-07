@@ -34,6 +34,12 @@ async function init(): Promise<null> {
   const scratchesTexture = new Texture(
     await fetchImage('/assets/textures/golfball/scratches.png')
   );
+  const anisotropicFlow1Texture = new Texture(
+    await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg')
+  );
+  const normalTexture = new Texture(
+    await fetchImage('/assets/textures/golfball/normals2.jpg')
+  );
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
@@ -42,7 +48,18 @@ async function init(): Promise<null> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const albedoMap = makeTexImage2DFromTexture(context, texture);
-  const bumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
+  const clearCoatBumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
+  const specularAnisotropicFlowMap = makeTexImage2DFromTexture(
+    context,
+    anisotropicFlow1Texture
+  );
+  const normalMap = makeTexImage2DFromTexture(context, normalTexture);
+
+  const specularRoughnessMap = clearCoatBumpMap;
+  const displacementMap = clearCoatBumpMap;
+  const clearCoatRoughnessMap = specularRoughnessMap;
+  const sheenMap = specularAnisotropicFlowMap; // not a great choice.
+
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -62,10 +79,32 @@ async function init(): Promise<null> {
     pointLightRange: 6,
 
     // materials
+    featureFlags: 0xffff,
+
+    albedoColor: new Color3(0.9, 0.9, 0.9),
     albedoMap,
 
-    clearCoatBumpModulator: 1,
-    clearCoatBumpMap: bumpMap
+    normalMap,
+
+    displacementScale: 0.1,
+    displacementMap,
+
+    specularRoughnessFactor: 0.5,
+    specularRoughnessMap,
+
+    specularAnisotropicStrength: 0.5,
+    specularAnisotropicFlowMap,
+
+    sheenIntensity: 1,
+    sheenColor: new Color3(0.3, 0.3, 1),
+    sheenMap,
+
+    clearCoatStrength: 0.5,
+    clearCoatTint: new Color3(1, 1, 1),
+    clearCoatBumpMap,
+
+    clearCoatRoughnessFactor: 0.1,
+    clearCoatRoughnessMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   canvasFramebuffer.depthTestState = new DepthTestState(

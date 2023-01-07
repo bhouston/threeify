@@ -2,7 +2,7 @@
 #pragma include <math/math>
 
 // reads channel R, compatible with a combined OcclusionRoughnessMetallic (RGB) texture
-// ao = texture2D( aoMap, vUv2 ).r
+// ao = texture( aoMap, vUv2 ).r
 float ambientOcclusion( float ao, float aoIntensity ) {
 	return ( ao - 1. ) * aoMapIntensity + 1.;
 }

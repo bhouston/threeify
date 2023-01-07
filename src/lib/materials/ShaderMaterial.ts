@@ -20,7 +20,7 @@ export class ShaderMaterial
   constructor(
     public vertexShaderCode: string,
     public fragmentShaderCode: string,
-    public glslVersion = 200
+    public glslVersion = 300
   ) {}
 
   dirty(): void {

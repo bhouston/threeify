@@ -1,1 +1,1 @@
-export const GL = WebGLRenderingContext;
+export const GL = WebGL2RenderingContext;

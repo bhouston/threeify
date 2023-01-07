@@ -22,7 +22,7 @@ import { RenderingContext } from '../RenderingContext.js';
 import { VertexArrayObject } from '../VertexArrayObject.js';
 import { BufferBit } from './BufferBit.js';
 
-const GL = WebGLRenderingContext;
+const GL = WebGL2RenderingContext;
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;

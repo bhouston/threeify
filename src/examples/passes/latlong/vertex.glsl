@@ -1,6 +1,6 @@
-attribute vec3 position;
+in vec3 position;
 
-varying vec4 v_homogeneousVertexPosition;
+out vec4 v_homogeneousVertexPosition;
 
 void main() {
 

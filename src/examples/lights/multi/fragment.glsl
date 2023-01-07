@@ -1,8 +1,8 @@
 precision highp float;
 
-varying vec3 v_viewSurfacePosition;
-varying vec3 v_viewSurfaceNormal;
-varying vec2 v_uv0;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
+in vec2 v_uv0;
 
 #define MAX_PUNCTUAL_LIGHTS 4
 uniform int numPunctualLights;
@@ -16,6 +16,7 @@ uniform float punctualLightOuterCos[MAX_PUNCTUAL_LIGHTS];
 
 uniform sampler2D albedoMap;
 
+out vec4 outputColor;
 
 #pragma include <lighting/punctual>
 #pragma include <brdfs/ambient/basic>
@@ -27,7 +28,7 @@ uniform sampler2D albedoMap;
 
 void main() {
 
-  vec3 albedo = sRGBToLinear( texture2D(albedoMap, v_uv0).rgb );
+  vec3 albedo = sRGBToLinear( texture(albedoMap, v_uv0).rgb );
   vec3 specular = vec3(.5);
   float specularRoughness = .25;
   vec3 specularF0 = specularIntensityToF0( specular );
@@ -74,7 +75,7 @@ void main() {
 
   }
 
-  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
-  gl_FragColor.a = 1.;
+  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.a = 1.;
 
 }

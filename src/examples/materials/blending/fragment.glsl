@@ -1,17 +1,19 @@
 precision highp float;
 
-varying vec2 v_uv;
+in vec2 v_uv;
 
 uniform sampler2D map;
 uniform int premultipliedAlpha;
 uniform float alpha;
 
+out vec4 outputColor;
+
 void main() {
 
-  gl_FragColor = texture2D(map, v_uv);
-  gl_FragColor.a *= alpha;
+  outputColor = texture(map, v_uv);
+  outputColor.a *= alpha;
   if( premultipliedAlpha == 1 ) {
-    gl_FragColor.xyz *= gl_FragColor.a;
+    outputColor.xyz *= outputColor.a;
   }
 
 }

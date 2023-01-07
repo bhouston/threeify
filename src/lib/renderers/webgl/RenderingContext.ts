@@ -36,7 +36,7 @@ export type Resource =
 export type ResourceMap = { [id: number]: Resource };
 
 export class RenderingContext {
-  readonly gl: WebGLRenderingContext;
+  readonly gl: WebGL2RenderingContext;
   readonly glx: Extensions;
   readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
@@ -70,9 +70,9 @@ export class RenderingContext {
       attributes.stencil = true;
     }
     {
-      const gl = canvas.getContext('webgl', attributes);
+      const gl = canvas.getContext('webgl2', attributes);
       if (gl === null) {
-        throw new Error('webgl not supported');
+        throw new Error('webgl2 not supported');
       }
       this.gl = gl;
     }

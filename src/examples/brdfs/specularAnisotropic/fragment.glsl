@@ -1,8 +1,8 @@
 precision highp float;
 
-varying vec3 v_viewSurfacePosition;
-varying vec3 v_viewSurfaceNormal;
-varying vec2 v_uv0;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
+in vec2 v_uv0;
 
 uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightIntensity;
@@ -11,6 +11,7 @@ uniform float pointLightRange;
 uniform float     specularAnisotropicStrength;
 uniform sampler2D specularAnisotropicFlowMap;
 
+out vec4 outputColor;
 
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
@@ -23,10 +24,10 @@ uniform sampler2D specularAnisotropicFlowMap;
 
 void main() {
 
-  vec3 albedo = texture2D(specularAnisotropicFlowMap, v_uv0).rgb;
+  vec3 albedo = texture(specularAnisotropicFlowMap, v_uv0).rgb;
   vec3 specular = vec3( 0.5 );
   float specularRoughness = 0.5;
-  vec2 specularAnisotropicFlow = decodeDirection( texture2D( specularAnisotropicFlowMap, v_uv0 ).rg );
+  vec2 specularAnisotropicFlow = decodeDirection( texture( specularAnisotropicFlowMap, v_uv0 ).rg );
   vec3 specularF0 = specularIntensityToF0( specular );
   vec3 specularF90 = vec3( 1., 0., 0. );
 
@@ -66,7 +67,7 @@ void main() {
   outgoingRadiance += directLight.radiance * dotNL *
     BRDF_Diffuse_Lambert( albedo );
 
-  gl_FragColor.rgb = linearTosRGB( outgoingRadiance );
-  gl_FragColor.a = 1.;
+  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.a = 1.;
 
 }

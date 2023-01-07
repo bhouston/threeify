@@ -18,11 +18,3 @@ float degToRad( const in float deg ) { return deg * PI / 180.; }
 float radToDeg( const in float rad ) { return rad * 180. / PI; }
 
 const float NAN = sqrt( 0. );
-bool isnan( const in float x ) {
-  // this appears to be against the specification. another solution was offered here:
-  // https://www.shadertoy.com/view/lsjBDy
-  return (x) == NAN;
-}
-bool isinf( const in float x ) {
-  return (x) == (x)+1.;
-}

@@ -1,5 +1,5 @@
 export function getParameterAsString(
-  gl: WebGLRenderingContext,
+  gl: WebGL2RenderingContext,
   parameterId: number,
   result = ''
 ): string {

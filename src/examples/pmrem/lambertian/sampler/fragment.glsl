@@ -1,7 +1,7 @@
 precision highp float;
 
-varying vec3 v_position;
-varying vec2 v_uv;
+in vec3 v_position;
+in vec2 v_uv;
 
 uniform samplerCube envCubeMap;
 uniform int faceIndex;
@@ -16,7 +16,7 @@ void main() {
 
   vec3 direction = cubeFaceUVToDirection( faceIndex, v_uv );
 
-  gl_FragColor.rgb = BRDF_Diffuse_Lambert_Filter( direction, 1.0 );
-  gl_FragColor.a = 1.0;
+  outputColor.rgb = BRDF_Diffuse_Lambert_Filter( direction, 1.0 );
+  outputColor.a = 1.0;
 
 }

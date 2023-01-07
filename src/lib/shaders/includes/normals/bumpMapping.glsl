@@ -11,9 +11,9 @@ vec3 perturbNormalFromBumpMap( in vec3 position, in vec3 normal, in sampler2D bu
 
   // screen space bump map gradient
 	vec2 gradBump = vec2(
-      texture2D( bumpMap, bumpUv + dFdx( bumpUv ) ).x,
-		  texture2D( bumpMap, bumpUv + dFdy( bumpUv ) ).x ) -
-      texture2D( bumpMap, bumpUv ).x;
+      texture( bumpMap, bumpUv + dFdx( bumpUv ) ).x,
+		  texture( bumpMap, bumpUv + dFdy( bumpUv ) ).x ) -
+      texture( bumpMap, bumpUv ).x;
   gradBump *= bumpScale; // scale in world space.
 
   // screen oriented orthogonal basis
