@@ -17,8 +17,8 @@ float BRDF_Diffuse_Lambert_PDF(
   const in vec3 normal,
   const in vec3 lightDirection ) {
 
-	float dotNL = saturate( dot( normal, lightDirection ) );
-	return dotNL * RECIPROCAL_PI;
+	float NdotL = saturate( dot( normal, lightDirection ) );
+	return NdotL * RECIPROCAL_PI;
 }
 
 vec4 sampleIBL( vec3 direction, float lod );
@@ -43,9 +43,9 @@ vec3 BRDF_Diffuse_Lambert_Filter(vec3 N, float filterWidth ) {
 		vec3 V = N;
 		vec3 L = normalize( reflect( -V, H ) );
 
-		float dotNL = dot( N, L );
+		float NdotL = dot( N, L );
 
-		if ( dotNL > 0. ) {
+		if ( NdotL > 0. ) {
 			float lod = 0.;
 
       // Mipmap Filtered Samples

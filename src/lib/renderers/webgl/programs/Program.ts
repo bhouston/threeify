@@ -83,9 +83,10 @@ export class Program implements IDisposable {
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
 
-    const { gl, glxo } = this.context;
+    const { gl } = this.context;
     // Check if it linked.
-    /* const { KHR_parallel_shader_compile } = glxo;
+    /* const { glxo } = this.context;
+    const { KHR_parallel_shader_compile } = glxo;
     if (KHR_parallel_shader_compile !== null) {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       if (

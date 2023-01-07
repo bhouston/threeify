@@ -9,10 +9,10 @@
 // Microfacet Models for Refraction through Rough Surfaces - equation (33)
 // http://graphicrants.blogspot.com/2013/08/specular-brdf-reference.html
 // alpha is "roughness squared" in Disney’s reparameterization
-float D_GGX( const in float alphaRoughness, const in float dotNH ) {
+float D_GGX( const in float alphaRoughness, const in float NdotH ) {
 
 	float a2 = pow2( alphaRoughness );
-	float denom = pow2( dotNH ) * ( a2 - 1. ) + 1.; // avoid alpha = 0 with dotNH = 1
+	float denom = pow2( NdotH ) * ( a2 - 1. ) + 1.; // avoid alpha = 0 with NdotH = 1
 
 	return RECIPROCAL_PI * a2 / pow2( denom );
 

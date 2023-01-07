@@ -18,16 +18,17 @@ vec3 BRDF_Sheen_Ashikhmin(
   const in vec3 sheenColor,
   const in float sheenIntensity,
   const in float sheenRoughness ) {
+    
 	vec3 halfDirection = normalize( lightDirection + viewDirection );
 
   sheenRoughness = clamp( sheenRoughness, 0.07, 1. );
 
-	float dotNL = saturate( dot( normal, lightDirection ) );
-	float dotNV = saturate( dot( normal, viewDirection ) );
-	float dotNH = saturate( dot( normal, halfDirection ) );
+	float NdotL = saturate( dot( normal, lightDirection ) );
+	float NdotV = saturate( dot( normal, viewDirection ) );
+	float NdotH = saturate( dot( normal, halfDirection ) );
 
-  float sheenDistribution = D_Ashikhmin(sheenRoughness, dotNH);
-  float sheenVisibility = V_Ashikhmin(dotNL, dotNV);
+  float sheenDistribution = D_Ashikhmin(sheenRoughness, NdotH);
+  float sheenVisibility = V_Ashikhmin(NdotL, NdotV);
 
   return sheenColor * sheenIntensity * sheenDistribution * sheenVisibility;
 
