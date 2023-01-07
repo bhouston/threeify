@@ -13,8 +13,8 @@ void directionToCubeFaceUV(vec3 dir, out int face, out vec2 uv) {
       temp = vec3(-dir.z, dir.y, dir.x);
       face = 0; // right
     }
-  } else // Y dominant
-  if (abs(dir.y) >= abs(dir.z)) {
+  } // Y dominant
+  else if (abs(dir.y) >= abs(dir.z)) {
     if (dir.y < 0.0) {
       temp = vec3(dir.x, dir.z, -dir.y);
       face = 3; // top
@@ -22,8 +22,8 @@ void directionToCubeFaceUV(vec3 dir, out int face, out vec2 uv) {
       temp = vec3(dir.x, -dir.z, dir.y);
       face = 2; // bottom
     }
-  } else // Z domnant
-  {
+  } // Z domnant
+  else {
     if (dir.z < 0.0) {
       temp = vec3(dir.x, -dir.y, dir.z);
       face = 5; // back
