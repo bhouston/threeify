@@ -3,6 +3,7 @@
         "dbaeumer.vscode-eslint",
         "orta.vscode-jest",
         "esbenp.prettier-vscode",
-        "kisstkondoros.vscode-codemetrics"
+        "kisstkondoros.vscode-codemetrics",
+        "raczzalan.webgl-glsl-editor"
     ]
 }
