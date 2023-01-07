@@ -13,6 +13,7 @@ vec3 BRDF_Specular_GGX(
   const in float specularRoughness ) {
 
 	float alphaRoughness = pow2( specularRoughness ); // UE4's roughness
+	
 	vec3 halfDirection = normalize( lightDirection + viewDirection );
 
 	float NdotL = saturate( dot( normal, lightDirection ) );

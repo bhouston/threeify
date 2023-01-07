@@ -68,7 +68,7 @@ async function init(): Promise<null> {
     pointLightRange: 12,
 
     // materials
-    specularAnisotropicScale: 1,
+    specularAnisotropicStrength: 0.5,
     specularAnisotropicFlowMap: anisotropicFlow1Map
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);

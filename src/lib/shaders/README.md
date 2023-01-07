@@ -34,7 +34,7 @@
 
 - They pass in uniforms for which uv set to use as well.
 - They have a UVTransform matrix.
-- They have a function to get the normal, binormal, tangent matrix.
+- They have a function to get the normal, bitangent, tangent matrix.
 - What is the difference between MetallicRoughnessSpecular sampler and the MetallicRoughnessSampler?
 - I guess SpecularGlossiness and Diffuse are for BlinnPhong model.
 - No support for bump maps.
