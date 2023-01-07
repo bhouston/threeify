@@ -20,10 +20,10 @@ void main() {
 
   vec2 equirectangularUv = directionToLatLongUV( viewDirection );
 
-  vec3 outputColor = vec3(0.);
-  outputColor += sRGBToLinear( texture( equirectangularMap, equirectangularUv ).rgb );
+  vec3 mapColor = vec3(0.);
+  mapColor += sRGBToLinear( texture( equirectangularMap, equirectangularUv ).rgb );
 
-  outputColor.rgb = linearTosRGB( outputColor );
+  outputColor.rgb = linearTosRGB( mapColor );
   outputColor.a = 1.0;
 
 }

@@ -89,12 +89,12 @@ export function makeDepthAttachment(
   texParams.minFilter = TextureFilter.Nearest;
   // TODO: figure out which are supported and choose one of those.
   // context.glx.WEBGL_depth_texture.UNSIGNED_INT_24_8_WEBGL as DataType,
-  const dataType = DataType.UnsignedShort;
+  const dataType = DataType.UnsignedInt;
 
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.DepthComponent,
+    PixelFormat.DepthComponent24,
     dataType,
     PixelFormat.DepthComponent,
     TextureTarget.Texture2D,

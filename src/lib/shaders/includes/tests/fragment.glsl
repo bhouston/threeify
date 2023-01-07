@@ -1,7 +1,9 @@
 #pragma once
 precision highp float;
 
-varying vec2 v_uv;
+in vec2 v_uv;
+
+out vec4 outputColor;
 
 struct TestSuite {
   int selectorResult;
@@ -109,6 +111,6 @@ void main() {
 
   tests( suite );
 
-  gl_FragColor = toSuiteResult( suite );
+  outputColor = toSuiteResult( suite );
 
 }
