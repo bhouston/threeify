@@ -18,17 +18,24 @@ out vec2 v_uv0;
 #pragma include <vertex/displacement>
 
 void main() {
-
   mat4 localToView = worldToView * localToWorld;
-  v_viewSurfaceNormal = mat4TransformDirection( localToView, normalize( position ) );
-  v_viewSurfacePosition = mat4TransformPosition( localToView, position );
+  v_viewSurfaceNormal = mat4TransformDirection(
+    localToView,
+    normalize(position)
+  );
+  v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv;
 
-  if( ( featureFlags & 0x8000 ) != 0 ) {
-    float displacementAmount = texture(displacementMap, vec2(1.0) - uv).x * displacementScale;
-    v_viewSurfacePosition = displacePosition(v_viewSurfacePosition, v_viewSurfaceNormal, displacementAmount);
+  if ((featureFlags & 0x8000) != 0) {
+    float displacementAmount =
+      texture(displacementMap, vec2(1.0) - uv).x * displacementScale;
+    v_viewSurfacePosition = displacePosition(
+      v_viewSurfacePosition,
+      v_viewSurfaceNormal,
+      displacementAmount
+    );
   }
 
-  gl_Position = viewToScreen * vec4( v_viewSurfacePosition, 1. );
+  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
 
 }

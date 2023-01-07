@@ -16,13 +16,13 @@ varying vec2 v_uv;
 #pragma include <color/spaces/srgb>
 
 void main() {
-  vec3 outputColor = vec3(0.);
-  vec2 texelUv = ( uvToTexture * vec3( v_uv, 1.0 ) ).xy;
+  vec3 outputColor = vec3(0.0);
+  vec2 texelUv = (uvToTexture * vec3(v_uv, 1.0)).xy;
 
-  vec4 layerColor = texture( layerMap, texelUv, mipmapBias );
+  vec4 layerColor = texture(layerMap, texelUv, mipmapBias);
 
   // premultiply alpha in output as the source PNG is not premultiplied
-  if( convertToPremultipliedAlpha == 1 ) {
+  if (convertToPremultipliedAlpha == 1) {
     layerColor.rgb *= layerColor.a;
   }
   gl_FragColor = layerColor;

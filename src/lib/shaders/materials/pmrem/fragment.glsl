@@ -13,9 +13,9 @@ layout(push_constant) uniform FilterParameters {
   uint width;
   float lodBias;
   uint distribution; // enum
-} pFilterParameters;
+};
 
-layout (location = 0) in vec2 inUV;
+layout(location = 0) in vec2 inUV;
 
 // output cubemap faces
 layout(location = 0) out vec4 outFace0;

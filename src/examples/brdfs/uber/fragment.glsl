@@ -31,24 +31,35 @@ out vec4 outputColor;
 #pragma include <normals/tangentSpace>
 
 void main() {
+  vec3 albedo = sRGBToLinear(texture(albedoMap, v_uv0).rgb) * albedoColor;
 
-  vec3 albedo = sRGBToLinear( texture( albedoMap, v_uv0 ).rgb ) * albedoColor;
-  
   vec3 specular = vec3(0.15);
-  vec3 specularF0 = specularIntensityToF0( specular );
-  float specularRoughness = texture( specularRoughnessMap, v_uv0 ).r * specularRoughnessFactor;
-  
-  vec3 clearCoatF0 = vec3( clearCoatStrength ) * clearCoatTint;
-  float clearCoatRoughness = texture( clearCoatRoughnessMap, v_uv0 ).r * clearCoatRoughnessFactor;
-  
-  vec3 position = v_viewSurfacePosition;
-  vec3 normal = normalize( v_viewSurfaceNormal );
-  vec3 viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 specularF0 = specularIntensityToF0(specular);
+  float specularRoughness =
+    texture(specularRoughnessMap, v_uv0).r * specularRoughnessFactor;
 
-  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  vec3 clearCoatF0 = vec3(clearCoatStrength) * clearCoatTint;
+  float clearCoatRoughness =
+    texture(clearCoatRoughnessMap, v_uv0).r * clearCoatRoughnessFactor;
+
+  vec3 position = v_viewSurfacePosition;
+  vec3 normal = normalize(v_viewSurfaceNormal);
+  vec3 viewDirection = normalize(-v_viewSurfacePosition);
+
+  mat3 tangentToView = tangentToViewFromPositionNormalUV(
+    position,
+    normal,
+    v_uv0
+  );
   normal = tangentToView[2];
 
-	vec3 clearCoatNormal = perturbNormalFromBumpMap( position, normal, clearCoatBumpMap, v_uv0, 1. );
+  vec3 clearCoatNormal = perturbNormalFromBumpMap(
+    position,
+    normal,
+    clearCoatBumpMap,
+    v_uv0,
+    1.0
+  );
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -56,21 +67,37 @@ void main() {
   punctualLight.range = pointLightRange;
 
   DirectLight directLight;
-  pointLightToDirectLight( position, punctualLight, directLight );
+  pointLightToDirectLight(position, punctualLight, directLight);
 
-  float clearCoatDotNL = saturate( dot( directLight.direction, clearCoatNormal ) );
-  float dotNL = saturate( dot( directLight.direction, normal ) );
+  float clearCoatDotNL = saturate(dot(directLight.direction, clearCoatNormal));
+  float dotNL = saturate(dot(directLight.direction, normal));
 
   // this lack energy conservation.
   vec3 outgoingRadiance;
-  outgoingRadiance += directLight.radiance * clearCoatDotNL *
-    BRDF_Specular_GGX( clearCoatNormal, viewDirection, directLight.direction, clearCoatF0, clearCoatRoughness ) ;
-  outgoingRadiance += directLight.radiance * dotNL *
-    BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness ) ;
-  outgoingRadiance += directLight.radiance * dotNL *
-    BRDF_Diffuse_Lambert( albedo );
+  outgoingRadiance +=
+    directLight.radiance *
+    clearCoatDotNL *
+    BRDF_Specular_GGX(
+      clearCoatNormal,
+      viewDirection,
+      directLight.direction,
+      clearCoatF0,
+      clearCoatRoughness
+    );
+  outgoingRadiance +=
+    directLight.radiance *
+    dotNL *
+    BRDF_Specular_GGX(
+      normal,
+      viewDirection,
+      directLight.direction,
+      specularF0,
+      specularRoughness
+    );
+  outgoingRadiance +=
+    directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
-  outputColor.rgb = linearTosRGB( outgoingRadiance );
-  outputColor.a = 1.;
+  outputColor.rgb = linearTosRGB(outgoingRadiance);
+  outputColor.a = 1.0;
 
 }

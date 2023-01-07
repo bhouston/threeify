@@ -9,10 +9,9 @@ uniform float alpha;
 out vec4 outputColor;
 
 void main() {
-
   outputColor = texture(map, v_uv);
   outputColor.a *= alpha;
-  if( premultipliedAlpha == 1 ) {
+  if (premultipliedAlpha == 1) {
     outputColor.xyz *= outputColor.a;
   }
 

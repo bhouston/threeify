@@ -4,7 +4,7 @@ in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;
 
-#define MAX_PUNCTUAL_LIGHTS 4
+#define MAX_PUNCTUAL_LIGHTS (4)
 uniform int numPunctualLights;
 uniform int punctualLightType[MAX_PUNCTUAL_LIGHTS];
 uniform vec3 punctualLightViewPosition[MAX_PUNCTUAL_LIGHTS];
@@ -27,24 +27,26 @@ out vec4 outputColor;
 #pragma include <normals/tangentSpace>
 
 void main() {
-
-  vec3 albedo = sRGBToLinear( texture(albedoMap, v_uv0).rgb );
-  vec3 specular = vec3(.5);
-  float specularRoughness = .25;
-  vec3 specularF0 = specularIntensityToF0( specular );
+  vec3 albedo = sRGBToLinear(texture(albedoMap, v_uv0).rgb);
+  vec3 specular = vec3(0.5);
+  float specularRoughness = 0.25;
+  vec3 specularF0 = specularIntensityToF0(specular);
 
   vec3 position = v_viewSurfacePosition;
-  vec3 normal = normalize( v_viewSurfaceNormal );
-  vec3 viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 normal = normalize(v_viewSurfaceNormal);
+  vec3 viewDirection = normalize(-v_viewSurfacePosition);
 
-  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV(
+    position,
+    normal,
+    v_uv0
+  );
   normal = tangentToView[2];
 
   vec3 outgoingRadiance;
 
-  for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i ++ ) {
-
-    if( i >= numPunctualLights ) break;
+  for (int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++) {
+    if (i >= numPunctualLights) break;
 
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
@@ -56,26 +58,34 @@ void main() {
     punctualLight.outerConeCos = punctualLightOuterCos[i];
 
     DirectLight directLight;
-    if( punctualLight.type == 0 ) {
-      pointLightToDirectLight( position, punctualLight, directLight );
+    if (punctualLight.type == 0) {
+      pointLightToDirectLight(position, punctualLight, directLight);
     }
-    if( punctualLight.type == 1 ) {
-      spotLightToDirectLight( position, punctualLight, directLight );
+    if (punctualLight.type == 1) {
+      spotLightToDirectLight(position, punctualLight, directLight);
     }
-    if( punctualLight.type == 2 ) {
-      directionalLightToDirectLight( punctualLight, directLight );
+    if (punctualLight.type == 2) {
+      directionalLightToDirectLight(punctualLight, directLight);
     }
 
-    float dotNL = saturate( dot( directLight.direction, normal ) );
+    float dotNL = saturate(dot(directLight.direction, normal));
 
-    outgoingRadiance += directLight.radiance * dotNL *
-      BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness ) ;
-    outgoingRadiance += directLight.radiance * dotNL *
-      BRDF_Diffuse_Lambert( albedo );
+    outgoingRadiance +=
+      directLight.radiance *
+      dotNL *
+      BRDF_Specular_GGX(
+        normal,
+        viewDirection,
+        directLight.direction,
+        specularF0,
+        specularRoughness
+      );
+    outgoingRadiance +=
+      directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   }
 
-  outputColor.rgb = linearTosRGB( outgoingRadiance );
-  outputColor.a = 1.;
+  outputColor.rgb = linearTosRGB(outgoingRadiance);
+  outputColor.a = 1.0;
 
 }

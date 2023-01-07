@@ -10,10 +10,11 @@ out vec3 v_viewNormal;
 out vec3 v_localNormal;
 
 void main() {
-
-  v_localNormal = normalize( position );
-  v_viewNormal = normalize( ( worldToView * localToWorld * vec4( normalize( position ), 0. ) ).xyz );
-  v_viewPosition = ( worldToView * localToWorld * vec4( position, 1. ) ).xyz;
-  gl_Position = viewToScreen * vec4( v_viewPosition, 1. );
+  v_localNormal = normalize(position);
+  v_viewNormal = normalize(
+    (worldToView * localToWorld * vec4(normalize(position), 0.0)).xyz
+  );
+  v_viewPosition = (worldToView * localToWorld * vec4(position, 1.0)).xyz;
+  gl_Position = viewToScreen * vec4(v_viewPosition, 1.0);
 
 }

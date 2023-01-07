@@ -10,10 +10,9 @@ uniform int faceIndex;
 #pragma include <cubemaps/latLong>
 
 void main() {
+  vec3 direction = cubeFaceUVToDirection(faceIndex, v_uv);
+  vec2 equirectangularUv = directionToLatLongUV(direction);
 
-  vec3 direction = cubeFaceUVToDirection( faceIndex, v_uv );
-  vec2 equirectangularUv = directionToLatLongUV( direction );
-
-  gl_FragColor = texture( map, equirectangularUv );
+  gl_FragColor = texture(map, equirectangularUv);
 
 }

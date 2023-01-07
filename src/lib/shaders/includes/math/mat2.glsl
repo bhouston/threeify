@@ -1,19 +1,19 @@
 #pragma once
 
 mat2 mat2Identity() {
-  return mat2( 1., 0., 0., 1. );
+  return mat2(1.0, 0.0, 0.0, 1.0);
 }
 
-mat2 mat2RotateDirection( const in vec2 dir ){
-  return mat2( dir.x, -dir.y, dir.y, dir.x );
+mat2 mat2RotateDirection(const vec2 dir) {
+  return mat2(dir.x, -dir.y, dir.y, dir.x);
 }
 
 // validated - this is the same as the TS makeMatrix3RotationFromAngle
-mat2 mat2Rotate( const in float angle ){
-  return mat2RotateDirection( vec2( cos(angle), sin(angle) ) );
+mat2 mat2Rotate(const float angle) {
+  return mat2RotateDirection(vec2(cos(angle), sin(angle)));
 }
 
 // validated - this is the same as the TS makeMatrix3Scale
-mat2 mat2Scale( const in vec2 scale ){
-  return mat2( scale.x, 0., scale.y, 0 );
+mat2 mat2Scale(const vec2 scale) {
+  return mat2(scale.x, 0.0, scale.y, 0);
 }

@@ -26,25 +26,39 @@ out vec4 outputColor;
 #pragma include <materials/outputChannels>
 
 void main() {
-
   OutputChannels outputChannels;
 
   outputChannels.alpha = 1.0;
-  vec3 albedo = outputChannels.albedo = mix( vec3(0.2), vec3( 1., 0., 0. ), normalScale.y );
-  vec3 specular = vec3(1.);
+  vec3 albedo = outputChannels.albedo = mix(
+    vec3(0.2),
+    vec3(1.0, 0.0, 0.0),
+    normalScale.y
+  );
+  vec3 specular = vec3(1.0);
   float specularRoughness = 0.25;
-  vec3 specularF0 = specularIntensityToF0( specular );
-  vec3 normalDelta = normalize( rgbToNormal( texture( normalMap, vec2(1.0)-v_uv0 ).rgb ) * vec3( normalScale, 1. ) );
+  vec3 specularF0 = specularIntensityToF0(specular);
+  vec3 normalDelta = normalize(
+    rgbToNormal(texture(normalMap, vec2(1.0) - v_uv0).rgb) *
+      vec3(normalScale, 1.0)
+  );
   outputChannels.metalness = 0.0;
   outputChannels.roughness = specularRoughness;
 
   vec3 position = v_viewSurfacePosition;
-  vec3 normal = normalize( v_viewSurfaceNormal );
-  vec3 viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 normal = normalize(v_viewSurfaceNormal);
+  vec3 viewDirection = normalize(-v_viewSurfacePosition);
 
-  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV(
+    position,
+    normal,
+    v_uv0
+  );
   // warning, non-orthogonal matrix
-  tangentToView *= mat3( vec3( 1., 0., 0. ), vec3( 0., 1., 0. ), normalize( normalDelta ) );
+  tangentToView *= mat3(
+    vec3(1.0, 0.0, 0.0),
+    vec3(0.0, 1.0, 0.0),
+    normalize(normalDelta)
+  );
   normal = tangentToView[2];
 
   outputChannels.normal = normal;
@@ -56,22 +70,35 @@ void main() {
   punctualLight.range = pointLightRange;
 
   DirectLight directLight;
-  pointLightToDirectLight( position, punctualLight, directLight );
+  pointLightToDirectLight(position, punctualLight, directLight);
 
-  float dotNL = saturate( dot( directLight.direction, normal ) );
+  float dotNL = saturate(dot(directLight.direction, normal));
 
   vec3 outputDiffuse;
   vec3 outputSpecular;
   vec3 outputRadiance;
-  outputRadiance += outputChannels.specular = directLight.radiance * dotNL *
-    BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness );
-  outputRadiance += outputChannels.diffuse = directLight.radiance * dotNL *
-    BRDF_Diffuse_Lambert( albedo );
+  outputRadiance += outputChannels.specular =
+    directLight.radiance *
+    dotNL *
+    BRDF_Specular_GGX(
+      normal,
+      viewDirection,
+      directLight.direction,
+      specularF0,
+      specularRoughness
+    );
+  outputRadiance += outputChannels.diffuse =
+    directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
-  outputChannels.beauty = linearTosRGB( outputRadiance );
+  outputChannels.beauty = linearTosRGB(outputRadiance);
 
-  int newFragmentOutputs = int( mod(( -gl_FragCoord.x * 3. + gl_FragCoord.y ) * 0.002 + float( time ) / 3000., 13. ) );
+  int newFragmentOutputs = int(
+    mod(
+      (-gl_FragCoord.x * 3.0 + gl_FragCoord.y) * 0.002 + float(time) / 3000.0,
+      13.0
+    )
+  );
 
-  writeOutputChannels( outputChannels, newFragmentOutputs );
+  writeOutputChannels(outputChannels, newFragmentOutputs);
 
 }

@@ -24,17 +24,20 @@ out vec4 outputColor;
 #pragma include <normals/tangentSpace>
 
 void main() {
-
-  vec3 albedo = sRGBToLinear( texture(albedoMap, v_uv0).rgb );
-  vec3 specular = vec3(.5);
-  float specularRoughness = .25;
-  vec3 specularF0 = specularIntensityToF0( specular );
+  vec3 albedo = sRGBToLinear(texture(albedoMap, v_uv0).rgb);
+  vec3 specular = vec3(0.5);
+  float specularRoughness = 0.25;
+  vec3 specularF0 = specularIntensityToF0(specular);
 
   vec3 position = v_viewSurfacePosition;
-  vec3 normal = normalize( v_viewSurfaceNormal );
-  vec3 viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 normal = normalize(v_viewSurfaceNormal);
+  vec3 viewDirection = normalize(-v_viewSurfacePosition);
 
-  mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV(
+    position,
+    normal,
+    v_uv0
+  );
 
   PunctualLight punctualLight;
   punctualLight.position = spotLightViewPosition;
@@ -45,17 +48,25 @@ void main() {
   punctualLight.outerConeCos = spotLightOuterCos;
 
   DirectLight directLight;
-  spotLightToDirectLight( position, punctualLight, directLight );
+  spotLightToDirectLight(position, punctualLight, directLight);
 
-  float dotNL = saturate( dot( directLight.direction, normal ) );
+  float dotNL = saturate(dot(directLight.direction, normal));
 
   vec3 outgoingRadiance;
-  outgoingRadiance += directLight.radiance * dotNL *
-    BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularRoughness ) ;
-  outgoingRadiance += directLight.radiance * dotNL *
-    BRDF_Diffuse_Lambert( albedo );
+  outgoingRadiance +=
+    directLight.radiance *
+    dotNL *
+    BRDF_Specular_GGX(
+      normal,
+      viewDirection,
+      directLight.direction,
+      specularF0,
+      specularRoughness
+    );
+  outgoingRadiance +=
+    directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
-  outputColor.rgb = linearTosRGB( outgoingRadiance );
-  outputColor.a = 1.;
+  outputColor.rgb = linearTosRGB(outgoingRadiance);
+  outputColor.a = 1.0;
 
 }

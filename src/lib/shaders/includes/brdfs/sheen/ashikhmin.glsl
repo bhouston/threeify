@@ -12,20 +12,20 @@
 
 // f_sheen
 vec3 BRDF_Sheen_Ashikhmin(
-  const in vec3 normal,
-  const in vec3 viewDirection,
-  const in vec3 lightDirection,
-  const in vec3 sheenColor,
-  const in float sheenIntensity,
-  const in float sheenRoughness ) {
-    
-	vec3 halfDirection = normalize( lightDirection + viewDirection );
+  const vec3 normal,
+  const vec3 viewDirection,
+  const vec3 lightDirection,
+  const vec3 sheenColor,
+  const float sheenIntensity,
+  const float sheenRoughness
+) {
+  vec3 halfDirection = normalize(lightDirection + viewDirection);
 
-  sheenRoughness = clamp( sheenRoughness, 0.07, 1. );
+  sheenRoughness = clamp(sheenRoughness, 0.07, 1.0);
 
-	float NdotL = saturate( dot( normal, lightDirection ) );
-	float NdotV = saturate( dot( normal, viewDirection ) );
-	float NdotH = saturate( dot( normal, halfDirection ) );
+  float NdotL = saturate(dot(normal, lightDirection));
+  float NdotV = saturate(dot(normal, viewDirection));
+  float NdotH = saturate(dot(normal, halfDirection));
 
   float sheenDistribution = D_Ashikhmin(sheenRoughness, NdotH);
   float sheenVisibility = V_Ashikhmin(NdotL, NdotV);
