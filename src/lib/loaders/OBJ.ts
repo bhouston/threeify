@@ -1,5 +1,8 @@
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
-import { Geometry } from '../Geometry.js';
+import {
+  makeFloat32Attribute,
+  makeUint32Attribute
+} from '../geometry/Attribute.js';
+import { Geometry } from '../geometry/Geometry.js';
 
 export async function fetchOBJ(url: string): Promise<Geometry[]> {
   const response = await fetch(url);
@@ -17,6 +20,7 @@ const vRegexp = /^v +([\d+.-]+) +([\d+.-]+) +([\d+.-]+)/;
 const vnRegexp = /^vn +([\d+.-]+) +([\d+.-]+) +([\d+.-]+)/;
 const vtRegexp = /^vt +([\d+.-]+) +([\d+.-]+)/;
 const fRegexp =
+  // eslint-disable-next-line unicorn/no-unsafe-regex
   /^f( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))?/;
 
 // not yet supported
