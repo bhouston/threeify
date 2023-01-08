@@ -653,7 +653,7 @@ export function decomposeMatrix4(
   position: Vector3,
   rotation: Quaternion,
   scale: Vector3
-): Matrix4 {
+): { position: Vector3; rotation: Quaternion; scale: Vector3 } {
   const te = m.elements;
 
   let sx = new Vector3(te[0], te[1], te[2]).length();
@@ -670,7 +670,7 @@ export function decomposeMatrix4(
   position.z = te[14];
 
   // scale the rotation part
-  const m2 = new Matrix4().copy(m);
+  const m2 = m.clone();
 
   const invSX = 1 / sx;
   const invSY = 1 / sy;
@@ -695,7 +695,7 @@ export function decomposeMatrix4(
   scale.y = sy;
   scale.z = sz;
 
-  return m;
+  return { position, rotation, scale };
 }
 
 // TODO: Replace with a Box2

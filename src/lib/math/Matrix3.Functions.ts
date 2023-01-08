@@ -146,3 +146,57 @@ export function makeMatrix3RotationFromAngle(
 export function makeMatrix3Scale(s: Vector2, result = new Matrix3()): Matrix3 {
   return result.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1);
 }
+
+export function composeMatrix3(
+  translation: Vector2,
+  rotation: number,
+  scale: Vector2,
+  result = new Matrix3()
+): Matrix3 {
+  const te = result.elements;
+
+  const c = Math.cos(rotation);
+  const s = Math.sin(rotation);
+
+  te[0] = c * scale.x;
+  te[1] = -s * scale.y;
+  te[2] = translation.x;
+
+  te[3] = s * scale.x;
+  te[4] = c * scale.y;
+  te[5] = translation.y;
+
+  te[6] = 0;
+  te[7] = 0;
+  te[8] = 1;
+
+  return result;
+}
+
+export function decomposeMatrix3(
+  m: Matrix3,
+  translation = new Vector2(),
+  rotation = 0,
+  scale = new Vector2()
+): { translation: Vector2; rotation: number; scale: Vector2 } {
+  const te = m.elements;
+
+  let sx = new Vector2(te[0], te[1]).length();
+  const sy = new Vector2(te[3], te[4]).length();
+
+  // if determine is negative, we need to invert one scale
+  const det = matrix3Determinant(m);
+  if (det < 0) {
+    sx = -sx;
+  }
+
+  translation.x = te[2];
+  translation.y = te[5];
+
+  rotation = Math.atan2(-te[1] / sy, te[4] / sy);
+
+  scale.x = sx;
+  scale.y = sy;
+
+  return { translation, rotation, scale };
+}
