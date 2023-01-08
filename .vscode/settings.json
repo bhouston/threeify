@@ -8,6 +8,7 @@
   "editor.formatOnSave": false,
   "editor.formatOnPaste": true,
   "cSpell.words": [
+    "clearcoat",
     "GLTF",
     "interruptible",
     "lerp",

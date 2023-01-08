@@ -6,7 +6,7 @@
 //
 
 import { generateUUID } from '../core/generateUuid.js';
-import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
+import { IDisposable, IIdentifiable } from '../core/types.js';
 import { Euler3 } from '../math/Euler3.js';
 import {
   composeMatrix4,
@@ -17,7 +17,7 @@ import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
 import { Vector3 } from '../math/Vector3.js';
 import { NodeCollection } from './NodeCollection.js';
 
-export class Node implements IIdentifiable, IVersionable, IDisposable {
+export class Node implements IIdentifiable, IDisposable {
   disposed = false;
   readonly uuid: string = generateUUID();
   version = 0;
@@ -29,80 +29,25 @@ export class Node implements IIdentifiable, IVersionable, IDisposable {
   scale: Vector3 = new Vector3(1, 1, 1);
   visible = true;
 
-  #parentToLocalVersion = -1;
-  #parentToLocal: Matrix4 = new Matrix4();
-  #localToParentVersion = -1;
-  #localToParent: Matrix4 = new Matrix4();
-  // TODO: implement this one this.parent works!
-  #localToWorldTransform: Matrix4 = new Matrix4();
-  // TODO: implement this one this.parent works!
-  #worldToLocalTransform: Matrix4 = new Matrix4();
-
   constructor() {
     this.children = new NodeCollection(this);
-  }
-
-  dirty(): void {
-    this.version++;
   }
 
   dispose(): void {
     if (!this.disposed) {
       this.disposed = true;
-      this.dirty();
     }
   }
 
   get localToParentTransform(): Matrix4 {
-    if (this.#parentToLocalVersion !== this.version) {
-      this.#localToParent = composeMatrix4(
-        this.position,
-        makeQuaternionFromEuler(this.rotation),
-        this.scale,
-        this.#localToParent
-      );
-      this.#parentToLocalVersion = this.version;
-    }
-    return this.#localToParent;
+    return composeMatrix4(
+      this.position,
+      makeQuaternionFromEuler(this.rotation),
+      this.scale
+    );
   }
 
   get parentToLocalTransform(): Matrix4 {
-    if (this.#localToParentVersion !== this.version) {
-      makeMatrix4Inverse(this.localToParentTransform, this.#parentToLocal);
-      this.#localToParentVersion = this.version;
-    }
-    return this.#localToParent;
+    return makeMatrix4Inverse(this.localToParentTransform);
   }
-}
-
-// visitors
-
-export function depthFirstVisitor(
-  node: Node,
-  callback: (node: Node) => void
-): void {
-  node.children.forEach((child) => {
-    depthFirstVisitor(child, callback);
-  });
-  callback(node);
-}
-
-export function rootLastVisitor(
-  node: Node,
-  callback: (node: Node) => void
-): void {
-  callback(node);
-  if (node.parent !== undefined) {
-    rootLastVisitor(node.parent, callback);
-  }
-}
-
-export function rootFirstVisitor(
-  node: Node,
-  callback: (node: Node) => void
-): void {
-  if (node.parent !== undefined) {
-    rootFirstVisitor(node.parent, callback);
-  }
-  callback(node);
 }
