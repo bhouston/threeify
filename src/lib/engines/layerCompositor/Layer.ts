@@ -1,46 +1,46 @@
 import {
-  makeMatrix3Concatenation,
-  makeMatrix3Scale,
-  makeMatrix3Translation
-} from '../../math/Matrix3.Functions.js';
-import { Matrix3 } from '../../math/Matrix3.js';
+  makeMat3Concatenation,
+  makeMat3Scale,
+  makeMat3Translation
+} from '../../math/Mat3.Functions.js';
+import { Mat3 } from '../../math/Mat3.js';
 import {
-  makeMatrix4Concatenation,
-  makeMatrix4Scale,
-  makeMatrix4Translation
-} from '../../math/Matrix4.Functions.js';
-import { Matrix4 } from '../../math/Matrix4.js';
-import { Vector2 } from '../../math/Vector2.js';
-import { Vector3 } from '../../math/Vector3.js';
+  makeMat4Concatenation,
+  makeMat4Scale,
+  makeMat4Translation
+} from '../../math/Mat4.Functions.js';
+import { Mat4 } from '../../math/Mat4.js';
+import { Vec2 } from '../../math/Vec2.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D.js';
 import { LayerCompositor } from './LayerCompositor.js';
 
 export class Layer {
   disposed = false;
-  planeToImage: Matrix4;
-  uvToTexture: Matrix3;
+  planeToImage: Mat4;
+  uvToTexture: Mat3;
 
   constructor(
     public compositor: LayerCompositor,
     public url: string,
     public texImage2D: TexImage2D,
-    public offset: Vector2,
-    public uvScaleFactor = new Vector2(1, -1),
-    public uvOffset = new Vector2(0, 1)
+    public offset: Vec2,
+    public uvScaleFactor = new Vec2(1, -1),
+    public uvOffset = new Vec2(0, 1)
   ) {
     // console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
 
     // world space is assumed to be in layer pixel space
-    const planeToLayer = makeMatrix4Scale(
-      new Vector3(this.texImage2D.size.width, this.texImage2D.size.height, 1)
+    const planeToLayer = makeMat4Scale(
+      new Vec3(this.texImage2D.size.width, this.texImage2D.size.height, 1)
     );
-    const layerToImage = makeMatrix4Translation(
-      new Vector3(this.offset.x, this.offset.y, 0)
+    const layerToImage = makeMat4Translation(
+      new Vec3(this.offset.x, this.offset.y, 0)
     );
-    this.planeToImage = makeMatrix4Concatenation(layerToImage, planeToLayer);
+    this.planeToImage = makeMat4Concatenation(layerToImage, planeToLayer);
 
-    const uvScale = makeMatrix3Scale(this.uvScaleFactor);
-    const uvTranslation = makeMatrix3Translation(this.uvOffset);
-    this.uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
+    const uvScale = makeMat3Scale(this.uvScaleFactor);
+    const uvTranslation = makeMat3Translation(this.uvOffset);
+    this.uvToTexture = makeMat3Concatenation(uvTranslation, uvScale);
   }
 }

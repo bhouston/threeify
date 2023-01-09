@@ -12,7 +12,7 @@ import {
 import {
   linearToRgbdArray,
   rgbeToLinearArray
-} from '../../math/Vector4.Functions.js';
+} from '../../math/Vec4.Functions.js';
 import { DataType } from '../../renderers/webgl/textures/DataType.js';
 import { ArrayBufferImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';

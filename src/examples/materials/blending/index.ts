@@ -6,19 +6,19 @@ import {
   fetchImage,
   fetchImageElement,
   makeBufferGeometryFromGeometry,
-  makeMatrix4Concatenation,
-  makeMatrix4Scale,
-  makeMatrix4Translation,
+  makeMat4Concatenation,
+  makeMat4Scale,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector2,
-  Vector3
+  Vec2,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -28,7 +28,7 @@ async function init(): Promise<null> {
   const fgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/fg.svg',
-      new Vector2(1024, 1024)
+      new Vec2(1024, 1024)
     )
   );
   const fgSplatTexture = new Texture(
@@ -37,7 +37,7 @@ async function init(): Promise<null> {
   const bgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/bg.svg',
-      new Vector2(1024, 1024)
+      new Vec2(1024, 1024)
     )
   );
 
@@ -53,13 +53,13 @@ async function init(): Promise<null> {
 
   const program = makeProgramFromShaderMaterial(context, material);
   const bgUniforms = {
-    localToWorld: new Matrix4(),
+    localToWorld: new Mat4(),
     premultipliedAlpha: 0,
     alpha: 1,
     map: bgMap
   };
   const fgUniforms = {
-    localToWorld: new Matrix4(),
+    localToWorld: new Mat4(),
     premultipliedAlpha: 0,
     alpha: 1,
     map: fgMap
@@ -77,8 +77,8 @@ async function init(): Promise<null> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
-  const blackClearState = new ClearState(new Vector3(0, 0, 0), 1);
-  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1);
+  const blackClearState = new ClearState(new Vec3(0, 0, 0), 1);
+  const whiteClearState = new ClearState(new Vec3(1, 1, 1), 1);
 
   function animate(): void {
     const time = Date.now();
@@ -92,12 +92,12 @@ async function init(): Promise<null> {
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {
       fgMaps.forEach((fgMap, mIndex) => {
         blendings.forEach((blending, bIndex) => {
-          let localToWorld = makeMatrix4Translation(
-            new Vector3(-0.5 + bIndex / 4, (pIndex + mIndex * 2) / 4, 0)
+          let localToWorld = makeMat4Translation(
+            new Vec3(-0.5 + bIndex / 4, (pIndex + mIndex * 2) / 4, 0)
           );
-          localToWorld = makeMatrix4Concatenation(
+          localToWorld = makeMat4Concatenation(
             localToWorld,
-            makeMatrix4Scale(new Vector3(0.25, 0.25, 0))
+            makeMat4Scale(new Vec3(0.25, 0.25, 0))
           );
 
           bgUniforms.localToWorld = localToWorld;

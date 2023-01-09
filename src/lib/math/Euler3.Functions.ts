@@ -1,11 +1,11 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
 import { clamp } from './Functions.js';
-import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions.js';
-import { Matrix4 } from './Matrix4.js';
+import { makeMat4RotationFromQuaternion } from './Mat4.Functions.js';
+import { Mat4 } from './Mat4.js';
 import { Quaternion } from './Quaternion.js';
 
-export function makeEulerFromRotationMatrix4(
-  m: Matrix4,
+export function makeEulerFromRotationMat4(
+  m: Mat4,
   order: EulerOrder3 = EulerOrder3.Default,
   result = new Euler3()
 ): Euler3 {
@@ -114,6 +114,6 @@ export function makeEulerFromQuaternion(
   order: EulerOrder3,
   result = new Euler3()
 ): Euler3 {
-  const m = makeMatrix4RotationFromQuaternion(q);
-  return makeEulerFromRotationMatrix4(m, order, result);
+  const m = makeMat4RotationFromQuaternion(q);
+  return makeEulerFromRotationMat4(m, order, result);
 }

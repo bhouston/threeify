@@ -1,5 +1,5 @@
 //
-// based on Matrix4 from Three.js
+// based on Mat4 from Three.js
 //
 // Authors:
 // * @bhouston
@@ -8,7 +8,7 @@
 import { hashFloatArray } from '../core/hash.js';
 import { IPrimitive } from './IPrimitive.js';
 
-export class Matrix4 implements IPrimitive<Matrix4> {
+export class Mat4 implements IPrimitive<Mat4> {
   elements: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
   getHashCode(): number {
@@ -55,11 +55,11 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     return this;
   }
 
-  clone(): Matrix4 {
-    return new Matrix4().copy(this);
+  clone(): Mat4 {
+    return new Mat4().copy(this);
   }
 
-  copy(m: Matrix4): this {
+  copy(m: Mat4): this {
     const me = m.elements;
     return this.set(
       me[0],
@@ -118,7 +118,7 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     return this.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
   }
 
-  equals(m: Matrix4): boolean {
+  equals(m: Mat4): boolean {
     for (let i = 0; i < 16; i++) {
       if (m.elements[i] !== this.elements[i]) {
         return false;
@@ -128,13 +128,13 @@ export class Matrix4 implements IPrimitive<Matrix4> {
     return true;
   }
 
-  setFromArray(array: Float32Array, offset: number): void {
+  setFromArray(array: Float32Array, offset = 0): void {
     for (let i = 0; i < this.elements.length; i++) {
       this.elements[i] = array[offset + i];
     }
   }
 
-  toArray(array: Float32Array, offset: number): void {
+  toArray(array: Float32Array, offset = 0): void {
     for (let i = 0; i < this.elements.length; i++) {
       array[offset + i] = this.elements[i];
     }

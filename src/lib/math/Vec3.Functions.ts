@@ -1,38 +1,38 @@
 import { Spherical } from './Spherical.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export function crossFromCoplanarPoints(
-  a: Vector3,
-  b: Vector3,
-  c: Vector3,
-  result = new Vector3()
-): Vector3 {
-  // TODO: replace with just number math, no classes?  Or just use temporary Vector3 objects
+  a: Vec3,
+  b: Vec3,
+  c: Vec3,
+  result = new Vec3()
+): Vec3 {
+  // TODO: replace with just number math, no classes?  Or just use temporary Vec3 objects
   result.copy(c).sub(b);
   const v = a.clone().sub(b);
   return result.cross(v);
 }
 
-export function makeVector3FromDelta(
-  a: Vector3,
-  b: Vector3,
-  result = new Vector3()
-): Vector3 {
+export function makeVec3FromDelta(
+  a: Vec3,
+  b: Vec3,
+  result = new Vec3()
+): Vec3 {
   return result.copy(a).sub(b);
 }
 
-export function makeVector3FromSpherical(s: Spherical): Vector3 {
-  return makeVector3FromSphericalCoords(s.radius, s.phi, s.theta);
+export function makeVec3FromSpherical(s: Spherical): Vec3 {
+  return makeVec3FromSphericalCoords(s.radius, s.phi, s.theta);
 }
 
-export function makeVector3FromSphericalCoords(
+export function makeVec3FromSphericalCoords(
   radius: number,
   phi: number,
   theta: number
-): Vector3 {
+): Vec3 {
   const sinPhiRadius = Math.sin(phi) * radius;
 
-  return new Vector3(
+  return new Vec3(
     sinPhiRadius * Math.sin(theta),
     Math.cos(phi) * radius,
     sinPhiRadius * Math.cos(theta)
@@ -42,15 +42,15 @@ export function makeVector3FromSphericalCoords(
 // static/instance method to calculate barycentric coordinates
 // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
 export function pointToBaryCoords(
-  a: Vector3,
-  b: Vector3,
-  c: Vector3,
-  point: Vector3,
-  result = new Vector3()
-): Vector3 {
-  const v0 = makeVector3FromDelta(c, b);
-  const v1 = makeVector3FromDelta(b, a);
-  const v2 = makeVector3FromDelta(point, a);
+  a: Vec3,
+  b: Vec3,
+  c: Vec3,
+  point: Vec3,
+  result = new Vec3()
+): Vec3 {
+  const v0 = makeVec3FromDelta(c, b);
+  const v1 = makeVec3FromDelta(b, a);
+  const v2 = makeVec3FromDelta(point, a);
 
   const dot00 = v0.dot(v0);
   const dot01 = v0.dot(v1);
@@ -75,13 +75,13 @@ export function pointToBaryCoords(
   return result.set(1 - u - v, v, u);
 }
 
-export function makeVector3FromBaryCoordWeights(
-  baryCoord: Vector3,
-  a: Vector3,
-  b: Vector3,
-  c: Vector3,
-  result = new Vector3()
-): Vector3 {
+export function makeVec3FromBaryCoordWeights(
+  baryCoord: Vec3,
+  a: Vec3,
+  b: Vec3,
+  c: Vec3,
+  result = new Vec3()
+): Vec3 {
   const v = baryCoord;
   return result.set(
     a.x * v.x + b.x * v.y + c.x * v.z,

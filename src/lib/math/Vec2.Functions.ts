@@ -1,13 +1,13 @@
-import { Vector2 } from './Vector2.js';
-import { Vector3 } from './Vector3.js';
+import { Vec2 } from './Vec2.js';
+import { Vec3 } from './Vec3.js';
 
-export function makeVector2FromBaryCoordWeights(
-  baryCoord: Vector3,
-  a: Vector2,
-  b: Vector2,
-  c: Vector2,
-  result = new Vector2()
-): Vector2 {
+export function makeVec2FromBaryCoordWeights(
+  baryCoord: Vec3,
+  a: Vec2,
+  b: Vec2,
+  c: Vec2,
+  result = new Vec2()
+): Vec2 {
   const v = baryCoord;
   return result.set(
     a.x * v.x + b.x * v.y + c.x * v.z,
@@ -15,11 +15,11 @@ export function makeVector2FromBaryCoordWeights(
   );
 }
 
-export function makeVector2Fit(
-  frame: Vector2,
-  target: Vector2,
-  result = new Vector2()
-): Vector2 {
+export function makeVec2Fit(
+  frame: Vec2,
+  target: Vec2,
+  result = new Vec2()
+): Vec2 {
   result.copy(target);
   const fitScale = Math.min(
     frame.width / result.width,
@@ -29,22 +29,22 @@ export function makeVector2Fit(
   return result;
 }
 
-export function makeVector2FillHeight(
-  frame: Vector2,
-  target: Vector2,
-  result = new Vector2()
-): Vector2 {
+export function makeVec2FillHeight(
+  frame: Vec2,
+  target: Vec2,
+  result = new Vec2()
+): Vec2 {
   result.copy(target);
   const fitScale = frame.height / result.height;
   result.multiplyByScalar(fitScale);
   return result;
 }
 
-export function makeVector2Fill(
-  frame: Vector2,
-  target: Vector2,
-  result = new Vector2()
-): Vector2 {
+export function makeVec2Fill(
+  frame: Vec2,
+  target: Vec2,
+  result = new Vec2()
+): Vec2 {
   result.copy(target);
   const fitScale = Math.max(
     frame.width / result.width,

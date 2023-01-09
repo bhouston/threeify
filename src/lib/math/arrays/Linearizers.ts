@@ -1,9 +1,9 @@
 import { Color3 } from '../Color3.js';
-import { Matrix3 } from '../Matrix3.js';
-import { Matrix4 } from '../Matrix4.js';
+import { Mat3 } from '../Mat3.js';
+import { Mat4 } from '../Mat4.js';
 import { Quaternion } from '../Quaternion.js';
-import { Vector2 } from '../Vector2.js';
-import { Vector3 } from '../Vector3.js';
+import { Vec2 } from '../Vec2.js';
+import { Vec3 } from '../Vec3.js';
 
 export function linearizeNumberInt32Array(array: number[]): Int32Array {
   const result = new Int32Array(array.length);
@@ -31,7 +31,7 @@ export function linearizeColor3FloatArray(array: Color3[]): Float32Array {
   return result;
 }
 
-export function linearizeVector2FloatArray(array: Vector2[]): Float32Array {
+export function linearizeVec2FloatArray(array: Vec2[]): Float32Array {
   const result = new Float32Array(array.length * 2);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 2);
@@ -39,7 +39,7 @@ export function linearizeVector2FloatArray(array: Vector2[]): Float32Array {
   return result;
 }
 
-export function linearizeVector3FloatArray(array: Vector3[]): Float32Array {
+export function linearizeVec3FloatArray(array: Vec3[]): Float32Array {
   const result = new Float32Array(array.length * 3);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 3);
@@ -57,7 +57,7 @@ export function linearizeQuaternionFloatArray(
   return result;
 }
 
-export function linearizeMatrix3FloatArray(array: Matrix3[]): Float32Array {
+export function linearizeMat3FloatArray(array: Mat3[]): Float32Array {
   const result = new Float32Array(array.length * 9);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 9);
@@ -65,7 +65,7 @@ export function linearizeMatrix3FloatArray(array: Matrix3[]): Float32Array {
   return result;
 }
 
-export function linearizeMatrix4FloatArray(array: Matrix4[]): Float32Array {
+export function linearizeMat4FloatArray(array: Mat4[]): Float32Array {
   const result = new Float32Array(array.length * 16);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 16);

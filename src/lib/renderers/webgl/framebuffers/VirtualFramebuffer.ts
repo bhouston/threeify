@@ -7,7 +7,7 @@
 
 import { IDisposable } from '../../../core/types.js';
 import { Box2 } from '../../../math/Box2.js';
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import { Camera } from '../../../nodes/cameras/Camera.js';
 import { Node } from '../../../nodes/Node.js';
 import { BlendState } from '../BlendState.js';
@@ -35,7 +35,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
 
   constructor(public context: RenderingContext) {}
 
-  abstract get size(): Vector2;
+  abstract get size(): Vec2;
 
   clear(
     attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
@@ -91,7 +91,7 @@ export function renderBufferGeometry(
   context.program = program;
   context.program.setUniformValues(uniforms);
   context.program.setAttributeBuffers(bufferGeometry);
-  context.viewport = new Box2(new Vector2(), framebuffer.size);
+  context.viewport = new Box2(new Vec2(), framebuffer.size);
 
   // draw
   const { gl } = context;
@@ -129,7 +129,7 @@ export function renderVertexArrayObject(
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
-  context.viewport = new Box2(new Vector2(), framebuffer.size);
+  context.viewport = new Box2(new Vec2(), framebuffer.size);
 
   // draw
   const { gl } = context;
@@ -157,7 +157,7 @@ export function renderPass(
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
   context.program.setUniformValues(uniforms);
-  context.viewport = new Box2(new Vector2(), framebuffer.size);
+  context.viewport = new Box2(new Vec2(), framebuffer.size);
 
   throw new Error('Not implemented');
   // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.

@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { makeMatrix4OrthographicSimple } from '../../math/Matrix4.Functions.js';
-import { Matrix4 } from '../../math/Matrix4.js';
-import { Vector2 } from '../../math/Vector2.js';
+import { makeMat4OrthographicSimple } from '../../math/Mat4.Functions.js';
+import { Mat4 } from '../../math/Mat4.js';
+import { Vec2 } from '../../math/Vec2.js';
 import { Camera } from './Camera.js';
 
 export class OrthographicCamera extends Camera {
@@ -15,14 +15,14 @@ export class OrthographicCamera extends Camera {
     public height: number,
     public near: number,
     public far: number,
-    public center = new Vector2(),
+    public center = new Vec2(),
     public zoom = 1
   ) {
     super();
   }
 
-  getProjection(viewAspectRatio = 1, result = new Matrix4()): Matrix4 {
-    return makeMatrix4OrthographicSimple(
+  getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {
+    return makeMat4OrthographicSimple(
       this.height,
       this.center,
       this.near,

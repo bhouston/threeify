@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2.js';
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec2 } from '../../math/Vec2.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
 import { Geometry } from '../Geometry.js';
 
@@ -23,8 +23,8 @@ export function diskGeometry(
 
   // helper variables
 
-  const vertex = new Vector3();
-  const uv = new Vector2();
+  const vertex = new Vec3();
+  const uv = new Vec2();
 
   // center point
 

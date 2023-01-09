@@ -1,5 +1,5 @@
 //
-// based on Matrix4 from Three.js
+// based on Mat4 from Three.js
 //
 // Authors:
 // * @bhouston
@@ -11,7 +11,7 @@ import { IPrimitive } from './IPrimitive.js';
 //
 // NOTE: This is a homogeneous matrix, it is not a 3x3 rotation only.
 //
-export class Matrix3 implements IPrimitive<Matrix3> {
+export class Mat3 implements IPrimitive<Mat3> {
   elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
   getHashCode(): number {
@@ -44,11 +44,11 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     return this;
   }
 
-  clone(): Matrix3 {
-    return new Matrix3().copy(this);
+  clone(): Mat3 {
+    return new Mat3().copy(this);
   }
 
-  copy(m: Matrix3): this {
+  copy(m: Mat3): this {
     const te = this.elements;
     const me = m.elements;
 
@@ -97,7 +97,7 @@ export class Matrix3 implements IPrimitive<Matrix3> {
     return this;
   }
 
-  equals(m: Matrix3): boolean {
+  equals(m: Mat3): boolean {
     for (let i = 0; i < 16; i++) {
       if (m.elements[i] !== this.elements[i]) {
         return false;

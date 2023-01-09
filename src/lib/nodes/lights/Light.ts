@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { Node } from '../Node.js';
 import { LightType } from './LightType.js';
 
@@ -16,7 +16,7 @@ export class Light extends Node {
    */
   constructor(
     public readonly type: LightType,
-    public color: Vector3 = new Vector3(1, 1, 1),
+    public color: Vec3 = new Vec3(1, 1, 1),
     public intensity = 1
   ) {
     super();

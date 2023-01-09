@@ -6,17 +6,17 @@ import {
   DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4Translation,
+  makeMat4PerspectiveFov,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector3
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -38,9 +38,9 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: makeMat4Translation(new Vec3(0, 0, -3)),
+    viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -49,9 +49,9 @@ async function init(): Promise<null> {
     ),
 
     // lights
-    spotLightViewPosition: new Vector3(0, 0, 0),
-    spotLightViewDirection: new Vector3(0, 0, -1),
-    spotLightColor: new Vector3(1, 1, 1).multiplyByScalar(10),
+    spotLightViewPosition: new Vec3(0, 0, 0),
+    spotLightViewDirection: new Vec3(0, 0, -1),
+    spotLightColor: new Vec3(1, 1, 1).multiplyByScalar(10),
     spotLightRange: 15,
     spotLightInnerCos: 1,
     spotLightOuterCos: Math.cos(Math.PI * 0.5),
@@ -64,13 +64,13 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
 
-    /* uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    /* uniforms.localToWorld = makeMat4RotationFromEuler(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld,
     ); */
@@ -80,7 +80,7 @@ async function init(): Promise<null> {
     uniforms.spotLightOuterCos =
       uniforms.spotLightInnerCos *
       Math.cos(Math.PI * 0.05 * Math.cos(now * 0.0017));
-    uniforms.spotLightViewPosition = new Vector3(
+    uniforms.spotLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 0.5,
       Math.cos(now * 0.00087) * 0.5,
       1.5

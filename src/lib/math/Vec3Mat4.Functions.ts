@@ -1,11 +1,7 @@
-import { Matrix4 } from './Matrix4.js';
-import { Vector3 } from './Vector3.js';
+import { Mat4 } from './Mat4.js';
+import { Vec3 } from './Vec3.js';
 
-export function transformPoint3(
-  v: Vector3,
-  m: Matrix4,
-  result = new Vector3()
-): Vector3 {
+export function transformPoint3(v: Vec3, m: Mat4, result = new Vec3()): Vec3 {
   const { x } = v;
   const { y } = v;
   const { z } = v;
@@ -20,11 +16,7 @@ export function transformPoint3(
   return result;
 }
 
-export function transformNormal3(
-  v: Vector3,
-  m: Matrix4,
-  result = new Vector3()
-): Vector3 {
+export function transformNormal3(v: Vec3, m: Mat4, result = new Vec3()): Vec3 {
   const { x } = v;
   const { y } = v;
   const { z } = v;

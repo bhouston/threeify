@@ -1,9 +1,9 @@
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export class Sphere {
-  constructor(public center = new Vector3(), public radius = -1) {}
+  constructor(public center = new Vec3(), public radius = -1) {}
 
-  set(center: Vector3, radius: number): this {
+  set(center: Vec3, radius: number): this {
     this.center.copy(center);
     this.radius = radius;
 

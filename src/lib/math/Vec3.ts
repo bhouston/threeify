@@ -1,5 +1,5 @@
 //
-// based on Vector3 from Three.js
+// based on Vec3 from Three.js
 //
 // Authors:
 // * @bhouston
@@ -9,7 +9,7 @@ import { hashFloat3 } from '../core/hash.js';
 import { clamp } from './Functions.js';
 import { IPrimitive } from './IPrimitive.js';
 
-export class Vector3 implements IPrimitive<Vector3> {
+export class Vec3 implements IPrimitive<Vec3> {
   constructor(public x = 0, public y = 0, public z = 0) {}
 
   get width(): number {
@@ -72,15 +72,15 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  clone(): Vector3 {
-    return new Vector3().copy(this);
+  clone(): Vec3 {
+    return new Vec3().copy(this);
   }
 
-  copy(v: Vector3): this {
+  copy(v: Vec3): this {
     return this.set(v.x, v.y, v.z);
   }
 
-  add(v: Vector3): this {
+  add(v: Vec3): this {
     this.x += v.x;
     this.y += v.y;
     this.z += v.z;
@@ -96,7 +96,7 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  sub(v: Vector3): this {
+  sub(v: Vec3): this {
     this.x -= v.x;
     this.y -= v.y;
     this.z -= v.z;
@@ -120,7 +120,7 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  lerp(v: Vector3, alpha: number): this {
+  lerp(v: Vec3, alpha: number): this {
     this.x += (v.x - this.x) * alpha;
     this.y += (v.y - this.y) * alpha;
     this.z += (v.z - this.z) * alpha;
@@ -171,11 +171,11 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  dot(v: Vector3): number {
+  dot(v: Vec3): number {
     return this.x * v.x + this.y * v.y + this.z * v.z;
   }
 
-  cross(v: Vector3): this {
+  cross(v: Vec3): this {
     const ax = this.x;
     const ay = this.y;
     const az = this.z;
@@ -198,18 +198,18 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this.x * this.x + this.y * this.y + this.z * this.z;
   }
 
-  distanceToSquared(v: Vector3): number {
+  distanceToSquared(v: Vec3): number {
     const dx = this.x - v.x;
     const dy = this.y - v.y;
     const dz = this.z - v.z;
     return dx * dx + dy * dy + dz * dz;
   }
 
-  distanceTo(v: Vector3): number {
+  distanceTo(v: Vec3): number {
     return Math.sqrt(this.distanceToSquared(v));
   }
 
-  min(v: Vector3): this {
+  min(v: Vec3): this {
     this.x = Math.min(this.x, v.x);
     this.y = Math.min(this.y, v.y);
     this.z = Math.min(this.z, v.z);
@@ -217,7 +217,7 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  max(v: Vector3): this {
+  max(v: Vec3): this {
     this.x = Math.max(this.x, v.x);
     this.y = Math.max(this.y, v.y);
     this.z = Math.max(this.z, v.z);
@@ -225,7 +225,7 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  clamp(min: Vector3, max: Vector3): this {
+  clamp(min: Vec3, max: Vec3): this {
     this.x = clamp(this.x, min.x, max.x);
     this.y = clamp(this.y, min.y, max.y);
     this.z = clamp(this.z, min.z, max.z);
@@ -233,7 +233,7 @@ export class Vector3 implements IPrimitive<Vector3> {
     return this;
   }
 
-  equals(v: Vector3): boolean {
+  equals(v: Vec3): boolean {
     return v.x === this.x && v.y === this.y && v.z === this.z;
   }
 

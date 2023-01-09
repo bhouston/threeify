@@ -1,13 +1,13 @@
 import { Plane } from './Plane.js';
 import { Sphere } from './Sphere.js';
 import { Triangle3 } from './Triangle3.js';
-import { crossFromCoplanarPoints } from './Vector3.Functions.js';
-import { Vector3 } from './Vector3.js';
+import { crossFromCoplanarPoints } from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 export function makePlaneFromCoplanarPoints(
-  a: Vector3,
-  b: Vector3,
-  c: Vector3,
+  a: Vec3,
+  b: Vec3,
+  c: Vec3,
   result = new Plane()
 ): Plane {
   crossFromCoplanarPoints(a, b, c, result.normal);
@@ -23,8 +23,8 @@ export function makePlaneFromTriangle(
 }
 
 export function makePlaneFromNormalAndCoplanarPoint(
-  normal: Vector3,
-  point: Vector3,
+  normal: Vec3,
+  point: Vec3,
   result: Plane = new Plane()
 ): Plane {
   result.normal.copy(normal);
@@ -32,7 +32,7 @@ export function makePlaneFromNormalAndCoplanarPoint(
   return result;
 }
 
-export function planePointDistance(plane: Plane, point: Vector3): number {
+export function planePointDistance(plane: Plane, point: Vec3): number {
   return plane.normal.dot(point) + plane.constant;
 }
 
@@ -42,10 +42,10 @@ export function planeSphereDistance(plane: Plane, sphere: Sphere): number {
 }
 
 export function projectPointOntoPlane(
-  point: Vector3,
+  point: Vec3,
   plane: Plane,
-  result: Vector3 = new Vector3()
-): Vector3 {
+  result: Vec3 = new Vec3()
+): Vec3 {
   // TODO: Determine if this is even correct
   const v = point.clone();
   return result

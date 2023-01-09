@@ -1,10 +1,10 @@
 import { Attribute } from '../geometry/Attribute.js';
-import { Vector3View } from './arrays/PrimitiveView.js';
+import { Vec3View } from './arrays/PrimitiveView.js';
 import { Box3 } from './Box3.js';
-import { Matrix4 } from './Matrix4.js';
+import { Mat4 } from './Mat4.js';
 import { Sphere } from './Sphere.js';
-import { Vector3 } from './Vector3.js';
-import { transformPoint3 } from './Vector3Matrix4.Functions.js';
+import { Vec3 } from './Vec3.js';
+import { transformPoint3 } from './Vec3Mat4.Functions.js';
 
 export function makeBox3FromArray(
   array: Float32Array,
@@ -62,8 +62,8 @@ export function makeBox3FromAttribute(
   let maxY = Number.NEGATIVE_INFINITY;
   let maxZ = Number.NEGATIVE_INFINITY;
 
-  const v = new Vector3();
-  const vectorView = new Vector3View(attribute);
+  const v = new Vec3();
+  const vectorView = new Vec3View(attribute);
 
   for (let i = 0, l = attribute.count; i < l; i++) {
     vectorView.get(i, v);
@@ -96,7 +96,7 @@ export function makeBox3FromAttribute(
 }
 
 export function makeBox3FromPoints(
-  points: Vector3[],
+  points: Vec3[],
   result = new Box3()
 ): Box3 {
   result.makeEmpty();
@@ -107,8 +107,8 @@ export function makeBox3FromPoints(
 }
 
 export function makeBox3FromCenterAndSize(
-  center: Vector3,
-  size: Vector3,
+  center: Vec3,
+  size: Vec3,
   result = new Box3()
 ): Box3 {
   result.min.set(
@@ -133,7 +133,7 @@ export function makeBox3FromSphereBounds(s: Sphere, result = new Box3()): Box3 {
   return result.expandByScalar(s.radius);
 }
 
-export function box3ContainsPoint(box: Box3, point: Vector3): boolean {
+export function box3ContainsPoint(box: Box3, point: Vec3): boolean {
   return !(
     point.x < box.min.x ||
     point.x > box.max.x ||
@@ -157,13 +157,13 @@ export function box3ContainsBox(box: Box3, queryBox: Box3): boolean {
 
 export function box3ClampPoint(
   box: Box3,
-  point: Vector3,
-  result: Vector3 = new Vector3()
-): Vector3 {
+  point: Vec3,
+  result: Vec3 = new Vec3()
+): Vec3 {
   return result.copy(point).clamp(box.min, box.max);
 }
 
-export function box3DistanceToPoint(box: Box3, point: Vector3): number {
+export function box3DistanceToPoint(box: Box3, point: Vec3): number {
   // TODO: Remove memory allocation
   return point.clone().clamp(box.min, box.max).sub(point).length();
 }
@@ -187,14 +187,14 @@ export function box3Box3Union(a: Box3, b: Box3, result = new Box3()): Box3 {
 }
 
 // TODO: ensure convention for transform<Primitive>() is consistent across types.
-export function transformBox3(b: Box3, m: Matrix4, result = new Box3()): Box3 {
+export function transformBox3(b: Box3, m: Mat4, result = new Box3()): Box3 {
   result.makeEmpty();
   if (b.isEmpty()) {
     return result;
   }
 
   // NOTE: I am using a binary pattern to specify all 2^3 combinations below
-  const v = new Vector3();
+  const v = new Vec3();
 
   result.expandByPoint(transformPoint3(v.set(b.min.x, b.min.y, b.min.z), m, v));
   result.expandByPoint(transformPoint3(v.set(b.min.x, b.min.y, b.max.z), m, v));
@@ -211,7 +211,7 @@ export function transformBox3(b: Box3, m: Matrix4, result = new Box3()): Box3 {
 
 export function translateBox3(
   b: Box3,
-  offset: Vector3,
+  offset: Vec3,
   result = new Box3()
 ): Box3 {
   result.copy(b);

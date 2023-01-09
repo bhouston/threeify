@@ -9,12 +9,12 @@ import { generateUUID } from '../core/generateUuid.js';
 import { IDisposable, IIdentifiable } from '../core/types.js';
 import { Euler3 } from '../math/Euler3.js';
 import {
-  composeMatrix4,
-  makeMatrix4Inverse
-} from '../math/Matrix4.Functions.js';
-import { Matrix4 } from '../math/Matrix4.js';
+  composeMat4,
+  makeMat4Inverse
+} from '../math/Mat4.Functions.js';
+import { Mat4 } from '../math/Mat4.js';
 import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
-import { Vector3 } from '../math/Vector3.js';
+import { Vec3 } from '../math/Vec3.js';
 import { NodeCollection } from './NodeCollection.js';
 
 export class Node implements IIdentifiable, IDisposable {
@@ -24,9 +24,9 @@ export class Node implements IIdentifiable, IDisposable {
   parent: Node | undefined = undefined;
   name = '';
   children: NodeCollection;
-  position: Vector3 = new Vector3();
+  position: Vec3 = new Vec3();
   rotation: Euler3 = new Euler3();
-  scale: Vector3 = new Vector3(1, 1, 1);
+  scale: Vec3 = new Vec3(1, 1, 1);
   visible = true;
 
   constructor() {
@@ -39,15 +39,15 @@ export class Node implements IIdentifiable, IDisposable {
     }
   }
 
-  get localToParentTransform(): Matrix4 {
-    return composeMatrix4(
+  get localToParentTransform(): Mat4 {
+    return composeMat4(
       this.position,
       makeQuaternionFromEuler(this.rotation),
       this.scale
     );
   }
 
-  get parentToLocalTransform(): Matrix4 {
-    return makeMatrix4Inverse(this.localToParentTransform);
+  get parentToLocalTransform(): Mat4 {
+    return makeMat4Inverse(this.localToParentTransform);
   }
 }

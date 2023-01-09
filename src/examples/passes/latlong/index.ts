@@ -3,12 +3,12 @@ import {
   DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4Inverse,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromQuaternion,
+  makeMat4Inverse,
+  makeMat4PerspectiveFov,
+  makeMat4RotationFromQuaternion,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
   Orbit,
   passGeometry,
   renderBufferGeometry,
@@ -60,9 +60,9 @@ async function init(): Promise<null> {
 
   const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
   const passUniforms = {
-    viewToWorld: new Matrix4(),
-    screenToView: makeMatrix4Inverse(
-      makeMatrix4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+    viewToWorld: new Mat4(),
+    screenToView: makeMat4Inverse(
+      makeMat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
     ),
     equirectangularMap: texImage2Ds[0]
   };
@@ -73,11 +73,11 @@ async function init(): Promise<null> {
 
     const now = Date.now();
 
-    passUniforms.viewToWorld = makeMatrix4Inverse(
-      makeMatrix4RotationFromQuaternion(orbit.orientation)
+    passUniforms.viewToWorld = makeMat4Inverse(
+      makeMat4RotationFromQuaternion(orbit.orientation)
     );
-    passUniforms.screenToView = makeMatrix4Inverse(
-      makeMatrix4PerspectiveFov(
+    passUniforms.screenToView = makeMat4Inverse(
+      makeMat4PerspectiveFov(
         15 * (1 - orbit.zoom) + 15,
         0.1,
         4,

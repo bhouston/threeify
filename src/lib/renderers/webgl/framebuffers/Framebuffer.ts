@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
@@ -17,7 +17,7 @@ export type AttachmentMap = { [point: number]: TexImage2D | undefined };
 export class Framebuffer extends VirtualFramebuffer {
   readonly id: number;
   readonly glFramebuffer: WebGLFramebuffer;
-  readonly #size: Vector2 = new Vector2();
+  readonly #size: Vec2 = new Vec2();
   private _attachments: AttachmentMap = {};
 
   constructor(context: RenderingContext) {
@@ -62,7 +62,7 @@ export class Framebuffer extends VirtualFramebuffer {
     return this._attachments[attachmentPoint];
   }
 
-  get size(): Vector2 {
+  get size(): Vec2 {
     return this.#size;
   }
 

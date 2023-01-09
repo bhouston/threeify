@@ -2,10 +2,10 @@ import { IDisposable } from '../core/types.js';
 import { Euler3 } from '../math/Euler3.js';
 import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
 import { Quaternion } from '../math/Quaternion.js';
-import { Vector2 } from '../math/Vector2.js';
+import { Vec2 } from '../math/Vec2.js';
 
 export class Orbit implements IDisposable {
-  public lastPointerClient = new Vector2();
+  public lastPointerClient = new Vec2();
   public orientation = new Quaternion();
   public onPointerDownHandler: (ev: PointerEvent) => any;
   public onPointerCancelHandler: (ev: PointerEvent) => any;
@@ -93,7 +93,7 @@ export class Orbit implements IDisposable {
 
   onPointerMove(pe: PointerEvent) {
     // console.log("pointer move", pe);
-    const pointerClient = new Vector2(pe.clientX, pe.clientY);
+    const pointerClient = new Vec2(pe.clientX, pe.clientY);
     const pointerClientDelta = pointerClient
       .clone()
       .sub(this.lastPointerClient);

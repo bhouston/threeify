@@ -7,10 +7,10 @@
 
 import { hashFloat4 } from '../core/hash.js';
 import { ICloneable, IEquatable, IHashable } from '../core/types.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
-  constructor(public normal = new Vector3(), public constant = 0) {}
+  constructor(public normal = new Vec3(), public constant = 0) {}
 
   getHashCode(): number {
     return hashFloat4(
@@ -21,7 +21,7 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
     );
   }
 
-  set(normal: Vector3, constant: number): this {
+  set(normal: Vec3, constant: number): this {
     this.normal.copy(normal);
     this.constant = constant;
 

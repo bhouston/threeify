@@ -1,5 +1,5 @@
 import { clamp } from './Functions.js';
-import { Vector4 } from './Vector4.js';
+import { Vector4 } from './Vec4.js';
 
 export function rgbeToLinear(source: Vector4, result = new Vector4()): Vector4 {
   const s = 2 ** (source.a * 255 - 128);

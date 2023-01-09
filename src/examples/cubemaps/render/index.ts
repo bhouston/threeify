@@ -10,19 +10,19 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeColor3FromHSL,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
+  makeMat4PerspectiveFov,
+  makeMat4RotationFromEuler,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
-  Matrix4,
+  Mat4,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   TextureFilter,
-  Vector2,
-  Vector3
+  Vec3,
+  Vec2
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import { patternMaterial } from './pattern/PatternMaterial.js';
@@ -34,7 +34,7 @@ async function init(): Promise<null> {
 
   const geometry = icosahedronGeometry(0.75, 4);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
-  const imageSize = new Vector2(1024, 1024);
+  const imageSize = new Vec2(1024, 1024);
   const cubeTexture = new CubeMapTexture([
     imageSize,
     imageSize,
@@ -71,9 +71,9 @@ async function init(): Promise<null> {
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: makeMat4Translation(new Vec3(0, 0, -3)),
+    viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -105,7 +105,7 @@ async function init(): Promise<null> {
       );
     });
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = makeMat4RotationFromEuler(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );

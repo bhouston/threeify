@@ -6,9 +6,9 @@ import {
   makeQuaternionFromEuler
 } from '../math/Quaternion.Functions.js';
 import { Quaternion } from '../math/Quaternion.js';
-import { Vector3 } from '../math/Vector3.js';
+import { Vec3 } from '../math/Vec3.js';
 
-const zAxis = new Vector3(0, 0, 1);
+const zAxis = new Vec3(0, 0, 1);
 // - PI/2 around the x-axis
 const q1 = new Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5));
 

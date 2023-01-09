@@ -1,14 +1,14 @@
 import { hashFloat3 } from '../core/hash.js';
 import { ICloneable, IEquatable, IHashable } from '../core/types.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export class Triangle3
   implements ICloneable<Triangle3>, IEquatable<Triangle3>, IHashable
 {
   constructor(
-    public a = new Vector3(),
-    public b = new Vector3(),
-    public c = new Vector3()
+    public a = new Vec3(),
+    public b = new Vec3(),
+    public c = new Vec3()
   ) {}
 
   getHashCode(): number {
@@ -19,7 +19,7 @@ export class Triangle3
     );
   }
 
-  set(a: Vector3, b: Vector3, c: Vector3): this {
+  set(a: Vec3, b: Vec3, c: Vec3): this {
     this.a.copy(a);
     this.b.copy(b);
     this.c.copy(c);

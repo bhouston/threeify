@@ -6,14 +6,14 @@
 //
 
 import { ICloneable, IEquatable } from '../../core/types.js';
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec3 } from '../../math/Vec3.js';
 
 export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>
 {
   // TODO: Should be intialized to default WebGL states
   constructor(
-    public color = new Vector3(1, 1, 1),
+    public color = new Vec3(1, 1, 1),
     public alpha = 0,
     public depth = 1,
     public stencil = 0

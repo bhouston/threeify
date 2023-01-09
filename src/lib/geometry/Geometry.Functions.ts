@@ -1,10 +1,10 @@
-import { makeVector3View } from '../math/arrays/PrimitiveView.js';
-import { Matrix4 } from '../math/Matrix4.js';
-import { Vector3 } from '../math/Vector3.js';
+import { makeVec3View } from '../math/arrays/PrimitiveView.js';
+import { Mat4 } from '../math/Mat4.js';
+import { Vec3 } from '../math/Vec3.js';
 import {
   transformNormal3,
   transformPoint3
-} from '../math/Vector3Matrix4.Functions.js';
+} from '../math/Vec3Mat4.Functions.js';
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';
 import { Geometry } from './Geometry.js';
@@ -89,18 +89,18 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   // reset existing normals to zero
 
-  const positions = makeVector3View(positionAttribute);
-  const normals = makeVector3View(normalAttribute);
+  const positions = makeVec3View(positionAttribute);
+  const normals = makeVec3View(normalAttribute);
 
   for (let i = 0, il = normals.count; i < il; i++) {
-    normals.set(i, new Vector3());
+    normals.set(i, new Vec3());
   }
 
-  const pA = new Vector3();
-  const pB = new Vector3();
-  const pC = new Vector3();
-  const cb = new Vector3();
-  const ab = new Vector3();
+  const pA = new Vec3();
+  const pB = new Vec3();
+  const pC = new Vec3();
+  const cb = new Vec3();
+  const ab = new Vec3();
 
   // indexed elements
 
@@ -142,20 +142,20 @@ export function computeVertexNormals(geometry: Geometry): void {
     }
   }
 
-  const v = new Vector3();
+  const v = new Vec3();
   for (let i = 0, il = normals.count; i < il; i += 3) {
     normals.set(i, normals.get(i, v).normalize());
   }
 }
 
-export function transformGeometry(geometry: Geometry, m: Matrix4): void {
+export function transformGeometry(geometry: Geometry, m: Mat4): void {
   const positionAttribute = geometry.attributes.position;
   if (positionAttribute === undefined) {
     throw new Error('missing position attribute');
   }
-  const positions = makeVector3View(positionAttribute);
+  const positions = makeVec3View(positionAttribute);
 
-  const v = new Vector3();
+  const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
     positions.get(i, v);
     transformPoint3(v, m, v);
@@ -164,7 +164,7 @@ export function transformGeometry(geometry: Geometry, m: Matrix4): void {
 
   const normalAttribute = geometry.attributes.normal;
   if (normalAttribute !== undefined) {
-    const normals = makeVector3View(normalAttribute);
+    const normals = makeVec3View(normalAttribute);
     for (let i = 0; i < normals.count; i++) {
       normals.get(i, v);
       transformNormal3(v, m, v);

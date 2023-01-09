@@ -1,10 +1,10 @@
 import { makeBox3FromPoints } from './Box3.Functions.js';
 import { Box3 } from './Box3.js';
-import { getMaxScaleOnAxis } from './Matrix4.Functions.js';
-import { Matrix4 } from './Matrix4.js';
+import { getMaxScaleOnAxis } from './Mat4.Functions.js';
+import { Mat4 } from './Mat4.js';
 import { Sphere } from './Sphere.js';
-import { Vector3 } from './Vector3.js';
-import { transformPoint3 } from './Vector3Matrix4.Functions.js';
+import { Vec3 } from './Vec3.js';
+import { transformPoint3 } from './Vec3Mat4.Functions.js';
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
 export function makeBoundingSphereFromBox(
@@ -17,8 +17,8 @@ export function makeBoundingSphereFromBox(
 }
 
 export function makeSphereFromPoints(
-  points: Vector3[],
-  optionalCenter: Vector3 | undefined,
+  points: Vec3[],
+  optionalCenter: Vec3 | undefined,
   result = new Sphere()
 ): Sphere {
   if (optionalCenter !== undefined) {
@@ -38,17 +38,17 @@ export function makeSphereFromPoints(
   return result;
 }
 
-export function sphereContainsPoint(sphere: Sphere, point: Vector3): boolean {
+export function sphereContainsPoint(sphere: Sphere, point: Vec3): boolean {
   return (
     point.distanceToSquared(sphere.center) <= sphere.radius * sphere.radius
   );
 }
 
-export function sphereDistanceToPoint(sphere: Sphere, point: Vector3): number {
+export function sphereDistanceToPoint(sphere: Sphere, point: Vec3): number {
   return point.distanceTo(sphere.center) - sphere.radius;
 }
 
-export function clampPointToSphere(sphere: Sphere, point: Vector3): Vector3 {
+export function clampPointToSphere(sphere: Sphere, point: Vec3): Vec3 {
   const deltaLengthSq = sphere.center.distanceToSquared(point);
 
   if (deltaLengthSq > sphere.radius * sphere.radius) {
@@ -61,7 +61,7 @@ export function clampPointToSphere(sphere: Sphere, point: Vector3): Vector3 {
 
 export function transformSphere(
   s: Sphere,
-  m: Matrix4,
+  m: Mat4,
   result = new Sphere()
 ): Sphere {
   transformPoint3(s.center, m, result.center);
@@ -71,7 +71,7 @@ export function transformSphere(
 
 export function translateSphere(
   s: Sphere,
-  offset: Vector3,
+  offset: Vec3,
   result = new Sphere()
 ): Sphere {
   result.copy(s);

@@ -1,5 +1,5 @@
 import { generateUUID } from '../core/generateUuid.js';
-import { Vector2 } from '../math/Vector2.js';
+import { Vec2 } from '../math/Vec2.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
@@ -13,14 +13,14 @@ export type TextureSource =
   | HTMLVideoElement
   | OffscreenCanvas
   | ImageBitmap
-  | Vector2;
+  | Vec2;
 
 export class VirtualTexture {
   disposed = false;
   uuid: string = generateUUID();
   version = 0;
   name = '';
-  size: Vector2 = new Vector2();
+  size: Vec2 = new Vec2();
 
   constructor(
     public level = 0,

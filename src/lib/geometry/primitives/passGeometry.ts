@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2.js';
+import { Vec2 } from '../../math/Vec2.js';
 import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
 import { Geometry } from '../Geometry.js';
 
@@ -16,8 +16,8 @@ import { Geometry } from '../Geometry.js';
  * @param max in clip space
  */
 export function passGeometry(
-  min = new Vector2(-1, -1),
-  max = new Vector2(1, 1)
+  min = new Vec2(-1, -1),
+  max = new Vec2(1, 1)
 ): Geometry {
   const geometry = new Geometry();
   geometry.indices = makeUint32Attribute([0, 1, 2, 0, 2, 3]);

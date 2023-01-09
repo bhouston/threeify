@@ -5,20 +5,20 @@ import { Blending } from '../../materials/Blending.js';
 import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
 import { ceilPow2 } from '../../math/Functions.js';
 import {
-  makeMatrix3Concatenation,
-  makeMatrix3Scale,
-  makeMatrix3Translation
-} from '../../math/Matrix3.Functions.js';
+  makeMat3Concatenation,
+  makeMat3Scale,
+  makeMat3Translation
+} from '../../math/Mat3.Functions.js';
 import {
-  makeMatrix4Inverse,
-  makeMatrix4Orthographic,
-  makeMatrix4OrthographicSimple,
-  makeMatrix4Scale,
-  makeMatrix4Translation
-} from '../../math/Matrix4.Functions.js';
-import { Matrix4 } from '../../math/Matrix4.js';
-import { Vector2 } from '../../math/Vector2.js';
-import { Vector3 } from '../../math/Vector3.js';
+  makeMat4Inverse,
+  makeMat4Orthographic,
+  makeMat4OrthographicSimple,
+  makeMat4Scale,
+  makeMat4Translation
+} from '../../math/Mat4.Functions.js';
+import { Mat4 } from '../../math/Mat4.js';
+import { Vec2 } from '../../math/Vec2.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { isFirefox, isiOS, isMacOS } from '../../platform/Detection.js';
 import { blendModeToBlendState } from '../../renderers/webgl/BlendState.js';
 import {
@@ -87,7 +87,7 @@ export type TexImage2DPromiseMap = {
 
 export function makeColorMipmapAttachment(
   context: RenderingContext,
-  size: Vector2,
+  size: Vec2,
   dataType: DataType | undefined = undefined
 ): TexImage2D {
   const texParams = new TexParameters();
@@ -119,17 +119,17 @@ export class LayerCompositor {
   texImage2DPromiseCache: TexImage2DPromiseMap = {};
   #bufferGeometry: BufferGeometry;
   #program: Program;
-  imageSize = new Vector2(0, 0);
+  imageSize = new Vec2(0, 0);
   imageFitMode: ImageFitMode = ImageFitMode.FitHeight;
   zoomScale = 1; // no zoom
-  panPosition: Vector2 = new Vector2(0.5, 0.5); // center
+  panPosition: Vec2 = new Vec2(0.5, 0.5); // center
   #layers: Layer[] = [];
   #layerVersion = 0;
   #offlineLayerVersion = -1;
   firstRender = true;
-  clearState = new ClearState(new Vector3(1, 1, 1), 0);
+  clearState = new ClearState(new Vec3(1, 1, 1), 0);
   offscreenFramebuffer: Framebuffer | undefined;
-  offscreenSize = new Vector2(0, 0);
+  offscreenSize = new Vec2(0, 0);
   offscreenColorAttachment: TexImage2D | undefined;
   renderId = 0;
   autoDiscard = false;
@@ -146,7 +146,7 @@ export class LayerCompositor {
     this.context.canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
     this.context.canvasFramebuffer.resize();
     const plane = planeGeometry(1, 1, 1, 1);
-    transformGeometry(plane, makeMatrix4Translation(new Vector3(0.5, 0.5, 0)));
+    transformGeometry(plane, makeMat4Translation(new Vec3(0.5, 0.5, 0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(
       this.context,
@@ -169,7 +169,7 @@ export class LayerCompositor {
 
   updateOffscreen(): void {
     // but to enable mipmaps (for filtering) we need it to be up-rounded to a power of 2 in width/height.
-    const offscreenSize = new Vector2(
+    const offscreenSize = new Vec2(
       ceilPow2(this.imageSize.x),
       ceilPow2(this.imageSize.y)
     );
@@ -332,7 +332,7 @@ export class LayerCompositor {
       canvasImageCenter.add(centeredCanvasPanOffset);
     }
 
-    const imageToCanvas = makeMatrix4OrthographicSimple(
+    const imageToCanvas = makeMat4OrthographicSimple(
       canvasSize.height,
       canvasImageCenter,
       -1,
@@ -344,30 +344,30 @@ export class LayerCompositor {
       `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
     ); */
 
-    const canvasToImage = makeMatrix4Inverse(imageToCanvas);
+    const canvasToImage = makeMat4Inverse(imageToCanvas);
 
-    const planeToImage = makeMatrix4Scale(
-      new Vector3(canvasImageSize.width, canvasImageSize.height, 1)
+    const planeToImage = makeMat4Scale(
+      new Vec3(canvasImageSize.width, canvasImageSize.height, 1)
     );
 
     this.renderLayersToFramebuffer();
 
-    const layerUVScale = new Vector2(
+    const layerUVScale = new Vec2(
       this.imageSize.width / this.offscreenSize.width,
       this.imageSize.height / this.offscreenSize.height
     );
 
-    const uvScale = makeMatrix3Scale(layerUVScale);
-    const uvTranslation = makeMatrix3Translation(
-      new Vector2(
+    const uvScale = makeMat3Scale(layerUVScale);
+    const uvTranslation = makeMat3Translation(
+      new Vec2(
         0,
         (this.offscreenSize.height - this.imageSize.height) /
           this.offscreenSize.height
       )
     );
-    const uvToTexture = makeMatrix3Concatenation(uvTranslation, uvScale);
+    const uvToTexture = makeMat3Concatenation(uvTranslation, uvScale);
 
-    canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0);
+    canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 0);
     canvasFramebuffer.clear();
 
     const { offscreenColorAttachment } = this;
@@ -377,7 +377,7 @@ export class LayerCompositor {
     const uniforms = {
       viewToScreen: imageToCanvas,
       screenToView: canvasToImage,
-      worldToView: new Matrix4(),
+      worldToView: new Mat4(),
       localToWorld: planeToImage,
       layerMap: offscreenColorAttachment,
       uvToTexture,
@@ -421,10 +421,10 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 0);
+    offscreenFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 0);
     offscreenFramebuffer.clear();
 
-    const imageToOffscreen = makeMatrix4Orthographic(
+    const imageToOffscreen = makeMat4Orthographic(
       0,
       this.offscreenSize.width,
       0,
@@ -435,7 +435,7 @@ export class LayerCompositor {
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
     ); */
-    const offscreenToImage = makeMatrix4Inverse(imageToOffscreen);
+    const offscreenToImage = makeMat4Inverse(imageToOffscreen);
 
     // Ben on 2020-10-31
     // - does not understand why this is necessary.
@@ -453,7 +453,7 @@ export class LayerCompositor {
       const uniforms = {
         viewToScreen: imageToOffscreen,
         screenToView: offscreenToImage,
-        worldToView: new Matrix4(),
+        worldToView: new Mat4(),
         localToWorld: layer.planeToImage,
         layerMap: layer.texImage2D,
         uvToTexture: layer.uvToTexture,

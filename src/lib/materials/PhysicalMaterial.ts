@@ -6,8 +6,8 @@
 //
 
 import { Color3 } from '../math/Color3.js';
-import { Vector2 } from '../math/Vector2.js';
-import { Vector3 } from '../math/Vector3.js';
+import { Vec2 } from '../math/Vec2.js';
+import { Vec3 } from '../math/Vec3.js';
 import { Texture } from '../textures/Texture.js';
 import { Blending } from './Blending.js';
 import { Material } from './Material.js';
@@ -26,7 +26,7 @@ export class PhysicalMaterial extends Material {
   public metallic = 0;
   public metallicMap: Texture | null = null;
 
-  public normalScale = new Vector2(1, 1);
+  public normalScale = new Vec2(1, 1);
   public normalMap: Texture | null = null;
 
   public emissiveColor = new Color3(0, 0, 0);
@@ -40,14 +40,14 @@ export class PhysicalMaterial extends Material {
 
   public anisotropy = 0;
   public anisotropyMap: Texture | null = null;
-  public anisotropyDirection = new Vector3(1, 0, 0);
+  public anisotropyDirection = new Vec3(1, 0, 0);
   public anisotropyDirectionMap: Texture | null = null;
 
   public clearcoatFactor = 0;
   public clearcoatTexture: Texture | null = null;
   public clearcoatRoughnessFactor = 0;
   public clearcoatRoughnessTexture: Texture | null = null;
-  public clearcoatNormalScale = new Vector2(1, 1);
+  public clearcoatNormalScale = new Vec2(1, 1);
   public clearcoatNormalTexture: Texture | null = null;
 
   public clearcoatTint = new Color3(1, 1, 1);

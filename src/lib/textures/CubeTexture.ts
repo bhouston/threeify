@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { makeMatrix4LookAt } from '../math/Matrix4.Functions.js';
-import { Matrix4 } from '../math/Matrix4.js';
-import { Vector2 } from '../math/Vector2.js';
-import { Vector3 } from '../math/Vector3.js';
+import { makeMat4LookAt } from '../math/Mat4.Functions.js';
+import { Mat4 } from '../math/Mat4.js';
+import { Vec2 } from '../math/Vec2.js';
+import { Vec3 } from '../math/Vec3.js';
 import { IPoolUser } from '../renderers/Pool.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
@@ -41,7 +41,7 @@ export class CubeMapTexture extends VirtualTexture implements IPoolUser {
         `images.length (${this.images.length}) must be a positive multiple of 6`
       );
     }
-    this.size = new Vector2(images[0].width, images[0].height);
+    this.size = new Vec2(images[0].width, images[0].height);
   }
 }
 
@@ -64,29 +64,29 @@ export const cubeFaceTargets = [
 ];
 
 export const cubeFaceLooks = [
-  new Vector3(1, 0, 0),
-  new Vector3(-1, 0, 0),
-  new Vector3(0, 1, 0),
-  new Vector3(0, -1, 0),
-  new Vector3(0, 0, 1),
-  new Vector3(0, 0, -1)
+  new Vec3(1, 0, 0),
+  new Vec3(-1, 0, 0),
+  new Vec3(0, 1, 0),
+  new Vec3(0, -1, 0),
+  new Vec3(0, 0, 1),
+  new Vec3(0, 0, -1)
 ];
 
 export const cubeFaceUps = [
-  new Vector3(0, -1, 0),
-  new Vector3(0, -1, 0),
-  new Vector3(0, 0, 1),
-  new Vector3(0, 0, -1),
-  new Vector3(0, 1, 0),
-  new Vector3(0, -1, 0)
+  new Vec3(0, -1, 0),
+  new Vec3(0, -1, 0),
+  new Vec3(0, 0, 1),
+  new Vec3(0, 0, -1),
+  new Vec3(0, 1, 0),
+  new Vec3(0, -1, 0)
 ];
 
-export function makeMatrix4CubeMapTransform(
-  position: Vector3,
+export function makeMat4CubeMapTransform(
+  position: Vec3,
   faceIndex: number,
-  result = new Matrix4()
-): Matrix4 {
-  return makeMatrix4LookAt(
+  result = new Mat4()
+): Mat4 {
+  return makeMat4LookAt(
     position,
     position.clone().add(cubeFaceLooks[faceIndex]),
     cubeFaceUps[faceIndex],
@@ -95,7 +95,7 @@ export function makeMatrix4CubeMapTransform(
 }
 
 /*
-export function makeMatrix4CubeMapProjection(near: number, far: number, result = new Matrix4()): Matrix4 {
+export function makeMat4CubeMapProjection(near: number, far: number, result = new Mat4()): Mat4 {
   const CUBE_PROJECTION = mat4.perspective(Math.PI / 2, aspect, near, far);
 }
 */

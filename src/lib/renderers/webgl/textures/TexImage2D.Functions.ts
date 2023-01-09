@@ -1,6 +1,6 @@
 import { passGeometry } from '../../../geometry/primitives/passGeometry.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import {
   cubeFaceTargets,
   CubeMapTexture
@@ -70,7 +70,7 @@ export function makeTexImage2DFromCubeTexture(
 export function makeTexImage2DFromEquirectangularTexture(
   context: RenderingContext,
   latLongTexture: Texture,
-  faceSize = new Vector2(512, 512),
+  faceSize = new Vec2(512, 512),
   generateMipmaps = true
 ): TexImage2D {
   // required for proper reading.

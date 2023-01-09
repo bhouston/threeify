@@ -8,7 +8,7 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec3 } from '../../math/Vec3.js';
 import {
   eulerToNegativeZDirection,
   negativeZDirectionToEuler
@@ -37,7 +37,7 @@ export class SpotLight extends Light {
    * Must be greater than innerConeAngle and less than or equal to PI / 2.0.
    */
   constructor(
-    color: Vector3 = new Vector3(1, 1, 1),
+    color: Vec3 = new Vec3(1, 1, 1),
     intensity = 1,
     public range = -1,
     public innerConeAngle = 0,
@@ -65,7 +65,7 @@ export class SpotLight extends Light {
   /**
    * direction points in the -z local axis
    */
-  get direction(): Vector3 {
+  get direction(): Vec3 {
     // figure out where the -z axis is pointing from the matrix.
     return eulerToNegativeZDirection(this.rotation);
   }
@@ -73,7 +73,7 @@ export class SpotLight extends Light {
   /**
    * direction points in the -z local axis
    */
-  set direction(v: Vector3) {
+  set direction(v: Vec3) {
     // adjust matrix to point in this direction.
     this.rotation = negativeZDirectionToEuler(v, this.rotation);
   }

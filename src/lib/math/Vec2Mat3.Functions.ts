@@ -1,11 +1,7 @@
-import { Matrix3 } from './Matrix3.js';
-import { Vector2 } from './Vector2.js';
+import { Mat3 } from './Mat3.js';
+import { Vec2 } from './Vec2.js';
 
-export function transformPoint2(
-  v: Vector2,
-  m: Matrix3,
-  result = new Vector2()
-): Vector2 {
+export function transformPoint2(v: Vec2, m: Mat3, result = new Vec2()): Vec2 {
   const { x } = v;
   const { y } = v;
   const e = m.elements;
@@ -19,10 +15,10 @@ export function transformPoint2(
 }
 
 export function transformDirection2(
-  v: Vector2,
-  m: Matrix3,
-  result = new Vector2()
-): Vector2 {
+  v: Vec2,
+  m: Mat3,
+  result = new Vec2()
+): Vec2 {
   const { x } = v;
   const { y } = v;
   const e = m.elements;

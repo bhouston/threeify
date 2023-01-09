@@ -1,11 +1,11 @@
-import { Matrix3 } from './Matrix3.js';
-import { Vector2 } from './Vector2.js';
+import { Mat3 } from './Mat3.js';
+import { Vec2 } from './Vec2.js';
 
-export function makeMatrix3Concatenation(
-  a: Matrix3,
-  b: Matrix3,
-  result = new Matrix3()
-): Matrix3 {
+export function makeMat3Concatenation(
+  a: Mat3,
+  b: Mat3,
+  result = new Mat3()
+): Mat3 {
   const ae = a.elements;
   const be = b.elements;
   const te = result.elements;
@@ -45,7 +45,7 @@ export function makeMatrix3Concatenation(
   return result;
 }
 
-export function matrix3Determinant(m: Matrix3): number {
+export function mat3Determinant(m: Mat3): number {
   const te = m.elements;
 
   const a = te[0];
@@ -61,10 +61,7 @@ export function matrix3Determinant(m: Matrix3): number {
   return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
 }
 
-export function makeMatrix3Transpose(
-  m: Matrix3,
-  result = new Matrix3()
-): Matrix3 {
+export function makeMat3Transpose(m: Mat3, result = new Mat3()): Mat3 {
   let tmp;
   const me = result.copy(m).elements;
 
@@ -82,10 +79,7 @@ export function makeMatrix3Transpose(
   return result;
 }
 
-export function makeMatrix3Inverse(
-  m: Matrix3,
-  result = new Matrix3()
-): Matrix3 {
+export function makeMat3Inverse(m: Mat3, result = new Mat3()): Mat3 {
   const e = m.elements;
 
   const n11 = e[0];
@@ -126,33 +120,30 @@ export function makeMatrix3Inverse(
   return result;
 }
 
-export function makeMatrix3Translation(
-  t: Vector2,
-  result = new Matrix3()
-): Matrix3 {
+export function makeMat3Translation(t: Vec2, result = new Mat3()): Mat3 {
   return result.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
 }
 
-export function makeMatrix3RotationFromAngle(
+export function makeMat3RotationFromAngle(
   angle: number,
-  result = new Matrix3()
-): Matrix3 {
+  result = new Mat3()
+): Mat3 {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
 
   return result.set(c, -s, 0, s, c, 0, 0, 0, 1);
 }
 
-export function makeMatrix3Scale(s: Vector2, result = new Matrix3()): Matrix3 {
+export function makeMat3Scale(s: Vec2, result = new Mat3()): Mat3 {
   return result.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1);
 }
 
-export function composeMatrix3(
-  translation: Vector2,
+export function composeMat3(
+  translation: Vec2,
   rotation: number,
-  scale: Vector2,
-  result = new Matrix3()
-): Matrix3 {
+  scale: Vec2,
+  result = new Mat3()
+): Mat3 {
   const te = result.elements;
 
   const c = Math.cos(rotation);
@@ -173,19 +164,19 @@ export function composeMatrix3(
   return result;
 }
 
-export function decomposeMatrix3(
-  m: Matrix3,
-  translation = new Vector2(),
+export function decomposeMat3(
+  m: Mat3,
+  translation = new Vec2(),
   rotation = 0,
-  scale = new Vector2()
-): { translation: Vector2; rotation: number; scale: Vector2 } {
+  scale = new Vec2()
+): { translation: Vec2; rotation: number; scale: Vec2 } {
   const te = m.elements;
 
-  let sx = new Vector2(te[0], te[1]).length();
-  const sy = new Vector2(te[3], te[4]).length();
+  let sx = new Vec2(te[0], te[1]).length();
+  const sy = new Vec2(te[3], te[4]).length();
 
   // if determine is negative, we need to invert one scale
-  const det = matrix3Determinant(m);
+  const det = mat3Determinant(m);
   if (det < 0) {
     sx = -sx;
   }

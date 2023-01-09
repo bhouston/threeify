@@ -8,7 +8,7 @@
 
 import { IDisposable } from '../../../core/types.js';
 import { isPow2 } from '../../../math/Functions.js';
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
@@ -22,7 +22,7 @@ export class TexImage2D implements IDisposable {
   public readonly id: number;
   public disposed = false;
   public glTexture: WebGLTexture;
-  public size = new Vector2();
+  public size = new Vec2();
 
   constructor(
     public context: RenderingContext,
@@ -134,7 +134,7 @@ export class TexImage2D implements IDisposable {
   ): void {
     const { gl } = this.context;
 
-    if (image instanceof Vector2) {
+    if (image instanceof Vec2) {
       gl.texImage2D(
         target ?? this.target,
         level,

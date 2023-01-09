@@ -1,9 +1,9 @@
 import { makeEulerFromQuaternion } from './Euler3.Functions.js';
 import { EulerOrder3 } from './Euler3.js';
-import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions.js';
+import { makeMat4RotationFromQuaternion } from './Mat4.Functions.js';
 import {
   makeQuaternionFromEuler,
-  makeQuaternionFromRotationMatrix4
+  makeQuaternionFromRotationMat4
 } from './Quaternion.Functions.js';
 import { Quaternion } from './Quaternion.js';
 
@@ -77,11 +77,11 @@ describe('Quaternion-Euler3 ', () => {
   });
 });
 
-describe('Quaternion-Matrix4', () => {
+describe('Quaternion-Mat4', () => {
   testValues.forEach((q, qi) => {
     test(`q ${qi}`, () => {
-      const m = makeMatrix4RotationFromQuaternion(q);
-      const q2 = makeQuaternionFromRotationMatrix4(m);
+      const m = makeMat4RotationFromQuaternion(q);
+      const q2 = makeQuaternionFromRotationMat4(m);
       expect(q2.clone().sub(q).length()).toBeLessThan(0.000001);
     });
   });

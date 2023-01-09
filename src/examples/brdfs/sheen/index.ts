@@ -9,18 +9,18 @@ import {
   EulerOrder3,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
-  makeMatrix4Concatenation,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Scale,
-  makeMatrix4Translation,
+  makeMat4Concatenation,
+  makeMat4PerspectiveFov,
+  makeMat4RotationFromEuler,
+  makeMat4Scale,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
-  Matrix4,
+  Mat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   transformGeometry,
-  Vector3
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -29,9 +29,9 @@ async function init(): Promise<null> {
   const [geometry] = await fetchOBJ('/assets/models/cloth/cloth.obj');
   transformGeometry(
     geometry,
-    makeMatrix4Concatenation(
-      makeMatrix4Translation(new Vector3(0, -0.5, 0)),
-      makeMatrix4Scale(new Vector3(10, 10, 10))
+    makeMat4Concatenation(
+      makeMat4Translation(new Vec3(0, -0.5, 0)),
+      makeMat4Scale(new Vec3(10, 10, 10))
     )
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
@@ -45,9 +45,9 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -2)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: makeMat4Translation(new Vec3(0, 0, -2)),
+    viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -56,7 +56,7 @@ async function init(): Promise<null> {
     ),
 
     // lights
-    pointLightViewPosition: new Vector3(0, 0, 0),
+    pointLightViewPosition: new Vec3(0, 0, 0),
     pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(30),
     pointLightRange: 6,
 
@@ -70,18 +70,18 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = makeMat4RotationFromEuler(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
     uniforms.sheenRoughness = Math.cos(now * 0.0003) * 0.5 + 0.5;
-    uniforms.pointLightViewPosition = new Vector3(
+    uniforms.pointLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 3,
       2,
       0.5

@@ -1,10 +1,10 @@
 import { IArrayable } from '../../core/types.js';
 import { Attribute } from '../../geometry/Attribute.js';
-import { Matrix3 } from '../Matrix3.js';
-import { Matrix4 } from '../Matrix4.js';
+import { Mat3 } from '../Mat3.js';
+import { Mat4 } from '../Mat4.js';
 import { Quaternion } from '../Quaternion.js';
-import { Vector2 } from '../Vector2.js';
-import { Vector3 } from '../Vector3.js';
+import { Vec2 } from '../Vec2.js';
+import { Vec3 } from '../Vec3.js';
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
 
@@ -67,43 +67,43 @@ export class PrimitiveView<P extends IArrayable> {
   }
 }
 
-export class Vector2View extends PrimitiveView<Vector2> {
-  readonly tempPrimitive = new Vector2();
+export class Vec2View extends PrimitiveView<Vec2> {
+  readonly tempPrimitive = new Vec2();
 
   constructor(dataArray: DataArray, floatStride = -1, floatOffset = -1) {
     super(dataArray, 2, floatStride, floatOffset);
   }
 
-  add(index: number, v: Vector2): this {
+  add(index: number, v: Vec2): this {
     return this.set(index, this.get(index, this.tempPrimitive).add(v));
   }
 }
 
-export class Vector3View extends PrimitiveView<Vector3> {
-  readonly tempPrimitive = new Vector3();
+export class Vec3View extends PrimitiveView<Vec3> {
+  readonly tempPrimitive = new Vec3();
 
   constructor(dataArray: DataArray, floatStride = -1, floatOffset = -1) {
     super(dataArray, 3, floatStride, floatOffset);
   }
 
-  add(index: number, v: Vector3): this {
+  add(index: number, v: Vec3): this {
     return this.set(index, this.get(index, this.tempPrimitive).add(v));
   }
 }
 
-export function makeVector2View(
+export function makeVec2View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): Vector2View {
-  return new Vector2View(dataArray, floatStride, floatOffset);
+): Vec2View {
+  return new Vec2View(dataArray, floatStride, floatOffset);
 }
-export function makeVector3View(
+export function makeVec3View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): Vector3View {
-  return new Vector3View(dataArray, floatStride, floatOffset);
+): Vec3View {
+  return new Vec3View(dataArray, floatStride, floatOffset);
 }
 export function makeQuaternionView(
   dataArray: DataArray,
@@ -112,17 +112,17 @@ export function makeQuaternionView(
 ): PrimitiveView<Quaternion> {
   return new PrimitiveView<Quaternion>(dataArray, 4, floatStride, floatOffset);
 }
-export function makeMatrix3View(
+export function makeMat3View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): PrimitiveView<Matrix3> {
-  return new PrimitiveView<Matrix3>(dataArray, 9, floatStride, floatOffset);
+): PrimitiveView<Mat3> {
+  return new PrimitiveView<Mat3>(dataArray, 9, floatStride, floatOffset);
 }
-export function makeMatrix4View(
+export function makeMat4View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): PrimitiveView<Matrix4> {
-  return new PrimitiveView<Matrix4>(dataArray, 16, floatStride, floatOffset);
+): PrimitiveView<Mat4> {
+  return new PrimitiveView<Mat4>(dataArray, 16, floatStride, floatOffset);
 }

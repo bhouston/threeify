@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2.js';
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec2 } from '../../math/Vec2.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { makeFloat32Attribute } from '../Attribute.js';
 import { computeVertexNormals } from '../Geometry.Functions.js';
 import { Geometry } from '../Geometry.js';
@@ -196,9 +196,9 @@ export function polyhedronGeometry(
   // helper functions
 
   function subdivide(detail: number): void {
-    const a = new Vector3();
-    const b = new Vector3();
-    const c = new Vector3();
+    const a = new Vec3();
+    const b = new Vec3();
+    const c = new Vec3();
 
     // iterate over all faces and apply a subdivison with the given detail value
 
@@ -215,17 +215,12 @@ export function polyhedronGeometry(
     }
   }
 
-  function subdivideFace(
-    a: Vector3,
-    b: Vector3,
-    c: Vector3,
-    detail: number
-  ): void {
+  function subdivideFace(a: Vec3, b: Vec3, c: Vec3, detail: number): void {
     const cols = 2 ** detail;
 
     // we use this multidimensional array as a data structure for creating the subdivision
 
-    const v: Vector3[][] = [];
+    const v: Vec3[][] = [];
 
     // construct all of the vertices for this subdivision
 
@@ -266,7 +261,7 @@ export function polyhedronGeometry(
   }
 
   function applyRadius(radius: number): void {
-    const vertex = new Vector3();
+    const vertex = new Vec3();
 
     // iterate over the entire buffer and apply the radius to each vertex
 
@@ -284,7 +279,7 @@ export function polyhedronGeometry(
   }
 
   function generateUVs(): void {
-    const vertex = new Vector3();
+    const vertex = new Vec3();
 
     for (let i = 0; i < vertexBuffer.length; i += 3) {
       vertex.x = vertexBuffer[i + 0];
@@ -330,11 +325,11 @@ export function polyhedronGeometry(
     }
   }
 
-  function pushVertex(vertex: Vector3): void {
+  function pushVertex(vertex: Vec3): void {
     vertexBuffer.push(vertex.x, vertex.y, vertex.z);
   }
 
-  function getVertexByIndex(index: number, vertex: Vector3): void {
+  function getVertexByIndex(index: number, vertex: Vec3): void {
     const stride = index * 3;
 
     vertex.x = vertices[stride + 0];
@@ -343,15 +338,15 @@ export function polyhedronGeometry(
   }
 
   function correctUVs(): void {
-    const a = new Vector3();
-    const b = new Vector3();
-    const c = new Vector3();
+    const a = new Vec3();
+    const b = new Vec3();
+    const c = new Vec3();
 
-    const centroid = new Vector3();
+    const centroid = new Vec3();
 
-    const uvA = new Vector2();
-    const uvB = new Vector2();
-    const uvC = new Vector2();
+    const uvA = new Vec2();
+    const uvB = new Vec2();
+    const uvC = new Vec2();
 
     for (let i = 0, j = 0; i < vertexBuffer.length; i += 9, j += 6) {
       a.set(vertexBuffer[i + 0], vertexBuffer[i + 1], vertexBuffer[i + 2]);
@@ -377,9 +372,9 @@ export function polyhedronGeometry(
   }
 
   function correctUV(
-    uv: Vector2,
+    uv: Vec2,
     stride: number,
-    vector: Vector3,
+    vector: Vec3,
     azimuth: number
   ): void {
     if (azimuth < 0 && uv.x === 1) {
@@ -394,13 +389,13 @@ export function polyhedronGeometry(
   // TODO: Replace with PolarCoordinate System.
   // Angle around the Y axis, counter-clockwise when looking from above.
 
-  function azimuth(vector: Vector3): number {
+  function azimuth(vector: Vec3): number {
     return Math.atan2(vector.z, -vector.x);
   }
 
   // Angle above the XZ plane.
 
-  function inclination(vector: Vector3): number {
+  function inclination(vector: Vec3): number {
     return Math.atan2(
       -vector.y,
       Math.sqrt(vector.x * vector.x + vector.z * vector.z)

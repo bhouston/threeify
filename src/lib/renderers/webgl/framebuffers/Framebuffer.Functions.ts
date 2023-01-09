@@ -1,4 +1,4 @@
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType, sizeOfDataType } from '../textures/DataType.js';
@@ -61,7 +61,7 @@ export function readPixelsFromFramebuffer(
 
 export function makeColorAttachment(
   context: RenderingContext,
-  size: Vector2,
+  size: Vec2,
   dataType: DataType | undefined = undefined
 ): TexImage2D {
   const texParams = new TexParameters();
@@ -81,7 +81,7 @@ export function makeColorAttachment(
 
 export function makeDepthAttachment(
   context: RenderingContext,
-  size: Vector2
+  size: Vec2
 ): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = false;

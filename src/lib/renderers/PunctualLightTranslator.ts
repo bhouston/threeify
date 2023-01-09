@@ -1,16 +1,17 @@
-import { Vector3 } from '../math/Vector3.js';
+import { Vec3 } from '../math/Vec3.js';
 import { DirectionalLight } from '../nodes/lights/DirectionalLight.js';
 import { Light } from '../nodes/lights/Light.js';
 import { PointLight } from '../nodes/lights/PointLight.js';
 import { SpotLight } from '../nodes/lights/SpotLight.js';
-import { depthFirstVisitor, Node } from '../nodes/Node.js';
+import { Node } from '../nodes/Node.js';
+import { depthFirstVisitor } from '../nodes/Visitors.js';
 
 export class PunctualLightUniforms {
   numLights = 0;
   lightTypes: number[] = [];
-  lightPositions: Vector3[] = [];
-  lightColors: Vector3[] = [];
-  lightDirections: Vector3[] = [];
+  lightPositions: Vec3[] = [];
+  lightColors: Vec3[] = [];
+  lightDirections: Vec3[] = [];
   lightRanges: number[] = [];
   lightInnerConeCos: number[] = [];
   lightOuterConeCos: number[] = [];
@@ -36,7 +37,7 @@ export function punctualLightsTranslator(
 
     if (node instanceof PointLight) {
       const pointLight = node as PointLight;
-      result.lightDirections.push(new Vector3());
+      result.lightDirections.push(new Vec3());
       result.lightRanges.push(pointLight.range);
       result.lightInnerConeCos.push(0);
       result.lightOuterConeCos.push(0);

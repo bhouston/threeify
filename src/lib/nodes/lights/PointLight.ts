@@ -8,7 +8,7 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { Light } from './Light.js';
 import { LightType } from './LightType.js';
 
@@ -26,7 +26,7 @@ export class PointLight extends Light {
    * @param range - The distance cutoff at which the light's intensity reaches zero.  If <= 0, assumed to be infinite.
    */
   constructor(
-    color: Vector3 = new Vector3(1, 1, 1),
+    color: Vec3 = new Vec3(1, 1, 1),
     intensity = 1,
     public range = -1
   ) {

@@ -1,8 +1,8 @@
 import { Spherical } from './Spherical.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
-export function makeSphericalFromVector3(
-  v: Vector3,
+export function makeSphericalFromVec3(
+  v: Vec3,
   result = new Spherical()
 ): Spherical {
   result.radius = v.length();

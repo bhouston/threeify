@@ -1,9 +1,9 @@
 import {
   makeEulerFromQuaternion,
-  makeEulerFromRotationMatrix4
+  makeEulerFromRotationMat4
 } from './Euler3.Functions.js';
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import { makeMatrix4RotationFromEuler } from './Matrix4.Functions.js';
+import { makeMat4RotationFromEuler } from './Mat4.Functions.js';
 import { makeQuaternionFromEuler } from './Quaternion.Functions.js';
 
 const testOrders = [
@@ -80,14 +80,14 @@ describe('Euler3-Quaternion', () => {
   });
 });
 
-describe('Euler3-Matrix4', () => {
+describe('Euler3-Mat4', () => {
   testValues.forEach((euler, ei) => {
     testOrders.forEach((order, oi) => {
       test(`e ${ei} order ${oi}`, () => {
         const e = euler.clone();
         e.order = order;
-        const m = makeMatrix4RotationFromEuler(e);
-        const e2 = makeEulerFromRotationMatrix4(m, e.order);
+        const m = makeMat4RotationFromEuler(e);
+        const e2 = makeEulerFromRotationMat4(m, e.order);
         expect(delta(e, e2)).toBeLessThan(0.000001);
         expect(e.order).toBe(e2.order);
       });

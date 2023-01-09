@@ -7,18 +7,12 @@
 
 import { hashFloat2 } from '../core/hash.js';
 import { ICloneable, IEquatable, IHashable } from '../core/types.js';
-import { Vector2 } from './Vector2.js';
+import { Vec2 } from './Vec2.js';
 
 export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
   constructor(
-    public min = new Vector2(
-      +Number.POSITIVE_INFINITY,
-      +Number.POSITIVE_INFINITY
-    ),
-    public max = new Vector2(
-      +Number.POSITIVE_INFINITY,
-      +Number.POSITIVE_INFINITY
-    )
+    public min = new Vec2(+Number.POSITIVE_INFINITY, +Number.POSITIVE_INFINITY),
+    public max = new Vec2(+Number.POSITIVE_INFINITY, +Number.POSITIVE_INFINITY)
   ) {}
 
   get x(): number {
@@ -57,7 +51,7 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     return hashFloat2(this.min.getHashCode(), this.max.getHashCode());
   }
 
-  set(min: Vector2, max: Vector2): this {
+  set(min: Vec2, max: Vec2): this {
     this.min.copy(min);
     this.max.copy(max);
 
@@ -75,7 +69,7 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     return this;
   }
 
-  getCenter(v: Vector2): Vector2 {
+  getCenter(v: Vec2): Vec2 {
     return v.set(
       (this.min.x + this.max.x) * 0.5,
       (this.min.y + this.max.y) * 0.5
@@ -103,7 +97,7 @@ export class Box2 implements ICloneable<Box2>, IEquatable<Box2>, IHashable {
     return this;
   }
 
-  translate(offset: Vector2): this {
+  translate(offset: Vec2): this {
     this.min.add(offset);
     this.max.add(offset);
 

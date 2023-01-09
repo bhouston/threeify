@@ -7,19 +7,19 @@
 
 import { hashFloat2 } from '../core/hash.js';
 import { ICloneable, IEquatable, IHashable } from '../core/types.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export class Ray3 implements ICloneable<Ray3>, IEquatable<Ray3>, IHashable {
   constructor(
-    public origin = new Vector3(),
-    public direction = new Vector3(0, 0, -1)
+    public origin = new Vec3(),
+    public direction = new Vec3(0, 0, -1)
   ) {}
 
   getHashCode(): number {
     return hashFloat2(this.origin.getHashCode(), this.direction.getHashCode());
   }
 
-  set(origin: Vector3, direction: Vector3): this {
+  set(origin: Vec3, direction: Vec3): this {
     this.origin.copy(origin);
     this.direction.copy(direction);
 
@@ -37,11 +37,11 @@ export class Ray3 implements ICloneable<Ray3>, IEquatable<Ray3>, IHashable {
     return this;
   }
 
-  at(t: number, result: Vector3): Vector3 {
+  at(t: number, result: Vec3): Vec3 {
     return result.copy(this.direction).multiplyByScalar(t).add(this.origin);
   }
 
-  lookAt(v: Vector3): this {
+  lookAt(v: Vec3): this {
     this.direction.copy(v).sub(this.origin).normalize();
 
     return this;

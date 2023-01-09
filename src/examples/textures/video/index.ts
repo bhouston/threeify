@@ -3,21 +3,21 @@ import {
   ClearState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4OrthographicSimple,
-  makeMatrix4Translation,
+  makeMat4OrthographicSimple,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   makeTextureFromVideoElement,
-  Matrix4,
+  Mat4,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   TexImage2D,
   Texture,
-  Vector2,
-  Vector2View,
-  Vector3
+  Vec2,
+  Vec2View,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -26,8 +26,8 @@ async function init(): Promise<null> {
   const geometry = planeGeometry(1, 0.5);
   const uvs = geometry.attributes.uv;
   if (uvs !== undefined) {
-    const uvView = new Vector2View(uvs.attributeData.arrayBuffer);
-    const uv = new Vector2();
+    const uvView = new Vec2View(uvs.attributeData.arrayBuffer);
+    const uv = new Vec2();
     for (let u = 0; u < uvView.count; u++) {
       uvView.get(u, uv);
       uv.y = 1 - uv.y;
@@ -48,17 +48,17 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const clickToPlayMap = makeTexImage2DFromTexture(context, clickToPlayTexture);
   const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4OrthographicSimple(
+    localToWorld: new Mat4(),
+    worldToView: makeMat4Translation(new Vec3(0, 0, -1)),
+    viewToScreen: makeMat4OrthographicSimple(
       1.5,
-      new Vector2(),
+      new Vec2(),
       0.1,
       2,
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vector3(0, 0, 0),
+    viewLightPosition: new Vec3(0, 0, 0),
     map: clickToPlayMap
   };
 
@@ -85,12 +85,12 @@ async function init(): Promise<null> {
   );
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(new Vec3(1, 1, 1), 1);
 
   function animate(): void {
     const now = Date.now();
-    uniforms.localToWorld = makeMatrix4Translation(
-      new Vector3(
+    uniforms.localToWorld = makeMat4Translation(
+      new Vec3(
         Math.cos(now * 0.00077) * 0.25,
         Math.sin(now * 0.001 + 0.4) * 0.25,
         0

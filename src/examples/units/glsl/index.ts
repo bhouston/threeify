@@ -14,8 +14,8 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Vector2,
-  Vector3
+  Vec2,
+  Vec3
 } from '../../../lib/index.js';
 import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from '../../../lib/shaders/testSuites.js';
@@ -32,7 +32,7 @@ async function init(): Promise<null> {
   const unitUniforms = {};
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
-  const framebufferSize = new Vector2(1024, 1);
+  const framebufferSize = new Vec2(1024, 1);
   const framebuffer = new Framebuffer(context);
   framebuffer.attach(
     Attachment.Color0,
@@ -43,7 +43,7 @@ async function init(): Promise<null> {
     makeDepthAttachment(context, framebufferSize)
   );
 
-  framebuffer.clearState = new ClearState(new Vector3(0.5, 0.5, 0.5), 0.5);
+  framebuffer.clearState = new ClearState(new Vec3(0.5, 0.5, 0.5), 0.5);
   framebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 
   const output: string[] = [];

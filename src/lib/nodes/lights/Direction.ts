@@ -1,11 +1,11 @@
-import { makeEulerFromRotationMatrix4 } from '../../math/Euler3.Functions.js';
+import { makeEulerFromRotationMat4 } from '../../math/Euler3.Functions.js';
 import { Euler3, EulerOrder3 } from '../../math/Euler3.js';
-import { makeMatrix4RotationFromEuler } from '../../math/Matrix4.Functions.js';
-import { Matrix4 } from '../../math/Matrix4.js';
-import { Vector3 } from '../../math/Vector3.js';
+import { makeMat4RotationFromEuler } from '../../math/Mat4.Functions.js';
+import { Mat4 } from '../../math/Mat4.js';
+import { Vec3 } from '../../math/Vec3.js';
 
 export function negativeZDirectionToEuler(
-  d: Vector3,
+  d: Vec3,
   result = new Euler3()
 ): Euler3 {
   // NOTE: This has never been tested.  It may not work.
@@ -19,7 +19,7 @@ export function negativeZDirectionToEuler(
   const c2 = c1 !== 0 ? d.x / c1 : 1;
   const s2 = c1 !== 0 ? d.y / c1 : 0;
 
-  const m = new Matrix4();
+  const m = new Mat4();
   const te = m.elements;
   te[0] = s1 * c2;
   te[4] = s1 * s2;
@@ -41,15 +41,15 @@ export function negativeZDirectionToEuler(
   te[11] = 0;
   te[15] = 1;
 
-  return makeEulerFromRotationMatrix4(m, EulerOrder3.Default, result);
+  return makeEulerFromRotationMat4(m, EulerOrder3.Default, result);
 }
 
 export function eulerToNegativeZDirection(
   e: Euler3,
-  result = new Vector3()
-): Vector3 {
+  result = new Vec3()
+): Vec3 {
   console.warn('This has never been tested.');
-  const m = makeMatrix4RotationFromEuler(e);
+  const m = makeMat4RotationFromEuler(e);
   const te = m.elements;
   return result.set(te[2], te[6], te[10]);
 }

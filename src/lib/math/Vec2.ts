@@ -1,5 +1,5 @@
 //
-// based on Vector2 from Three.js
+// based on Vec2 from Three.js
 //
 // Authors:
 // * @bhouston
@@ -9,7 +9,7 @@ import { hashFloat2 } from '../core/hash.js';
 import { clamp } from './Functions.js';
 import { IPrimitive } from './IPrimitive.js';
 
-export class Vector2 implements IPrimitive<Vector2> {
+export class Vec2 implements IPrimitive<Vec2> {
   constructor(public x = 0, public y = 0) {}
 
   get width(): number {
@@ -39,15 +39,15 @@ export class Vector2 implements IPrimitive<Vector2> {
     return this;
   }
 
-  clone(): Vector2 {
-    return new Vector2().copy(this);
+  clone(): Vec2 {
+    return new Vec2().copy(this);
   }
 
-  copy(v: Vector2): this {
+  copy(v: Vec2): this {
     return this.set(v.x, v.y);
   }
 
-  add(v: Vector2): this {
+  add(v: Vec2): this {
     this.x += v.x;
     this.y += v.y;
 
@@ -61,7 +61,7 @@ export class Vector2 implements IPrimitive<Vector2> {
     return this;
   }
 
-  sub(v: Vector2): this {
+  sub(v: Vec2): this {
     this.x -= v.x;
     this.y -= v.y;
 
@@ -109,7 +109,7 @@ export class Vector2 implements IPrimitive<Vector2> {
     return this;
   }
 
-  dot(v: Vector2): number {
+  dot(v: Vec2): number {
     return this.x * v.x + this.y * v.y;
   }
 
@@ -121,28 +121,28 @@ export class Vector2 implements IPrimitive<Vector2> {
     return this.x * this.x + this.y * this.y;
   }
 
-  min(v: Vector2): this {
+  min(v: Vec2): this {
     this.x = Math.min(this.x, v.x);
     this.y = Math.min(this.y, v.y);
 
     return this;
   }
 
-  max(v: Vector2): this {
+  max(v: Vec2): this {
     this.x = Math.max(this.x, v.x);
     this.y = Math.max(this.y, v.y);
 
     return this;
   }
 
-  clamp(min: Vector2, max: Vector2): this {
+  clamp(min: Vec2, max: Vec2): this {
     this.x = clamp(this.x, min.x, max.x);
     this.y = clamp(this.y, min.y, max.y);
 
     return this;
   }
 
-  equals(v: Vector2): boolean {
+  equals(v: Vec2): boolean {
     return v.x === this.x && v.y === this.y;
   }
 
@@ -157,4 +157,4 @@ export class Vector2 implements IPrimitive<Vector2> {
   }
 }
 
-export type Size2 = Vector2;
+export type Size2 = Vec2;

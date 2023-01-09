@@ -1,7 +1,7 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import { Matrix4 } from './Matrix4.js';
+import { Mat4 } from './Mat4.js';
 import { Quaternion } from './Quaternion.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export function makeQuaternionFromEuler(
   e: Euler3,
@@ -77,8 +77,8 @@ export function makeQuaternionFromEuler(
   }
 }
 
-export function makeQuaternionFromRotationMatrix4(
-  m: Matrix4,
+export function makeQuaternionFromRotationMat4(
+  m: Mat4,
   result = new Quaternion()
 ): Quaternion {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
@@ -141,7 +141,7 @@ export function makeQuaternionFromRotationMatrix4(
 }
 
 export function makeQuaternionFromAxisAngle(
-  axis: Vector3,
+  axis: Vec3,
   angle: number,
   result = new Quaternion()
 ): Quaternion {
@@ -156,7 +156,7 @@ export function makeQuaternionFromAxisAngle(
 }
 
 export function makeQuaternionFromBaryCoordWeights(
-  baryCoord: Vector3,
+  baryCoord: Vec3,
   a: Quaternion,
   b: Quaternion,
   c: Quaternion,

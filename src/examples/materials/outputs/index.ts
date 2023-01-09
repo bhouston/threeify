@@ -10,22 +10,22 @@ import {
   fetchImage,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
-  makeMatrix4Concatenation,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Scale,
-  makeMatrix4Translation,
+  makeMat4Concatenation,
+  makeMat4PerspectiveFov,
+  makeMat4RotationFromEuler,
+  makeMat4Scale,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
   OutputChannels,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
   transformGeometry,
-  Vector2,
-  Vector3
+  Vec3,
+  Vec2
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -34,9 +34,9 @@ async function init(): Promise<null> {
   const [geometry] = await fetchOBJ('/assets/models/ninjaHead/ninjaHead.obj');
   transformGeometry(
     geometry,
-    makeMatrix4Concatenation(
-      makeMatrix4Scale(new Vector3(0.06, 0.06, 0.06)),
-      makeMatrix4Translation(new Vector3(0, -172, -4))
+    makeMat4Concatenation(
+      makeMat4Scale(new Vec3(0.06, 0.06, 0.06)),
+      makeMat4Translation(new Vec3(0, -172, -4))
     )
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
@@ -61,9 +61,9 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: makeMat4Translation(new Vec3(0, 0, -3)),
+    viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -72,13 +72,13 @@ async function init(): Promise<null> {
     ),
 
     // lights
-    pointLightViewPosition: new Vector3(0, 0, 0),
+    pointLightViewPosition: new Vec3(0, 0, 0),
     pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(40),
     pointLightRange: 12,
 
     // materials
     normalMap,
-    normalScale: new Vector2(1, 1),
+    normalScale: new Vec2(1, 1),
     displacementMap,
     displacementScale: 1,
 
@@ -90,7 +90,7 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   const fragmentOutputs = [
@@ -115,15 +115,15 @@ async function init(): Promise<null> {
     lastNow = now;
 
     uniforms.time += averageDelta;
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = makeMat4RotationFromEuler(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
 
     const effectScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
-    uniforms.normalScale = new Vector2(-1, 1).multiplyByScalar(effectScale);
+    uniforms.normalScale = new Vec2(-1, 1).multiplyByScalar(effectScale);
     uniforms.displacementScale = effectScale * 0.1;
-    uniforms.pointLightViewPosition = new Vector3(
+    uniforms.pointLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 3,
       2,
       0.5

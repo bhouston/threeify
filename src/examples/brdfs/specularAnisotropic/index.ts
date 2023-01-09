@@ -10,17 +10,17 @@ import {
   EulerOrder3,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
+  makeMat4PerspectiveFov,
+  makeMat4RotationFromEuler,
+  makeMat4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector3
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -52,9 +52,9 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: makeMat4Translation(new Vec3(0, 0, -1)),
+    viewToScreen: makeMat4PerspectiveFov(
       35,
       0.1,
       4,
@@ -63,7 +63,7 @@ async function init(): Promise<null> {
     ),
 
     // lights
-    pointLightViewPosition: new Vector3(0, 0, 0),
+    pointLightViewPosition: new Vec3(0, 0, 0),
     pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(0.7),
     pointLightRange: 12,
 
@@ -76,13 +76,13 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = makeMat4RotationFromEuler(
       new Euler3(-0.3 * Math.PI, 0, now * 0.0006, EulerOrder3.YXZ),
       uniforms.localToWorld
     );
