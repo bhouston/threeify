@@ -1,10 +1,3 @@
-//
-// based on Quat from Three.js
-//
-// Authors:
-// * @bhouston
-//
-
 import { hashFloat2 } from '../core/hash.js';
 import { Vec3 } from './Vec3.js';
 

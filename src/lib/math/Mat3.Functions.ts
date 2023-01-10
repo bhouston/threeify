@@ -285,10 +285,7 @@ export function eulerToMat3(euler: Vec3, result = new Mat3()): Mat3 {
 }
 
 export function quatToMat3(q: Vec4, result = new Mat3()): Mat3 {
-  const x = q.x,
-    y = q.y,
-    z = q.z,
-    w = q.w;
+  const { x, y, z, w } = q;
   const x2 = x + x,
     y2 = y + y,
     z2 = z + z;

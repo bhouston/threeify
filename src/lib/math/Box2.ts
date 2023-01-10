@@ -1,10 +1,3 @@
-//
-// based on Box2 from Three.js
-//
-// Authors:
-// * @bhouston
-//
-
 import { hashFloat2 } from '../core/hash.js';
 import { Vec2 } from './Vec2.js';
 

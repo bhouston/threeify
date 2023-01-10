@@ -1,7 +1,5 @@
 import { hashFloat4 } from '../core/hash';
 
-export type Vec4JSON = number[];
-
 export class Vec4 {
   constructor(
     public x: number = 0,

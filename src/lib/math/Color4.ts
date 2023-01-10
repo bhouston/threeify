@@ -1,7 +1,5 @@
 import { hashFloat4 } from '../core/hash';
 
-export type Color4JSON = number[];
-
 export class Color4 {
   constructor(
     public r: number = 0,

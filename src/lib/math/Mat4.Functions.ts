@@ -21,6 +21,10 @@ import {
 } from './Vec3.Functions';
 import { Vec4 } from './Vec4';
 
+export function mat4Identity(result = new Mat4()): Mat4 {
+  return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+}
+
 export function mat4SetColumn4(
   m: Mat4,
   columnIndex: number,
