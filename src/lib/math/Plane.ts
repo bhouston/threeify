@@ -6,11 +6,10 @@
 //
 
 import { hashFloat4 } from '../core/hash.js';
-import { ICloneable, IEquatable, IHashable } from '../core/types.js';
 import { Vec3 } from './Vec3.js';
 
-export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
-  constructor(public normal = new Vec3(), public constant = 0) {}
+export class Plane {
+  constructor(public normal = new Vec3(0, 0, -1), public constant = 0) {}
 
   getHashCode(): number {
     return hashFloat4(
@@ -22,7 +21,7 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
   }
 
   set(normal: Vec3, constant: number): this {
-    this.normal.copy(normal);
+    normal.clone(this.normal);
     this.constant = constant;
 
     return this;
@@ -33,29 +32,9 @@ export class Plane implements ICloneable<Plane>, IEquatable<Plane>, IHashable {
   }
 
   copy(plane: Plane): this {
-    this.normal.copy(plane.normal);
+    plane.normal.clone(this.normal);
     this.constant = plane.constant;
 
     return this;
-  }
-
-  normalize(): this {
-    // Note: will lead to a divide by zero if the plane is invalid.
-    const inverseNormalLength = 1 / this.normal.length();
-    this.normal.multiplyByScalar(inverseNormalLength);
-    this.constant *= inverseNormalLength;
-
-    return this;
-  }
-
-  negate(): this {
-    this.constant *= -1;
-    this.normal.negate();
-
-    return this;
-  }
-
-  equals(p: Plane): boolean {
-    throw p.normal.equals(this.normal) && p.constant === this.constant;
   }
 }

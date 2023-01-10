@@ -977,7 +977,7 @@ export function shearToMat4(
 }
 
 export function composeMat4(
-  position: Vec3,
+  translation: Vec3,
   rotation: Quat,
   scale: Vec3,
   result = new Mat4()
@@ -1005,15 +1005,15 @@ export function composeMat4(
     (1 - (yy + zz)) * sx,
     (xy - wz) * sy,
     (xz + wy) * sz,
-    position.x,
+    translation.x,
     (xy + wz) * sx,
     (1 - (xx + zz)) * sy,
     (yz - wx) * sz,
-    position.y,
+    translation.y,
     (xz - wy) * sx,
     (yz + wx) * sy,
     (1 - (xx + yy)) * sz,
-    position.z,
+    translation.z,
     0,
     0,
     0,
@@ -1023,10 +1023,10 @@ export function composeMat4(
 
 export function decomposeMat4(
   m: Mat4,
-  position: Vec3,
-  rotation: Quat,
-  scale: Vec3
-): { position: Vec3; rotation: Quat; scale: Vec3 } {
+  translation = new Vec3(),
+  rotation = new Quat(),
+  scale = new Vec3()
+): { translation: Vec3; rotation: Quat; scale: Vec3 } {
   const te = m.elements;
 
   let sx = vec3Length(new Vec3(te[0], te[1], te[2]));
@@ -1038,9 +1038,9 @@ export function decomposeMat4(
     sx = -sx;
   }
 
-  position.x = te[12];
-  position.y = te[13];
-  position.z = te[14];
+  translation.x = te[12];
+  translation.y = te[13];
+  translation.z = te[14];
 
   // scale the rotation part
   const m2 = m.clone();
@@ -1068,5 +1068,5 @@ export function decomposeMat4(
   scale.y = sy;
   scale.z = sz;
 
-  return { position, rotation, scale };
+  return { translation, rotation, scale };
 }

@@ -1,7 +1,10 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the Mat4 function helpers
 
+import { EPSILON } from './Common.js';
 import { mat4ToMat3 } from './Mat3.Functions.js';
 import {
+  composeMat4,
+  decomposeMat4,
   mat4Add,
   mat4Equals,
   mat4Identity,
@@ -14,6 +17,8 @@ import {
   translation3ToMat4
 } from './Mat4.Functions';
 import { Mat4 } from './Mat4.js';
+import { quatNormalize } from './Quat.Functions.js';
+import { Quat } from './Quat.js';
 import { Vec3 } from './Vec3.js';
 
 describe('Mat4 Functions', () => {
@@ -227,5 +232,31 @@ describe('Mat4 Functions', () => {
     expect(a.elements[13]).toBe(0);
     expect(a.elements[14]).toBe(0);
     expect(a.elements[15]).toBe(1);
+  });
+
+  // compose the matrix and then decompose the matrix, the results hsould be the same within the EPLISON tolerance
+  test('composeMat4', () => {
+    const translation = new Vec3(1, 2, 3);
+    const rotation = quatNormalize(new Quat(1, 2, 3, 4));
+    const scale = new Vec3(1, 2, 3);
+    const mat4 = composeMat4(translation, rotation, scale);
+    const {
+      translation: translation2,
+      rotation: rotation2,
+      scale: scale2
+    } = decomposeMat4(mat4);
+    console.log(translation2, translation);
+    console.log(rotation2, rotation);
+    console.log(scale2, scale);
+    expect(translation2.x).toBeCloseTo(translation.x, EPSILON);
+    expect(translation2.y).toBeCloseTo(translation.y, EPSILON);
+    expect(translation2.z).toBeCloseTo(translation.z, EPSILON);
+    expect(rotation2.x).toBeCloseTo(rotation.x, EPSILON);
+    expect(rotation2.y).toBeCloseTo(rotation.y, EPSILON);
+    expect(rotation2.z).toBeCloseTo(rotation.z, EPSILON);
+    expect(rotation2.w).toBeCloseTo(rotation.w, EPSILON);
+    expect(scale2.x).toBeCloseTo(scale.x, EPSILON);
+    expect(scale2.y).toBeCloseTo(scale.y, EPSILON);
+    expect(scale2.z).toBeCloseTo(scale.z, EPSILON);
   });
 });

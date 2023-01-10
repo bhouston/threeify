@@ -32,7 +32,7 @@ const testOrders = [
   EulerOrder3.XZY
 ];
 
-describe('Quatr', () => {
+describe('Quat', () => {
   test('constructor defaults', () => {
     const a = new Quat();
     expect(a.x).toBe(0);
