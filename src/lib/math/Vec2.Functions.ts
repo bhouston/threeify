@@ -43,6 +43,25 @@ export function vec2Length(a: Vec2): number {
   return Math.sqrt(vec2Dot(a, a));
 }
 
+export function vec2Min(a: Vec2, b: Vec2, result: Vec2 = new Vec2()): Vec2 {
+  return result.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
+}
+
+export function vec2Max(a: Vec2, b: Vec2, result: Vec2 = new Vec2()): Vec2 {
+  return result.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
+}
+export function vec2Clamp(
+  a: Vec2,
+  min: Vec2,
+  max: Vec2,
+  result: Vec2 = new Vec2()
+): Vec2 {
+  return result.set(
+    Math.min(Math.max(a.x, min.x), max.x),
+    Math.min(Math.max(a.y, min.y), max.y)
+  );
+}
+
 export function vec2Distance(a: Vec2, b: Vec2): number {
   // TODO: optimize this by breaking it apart
   return vec2Length(vec2Subtract(a, b));

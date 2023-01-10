@@ -1,14 +1,88 @@
 import { Attribute } from '../geometry/Attribute.js';
 import { makeVec3View } from './arrays/PrimitiveView.js';
 import { Box3 } from './Box3.js';
+import { mat4TransformPoint3 } from './Mat4.Functions.js';
 import { Mat4 } from './Mat4.js';
 import { sphereIsEmpty } from './Sphere.Functions.js';
 import { Sphere } from './Sphere.js';
-import { vec3Add } from './Vec3.Functions.js';
+import {
+  vec3Add,
+  vec3Clamp,
+  vec3Distance,
+  vec3Equals,
+  vec3Max,
+  vec3Min,
+  vec3Subtract
+} from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
-import { transformPoint3 } from './Vec3Mat4.Functions.js';
 
-export function makeBox3FromArray(
+export function box3Center(box: Box3, result = new Vec3()): Vec3 {
+  return result.set(
+    (box.min.x + box.max.x) * 0.5,
+    (box.min.y + box.max.y) * 0.5,
+    (box.min.z + box.max.z) * 0.5
+  );
+}
+export function box3Empty(result = new Box3()): Box3 {
+  result.min.x = result.min.y = result.min.z = Number.POSITIVE_INFINITY;
+  result.max.x = result.max.y = result.max.z = Number.NEGATIVE_INFINITY;
+  return result;
+}
+
+export function box3IsEmpty(b): boolean {
+  return b.max.x < b.min.x || b.max.y < b.min.y || b.max.z < b.min.z;
+}
+
+export function box3UnionWithBox3(a: Box3, b: Box3, result = new Box3()): Box3 {
+  vec3Min(a.min, b.min, result.min);
+  vec3Max(a.max, b.max, result.max);
+  return result;
+}
+
+export function box3UnionWithVec3(b: Box3, v: Vec3, result = new Box3()): Box3 {
+  vec3Min(b.min, v, result.min);
+  vec3Max(b.max, v, result.max);
+  return result;
+}
+
+export function box3GrowByVec3(b: Box3, v: Vec3, result = new Box3()): Box3 {
+  vec3Subtract(b.min, v, result.min);
+  vec3Add(b.max, v, result.max);
+  return result;
+}
+
+export function box3GrowByScalar(
+  b: Box3,
+  s: number,
+  result = new Box3()
+): Box3 {
+  return box3GrowByVec3(b, new Vec3(s, s, s), result);
+}
+
+export function box3IntersectWithBox3(
+  a: Box3,
+  b: Box3,
+  result = new Box3()
+): Box3 {
+  vec3Max(a.min, b.min, result.min);
+  vec3Min(a.max, b.max, result.max);
+  return result;
+}
+export function box3Translate(
+  b: Box3,
+  offset: Vec3,
+  result = new Box3()
+): Box3 {
+  vec3Add(b.min, offset, result.min);
+  vec3Add(b.max, offset, result.max);
+  return result;
+}
+
+export function box3Equals(a: Box3, b: Box3): boolean {
+  return vec3Equals(a.min, b.min) && vec3Equals(a.max, b.max);
+}
+
+export function box3FromVec3Array(
   array: Float32Array,
   result = new Box3()
 ): Box3 {
@@ -52,13 +126,10 @@ export function makeBox3FromArray(
   return result;
 }
 
-export function makeBox3FromAttribute(
-  attribute: Attribute,
-  result: Box3
-): Box3 {
-  let minX = +Number.POSITIVE_INFINITY;
-  let minY = +Number.POSITIVE_INFINITY;
-  let minZ = +Number.POSITIVE_INFINITY;
+export function box3FromAttribute(attribute: Attribute, result: Box3): Box3 {
+  let minX = Number.POSITIVE_INFINITY;
+  let minY = Number.POSITIVE_INFINITY;
+  let minZ = Number.POSITIVE_INFINITY;
 
   let maxX = Number.NEGATIVE_INFINITY;
   let maxY = Number.NEGATIVE_INFINITY;
@@ -97,15 +168,15 @@ export function makeBox3FromAttribute(
   return result;
 }
 
-export function makeBox3FromPoints(points: Vec3[], result = new Box3()): Box3 {
-  result.makeEmpty();
+export function box3FromVec3s(points: Vec3[], result = new Box3()): Box3 {
+  box3Empty(result);
   for (let i = 0, il = points.length; i < il; i++) {
-    result.expandByPoint(points[i]);
+    box3UnionWithVec3(result, points[i], result);
   }
   return result;
 }
 
-export function makeBox3FromCenterAndSize(
+export function box3FromCenterAndSize(
   center: Vec3,
   size: Vec3,
   result = new Box3()
@@ -123,16 +194,16 @@ export function makeBox3FromCenterAndSize(
   return result;
 }
 
-export function makeBox3FromSphereBounds(s: Sphere, result = new Box3()): Box3 {
+export function box3FromSphere(s: Sphere, result = new Box3()): Box3 {
   if (sphereIsEmpty(s)) {
-    return result.makeEmpty();
+    return box3Empty(result);
   }
 
   result.set(s.center, s.center);
-  return result.expandByScalar(s.radius);
+  return box3GrowByScalar(result, s.radius, result);
 }
 
-export function box3ContainsPoint(box: Box3, point: Vec3): boolean {
+export function box3ContainsVec3(box: Box3, point: Vec3): boolean {
   return !(
     point.x < box.min.x ||
     point.x > box.max.x ||
@@ -143,7 +214,7 @@ export function box3ContainsPoint(box: Box3, point: Vec3): boolean {
   );
 }
 
-export function box3ContainsBox(box: Box3, queryBox: Box3): boolean {
+export function box3ContainsBox3(box: Box3, queryBox: Box3): boolean {
   return (
     box.min.x <= queryBox.min.x &&
     queryBox.max.x <= box.max.x &&
@@ -154,56 +225,70 @@ export function box3ContainsBox(box: Box3, queryBox: Box3): boolean {
   );
 }
 
-export function box3ClampPoint(
-  box: Box3,
+export function vec3ClampToBox3(
   point: Vec3,
+  box: Box3,
   result: Vec3 = new Vec3()
 ): Vec3 {
-  return point.clone(result).clamp(box.min, box.max);
+  return vec3Clamp(point, box.min, box.max, result);
 }
 
-export function box3DistanceToPoint(box: Box3, point: Vec3): number {
-  // TODO: Remove memory allocation
-  return point.clone().clamp(box.min, box.max).sub(point).length();
-}
-
-export function box3Box3Intersect(a: Box3, b: Box3, result: Box3): boolean {
-  result.copy(a);
-  result.min.max(b.min);
-  result.max.min(b.max);
-
-  // ensure that if there is no overlap, the result is fully empty, not slightly empty
-  // with non-inf/+inf values that will cause subsequence intersects to erroneously return valid values.
-  return !result.isEmpty();
-}
-
-export function box3Box3Union(a: Box3, b: Box3, result = new Box3()): Box3 {
-  result.copy(a);
-  result.expandByPoint(b.min);
-  result.expandByPoint(b.max);
-
-  return result;
+export function box3DistanceToVec3(box: Box3, point: Vec3): number {
+  const clampedPoint = vec3ClampToBox3(point, b);
+  return vec3Distance(clampedPoint, point);
 }
 
 // TODO: ensure convention for transform<Primitive>() is consistent across types.
-export function transformBox3(b: Box3, m: Mat4, result = new Box3()): Box3 {
-  result.makeEmpty();
-  if (b.isEmpty()) {
+export function mat4TransformBox3(m: Mat4, b: Box3, result = new Box3()): Box3 {
+  box3Empty(result);
+  if (box3IsEmpty(b)) {
     return result;
   }
 
   // NOTE: I am using a binary pattern to specify all 2^3 combinations below
   const v = new Vec3();
 
-  result.expandByPoint(transformPoint3(v.set(b.min.x, b.min.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint3(v.set(b.min.x, b.min.y, b.max.z), m, v));
-  result.expandByPoint(transformPoint3(v.set(b.min.x, b.max.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint3(v.set(b.min.x, b.max.y, b.max.z), m, v));
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.min.x, b.min.y, b.min.z), v),
+    result
+  );
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.min.x, b.min.y, b.max.z), v),
+    result
+  );
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.min.x, b.max.y, b.min.z), v),
+    result
+  );
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.min.x, b.max.y, b.max.z), v),
+    result
+  );
 
-  result.expandByPoint(transformPoint3(v.set(b.max.x, b.min.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint3(v.set(b.max.x, b.min.y, b.max.z), m, v));
-  result.expandByPoint(transformPoint3(v.set(b.max.x, b.max.y, b.min.z), m, v));
-  result.expandByPoint(transformPoint3(v.set(b.max.x, b.max.y, b.max.z), m, v));
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.max.x, b.min.y, b.min.z), v),
+    result
+  );
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.max.x, b.min.y, b.max.z), v),
+    result
+  );
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.max.x, b.max.y, b.min.z), v),
+    result
+  );
+  box3UnionWithVec3(
+    result,
+    mat4TransformPoint3(m, v.set(b.max.x, b.max.y, b.max.z), v),
+    result
+  );
 
   return result;
 }

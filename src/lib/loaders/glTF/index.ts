@@ -1,7 +1,7 @@
 import { WebIO } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
-import { Mat4 } from '../../math/Mat4';
 
+import { mat4FromArray } from '../../math';
 import { Node } from '../../nodes/Node';
 
 export async function loadGLTF(url: string): Promise<Node> {
@@ -16,8 +16,8 @@ export async function loadGLTF(url: string): Promise<Node> {
 
   scene.listChildren().forEach((node) => {
     const localNode = new Node();
-    const localTransform = new Mat4().setFromArray( node.getMatrix() );
-    const 
+    const localTransform = mat4FromArray(node.getMatrix());
+
     console.log('localTransform', localTransform);
     const mesh = node.getMesh();
     if (mesh !== null) {
@@ -29,5 +29,9 @@ export async function loadGLTF(url: string): Promise<Node> {
       });
     }
     rootNode.children.add(localNode);
+  });
+
+  return new Promise<Node>((resolve) => {
+    resolve(rootNode);
   });
 }

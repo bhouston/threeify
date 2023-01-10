@@ -51,6 +51,20 @@ export function vec3DistanceSq(a: Vec3, b: Vec3): number {
   // TODO: optimize this by breaking it apart
   return vec3LengthSq(vec3Subtract(a, b));
 }
+export function vec3Min(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
+  return result.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+}
+export function vec3Max(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
+  return result.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+}
+export function vec3Clamp(
+  a: Vec3,
+  min: Vec3,
+  max: Vec3,
+  result = new Vec3()
+): Vec3 {
+  return vec3Max(min, vec3Min(max, a, result), result);
+}
 
 export function vec3Normalize(a: Vec3, result = new Vec3()): Vec3 {
   const invLength = 1 / vec3Length(a);

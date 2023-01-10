@@ -1,4 +1,4 @@
-import { makeBox3FromPoints } from './Box3.Functions.js';
+import { box3FromVec3s } from './Box3.Functions.js';
 import { Box3 } from './Box3.js';
 import { mat4ToMaxAxisScale } from './Mat4.Functions.js';
 import { Mat4 } from './Mat4.js';
@@ -44,7 +44,7 @@ export function vec3ArrayToSphere(
   if (optionalCenter !== undefined) {
     optionalCenter.clone(result.center);
   } else {
-    makeBox3FromPoints(points).getCenter(result.center);
+    box3FromVec3s(points).getCenter(result.center);
   }
   let maxRadiusSq = 0;
   for (let i = 0, il = points.length; i < il; i++) {

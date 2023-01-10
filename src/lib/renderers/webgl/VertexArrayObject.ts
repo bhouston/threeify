@@ -25,11 +25,11 @@ export class VertexArrayObject implements IDisposable {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 
-    const glxVAO = this.program.context.glx.OES_vertex_array_object;
+    const gl = this.program.context.gl;
 
     {
       // Create a vertex array object (attribute state)
-      const vao = glxVAO.createVertexArrayOES();
+      const vao = gl.createVertexArray();
       if (vao === null) {
         throw new Error('createVertexArray failed');
       }
@@ -37,7 +37,7 @@ export class VertexArrayObject implements IDisposable {
     }
 
     // and make it the one we're currently working with
-    glxVAO.bindVertexArrayOES(this.glVertexArrayObject);
+    gl.bindVertexArray(this.glVertexArrayObject);
 
     program.setAttributeBuffers(bufferGeometry);
 
@@ -46,8 +46,8 @@ export class VertexArrayObject implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
-      const glxVAO = this.program.context.glx.OES_vertex_array_object;
-      glxVAO.deleteVertexArrayOES(this.glVertexArrayObject);
+      const gl = this.program.context.gl;
+      gl.deleteVertexArray(this.glVertexArrayObject);
       this.program.context.disposeResource(this);
       this.disposed = true;
     }
