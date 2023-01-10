@@ -4,7 +4,7 @@ import {
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Common';
+} from './Functions';;
 import { clamp } from './Functions';
 
 export function color4Equals(

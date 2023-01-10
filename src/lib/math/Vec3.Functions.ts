@@ -1,12 +1,17 @@
 import {
+  delta,
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Common.js';
+} from './Functions.js';
 import { Mat4 } from './Mat4.js';
 import { Spherical } from './Spherical.js';
 import { Vec3 } from './Vec3.js';
+
+export function vec3Delta(a: Vec3, b: Vec3): number {
+  return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z);
+}
 
 export function vec3Equals(
   a: Vec3,

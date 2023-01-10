@@ -1,6 +1,6 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the Mat4 function helpers
 
-import { EPSILON } from './Common.js';
+import { EPSILON } from './Functions.js';
 import { mat4ToMat3 } from './Mat3.Functions.js';
 import {
   composeMat4,

@@ -1,10 +1,11 @@
+import { Euler3, EulerOrder3 } from './Euler3';
 import {
+  delta,
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Common';
-import { Euler3, EulerOrder3 } from './Euler3';
+} from './Functions';
 import { Mat3 } from './Mat3';
 import { eulerToMat3, quatToMat3 } from './Mat3.Functions';
 import { Mat4 } from './Mat4';
@@ -20,6 +21,14 @@ import {
   vec3Subtract
 } from './Vec3.Functions';
 import { Vec4 } from './Vec4';
+
+export function mat4Delta(a: Mat4, b: Mat4): number {
+  let deltaSum = 0;
+  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+    deltaSum = delta(a.elements[i], b.elements[i]);
+  }
+  return deltaSum;
+}
 
 export function mat4Identity(result = new Mat4()): Mat4 {
   return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);

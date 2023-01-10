@@ -4,7 +4,7 @@ import {
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Common.js';
+} from './Functions.js';
 
 export function color3Equals(
   a: Color3,

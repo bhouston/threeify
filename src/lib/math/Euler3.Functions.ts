@@ -1,9 +1,13 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import { clamp } from './Functions.js';
+import { clamp, delta } from './Functions.js';
 import { mat4ToMat3, quatToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
 import { Quat } from './Quat.js';
+
+export function euler3Delta(a: Euler3, b: Euler3): number {
+  return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z);
+}
 
 export function mat4ToEuler3(
   m: Mat4,

@@ -1,5 +1,5 @@
 import { Euler3, EulerOrder3 } from './Euler3';
-import { mat4ToEuler3, quatToEuler3 } from './Euler3.Functions';
+import { euler3Delta, mat4ToEuler3, quatToEuler3 } from './Euler3.Functions';
 import { euler3ToMat4 } from './Mat4.Functions';
 import { euler3ToQuat } from './Quat.Functions';
 
@@ -21,10 +21,6 @@ const eXZ = new Euler3(0.5, 0, 1);
 const eXYZ = new Euler3(0.25, 0.5, 1);
 
 const testValues = [e0, eX, eY, eZ, eXY, eYZ, eXZ, eXYZ];
-
-function delta(a: Euler3, b: Euler3): number {
-  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z);
-}
 
 describe('Euler3', () => {
   test('constructor defaults', () => {
@@ -61,7 +57,7 @@ describe('Euler3-Quat', () => {
         e.order = order;
         const q = euler3ToQuat(e);
         const e2 = quatToEuler3(q, e.order);
-        expect(delta(e, e2)).toBeLessThan(0.000001);
+        expect(euler3Delta(e, e2)).toBeLessThan(0.000001);
         expect(e.order).toBe(e2.order);
       });
     });
@@ -76,7 +72,7 @@ describe('Euler3-Mat4', () => {
         e.order = order;
         const m = euler3ToMat4(e);
         const e2 = mat4ToEuler3(m, e.order);
-        expect(delta(e, e2)).toBeLessThan(0.000001);
+        expect(euler3Delta(e, e2)).toBeLessThan(0.000001);
         expect(e.order).toBe(e2.order);
       });
     });

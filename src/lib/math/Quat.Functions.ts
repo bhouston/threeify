@@ -1,15 +1,20 @@
+import { Euler3, EulerOrder3 } from './Euler3.js';
 import {
+  delta,
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Common.js';
-import { Euler3, EulerOrder3 } from './Euler3.js';
+} from './Functions.js';
 import { mat4ToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
 import { Quat } from './Quat.js';
 import { Vec3 } from './Vec3.js';
+
+export function quatDelta(a: Quat, b: Quat): number {
+  return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z) + delta(a.w, b.w);
+}
 
 export function quatEquals(
   a: Quat,
@@ -159,6 +164,23 @@ export function quatSlerp(
   result.z = a.z * ratioA + result.z * ratioB;
 
   return result;
+}
+
+export function quatAngleTo(a: Quat, b: Quat): number {
+  const dot = quatDot(a, b);
+  return Math.acos(2 * dot * dot - 1);
+}
+
+export function quatRotateTowards(
+  a: Quat,
+  b: Quat,
+  angle: number,
+  result = new Quat()
+): Quat {
+  const angleTo = quatAngleTo(a, b);
+  if (angleTo === 0) return a.clone(result);
+  const t = Math.min(1, angle / angleTo);
+  return quatSlerp(a, b, t, result);
 }
 
 /**

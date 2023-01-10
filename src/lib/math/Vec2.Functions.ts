@@ -1,11 +1,16 @@
 import {
+  delta,
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Common.js';
+} from './Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Vec2 } from './Vec2.js';
+
+export function vec2Delta(a: Vec2, b: Vec2): number {
+  return delta(a.x, b.x) + delta(a.y, b.y);
+}
 
 export function vec2Equals(
   a: Vec2,
