@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { makeMat4OrthographicSimple } from '../../math/Mat4.Functions.js';
+import { mat4OrthographicSimple } from '../../math/Mat4.Functions.js';
 import { Mat4 } from '../../math/Mat4.js';
 import { Vec2 } from '../../math/Vec2.js';
 import { Camera } from './Camera.js';
@@ -22,7 +22,7 @@ export class OrthographicCamera extends Camera {
   }
 
   getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {
-    return makeMat4OrthographicSimple(
+    return mat4OrthographicSimple(
       this.height,
       this.center,
       this.near,

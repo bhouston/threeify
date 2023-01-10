@@ -10,9 +10,9 @@ import {
   normalizedByteToFloats
 } from '../../math/arrays/Conversions.js';
 import {
-  linearToRgbdArray,
+  colorLinearToRgbdArray,
   rgbeToLinearArray
-} from '../../math/Vec4.Functions.js';
+} from '../../math/Color4.Functions.js';
 import { DataType } from '../../renderers/webgl/textures/DataType.js';
 import { ArrayBufferImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';
@@ -43,7 +43,7 @@ export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
 }
 
 export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
-  const buffer = new Buffer(new Uint8Array(arrayBuffer), 0);
+  const buffer = Buffer.from(new Uint8Array(arrayBuffer), 0);
   const header = readHeader(buffer);
   const pixelData = readRLEPixelData(
     buffer.data.subarray(buffer.position),
@@ -52,7 +52,7 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
   );
   return new ArrayBufferImage(
     floatsToNormalizedBytes(
-      linearToRgbdArray(
+      colorLinearToRgbdArray(
         rgbeToLinearArray(normalizedByteToFloats(pixelData)),
         16
       )

@@ -8,8 +8,8 @@ import {
   makeBufferGeometryFromGeometry,
   makeColor3FromHSL,
   makeHexStringFromColor3,
-  makeMat4OrthographicSimple,
-  makeMat4RotationFromEuler,
+  mat4OrthographicSimple,
+  euler3ToMat4,
   translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
@@ -77,7 +77,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: makeMat4OrthographicSimple(
+    viewToScreen: mat4OrthographicSimple(
       1.5,
       new Vec2(),
       0.1,
@@ -96,7 +96,7 @@ async function init(): Promise<null> {
   function animate(): void {
     frameNumber++;
     const now = Date.now();
-    uniforms.localToWorld = makeMat4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld
     );

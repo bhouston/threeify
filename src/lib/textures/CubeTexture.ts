@@ -5,18 +5,18 @@
 // * @bhouston
 //
 
-import { makeMat4LookAt } from '../math/Mat4.Functions.js';
+import { vec3Add } from '../index.js';
+import { mat4LookAt } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
 import { Vec2 } from '../math/Vec2.js';
 import { Vec3 } from '../math/Vec3.js';
-import { IPoolUser } from '../renderers/Pool.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureTarget } from '../renderers/webgl/textures/TextureTarget.js';
 import { TextureSource, VirtualTexture } from './VirtualTexture.js';
 
-export class CubeMapTexture extends VirtualTexture implements IPoolUser {
+export class CubeMapTexture extends VirtualTexture {
   constructor(
     public images: TextureSource[],
     level = 0,
@@ -86,9 +86,9 @@ export function makeMat4CubeMapTransform(
   faceIndex: number,
   result = new Mat4()
 ): Mat4 {
-  return makeMat4LookAt(
+  return mat4LookAt(
     position,
-    position.clone().add(cubeFaceLooks[faceIndex]),
+    vec3Add(position, cubeFaceLooks[faceIndex]),
     cubeFaceUps[faceIndex],
     result
   );

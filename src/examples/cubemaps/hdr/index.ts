@@ -7,8 +7,8 @@ import {
   fetchCubeHDRs,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  makeMat4PerspectiveFov,
-  makeMat4RotationFromEuler,
+  mat4PerspectiveFov,
+  euler3ToMat4,
   translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
@@ -38,7 +38,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: makeMat4PerspectiveFov(
+    viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -54,7 +54,7 @@ async function init(): Promise<null> {
 
   function animate(): void {
     const now = Date.now();
-    uniforms.localToWorld = makeMat4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );

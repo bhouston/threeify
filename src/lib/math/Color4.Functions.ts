@@ -133,7 +133,7 @@ export function rgbeToLinearArray(
   return result;
 }
 
-export function linearToRgbdArray(
+export function colorLinearToRgbdArray(
   sourceArray: Float32Array,
   maxRange: number,
   result: Float32Array | undefined = undefined

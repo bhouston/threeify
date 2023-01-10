@@ -671,7 +671,7 @@ export function mat4PerspectiveFov(
 }
 
 // TODO: Replace with a Box3?
-export function mat4Orthogonal(
+export function mat4Orthographic(
   left: number,
   right: number,
   top: number,
@@ -708,7 +708,7 @@ export function mat4Orthogonal(
   ]);
 }
 
-export function mat4OrthogonalSimple(
+export function mat4OrthographicSimple(
   height: number,
   center: Vec2,
   near: number,
@@ -726,7 +726,7 @@ export function mat4OrthogonalSimple(
   const top = -height * 0.5 + center.y;
   const bottom = top + height;
 
-  return mat4Orthogonal(left, right, top, bottom, near, far, result);
+  return mat4Orthographic(left, right, top, bottom, near, far, result);
 }
 
 export function mat4LookAt(

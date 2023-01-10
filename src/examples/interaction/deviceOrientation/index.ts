@@ -5,7 +5,7 @@ import {
   DeviceOrientation,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMat4Inverse,
+  mat4Inverse,
   makeMat4Perspective,
   makeMat4RotationFromQuat,
   translation3ToMat4,
@@ -62,7 +62,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     if (deviceOrientation !== undefined) {
-      uniforms.localToWorld = makeMat4Inverse(
+      uniforms.localToWorld = mat4Inverse(
         makeMat4RotationFromQuat(deviceOrientation.orientation)
       );
     }

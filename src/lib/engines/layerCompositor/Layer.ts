@@ -1,7 +1,7 @@
 import {
   makeMat3Concatenation,
-  makeMat3Scale,
-  makeMat3Translation
+  scale2ToMat3,
+  translation2ToMat3
 } from '../../math/Mat3.Functions.js';
 import { Mat3 } from '../../math/Mat3.js';
 import {
@@ -39,8 +39,8 @@ export class Layer {
     );
     this.planeToImage = mat4Multiply(layerToImage, planeToLayer);
 
-    const uvScale = makeMat3Scale(this.uvScaleFactor);
-    const uvTranslation = makeMat3Translation(this.uvOffset);
+    const uvScale = scale2ToMat3(this.uvScaleFactor);
+    const uvTranslation = translation2ToMat3(this.uvOffset);
     this.uvToTexture = makeMat3Concatenation(uvTranslation, uvScale);
   }
 }

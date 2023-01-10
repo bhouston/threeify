@@ -1,8 +1,8 @@
-import { Vec2 } from '../math/Vec2.js';
-import { Vec3 } from '../math/Vec3.js';
-
 // Reference:
 // https://learnopengl.com/Getting-started/Coordinate-Systems
+
+import { Vec2 } from '../math/Vec2';
+import { Vec3 } from '../math/Vec3';
 
 // right hand coordinate system
 // same as view space and local space

@@ -10,10 +10,10 @@ import { IDisposable, IIdentifiable } from '../core/types.js';
 import { Euler3 } from '../math/Euler3.js';
 import {
   composeMat4,
-  makeMat4Inverse
+  mat4Inverse
 } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
-import { makeQuatFromEuler } from '../math/Quat.Functions.js';
+import { euler3ToQuat } from '../math/Quat.Functions.js';
 import { Vec3 } from '../math/Vec3.js';
 import { NodeCollection } from './NodeCollection.js';
 
@@ -42,12 +42,12 @@ export class Node implements IIdentifiable, IDisposable {
   get localToParentTransform(): Mat4 {
     return composeMat4(
       this.position,
-      makeQuatFromEuler(this.rotation),
+      euler3ToQuat(this.rotation),
       this.scale
     );
   }
 
   get parentToLocalTransform(): Mat4 {
-    return makeMat4Inverse(this.localToParentTransform);
+    return mat4Inverse(this.localToParentTransform);
   }
 }

@@ -1,4 +1,4 @@
-import { hashFloat3 } from '../core';
+import { hashFloat3 } from '../core/hash';
 
 export type Vec3JSON = number[];
 

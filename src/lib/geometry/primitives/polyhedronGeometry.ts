@@ -6,6 +6,12 @@
 //
 
 import { Vec2 } from '../../math/Vec2.js';
+import {
+  vec3Add,
+  vec3Mix,
+  vec3MultiplyByScalar,
+  vec3Normalize
+} from '../../math/Vec3.Functions.js';
 import { Vec3 } from '../../math/Vec3.js';
 import { makeFloat32Attribute } from '../Attribute.js';
 import { computeVertexNormals } from '../Geometry.Functions.js';
@@ -227,8 +233,8 @@ export function polyhedronGeometry(
     for (let i = 0; i <= cols; i++) {
       v[i] = [];
 
-      const aj = a.clone().lerp(c, i / cols);
-      const bj = b.clone().lerp(c, i / cols);
+      const aj = vec3Mix(a, c, i / cols);
+      const bj = vec3Mix(b, c, i / cols);
 
       const rows = cols - i;
 
@@ -236,7 +242,7 @@ export function polyhedronGeometry(
         if (j === 0 && i === cols) {
           v[i][j] = aj;
         } else {
-          v[i][j] = aj.clone().lerp(bj, j / rows);
+          v[i][j] = vec3Mix(aj, bj, j / rows);
         }
       }
     }
@@ -270,7 +276,7 @@ export function polyhedronGeometry(
       vertex.y = vertexBuffer[i + 1];
       vertex.z = vertexBuffer[i + 2];
 
-      vertex.normalize().multiplyByScalar(radius);
+      vec3MultiplyByScalar(vec3Normalize(vertex, vertex), radius, vertex);
 
       vertexBuffer[i + 0] = vertex.x;
       vertexBuffer[i + 1] = vertex.y;
@@ -357,11 +363,8 @@ export function polyhedronGeometry(
       uvB.set(uvBuffer[j + 2], uvBuffer[j + 3]);
       uvC.set(uvBuffer[j + 4], uvBuffer[j + 5]);
 
-      centroid
-        .copy(a)
-        .add(b)
-        .add(c)
-        .multiplyByScalar(1 / 3);
+      vec3Add(vec3Add(a, b, centroid), c, centroid);
+      vec3MultiplyByScalar(centroid, 1 / 3, centroid);
 
       const azi = azimuth(centroid);
 

@@ -3,7 +3,7 @@ import {
   ClearState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMat4OrthographicSimple,
+  mat4OrthographicSimple,
   translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
@@ -50,7 +50,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: makeMat4OrthographicSimple(
+    viewToScreen: mat4OrthographicSimple(
       1.5,
       new Vec2(),
       0.1,

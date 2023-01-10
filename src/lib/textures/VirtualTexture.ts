@@ -13,7 +13,7 @@ export type TextureSource =
   | HTMLVideoElement
   | OffscreenCanvas
   | ImageBitmap
-  | Vec2;
+  | { width: number; height: number };
 
 export class VirtualTexture {
   disposed = false;
@@ -36,7 +36,7 @@ export class VirtualTexture {
     if (!this.generateMipmaps) {
       return 1;
     }
-    return Math.floor(Math.log2(Math.max(this.size.width, this.size.height)));
+    return Math.floor(Math.log2(Math.max(this.size.x, this.size.y)));
   }
 
   dirty(): void {

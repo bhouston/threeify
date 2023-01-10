@@ -1,3 +1,5 @@
+import { hashFloat3 } from '../core/hash';
+
 export type Color3JSON = number[];
 
 export class Color3 {

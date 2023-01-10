@@ -3,11 +3,10 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMat4Perspective,
-  makeMat4RotationFromEuler,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -15,6 +14,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -48,7 +48,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    uniforms.localToWorld = makeMat4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld
     );

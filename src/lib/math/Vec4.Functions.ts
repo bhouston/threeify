@@ -72,7 +72,7 @@ export function vec4Mix(
   );
 }
 export function vec4FromArray(
-  array: Float42Array | number[],
+  array: Float32Array | number[],
   offset = 0,
   result = new Vec4()
 ): Vec4 {

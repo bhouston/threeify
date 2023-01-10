@@ -6,6 +6,7 @@ import {
 } from './Common.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
+import { vec2Length } from './Vec2.Functions.js';
 import { Vec2 } from './Vec2.js';
 import { Vec3 } from './Vec3.js';
 import { Vec4 } from './Vec4.js';
@@ -421,7 +422,7 @@ export function makeMat3Concatenation(
 
 export function makeMat3Transpose(m: Mat3, result = new Mat3()): Mat3 {
   let tmp;
-  const me = result.copy(m).elements;
+  const me = m.clone(result).elements;
 
   // TODO: replace this with just reading from me and setting re, no need for a temporary
   tmp = me[1];
@@ -478,22 +479,11 @@ export function makeMat3Inverse(m: Mat3, result = new Mat3()): Mat3 {
   return result;
 }
 
-export function makeMat3Translation(t: Vec2, result = new Mat3()): Mat3 {
-  return result.set(1, 0, t.x, 0, 1, t.y, 0, 0, 1);
-}
-
-export function makeMat3RotationFromAngle(
-  angle: number,
-  result = new Mat3()
-): Mat3 {
+export function angleXToMat3(angle: number, result = new Mat3()): Mat3 {
   const c = Math.cos(angle);
   const s = Math.sin(angle);
 
-  return result.set(c, -s, 0, s, c, 0, 0, 0, 1);
-}
-
-export function makeMat3Scale(s: Vec2, result = new Mat3()): Mat3 {
-  return result.set(s.x, 0, 0, 0, s.y, 0, 0, 0, 1);
+  return result.set([c, -s, 0, s, c, 0, 0, 0, 1]);
 }
 
 export function composeMat3(
@@ -530,8 +520,8 @@ export function decomposeMat3(
 ): { translation: Vec2; rotation: number; scale: Vec2 } {
   const te = m.elements;
 
-  let sx = new Vec2(te[0], te[1]).length();
-  const sy = new Vec2(te[3], te[4]).length();
+  let sx = vec2Length(new Vec2(te[0], te[1]));
+  const sy = vec2Length(new Vec2(te[3], te[4]));
 
   // if determine is negative, we need to invert one scale
   const det = mat3Determinant(m);

@@ -3,8 +3,8 @@ import { icosahedronGeometry } from '../../../lib/geometry/primitives/polyhedron
 import { ShaderMaterial } from '../../../lib/materials/ShaderMaterial.js';
 import { Euler3 } from '../../../lib/math/Euler3.js';
 import {
-  makeMat4PerspectiveFov,
-  makeMat4RotationFromEuler,
+  euler3ToMat4,
+  mat4PerspectiveFov,
   translation3ToMat4
 } from '../../../lib/math/Mat4.Functions.js';
 import { Mat4 } from '../../../lib/math/Mat4.js';
@@ -107,7 +107,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: makeMat4PerspectiveFov(
+    viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -122,7 +122,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    uniforms.localToWorld = makeMat4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );

@@ -8,8 +8,8 @@
 export type Mat3JSON = number[];
 
 export class Mat3 {
-  static readonly NUM_ROWS = 4;
-  static readonly NUM_COLUMNS = 4;
+  static readonly NUM_ROWS = 3;
+  static readonly NUM_COLUMNS = 3;
   static readonly NUM_ELEMENTS = Mat3.NUM_ROWS * Mat3.NUM_COLUMNS;
 
   constructor(public elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1]) {

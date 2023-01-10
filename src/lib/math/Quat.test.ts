@@ -1,24 +1,26 @@
+import { quatToEuler3 } from './Euler3.Functions.js';
 import { EulerOrder3 } from './Euler3.js';
 import { quatToMat4 } from './Mat4.Functions.js';
 import {
   euler3ToQuat,
   mat4ToQuat,
   quatLength,
+  quatNormalize,
   quatSubtract
 } from './Quat.Functions.js';
 import { Quat } from './Quat.js';
 
-const qX = new Quat(1, 0, 0).normalize();
-const qY = new Quat(0, 1, 0).normalize();
-const qZ = new Quat(0, 0, 1).normalize();
-const qW = new Quat(0, 0, 0, 1).normalize();
-const qXY = new Quat(1, 0.5, 0).normalize();
-const qYZ = new Quat(0, 1, 0.5).normalize();
-const qXZ = new Quat(0.5, 0, 1).normalize();
-const qXYZ = new Quat(0.25, 0.5, 1).normalize();
-const qXYW = new Quat(1, 0.5, 0, 0.25).normalize();
-const qYZW = new Quat(0, 1, 0.5, 0.25).normalize();
-const qXZW = new Quat(0.5, 0, 1, 0.25).normalize();
+const qX = quatNormalize(new Quat(1, 0, 0));
+const qY = quatNormalize(new Quat(0, 1, 0));
+const qZ = quatNormalize(new Quat(0, 0, 1));
+const qW = quatNormalize(new Quat(0, 0, 0, 1));
+const qXY = quatNormalize(new Quat(1, 0.5, 0));
+const qYZ = quatNormalize(new Quat(0, 1, 0.5));
+const qXZ = quatNormalize(new Quat(0.5, 0, 1));
+const qXYZ = quatNormalize(new Quat(0.25, 0.5, 1));
+const qXYW = quatNormalize(new Quat(1, 0.5, 0, 0.25));
+const qYZW = quatNormalize(new Quat(0, 1, 0.5, 0.25));
+const qXZW = quatNormalize(new Quat(0.5, 0, 1, 0.25));
 
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
 const testOrders = [

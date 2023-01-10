@@ -6,13 +6,13 @@ import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
 import { ceilPow2 } from '../../math/Functions.js';
 import {
   makeMat3Concatenation,
-  makeMat3Scale,
-  makeMat3Translation
+  scale2ToMat3,
+  translation2ToMat3
 } from '../../math/Mat3.Functions.js';
 import {
-  makeMat4Inverse,
-  makeMat4Orthographic,
-  makeMat4OrthographicSimple,
+  mat4Inverse,
+  mat4Orthographic,
+  mat4OrthographicSimple,
   scale3ToMat4,
   translation3ToMat4
 } from '../../math/Mat4.Functions.js';
@@ -332,7 +332,7 @@ export class LayerCompositor {
       canvasImageCenter.add(centeredCanvasPanOffset);
     }
 
-    const imageToCanvas = makeMat4OrthographicSimple(
+    const imageToCanvas = mat4OrthographicSimple(
       canvasSize.height,
       canvasImageCenter,
       -1,
@@ -344,7 +344,7 @@ export class LayerCompositor {
       `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
     ); */
 
-    const canvasToImage = makeMat4Inverse(imageToCanvas);
+    const canvasToImage = mat4Inverse(imageToCanvas);
 
     const planeToImage = scale3ToMat4(
       new Vec3(canvasImageSize.width, canvasImageSize.height, 1)
@@ -357,8 +357,8 @@ export class LayerCompositor {
       this.imageSize.height / this.offscreenSize.height
     );
 
-    const uvScale = makeMat3Scale(layerUVScale);
-    const uvTranslation = makeMat3Translation(
+    const uvScale = scale2ToMat3(layerUVScale);
+    const uvTranslation = translation2ToMat3(
       new Vec2(
         0,
         (this.offscreenSize.height - this.imageSize.height) /
@@ -424,7 +424,7 @@ export class LayerCompositor {
     offscreenFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 0);
     offscreenFramebuffer.clear();
 
-    const imageToOffscreen = makeMat4Orthographic(
+    const imageToOffscreen = mat4Orthographic(
       0,
       this.offscreenSize.width,
       0,
@@ -435,7 +435,7 @@ export class LayerCompositor {
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
     ); */
-    const offscreenToImage = makeMat4Inverse(imageToOffscreen);
+    const offscreenToImage = mat4Inverse(imageToOffscreen);
 
     // Ben on 2020-10-31
     // - does not understand why this is necessary.

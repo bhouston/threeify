@@ -6,13 +6,12 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   EulerOrder3,
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  makeMat4PerspectiveFov,
-  makeMat4RotationFromEuler,
-  translation3ToMat4,
+  mat4PerspectiveFov,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -20,6 +19,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -50,7 +50,7 @@ async function init(): Promise<null> {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: makeMat4PerspectiveFov(
+    viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -89,7 +89,7 @@ async function init(): Promise<null> {
   function animate(): void {
     const now = Date.now();
 
-    uniforms.localToWorld = makeMat4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );

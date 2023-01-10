@@ -3,7 +3,9 @@ import { Attribute } from '../../geometry/Attribute.js';
 import { Mat3 } from '../Mat3.js';
 import { Mat4 } from '../Mat4.js';
 import { Quat } from '../Quat.js';
+import { vec2Add } from '../Vec2.Functions.js';
 import { Vec2 } from '../Vec2.js';
+import { vec3Add } from '../Vec3.Functions.js';
 import { Vec3 } from '../Vec3.js';
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
@@ -75,7 +77,10 @@ export class Vec2View extends PrimitiveView<Vec2> {
   }
 
   add(index: number, v: Vec2): this {
-    return this.set(index, this.get(index, this.tempPrimitive).add(v));
+    return this.set(
+      index,
+      vec2Add(this.get(index, this.tempPrimitive), v, this.tempPrimitive)
+    );
   }
 }
 
@@ -87,7 +92,10 @@ export class Vec3View extends PrimitiveView<Vec3> {
   }
 
   add(index: number, v: Vec3): this {
-    return this.set(index, this.get(index, this.tempPrimitive).add(v));
+    return this.set(
+      index,
+      vec3Add(this.get(index, this.tempPrimitive), v, this.tempPrimitive)
+    );
   }
 }
 

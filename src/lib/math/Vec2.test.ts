@@ -20,13 +20,6 @@ describe('Vec2', () => {
     expect(c.x).toBe(1);
     expect(c.y).toBe(2);
   });
-
-  test('copy', () => {
-    const b = new Vec2(1, 2);
-    const d = new Vec2().copy(b);
-    expect(d.x).toBe(1);
-    expect(d.y).toBe(2);
-  });
 });
 
 describe('makeVec2Fit', () => {

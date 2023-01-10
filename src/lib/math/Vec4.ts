@@ -1,4 +1,4 @@
-import { hashFloat4 } from '..';
+import { hashFloat4 } from '../core/hash';
 
 export type Vec4JSON = number[];
 
