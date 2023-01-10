@@ -11,10 +11,10 @@ import {
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -54,7 +54,7 @@ async function init(): Promise<null> {
 
     // lights
     directionalLightViewDirection: new Vec3(0, 0, -1),
-    directionalLightColor: new Color3(1, 1, 1).multiplyByScalar(5),
+    directionalLightColor: color3MultiplyByScalar(new Color3(1, 1, 1), 5),
 
     // materials
     albedoMap: map

@@ -3,20 +3,20 @@ import {
   ClearState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  mat4OrthographicSimple,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   makeTextureFromVideoElement,
+  makeVec2View,
   Mat4,
+  mat4OrthographicSimple,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   TexImage2D,
   Texture,
+  translation3ToMat4,
   Vec2,
-  Vec2View,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -26,7 +26,7 @@ async function init(): Promise<null> {
   const geometry = planeGeometry(1, 0.5);
   const uvs = geometry.attributes.uv;
   if (uvs !== undefined) {
-    const uvView = new Vec2View(uvs.attributeData.arrayBuffer);
+    const uvView = makeVec2View(uvs.attributeData.arrayBuffer);
     const uv = new Vec2();
     for (let u = 0; u < uvView.count; u++) {
       uvView.get(u, uv);

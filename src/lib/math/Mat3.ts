@@ -5,6 +5,8 @@
 // where elements 2 and 5 would be translation in 2D, as they would multiplied
 // by the last virtual element of the 2D vector.
 
+import { hashFloatArray } from '../core/hash';
+
 export type Mat3JSON = number[];
 
 export class Mat3 {
@@ -18,6 +20,10 @@ export class Mat3 {
         `elements must have length ${Mat3.NUM_ELEMENTS}, got ${elements.length}`
       );
     }
+  }
+
+  getHashCode(): number {
+    return hashFloatArray(this.elements);
   }
 
   clone(result = new Mat3()): Mat3 {

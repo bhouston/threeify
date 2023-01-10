@@ -1,10 +1,16 @@
 import { makeVec3View } from '../math/arrays/PrimitiveView.js';
-import { Mat4 } from '../math/Mat4.js';
-import { Vec3 } from '../math/Vec3.js';
 import {
-  transformNormal3,
-  transformPoint3
-} from '../math/Vec3Mat4.Functions.js';
+  mat4TransformNormal3,
+  mat4TransformPoint3
+} from '../math/Mat4.Functions.js';
+import { Mat4 } from '../math/Mat4.js';
+import {
+  vec3Add,
+  vec3Cross,
+  vec3Normalize,
+  vec3Subtract
+} from '../math/Vec3.Functions.js';
+import { Vec3 } from '../math/Vec3.js';
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';
 import { Geometry } from './Geometry.js';
@@ -102,6 +108,8 @@ export function computeVertexNormals(geometry: Geometry): void {
   const cb = new Vec3();
   const ab = new Vec3();
 
+  const temp = new Vec3();
+
   // indexed elements
 
   if (indicesAttribute !== undefined) {
@@ -116,13 +124,21 @@ export function computeVertexNormals(geometry: Geometry): void {
       positions.get(vB, pB);
       positions.get(vC, pC);
 
-      cb.copy(pC).sub(pB);
-      ab.copy(pA).sub(pB);
-      cb.cross(ab);
+      vec3Subtract(pC, pB, cb);
+      vec3Subtract(pA, pB, ab);
+      vec3Cross(cb, ab, cb);
 
-      normals.add(vA, cb);
-      normals.add(vB, cb);
-      normals.add(vC, cb);
+      normals.get(vA, temp);
+      vec3Add(temp, cb, temp);
+      normals.set(vA, temp);
+
+      normals.get(vB, temp);
+      vec3Add(temp, cb, temp);
+      normals.set(vB, temp);
+
+      normals.get(vC, temp);
+      vec3Add(temp, cb, temp);
+      normals.set(vC, temp);
     }
   } else {
     // non-indexed elements (unconnected triangle soup)
@@ -132,19 +148,20 @@ export function computeVertexNormals(geometry: Geometry): void {
       positions.get(i + 1, pB);
       positions.get(i + 2, pC);
 
-      cb.copy(pC).sub(pB);
-      ab.copy(pA).sub(pB);
-      cb.cross(ab);
+      vec3Subtract(pC, pB, cb);
+      vec3Subtract(pA, pB, ab);
+      vec3Cross(cb, ab, cb);
 
-      normals.add(i, cb);
-      normals.add(i + 1, cb);
-      normals.add(i + 2, cb);
+      for (let j = 0; j < 3; j++) {
+        normals.get(i + j, temp);
+        vec3Add(temp, cb, temp);
+        normals.set(i + j, temp);
+      }
     }
   }
 
-  const v = new Vec3();
   for (let i = 0, il = normals.count; i < il; i += 3) {
-    normals.set(i, normals.get(i, v).normalize());
+    normals.set(i, vec3Normalize(normals.get(i, temp), temp));
   }
 }
 
@@ -158,7 +175,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
   const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
     positions.get(i, v);
-    transformPoint3(v, m, v);
+    mat4TransformPoint3(m, v, v);
     positions.set(i, v);
   }
 
@@ -167,7 +184,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
     const normals = makeVec3View(normalAttribute);
     for (let i = 0; i < normals.count; i++) {
       normals.get(i, v);
-      transformNormal3(v, m, v);
+      mat4TransformNormal3(m, v, v);
       normals.set(i, v);
     }
   }

@@ -13,9 +13,8 @@ import {
   vec3Subtract
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
-import { transformPoint3 } from './Vec3Mat4.Functions.js';
 
-export function sphereIEmpty(s: Sphere): boolean {
+export function sphereIsEmpty(s: Sphere): boolean {
   return s.radius < 0;
 }
 

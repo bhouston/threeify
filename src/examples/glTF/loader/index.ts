@@ -11,10 +11,10 @@ import {
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -60,7 +60,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(30),
+    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 30),
     pointLightRange: 6,
 
     // materials

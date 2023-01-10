@@ -1,8 +1,10 @@
 import { Attribute } from '../geometry/Attribute.js';
-import { Vec3View } from './arrays/PrimitiveView.js';
+import { makeVec3View } from './arrays/PrimitiveView.js';
 import { Box3 } from './Box3.js';
 import { Mat4 } from './Mat4.js';
+import { sphereIsEmpty } from './Sphere.Functions.js';
 import { Sphere } from './Sphere.js';
+import { vec3Add } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 import { transformPoint3 } from './Vec3Mat4.Functions.js';
 
@@ -63,7 +65,7 @@ export function makeBox3FromAttribute(
   let maxZ = Number.NEGATIVE_INFINITY;
 
   const v = new Vec3();
-  const vectorView = new Vec3View(attribute);
+  const vectorView = makeVec3View(attribute);
 
   for (let i = 0, l = attribute.count; i < l; i++) {
     vectorView.get(i, v);
@@ -95,10 +97,7 @@ export function makeBox3FromAttribute(
   return result;
 }
 
-export function makeBox3FromPoints(
-  points: Vec3[],
-  result = new Box3()
-): Box3 {
+export function makeBox3FromPoints(points: Vec3[], result = new Box3()): Box3 {
   result.makeEmpty();
   for (let i = 0, il = points.length; i < il; i++) {
     result.expandByPoint(points[i]);
@@ -125,7 +124,7 @@ export function makeBox3FromCenterAndSize(
 }
 
 export function makeBox3FromSphereBounds(s: Sphere, result = new Box3()): Box3 {
-  if (s.isEmpty()) {
+  if (sphereIsEmpty(s)) {
     return result.makeEmpty();
   }
 
@@ -160,7 +159,7 @@ export function box3ClampPoint(
   point: Vec3,
   result: Vec3 = new Vec3()
 ): Vec3 {
-  return result.copy(point).clamp(box.min, box.max);
+  return point.clone(result).clamp(box.min, box.max);
 }
 
 export function box3DistanceToPoint(box: Box3, point: Vec3): number {
@@ -214,9 +213,9 @@ export function translateBox3(
   offset: Vec3,
   result = new Box3()
 ): Box3 {
-  result.copy(b);
-  result.min.add(offset);
-  result.max.add(offset);
+  b.clone(result);
+  vec3Add(result.min, offset, result.min);
+  vec3Add(result.max, offset, result.max);
 
   return result;
 }

@@ -6,14 +6,15 @@
 //
 
 import { ICloneable, IEquatable } from '../../core/types.js';
-import { Vec3 } from '../../math/Vec3.js';
+import { color3Equals } from '../../math/Color3.Functions.js';
+import { Color3 } from '../../math/Color3.js';
 
 export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>
 {
   // TODO: Should be intialized to default WebGL states
   constructor(
-    public color = new Vec3(1, 1, 1),
+    public color = new Color3(1, 1, 1),
     public alpha = 0,
     public depth = 1,
     public stencil = 0
@@ -24,7 +25,7 @@ export class ClearState
   }
 
   copy(cs: ClearState): void {
-    this.color.copy(cs.color);
+    cs.color.clone(this.color);
     this.alpha = cs.alpha;
     this.depth = cs.depth;
     this.stencil = cs.stencil;
@@ -32,7 +33,7 @@ export class ClearState
 
   equals(cs: ClearState): boolean {
     return (
-      this.color.equals(cs.color) &&
+      color3Equals(this.color, cs.color) &&
       this.alpha === cs.alpha &&
       this.depth === cs.depth &&
       this.stencil === cs.stencil

@@ -598,7 +598,7 @@ export function mat4RotateByEuler(m: Mat4, e: Vec3, result = new Mat4()): Mat4 {
 
 export function mat4TransformPoint3(
   m: Mat4,
-  v: Vec4,
+  v: Vec3,
   result = new Vec3()
 ): Vec3 {
   const { x, y, z } = v;
@@ -614,8 +614,8 @@ export function mat4TransformPoint3(
 }
 
 export function mat4TransformNormal3(
-  v: Vec3,
   m: Mat4,
+  v: Vec3,
   result = new Vec3()
 ): Vec3 {
   const { x, y, z } = v;

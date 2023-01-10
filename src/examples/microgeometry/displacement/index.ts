@@ -6,25 +6,25 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   EulerOrder3,
   fetchImage,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
-  mat4Multiply,
-  mat4PerspectiveFov,
-  euler3ToMat4,
-  scale3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4Multiply,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
+  scale3ToMat4,
   ShaderMaterial,
   Texture,
   transformGeometry,
-  Vec3,
-  Vec2
+  translation3ToMat4,
+  Vec2,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -72,7 +72,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(40),
+    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 40),
     pointLightRange: 12,
 
     // materials

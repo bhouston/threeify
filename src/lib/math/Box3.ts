@@ -34,13 +34,13 @@ export class Box3 implements ICloneable<Box3>, IEquatable<Box3>, IHashable {
     return this;
   }
 
-  clone(): Box3 {
-    return new Box3().copy(this);
+  clone(result = new Box3()): Box3 {
+    return result.copy(this);
   }
 
   copy(box: Box3): this {
-    this.min.copy(box.min);
-    this.max.copy(box.max);
+    box.min.clone(this.min);
+    box.max.clone(this.max);
 
     return this;
   }
