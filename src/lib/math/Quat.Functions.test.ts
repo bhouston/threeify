@@ -1,13 +1,19 @@
 import { Euler3, EulerOrder3 } from './Euler3';
 import { quatToEuler3 } from './Euler3.Functions';
 import { delta, EPSILON } from './Functions';
-import { euler3ToMat4, mat4Multiply, quatToMat4 } from './Mat4.Functions';
+import {
+  euler3ToMat4,
+  mat4Delta,
+  mat4Multiply,
+  quatToMat4
+} from './Mat4.Functions';
 import { Quat } from './Quat';
 import {
   euler3ToQuat,
   mat4ToQuat,
   quatAngleTo,
   quatConjugate,
+  quatDelta,
   quatDot,
   quatExp,
   quatLength,
@@ -37,6 +43,9 @@ const qXYW = quatNormalize(new Quat(1, 0.5, 0, 0.25));
 const qYZW = quatNormalize(new Quat(0, 1, 0.5, 0.25));
 const qXZW = quatNormalize(new Quat(0.5, 0, 1, 0.25));
 
+function changeEulerOrder(euler, order) {
+  return new Euler3(euler.x, euler.y, euler.z, order);
+}
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
 const testOrders = [
   EulerOrder3.XYZ,
@@ -142,32 +151,34 @@ describe('Quat Functions', () => {
   });
 
   test('quatMultiply', () => {
-   
-			var angles = [ new Euler3( 1, 0, 0 ), new Euler3( 0, 1, 0 ), new Euler3( 0, 0, 1 ) ];
+    const angles = [
+      new Euler3(1, 0, 0),
+      new Euler3(0, 1, 0),
+      new Euler3(0, 0, 1)
+    ];
 
-			var q1 = euler3ToQuat( changeEulerOrder( angles[ 0 ], 'XYZ' ) );
-			var q2 = euler3ToQuat( changeEulerOrder( angles[ 1 ], 'XYZ' ) );
-			var q3 = euler3ToQuat( changeEulerOrder( angles[ 2 ], 'XYZ' ) );
+    const q1 = euler3ToQuat(changeEulerOrder(angles[0], 'XYZ'));
+    const q2 = euler3ToQuat(changeEulerOrder(angles[1], 'XYZ'));
+    const q3 = euler3ToQuat(changeEulerOrder(angles[2], 'XYZ'));
 
-			var q = quatMultiply( quatMultiply( q1, q2 ), q3 );
-			var q2 = quatMultiply(  q1, quatMultiply(q2 , q3 ) );
+    const q = quatMultiply(quatMultiply(q1, q2), q3);
+    const qq = quatMultiply(q1, quatMultiply(q2, q3));
 
-      expect( quatDelta( q, q2)).toBeCloseTo( 0);
+    expect(quatDelta(q, qq)).toBeCloseTo(0);
 
-			var m1 = euler3ToMat4( changeEulerOrder( angles[ 0 ], 'XYZ' ) );
-			var m2 = euler3ToMat4( changeEulerOrder( angles[ 1 ], 'XYZ' ) );
-			var m3 = euler3ToMat4( changeEulerOrder( angles[ 2 ], 'XYZ' ) );
+    const m1 = euler3ToMat4(changeEulerOrder(angles[0], 'XYZ'));
+    const m2 = euler3ToMat4(changeEulerOrder(angles[1], 'XYZ'));
+    const m3 = euler3ToMat4(changeEulerOrder(angles[2], 'XYZ'));
 
-			var m = mat4Multiply( m1, mat4Multiply( m2, m3 ) );
-      var m2 = mat4Multiply(mat4Multiply(  m1, m2), m3 );
+    const m = mat4Multiply(m1, mat4Multiply(m2, m3));
+    const mm = mat4Multiply(mat4Multiply(m1, m2), m3);
 
-      expect( mat4Delta( m, m2)).toBeCloseTo( 0);
+    expect(mat4Delta(m, mm)).toBeCloseTo(0);
 
-			var qFromM = mat4ToQuat( m );
+    const qFromM = mat4ToQuat(m);
 
-			assert.ok( qSub( q, qFromM ).length() < 0.001, 'Passed!' );
-
-  }
+    expect(quatDelta(q, qFromM)).toBeCloseTo(0);
+  });
 });
 
 describe('Quat-Euler3', () => {
