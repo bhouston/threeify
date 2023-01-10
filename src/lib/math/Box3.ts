@@ -22,6 +22,25 @@ export class Box3 {
     )
   ) {}
 
+  get x(): number {
+    return this.min.x;
+  }
+  get y(): number {
+    return this.min.y;
+  }
+  get z(): number {
+    return this.min.z;
+  }
+  get width(): number {
+    return this.max.x - this.min.x;
+  }
+  get height(): number {
+    return this.max.y - this.min.y;
+  }
+  get depth(): number {
+    return this.max.z - this.min.z;
+  }
+
   getHashCode(): number {
     return hashFloat2(this.min.getHashCode(), this.max.getHashCode());
   }

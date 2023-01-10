@@ -29,7 +29,7 @@ export function box3Empty(result = new Box3()): Box3 {
   return result;
 }
 
-export function box3IsEmpty(b): boolean {
+export function box3IsEmpty(b: Box3): boolean {
   return b.max.x < b.min.x || b.max.y < b.min.y || b.max.z < b.min.z;
 }
 
@@ -234,7 +234,7 @@ export function vec3ClampToBox3(
 }
 
 export function box3DistanceToVec3(box: Box3, point: Vec3): number {
-  const clampedPoint = vec3ClampToBox3(point, b);
+  const clampedPoint = vec3ClampToBox3(point, box);
   return vec3Distance(clampedPoint, point);
 }
 
