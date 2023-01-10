@@ -6,9 +6,9 @@ import {
   fetchImage,
   fetchImageElement,
   makeBufferGeometryFromGeometry,
-  makeMat4Concatenation,
-  makeMat4Scale,
-  makeMat4Translation,
+  mat4Multiply,
+  scale3ToMat4,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -92,12 +92,12 @@ async function init(): Promise<null> {
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {
       fgMaps.forEach((fgMap, mIndex) => {
         blendings.forEach((blending, bIndex) => {
-          let localToWorld = makeMat4Translation(
+          let localToWorld = translation3ToMat4(
             new Vec3(-0.5 + bIndex / 4, (pIndex + mIndex * 2) / 4, 0)
           );
-          localToWorld = makeMat4Concatenation(
+          localToWorld = mat4Multiply(
             localToWorld,
-            makeMat4Scale(new Vec3(0.25, 0.25, 0))
+            scale3ToMat4(new Vec3(0.25, 0.25, 0))
           );
 
           bgUniforms.localToWorld = localToWorld;

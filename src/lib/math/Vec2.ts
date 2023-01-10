@@ -1,160 +1,21 @@
-//
-// based on Vec2 from Three.js
-//
-// Authors:
-// * @bhouston
-//
+import { hashFloat2 } from '../core/hash';
 
-import { hashFloat2 } from '../core/hash.js';
-import { clamp } from './Functions.js';
-import { IPrimitive } from './IPrimitive.js';
+export type Vec2JSON = number[];
 
-export class Vec2 implements IPrimitive<Vec2> {
-  constructor(public x = 0, public y = 0) {}
-
-  get width(): number {
-    return this.x;
-  }
-
-  set width(width: number) {
-    this.x = width;
-  }
-
-  get height(): number {
-    return this.y;
-  }
-
-  set height(height: number) {
-    this.y = height;
-  }
+export class Vec2 {
+  constructor(public x: number = 0, public y: number = 0) {}
 
   getHashCode(): number {
     return hashFloat2(this.x, this.y);
   }
 
+  clone(result = new Vec2()): Vec2 {
+    return result.set(this.x, this.y);
+  }
+
   set(x: number, y: number): this {
     this.x = x;
     this.y = y;
-
     return this;
-  }
-
-  clone(): Vec2 {
-    return new Vec2().copy(this);
-  }
-
-  copy(v: Vec2): this {
-    return this.set(v.x, v.y);
-  }
-
-  add(v: Vec2): this {
-    this.x += v.x;
-    this.y += v.y;
-
-    return this;
-  }
-
-  addScalar(s: number): this {
-    this.x += s;
-    this.y += s;
-
-    return this;
-  }
-
-  sub(v: Vec2): this {
-    this.x -= v.x;
-    this.y -= v.y;
-
-    return this;
-  }
-
-  multiplyByScalar(s: number): this {
-    this.x *= s;
-    this.y *= s;
-
-    return this;
-  }
-
-  negate(): this {
-    this.x *= -1;
-    this.y *= -1;
-
-    return this;
-  }
-
-  normalize(): this {
-    const length = this.length();
-    return this.multiplyByScalar(length === 0 ? 1 : 0);
-  }
-
-  getComponent(index: number): number {
-    if (index === 0) {
-      return this.x;
-    }
-    if (index === 1) {
-      return this.y;
-    }
-    throw new Error(`index of our range: ${index}`);
-  }
-
-  setComponent(index: number, value: number): this {
-    if (index === 0) {
-      this.x = value;
-    } else if (index === 1) {
-      this.y = value;
-    } else {
-      throw new Error(`index of our range: ${index}`);
-    }
-
-    return this;
-  }
-
-  dot(v: Vec2): number {
-    return this.x * v.x + this.y * v.y;
-  }
-
-  length(): number {
-    return Math.sqrt(this.lengthSquared());
-  }
-
-  lengthSquared(): number {
-    return this.x * this.x + this.y * this.y;
-  }
-
-  min(v: Vec2): this {
-    this.x = Math.min(this.x, v.x);
-    this.y = Math.min(this.y, v.y);
-
-    return this;
-  }
-
-  max(v: Vec2): this {
-    this.x = Math.max(this.x, v.x);
-    this.y = Math.max(this.y, v.y);
-
-    return this;
-  }
-
-  clamp(min: Vec2, max: Vec2): this {
-    this.x = clamp(this.x, min.x, max.x);
-    this.y = clamp(this.y, min.y, max.y);
-
-    return this;
-  }
-
-  equals(v: Vec2): boolean {
-    return v.x === this.x && v.y === this.y;
-  }
-
-  setFromArray(array: Float32Array, offset: number): void {
-    this.x = array[offset + 0];
-    this.y = array[offset + 1];
-  }
-
-  toArray(array: Float32Array, offset: number): void {
-    array[offset + 0] = this.x;
-    array[offset + 1] = this.y;
   }
 }
-
-export type Size2 = Vec2;

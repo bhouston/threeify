@@ -1,11 +1,20 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
 import { clamp } from './Functions.js';
-import { makeMat4RotationFromQuaternion } from './Mat4.Functions.js';
+import { mat4ToMat3, quatToMat3 } from './Mat3.Functions.js';
+import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
-import { Quaternion } from './Quaternion.js';
+import { Quat } from './Quat.js';
 
-export function makeEulerFromRotationMat4(
+export function mat4ToEuler3(
   m: Mat4,
+  order: EulerOrder3 = EulerOrder3.Default,
+  result = new Euler3()
+): Euler3 {
+  return mat3ToEuler3(mat4ToMat3(m), order, result);
+}
+
+export function mat3ToEuler3(
+  m: Mat3,
   order: EulerOrder3 = EulerOrder3.Default,
   result = new Euler3()
 ): Euler3 {
@@ -13,14 +22,14 @@ export function makeEulerFromRotationMat4(
 
   const te = m.elements;
   const m11 = te[0];
-  const m12 = te[4];
-  const m13 = te[8];
+  const m12 = te[3];
+  const m13 = te[6];
   const m21 = te[1];
-  const m22 = te[5];
-  const m23 = te[9];
+  const m22 = te[4];
+  const m23 = te[7];
   const m31 = te[2];
-  const m32 = te[6];
-  const m33 = te[10];
+  const m32 = te[5];
+  const m33 = te[8];
 
   let x = 0;
   let y = 0;
@@ -109,11 +118,11 @@ export function makeEulerFromRotationMat4(
   return result.set(x, y, z, order);
 }
 
-export function makeEulerFromQuaternion(
-  q: Quaternion,
+export function quatToEuler3(
+  q: Quat,
   order: EulerOrder3,
   result = new Euler3()
 ): Euler3 {
-  const m = makeMat4RotationFromQuaternion(q);
-  return makeEulerFromRotationMat4(m, order, result);
+  const m = quatToMat3(q);
+  return mat3ToEuler3(m, order, result);
 }

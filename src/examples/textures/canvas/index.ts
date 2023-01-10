@@ -10,7 +10,7 @@ import {
   makeHexStringFromColor3,
   makeMat4OrthographicSimple,
   makeMat4RotationFromEuler,
-  makeMat4Translation,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -76,7 +76,7 @@ async function init(): Promise<null> {
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
   const uniforms = {
     localToWorld: new Mat4(),
-    worldToView: makeMat4Translation(new Vec3(0, 0, -1)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
     viewToScreen: makeMat4OrthographicSimple(
       1.5,
       new Vec2(),

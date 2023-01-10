@@ -7,7 +7,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMat4PerspectiveFov,
-  makeMat4Translation,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -39,7 +39,7 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
-    worldToView: makeMat4Translation(new Vec3(0, 0, -3)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
     viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,

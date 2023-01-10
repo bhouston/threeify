@@ -1,10 +1,7 @@
-import {
-  makeEulerFromQuaternion,
-  makeEulerFromRotationMat4
-} from './Euler3.Functions.js';
-import { Euler3, EulerOrder3 } from './Euler3.js';
-import { makeMat4RotationFromEuler } from './Mat4.Functions.js';
-import { makeQuaternionFromEuler } from './Quaternion.Functions.js';
+import { Euler3, EulerOrder3 } from './Euler3';
+import { mat4ToEuler3, quatToEuler3 } from './Euler3.Functions';
+import { euler3ToMat4 } from './Mat4.Functions';
+import { euler3ToQuat } from './Quat.Functions';
 
 const testOrders = [
   EulerOrder3.XYZ,
@@ -54,25 +51,16 @@ describe('Euler3', () => {
     expect(c.z).toBe(3);
     expect(c.order).toBe(EulerOrder3.ZXY);
   });
-
-  test('copy', () => {
-    const b = new Euler3(1, 2, 3, EulerOrder3.ZXY);
-    const d = new Euler3().copy(b);
-    expect(d.x).toBe(1);
-    expect(d.y).toBe(2);
-    expect(d.z).toBe(3);
-    expect(d.order).toBe(EulerOrder3.ZXY);
-  });
 });
 
-describe('Euler3-Quaternion', () => {
+describe('Euler3-Quat', () => {
   testValues.forEach((euler, ei) => {
     testOrders.forEach((order, oi) => {
       test(`e ${ei} order ${oi}`, () => {
         const e = euler.clone();
         e.order = order;
-        const q = makeQuaternionFromEuler(e);
-        const e2 = makeEulerFromQuaternion(q, e.order);
+        const q = euler3ToQuat(e);
+        const e2 = quatToEuler3(q, e.order);
         expect(delta(e, e2)).toBeLessThan(0.000001);
         expect(e.order).toBe(e2.order);
       });
@@ -86,8 +74,8 @@ describe('Euler3-Mat4', () => {
       test(`e ${ei} order ${oi}`, () => {
         const e = euler.clone();
         e.order = order;
-        const m = makeMat4RotationFromEuler(e);
-        const e2 = makeEulerFromRotationMat4(m, e.order);
+        const m = euler3ToMat4(e);
+        const e2 = mat4ToEuler3(m, e.order);
         expect(delta(e, e2)).toBeLessThan(0.000001);
         expect(e.order).toBe(e2.order);
       });

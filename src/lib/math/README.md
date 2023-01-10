@@ -9,7 +9,7 @@
 
 If one is just setting the value fully, do not use make:
 
-- Quaternion.setFromEuler()
+- Quat.setFromEuler()
 
 If you are making a special version of a variable use the term "make", rather than set:
 
@@ -18,12 +18,12 @@ If you are making a special version of a variable use the term "make", rather th
 
 If there are multiple types of makes of the same end result but different inputs use the pattern "make*From*"
 
-- Mat4.makeRotationFromQuaternion()
+- Mat4.makeRotationFromQuat()
 
 When a function takes a single parameter, the parameter should be named after its type:
 
 - v: Vec3
-- q: Quaternion
+- q: Quat
 - m: Mat4
 
 ## Expected Function in a Math Class
@@ -36,7 +36,7 @@ Each math class should have the following:
 
 ## Changes from Three.js
 
-- Removed event emitters from Quaternion and Euler3. This causes unnecessary complexity. We can change the update structure in the Node class to compensate.
+- Removed event emitters from Quat and Euler3. This causes unnecessary complexity. We can change the update structure in the Node class to compensate.
 
 # Mat4
 

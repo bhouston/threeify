@@ -13,7 +13,7 @@ import {
   makeMat4Inverse
 } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
-import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
+import { makeQuatFromEuler } from '../math/Quat.Functions.js';
 import { Vec3 } from '../math/Vec3.js';
 import { NodeCollection } from './NodeCollection.js';
 
@@ -42,7 +42,7 @@ export class Node implements IIdentifiable, IDisposable {
   get localToParentTransform(): Mat4 {
     return composeMat4(
       this.position,
-      makeQuaternionFromEuler(this.rotation),
+      makeQuatFromEuler(this.rotation),
       this.scale
     );
   }

@@ -4,7 +4,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeMat4OrthographicSimple,
-  makeMat4Translation,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   makeTextureFromVideoElement,
@@ -49,7 +49,7 @@ async function init(): Promise<null> {
   const clickToPlayMap = makeTexImage2DFromTexture(context, clickToPlayTexture);
   const uniforms = {
     localToWorld: new Mat4(),
-    worldToView: makeMat4Translation(new Vec3(0, 0, -1)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
     viewToScreen: makeMat4OrthographicSimple(
       1.5,
       new Vec2(),
@@ -89,7 +89,7 @@ async function init(): Promise<null> {
 
   function animate(): void {
     const now = Date.now();
-    uniforms.localToWorld = makeMat4Translation(
+    uniforms.localToWorld = translation3ToMat4(
       new Vec3(
         Math.cos(now * 0.00077) * 0.25,
         Math.sin(now * 0.001 + 0.4) * 0.25,

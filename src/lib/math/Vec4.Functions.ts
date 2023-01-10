@@ -1,64 +1,101 @@
-import { clamp } from './Functions.js';
-import { Vector4 } from './Vec4.js';
+import {
+  EPSILON,
+  equalsTolerance,
+  parseSafeFloats,
+  toSafeString
+} from './Common';
+import { Vec4 } from './Vec4';
 
-export function rgbeToLinear(source: Vector4, result = new Vector4()): Vector4 {
-  const s = 2 ** (source.a * 255 - 128);
-  return result.set(source.r * s, source.g * s, source.b * s, 1);
+export function vec4Equals(
+  a: Vec4,
+  b: Vec4,
+  tolerance: number = EPSILON
+): boolean {
+  return (
+    equalsTolerance(a.x, b.x, tolerance) &&
+    equalsTolerance(a.y, b.y, tolerance) &&
+    equalsTolerance(a.z, b.z, tolerance) &&
+    equalsTolerance(a.w, b.w, tolerance)
+  );
+}
+export function vec4Add(a: Vec4, b: Vec4, result = new Vec4()): Vec4 {
+  return result.set(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+}
+export function vec4Subtract(a: Vec4, b: Vec4, result = new Vec4()): Vec4 {
+  return result.set(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+export function vec4MultiplyByScalar(
+  a: Vec4,
+  b: number,
+  result = new Vec4()
+): Vec4 {
+  return result.set(a.x * b, a.y * b, a.z * b, a.w * b);
+}
+export function vec4Negate(a: Vec4, result = new Vec4()): Vec4 {
+  return result.set(-a.x, -a.y, -a.z, -a.w);
+}
+export function vec4LengthSq(a: Vec4): number {
+  return vec4Dot(a, a);
+}
+export function vec4Length(a: Vec4): number {
+  return Math.sqrt(vec4Dot(a, a));
 }
 
-export function linearToRgbd(
-  source: Vector4,
-  maxRange: number,
-  result = new Vector4()
-): Vector4 {
-  const maxRGB = Math.max(source.r, source.g, source.b);
-  const realD = Math.max(maxRange / maxRGB, 1);
-  const normalizedD = clamp(Math.floor(realD) / 255, 0, 1);
-  const s = normalizedD * (255 / maxRange);
-  return result.set(source.r * s, source.g * s, source.b * s, normalizedD);
+export function vec4Distance(a: Vec4, b: Vec4): number {
+  // TODO: optimize this by breaking it apart
+  return vec4Length(vec4Subtract(a, b));
+}
+export function vec4DistanceSq(a: Vec4, b: Vec4): number {
+  // TODO: optimize this by breaking it apart
+  return vec4LengthSq(vec4Subtract(a, b));
 }
 
-export function linearToRgbd16(
-  source: Vector4,
-  result = new Vector4()
-): Vector4 {
-  return linearToRgbd(source, 16, result);
+export function vec4Normalize(a: Vec4, result = new Vec4()): Vec4 {
+  const invLength = 1 / vec4Length(a);
+  return vec4MultiplyByScalar(a, invLength, result);
 }
-
-// TODO: Convert these to generics that take a encoding function of type (V4,V4)=>V4
-//  encodeArray<T>( sourceArray: Float32Array, result: Float32Array | undefined = undefined ): Float32Array {}
-
-export function rgbeToLinearArray(
-  sourceArray: Float32Array,
-  result: Float32Array | undefined = undefined
-): Float32Array {
-  const sourceColor = new Vector4();
-  const destColor = new Vector4();
-  if (result === undefined) {
-    result = new Float32Array(sourceArray.length);
-  }
-  for (let i = 0; i < sourceArray.length; i += 4) {
-    sourceColor.setFromArray(sourceArray, i);
-    rgbeToLinear(sourceColor, destColor);
-    destColor.toArray(result, i);
-  }
-  return result;
+export function vec4Dot(a: Vec4, b: Vec4): number {
+  return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
-
-export function linearToRgbdArray(
-  sourceArray: Float32Array,
-  maxRange: number,
-  result: Float32Array | undefined = undefined
-): Float32Array {
-  const sourceColor = new Vector4();
-  const destColor = new Vector4();
-  if (result === undefined) {
-    result = new Float32Array(sourceArray.length);
-  }
-  for (let i = 0; i < sourceArray.length; i += 4) {
-    sourceColor.setFromArray(sourceArray, i);
-    linearToRgbd(sourceColor, maxRange, destColor);
-    destColor.toArray(result, i);
-  }
-  return result;
+export function vec4Mix(
+  a: Vec4,
+  b: Vec4,
+  t: number,
+  result = new Vec4()
+): Vec4 {
+  const s = 1 - t;
+  return result.set(
+    a.x * s + b.x * t,
+    a.y * s + b.y * t,
+    a.z * s + b.z * t,
+    a.w * s + b.w * t
+  );
+}
+export function vec4FromArray(
+  array: Float42Array | number[],
+  offset = 0,
+  result = new Vec4()
+): Vec4 {
+  return result.set(
+    array[offset + 0],
+    array[offset + 1],
+    array[offset + 2],
+    array[offset + 3]
+  );
+}
+export function vec4ToArray(
+  a: Vec4,
+  array: Float32Array | number[],
+  offset = 0
+): void {
+  array[offset + 0] = a.x;
+  array[offset + 1] = a.y;
+  array[offset + 2] = a.z;
+  array[offset + 3] = a.w;
+}
+export function vec4ToString(a: Vec4): string {
+  return toSafeString([a.x, a.y, a.z, a.w]);
+}
+export function vec4Parse(text: string, result = new Vec4()): Vec4 {
+  return vec4FromArray(parseSafeFloats(text), 0, result);
 }

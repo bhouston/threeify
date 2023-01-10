@@ -10,11 +10,11 @@ import {
   fetchImage,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
-  makeMat4Concatenation,
+  mat4Multiply,
   makeMat4PerspectiveFov,
   makeMat4RotationFromEuler,
-  makeMat4Scale,
-  makeMat4Translation,
+  scale3ToMat4,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -33,9 +33,9 @@ async function init(): Promise<null> {
   const [geometry] = await fetchOBJ('/assets/models/ninjaHead/ninjaHead.obj');
   transformGeometry(
     geometry,
-    makeMat4Concatenation(
-      makeMat4Scale(new Vec3(0.06, 0.06, 0.06)),
-      makeMat4Translation(new Vec3(0, -172, -4))
+    mat4Multiply(
+      scale3ToMat4(new Vec3(0.06, 0.06, 0.06)),
+      translation3ToMat4(new Vec3(0, -172, -4))
     )
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
@@ -61,7 +61,7 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
-    worldToView: makeMat4Translation(new Vec3(0, 0, -3)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
     viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,

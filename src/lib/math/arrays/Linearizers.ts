@@ -1,7 +1,7 @@
 import { Color3 } from '../Color3.js';
 import { Mat3 } from '../Mat3.js';
 import { Mat4 } from '../Mat4.js';
-import { Quaternion } from '../Quaternion.js';
+import { Quat } from '../Quat.js';
 import { Vec2 } from '../Vec2.js';
 import { Vec3 } from '../Vec3.js';
 
@@ -47,8 +47,8 @@ export function linearizeVec3FloatArray(array: Vec3[]): Float32Array {
   return result;
 }
 
-export function linearizeQuaternionFloatArray(
-  array: Quaternion[]
+export function linearizeQuatFloatArray(
+  array: Quat[]
 ): Float32Array {
   const result = new Float32Array(array.length * 4);
   for (let i = 0; i < array.length; i++) {

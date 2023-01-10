@@ -5,7 +5,7 @@ import {
   makeBufferGeometryFromGeometry,
   makeMat4Inverse,
   makeMat4PerspectiveFov,
-  makeMat4RotationFromQuaternion,
+  makeMat4RotationFromQuat,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -74,7 +74,7 @@ async function init(): Promise<null> {
     const now = Date.now();
 
     passUniforms.viewToWorld = makeMat4Inverse(
-      makeMat4RotationFromQuaternion(orbit.orientation)
+      makeMat4RotationFromQuat(orbit.orientation)
     );
     passUniforms.screenToView = makeMat4Inverse(
       makeMat4PerspectiveFov(

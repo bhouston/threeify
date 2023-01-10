@@ -5,9 +5,9 @@ import {
 } from '../../math/Mat3.Functions.js';
 import { Mat3 } from '../../math/Mat3.js';
 import {
-  makeMat4Concatenation,
-  makeMat4Scale,
-  makeMat4Translation
+  mat4Multiply,
+  scale3ToMat4,
+  translation3ToMat4
 } from '../../math/Mat4.Functions.js';
 import { Mat4 } from '../../math/Mat4.js';
 import { Vec2 } from '../../math/Vec2.js';
@@ -31,13 +31,13 @@ export class Layer {
     // console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
 
     // world space is assumed to be in layer pixel space
-    const planeToLayer = makeMat4Scale(
+    const planeToLayer = scale3ToMat4(
       new Vec3(this.texImage2D.size.width, this.texImage2D.size.height, 1)
     );
-    const layerToImage = makeMat4Translation(
+    const layerToImage = translation3ToMat4(
       new Vec3(this.offset.x, this.offset.y, 0)
     );
-    this.planeToImage = makeMat4Concatenation(layerToImage, planeToLayer);
+    this.planeToImage = mat4Multiply(layerToImage, planeToLayer);
 
     const uvScale = makeMat3Scale(this.uvScaleFactor);
     const uvTranslation = makeMat3Translation(this.uvOffset);

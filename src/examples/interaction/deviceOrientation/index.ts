@@ -7,8 +7,8 @@ import {
   makeBufferGeometryFromGeometry,
   makeMat4Inverse,
   makeMat4Perspective,
-  makeMat4RotationFromQuaternion,
-  makeMat4Translation,
+  makeMat4RotationFromQuat,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -37,7 +37,7 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
-    worldToView: makeMat4Translation(new Vec3(0, 0, -1)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
     viewToScreen: makeMat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
     viewLightPosition: new Vec3(0, 0, 0),
     map: makeTexImage2DFromTexture(context, texture)
@@ -63,7 +63,7 @@ async function init(): Promise<null> {
 
     if (deviceOrientation !== undefined) {
       uniforms.localToWorld = makeMat4Inverse(
-        makeMat4RotationFromQuaternion(deviceOrientation.orientation)
+        makeMat4RotationFromQuat(deviceOrientation.orientation)
       );
     }
     renderBufferGeometry(

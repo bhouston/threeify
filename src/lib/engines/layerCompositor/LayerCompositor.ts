@@ -13,8 +13,8 @@ import {
   makeMat4Inverse,
   makeMat4Orthographic,
   makeMat4OrthographicSimple,
-  makeMat4Scale,
-  makeMat4Translation
+  scale3ToMat4,
+  translation3ToMat4
 } from '../../math/Mat4.Functions.js';
 import { Mat4 } from '../../math/Mat4.js';
 import { Vec2 } from '../../math/Vec2.js';
@@ -146,7 +146,7 @@ export class LayerCompositor {
     this.context.canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
     this.context.canvasFramebuffer.resize();
     const plane = planeGeometry(1, 1, 1, 1);
-    transformGeometry(plane, makeMat4Translation(new Vec3(0.5, 0.5, 0)));
+    transformGeometry(plane, translation3ToMat4(new Vec3(0.5, 0.5, 0)));
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(
       this.context,
@@ -346,7 +346,7 @@ export class LayerCompositor {
 
     const canvasToImage = makeMat4Inverse(imageToCanvas);
 
-    const planeToImage = makeMat4Scale(
+    const planeToImage = scale3ToMat4(
       new Vec3(canvasImageSize.width, canvasImageSize.height, 1)
     );
 

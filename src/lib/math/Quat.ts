@@ -1,19 +1,20 @@
-import { hashFloat4 } from '..';
+import { hashFloat4 } from '../core/hash';
 
-export type Vec4JSON = number[];
+export type QuatJSON = number[];
 
-export class Vec4 {
+export class Quat {
   constructor(
     public x: number = 0,
     public y: number = 0,
     public z: number = 0,
     public w: number = 0
   ) {}
+
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.w);
   }
 
-  clone(result = new Vec4()): Vec4 {
+  clone(result = new Quat()): Quat {
     return result.set(this.x, this.y, this.z, this.w);
   }
 

@@ -9,11 +9,11 @@ import {
   EulerOrder3,
   fetchOBJ,
   makeBufferGeometryFromGeometry,
-  makeMat4Concatenation,
+  mat4Multiply,
   makeMat4PerspectiveFov,
   makeMat4RotationFromEuler,
-  makeMat4Scale,
-  makeMat4Translation,
+  scale3ToMat4,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   Mat4,
   renderBufferGeometry,
@@ -29,9 +29,9 @@ async function init(): Promise<null> {
   const [geometry] = await fetchOBJ('/assets/models/cloth/cloth.obj');
   transformGeometry(
     geometry,
-    makeMat4Concatenation(
-      makeMat4Translation(new Vec3(0, -0.5, 0)),
-      makeMat4Scale(new Vec3(10, 10, 10))
+    mat4Multiply(
+      translation3ToMat4(new Vec3(0, -0.5, 0)),
+      scale3ToMat4(new Vec3(10, 10, 10))
     )
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
@@ -46,7 +46,7 @@ async function init(): Promise<null> {
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
-    worldToView: makeMat4Translation(new Vec3(0, 0, -2)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
     viewToScreen: makeMat4PerspectiveFov(
       25,
       0.1,

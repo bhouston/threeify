@@ -1,12 +1,13 @@
 import { IDisposable } from '../core/types.js';
+import { vec2Subtract } from '../index.js';
 import { Euler3 } from '../math/Euler3.js';
-import { makeQuaternionFromEuler } from '../math/Quaternion.Functions.js';
-import { Quaternion } from '../math/Quaternion.js';
+import { euler3ToQuat } from '../math/Quat.Functions.js';
+import { Quat } from '../math/Quat.js';
 import { Vec2 } from '../math/Vec2.js';
 
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vec2();
-  public orientation = new Quaternion();
+  public orientation = new Quat();
   public onPointerDownHandler: (ev: PointerEvent) => any;
   public onPointerCancelHandler: (ev: PointerEvent) => any;
   public onPointerUpHandler: (ev: PointerEvent) => any;
@@ -94,9 +95,10 @@ export class Orbit implements IDisposable {
   onPointerMove(pe: PointerEvent) {
     // console.log("pointer move", pe);
     const pointerClient = new Vec2(pe.clientX, pe.clientY);
-    const pointerClientDelta = pointerClient
-      .clone()
-      .sub(this.lastPointerClient);
+    const pointerClientDelta = vec2Subtract(
+      pointerClient,
+      this.lastPointerClient
+    );
 
     // convert to relative
     pointerClientDelta.x /= this.domElement.clientWidth;
@@ -105,7 +107,7 @@ export class Orbit implements IDisposable {
     this.eulerMomentum.x += pointerClientDelta.y * Math.PI * this.damping;
     this.eulerMomentum.y += pointerClientDelta.x * Math.PI * this.damping;
 
-    this.lastPointerClient.copy(pointerClient);
+    this.lastPointerClient.clone(pointerClient);
   }
 
   update() {
@@ -114,7 +116,7 @@ export class Orbit implements IDisposable {
     this.eulerMomentum.x *= 1 - this.damping;
     this.eulerMomentum.y *= 1 - this.damping;
 
-    this.orientation = makeQuaternionFromEuler(this.euler, this.orientation);
+    this.orientation = euler3ToQuat(this.euler, this.orientation);
 
     this.zoom += this.zoomMomentum;
     this.zoomMomentum *= 1 - this.damping;

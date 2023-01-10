@@ -2,7 +2,7 @@ import { IArrayable } from '../../core/types.js';
 import { Attribute } from '../../geometry/Attribute.js';
 import { Mat3 } from '../Mat3.js';
 import { Mat4 } from '../Mat4.js';
-import { Quaternion } from '../Quaternion.js';
+import { Quat } from '../Quat.js';
 import { Vec2 } from '../Vec2.js';
 import { Vec3 } from '../Vec3.js';
 
@@ -105,12 +105,12 @@ export function makeVec3View(
 ): Vec3View {
   return new Vec3View(dataArray, floatStride, floatOffset);
 }
-export function makeQuaternionView(
+export function makeQuatView(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): PrimitiveView<Quaternion> {
-  return new PrimitiveView<Quaternion>(dataArray, 4, floatStride, floatOffset);
+): PrimitiveView<Quat> {
+  return new PrimitiveView<Quat>(dataArray, 4, floatStride, floatOffset);
 }
 export function makeMat3View(
   dataArray: DataArray,
