@@ -1,16 +1,18 @@
-import { IArrayable } from '../../core/types.js';
 import { Attribute } from '../../geometry/Attribute.js';
+import { mat3FromArray, mat3ToArray } from '../Mat3.Functions.js';
 import { Mat3 } from '../Mat3.js';
+import { mat4FromArray, mat4ToArray } from '../Mat4.Functions.js';
 import { Mat4 } from '../Mat4.js';
+import { quatFromArray, quatToArray } from '../Quat.Functions.js';
 import { Quat } from '../Quat.js';
-import { vec2Add } from '../Vec2.Functions.js';
+import { vec2FromArray, vec2ToArray } from '../Vec2.Functions.js';
 import { Vec2 } from '../Vec2.js';
-import { vec3Add } from '../Vec3.Functions.js';
+import { vec3FromArray, vec3ToArray } from '../Vec3.Functions.js';
 import { Vec3 } from '../Vec3.js';
 
 type DataArray = Attribute | ArrayBuffer | Float32Array;
 
-export class PrimitiveView<P extends IArrayable> {
+export class PrimitiveView<PrimitiveType> {
   readonly floatArray: Float32Array;
   readonly count: number;
 
@@ -18,7 +20,17 @@ export class PrimitiveView<P extends IArrayable> {
     dataArray: DataArray,
     floatPerPrimitive = -1,
     public floatStride: number = -1,
-    public floatOffset: number = -1
+    public floatOffset: number = -1,
+    private primitiveToArray: (
+      p: PrimitiveType,
+      a: Float32Array,
+      i: number
+    ) => void,
+    private arrayToPrimitive: (
+      a: Float32Array,
+      i: number,
+      p: PrimitiveType
+    ) => void
   ) {
     if (dataArray instanceof Attribute) {
       if (this.floatStride >= 0) {
@@ -55,47 +67,22 @@ export class PrimitiveView<P extends IArrayable> {
     this.count = this.floatArray.length / this.floatStride;
   }
 
-  set(index: number, v: P): this {
-    v.toArray(this.floatArray, index * this.floatStride + this.floatOffset);
-    return this;
-  }
-
-  get(index: number, v: P): P {
-    v.setFromArray(
+  set(index: number, v: PrimitiveType): this {
+    this.primitiveToArray(
+      v,
       this.floatArray,
       index * this.floatStride + this.floatOffset
     );
+    return this;
+  }
+
+  get(index: number, v: PrimitiveType): PrimitiveType {
+    this.arrayToPrimitive(
+      this.floatArray,
+      index * this.floatStride + this.floatOffset,
+      v
+    );
     return v;
-  }
-}
-
-export class Vec2View extends PrimitiveView<Vec2> {
-  readonly tempPrimitive = new Vec2();
-
-  constructor(dataArray: DataArray, floatStride = -1, floatOffset = -1) {
-    super(dataArray, 2, floatStride, floatOffset);
-  }
-
-  add(index: number, v: Vec2): this {
-    return this.set(
-      index,
-      vec2Add(this.get(index, this.tempPrimitive), v, this.tempPrimitive)
-    );
-  }
-}
-
-export class Vec3View extends PrimitiveView<Vec3> {
-  readonly tempPrimitive = new Vec3();
-
-  constructor(dataArray: DataArray, floatStride = -1, floatOffset = -1) {
-    super(dataArray, 3, floatStride, floatOffset);
-  }
-
-  add(index: number, v: Vec3): this {
-    return this.set(
-      index,
-      vec3Add(this.get(index, this.tempPrimitive), v, this.tempPrimitive)
-    );
   }
 }
 
@@ -103,34 +90,69 @@ export function makeVec2View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): Vec2View {
-  return new Vec2View(dataArray, floatStride, floatOffset);
+): PrimitiveView<Vec2> {
+  return new PrimitiveView<Vec2>(
+    dataArray,
+    2,
+    floatStride,
+    floatOffset,
+    vec2ToArray,
+    vec2FromArray
+  );
 }
 export function makeVec3View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
-): Vec3View {
-  return new Vec3View(dataArray, floatStride, floatOffset);
+): PrimitiveView<Vec3> {
+  return new PrimitiveView<Vec3>(
+    dataArray,
+    3,
+    floatStride,
+    floatOffset,
+    vec3ToArray,
+    vec3FromArray
+  );
 }
 export function makeQuatView(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
 ): PrimitiveView<Quat> {
-  return new PrimitiveView<Quat>(dataArray, 4, floatStride, floatOffset);
+  return new PrimitiveView<Quat>(
+    dataArray,
+    4,
+    floatStride,
+    floatOffset,
+    quatToArray,
+    quatFromArray
+  );
 }
 export function makeMat3View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
 ): PrimitiveView<Mat3> {
-  return new PrimitiveView<Mat3>(dataArray, 9, floatStride, floatOffset);
+  return new PrimitiveView<Mat3>(
+    dataArray,
+    9,
+    floatStride,
+    floatOffset,
+    mat3ToArray,
+    mat3FromArray
+  );
 }
 export function makeMat4View(
   dataArray: DataArray,
   floatStride = -1,
   floatOffset = -1
 ): PrimitiveView<Mat4> {
-  return new PrimitiveView<Mat4>(dataArray, 16, floatStride, floatOffset);
+  return new PrimitiveView<Mat4>(
+    dataArray,
+    16,
+    floatStride,
+    floatOffset,
+    mat4ToArray,
+    mat4FromArray
+  );
 }
