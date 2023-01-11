@@ -272,28 +272,51 @@ describe('Mat4 Functions', () => {
   });
 
   // compose the matrix and then decompose the matrix, the results hsould be the same within the EPLISON tolerance
-  test('composeMat4', () => {
+  describe('composeMat4', () => {
     const translation = new Vec3(1, 2, 3);
-    const rotation = quatNormalize(new Quat(1, 2, 3, 4));
+    const rotation = quatNormalize(new Quat(1, 2, -3, 4));
     const scale = new Vec3(1, 2, 3);
-    const mat4 = composeMat4(translation, rotation, scale);
-    const {
-      translation: translation2,
-      rotation: rotation2,
-      scale: scale2
-    } = decomposeMat4(mat4);
-    console.log(translation2, translation);
-    console.log(rotation2, rotation);
-    console.log(scale2, scale);
-    expect(translation2.x).toBeCloseTo(translation.x, EPSILON);
-    expect(translation2.y).toBeCloseTo(translation.y, EPSILON);
-    expect(translation2.z).toBeCloseTo(translation.z, EPSILON);
-    expect(rotation2.x).toBeCloseTo(rotation.x, EPSILON);
-    expect(rotation2.y).toBeCloseTo(rotation.y, EPSILON);
-    expect(rotation2.z).toBeCloseTo(rotation.z, EPSILON);
-    expect(rotation2.w).toBeCloseTo(rotation.w, EPSILON);
-    expect(scale2.x).toBeCloseTo(scale.x, EPSILON);
-    expect(scale2.y).toBeCloseTo(scale.y, EPSILON);
-    expect(scale2.z).toBeCloseTo(scale.z, EPSILON);
+    const m = composeMat4(translation, rotation, scale);
+
+    test('explicit compose', () => {
+      const m2 = new Mat4([
+        0.13333333333333353, -0.6666666666666666, -0.7333333333333332, 0,
+        1.8666666666666665, 0.666666666666667, -0.2666666666666667, 0,
+        0.9999999999999998, -1.9999999999999996, 2, 0, 1, 2, 3, 1
+      ]);
+      expect(m.elements[0]).toBeCloseTo(m2.elements[0], EPSILON);
+      expect(m.elements[1]).toBeCloseTo(m2.elements[1], EPSILON);
+      expect(m.elements[2]).toBeCloseTo(m2.elements[2], EPSILON);
+      expect(m.elements[3]).toBeCloseTo(m2.elements[3], EPSILON);
+      expect(m.elements[4]).toBeCloseTo(m2.elements[4], EPSILON);
+      expect(m.elements[5]).toBeCloseTo(m2.elements[5], EPSILON);
+      expect(m.elements[6]).toBeCloseTo(m2.elements[6], EPSILON);
+      expect(m.elements[7]).toBeCloseTo(m2.elements[7], EPSILON);
+      expect(m.elements[8]).toBeCloseTo(m2.elements[8], EPSILON);
+      expect(m.elements[9]).toBeCloseTo(m2.elements[9], EPSILON);
+      expect(m.elements[10]).toBeCloseTo(m2.elements[10], EPSILON);
+      expect(m.elements[11]).toBeCloseTo(m2.elements[11], EPSILON);
+      expect(m.elements[12]).toBeCloseTo(m2.elements[12], EPSILON);
+      expect(m.elements[13]).toBeCloseTo(m2.elements[13], EPSILON);
+      expect(m.elements[14]).toBeCloseTo(m2.elements[14], EPSILON);
+      expect(m.elements[15]).toBeCloseTo(m2.elements[15], EPSILON);
+    });
+    test('composeMat4/decomposeMat4', () => {
+      const {
+        translation: translation2,
+        rotation: rotation2,
+        scale: scale2
+      } = decomposeMat4(m);
+      expect(translation2.x).toBeCloseTo(translation.x, EPSILON);
+      expect(translation2.y).toBeCloseTo(translation.y, EPSILON);
+      expect(translation2.z).toBeCloseTo(translation.z, EPSILON);
+      expect(rotation2.x).toBeCloseTo(rotation.x, EPSILON);
+      expect(rotation2.y).toBeCloseTo(rotation.y, EPSILON);
+      expect(rotation2.z).toBeCloseTo(rotation.z, EPSILON);
+      expect(rotation2.w).toBeCloseTo(rotation.w, EPSILON);
+      expect(scale2.x).toBeCloseTo(scale.x, EPSILON);
+      expect(scale2.y).toBeCloseTo(scale.y, EPSILON);
+      expect(scale2.z).toBeCloseTo(scale.z, EPSILON);
+    });
   });
 });

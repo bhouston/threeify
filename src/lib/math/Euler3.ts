@@ -1,13 +1,12 @@
 import { hashFloat4 } from '../core/hash.js';
 
 export enum EulerOrder3 {
-  XYZ = 0,
-  YXZ = 1,
-  ZXY = 2,
-  ZYX = 3,
-  YZX = 4,
-  XZY = 5,
-  Default = EulerOrder3.XYZ
+  XYZ,
+  XZY,
+  YXZ,
+  YZX,
+  ZYX,
+  ZXY
 }
 
 export type Euler3JSON = number[];
@@ -17,7 +16,7 @@ export class Euler3 {
     public x: number = 0,
     public y: number = 0,
     public z: number = 0,
-    public order: EulerOrder3 = EulerOrder3.Default
+    public order: EulerOrder3 = EulerOrder3.XYZ
   ) {}
 
   getHashCode(): number {

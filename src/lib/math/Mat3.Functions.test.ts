@@ -16,7 +16,6 @@ import {
 import { Mat4 } from './Mat4';
 import { mat3ToMat4, mat4Equals } from './Mat4.Functions';
 import { Vec3 } from './Vec3';
-import { vec3Delta } from './Vec3.Functions';
 
 describe('Mat3 Functions', () => {
   test('mat3Zero', () => {
@@ -63,9 +62,9 @@ describe('Mat3 Functions', () => {
     expect(mat3Delta(a, identity)).toBe(0);
 
     const testBases = [
-      new Vec3(0, 1, 0),
+      new Vec3(0, 2, 0),
       new Vec3(-1, 0, 0),
-      new Vec3(0, 0, 1)
+      new Vec3(0, 0, 3)
     ];
 
     const b = basis3ToMat3(testBases[0], testBases[1], testBases[2]);
@@ -74,8 +73,9 @@ describe('Mat3 Functions', () => {
     mat3ToBasis3(b, outBasis[0], outBasis[1], outBasis[2]);
     // check what goes in, is what comes out.
     for (let j = 0; j < outBasis.length; j++) {
-      console.log(j, testBases[j], outBasis[j], b);
-      expect(vec3Delta(testBases[j], outBasis[j])).toBe(0);
+      expect(testBases[j].x).toBeCloseTo(outBasis[j].x);
+      expect(testBases[j].y).toBeCloseTo(outBasis[j].y);
+      expect(testBases[j].z).toBeCloseTo(outBasis[j].z);
     }
 
     // get the basis out the hard war

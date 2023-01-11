@@ -28,21 +28,21 @@ export function mat3Identity(result = new Mat3()): Mat3 {
   return result.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
 }
 
-export function mat3SetRow3(
+export function mat3SetColumn3(
   m: Mat3,
   rowIndex: number,
   row: Vec3,
   result = new Mat3()
 ): Mat3 {
   const re = result.set(m.elements).elements;
-  const base = Number(rowIndex) * Mat3.NUM_ROWS;
+  const base = rowIndex * Mat3.NUM_ROWS;
   re[base + 0] = row.x;
   re[base + 1] = row.y;
   re[base + 2] = row.z;
   return result;
 }
 
-export function mat3GetRow3(
+export function mat3GetColumn3(
   m: Mat3,
   rowIndex: number,
   result = new Vec3()
@@ -55,7 +55,7 @@ export function mat3GetRow3(
   );
 }
 
-export function mat3SetColumn3(
+export function mat3SetRow3(
   m: Mat3,
   columnIndex: number,
   column: Vec3,
@@ -69,7 +69,7 @@ export function mat3SetColumn3(
   return result;
 }
 
-export function mat3GetColumn3(
+export function mat3GetRow3(
   m: Mat3,
   columnIndex: number,
   result = new Vec3()
@@ -90,13 +90,13 @@ export function basis3ToMat3(
 ): Mat3 {
   return result.set([
     xAxis.x,
-    yAxis.x,
-    zAxis.x,
     xAxis.y,
-    yAxis.y,
-    zAxis.y,
     xAxis.z,
+    yAxis.x,
+    yAxis.y,
     yAxis.z,
+    zAxis.x,
+    zAxis.y,
     zAxis.z
   ]);
 }
@@ -346,13 +346,13 @@ export function quatToMat3(q: Vec4, result = new Mat3()): Mat3 {
 
   return result.set([
     1 - (yy + zz),
-    xy - wz,
-    xz + wy,
     xy + wz,
-    1 - (xx + zz),
-    yz - wx,
     xz - wy,
+    xy - wz,
+    1 - (xx + zz),
     yz + wx,
+    xz + wy,
+    yz - wx,
     1 - (xx + yy)
   ]);
 }

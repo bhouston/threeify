@@ -1,7 +1,5 @@
 import { hashFloat4 } from '../core/hash';
 
-export type QuatJSON = number[];
-
 export class Quat {
   constructor(
     public x: number = 0,

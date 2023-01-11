@@ -11,7 +11,7 @@ export function euler3Delta(a: Euler3, b: Euler3): number {
 
 export function mat4ToEuler3(
   m: Mat4,
-  order: EulerOrder3 = EulerOrder3.Default,
+  order: EulerOrder3 = EulerOrder3.XYZ,
   result = new Euler3()
 ): Euler3 {
   return mat3ToEuler3(mat4ToMat3(m), order, result);
@@ -19,7 +19,7 @@ export function mat4ToEuler3(
 
 export function mat3ToEuler3(
   m: Mat3,
-  order: EulerOrder3 = EulerOrder3.Default,
+  order: EulerOrder3 = EulerOrder3.XYZ,
   result = new Euler3()
 ): Euler3 {
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
@@ -124,7 +124,7 @@ export function mat3ToEuler3(
 
 export function quatToEuler3(
   q: Quat,
-  order: EulerOrder3,
+  order: EulerOrder3 = EulerOrder3.XYZ,
   result = new Euler3()
 ): Euler3 {
   const m = quatToMat3(q);

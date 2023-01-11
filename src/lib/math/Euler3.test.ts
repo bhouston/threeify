@@ -28,7 +28,7 @@ describe('Euler3', () => {
     expect(a.x).toBe(0);
     expect(a.y).toBe(0);
     expect(a.z).toBe(0);
-    expect(a.order).toBe(EulerOrder3.Default);
+    expect(a.order).toBe(EulerOrder3.XYZ);
   });
 
   test('constructor values', () => {

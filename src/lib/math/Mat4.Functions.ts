@@ -41,26 +41,26 @@ export function mat4Identity(result = new Mat4()): Mat4 {
   return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 }
 
-export function mat4SetRow3(
+export function mat4SetColumn3(
   m: Mat4,
-  rowIndex: number,
-  row: Vec3,
+  index: number,
+  v: Vec3,
   result = new Mat4()
 ): Mat4 {
   const re = result.set(m.elements).elements;
-  const base = Number(rowIndex) * Mat4.NUM_ROWS;
-  re[base + 0] = row.x;
-  re[base + 1] = row.y;
-  re[base + 2] = row.z;
+  const base = Number(index) * Mat4.NUM_ROWS;
+  re[base + 0] = v.x;
+  re[base + 1] = v.y;
+  re[base + 2] = v.z;
   return result;
 }
 
-export function mat4GetRow3(
+export function mat4GetColumn3(
   m: Mat4,
-  rowIndex: number,
+  index: number,
   result = new Vec3()
 ): Vec3 {
-  const base = rowIndex * Mat4.NUM_ROWS;
+  const base = index * Mat4.NUM_ROWS;
   return result.set(
     m.elements[base + 0],
     m.elements[base + 1],
@@ -68,30 +68,26 @@ export function mat4GetRow3(
   );
 }
 
-export function mat4SetColumn3(
+export function mat4SetRow3(
   m: Mat4,
-  columnIndex: number,
-  column: Vec3,
+  index: number,
+  v: Vec3,
   result = new Mat4()
 ): Mat4 {
   const re = result.set(m.elements).elements;
   const stride = Mat4.NUM_COLUMNS;
-  re[columnIndex + stride * 0] = column.x;
-  re[columnIndex + stride * 1] = column.y;
-  re[columnIndex + stride * 2] = column.z;
+  re[index + stride * 0] = v.x;
+  re[index + stride * 1] = v.y;
+  re[index + stride * 2] = v.z;
   return result;
 }
 
-export function mat4GetColumn3(
-  m: Mat3,
-  columnIndex: number,
-  result = new Vec3()
-): Vec3 {
+export function mat4GetRow3(m: Mat3, index: number, result = new Vec3()): Vec3 {
   const stride = Mat4.NUM_COLUMNS;
   return result.set(
-    m.elements[columnIndex + stride * 0],
-    m.elements[columnIndex + stride * 1],
-    m.elements[columnIndex + stride * 2]
+    m.elements[index + stride * 0],
+    m.elements[index + stride * 1],
+    m.elements[index + stride * 2]
   );
 }
 
@@ -103,15 +99,15 @@ export function basis3ToMat4(
 ): Mat4 {
   return result.set([
     xAxis.x,
-    yAxis.x,
-    zAxis.x,
-    0,
     xAxis.y,
-    yAxis.y,
-    zAxis.y,
-    0,
     xAxis.z,
+    0,
+    yAxis.x,
+    yAxis.y,
     yAxis.z,
+    0,
+    zAxis.x,
+    zAxis.y,
     zAxis.z,
     0,
     0,
@@ -1090,17 +1086,16 @@ export function composeMat4(
   const sz = scale.z;
 
   return result.set([
-    // TODO: Replace with set
     (1 - (yy + zz)) * sx,
-    (xy - wz) * sy,
-    (xz + wy) * sz,
-    0,
     (xy + wz) * sx,
-    (1 - (xx + zz)) * sy,
-    (yz - wx) * sz,
-    0,
     (xz - wy) * sx,
+    0,
+    (xy - wz) * sy,
+    (1 - (xx + zz)) * sy,
     (yz + wx) * sy,
+    0,
+    (xz + wy) * sz,
+    (yz - wx) * sz,
     (1 - (xx + yy)) * sz,
     0,
     translation.x,
