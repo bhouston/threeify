@@ -15,4 +15,8 @@ export class Sphere {
     result.radius = this.radius;
     return result;
   }
+
+  copy(s: Sphere): this {
+    return this.set(s.center, s.radius);
+  }
 }

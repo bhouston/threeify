@@ -40,4 +40,17 @@ describe('Ray3', () => {
     expect(b.direction.y).toBe(5);
     expect(b.direction.z).toBe(6);
   });
+
+  test('copy', () => {
+    const a = new Ray3();
+    a.set(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const b = new Ray3();
+    b.copy(a);
+    expect(b.origin.x).toBe(1);
+    expect(b.origin.y).toBe(2);
+    expect(b.origin.z).toBe(3);
+    expect(b.direction.x).toBe(4);
+    expect(b.direction.y).toBe(5);
+    expect(b.direction.z).toBe(6);
+  });
 });

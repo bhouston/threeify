@@ -30,6 +30,10 @@ export function mat4Delta(a: Mat4, b: Mat4): number {
   return deltaSum;
 }
 
+export function mat4Zero(result = new Mat4()): Mat4 {
+  return result.set([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+}
+
 export function mat4Identity(result = new Mat4()): Mat4 {
   return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 }

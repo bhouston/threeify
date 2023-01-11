@@ -21,4 +21,12 @@ describe('Color3', () => {
     expect(c.g).toBe(2);
     expect(c.b).toBe(3);
   });
+  test('copy', () => {
+    const b = new Color3(1, 2, 3);
+    const c = new Color3();
+    c.copy(b);
+    expect(c.r).toBe(1);
+    expect(c.g).toBe(2);
+    expect(c.b).toBe(3);
+  });
 });

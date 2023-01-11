@@ -22,4 +22,12 @@ describe('Vec3', () => {
     expect(c.y).toBe(2);
     expect(c.z).toBe(3);
   });
+  test('copy', () => {
+    const b = new Vec3(1, 2, 3);
+    const c = new Vec3();
+    c.copy(b);
+    expect(c.x).toBe(1);
+    expect(c.y).toBe(2);
+    expect(c.z).toBe(3);
+  });
 });

@@ -24,4 +24,13 @@ describe('Vector4', () => {
     expect(c.z).toBe(3);
     expect(c.w).toBe(4);
   });
+  test('copy', () => {
+    const b = new Vec4(1, 2, 3, 4);
+    const c = new Vec4();
+    c.copy(b);
+    expect(c.x).toBe(1);
+    expect(c.y).toBe(2);
+    expect(c.z).toBe(3);
+    expect(c.w).toBe(4);
+  });
 });

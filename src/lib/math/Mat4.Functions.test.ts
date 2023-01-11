@@ -1,7 +1,8 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the Mat4 function helpers
 
 import { EPSILON } from './Functions.js';
-import { mat4ToMat3 } from './Mat3.Functions.js';
+import { mat3Equals, mat4ToMat3 } from './Mat3.Functions.js';
+import { Mat3 } from './Mat3.js';
 import {
   basis3ToMat4,
   composeMat4,
@@ -17,6 +18,7 @@ import {
   mat4ToBasis3,
   mat4TransformPoint3,
   mat4Transpose,
+  mat4Zero,
   scale3ToMat4,
   translation3ToMat4
 } from './Mat4.Functions';
@@ -27,39 +29,25 @@ import { vec3Delta } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 describe('Mat4 Functions', () => {
+  test('mat4Zero', () => {
+    const a = new Mat4([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]);
+    const b = mat4Zero(a);
+    const c = new Mat4([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    expect(mat4Equals(b, c)).toBe(true);
+  });
+
   test('mat4Identity', () => {
     const a = new Mat4([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]);
     const b = mat4Identity(a);
-    expect(b.elements[0]).toBe(1);
-    expect(b.elements[1]).toBe(0);
-    expect(b.elements[2]).toBe(0);
-    expect(b.elements[3]).toBe(0);
-    expect(b.elements[4]).toBe(0);
-    expect(b.elements[5]).toBe(1);
-    expect(b.elements[6]).toBe(0);
-    expect(b.elements[7]).toBe(0);
-    expect(b.elements[8]).toBe(0);
-    expect(b.elements[9]).toBe(0);
-    expect(b.elements[10]).toBe(1);
-    expect(b.elements[11]).toBe(0);
-    expect(b.elements[12]).toBe(0);
-    expect(b.elements[13]).toBe(0);
-    expect(b.elements[14]).toBe(0);
-    expect(b.elements[15]).toBe(1);
+    const c = new Mat4([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+    expect(mat4Equals(b, c)).toBe(true);
   });
 
   test('mat4ToMat3', () => {
     const a = new Mat4([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     const b = mat4ToMat3(a);
-    expect(b.elements[0]).toBe(1);
-    expect(b.elements[1]).toBe(2);
-    expect(b.elements[2]).toBe(3);
-    expect(b.elements[3]).toBe(5);
-    expect(b.elements[4]).toBe(6);
-    expect(b.elements[5]).toBe(7);
-    expect(b.elements[6]).toBe(9);
-    expect(b.elements[7]).toBe(10);
-    expect(b.elements[8]).toBe(11);
+    const c = new Mat3([1, 2, 3, 5, 6, 7, 9, 10, 11]);
+    expect(mat3Equals(b, c)).toBe(true);
   });
 
   test('mat4Equals', () => {

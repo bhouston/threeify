@@ -21,4 +21,8 @@ export class Ray3 {
   clone(result = new Ray3()): Ray3 {
     return result.set(this.origin, this.direction);
   }
+
+  copy(s: Ray3): this {
+    return this.set(s.origin, s.direction);
+  }
 }

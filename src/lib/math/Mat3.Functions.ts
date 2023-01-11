@@ -20,6 +20,14 @@ export function mat3Delta(a: Mat3, b: Mat3): number {
   return deltaSum;
 }
 
+export function mat3Zero(result = new Mat3()): Mat3 {
+  return result.set([0, 0, 0, 0, 0, 0, 0, 0, 0]);
+}
+
+export function mat3Identity(result = new Mat3()): Mat3 {
+  return result.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+}
+
 export function mat3SetRow3(
   m: Mat3,
   rowIndex: number,
@@ -100,7 +108,7 @@ export function basis3ToMat3(
   ]);
 }
 
-export function mat4ToBasis3(
+export function mat3ToBasis3(
   m: Mat3,
   xAxis = new Vec3(),
   yAxis = new Vec3(),
