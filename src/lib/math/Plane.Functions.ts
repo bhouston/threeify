@@ -1,9 +1,11 @@
+import { delta } from './Functions.js';
 import { Plane } from './Plane.js';
 import { Sphere } from './Sphere.js';
 import { Triangle3 } from './Triangle3.js';
 import {
   crossFromCoplanarPoints as vec3CrossFromCoplanarPoints,
   vec3Add,
+  vec3Delta,
   vec3Dot,
   vec3Equals,
   vec3Length,
@@ -12,6 +14,10 @@ import {
   vec3Normalize
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
+
+export function planeDelta(a: Plane, b: Plane): number {
+  return vec3Delta(a.normal, b.normal) + delta(a.constant, b.constant);
+}
 
 export function planeNormalize(p: Plane, result = new Plane()): Plane {
   // Note: will lead to a divide by zero if the plane is invalid.
