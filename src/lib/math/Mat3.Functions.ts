@@ -34,6 +34,19 @@ export function mat3SetColumn3(
   return result;
 }
 
+export function mat3GetColumn3(
+  m: Mat3,
+  columnIndex: number,
+  result = new Vec3()
+): Vec3 {
+  const base = columnIndex * Mat3.NUM_ROWS;
+  return result.set(
+    m.elements[base + 0],
+    m.elements[base + 1],
+    m.elements[base + 2]
+  );
+}
+
 export function mat3SetRow3(
   m: Mat3,
   rowIndex: number,
@@ -47,22 +60,47 @@ export function mat3SetRow3(
   return result;
 }
 
-export function column3ToMat3(
-  a: Vec3,
-  b: Vec3,
-  c: Vec3,
+export function mat3GetRow3(
+  m: Mat3,
+  rowIndex: number,
+  result = new Vec3()
+): Vec3 {
+  return result.set(
+    m.elements[rowIndex + Mat3.NUM_COLUMNS * 0],
+    m.elements[rowIndex + Mat3.NUM_COLUMNS * 1],
+    m.elements[rowIndex + Mat3.NUM_COLUMNS * 2]
+  );
+}
+
+export function basis3ToMat3(
+  xAxis: Vec3,
+  yAxis: Vec3,
+  zAxis: Vec3,
   result = new Mat3()
 ): Mat3 {
-  const re = result.elements;
-  const columns = [a, b, c];
-  for (let c = 0; c < columns.length; c++) {
-    const base = c * Mat3.NUM_ROWS;
-    const column = columns[c];
-    re[base + 0] = column.x;
-    re[base + 1] = column.y;
-    re[base + 2] = column.z;
-  }
-  return result;
+  return result.set([
+    xAxis.x,
+    yAxis.x,
+    zAxis.x,
+    xAxis.y,
+    yAxis.y,
+    zAxis.y,
+    xAxis.z,
+    yAxis.z,
+    zAxis.z
+  ]);
+}
+
+export function mat3ToBasis3(
+  m: Mat4,
+  xAxis = new Vec3(),
+  yAxis = new Vec3(),
+  zAxis = new Vec3()
+): { xAxis: Vec3; yAxis: Vec3; zAxis: Vec3 } {
+  mat3GetColumn3(m, 0, xAxis);
+  mat3GetColumn3(m, 1, yAxis);
+  mat3GetColumn3(m, 2, zAxis);
+  return { xAxis, yAxis, zAxis };
 }
 
 export function mat3Equals(a: Mat3, b: Mat3, tolerance = EPSILON): boolean {
@@ -158,6 +196,11 @@ export function mat3Determinant(m: Mat3): number {
     i = me[8];
 
   return a * e * i - a * f * h - b * d * i + b * f * g + c * d * h - c * e * g;
+}
+
+export function mat3Trace(m: Mat3): number {
+  const me = m.elements;
+  return me[0] + me[4] + me[8];
 }
 
 export function mat3Transpose(m: Mat3, result = new Mat3()): Mat3 {

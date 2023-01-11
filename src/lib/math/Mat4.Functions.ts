@@ -34,10 +34,10 @@ export function mat4Identity(result = new Mat4()): Mat4 {
   return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 }
 
-export function mat4SetColumn4(
+export function mat4SetColumn3(
   m: Mat4,
   columnIndex: number,
-  column: Vec4,
+  column: Vec3,
   result = new Mat4()
 ): Mat4 {
   const re = result.set(m.elements).elements;
@@ -45,43 +45,85 @@ export function mat4SetColumn4(
   re[base + 0] = column.x;
   re[base + 1] = column.y;
   re[base + 2] = column.z;
-  re[base + 3] = column.w;
   return result;
 }
 
-export function mat4SetRow4(
+export function mat4GetColumn3(
+  m: Mat4,
+  columnIndex: number,
+  result = new Vec3()
+): Vec3 {
+  const base = columnIndex * Mat4.NUM_ROWS;
+  return result.set(
+    m.elements[base + 0],
+    m.elements[base + 1],
+    m.elements[base + 2]
+  );
+}
+
+export function mat4SetRow3(
   m: Mat4,
   rowIndex: number,
-  row: Vec4,
+  row: Vec3,
   result = new Mat4()
 ): Mat4 {
   const re = result.set(m.elements).elements;
-  const base = Number(rowIndex);
-  re[base + Mat4.NUM_COLUMNS * 0] = row.x;
-  re[base + Mat4.NUM_COLUMNS * 1] = row.y;
-  re[base + Mat4.NUM_COLUMNS * 2] = row.z;
-  re[base + Mat4.NUM_COLUMNS * 3] = row.w;
+  const stride = Mat4.NUM_COLUMNS;
+  re[rowIndex + stride * 0] = row.x;
+  re[rowIndex + stride * 1] = row.y;
+  re[rowIndex + stride * 2] = row.z;
   return result;
 }
 
-export function column4ToMat4(
-  a: Vec4,
-  b: Vec4,
-  c: Vec4,
-  d: Vec4,
+export function mat3GetRow3(
+  m: Mat3,
+  rowIndex: number,
+  result = new Vec3()
+): Vec3 {
+  const stride = Mat4.NUM_COLUMNS;
+  return result.set(
+    m.elements[rowIndex + stride * 0],
+    m.elements[rowIndex + stride * 1],
+    m.elements[rowIndex + stride * 2]
+  );
+}
+
+export function basis3ToMat4(
+  xAxis: Vec3,
+  yAxis: Vec3,
+  zAxis: Vec3,
   result = new Mat4()
 ): Mat4 {
-  const re = result.elements;
-  const columns = [a, b, c, d];
-  for (let c = 0; c < columns.length; c++) {
-    const base = c * Mat4.NUM_ROWS;
-    const column = columns[c];
-    re[base + 0] = column.x;
-    re[base + 1] = column.y;
-    re[base + 2] = column.z;
-    re[base + 3] = column.w;
-  }
-  return result;
+  return result.set([
+    xAxis.x,
+    yAxis.x,
+    zAxis.x,
+    0,
+    xAxis.y,
+    yAxis.y,
+    zAxis.y,
+    0,
+    xAxis.z,
+    yAxis.z,
+    zAxis.z,
+    0,
+    0,
+    0,
+    0,
+    1
+  ]);
+}
+
+export function mat4ToBasis3(
+  m: Mat4,
+  xAxis = new Vec3(),
+  yAxis = new Vec3(),
+  zAxis = new Vec3()
+): { xAxis: Vec3; yAxis: Vec3; zAxis: Vec3 } {
+  mat4GetColumn3(m, 0, xAxis);
+  mat4GetColumn3(m, 1, yAxis);
+  mat4GetColumn3(m, 2, zAxis);
+  return { xAxis, yAxis, zAxis };
 }
 
 export function mat4Equals(
@@ -681,6 +723,11 @@ export function mat4PerspectiveFov(
   const bottom = top - height;
 
   return mat4Perspective(left, right, top, bottom, near, far, result);
+}
+
+export function mat4Trace(m: Mat4): number {
+  const me = m.elements;
+  return me[0] + me[5] + me[10] + me[15];
 }
 
 // TODO: Replace with a Box3?
