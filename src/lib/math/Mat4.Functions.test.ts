@@ -3,15 +3,19 @@
 import { EPSILON } from './Functions.js';
 import { mat4ToMat3 } from './Mat3.Functions.js';
 import {
+  basis3ToMat4,
   composeMat4,
   decomposeMat4,
   mat4Add,
+  mat4Delta,
   mat4Equals,
   mat4Identity,
   mat4Multiply,
   mat4MultiplyByScalar,
   mat4Negate,
   mat4Subtract,
+  mat4ToBasis3,
+  mat4TransformPoint3,
   mat4Transpose,
   scale3ToMat4,
   translation3ToMat4
@@ -19,6 +23,7 @@ import {
 import { Mat4 } from './Mat4.js';
 import { quatNormalize } from './Quat.Functions.js';
 import { Quat } from './Quat.js';
+import { vec3Delta } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 describe('Mat4 Functions', () => {
@@ -63,6 +68,48 @@ describe('Mat4 Functions', () => {
     const c = new Mat4([2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
     expect(mat4Equals(a, b)).toBe(true);
     expect(mat4Equals(a, c)).toBe(false);
+  });
+
+  test('basis3ToMat4/mat4ToBasis3', () => {
+    const identityBasis = [
+      new Vec3(1, 0, 0),
+      new Vec3(0, 1, 0),
+      new Vec3(0, 0, 1)
+    ];
+    const a = basis3ToMat4(
+      identityBasis[0],
+      identityBasis[1],
+      identityBasis[2]
+    );
+    const identity = new Mat4();
+    expect(mat4Delta(a, identity)).toBe(0);
+
+    const testBases = [
+      new Vec3(0, 1, 0),
+      new Vec3(-1, 0, 0),
+      new Vec3(0, 0, 1)
+    ];
+
+    const b = basis3ToMat4(testBases[0], testBases[1], testBases[2]);
+    const outBasis = [new Vec3(), new Vec3(), new Vec3()];
+
+    mat4ToBasis3(b, outBasis[0], outBasis[1], outBasis[2]);
+    // check what goes in, is what comes out.
+    for (let j = 0; j < outBasis.length; j++) {
+      console.log(j, testBases[j], outBasis[j], b);
+      expect(vec3Delta(testBases[j], outBasis[j])).toBe(0);
+    }
+
+    // get the basis out the hard war
+    for (let j = 0; j < identityBasis.length; j++) {
+      outBasis[j].copy(identityBasis[j]);
+      mat4TransformPoint3(b, outBasis[j], outBasis[j]);
+    }
+
+    // did the multiply method of basis extraction work?
+    for (let j = 0; j < outBasis.length; j++) {
+      expect(vec3Delta(testBases[j], outBasis[j])).toBe(0);
+    }
   });
 
   test('mat4Add', () => {

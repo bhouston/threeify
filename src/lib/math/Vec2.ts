@@ -11,6 +11,10 @@ export class Vec2 {
     return result.set(this.x, this.y);
   }
 
+  copy(v: Vec2): this {
+    return this.set(v.x, v.y);
+  }
+
   set(x: number, y: number): this {
     this.x = x;
     this.y = y;

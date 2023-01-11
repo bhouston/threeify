@@ -16,6 +16,10 @@ export class Color4 {
     return result.set(this.r, this.g, this.b, this.a);
   }
 
+  copy(v: Color4): this {
+    return this.set(v.r, v.g, v.b, v.a);
+  }
+
   set(r: number, g: number, b: number, a: number): this {
     this.r = r;
     this.g = g;

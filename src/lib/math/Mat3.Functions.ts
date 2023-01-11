@@ -20,33 +20,6 @@ export function mat3Delta(a: Mat3, b: Mat3): number {
   return deltaSum;
 }
 
-export function mat3SetColumn3(
-  m: Mat3,
-  columnIndex: number,
-  column: Vec3,
-  result = new Mat3()
-): Mat3 {
-  const re = result.set(m.elements).elements;
-  const base = columnIndex * Mat3.NUM_ROWS;
-  re[base + 0] = column.x;
-  re[base + 1] = column.y;
-  re[base + 2] = column.z;
-  return result;
-}
-
-export function mat3GetColumn3(
-  m: Mat3,
-  columnIndex: number,
-  result = new Vec3()
-): Vec3 {
-  const base = columnIndex * Mat3.NUM_ROWS;
-  return result.set(
-    m.elements[base + 0],
-    m.elements[base + 1],
-    m.elements[base + 2]
-  );
-}
-
 export function mat3SetRow3(
   m: Mat3,
   rowIndex: number,
@@ -54,9 +27,10 @@ export function mat3SetRow3(
   result = new Mat3()
 ): Mat3 {
   const re = result.set(m.elements).elements;
-  re[rowIndex + Mat3.NUM_COLUMNS * 0] = row.x;
-  re[rowIndex + Mat3.NUM_COLUMNS * 1] = row.y;
-  re[rowIndex + Mat3.NUM_COLUMNS * 2] = row.z;
+  const base = Number(rowIndex) * Mat3.NUM_ROWS;
+  re[base + 0] = row.x;
+  re[base + 1] = row.y;
+  re[base + 2] = row.z;
   return result;
 }
 
@@ -65,10 +39,38 @@ export function mat3GetRow3(
   rowIndex: number,
   result = new Vec3()
 ): Vec3 {
+  const base = rowIndex * Mat3.NUM_ROWS;
   return result.set(
-    m.elements[rowIndex + Mat3.NUM_COLUMNS * 0],
-    m.elements[rowIndex + Mat3.NUM_COLUMNS * 1],
-    m.elements[rowIndex + Mat3.NUM_COLUMNS * 2]
+    m.elements[base + 0],
+    m.elements[base + 1],
+    m.elements[base + 2]
+  );
+}
+
+export function mat3SetColumn3(
+  m: Mat3,
+  columnIndex: number,
+  column: Vec3,
+  result = new Mat3()
+): Mat3 {
+  const re = result.set(m.elements).elements;
+  const stride = Mat3.NUM_COLUMNS;
+  re[columnIndex + stride * 0] = column.x;
+  re[columnIndex + stride * 1] = column.y;
+  re[columnIndex + stride * 2] = column.z;
+  return result;
+}
+
+export function mat3GetColumn3(
+  m: Mat3,
+  columnIndex: number,
+  result = new Vec3()
+): Vec3 {
+  const stride = Mat3.NUM_COLUMNS;
+  return result.set(
+    m.elements[columnIndex + stride * 0],
+    m.elements[columnIndex + stride * 1],
+    m.elements[columnIndex + stride * 2]
   );
 }
 
@@ -82,17 +84,24 @@ export function basis3ToMat3(
     xAxis.x,
     yAxis.x,
     zAxis.x,
+    0,
     xAxis.y,
     yAxis.y,
     zAxis.y,
+    0,
     xAxis.z,
     yAxis.z,
-    zAxis.z
+    zAxis.z,
+    0,
+    0,
+    0,
+    0,
+    1
   ]);
 }
 
-export function mat3ToBasis3(
-  m: Mat4,
+export function mat4ToBasis3(
+  m: Mat3,
   xAxis = new Vec3(),
   yAxis = new Vec3(),
   zAxis = new Vec3()
@@ -303,37 +312,19 @@ export function mat3Parse(text: string, result = new Mat3()): Mat3 {
   return mat3FromArray(parseSafeFloats(text), 0, result);
 }
 
-export function eulerToMat3(euler: Vec3, result = new Mat3()): Mat3 {
-  const te = result.elements;
+export function mat3TransformPoint3(
+  m: Mat3,
+  v: Vec3,
+  result = new Vec3()
+): Vec3 {
+  const { x, y, z } = v;
+  const e = m.elements;
 
-  const x = euler.x,
-    y = euler.y,
-    z = euler.z;
-  const a = Math.cos(x),
-    b = Math.sin(x);
-  const c = Math.cos(y),
-    d = Math.sin(y);
-  const e = Math.cos(z),
-    f = Math.sin(z);
-
-  const ae = a * e,
-    af = a * f,
-    be = b * e,
-    bf = b * f;
-
-  te[0] = c * e;
-  te[3] = -c * f;
-  te[6] = d;
-
-  te[1] = af + be * d;
-  te[4] = ae - bf * d;
-  te[7] = -b * c;
-
-  te[2] = bf - ae * d;
-  te[5] = be + af * d;
-  te[8] = a * c;
-
-  return result;
+  return result.set(
+    e[0] * x + e[3] * y + e[6] * z,
+    e[1] * x + e[4] * y + e[7] * z,
+    e[2] * x + e[5] * y + e[8] * z
+  );
 }
 
 export function quatToMat3(q: Vec4, result = new Mat3()): Mat3 {

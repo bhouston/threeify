@@ -14,6 +14,9 @@ export class Color3 {
   clone(result = new Color3()): Color3 {
     return result.set(this.r, this.g, this.b);
   }
+  copy(v: Color3): this {
+    return this.set(v.r, v.g, v.b);
+  }
 
   set(r: number, g: number, b: number): this {
     this.r = r;

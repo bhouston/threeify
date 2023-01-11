@@ -15,6 +15,10 @@ export class Vec3 {
     return result.set(this.x, this.y, this.z);
   }
 
+  copy(v: Vec3): this {
+    return this.set(v.x, v.y, v.z);
+  }
+
   set(x: number, y: number, z: number): this {
     this.x = x;
     this.y = y;

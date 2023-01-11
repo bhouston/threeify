@@ -18,6 +18,10 @@ export class Quat {
     return result.set(this.x, this.y, this.z, this.w);
   }
 
+  copy(v: Quat): this {
+    return this.set(v.x, v.y, v.z, v.w);
+  }
+
   set(x: number, y: number, z: number, w: number): this {
     this.x = x;
     this.y = y;

@@ -28,6 +28,10 @@ export class Euler3 {
     return result.set(this.x, this.y, this.z, this.order);
   }
 
+  copy(v: Euler3): this {
+    return this.set(v.x, v.y, v.z, v.order);
+  }
+
   set(x: number, y: number, z: number, order: EulerOrder3): this {
     this.x = x;
     this.y = y;

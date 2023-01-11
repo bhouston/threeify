@@ -34,33 +34,6 @@ export function mat4Identity(result = new Mat4()): Mat4 {
   return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 }
 
-export function mat4SetColumn3(
-  m: Mat4,
-  columnIndex: number,
-  column: Vec3,
-  result = new Mat4()
-): Mat4 {
-  const re = result.set(m.elements).elements;
-  const base = Number(columnIndex) * Mat4.NUM_ROWS;
-  re[base + 0] = column.x;
-  re[base + 1] = column.y;
-  re[base + 2] = column.z;
-  return result;
-}
-
-export function mat4GetColumn3(
-  m: Mat4,
-  columnIndex: number,
-  result = new Vec3()
-): Vec3 {
-  const base = columnIndex * Mat4.NUM_ROWS;
-  return result.set(
-    m.elements[base + 0],
-    m.elements[base + 1],
-    m.elements[base + 2]
-  );
-}
-
 export function mat4SetRow3(
   m: Mat4,
   rowIndex: number,
@@ -68,23 +41,50 @@ export function mat4SetRow3(
   result = new Mat4()
 ): Mat4 {
   const re = result.set(m.elements).elements;
-  const stride = Mat4.NUM_COLUMNS;
-  re[rowIndex + stride * 0] = row.x;
-  re[rowIndex + stride * 1] = row.y;
-  re[rowIndex + stride * 2] = row.z;
+  const base = Number(rowIndex) * Mat4.NUM_ROWS;
+  re[base + 0] = row.x;
+  re[base + 1] = row.y;
+  re[base + 2] = row.z;
   return result;
 }
 
-export function mat3GetRow3(
-  m: Mat3,
+export function mat4GetRow3(
+  m: Mat4,
   rowIndex: number,
+  result = new Vec3()
+): Vec3 {
+  const base = rowIndex * Mat4.NUM_ROWS;
+  return result.set(
+    m.elements[base + 0],
+    m.elements[base + 1],
+    m.elements[base + 2]
+  );
+}
+
+export function mat4SetColumn3(
+  m: Mat4,
+  columnIndex: number,
+  column: Vec3,
+  result = new Mat4()
+): Mat4 {
+  const re = result.set(m.elements).elements;
+  const stride = Mat4.NUM_COLUMNS;
+  re[columnIndex + stride * 0] = column.x;
+  re[columnIndex + stride * 1] = column.y;
+  re[columnIndex + stride * 2] = column.z;
+  return result;
+}
+
+export function mat4GetColumn3(
+  m: Mat3,
+  columnIndex: number,
   result = new Vec3()
 ): Vec3 {
   const stride = Mat4.NUM_COLUMNS;
   return result.set(
-    m.elements[rowIndex + stride * 0],
-    m.elements[rowIndex + stride * 1],
-    m.elements[rowIndex + stride * 2]
+    m.elements[columnIndex + stride * 0],
+    m.elements[columnIndex + stride * 1],
+    m.elements[columnIndex + stride * 2]
   );
 }
 
