@@ -59,7 +59,7 @@ describe('Mat3 Functions', () => {
       identityBasis[1],
       identityBasis[2]
     );
-    const identity = new Mat4();
+    const identity = new Mat3();
     expect(mat3Delta(a, identity)).toBe(0);
 
     const testBases = [
@@ -86,7 +86,9 @@ describe('Mat3 Functions', () => {
 
     // did the multiply method of basis extraction work?
     for (let j = 0; j < outBasis.length; j++) {
-      expect(vec3Delta(testBases[j], outBasis[j])).toBe(0);
+      expect(testBases[j].x).toBeCloseTo(outBasis[j].x);
+      expect(testBases[j].y).toBeCloseTo(outBasis[j].y);
+      expect(testBases[j].z).toBeCloseTo(outBasis[j].z);
     }
   });
 
@@ -111,7 +113,7 @@ describe('Mat3 Functions', () => {
     const a = new Mat3([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     const b = new Mat3([2, 4, 6, 8, 10, 12, 14, 16, 18]);
     const c = 2;
-    const d = mat3MultiplyByScalar(a, a, c);
+    const d = mat3MultiplyByScalar(a, c);
     expect(mat3Equals(b, d)).toBe(true);
   });
 

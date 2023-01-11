@@ -45,12 +45,12 @@ describe('Sphere Functions', () => {
     expect(sphere.center.x).toBeCloseTo(1.5);
     expect(sphere.center.y).toBeCloseTo(1.5);
     expect(sphere.center.z).toBeCloseTo(1.5);
-    expect(sphere.radius).toBeCloseTo(0.7071067811865476);
+    expect(sphere.radius).toBeCloseTo(Math.sqrt(3 * Math.pow(0.5, 2)));
   });
 
   test('sphereTranslate', () => {
     const sphere = new Sphere(new Vec3(1, 1, 1), 1);
-    sphereTranslate(sphere, new Vec3(1, 1, 1));
+    sphereTranslate(sphere, new Vec3(1, 1, 1), sphere);
     expect(sphere.center.x).toBeCloseTo(2);
     expect(sphere.center.y).toBeCloseTo(2);
     expect(sphere.center.z).toBeCloseTo(2);
@@ -59,7 +59,7 @@ describe('Sphere Functions', () => {
 
   test('sphereScale', () => {
     const sphere = new Sphere(new Vec3(1, 1, 1), 1);
-    sphereScale(sphere, 2);
+    sphereScale(sphere, 2, sphere);
     expect(sphere.center.x).toBeCloseTo(1);
     expect(sphere.center.y).toBeCloseTo(1);
     expect(sphere.center.z).toBeCloseTo(1);

@@ -1,3 +1,4 @@
+import { clamp } from './Functions';
 import { Line3 } from './Line3';
 import { Vec3 } from './Vec3';
 import {
@@ -40,17 +41,32 @@ export function line3Invert(a: Line3, result = new Line3()): Line3 {
   return result.set(a.end, a.start);
 }
 
+export function line3ClosestPointParameter(
+  a: Line3,
+  b: Vec3,
+  clampToLine = true
+): number {
+  const sb = vec3Subtract(b, a.start);
+  const se = vec3Subtract(a.end, a.start);
+  const se2 = vec3Dot(se, se);
+  const se_sb = vec3Dot(se, sb);
+
+  if (se2 === 0) {
+    return 0;
+  }
+  let t = se_sb / se2;
+  if (clampToLine) {
+    t = clamp(t, 0, 1);
+  }
+  return t;
+}
+
 export function line3ClosestPoint(
   a: Line3,
   b: Vec3,
+  clampToLine = true,
   result = new Vec3()
 ): Vec3 {
-  const ab = vec3Subtract(b, a.start);
-  const ac = vec3Subtract(b, a.end);
-  const ab2 = vec3Dot(ab, ab);
-  if (ab2 === 0) {
-    return result.copy(a.start);
-  }
-  const t = vec3Dot(ac, ab) / ab2;
+  const t = line3ClosestPointParameter(a, b, clampToLine);
   return line3At(a, t, result);
 }

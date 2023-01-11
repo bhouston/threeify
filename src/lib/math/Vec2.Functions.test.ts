@@ -1,5 +1,7 @@
 import { Vec2 } from './Vec2';
 import {
+  makeVec2Fill,
+  makeVec2Fit,
   vec2Add,
   vec2Clamp,
   vec2Delta,

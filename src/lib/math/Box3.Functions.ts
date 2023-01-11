@@ -1,5 +1,3 @@
-import { Attribute } from '../geometry/Attribute.js';
-import { makeVec3View } from './arrays/PrimitiveView.js';
 import { Box3 } from './Box3.js';
 import { mat4TransformPoint3 } from './Mat4.Functions.js';
 import { Mat4 } from './Mat4.js';
@@ -117,48 +115,6 @@ export function box3FromVec3Array(
     }
     if (z > maxZ) {
       maxZ = z;
-    }
-  }
-
-  result.min.set(minX, minY, minZ);
-  result.max.set(maxX, maxY, maxZ);
-
-  return result;
-}
-
-export function box3FromAttribute(attribute: Attribute, result: Box3): Box3 {
-  let minX = Number.POSITIVE_INFINITY;
-  let minY = Number.POSITIVE_INFINITY;
-  let minZ = Number.POSITIVE_INFINITY;
-
-  let maxX = Number.NEGATIVE_INFINITY;
-  let maxY = Number.NEGATIVE_INFINITY;
-  let maxZ = Number.NEGATIVE_INFINITY;
-
-  const v = new Vec3();
-  const vectorView = makeVec3View(attribute);
-
-  for (let i = 0, l = attribute.count; i < l; i++) {
-    vectorView.get(i, v);
-
-    if (v.x < minX) {
-      minX = v.x;
-    }
-    if (v.y < minY) {
-      minY = v.y;
-    }
-    if (v.z < minZ) {
-      minZ = v.z;
-    }
-
-    if (v.x > maxX) {
-      maxX = v.x;
-    }
-    if (v.y > maxY) {
-      maxY = v.y;
-    }
-    if (v.z > maxZ) {
-      maxZ = v.z;
     }
   }
 

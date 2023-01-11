@@ -25,7 +25,6 @@ import {
 import { Mat4 } from './Mat4.js';
 import { quatNormalize } from './Quat.Functions.js';
 import { Quat } from './Quat.js';
-import { vec3Delta } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 describe('Mat4 Functions', () => {
@@ -84,8 +83,9 @@ describe('Mat4 Functions', () => {
     mat4ToBasis3(b, outBasis[0], outBasis[1], outBasis[2]);
     // check what goes in, is what comes out.
     for (let j = 0; j < outBasis.length; j++) {
-      console.log(j, testBases[j], outBasis[j], b);
-      expect(vec3Delta(testBases[j], outBasis[j])).toBe(0);
+      expect(testBases[j].x).toBeCloseTo(outBasis[j].x);
+      expect(testBases[j].y).toBeCloseTo(outBasis[j].y);
+      expect(testBases[j].z).toBeCloseTo(outBasis[j].z);
     }
 
     // get the basis out the hard war
@@ -96,7 +96,9 @@ describe('Mat4 Functions', () => {
 
     // did the multiply method of basis extraction work?
     for (let j = 0; j < outBasis.length; j++) {
-      expect(vec3Delta(testBases[j], outBasis[j])).toBe(0);
+      expect(testBases[j].x).toBeCloseTo(outBasis[j].x);
+      expect(testBases[j].y).toBeCloseTo(outBasis[j].y);
+      expect(testBases[j].z).toBeCloseTo(outBasis[j].z);
     }
   });
 

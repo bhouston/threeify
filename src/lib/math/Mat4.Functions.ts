@@ -8,7 +8,7 @@ import {
 } from './Functions';
 import { Line3 } from './Line3';
 import { Mat3 } from './Mat3';
-import { eulerToMat3, quatToMat3 } from './Mat3.Functions';
+import { quatToMat3 } from './Mat3.Functions';
 import { Mat4 } from './Mat4';
 import { Quat } from './Quat';
 import { mat4ToQuat } from './Quat.Functions';
@@ -602,10 +602,6 @@ export function mat3ToMat4(a: Mat3, result = new Mat4()): Mat4 {
   ]);
 }
 
-export function eulerToMat4(e: Vec3, result = new Mat4()): Mat4 {
-  return mat3ToMat4(eulerToMat3(e), result);
-}
-
 export function quatToMat4(q: Vec4, result = new Mat4()): Mat4 {
   return mat3ToMat4(quatToMat3(q), result);
 }
@@ -651,11 +647,15 @@ export function mat4Translate(m: Mat4, t: Vec3, result = new Mat4()): Mat4 {
 export function mat4Scale(m: Mat4, s: Vec3, result = new Mat4()): Mat4 {
   return mat4Multiply(m, scale3ToMat4(s), result);
 }
-export function mat4RotateByQuat(m: Mat4, q: Vec4, result = new Mat4()): Mat4 {
+export function mat4RotateByQuat(m: Mat4, q: Quat, result = new Mat4()): Mat4 {
   return mat4Multiply(m, quatToMat4(q), result);
 }
-export function mat4RotateByEuler(m: Mat4, e: Vec3, result = new Mat4()): Mat4 {
-  return mat4Multiply(m, eulerToMat4(e), result);
+export function mat4RotateByEuler(
+  m: Mat4,
+  e: Euler3,
+  result = new Mat4()
+): Mat4 {
+  return mat4Multiply(m, euler3ToMat4(e), result);
 }
 
 export function mat4TransformPoint3(

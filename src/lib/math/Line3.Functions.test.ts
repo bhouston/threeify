@@ -55,11 +55,15 @@ describe('Line3 Functions', () => {
   });
 
   test('line3ClosestPoint', () => {
-    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const a = new Line3(new Vec3(0, 0, 0), new Vec3(1, 0, 0));
     const b = new Vec3(7, 8, 9);
-    const c = line3ClosestPoint(a, b);
-    expect(c.x).toBeCloseTo(4.5);
-    expect(c.y).toBeCloseTo(5.5);
-    expect(c.z).toBeCloseTo(6.5);
+    const c = line3ClosestPoint(a, b, true);
+    expect(c.x).toBeCloseTo(1);
+    expect(c.y).toBeCloseTo(0);
+    expect(c.z).toBeCloseTo(0);
+    const d = line3ClosestPoint(a, b, false);
+    expect(d.x).toBeCloseTo(7);
+    expect(d.y).toBeCloseTo(0);
+    expect(d.z).toBeCloseTo(0);
   });
 });

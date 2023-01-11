@@ -62,6 +62,24 @@ export function vec4Normalize(a: Vec4, result = new Vec4()): Vec4 {
   }
   return vec4MultiplyByScalar(a, 1 / length, result);
 }
+
+export function vec4Min(a: Vec4, b: Vec4, result = new Vec4()): Vec4 {
+  return result.set(
+    Math.min(a.x, b.x),
+    Math.min(a.y, b.y),
+    Math.min(a.z, b.z),
+    Math.min(a.w, b.w)
+  );
+}
+export function vec4Max(a: Vec4, b: Vec4, result = new Vec4()): Vec4 {
+  return result.set(
+    Math.max(a.x, b.x),
+    Math.max(a.y, b.y),
+    Math.max(a.z, b.z),
+    Math.max(a.w, b.w)
+  );
+}
+
 export function vec4Dot(a: Vec4, b: Vec4): number {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }

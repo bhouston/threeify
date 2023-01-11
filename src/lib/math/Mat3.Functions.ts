@@ -92,19 +92,12 @@ export function basis3ToMat3(
     xAxis.x,
     yAxis.x,
     zAxis.x,
-    0,
     xAxis.y,
     yAxis.y,
     zAxis.y,
-    0,
     xAxis.z,
     yAxis.z,
-    zAxis.z,
-    0,
-    0,
-    0,
-    0,
-    1
+    zAxis.z
   ]);
 }
 
