@@ -16,6 +16,27 @@ export function quatDelta(a: Quat, b: Quat): number {
   return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z) + delta(a.w, b.w);
 }
 
+export function quatRandomUnit(result = new Quat()): Quat {
+  // Derived from http://planning.cs.uiuc.edu/node198.html
+  // Note, this source uses w, x, y, z ordering,
+  // so we swap the order below.
+
+  const u1 = Math.random();
+  const sqrt1u1 = Math.sqrt(1 - u1);
+  const sqrtu1 = Math.sqrt(u1);
+
+  const u2 = 2 * Math.PI * Math.random();
+
+  const u3 = 2 * Math.PI * Math.random();
+
+  return result.set(
+    sqrt1u1 * Math.cos(u2),
+    sqrtu1 * Math.sin(u3),
+    sqrtu1 * Math.cos(u3),
+    sqrt1u1 * Math.sin(u2)
+  );
+}
+
 export function quatEquals(
   a: Quat,
   b: Quat,
@@ -47,9 +68,15 @@ export function quatNegate(a: Quat, result = new Quat()): Quat {
 export function quatLength(a: Quat): number {
   return Math.sqrt(quatDot(a, a));
 }
+export function quatLengthSq(a: Quat): number {
+  return quatDot(a, a);
+}
 export function quatNormalize(a: Quat, result = new Quat()): Quat {
-  const invLength = 1 / quatLength(a);
-  return quatMultiplyByScalar(a, invLength, result);
+  const length = quatLength(a);
+  if (length === 0) {
+    return result.set(0, 0, 0, 1);
+  }
+  return quatMultiplyByScalar(a, 1 / length, result);
 }
 export function quatDot(a: Quat, b: Quat): number {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;

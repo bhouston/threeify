@@ -76,14 +76,17 @@ export function vec2DistanceSq(a: Vec2, b: Vec2): number {
   return vec2LengthSq(vec2Subtract(a, b));
 }
 
-export function vec2Normalize(a: Vec2, result: Vec2 = new Vec2()): Vec2 {
-  const invLength = 1 / vec2Length(a);
-  return vec2MultiplyByScalar(a, invLength, result);
+export function vec2Normalize(a: Vec2, result = new Vec2()): Vec2 {
+  const length = vec2Length(a);
+  if (length === 0) {
+    return result.set(0, 0);
+  }
+  return vec2MultiplyByScalar(a, 1 / length, result);
 }
 export function vec2Dot(a: Vec2, b: Vec2): number {
   return a.x * b.x + a.y * b.y;
 }
-export function vec2Mix(
+export function vec2Lerp(
   a: Vec2,
   b: Vec2,
   t: number,

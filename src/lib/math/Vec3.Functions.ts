@@ -72,8 +72,11 @@ export function vec3Clamp(
 }
 
 export function vec3Normalize(a: Vec3, result = new Vec3()): Vec3 {
-  const invLength = 1 / vec3Length(a);
-  return vec3MultiplyByScalar(a, invLength, result);
+  const length = vec3Length(a);
+  if (length === 0) {
+    return result.set(0, 0, 0);
+  }
+  return vec3MultiplyByScalar(a, 1 / length, result);
 }
 export function vec3Dot(a: Vec3, b: Vec3): number {
   return a.x * b.x + a.y * b.y + a.z * b.z;
@@ -88,7 +91,7 @@ export function vec3Cross(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
 
   return result.set(ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx);
 }
-export function vec3Mix(
+export function vec3Lerp(
   a: Vec3,
   b: Vec3,
   t: number,

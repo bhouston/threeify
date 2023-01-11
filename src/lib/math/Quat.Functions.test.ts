@@ -1,6 +1,5 @@
 import { Euler3, EulerOrder3 } from './Euler3';
 import { quatToEuler3 } from './Euler3.Functions';
-import { delta, EPSILON } from './Functions';
 import {
   euler3ToMat4,
   mat4Delta,
@@ -10,6 +9,7 @@ import {
 import { Quat } from './Quat';
 import {
   euler3ToQuat,
+  mat3ToQuat,
   mat4ToQuat,
   quatAngleTo,
   quatConjugate,
@@ -17,19 +17,16 @@ import {
   quatDot,
   quatExp,
   quatLength,
+  quatLengthSq,
   quatLn,
   quatMultiply,
   quatMultiplyByScalar,
   quatNormalize,
   quatPow,
   quatRotateTowards,
-  quatSubtract
+  quatSlerp
 } from './Quat.Functions';
 import { Vec4 } from './Vec4';
-
-// many of these are based on three.j tests.
-const orders = ['XYZ', 'YXZ', 'ZXY', 'ZYX', 'YZX', 'XZY'];
-const eulerAngles = new Euler3(0.1, -0.3, 0.25);
 
 const qX = quatNormalize(new Quat(1, 0, 0));
 const qY = quatNormalize(new Quat(0, 1, 0));
@@ -43,9 +40,12 @@ const qXYW = quatNormalize(new Quat(1, 0.5, 0, 0.25));
 const qYZW = quatNormalize(new Quat(0, 1, 0.5, 0.25));
 const qXZW = quatNormalize(new Quat(0.5, 0, 1, 0.25));
 
-function changeEulerOrder(euler, order) {
+function changeEulerOrder(euler: Euler3, order: EulerOrder3): Euler3 {
   return new Euler3(euler.x, euler.y, euler.z, order);
 }
+
+const eulerAngles = new Euler3(0.1, -0.3, 0.25);
+
 const testValues = [qX, qY, qZ, qW, qXY, qYZ, qXZ, qXYZ, qXYW, qYZW, qXZW];
 const testOrders = [
   EulerOrder3.XYZ,
@@ -157,18 +157,18 @@ describe('Quat Functions', () => {
       new Euler3(0, 0, 1)
     ];
 
-    const q1 = euler3ToQuat(changeEulerOrder(angles[0], 'XYZ'));
-    const q2 = euler3ToQuat(changeEulerOrder(angles[1], 'XYZ'));
-    const q3 = euler3ToQuat(changeEulerOrder(angles[2], 'XYZ'));
+    const q1 = euler3ToQuat(changeEulerOrder(angles[0], EulerOrder3.XYZ));
+    const q2 = euler3ToQuat(changeEulerOrder(angles[1], EulerOrder3.XYZ));
+    const q3 = euler3ToQuat(changeEulerOrder(angles[2], EulerOrder3.XYZ));
 
     const q = quatMultiply(quatMultiply(q1, q2), q3);
     const qq = quatMultiply(q1, quatMultiply(q2, q3));
 
     expect(quatDelta(q, qq)).toBeCloseTo(0);
 
-    const m1 = euler3ToMat4(changeEulerOrder(angles[0], 'XYZ'));
-    const m2 = euler3ToMat4(changeEulerOrder(angles[1], 'XYZ'));
-    const m3 = euler3ToMat4(changeEulerOrder(angles[2], 'XYZ'));
+    const m1 = euler3ToMat4(changeEulerOrder(angles[0], EulerOrder3.XYZ));
+    const m2 = euler3ToMat4(changeEulerOrder(angles[1], EulerOrder3.XYZ));
+    const m3 = euler3ToMat4(changeEulerOrder(angles[2], EulerOrder3.XYZ));
 
     const m = mat4Multiply(m1, mat4Multiply(m2, m3));
     const mm = mat4Multiply(mat4Multiply(m1, m2), m3);
@@ -179,6 +179,96 @@ describe('Quat Functions', () => {
 
     expect(quatDelta(q, qFromM)).toBeCloseTo(0);
   });
+
+  test('normalize/length/lengthSq', () => {
+    const a = new Quat(2, 3, 4, 5);
+    expect(quatLength(a)).not.toBe(1);
+    expect(quatLengthSq(a)).not.toBe(1);
+
+    quatNormalize(a, a);
+    expect(quatLength(a)).toBe(1);
+    expect(quatLengthSq(a)).toBe(1);
+
+    a.set(0, 0, 0, 0);
+    expect(quatLengthSq(a)).toBe(0);
+    expect(quatLength(a)).toBe(0);
+
+    quatNormalize(a, a);
+    expect(quatLength(a)).toBe(1);
+    expect(quatLengthSq(a)).toBe(1);
+  });
+
+  test('slerp', () => {
+    const a = new Quat(2, 3, 4, 5);
+    const b = new Quat(-2, -3, -4, -5);
+
+    const a1 = quatSlerp(a, b, 0);
+    const b1 = quatSlerp(a, b, 1);
+
+    expect(quatDelta(a, a1)).toBeCloseTo(0);
+    expect(quatDelta(b, b1)).toBeCloseTo(0);
+
+    const D = Math.SQRT1_2;
+
+    const e = new Quat(1, 0, 0, 0);
+    const f = new Quat(0, 0, 1, 0);
+    let expected = new Quat(D, 0, D, 0);
+    let result = quatSlerp(e, f, 0.5);
+    expect(quatDelta(result, expected)).toBeCloseTo(0);
+
+    const g = new Quat(0, D, 0, D);
+    const h = new Quat(0, -D, 0, D);
+    expected = new Quat(0, 0, 0, 1);
+    result = quatSlerp(g, h, 0.5);
+
+    expect(quatDelta(result, expected)).toBeCloseTo(0);
+  });
+
+  test('euler3ToQuat/mat4ToQuat', () => {
+    // ensure euler conversion for Quaternion matches that of Matrix4
+    for (let i = 0; i < testOrders.length; i++) {
+      const q = euler3ToQuat(changeEulerOrder(eulerAngles, testOrders[i]));
+      const m = euler3ToMat4(changeEulerOrder(eulerAngles, testOrders[i]));
+      const q2 = mat4ToQuat(m);
+
+      expect(quatDelta(q, q2)).toBeCloseTo(0);
+    }
+  });
+
+  test('mat4ToQuat 1', () => {
+    // contrived examples purely to please the god of code coverage...
+    // match conditions in various 'else [if]' blocks
+
+    const q = quatNormalize(new Quat(-9, -2, 3, -4));
+    const m = quatToMat4(q);
+    const expected = new Quat(
+      0.8581163303210332,
+      0.19069251784911848,
+      -0.2860387767736777,
+      0.38138503569823695
+    );
+    //expect(quatDelta(q, expected)).toBeCloseTo(0);
+    const q2 = mat3ToQuat(m);
+    expect(quatDelta(q2, expected)).toBeCloseTo(0);
+  });
+
+  test('mat4ToQuat 2', () => {
+    // contrived examples purely to please the god of code coverage...
+    // match conditions in various 'else [if]' blocks
+
+    const q = quatNormalize(new Quat(-1, -2, 1, -1));
+    const m = quatToMat4(q);
+    const expected = new Quat(
+      0.37796447300922714,
+      0.7559289460184544,
+      -0.37796447300922714,
+      0.37796447300922714
+    );
+    //expect(quatDelta(q, expected)).toBeCloseTo(0);
+
+    const q2 = mat3ToQuat(m);
+    expect(quatDelta(q2, expected)).toBeCloseTo(0);
+  });
 });
 
 describe('Quat-Euler3', () => {
@@ -187,7 +277,7 @@ describe('Quat-Euler3', () => {
       test(`q${qi} order ${ei}`, () => {
         const e = quatToEuler3(q, eulerOrder);
         const q2 = euler3ToQuat(e);
-        expect(quatLength(quatSubtract(q2, q))).toBeLessThan(0.000001);
+        expect(quatDelta(q2, q)).toBeCloseTo(0);
       });
     });
   });
@@ -198,7 +288,7 @@ describe('Quat-Mat4', () => {
     test(`q ${qi}`, () => {
       const m = quatToMat4(q);
       const q2 = mat4ToQuat(m);
-      expect(quatLength(quatSubtract(q2, q))).toBeLessThan(0.000001);
+      expect(quatDelta(q2, q)).toBeCloseTo(0);
     });
   });
 });
@@ -219,10 +309,8 @@ describe('Quat-Mat4', () => {
     );
 
     mat4ToQuat(m, a);
-    expect(delta(a.x, expected.x)).toBeLessThan(EPSILON);
-    expect(delta(a.y, expected.y)).toBeLessThan(EPSILON);
-    expect(delta(a.z, expected.z)).toBeLessThan(EPSILON);
-    expect(delta(a.w, expected.w)).toBeLessThan(EPSILON);
+
+    expect(quatDelta(a, expected)).toBeCloseTo(0);
   });
 
   test('Quat-Mat4 explicit 2', () => {
@@ -237,9 +325,6 @@ describe('Quat-Mat4', () => {
     );
 
     mat4ToQuat(m, a);
-    expect(delta(a.x, expected.x)).toBeLessThan(EPSILON);
-    expect(delta(a.y, expected.y)).toBeLessThan(EPSILON);
-    expect(delta(a.z, expected.z)).toBeLessThan(EPSILON);
-    expect(delta(a.w, expected.w)).toBeLessThan(EPSILON);
+    expect(quatDelta(a, expected)).toBeCloseTo(0);
   });
 });

@@ -56,13 +56,16 @@ export function vec4DistanceSq(a: Vec4, b: Vec4): number {
 }
 
 export function vec4Normalize(a: Vec4, result = new Vec4()): Vec4 {
-  const invLength = 1 / vec4Length(a);
-  return vec4MultiplyByScalar(a, invLength, result);
+  const length = vec4Length(a);
+  if (length === 0) {
+    return result.set(0, 0, 0, 0);
+  }
+  return vec4MultiplyByScalar(a, 1 / length, result);
 }
 export function vec4Dot(a: Vec4, b: Vec4): number {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
-export function vec4Mix(
+export function vec4Lerp(
   a: Vec4,
   b: Vec4,
   t: number,

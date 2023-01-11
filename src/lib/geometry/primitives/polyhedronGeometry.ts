@@ -8,7 +8,7 @@
 import { Vec2 } from '../../math/Vec2.js';
 import {
   vec3Add,
-  vec3Mix,
+  vec3Lerp,
   vec3MultiplyByScalar,
   vec3Normalize
 } from '../../math/Vec3.Functions.js';
@@ -233,8 +233,8 @@ export function polyhedronGeometry(
     for (let i = 0; i <= cols; i++) {
       v[i] = [];
 
-      const aj = vec3Mix(a, c, i / cols);
-      const bj = vec3Mix(b, c, i / cols);
+      const aj = vec3Lerp(a, c, i / cols);
+      const bj = vec3Lerp(b, c, i / cols);
 
       const rows = cols - i;
 
@@ -242,7 +242,7 @@ export function polyhedronGeometry(
         if (j === 0 && i === cols) {
           v[i][j] = aj;
         } else {
-          v[i][j] = vec3Mix(aj, bj, j / rows);
+          v[i][j] = vec3Lerp(aj, bj, j / rows);
         }
       }
     }

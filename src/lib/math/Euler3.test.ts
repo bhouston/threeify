@@ -3,7 +3,7 @@ import { euler3Delta, mat4ToEuler3, quatToEuler3 } from './Euler3.Functions';
 import { euler3ToMat4 } from './Mat4.Functions';
 import { euler3ToQuat } from './Quat.Functions';
 
-const testOrders = [
+const testtestOrders = [
   EulerOrder3.XYZ,
   EulerOrder3.YXZ,
   EulerOrder3.ZXY,
@@ -51,7 +51,7 @@ describe('Euler3', () => {
 
 describe('Euler3-Quat', () => {
   testValues.forEach((euler, ei) => {
-    testOrders.forEach((order, oi) => {
+    testtestOrders.forEach((order, oi) => {
       test(`e ${ei} order ${oi}`, () => {
         const e = euler.clone();
         e.order = order;
@@ -66,7 +66,7 @@ describe('Euler3-Quat', () => {
 
 describe('Euler3-Mat4', () => {
   testValues.forEach((euler, ei) => {
-    testOrders.forEach((order, oi) => {
+    testtestOrders.forEach((order, oi) => {
       test(`e ${ei} order ${oi}`, () => {
         const e = euler.clone();
         e.order = order;
