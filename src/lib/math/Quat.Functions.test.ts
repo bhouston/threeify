@@ -4,6 +4,7 @@ import {
   euler3ToMat4,
   mat4Delta,
   mat4Multiply,
+  mat4TransformPoint3,
   quatToMat4
 } from './Mat4.Functions';
 import { Quat } from './Quat';
@@ -23,8 +24,11 @@ import {
   quatNormalize,
   quatPow,
   quatRotateTowards,
-  quatSlerp
+  quatSlerp,
+  quatTransformPoint3
 } from './Quat.Functions';
+import { Vec3 } from './Vec3';
+import { vec3Delta } from './Vec3.Functions';
 import { Vec4 } from './Vec4';
 
 const qX = quatNormalize(new Quat(1, 0, 0));
@@ -266,6 +270,28 @@ describe('Quat Functions', () => {
     const q2 = mat4ToQuat(m);
     expect(quatDelta(q, q2)).toBeCloseTo(0);
     expect(quatDelta(q2, expected)).toBeCloseTo(0);
+  });
+
+  test('quatTransformPoint3', () => {
+    const angles = [
+      new Euler3(1, 0, 0),
+      new Euler3(0, 1, 0),
+      new Euler3(0, 0, 1)
+    ];
+
+    // ensure euler conversion for Quaternion matches that of Matrix4
+    for (let i = 0; i < testOrders.length; i++) {
+      for (let j = 0; j < angles.length; j++) {
+        const q = euler3ToQuat(changeEulerOrder(angles[j], testOrders[i]));
+        const m = euler3ToMat4(changeEulerOrder(angles[j], testOrders[i]));
+
+        const v0 = new Vec3(1, 0, 0);
+        const qv = quatTransformPoint3(q, v0);
+        const mv = mat4TransformPoint3(m, v0);
+
+        expect(vec3Delta(qv, mv)).toBeCloseTo(0);
+      }
+    }
   });
 });
 

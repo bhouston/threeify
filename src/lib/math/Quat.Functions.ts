@@ -146,6 +146,30 @@ export function quatMultiply(a: Quat, b: Quat, result = new Quat()): Quat {
   );
 }
 
+export function quatTransformPoint3(
+  q: Quat,
+  p: Vec3,
+  result = new Vec3()
+): Vec3 {
+  const { x, y, z } = p;
+  const { x: qx, y: qy, z: qz, w: qw } = q;
+
+  // calculate quat * vector
+
+  const ix = qw * x + qy * z - qz * y;
+  const iy = qw * y + qz * x - qx * z;
+  const iz = qw * z + qx * y - qy * x;
+  const iw = -qx * x - qy * y - qz * z;
+
+  // calculate result * inverse quat
+
+  return result.set(
+    ix * qw + iw * -qx + iy * -qz - iz * -qy,
+    iy * qw + iw * -qy + iz * -qx - ix * -qz,
+    iz * qw + iw * -qz + ix * -qy - iy * -qx
+  );
+}
+
 export function quatSlerp(
   a: Quat,
   b: Quat,
