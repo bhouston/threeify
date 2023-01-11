@@ -81,7 +81,7 @@ export function quatNormalize(a: Quat, result = new Quat()): Quat {
 export function quatDot(a: Quat, b: Quat): number {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
-export function quatMix(
+export function quatLerp(
   a: Quat,
   b: Quat,
   t: number,
@@ -174,7 +174,7 @@ export function quatSlerp(
   const sqrSinHalfTheta = 1 - cosHalfTheta * cosHalfTheta;
 
   if (sqrSinHalfTheta <= Number.EPSILON) {
-    quatMix(a, result, t);
+    quatLerp(a, result, t);
     quatNormalize(result, result);
 
     return result;

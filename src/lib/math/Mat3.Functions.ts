@@ -506,14 +506,14 @@ export function composeMat3(
 
   te[0] = c * scale.x;
   te[1] = -s * scale.y;
-  te[2] = translation.x;
+  te[2] = 0;
 
   te[3] = s * scale.x;
   te[4] = c * scale.y;
-  te[5] = translation.y;
+  te[5] = 0;
 
-  te[6] = 0;
-  te[7] = 0;
+  te[6] = translation.x;
+  te[7] = translation.y;
   te[8] = 1;
 
   return result;
@@ -536,8 +536,8 @@ export function decomposeMat3(
     sx = -sx;
   }
 
-  translation.x = te[2];
-  translation.y = te[5];
+  translation.x = te[6];
+  translation.y = te[7];
 
   rotation = Math.atan2(-te[1] / sy, te[4] / sy);
 

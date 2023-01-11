@@ -9,7 +9,6 @@ import {
 import { Quat } from './Quat';
 import {
   euler3ToQuat,
-  mat3ToQuat,
   mat4ToQuat,
   quatAngleTo,
   quatConjugate,
@@ -247,8 +246,8 @@ describe('Quat Functions', () => {
       -0.2860387767736777,
       0.38138503569823695
     );
-    //expect(quatDelta(q, expected)).toBeCloseTo(0);
-    const q2 = mat3ToQuat(m);
+    const q2 = mat4ToQuat(m);
+    expect(quatDelta(q, q2)).toBeCloseTo(0);
     expect(quatDelta(q2, expected)).toBeCloseTo(0);
   });
 
@@ -264,9 +263,8 @@ describe('Quat Functions', () => {
       -0.37796447300922714,
       0.37796447300922714
     );
-    //expect(quatDelta(q, expected)).toBeCloseTo(0);
-
-    const q2 = mat3ToQuat(m);
+    const q2 = mat4ToQuat(m);
+    expect(quatDelta(q, q2)).toBeCloseTo(0);
     expect(quatDelta(q2, expected)).toBeCloseTo(0);
   });
 });

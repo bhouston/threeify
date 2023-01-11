@@ -199,18 +199,18 @@ describe('Mat4 Functions', () => {
     expect(a.elements[0]).toBe(1);
     expect(a.elements[1]).toBe(0);
     expect(a.elements[2]).toBe(0);
-    expect(a.elements[3]).toBe(1);
+    expect(a.elements[3]).toBe(0);
     expect(a.elements[4]).toBe(0);
     expect(a.elements[5]).toBe(1);
     expect(a.elements[6]).toBe(0);
-    expect(a.elements[7]).toBe(2);
+    expect(a.elements[7]).toBe(0);
     expect(a.elements[8]).toBe(0);
     expect(a.elements[9]).toBe(0);
     expect(a.elements[10]).toBe(1);
-    expect(a.elements[11]).toBe(3);
-    expect(a.elements[12]).toBe(0);
-    expect(a.elements[13]).toBe(0);
-    expect(a.elements[14]).toBe(0);
+    expect(a.elements[11]).toBe(0);
+    expect(a.elements[12]).toBe(1);
+    expect(a.elements[13]).toBe(2);
+    expect(a.elements[14]).toBe(3);
     expect(a.elements[15]).toBe(1);
   });
 

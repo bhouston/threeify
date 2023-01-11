@@ -590,11 +590,11 @@ export function mat4ToMaxAxisScale(m: Mat4): number {
 }
 
 export function translation3ToMat4(t: Vec3, result = new Mat4()): Mat4 {
-  return result.set([1, 0, 0, t.x, 0, 1, 0, t.y, 0, 0, 1, t.z, 0, 0, 0, 1]);
+  return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.x, t.y, t.z, 1]);
 }
 export function mat4ToTranslation3(m: Mat4, result = new Vec3()): Vec3 {
   const me = m.elements;
-  return result.set(me[3], me[7], me[11]);
+  return result.set(me[12], me[13], me[14]);
 }
 export function mat4Translate(m: Mat4, t: Vec3, result = new Mat4()): Mat4 {
   return mat4Multiply(m, translation3ToMat4(t), result);
@@ -1014,18 +1014,18 @@ export function composeMat4(
     (1 - (yy + zz)) * sx,
     (xy - wz) * sy,
     (xz + wy) * sz,
-    translation.x,
+    0,
     (xy + wz) * sx,
     (1 - (xx + zz)) * sy,
     (yz - wx) * sz,
-    translation.y,
+    0,
     (xz - wy) * sx,
     (yz + wx) * sy,
     (1 - (xx + yy)) * sz,
+    0,
+    translation.x,
+    translation.y,
     translation.z,
-    0,
-    0,
-    0,
     1
   ]);
 }
