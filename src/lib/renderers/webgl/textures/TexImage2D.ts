@@ -97,7 +97,7 @@ export class TexImage2D implements IDisposable {
     if (!this.texParameters.generateMipmaps) {
       return 1;
     }
-    return Math.floor(Math.log2(Math.max(this.size.width, this.size.height)));
+    return Math.floor(Math.log2(Math.max(this.size.x, this.size.y)));
   }
 
   dispose(): void {

@@ -6,17 +6,17 @@ import {
   fetchImage,
   fetchImageElement,
   makeBufferGeometryFromGeometry,
-  mat4Multiply,
-  scale3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4Multiply,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
+  scale3ToMat4,
   ShaderMaterial,
   Texture,
+  translation3ToMat4,
   Vec2,
   Vec3
 } from '../../../lib/index.js';
@@ -77,8 +77,8 @@ async function init(): Promise<null> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
-  const blackClearState = new ClearState(new Vec3(0, 0, 0), 1);
-  const whiteClearState = new ClearState(new Vec3(1, 1, 1), 1);
+  const blackClearState = new ClearState(new Color3(0, 0, 0), 1);
+  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   function animate(): void {
     const time = Date.now();

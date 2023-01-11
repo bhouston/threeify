@@ -1,6 +1,7 @@
 import {
   BufferBit,
   ClearState,
+  Color3,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -85,7 +86,7 @@ async function init(): Promise<null> {
   );
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const whiteClearState = new ClearState(new Vec3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   function animate(): void {
     const now = Date.now();

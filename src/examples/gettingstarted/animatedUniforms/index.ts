@@ -2,7 +2,6 @@ import {
   Color3,
   Geometry,
   makeBufferGeometryFromGeometry,
-  makeColor3FromHSL,
   makeFloat32Attribute,
   makeProgramFromShaderMaterial,
   makeUint32Attribute,

@@ -13,7 +13,8 @@ export type TextureSource =
   | HTMLVideoElement
   | OffscreenCanvas
   | ImageBitmap
-  | { width: number; height: number };
+  | { width: number; height: number }
+  | { x: number; y: number };
 
 export class VirtualTexture {
   disposed = false;

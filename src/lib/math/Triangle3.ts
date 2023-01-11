@@ -1,10 +1,8 @@
 import { hashFloat3 } from '../core/hash.js';
-import { ICloneable, IEquatable, IHashable } from '../core/types.js';
+import { vec3Equals } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
-export class Triangle3
-  implements ICloneable<Triangle3>, IEquatable<Triangle3>, IHashable
-{
+export class Triangle3 {
   constructor(
     public a = new Vec3(),
     public b = new Vec3(),
@@ -36,6 +34,10 @@ export class Triangle3
   }
 
   equals(t: Triangle3): boolean {
-    return t.a.equals(this.a) && t.b.equals(this.b) && t.c.equals(this.c);
+    return (
+      vec3Equals(t.a, this.a) &&
+      vec3Equals(t.b, this.b) &&
+      vec3Equals(t.c, this.c)
+    );
   }
 }

@@ -6,23 +6,23 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   Framebuffer,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeColor3FromHSL,
-  mat4PerspectiveFov,
-  euler3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
   Mat4,
+  mat4PerspectiveFov,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   TextureFilter,
-  Vec3,
-  Vec2
+  translation3ToMat4,
+  Vec2,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import { patternMaterial } from './pattern/PatternMaterial.js';

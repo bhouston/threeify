@@ -2,6 +2,7 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -11,10 +12,10 @@ import {
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -53,7 +54,7 @@ async function init(): Promise<null> {
 
     // lights
     pointLightViewPosition: new Vec3(1, 0, -0.5),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1),40),
+    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 40),
     pointLightRange: 6,
 
     // materials
@@ -65,7 +66,7 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {

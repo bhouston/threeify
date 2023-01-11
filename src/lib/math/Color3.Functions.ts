@@ -101,7 +101,7 @@ makeMat3Concatenation
 	},
 */
 
-export function hslToRGB(hsl: Vec3, result = new Color3()): Color3 {
+export function hslToColor3(hsl: Vec3, result = new Color3()): Color3 {
   function hue2rgb(p: number, q: number, t: number): number {
     if (t < 0) {
       t += 1;
@@ -141,7 +141,7 @@ export function hslToRGB(hsl: Vec3, result = new Color3()): Color3 {
   );
 }
 
-export function rgbToHSL(rgb: Color3, result = new Vec3()): Vec3 {
+export function color3ToHSL(rgb: Color3, result = new Vec3()): Vec3 {
   // h,s,l ranges are in 0.0 - 1.0
   const { r, g, b } = rgb;
 

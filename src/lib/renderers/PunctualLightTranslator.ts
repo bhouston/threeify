@@ -1,3 +1,5 @@
+import { color3MultiplyByScalar } from '../math/Color3.Functions.js';
+import { Color3 } from '../math/Color3.js';
 import { Vec3 } from '../math/Vec3.js';
 import { DirectionalLight } from '../nodes/lights/DirectionalLight.js';
 import { Light } from '../nodes/lights/Light.js';
@@ -10,7 +12,7 @@ export class PunctualLightUniforms {
   numLights = 0;
   lightTypes: number[] = [];
   lightPositions: Vec3[] = [];
-  lightColors: Vec3[] = [];
+  lightColors: Color3[] = [];
   lightDirections: Vec3[] = [];
   lightRanges: number[] = [];
   lightInnerConeCos: number[] = [];
@@ -32,7 +34,7 @@ export function punctualLightsTranslator(
     result.lightTypes.push(light.type);
     result.lightPositions.push(light.position);
     result.lightColors.push(
-      light.color.clone().multiplyByScalar(light.intensity)
+      color3MultiplyByScalar(light.color, light.intensity)
     );
 
     if (node instanceof PointLight) {

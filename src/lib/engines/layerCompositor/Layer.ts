@@ -32,7 +32,7 @@ export class Layer {
 
     // world space is assumed to be in layer pixel space
     const planeToLayer = scale3ToMat4(
-      new Vec3(this.texImage2D.size.width, this.texImage2D.size.height, 1)
+      new Vec3(this.texImage2D.size.x, this.texImage2D.size.y, 1)
     );
     const layerToImage = translation3ToMat4(
       new Vec3(this.offset.x, this.offset.y, 0)

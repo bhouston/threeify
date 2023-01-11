@@ -3,6 +3,7 @@ import { transformGeometry } from '../../geometry/Geometry.Functions.js';
 import { planeGeometry } from '../../geometry/primitives/planeGeometry.js';
 import { Blending } from '../../materials/Blending.js';
 import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
+import { Color3 } from '../../math/Color3.js';
 import { ceilPow2 } from '../../math/Functions.js';
 import {
   makeMat3Concatenation,
@@ -17,6 +18,12 @@ import {
   translation3ToMat4
 } from '../../math/Mat4.Functions.js';
 import { Mat4 } from '../../math/Mat4.js';
+import {
+  vec2Add,
+  vec2Equals,
+  vec2MultiplyByScalar,
+  vec2Subtract
+} from '../../math/Vec2.Functions.js';
 import { Vec2 } from '../../math/Vec2.js';
 import { Vec3 } from '../../math/Vec3.js';
 import { isFirefox, isiOS, isMacOS } from '../../platform/Detection.js';
@@ -127,7 +134,7 @@ export class LayerCompositor {
   #layerVersion = 0;
   #offlineLayerVersion = -1;
   firstRender = true;
-  clearState = new ClearState(new Vec3(1, 1, 1), 0);
+  clearState = new ClearState(new Color3(1, 1, 1), 0);
   offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vec2(0, 0);
   offscreenColorAttachment: TexImage2D | undefined;
@@ -175,7 +182,7 @@ export class LayerCompositor {
     );
     if (
       this.offscreenFramebuffer === undefined ||
-      !this.offscreenSize.equals(offscreenSize)
+      !vec2Equals(this.offscreenSize, offscreenSize)
     ) {
       // console.log("updating framebuffer");
 
@@ -285,32 +292,37 @@ export class LayerCompositor {
 
     const { canvasFramebuffer } = this.context;
     const canvasSize = canvasFramebuffer.size;
-    const canvasAspectRatio = canvasSize.width / canvasSize.height;
+    const canvasAspectRatio = canvasSize.x / canvasSize.y;
 
     const imageToCanvasScale =
       this.imageFitMode === ImageFitMode.FitWidth
-        ? canvasSize.width / this.imageSize.width
-        : canvasSize.height / this.imageSize.height;
+        ? canvasSize.x / this.imageSize.y
+        : canvasSize.x / this.imageSize.y;
 
-    const canvasImageSize = this.imageSize
-      .clone()
-      .multiplyByScalar(imageToCanvasScale);
-    const canvasImageCenter = canvasImageSize.clone().multiplyByScalar(0.5);
+    const canvasImageSize = vec2MultiplyByScalar(
+      this.imageSize,
+      imageToCanvasScale
+    );
+
+    const canvasImageCenter = vec2MultiplyByScalar(canvasImageSize, 0.5);
 
     if (this.zoomScale > 1) {
       // convert from canvas space to image space
-      const imagePanPosition = this.panPosition
-        .clone()
-        .multiplyByScalar(1 / imageToCanvasScale)
-        .multiplyByScalar(this.context.canvasFramebuffer.devicePixelRatio);
-      const imageCanvasSize = canvasSize
-        .clone()
-        .multiplyByScalar(1 / imageToCanvasScale);
+      const imagePanPosition = vec2MultiplyByScalar(
+        this.panPosition,
+        (1 / imageToCanvasScale) *
+          this.context.canvasFramebuffer.devicePixelRatio
+      );
+      const imageCanvasSize = vec2MultiplyByScalar(
+        canvasSize,
+        1 / imageToCanvasScale
+      );
 
       // center pan
-      const imagePanOffset = imagePanPosition
-        .clone()
-        .sub(imageCanvasSize.clone().multiplyByScalar(0.5));
+      const imagePanOffset = vec2Subtract(
+        imagePanPosition,
+        vec2MultiplyByScalar(imageCanvasSize, 0.5)
+      );
       // clamp to within image.
       imagePanOffset.x =
         Math.sign(imagePanOffset.x) *
@@ -320,20 +332,22 @@ export class LayerCompositor {
         Math.min(Math.abs(imagePanOffset.y), this.imageSize.y * 0.5);
 
       // convert back to
-      const canvasPanOffset = imagePanOffset
-        .clone()
-        .multiplyByScalar(imageToCanvasScale);
+      const canvasPanOffset = vec2MultiplyByScalar(
+        imagePanOffset,
+        imageToCanvasScale
+      );
 
       // ensure zoom is at point of contact, not center of screen.
-      const centeredCanvasPanOffset = canvasPanOffset
-        .clone()
-        .multiplyByScalar(1 - 1 / this.zoomScale);
+      const centeredCanvasPanOffset = vec2MultiplyByScalar(
+        canvasPanOffset,
+        1 - 1 / this.zoomScale
+      );
 
-      canvasImageCenter.add(centeredCanvasPanOffset);
+      vec2Add(canvasImageCenter, centeredCanvasPanOffset, canvasImageCenter);
     }
 
     const imageToCanvas = mat4OrthographicSimple(
-      canvasSize.height,
+      canvasSize.y,
       canvasImageCenter,
       -1,
       1,
@@ -347,27 +361,26 @@ export class LayerCompositor {
     const canvasToImage = mat4Inverse(imageToCanvas);
 
     const planeToImage = scale3ToMat4(
-      new Vec3(canvasImageSize.width, canvasImageSize.height, 1)
+      new Vec3(canvasImageSize.x, canvasImageSize.y, 1)
     );
 
     this.renderLayersToFramebuffer();
 
     const layerUVScale = new Vec2(
-      this.imageSize.width / this.offscreenSize.width,
-      this.imageSize.height / this.offscreenSize.height
+      this.imageSize.x / this.offscreenSize.x,
+      this.imageSize.y / this.offscreenSize.y
     );
 
     const uvScale = scale2ToMat3(layerUVScale);
     const uvTranslation = translation2ToMat3(
       new Vec2(
         0,
-        (this.offscreenSize.height - this.imageSize.height) /
-          this.offscreenSize.height
+        (this.offscreenSize.y - this.imageSize.y) / this.offscreenSize.y
       )
     );
     const uvToTexture = makeMat3Concatenation(uvTranslation, uvScale);
 
-    canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 0);
+    canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
     canvasFramebuffer.clear();
 
     const { offscreenColorAttachment } = this;
@@ -421,7 +434,7 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 0);
+    offscreenFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
     offscreenFramebuffer.clear();
 
     const imageToOffscreen = mat4Orthographic(

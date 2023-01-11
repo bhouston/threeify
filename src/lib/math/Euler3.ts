@@ -6,7 +6,8 @@ export enum EulerOrder3 {
   YXZ,
   YZX,
   ZYX,
-  ZXY
+  ZXY,
+  Default = XYZ
 }
 
 export type Euler3JSON = number[];

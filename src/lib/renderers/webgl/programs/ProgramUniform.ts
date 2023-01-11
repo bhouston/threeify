@@ -191,7 +191,7 @@ export class ProgramUniform {
         if (value instanceof Mat3) {
           const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
-            gl.uniformMat3fv(this.glLocation, false, value.elements);
+            gl.uniformMatrix3fv(this.glLocation, false, value.elements);
             this.valueHashCode = hashCode;
           }
           return this;

@@ -35,8 +35,8 @@ export function readPixelsFromFramebuffer(
   const pixelByteLength =
     sizeOfDataType(texImage2D.dataType) *
     numPixelFormatComponents(texImage2D.pixelFormat) *
-    texImage2D.size.width *
-    texImage2D.size.height;
+    texImage2D.size.x *
+    texImage2D.size.y;
   if (pixelBuffer === undefined) {
     pixelBuffer = new Uint8Array(pixelByteLength);
   }
@@ -49,8 +49,8 @@ export function readPixelsFromFramebuffer(
   gl.readPixels(
     0,
     0,
-    texImage2D.size.width,
-    texImage2D.size.height,
+    texImage2D.size.x,
+    texImage2D.size.y,
     texImage2D.pixelFormat,
     texImage2D.dataType,
     pixelBuffer

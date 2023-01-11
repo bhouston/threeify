@@ -2,22 +2,23 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
+  Color3,
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   makeBufferGeometryFromGeometry,
   makeColor3FromHSL,
   makeHexStringFromColor3,
-  mat4OrthographicSimple,
-  euler3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4OrthographicSimple,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
+  translation3ToMat4,
   Vec2,
   Vec3
 } from '../../../lib/index.js';
@@ -90,7 +91,7 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  const whiteClearState = new ClearState(new Vec3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   let frameNumber = 0;
   function animate(): void {

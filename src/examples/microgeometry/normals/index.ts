@@ -67,7 +67,7 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vec3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
