@@ -1,7 +1,5 @@
-import { box3FromVec3s } from './Box3.Functions.js';
+import { box3Center, box3FromVec3s } from './Box3.Functions.js';
 import { Box3 } from './Box3.js';
-import { mat4ToMaxAxisScale } from './Mat4.Functions.js';
-import { Mat4 } from './Mat4.js';
 import { Sphere } from './Sphere.js';
 import {
   vec3Add,
@@ -31,20 +29,20 @@ export function sphereEquals(a: Sphere, b: Sphere): boolean {
 
 // TODO: Standardize constructor parameters to make it clear where the result it.  Often it is last and called result.
 export function box3ToSphere(box: Box3, result = new Sphere()): Sphere {
-  box.getCenter(result.center);
+  box3Center(box, result.center);
   result.radius = vec3Distance(box.min, box.max) * 0.5;
   return result;
 }
 
 export function vec3ArrayToSphere(
   points: Vec3[],
-  optionalCenter: Vec3 | undefined,
+  optionalCenter: Vec3 | undefined = undefined,
   result = new Sphere()
 ): Sphere {
   if (optionalCenter !== undefined) {
     optionalCenter.clone(result.center);
   } else {
-    box3FromVec3s(points).getCenter(result.center);
+    box3Center(box3FromVec3s(points), result.center);
   }
   let maxRadiusSq = 0;
   for (let i = 0, il = points.length; i < il; i++) {
@@ -83,16 +81,6 @@ export function sphereClampPoint(
     );
   }
 
-  return result;
-}
-
-export function sphereTransformMat3(
-  s: Sphere,
-  m: Mat4,
-  result = new Sphere()
-): Sphere {
-  transformPoint3(s.center, m, result.center);
-  result.radius = s.radius * mat4ToMaxAxisScale(m);
   return result;
 }
 

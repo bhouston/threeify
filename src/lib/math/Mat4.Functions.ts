@@ -6,11 +6,14 @@ import {
   parseSafeFloats,
   toSafeString
 } from './Functions';
+import { Line3 } from './Line3';
 import { Mat3 } from './Mat3';
 import { eulerToMat3, quatToMat3 } from './Mat3.Functions';
 import { Mat4 } from './Mat4';
 import { Quat } from './Quat';
 import { mat4ToQuat } from './Quat.Functions';
+import { Ray3 } from './Ray3';
+import { Sphere } from './Sphere';
 import { Vec2 } from './Vec2';
 import { Vec3 } from './Vec3';
 import {
@@ -685,6 +688,32 @@ export function mat4TransformNormal3(
   result.z = e[2] * x + e[6] * y + e[10] * z;
 
   return vec3Normalize(result, result);
+}
+
+export function mat4TransformSphere(
+  m: Mat4,
+  s: Sphere,
+  result = new Sphere()
+): Sphere {
+  mat4TransformPoint3(m, s.center, result.center);
+  result.radius = s.radius * mat4ToMaxAxisScale(m);
+  return result;
+}
+
+export function mat4TransformRay3(m: Mat4, r: Ray3, result = new Ray3()): Ray3 {
+  mat4TransformPoint3(m, r.origin, result.origin);
+  mat4TransformNormal3(m, r.direction, result.direction);
+  return result;
+}
+
+export function mat4TransformLine3(
+  m: Mat4,
+  l: Line3,
+  result = new Line3()
+): Line3 {
+  mat4TransformPoint3(m, l.start, result.start);
+  mat4TransformPoint3(m, l.end, result.end);
+  return result;
 }
 
 export function mat4Perspective(

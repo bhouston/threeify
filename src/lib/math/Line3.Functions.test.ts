@@ -1,0 +1,65 @@
+import { Line3 } from './Line3';
+import {
+  line3At,
+  line3ClosestPoint,
+  line3Delta,
+  line3Invert,
+  line3Length,
+  line3LengthSq,
+  line3Midpoint
+} from './Line3.Functions';
+import { Vec3 } from './Vec3';
+
+describe('Line3 Functions', () => {
+  test('line3Delta', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const b = new Line3(new Vec3(7, 8, 9), new Vec3(10, 11, 12));
+    expect(line3Delta(a, b)).toBeCloseTo(36);
+  });
+
+  test('line3Length', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    expect(line3Length(a)).toBeCloseTo(5.1961524227);
+  });
+
+  test('line3LengthSq', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    expect(line3LengthSq(a)).toBeCloseTo(27);
+  });
+
+  test('line3Midpoint', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const b = line3Midpoint(a);
+    expect(b.x).toBeCloseTo(2.5);
+    expect(b.y).toBeCloseTo(3.5);
+    expect(b.z).toBeCloseTo(4.5);
+  });
+
+  test('line3At', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const b = line3At(a, 0.5);
+    expect(b.x).toBeCloseTo(2.5);
+    expect(b.y).toBeCloseTo(3.5);
+    expect(b.z).toBeCloseTo(4.5);
+  });
+
+  test('line3Invert', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const b = line3Invert(a);
+    expect(b.start.x).toBeCloseTo(4);
+    expect(b.start.y).toBeCloseTo(5);
+    expect(b.start.z).toBeCloseTo(6);
+    expect(b.end.x).toBeCloseTo(1);
+    expect(b.end.y).toBeCloseTo(2);
+    expect(b.end.z).toBeCloseTo(3);
+  });
+
+  test('line3ClosestPoint', () => {
+    const a = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const b = new Vec3(7, 8, 9);
+    const c = line3ClosestPoint(a, b);
+    expect(c.x).toBeCloseTo(4.5);
+    expect(c.y).toBeCloseTo(5.5);
+    expect(c.z).toBeCloseTo(6.5);
+  });
+});
