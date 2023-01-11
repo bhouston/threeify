@@ -75,7 +75,7 @@ export class TexImage2D implements IDisposable {
     }
 
     if (texParameters.generateMipmaps) {
-      if (isPow2(this.size.width) && isPow2(this.size.height)) {
+      if (isPow2(this.size.x) && isPow2(this.size.y)) {
         gl.generateMipmap(this.target);
       }
     }

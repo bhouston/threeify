@@ -2,6 +2,7 @@ import { mat4ToEuler3 } from '../../math/Euler3.Functions.js';
 import { Euler3, EulerOrder3 } from '../../math/Euler3.js';
 import { euler3ToMat4 } from '../../math/Mat4.Functions.js';
 import { Mat4 } from '../../math/Mat4.js';
+import { vec3Length } from '../../math/Vec3.Functions.js';
 import { Vec3 } from '../../math/Vec3.js';
 
 export function negativeZDirectionToEuler(
@@ -13,7 +14,7 @@ export function negativeZDirectionToEuler(
   console.warn('This has never been tested.');
 
   /* Find cosφ and sinφ */
-  const c1 = d.length();
+  const c1 = vec3Length(d);
   const s1 = d.z;
   /* Find cosθ and sinθ; if gimbal lock, choose (1,0) arbitrarily */
   const c2 = c1 !== 0 ? d.x / c1 : 1;

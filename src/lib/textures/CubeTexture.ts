@@ -41,9 +41,13 @@ export class CubeMapTexture extends VirtualTexture {
         `images.length (${this.images.length}) must be a positive multiple of 6`
       );
     }
-    this.size =
-      new Vec2(images[0].width || images[0].x, images[0].height) ||
-      images[0].x );
+    const firstImage = images[0];
+    // check if firstImage is a Vec2 in typescript
+    if (firstImage instanceof Vec2) {
+      this.size.copy(firstImage);
+    } else {
+      this.size = new Vec2(firstImage.width, firstImage.height);
+    }
   }
 }
 
