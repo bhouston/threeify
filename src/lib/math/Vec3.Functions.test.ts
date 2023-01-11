@@ -3,6 +3,7 @@ import {
   vec3Add,
   vec3Clamp,
   vec3Cross,
+  vec3Delta,
   vec3Distance,
   vec3DistanceSq,
   vec3Dot,
@@ -18,6 +19,13 @@ import {
 } from './Vec3.Functions';
 
 describe('Vec3 Functions', () => {
+  test('vec3Delta', () => {
+    const a = new Vec3(1, 2, 3);
+    const b = new Vec3(4, 5, 6);
+    const c = vec3Delta(a, b);
+    expect(c).toBe(9);
+  });
+
   test('vec3Add', () => {
     const a = new Vec3(1, 2, 3);
     const b = new Vec3(4, 5, 6);

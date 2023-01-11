@@ -2,6 +2,7 @@ import { Vec2 } from './Vec2';
 import {
   vec2Add,
   vec2Clamp,
+  vec2Delta,
   vec2Distance,
   vec2DistanceSq,
   vec2Dot,
@@ -17,6 +18,13 @@ import {
 } from './Vec2.Functions';
 
 describe('Vec2 Functions', () => {
+  test('vec2Delta', () => {
+    const a = new Vec2(1, 2);
+    const b = new Vec2(4, 5);
+    const c = vec2Delta(a, b);
+    expect(c).toBe(6);
+  });
+
   test('vec2Add', () => {
     const a = new Vec2(1, 2);
     const b = new Vec2(4, 5);
