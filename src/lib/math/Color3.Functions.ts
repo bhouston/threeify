@@ -179,7 +179,7 @@ export function color3ToHSL(rgb: Color3, result = new Vec3()): Vec3 {
   return result.set(hue, saturation, lightness);
 }
 
-export function hexToRGB(hex: number, result = new Color3()): Color3 {
+export function hexToColor3(hex: number, result = new Color3()): Color3 {
   hex = Math.floor(hex);
   return result.set(
     ((hex >> 16) & 255) / 255,
@@ -188,6 +188,14 @@ export function hexToRGB(hex: number, result = new Color3()): Color3 {
   );
 }
 
-export function rgbToHex(rgb: Color3): number {
+export function color3ToHex(rgb: Color3): number {
   return ((rgb.r * 255) << 16) ^ ((rgb.g * 255) << 8) ^ ((rgb.b * 255) << 0);
+}
+
+export function color3ToHexString(rgb: Color3): string {
+  return `#${color3ToHex(rgb).toString(16)}`;
+}
+
+export function hexStringToColor3(hex: string, result = new Color3()): Color3 {
+  return hexToColor3(Number.parseInt(hex.replace(/^#/, ''), 16), result);
 }

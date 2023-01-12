@@ -7,10 +7,9 @@
 
 import { generateUUID } from '../core/generateUuid.js';
 import { IDisposable, IIdentifiable } from '../core/types.js';
-import { IPoolUser } from '../renderers/Pool.js';
 import { BufferTarget } from '../renderers/webgl/buffers/BufferTarget.js';
 
-export class AttributeData implements IIdentifiable, IDisposable, IPoolUser {
+export class AttributeData implements IIdentifiable, IDisposable {
   disposed = false;
   uuid: string = generateUUID();
 

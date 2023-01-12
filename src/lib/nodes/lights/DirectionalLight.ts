@@ -8,6 +8,7 @@
 // * @bhouston
 //
 
+import { Color3 } from '../../math/Color3.js';
 import { Vec3 } from '../../math/Vec3.js';
 import {
   eulerToNegativeZDirection,
@@ -29,7 +30,7 @@ export class DirectionalLight extends Light {
    * @param color - RGB value for light's color in linear space.
    * @param intensity - Illuminance in lux (lm/m2).
    */
-  constructor(color: Vec3 = new Vec3(1, 1, 1), intensity = 1) {
+  constructor(color = new Color3(1, 1, 1), intensity = 1) {
     super(LightType.Directional, color, intensity);
   }
 

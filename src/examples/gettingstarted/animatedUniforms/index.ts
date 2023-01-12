@@ -1,13 +1,15 @@
 import {
   Color3,
   Geometry,
+  hslToColor3,
   makeBufferGeometryFromGeometry,
   makeFloat32Attribute,
   makeProgramFromShaderMaterial,
   makeUint32Attribute,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial
+  ShaderMaterial,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -35,10 +37,8 @@ function animate(): void {
   requestAnimationFrame(animate);
 
   uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
-  uniforms.color = makeColor3FromHSL(
-    Date.now() * 0.001,
-    1,
-    0.5,
+  uniforms.color = hslToColor3(
+    new Vec3(Date.now() * 0.001, 1, 0.5),
     uniforms.color
   );
 

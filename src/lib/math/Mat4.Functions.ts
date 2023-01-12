@@ -20,7 +20,6 @@ import {
   vec3Normalize,
   vec3Subtract
 } from './Vec3.Functions';
-import { Vec4 } from './Vec4';
 
 export function mat4Delta(a: Mat4, b: Mat4): number {
   let deltaSum = 0;
@@ -595,7 +594,7 @@ export function mat3ToMat4(a: Mat3, result = new Mat4()): Mat4 {
   ]);
 }
 
-export function quatToMat4(q: Vec4, result = new Mat4()): Mat4 {
+export function quatToMat4(q: Quat, result = new Mat4()): Mat4 {
   return mat3ToMat4(quatToMat3(q), result);
 }
 

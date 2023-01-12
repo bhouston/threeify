@@ -2,6 +2,7 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -24,6 +25,7 @@ import {
   transformGeometry,
   translation3ToMat4,
   Vec2,
+  vec2MultiplyByScalar,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -99,7 +101,7 @@ async function init(): Promise<null> {
     );
 
     const effectScale = Math.cos(now * 0.0008) * 0.5 + 0.5;
-    uniforms.normalScale = new Vec2(-1, 1).multiplyByScalar(effectScale);
+    uniforms.normalScale = vec2MultiplyByScalar(new Vec2(-1, 1), effectScale);
     uniforms.displacementScale = effectScale * 0.1;
     uniforms.pointLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 3,

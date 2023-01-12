@@ -5,12 +5,15 @@
 // * @bhouston
 //
 
-import { Vec2 } from '../math/Vec2.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
-import { TextureSource, VirtualTexture } from './VirtualTexture.js';
+import {
+  getTextureSourceSize,
+  TextureSource,
+  VirtualTexture
+} from './VirtualTexture.js';
 
 export class Texture extends VirtualTexture {
   constructor(
@@ -34,7 +37,7 @@ export class Texture extends VirtualTexture {
       generateMipmaps,
       anisotropicLevels
     );
-    this.size = new Vec2(image.width, image.height);
+    this.size = getTextureSourceSize(image);
   }
 }
 

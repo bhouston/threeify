@@ -3,14 +3,14 @@ import {
   DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  mat4Inverse,
-  mat4PerspectiveFov,
-  makeMat4RotationFromQuat,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4Inverse,
+  mat4PerspectiveFov,
   Orbit,
   passGeometry,
+  quatToMat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -44,7 +44,6 @@ async function init(): Promise<null> {
           texture.wrapT = TextureWrap.ClampToEdge;
           texture.minFilter = TextureFilter.Linear;
           textures[i] = texture;
-
           texImage2Ds[i] = makeTexImage2DFromTexture(context, texture);
         }
       )
@@ -73,9 +72,7 @@ async function init(): Promise<null> {
 
     const now = Date.now();
 
-    passUniforms.viewToWorld = mat4Inverse(
-      makeMat4RotationFromQuat(orbit.orientation)
-    );
+    passUniforms.viewToWorld = mat4Inverse(quatToMat4(orbit.orientation));
     passUniforms.screenToView = mat4Inverse(
       mat4PerspectiveFov(
         15 * (1 - orbit.zoom) + 15,
@@ -105,7 +102,8 @@ async function init(): Promise<null> {
     (event) => {
       if (event.key !== undefined) {
         imageIndex =
-          (event.key.charCodeAt(0) - '0'.charCodeAt(0)) % images.length;
+          ((event.key.codePointAt(0) || 0) - ('0'.codePointAt(0) || 0)) %
+          images.length;
         // Handle the event with KeyboardEvent.key and set handled true.
       }
     },

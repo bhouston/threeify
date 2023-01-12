@@ -1,9 +1,9 @@
 import { makeVec3View } from '../math/arrays/PrimitiveView.js';
+import { Mat4 } from '../math/Mat4.js';
 import {
   mat4TransformNormal3,
   mat4TransformVec3
-} from '../math/Mat4.Functions.js';
-import { Mat4 } from '../math/Mat4.js';
+} from '../math/Vec3.Functions.js';
 import {
   vec3Add,
   vec3Cross,

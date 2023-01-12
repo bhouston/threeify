@@ -3,6 +3,7 @@ import {
   blendModeToBlendState,
   BufferBit,
   ClearState,
+  Color3,
   fetchImage,
   fetchImageElement,
   makeBufferGeometryFromGeometry,

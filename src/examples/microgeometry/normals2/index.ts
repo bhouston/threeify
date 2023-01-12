@@ -2,6 +2,7 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -21,6 +22,7 @@ import {
   Texture,
   translation3ToMat4,
   Vec2,
+  vec2MultiplyByScalar,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -79,7 +81,8 @@ async function init(): Promise<null> {
       uniforms.localToWorld
     );
     // Q: Why is this one -1 required?  Is the tangent space from UV calculation incorrect?
-    uniforms.normalModulator = new Vec2(-1, 1).multiplyByScalar(
+    uniforms.normalModulator = vec2MultiplyByScalar(
+      new Vec2(-1, 1),
       Math.cos(now * 0.001) * 0.5 + 0.5
     );
     uniforms.pointLightViewPosition = new Vec3(

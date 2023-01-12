@@ -17,10 +17,9 @@ import { DataType } from '../../renderers/webgl/textures/DataType.js';
 import { ArrayBufferImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';
 
-class Buffer {
-  constructor(public data: Uint8Array, public position: number) {}
+class ReadBuffer {
+  constructor(public data: Buffer, public position: number) {}
 }
-
 export async function fetchCubeHDRs(
   urlPattern: string
 ): Promise<ArrayBufferImage[]> {
@@ -43,10 +42,13 @@ export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
 }
 
 export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
-  const buffer = Buffer.from(new Uint8Array(arrayBuffer), 0);
-  const header = readHeader(buffer);
+  const readBuffer = new ReadBuffer(
+    Buffer.from(new Uint8Array(arrayBuffer), 0),
+    0
+  );
+  const header = readHeader(readBuffer);
   const pixelData = readRLEPixelData(
-    buffer.data.subarray(buffer.position),
+    readBuffer.data.subarray(readBuffer.position),
     header.width,
     header.height
   );
@@ -67,12 +69,12 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
 function stringFromCharCodes(unicode: Uint16Array): string {
   let result = '';
   for (let i = 0; i < unicode.length; i++) {
-    result += String.fromCharCode(unicode[i]);
+    result += String.fromCodePoint(unicode[i]);
   }
   return result;
 }
 function fgets(
-  buffer: Buffer,
+  buffer: ReadBuffer,
   lineLimit = 0,
   consume = true
 ): string | undefined {
@@ -122,7 +124,7 @@ class Header {
 }
 
 /* minimal header reading.  modify if you want to parse more information */
-function readHeader(buffer: Buffer): Header {
+function readHeader(buffer: ReadBuffer): Header {
   const RGBE_VALID_PROGRAMTYPE = 1;
   const RGBE_VALID_FORMAT = 2;
   const RGBE_VALID_DIMENSIONS = 4;

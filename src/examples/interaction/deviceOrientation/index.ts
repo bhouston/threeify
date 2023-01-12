@@ -5,17 +5,17 @@ import {
   DeviceOrientation,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  mat4Inverse,
-  makeMat4Perspective,
-  makeMat4RotationFromQuat,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4Inverse,
+  mat4Perspective,
+  quatToMat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
+  translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -38,7 +38,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: makeMat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
+    viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
     viewLightPosition: new Vec3(0, 0, 0),
     map: makeTexImage2DFromTexture(context, texture)
   };
@@ -63,7 +63,7 @@ async function init(): Promise<null> {
 
     if (deviceOrientation !== undefined) {
       uniforms.localToWorld = mat4Inverse(
-        makeMat4RotationFromQuat(deviceOrientation.orientation)
+        quatToMat4(deviceOrientation.orientation)
       );
     }
     renderBufferGeometry(

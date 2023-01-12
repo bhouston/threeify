@@ -26,4 +26,39 @@ export class Vec4 {
     this.w = w;
     return this;
   }
+
+  setComponent(index: number, value: number): this {
+    switch (index) {
+      case 0:
+        this.x = value;
+        break;
+      case 1:
+        this.y = value;
+        break;
+      case 2:
+        this.z = value;
+        break;
+      case 3:
+        this.w = value;
+        break;
+      default:
+        throw new Error(`index is out of range: ${index}`);
+    }
+    return this;
+  }
+
+  getComponent(index: number): number {
+    switch (index) {
+      case 0:
+        return this.x;
+      case 1:
+        return this.y;
+      case 2:
+        return this.z;
+      case 3:
+        return this.w;
+      default:
+        throw new Error(`index is out of range: ${index}`);
+    }
+  }
 }

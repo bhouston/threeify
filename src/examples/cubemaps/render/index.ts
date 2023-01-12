@@ -8,9 +8,9 @@ import {
   Euler3,
   euler3ToMat4,
   Framebuffer,
+  hslToColor3,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  makeColor3FromHSL,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
   Mat4,
@@ -91,10 +91,8 @@ async function init(): Promise<null> {
 
     cubeFaceTargets.forEach((target, index) => {
       framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
-      patternUniforms.color = makeColor3FromHSL(
-        index / 6 + now * 0.0001,
-        0.5,
-        0.5
+      patternUniforms.color = hslToColor3(
+        new Vec3(index / 6 + now * 0.0001, 0.5, 0.5)
       );
 
       renderBufferGeometry(

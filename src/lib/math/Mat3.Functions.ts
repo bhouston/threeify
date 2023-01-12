@@ -7,10 +7,10 @@ import {
 } from './Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
+import { Quat } from './Quat.js';
 import { vec2Length } from './Vec2.Functions.js';
 import { Vec2 } from './Vec2.js';
 import { Vec3 } from './Vec3.js';
-import { Vec4 } from './Vec4.js';
 
 export function mat3Delta(a: Mat3, b: Mat3): number {
   let deltaSum = 0;
@@ -328,7 +328,7 @@ export function mat3TransformPoint3(
   );
 }
 
-export function quatToMat3(q: Vec4, result = new Mat3()): Mat3 {
+export function quatToMat3(q: Quat, result = new Mat3()): Mat3 {
   const { x, y, z, w } = q;
 
   const x2 = x + x;

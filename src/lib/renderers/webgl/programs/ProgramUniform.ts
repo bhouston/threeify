@@ -5,7 +5,7 @@ import {
   linearizeVec2FloatArray,
   linearizeVec3FloatArray
 } from '../../../math/arrays/Linearizers.js';
-import { Color3 } from '../../../index_math.js';
+import { Color3 } from '../../../math/Color3.js';
 import { Mat3 } from '../../../math/Mat3.js';
 import { Mat4 } from '../../../math/Mat4.js';
 import { Vec2 } from '../../../math/Vec2.js';

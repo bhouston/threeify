@@ -15,6 +15,13 @@ export type TextureSource =
   | ImageBitmap
   | Vec2;
 
+export function getTextureSourceSize(textureSource: TextureSource): Vec2 {
+  if (textureSource instanceof Vec2) {
+    return textureSource;
+  }
+  return new Vec2(textureSource.width, textureSource.height);
+}
+
 export class VirtualTexture {
   disposed = false;
   uuid: string = generateUUID();

@@ -38,7 +38,7 @@ export class SpotLight extends Light {
    * Must be greater than innerConeAngle and less than or equal to PI / 2.0.
    */
   constructor(
-    color: Color3 = new Color3(1, 1, 1),
+    color = new Color3(1, 1, 1),
     intensity = 1,
     public range = -1,
     public innerConeAngle = 0,

@@ -3,13 +3,13 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3ToHexString,
   DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
+  hslToColor3,
   makeBufferGeometryFromGeometry,
-  makeColor3FromHSL,
-  makeHexStringFromColor3,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
@@ -35,15 +35,11 @@ function updateCanvas(
   const grd = ctx.createLinearGradient(0, 0, 256, frameNumber % 256);
   grd.addColorStop(
     0,
-    `#${makeHexStringFromColor3(
-      makeColor3FromHSL(frameNumber / 256, 0.5, 0.5)
-    )}`
+    `#${color3ToHexString(hslToColor3(new Vec3(frameNumber / 256, 0.5, 0.5)))}`
   );
   grd.addColorStop(
     1,
-    `#${makeHexStringFromColor3(
-      makeColor3FromHSL(frameNumber / 193, 0.5, 0.5)
-    )}`
+    `#${color3ToHexString(hslToColor3(new Vec3(frameNumber / 193, 0.5, 0.5)))}`
   );
 
   ctx.fillStyle = grd;

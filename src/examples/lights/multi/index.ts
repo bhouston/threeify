@@ -20,7 +20,8 @@ import {
   ShaderMaterial,
   Texture,
   translation3ToMat4,
-  Vec3
+  Vec3,
+  vec3Normalize
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -63,7 +64,7 @@ async function init(): Promise<null> {
     punctualLightViewDirection: [
       new Vec3(),
       new Vec3(0, 0, -1),
-      new Vec3(0, -1, -1).normalize()
+      vec3Normalize(new Vec3(0, -1, -1))
     ],
     punctualLightColor: [
       new Color3(60, 4, 4),
@@ -93,11 +94,13 @@ async function init(): Promise<null> {
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
-    uniforms.punctualLightViewDirection[2] = new Vec3(
-      Math.cos(now * 0.001) * 0.5,
-      Math.cos(now * 0.00087) * 0.5,
-      Math.cos(now * 0.00045) * 0.5
-    ).normalize();
+    uniforms.punctualLightViewDirection[2] = vec3Normalize(
+      new Vec3(
+        Math.cos(now * 0.001) * 0.5,
+        Math.cos(now * 0.00087) * 0.5,
+        Math.cos(now * 0.00045) * 0.5
+      )
+    );
     uniforms.punctualLightViewPosition[0] = new Vec3(
       Math.cos(now * 0.00097) * 5,
       Math.cos(now * 0.00082) * 5,

@@ -76,7 +76,7 @@ export function boxGeometry(
         vector.setComponent(v, 0);
         vector.setComponent(w, depth > 0 ? 1 : -1);
 
-        // now apply vector to normal buffer
+        // now apply vector to normalds buffer
 
         normals.push(vector.x, vector.y, vector.z);
 

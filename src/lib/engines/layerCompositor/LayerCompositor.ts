@@ -439,9 +439,9 @@ export class LayerCompositor {
 
     const imageToOffscreen = mat4Orthographic(
       0,
-      this.offscreenSize.width,
+      this.offscreenSize.x,
       0,
-      this.offscreenSize.height,
+      this.offscreenSize.y,
       -1,
       1
     );

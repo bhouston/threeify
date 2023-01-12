@@ -2,6 +2,7 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -20,7 +21,8 @@ import {
   ShaderMaterial,
   Texture,
   translation3ToMat4,
-  Vec3
+  Vec3,
+  vec3Normalize
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -74,11 +76,13 @@ async function init(): Promise<null> {
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
-    uniforms.directionalLightViewDirection = new Vec3(
-      Math.cos(now * 0.001) * 0.5,
-      Math.cos(now * 0.00087) * 0.5,
-      Math.cos(now * 0.00045) * 0.5
-    ).normalize();
+    uniforms.directionalLightViewDirection = vec3Normalize(
+      new Vec3(
+        Math.cos(now * 0.001) * 0.5,
+        Math.cos(now * 0.00087) * 0.5,
+        Math.cos(now * 0.00045) * 0.5
+      )
+    );
 
     canvasFramebuffer.clear(BufferBit.All);
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);

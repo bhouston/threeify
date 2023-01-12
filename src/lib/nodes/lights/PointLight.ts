@@ -8,7 +8,7 @@
 // * @bhouston
 //
 
-import { Vec3 } from '../../math/Vec3.js';
+import { Color3 } from '../../math/Color3.js';
 import { Light } from './Light.js';
 import { LightType } from './LightType.js';
 
@@ -25,11 +25,7 @@ export class PointLight extends Light {
    * @param intensity - Luminous intensity in candela (lm/sr)
    * @param range - The distance cutoff at which the light's intensity reaches zero.  If <= 0, assumed to be infinite.
    */
-  constructor(
-    color: Vec3 = new Vec3(1, 1, 1),
-    intensity = 1,
-    public range = -1
-  ) {
+  constructor(color = new Color3(1, 1, 1), intensity = 1, public range = -1) {
     super(LightType.Point, color, intensity);
   }
 

@@ -6,10 +6,10 @@ import {
   euler3ToMat4,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMat4Perspective,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   Mat4,
+  mat4Perspective,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -37,7 +37,7 @@ async function init(): Promise<null> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: makeMat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
+    viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
     viewLightPosition: new Vec3(0, 0, 0),
     map: makeTexImage2DFromTexture(context, texture)
   };

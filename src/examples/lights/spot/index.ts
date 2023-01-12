@@ -1,6 +1,8 @@
 import {
   BufferBit,
   ClearState,
+  Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -51,7 +53,7 @@ async function init(): Promise<null> {
     // lights
     spotLightViewPosition: new Vec3(0, 0, 0),
     spotLightViewDirection: new Vec3(0, 0, -1),
-    spotLightColor: new Vec3(1, 1, 1).multiplyByScalar(10),
+    spotLightColor: color3MultiplyByScalar(new Color3(1, 1, 1), 10),
     spotLightRange: 15,
     spotLightInnerCos: 1,
     spotLightOuterCos: Math.cos(Math.PI * 0.5),

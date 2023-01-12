@@ -3,6 +3,7 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
