@@ -31,13 +31,13 @@ export function box3IsEmpty(b: Box3): boolean {
   return b.max.x < b.min.x || b.max.y < b.min.y || b.max.z < b.min.z;
 }
 
-export function box3UnionWithBox3(a: Box3, b: Box3, result = new Box3()): Box3 {
+export function box3ExpandByBox3(a: Box3, b: Box3, result = new Box3()): Box3 {
   vec3Min(a.min, b.min, result.min);
   vec3Max(a.max, b.max, result.max);
   return result;
 }
 
-export function box3UnionWithVec3(b: Box3, v: Vec3, result = new Box3()): Box3 {
+export function box3ExpandByVec3(b: Box3, v: Vec3, result = new Box3()): Box3 {
   vec3Min(b.min, v, result.min);
   vec3Max(b.max, v, result.max);
   return result;
@@ -127,7 +127,7 @@ export function box3FromVec3Array(
 export function box3FromVec3s(points: Vec3[], result = new Box3()): Box3 {
   box3Empty(result);
   for (let i = 0, il = points.length; i < il; i++) {
-    box3UnionWithVec3(result, points[i], result);
+    box3ExpandByVec3(result, points[i], result);
   }
   return result;
 }
@@ -204,43 +204,43 @@ export function mat4TransformBox3(m: Mat4, b: Box3, result = new Box3()): Box3 {
   // NOTE: I am using a binary pattern to specify all 2^3 combinations below
   const v = new Vec3();
 
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.min.x, b.min.y, b.min.z), v),
     result
   );
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.min.x, b.min.y, b.max.z), v),
     result
   );
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.min.x, b.max.y, b.min.z), v),
     result
   );
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.min.x, b.max.y, b.max.z), v),
     result
   );
 
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.max.x, b.min.y, b.min.z), v),
     result
   );
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.max.x, b.min.y, b.max.z), v),
     result
   );
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.max.x, b.max.y, b.min.z), v),
     result
   );
-  box3UnionWithVec3(
+  box3ExpandByVec3(
     result,
     mat4TransformPoint3(m, v.set(b.max.x, b.max.y, b.max.z), v),
     result
@@ -258,5 +258,44 @@ export function translateBox3(
   vec3Add(result.min, offset, result.min);
   vec3Add(result.max, offset, result.max);
 
+  return result;
+}
+
+export function box3IntersectsBox3(a: Box3, b: Box3): boolean {
+  return (
+    a.min.x <= b.max.x &&
+    a.max.x >= b.min.x &&
+    a.min.y <= b.max.y &&
+    a.max.y >= b.min.y &&
+    a.min.z <= b.max.z &&
+    a.max.z >= b.min.z
+  );
+}
+
+export function box3Size(b: Box3): Vec3 {
+  return vec3Subtract(b.max, b.min);
+}
+
+export function box3Scale(b: Box3, scale: Vec3, result = new Box3()): Box3 {
+  result.min.x = b.min.x * scale.x;
+  result.min.y = b.min.y * scale.y;
+  result.min.z = b.min.z * scale.z;
+  result.max.x = b.max.x * scale.x;
+  result.max.y = b.max.y * scale.y;
+  result.max.z = b.max.z * scale.z;
+  return result;
+}
+
+export function box3ExpandByPoint3(
+  b: Box3,
+  p: Vec3,
+  result = new Box3()
+): Box3 {
+  result.min.x = Math.min(b.min.x, p.x);
+  result.min.y = Math.min(b.min.y, p.y);
+  result.min.z = Math.min(b.min.z, p.z);
+  result.max.x = Math.max(b.max.x, p.x);
+  result.max.y = Math.max(b.max.y, p.y);
+  result.max.z = Math.max(b.max.z, p.z);
   return result;
 }

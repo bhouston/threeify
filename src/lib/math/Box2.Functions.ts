@@ -9,11 +9,8 @@ import {
 } from './Vec2.Functions.js';
 import { Vec2 } from './Vec2.js';
 
-export function box2Center(box: Box2, result = new Vec2()): Vec2 {
-  return result.set(
-    (box.min.x + box.max.x) * 0.5,
-    (box.min.y + box.max.y) * 0.5
-  );
+export function box2Equals(a: Box2, b: Box2): boolean {
+  return vec2Equals(a.min, b.min) && vec2Equals(a.max, b.max);
 }
 
 export function box2Empty(result = new Box2()): Box2 {
@@ -26,7 +23,7 @@ export function box2Empty(result = new Box2()): Box2 {
 export function box2IsEmpty(box: Box2): boolean {
   return box.max.x < box.min.x || box.max.y < box.min.y;
 }
-export function box2Union(a: Box2, b: Box2, result = new Box2()): Box2 {
+export function box2ExpandByBox(a: Box2, b: Box2, result = new Box2()): Box2 {
   vec2Min(a.min, b.min, result.min);
   vec2Max(a.max, b.max, result.max);
   return result;
@@ -42,8 +39,23 @@ export function box2Translate(
   return result;
 }
 
-export function box2Equals(a: Box2, b: Box2): boolean {
-  return vec2Equals(a.min, b.min) && vec2Equals(a.max, b.max);
+export function box2Scale(b: Box2, scale: Vec2, result = new Box2()): Box2 {
+  result.min.x = b.min.x * scale.x;
+  result.min.y = b.min.y * scale.y;
+  result.max.x = b.max.x * scale.x;
+  result.max.y = b.max.y * scale.y;
+  return result;
+}
+
+export function box2Size(b: Box2, result = new Vec2()): Vec2 {
+  return result.set(b.max.x - b.min.x, b.max.y - b.min.y);
+}
+
+export function box2Center(box: Box2, result = new Vec2()): Vec2 {
+  return result.set(
+    (box.min.x + box.max.x) * 0.5,
+    (box.min.y + box.max.y) * 0.5
+  );
 }
 
 export function box2FromVec2Array(points: Vec2[], result = new Box2()): Box2 {
@@ -56,10 +68,25 @@ export function box2FromVec2Array(points: Vec2[], result = new Box2()): Box2 {
   return result;
 }
 
-export function box2ExpandByPoint(b: Box2, point: Vec2): Box2 {
-  vec2Min(b.min, point, b.min);
-  vec2Max(b.max, point, b.max);
+export function box2ExpandByPoint(
+  b: Box2,
+  point: Vec2,
+  result = new Box2()
+): Box2 {
+  vec2Min(b.min, point, result.min);
+  vec2Max(b.max, point, result.max);
+  return result;
+}
 
+export function box2ExpandByScalar(
+  b: Box2,
+  scalar: number,
+  result = new Box2()
+): Box2 {
+  result.min.x = b.min.x - scalar;
+  result.min.y = b.min.y - scalar;
+  result.max.x = b.max.x + scalar;
+  result.max.y = b.max.y + scalar;
   return b;
 }
 
@@ -90,6 +117,25 @@ export function vec2ClampToBox2(
 }
 
 export function box2DistanceToVec2(b: Box2, point: Vec2): number {
+  console.log('point', point);
+  console.log('b', b);
   const clampedPoint = vec2ClampToBox2(point, b);
-  return vec2Distance(clampedPoint, point);
+  console.log('clampedPoint', clampedPoint);
+  const distance = vec2Distance(clampedPoint, point);
+  console.log('distance', distance);
+  return distance;
+}
+
+export function box2IntersectsBox2(a: Box2, b: Box2): boolean {
+  return (
+    a.min.x <= b.max.x &&
+    a.max.x >= b.min.x &&
+    a.min.y <= b.max.y &&
+    a.max.y >= b.min.y
+  );
+}
+
+export function box2DistanceToBox2(a: Box2, b: Box2): number {
+  const clampedPoint = vec2ClampToBox2(box2Center(a), b);
+  return vec2Distance(clampedPoint, box2Center(a));
 }
