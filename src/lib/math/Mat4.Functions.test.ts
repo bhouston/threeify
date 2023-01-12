@@ -14,7 +14,8 @@ import {
   mat4Multiply,
   mat4MultiplyByScalar,
   mat4Negate,
-  mat4PerspectiveFov,
+  mat4Orthographic,
+  mat4Perspective,
   mat4Subtract,
   mat4ToBasis3,
   mat4Transpose,
@@ -321,41 +322,80 @@ describe('Mat4 Functions', () => {
     });
   });
 
-  // test the creation of a perspective transform creation and then the projection
-  // of a few key points to ensure that they are projected correctly
-  describe('mat4PerspectiveFov', () => {
-    const fovy = Math.PI / 2;
-    const aspect = 1;
-    const near = 1;
-    const far = 100;
-    const m = mat4PerspectiveFov(fovy, aspect, near, far, 1);
+  test('mat4Perspective', () => {
+    const m = mat4Perspective(-1, 1, -1, 1, 1, 100);
+    const m2 = new Mat4([
+      1,
+      0,
+      0,
+      0,
+      0,
+      -1,
+      0,
+      0,
+      0,
+      0,
+      -101 / 99,
+      -1,
+      0,
+      0,
+      -200 / 99,
+      0
+    ]);
 
-    // point in front of the camera
-    const p1 = new Vec3(0, 0, -10);
-    const p1p = mat4TransformVec3(m, p1);
-    expect(p1p.x).toBeCloseTo(0, EPSILON);
-    expect(p1p.y).toBeCloseTo(0, EPSILON);
-    expect(p1p.z).toBeCloseTo(-0.1, EPSILON);
+    expect(m.elements[0]).toBeCloseTo(m2.elements[0], EPSILON);
+    expect(m.elements[1]).toBeCloseTo(m2.elements[1], EPSILON);
+    expect(m.elements[2]).toBeCloseTo(m2.elements[2], EPSILON);
+    expect(m.elements[3]).toBeCloseTo(m2.elements[3], EPSILON);
+    expect(m.elements[4]).toBeCloseTo(m2.elements[4], EPSILON);
+    expect(m.elements[5]).toBeCloseTo(m2.elements[5], EPSILON);
+    expect(m.elements[6]).toBeCloseTo(m2.elements[6], EPSILON);
+    expect(m.elements[7]).toBeCloseTo(m2.elements[7], EPSILON);
+    expect(m.elements[8]).toBeCloseTo(m2.elements[8], EPSILON);
+    expect(m.elements[9]).toBeCloseTo(m2.elements[9], EPSILON);
+    expect(m.elements[10]).toBeCloseTo(m2.elements[10], EPSILON);
+    expect(m.elements[11]).toBeCloseTo(m2.elements[11], EPSILON);
+    expect(m.elements[12]).toBeCloseTo(m2.elements[12], EPSILON);
+    expect(m.elements[13]).toBeCloseTo(m2.elements[13], EPSILON);
+    expect(m.elements[14]).toBeCloseTo(m2.elements[14], EPSILON);
+    expect(m.elements[15]).toBeCloseTo(m2.elements[15], EPSILON);
+  });
+  test('mat4Orthographic', () => {
+    const m = mat4Orthographic(-1, 1, -1, 1, 1, 100);
+    const m2 = new Mat4([
+      1,
+      0,
+      0,
+      0,
+      0,
+      -1,
+      0,
+      0,
+      0,
+      0,
+      -2 / 99,
+      0,
+      0,
+      0,
+      -101 / 99,
+      1
+    ]);
 
-    // point on the near plane
-    const p2 = new Vec3(0, 0, -1);
-    const p2p = mat4TransformVec3(m, p2);
-    expect(p2p.x).toBeCloseTo(0, EPSILON);
-    expect(p2p.y).toBeCloseTo(0, EPSILON);
-    expect(p2p.z).toBeCloseTo(0, EPSILON);
-
-    // point on the far plane
-    const p3 = new Vec3(0, 0, -100);
-    const p3p = mat4TransformVec3(m, p3);
-    expect(p3p.x).toBeCloseTo(0, EPSILON);
-    expect(p3p.y).toBeCloseTo(0, EPSILON);
-    expect(p3p.z).toBeCloseTo(-1, EPSILON);
-
-    // point behind the camera
-    const p4 = new Vec3(0, 0, -101);
-    const p4p = mat4TransformVec3(m, p4);
-    expect(p4p.x).toBeCloseTo(0, EPSILON);
-    expect(p4p.y).toBeCloseTo(0, EPSILON);
-    expect(p4p.z).toBeCloseTo(-1.01, EPSILON);
+    expect(m.elements[0]).toBeCloseTo(m2.elements[0], EPSILON);
+    expect(m.elements[1]).toBeCloseTo(m2.elements[1], EPSILON);
+    expect(m.elements[2]).toBeCloseTo(m2.elements[2], EPSILON);
+    expect(m.elements[3]).toBeCloseTo(m2.elements[3], EPSILON);
+    expect(m.elements[4]).toBeCloseTo(m2.elements[4], EPSILON);
+    expect(m.elements[5]).toBeCloseTo(m2.elements[5], EPSILON);
+    expect(m.elements[6]).toBeCloseTo(m2.elements[6], EPSILON);
+    expect(m.elements[7]).toBeCloseTo(m2.elements[7], EPSILON);
+    expect(m.elements[8]).toBeCloseTo(m2.elements[8], EPSILON);
+    expect(m.elements[9]).toBeCloseTo(m2.elements[9], EPSILON);
+    expect(m.elements[10]).toBeCloseTo(m2.elements[10], EPSILON);
+    expect(m.elements[11]).toBeCloseTo(m2.elements[11], EPSILON);
+    expect(m.elements[12]).toBeCloseTo(m2.elements[12], EPSILON);
+    expect(m.elements[13]).toBeCloseTo(m2.elements[13], EPSILON);
+    expect(m.elements[14]).toBeCloseTo(m2.elements[14], EPSILON);
+    expect(m.elements[15]).toBeCloseTo(m2.elements[15], EPSILON);
   });
 });
