@@ -2,10 +2,20 @@ import { Triangle3 } from './Triangle3.js';
 import {
   crossFromCoplanarPoints,
   pointToBaryCoords,
+  vec3Delta,
+  vec3Equals,
   vec3Length,
   vec3Normalize
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
+
+export function triangleDelta(a: Triangle3, b: Triangle3): number {
+  return vec3Delta(a.a, b.a) && vec3Delta(a.b, b.b) && vec3Delta(a.c, b.c);
+}
+
+export function triangleEquals(a: Triangle3, b: Triangle3): boolean {
+  return vec3Equals(a.a, b.a) && vec3Equals(a.b, b.b) && vec3Equals(a.c, b.c);
+}
 
 export function makeTriangleFromPointsAndIndices(
   points: Vec3[],

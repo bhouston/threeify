@@ -47,9 +47,7 @@ export function linearizeVec3FloatArray(array: Vec3[]): Float32Array {
   return result;
 }
 
-export function linearizeQuatFloatArray(
-  array: Quat[]
-): Float32Array {
+export function linearizeQuatFloatArray(array: Quat[]): Float32Array {
   const result = new Float32Array(array.length * 4);
   for (let i = 0; i < array.length; i++) {
     array[i].toArray(result, i * 4);

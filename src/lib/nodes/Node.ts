@@ -8,10 +8,7 @@
 import { generateUUID } from '../core/generateUuid.js';
 import { IDisposable, IIdentifiable } from '../core/types.js';
 import { Euler3 } from '../math/Euler3.js';
-import {
-  composeMat4,
-  mat4Inverse
-} from '../math/Mat4.Functions.js';
+import { composeMat4, mat4Inverse } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
 import { euler3ToQuat } from '../math/Quat.Functions.js';
 import { Vec3 } from '../math/Vec3.js';
@@ -40,11 +37,7 @@ export class Node implements IIdentifiable, IDisposable {
   }
 
   get localToParentTransform(): Mat4 {
-    return composeMat4(
-      this.position,
-      euler3ToQuat(this.rotation),
-      this.scale
-    );
+    return composeMat4(this.position, euler3ToQuat(this.rotation), this.scale);
   }
 
   get parentToLocalTransform(): Mat4 {

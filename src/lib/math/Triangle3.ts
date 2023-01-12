@@ -1,5 +1,4 @@
 import { hashFloat3 } from '../core/hash.js';
-import { vec3Equals } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 export class Triangle3 {
@@ -31,13 +30,5 @@ export class Triangle3 {
 
   copy(t: Triangle3): this {
     return this.set(t.a, t.b, t.c);
-  }
-
-  equals(t: Triangle3): boolean {
-    return (
-      vec3Equals(t.a, this.a) &&
-      vec3Equals(t.b, this.b) &&
-      vec3Equals(t.c, this.c)
-    );
   }
 }
