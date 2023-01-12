@@ -1,8 +1,8 @@
 import { Box3 } from './Box3.js';
-import { mat4TransformPoint3 } from './Mat4.Functions.js';
 import { Mat4 } from './Mat4.js';
 import { sphereIsEmpty } from './Sphere.Functions.js';
 import { Sphere } from './Sphere.js';
+import { mat4TransformVec3 } from './Vec3.Functions.js';
 import {
   vec3Add,
   vec3Clamp,
@@ -206,43 +206,43 @@ export function mat4TransformBox3(m: Mat4, b: Box3, result = new Box3()): Box3 {
 
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.min.x, b.min.y, b.min.z), v),
+    mat4TransformVec3(m, v.set(b.min.x, b.min.y, b.min.z), v),
     result
   );
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.min.x, b.min.y, b.max.z), v),
+    mat4TransformVec3(m, v.set(b.min.x, b.min.y, b.max.z), v),
     result
   );
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.min.x, b.max.y, b.min.z), v),
+    mat4TransformVec3(m, v.set(b.min.x, b.max.y, b.min.z), v),
     result
   );
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.min.x, b.max.y, b.max.z), v),
+    mat4TransformVec3(m, v.set(b.min.x, b.max.y, b.max.z), v),
     result
   );
 
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.max.x, b.min.y, b.min.z), v),
+    mat4TransformVec3(m, v.set(b.max.x, b.min.y, b.min.z), v),
     result
   );
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.max.x, b.min.y, b.max.z), v),
+    mat4TransformVec3(m, v.set(b.max.x, b.min.y, b.max.z), v),
     result
   );
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.max.x, b.max.y, b.min.z), v),
+    mat4TransformVec3(m, v.set(b.max.x, b.max.y, b.min.z), v),
     result
   );
   box3ExpandByVec3(
     result,
-    mat4TransformPoint3(m, v.set(b.max.x, b.max.y, b.max.z), v),
+    mat4TransformVec3(m, v.set(b.max.x, b.max.y, b.max.z), v),
     result
   );
 

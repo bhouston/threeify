@@ -6,14 +6,11 @@ import {
   parseSafeFloats,
   toSafeString
 } from './Functions';
-import { Line3 } from './Line3';
 import { Mat3 } from './Mat3';
 import { quatToMat3 } from './Mat3.Functions';
 import { Mat4 } from './Mat4';
 import { Quat } from './Quat';
 import { mat4ToQuat } from './Quat.Functions';
-import { Ray3 } from './Ray3';
-import { Sphere } from './Sphere';
 import { Vec2 } from './Vec2';
 import { Vec3 } from './Vec3';
 import {
@@ -652,64 +649,6 @@ export function mat4RotateByEuler(
   result = new Mat4()
 ): Mat4 {
   return mat4Multiply(m, euler3ToMat4(e), result);
-}
-
-export function mat4TransformPoint3(
-  m: Mat4,
-  v: Vec3,
-  result = new Vec3()
-): Vec3 {
-  const { x, y, z } = v;
-  const e = m.elements;
-
-  const w = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]);
-
-  result.x = (e[0] * x + e[4] * y + e[8] * z + e[12]) * w;
-  result.y = (e[1] * x + e[5] * y + e[9] * z + e[13]) * w;
-  result.z = (e[2] * x + e[6] * y + e[10] * z + e[14]) * w;
-
-  return result;
-}
-
-export function mat4TransformNormal3(
-  m: Mat4,
-  v: Vec3,
-  result = new Vec3()
-): Vec3 {
-  const { x, y, z } = v;
-  const e = m.elements;
-
-  result.x = e[0] * x + e[4] * y + e[8] * z;
-  result.y = e[1] * x + e[5] * y + e[9] * z;
-  result.z = e[2] * x + e[6] * y + e[10] * z;
-
-  return vec3Normalize(result, result);
-}
-
-export function mat4TransformSphere(
-  m: Mat4,
-  s: Sphere,
-  result = new Sphere()
-): Sphere {
-  mat4TransformPoint3(m, s.center, result.center);
-  result.radius = s.radius * mat4ToMaxAxisScale(m);
-  return result;
-}
-
-export function mat4TransformRay3(m: Mat4, r: Ray3, result = new Ray3()): Ray3 {
-  mat4TransformPoint3(m, r.origin, result.origin);
-  mat4TransformNormal3(m, r.direction, result.direction);
-  return result;
-}
-
-export function mat4TransformLine3(
-  m: Mat4,
-  l: Line3,
-  result = new Line3()
-): Line3 {
-  mat4TransformPoint3(m, l.start, result.start);
-  mat4TransformPoint3(m, l.end, result.end);
-  return result;
 }
 
 export function mat4Perspective(

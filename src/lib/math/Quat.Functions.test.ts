@@ -4,7 +4,6 @@ import {
   euler3ToMat4,
   mat4Delta,
   mat4Multiply,
-  mat4TransformPoint3,
   quatToMat4
 } from './Mat4.Functions';
 import { Quat } from './Quat';
@@ -25,10 +24,10 @@ import {
   quatPow,
   quatRotateTowards,
   quatSlerp,
-  quatTransformPoint3
+  quatTransformPoint3 as quatTransformVec3
 } from './Quat.Functions';
 import { Vec3 } from './Vec3';
-import { vec3Delta } from './Vec3.Functions';
+import { mat4TransformVec3, vec3Delta } from './Vec3.Functions';
 import { Vec4 } from './Vec4';
 
 const qX = quatNormalize(new Quat(1, 0, 0));
@@ -294,8 +293,8 @@ describe('Quat Functions', () => {
         const m = euler3ToMat4(changeEulerOrder(angles[j], testOrders[i]));
 
         const v0 = new Vec3(1, 0, 0);
-        const qv = quatTransformPoint3(q, v0);
-        const mv = mat4TransformPoint3(m, v0);
+        const qv = quatTransformVec3(q, v0);
+        const mv = mat4TransformVec3(m, v0);
 
         expect(vec3Delta(qv, mv)).toBeCloseTo(0);
       }

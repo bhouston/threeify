@@ -6,8 +6,10 @@ import {
   line3Invert,
   line3Length,
   line3LengthSq,
-  line3Midpoint
+  line3Midpoint,
+  mat4TransformLine3
 } from './Line3.Functions';
+import { Mat4 } from './Mat4';
 import { Vec3 } from './Vec3';
 
 describe('Line3 Functions', () => {
@@ -65,5 +67,17 @@ describe('Line3 Functions', () => {
     expect(d.x).toBeCloseTo(7);
     expect(d.y).toBeCloseTo(0);
     expect(d.z).toBeCloseTo(0);
+  });
+
+  test('mat4TransformLine3', () => {
+    const a = new Mat4();
+    const b = new Line3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
+    const c = mat4TransformLine3(a, b);
+    expect(c.start.x).toBeCloseTo(1);
+    expect(c.start.y).toBeCloseTo(2);
+    expect(c.start.z).toBeCloseTo(3);
+    expect(c.end.x).toBeCloseTo(4);
+    expect(c.end.y).toBeCloseTo(5);
+    expect(c.end.z).toBeCloseTo(6);
   });
 });

@@ -1,7 +1,10 @@
 import { box3Center, box3FromVec3s } from './Box3.Functions.js';
 import { Box3 } from './Box3.js';
+import { mat4ToMaxAxisScale } from './Mat4.Functions.js';
+import { Mat4 } from './Mat4.js';
 import { Sphere } from './Sphere.js';
 import {
+  mat4TransformVec3,
   vec3Add,
   vec3Distance,
   vec3DistanceSq,
@@ -101,5 +104,15 @@ export function sphereScale(
 ): Sphere {
   s.clone(result);
   result.radius *= scale;
+  return result;
+}
+
+export function mat4TransformSphere(
+  m: Mat4,
+  s: Sphere,
+  result = new Sphere()
+): Sphere {
+  mat4TransformVec3(m, s.center, result.center);
+  result.radius = s.radius * mat4ToMaxAxisScale(m);
   return result;
 }

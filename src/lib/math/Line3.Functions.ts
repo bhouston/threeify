@@ -1,7 +1,9 @@
 import { clamp } from './Functions';
 import { Line3 } from './Line3';
+import { Mat4 } from './Mat4';
 import { Vec3 } from './Vec3';
 import {
+  mat4TransformVec3,
   vec3Delta,
   vec3Distance,
   vec3DistanceSq,
@@ -69,4 +71,14 @@ export function line3ClosestPoint(
 ): Vec3 {
   const t = line3ClosestPointParameter(a, b, clampToLine);
   return line3At(a, t, result);
+}
+
+export function mat4TransformLine3(
+  m: Mat4,
+  l: Line3,
+  result = new Line3()
+): Line3 {
+  mat4TransformVec3(m, l.start, result.start);
+  mat4TransformVec3(m, l.end, result.end);
+  return result;
 }

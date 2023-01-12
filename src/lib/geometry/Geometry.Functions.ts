@@ -1,7 +1,7 @@
 import { makeVec3View } from '../math/arrays/PrimitiveView.js';
 import {
   mat4TransformNormal3,
-  mat4TransformPoint3
+  mat4TransformVec3
 } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
 import {
@@ -175,7 +175,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
   const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
     positions.get(i, v);
-    mat4TransformPoint3(m, v, v);
+    mat4TransformVec3(m, v, v);
     positions.set(i, v);
   }
 

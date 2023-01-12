@@ -16,7 +16,6 @@ import {
   mat4Negate,
   mat4Subtract,
   mat4ToBasis3,
-  mat4TransformPoint3,
   mat4Transpose,
   mat4Zero,
   scale3ToMat4,
@@ -25,6 +24,7 @@ import {
 import { Mat4 } from './Mat4.js';
 import { quatNormalize } from './Quat.Functions.js';
 import { Quat } from './Quat.js';
+import { mat4TransformVec3 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 describe('Mat4 Functions', () => {
@@ -91,7 +91,7 @@ describe('Mat4 Functions', () => {
     // get the basis out the hard war
     for (let j = 0; j < identityBasis.length; j++) {
       outBasis[j].copy(identityBasis[j]);
-      mat4TransformPoint3(b, outBasis[j], outBasis[j]);
+      mat4TransformVec3(b, outBasis[j], outBasis[j]);
     }
 
     // did the multiply method of basis extraction work?
