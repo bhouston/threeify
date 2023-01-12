@@ -42,14 +42,10 @@ export function color4Negate(a: Color4, result = new Color4()): Color4 {
 export function color4Length(a: Color4): number {
   return Math.sqrt(color4Dot(a, a));
 }
-export function color4Normalize(a: Color4, result = new Color4()): Color4 {
-  const invLength = 1 / color4Length(a);
-  return color4MultiplyByScalar(a, invLength, result);
-}
 export function color4Dot(a: Color4, b: Color4): number {
   return a.r * b.r + a.g * b.g + a.b * b.b + a.a * b.a;
 }
-export function color4Mix(
+export function color4Lerp(
   a: Color4,
   b: Color4,
   t: number,
@@ -92,7 +88,7 @@ export function color4Parse(text: string, result = new Color4()): Color4 {
   return color4FromArray(parseSafeFloats(text), 0, result);
 }
 
-export function rgbeToLinear(source: Color4, result = new Color4()): Color4 {
+export function xwrgbeToLinear(source: Color4, result = new Color4()): Color4 {
   const s = 2 ** (source.a * 255 - 128);
   return result.set(source.r * s, source.g * s, source.b * s, 1);
 }
@@ -111,42 +107,4 @@ export function linearToRgbd(
 
 export function linearToRgbd16(source: Color4, result = new Color4()): Color4 {
   return linearToRgbd(source, 16, result);
-}
-
-// TODO: Convert these to generics that take a encoding function of type (V4,V4)=>V4
-//  encodeArray<T>( sourceArray: Float32Array, result: Float32Array | undefined = undefined ): Float32Array {}
-
-export function rgbeToLinearArray(
-  sourceArray: Float32Array,
-  result: Float32Array | undefined = undefined
-): Float32Array {
-  const sourceColor = new Color4();
-  const destColor = new Color4();
-  if (result === undefined) {
-    result = new Float32Array(sourceArray.length);
-  }
-  for (let i = 0; i < sourceArray.length; i += 4) {
-    color4FromArray(sourceArray, i, sourceColor);
-    rgbeToLinear(sourceColor, destColor);
-    color4ToArray(destColor, result, i);
-  }
-  return result;
-}
-
-export function colorLinearToRgbdArray(
-  sourceArray: Float32Array,
-  maxRange: number,
-  result: Float32Array | undefined = undefined
-): Float32Array {
-  const sourceColor = new Color4();
-  const destColor = new Color4();
-  if (result === undefined) {
-    result = new Float32Array(sourceArray.length);
-  }
-  for (let i = 0; i < sourceArray.length; i += 4) {
-    color4FromArray(sourceArray, i, sourceColor);
-    linearToRgbd(sourceColor, maxRange, destColor);
-    color4ToArray(destColor, result, i);
-  }
-  return result;
 }
