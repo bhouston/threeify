@@ -16,7 +16,7 @@ export class Mat4 {
   static readonly NUM_ELEMENTS = Mat4.NUM_ROWS * Mat4.NUM_COLUMNS;
 
   constructor(
-    public elements: number[] = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    public elements = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
   ) {
     if (elements.length !== Mat4.NUM_ELEMENTS) {
       throw new Error(

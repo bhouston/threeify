@@ -14,7 +14,7 @@ export class Mat3 {
   static readonly NUM_COLUMNS = 3;
   static readonly NUM_ELEMENTS = Mat3.NUM_ROWS * Mat3.NUM_COLUMNS;
 
-  constructor(public elements: number[] = [1, 0, 0, 0, 1, 0, 0, 0, 1]) {
+  constructor(public elements = [1, 0, 0, 0, 1, 0, 0, 0, 1]) {
     if (elements.length !== Mat3.NUM_ELEMENTS) {
       throw new Error(
         `elements must have length ${Mat3.NUM_ELEMENTS}, got ${elements.length}`

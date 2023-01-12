@@ -14,9 +14,9 @@ export type Euler3JSON = number[];
 
 export class Euler3 {
   constructor(
-    public x: number = 0,
-    public y: number = 0,
-    public z: number = 0,
+    public x = 0,
+    public y = 0,
+    public z = 0,
     public order: EulerOrder3 = EulerOrder3.XYZ
   ) {}
 

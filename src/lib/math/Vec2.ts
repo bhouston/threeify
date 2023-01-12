@@ -1,7 +1,7 @@
 import { hashFloat2 } from '../core/hash';
 
 export class Vec2 {
-  constructor(public x: number = 0, public y: number = 0) {}
+  constructor(public x = 0, public y = 0) {}
 
   getHashCode(): number {
     return hashFloat2(this.x, this.y);

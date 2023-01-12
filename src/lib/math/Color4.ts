@@ -1,12 +1,7 @@
 import { hashFloat4 } from '../core/hash';
 
 export class Color4 {
-  constructor(
-    public r: number = 0,
-    public g: number = 0,
-    public b: number = 0,
-    public a: number = 0
-  ) {}
+  constructor(public r = 0, public g = 0, public b = 0, public a = 0) {}
 
   getHashCode(): number {
     return hashFloat4(this.r, this.g, this.b, this.a);
