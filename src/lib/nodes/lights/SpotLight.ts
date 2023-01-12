@@ -8,6 +8,7 @@
 // * @bhouston
 //
 
+import { Color3 } from '../../math/Color3.js';
 import { Vec3 } from '../../math/Vec3.js';
 import {
   eulerToNegativeZDirection,
@@ -37,7 +38,7 @@ export class SpotLight extends Light {
    * Must be greater than innerConeAngle and less than or equal to PI / 2.0.
    */
   constructor(
-    color: Vec3 = new Vec3(1, 1, 1),
+    color: Color3 = new Color3(1, 1, 1),
     intensity = 1,
     public range = -1,
     public innerConeAngle = 0,

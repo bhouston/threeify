@@ -1,7 +1,7 @@
 import { WebIO } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 
-import { mat4FromArray } from '../../math';
+import { mat4FromArray } from '../../index_math';
 import { Node } from '../../nodes/Node';
 
 export async function loadGLTF(url: string): Promise<Node> {

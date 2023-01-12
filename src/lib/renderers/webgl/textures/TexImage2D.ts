@@ -139,15 +139,15 @@ export class TexImage2D implements IDisposable {
         target ?? this.target,
         level,
         this.internalFormat,
-        image.width,
-        image.height,
+        image.x,
+        image.y,
         0,
         this.pixelFormat,
         this.dataType,
         null
       );
       if (level === 0) {
-        this.size.set(image.width, image.height);
+        this.size.set(image.x, image.y);
       }
     } else if (image instanceof ArrayBufferImage) {
       gl.texImage2D(
