@@ -14,7 +14,7 @@ import { Vec3 } from './Vec3.js';
 
 export function mat3Delta(a: Mat3, b: Mat3): number {
   let deltaSum = 0;
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     deltaSum = delta(a.elements[i], b.elements[i]);
   }
   return deltaSum;
@@ -114,13 +114,13 @@ export function mat3ToBasis3(
 }
 
 export function mat3Equals(a: Mat3, b: Mat3, tolerance = EPSILON): boolean {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     if (!equalsTolerance(a.elements[i], b.elements[i], tolerance)) return false;
   }
   return true;
 }
 export function mat3Add(a: Mat3, b: Mat3, result: Mat3 = new Mat3()): Mat3 {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] + b.elements[i];
   }
   return result;
@@ -130,7 +130,7 @@ export function mat3Subtract(
   b: Mat3,
   result: Mat3 = new Mat3()
 ): Mat3 {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] - b.elements[i];
   }
   return result;
@@ -140,13 +140,13 @@ export function mat3MultiplyByScalar(
   b: number,
   result: Mat3 = new Mat3()
 ): Mat3 {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * b;
   }
   return result;
 }
 export function mat3Negate(a: Mat3, result: Mat3 = new Mat3()): Mat3 {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = -a.elements[i];
   }
   return result;
@@ -281,7 +281,7 @@ export function mat3Mix(
   result = new Mat3()
 ): Mat3 {
   const s = 1 - t;
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * s + b.elements[i] * t;
   }
   return result;
@@ -291,7 +291,7 @@ export function mat3FromArray(
   offset = 0,
   result: Mat3 = new Mat3()
 ): Mat3 {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = array[offset + i];
   }
   return result;
@@ -301,7 +301,7 @@ export function mat3ToArray(
   array: Float32Array | number[],
   offset = 0
 ): void {
-  for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     array[offset + i] = a.elements[i];
   }
 }

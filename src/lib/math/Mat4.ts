@@ -13,14 +13,14 @@ export type Mat4JSON = number[];
 export class Mat4 {
   static readonly NUM_ROWS = 4;
   static readonly NUM_COLUMNS = 4;
-  static readonly NUM_ELEMENTS = Mat4.NUM_ROWS * Mat4.NUM_COLUMNS;
+  static readonly NUM_COMPONENTS = Mat4.NUM_ROWS * Mat4.NUM_COLUMNS;
 
   constructor(
-    public elements = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+    public readonly elements = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
   ) {
-    if (elements.length !== Mat4.NUM_ELEMENTS) {
+    if (elements.length !== Mat4.NUM_COMPONENTS) {
       throw new Error(
-        `elements must have length ${Mat4.NUM_ELEMENTS}, got ${elements.length}`
+        `elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`
       );
     }
   }
@@ -33,12 +33,12 @@ export class Mat4 {
     return result.set(this.elements);
   }
   set(elements: number[]): this {
-    if (elements.length !== Mat4.NUM_ELEMENTS) {
+    if (elements.length !== Mat4.NUM_COMPONENTS) {
       throw new Error(
-        `elements must have length ${Mat4.NUM_ELEMENTS}, got ${elements.length}`
+        `elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`
       );
     }
-    for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+    for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
       this.elements[i] = elements[i];
     }
     return this;

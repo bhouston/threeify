@@ -10,9 +10,10 @@ import {
   normalizedByteToFloats
 } from '../../math/arrays/Conversions.js';
 import {
-  colorLinearToRgbdArray,
-  rgbeToLinearArray
-} from '../../math/Color4.Functions.js';
+  color4ArrayToFloat32Array,
+  float32ArrayToColor4Array
+} from '../../math/arrays/Linearizers.js';
+import { linearToRgbd16 } from '../../math/Color4.Functions.js';
 import { DataType } from '../../renderers/webgl/textures/DataType.js';
 import { ArrayBufferImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';
@@ -52,13 +53,14 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
     header.width,
     header.height
   );
+  const color4Array = float32ArrayToColor4Array(
+    normalizedByteToFloats(pixelData)
+  );
+  for (let i = 0; i < color4Array.length; i++) {
+    linearToRgbd16(color4Array[i], color4Array[i]);
+  }
   return new ArrayBufferImage(
-    floatsToNormalizedBytes(
-      colorLinearToRgbdArray(
-        rgbeToLinearArray(normalizedByteToFloats(pixelData)),
-        16
-      )
-    ),
+    floatsToNormalizedBytes(color4ArrayToFloat32Array(color4Array)),
     header.width,
     header.height,
     DataType.UnsignedByte,

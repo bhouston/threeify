@@ -2,7 +2,12 @@ import { hashFloat4 } from '../core/hash.js';
 import { Vec3 } from './Vec3.js';
 
 export class Plane {
-  constructor(public normal = new Vec3(0, 0, -1), public constant = 0) {}
+  static readonly NUM_COMPONENTS = 4;
+
+  constructor(
+    public readonly normal = new Vec3(0, 0, -1),
+    public constant = 0
+  ) {}
 
   getHashCode(): number {
     return hashFloat4(

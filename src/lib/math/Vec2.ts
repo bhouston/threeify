@@ -1,6 +1,8 @@
 import { hashFloat2 } from '../core/hash';
 
 export class Vec2 {
+  static readonly NUM_COMPONENTS = 2;
+
   constructor(public x = 0, public y = 0) {}
 
   getHashCode(): number {

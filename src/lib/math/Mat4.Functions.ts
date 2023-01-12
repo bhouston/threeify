@@ -23,7 +23,7 @@ import {
 
 export function mat4Delta(a: Mat4, b: Mat4): number {
   let deltaSum = 0;
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     deltaSum = delta(a.elements[i], b.elements[i]);
   }
   return deltaSum;
@@ -130,14 +130,14 @@ export function mat4Equals(
   b: Mat4,
   tolerance: number = EPSILON
 ): boolean {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     if (!equalsTolerance(a.elements[i], b.elements[i], tolerance)) return false;
   }
   return true;
 }
 
 export function mat4Add(a: Mat4, b: Mat4, result: Mat4 = new Mat4()): Mat4 {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] + b.elements[i];
   }
   return result;
@@ -147,7 +147,7 @@ export function mat4Subtract(
   b: Mat4,
   result: Mat4 = new Mat4()
 ): Mat4 {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] - b.elements[i];
   }
   return result;
@@ -158,14 +158,14 @@ export function mat4MultiplyByScalar(
   b: number,
   result: Mat4 = new Mat4()
 ): Mat4 {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * b;
   }
   return result;
 }
 
 export function mat4Negate(a: Mat4, result: Mat4 = new Mat4()): Mat4 {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = -a.elements[i];
   }
   return result;
@@ -537,7 +537,7 @@ export function mat4Mix(
   result = new Mat4()
 ): Mat4 {
   const s = 1 - t;
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * s + b.elements[i] * t;
   }
   return result;
@@ -548,7 +548,7 @@ export function mat4FromArray(
   offset = 0,
   result: Mat4 = new Mat4()
 ): Mat4 {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = array[offset + i];
   }
   return result;
@@ -559,7 +559,7 @@ export function mat4ToArray(
   array: Float32Array | number[],
   offset = 0
 ): void {
-  for (let i = 0; i < Mat4.NUM_ELEMENTS; i++) {
+  for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     array[offset + i] = a.elements[i];
   }
 }

@@ -3,8 +3,14 @@ import { Vec2 } from './Vec2.js';
 
 export class Box2 {
   constructor(
-    public min = new Vec2(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY),
-    public max = new Vec2(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY)
+    public readonly min = new Vec2(
+      Number.POSITIVE_INFINITY,
+      Number.POSITIVE_INFINITY
+    ),
+    public readonly max = new Vec2(
+      Number.NEGATIVE_INFINITY,
+      Number.NEGATIVE_INFINITY
+    )
   ) {}
 
   get x(): number {

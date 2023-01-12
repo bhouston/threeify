@@ -9,7 +9,10 @@ import { hashFloat2 } from '../core/hash.js';
 import { Vec3 } from './Vec3.js';
 
 export class Line3 {
-  constructor(public start = new Vec3(), public end = new Vec3()) {}
+  constructor(
+    public readonly start = new Vec3(),
+    public readonly end = new Vec3()
+  ) {}
 
   getHashCode(): number {
     return hashFloat2(this.start.getHashCode(), this.end.getHashCode());

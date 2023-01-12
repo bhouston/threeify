@@ -1,7 +1,7 @@
 import { Vec3 } from './Vec3.js';
 
 export class Sphere {
-  constructor(public center = new Vec3(), public radius = -1) {}
+  constructor(public readonly center = new Vec3(), public radius = -1) {}
 
   set(center: Vec3, radius: number): this {
     center.clone(this.center);

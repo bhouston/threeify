@@ -12,12 +12,12 @@ export type Mat3JSON = number[];
 export class Mat3 {
   static readonly NUM_ROWS = 3;
   static readonly NUM_COLUMNS = 3;
-  static readonly NUM_ELEMENTS = Mat3.NUM_ROWS * Mat3.NUM_COLUMNS;
+  static readonly NUM_COMPONENTS = Mat3.NUM_ROWS * Mat3.NUM_COLUMNS;
 
-  constructor(public elements = [1, 0, 0, 0, 1, 0, 0, 0, 1]) {
-    if (elements.length !== Mat3.NUM_ELEMENTS) {
+  constructor(public readonly elements = [1, 0, 0, 0, 1, 0, 0, 0, 1]) {
+    if (elements.length !== Mat3.NUM_COMPONENTS) {
       throw new Error(
-        `elements must have length ${Mat3.NUM_ELEMENTS}, got ${elements.length}`
+        `elements must have length ${Mat3.NUM_COMPONENTS}, got ${elements.length}`
       );
     }
   }
@@ -30,12 +30,12 @@ export class Mat3 {
     return result.set(this.elements);
   }
   set(elements: number[]): this {
-    if (elements.length !== Mat3.NUM_ELEMENTS) {
+    if (elements.length !== Mat3.NUM_COMPONENTS) {
       throw new Error(
-        `elements must have length ${Mat3.NUM_ELEMENTS}, got ${elements.length}`
+        `elements must have length ${Mat3.NUM_COMPONENTS}, got ${elements.length}`
       );
     }
-    for (let i = 0; i < Mat3.NUM_ELEMENTS; i++) {
+    for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
       this.elements[i] = elements[i];
     }
     return this;

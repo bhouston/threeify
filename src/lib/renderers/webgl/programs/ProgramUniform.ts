@@ -1,9 +1,9 @@
 import {
-  linearizeColor3FloatArray,
-  linearizeMat3FloatArray,
-  linearizeMat4FloatArray,
-  linearizeVec2FloatArray,
-  linearizeVec3FloatArray
+  color3ArrayToFloat32Array,
+  mat3ArrayToFloat32Array,
+  mat4ArrayToFloat32Array,
+  vec2ArrayToFloat32Array,
+  vec3ArrayToFloat32Array
 } from '../../../math/arrays/Linearizers.js';
 import { Color3 } from '../../../math/Color3.js';
 import { Mat3 } from '../../../math/Mat3.js';
@@ -138,7 +138,7 @@ export class ProgramUniform {
           value.length > 0 &&
           value[0] instanceof Vec2
         ) {
-          const array = linearizeVec2FloatArray(value as Vec2[]);
+          const array = vec2ArrayToFloat32Array(value as Vec2[]);
           gl.uniform2fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
@@ -166,7 +166,7 @@ export class ProgramUniform {
           value.length > 0 &&
           value[0] instanceof Vec3
         ) {
-          const array = linearizeVec3FloatArray(value as Vec3[]);
+          const array = vec3ArrayToFloat32Array(value as Vec3[]);
           gl.uniform3fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
@@ -176,7 +176,7 @@ export class ProgramUniform {
           value.length > 0 &&
           value[0] instanceof Color3
         ) {
-          const array = linearizeColor3FloatArray(value as Color3[]);
+          const array = color3ArrayToFloat32Array(value as Color3[]);
           gl.uniform3fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
@@ -201,7 +201,7 @@ export class ProgramUniform {
           value.length > 0 &&
           value[0] instanceof Mat4
         ) {
-          const array = linearizeMat3FloatArray(value as Mat3[]);
+          const array = mat3ArrayToFloat32Array(value as Mat3[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
           return this;
@@ -224,7 +224,7 @@ export class ProgramUniform {
           value.length > 0 &&
           value[0] instanceof Mat4
         ) {
-          const array = linearizeMat4FloatArray(value as Mat4[]);
+          const array = mat4ArrayToFloat32Array(value as Mat4[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
           return this;

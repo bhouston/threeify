@@ -3,12 +3,12 @@ import { Vec3 } from './Vec3.js';
 
 export class Box3 {
   constructor(
-    public min = new Vec3(
+    public readonly min = new Vec3(
       Number.POSITIVE_INFINITY,
       Number.POSITIVE_INFINITY,
       Number.POSITIVE_INFINITY
     ),
-    public max = new Vec3(
+    public readonly max = new Vec3(
       Number.NEGATIVE_INFINITY,
       Number.NEGATIVE_INFINITY,
       Number.NEGATIVE_INFINITY

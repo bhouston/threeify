@@ -3,8 +3,8 @@ import { Vec3 } from './Vec3.js';
 
 export class Ray3 {
   constructor(
-    public origin = new Vec3(),
-    public direction = new Vec3(0, 0, -1)
+    public readonly origin = new Vec3(),
+    public readonly direction = new Vec3(0, 0, -1)
   ) {}
 
   getHashCode(): number {

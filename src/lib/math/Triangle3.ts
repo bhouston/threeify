@@ -3,9 +3,9 @@ import { Vec3 } from './Vec3.js';
 
 export class Triangle3 {
   constructor(
-    public a = new Vec3(),
-    public b = new Vec3(),
-    public c = new Vec3()
+    public readonly a = new Vec3(),
+    public readonly b = new Vec3(),
+    public readonly c = new Vec3()
   ) {}
 
   getHashCode(): number {
@@ -30,5 +30,35 @@ export class Triangle3 {
 
   copy(t: Triangle3): this {
     return this.set(t.a, t.b, t.c);
+  }
+
+  getComponent(index: number): Vec3 {
+    switch (index) {
+      case 0:
+        return this.a;
+      case 1:
+        return this.b;
+      case 2:
+        return this.c;
+      default:
+        throw new Error(`index is out of range: ${index}`);
+    }
+  }
+
+  setComponent(index: number, v: Vec3): this {
+    switch (index) {
+      case 0:
+        this.a.copy(v);
+        break;
+      case 1:
+        this.b.copy(v);
+        break;
+      case 2:
+        this.c.copy(v);
+        break;
+      default:
+        throw new Error(`index is out of range: ${index}`);
+    }
+    return this;
   }
 }
