@@ -14,6 +14,7 @@ import {
   mat4Multiply,
   mat4MultiplyByScalar,
   mat4Negate,
+  mat4PerspectiveFov,
   mat4Subtract,
   mat4ToBasis3,
   mat4Transpose,
@@ -318,5 +319,43 @@ describe('Mat4 Functions', () => {
       expect(scale2.y).toBeCloseTo(scale.y, EPSILON);
       expect(scale2.z).toBeCloseTo(scale.z, EPSILON);
     });
+  });
+
+  // test the creation of a perspective transform creation and then the projection
+  // of a few key points to ensure that they are projected correctly
+  describe('mat4PerspectiveFov', () => {
+    const fovy = Math.PI / 2;
+    const aspect = 1;
+    const near = 1;
+    const far = 100;
+    const m = mat4PerspectiveFov(fovy, aspect, near, far, 1);
+
+    // point in front of the camera
+    const p1 = new Vec3(0, 0, -10);
+    const p1p = mat4TransformVec3(m, p1);
+    expect(p1p.x).toBeCloseTo(0, EPSILON);
+    expect(p1p.y).toBeCloseTo(0, EPSILON);
+    expect(p1p.z).toBeCloseTo(-0.1, EPSILON);
+
+    // point on the near plane
+    const p2 = new Vec3(0, 0, -1);
+    const p2p = mat4TransformVec3(m, p2);
+    expect(p2p.x).toBeCloseTo(0, EPSILON);
+    expect(p2p.y).toBeCloseTo(0, EPSILON);
+    expect(p2p.z).toBeCloseTo(0, EPSILON);
+
+    // point on the far plane
+    const p3 = new Vec3(0, 0, -100);
+    const p3p = mat4TransformVec3(m, p3);
+    expect(p3p.x).toBeCloseTo(0, EPSILON);
+    expect(p3p.y).toBeCloseTo(0, EPSILON);
+    expect(p3p.z).toBeCloseTo(-1, EPSILON);
+
+    // point behind the camera
+    const p4 = new Vec3(0, 0, -101);
+    const p4p = mat4TransformVec3(m, p4);
+    expect(p4p.x).toBeCloseTo(0, EPSILON);
+    expect(p4p.y).toBeCloseTo(0, EPSILON);
+    expect(p4p.z).toBeCloseTo(-1.01, EPSILON);
   });
 });

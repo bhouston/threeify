@@ -667,7 +667,7 @@ export function mat4Perspective(
   const c = -(far + near) / (far - near);
   const d = (-2 * far * near) / (far - near);
 
-  return result.set([x, 0, a, 0, 0, y, b, 0, 0, 0, c, d, 0, 0, -1, 0]);
+  return result.set([x, 0, 0, 0, 0, y, 0, 0, a, b, c, -1, 0, 0, d, 0]);
 }
 
 export function mat4PerspectiveFov(
@@ -719,18 +719,20 @@ export function mat4Orthographic(
     2 * w,
     0,
     0,
-    -x,
+    0,
+
     0,
     2 * h,
     0,
-    -y,
+    0,
+
     0,
     0,
     -2 * p,
+    0,
+    -x,
+    -y,
     -z,
-    0,
-    0,
-    0,
     1
   ]);
 }
