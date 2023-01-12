@@ -15,6 +15,23 @@ import { Vec3 } from '../Vec3.js';
 import { vec4ToArray } from '../Vec4.Functions.js';
 import { Vec4 } from '../Vec4.js';
 
+function ensureFloat32ArrayLength(
+  array: Float32Array | undefined,
+  length: number
+): Float32Array {
+  if (array === undefined) {
+    return new Float32Array(length);
+  }
+
+  if (array.length === length) {
+    return array;
+  }
+
+  throw new Error(
+    `Array length ${array.length} does not match expected length ${length}`
+  );
+}
+
 export function numberArrayToInt32Array(array: number[]): Int32Array {
   const result = new Int32Array(array.length);
   for (let i = 0; i < array.length; i++) {
@@ -25,17 +42,24 @@ export function numberArrayToInt32Array(array: number[]): Int32Array {
 
 // TODO: Convert to generics.
 
-export function numberArrayToFloat32Array(array: number[]): Float32Array {
-  const result = new Float32Array(array.length);
+export function numberArrayToFloat32Array(
+  array: number[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
+  const stride = 1;
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0; i < array.length; i++) {
     result[i] = array[i];
   }
   return result;
 }
 
-export function color3ArrayToFloat32Array(array: Color3[]): Float32Array {
+export function color3ArrayToFloat32Array(
+  array: Color3[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Color3.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     color3ToArray(array[i], result, offset);
   }
@@ -51,9 +75,12 @@ export function float32ArrayToColor3Array(array: Float32Array): Color3[] {
   return result;
 }
 
-export function color4ArrayToFloat32Array(array: Color4[]): Float32Array {
+export function color4ArrayToFloat32Array(
+  array: Color4[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Color4.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     color4ToArray(array[i], result, offset);
   }
@@ -69,9 +96,12 @@ export function float32ArrayToColor4Array(array: Float32Array): Color4[] {
   return result;
 }
 
-export function vec2ArrayToFloat32Array(array: Vec2[]): Float32Array {
+export function vec2ArrayToFloat32Array(
+  array: Vec2[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Vec2.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     vec2ToArray(array[i], result, offset);
   }
@@ -87,9 +117,12 @@ export function float32ArrayToVec2Array(array: Float32Array): Vec2[] {
   return result;
 }
 
-export function vec3ArrayToFloat32Array(array: Vec3[]): Float32Array {
+export function vec3ArrayToFloat32Array(
+  array: Vec3[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Vec3.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     vec3ToArray(array[i], result, offset);
   }
@@ -105,9 +138,12 @@ export function float32ArrayToVec3Array(array: Float32Array): Vec3[] {
   return result;
 }
 
-export function vec4ArrayToFloat32Array(array: Vec4[]): Float32Array {
+export function vec4ArrayToFloat32Array(
+  array: Vec4[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Vec4.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     vec4ToArray(array[i], result, offset);
   }
@@ -128,9 +164,12 @@ export function float32ArrayToVec4Array(array: Float32Array): Vec4[] {
   return result;
 }
 
-export function quatArrayToFloat32Array(array: Quat[]): Float32Array {
+export function quatArrayToFloat32Array(
+  array: Quat[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Quat.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     quatToArray(array[i], result, offset);
   }
@@ -151,9 +190,12 @@ export function float32ArrayToQuatArray(array: Float32Array): Quat[] {
   return result;
 }
 
-export function mat3ArrayToFloat32Array(array: Mat3[]): Float32Array {
+export function mat3ArrayToFloat32Array(
+  array: Mat3[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Mat3.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     mat3ToArray(array[i], result, offset);
   }
@@ -179,9 +221,12 @@ export function float32ArrayToMat3Array(array: Float32Array): Mat3[] {
   return result;
 }
 
-export function mat4ArrayToFloat32Array(array: Mat4[]): Float32Array {
+export function mat4ArrayToFloat32Array(
+  array: Mat4[],
+  result: Float32Array | undefined = undefined
+): Float32Array {
   const stride = Mat4.NUM_COMPONENTS;
-  const result = new Float32Array(array.length * stride);
+  result = ensureFloat32ArrayLength(result, array.length * stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
     mat4ToArray(array[i], result, offset);
   }
