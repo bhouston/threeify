@@ -10,7 +10,7 @@ uniform int faceIndex;
 #pragma include <brdfs/diffuse/lambertSampler>
 
 vec4 sampleIBL(vec3 direction, float lod) {
-  return textureCube(envCubeMap, direction, lod);
+  return texture(envCubeMap, direction, lod);
 }
 void main() {
   vec3 direction = cubeFaceUVToDirection(faceIndex, v_uv);

@@ -62,7 +62,7 @@ export function makeTexImage2DFromCubeTexture(
     texture.pixelFormat,
     texture.dataType,
     internalFormat,
-    TextureTarget.TextureCubeMap,
+    TextureTarget.textureMap,
     params
   );
 }

@@ -10,6 +10,6 @@ out vec4 outputColor;
 
 void main() {
   vec3 reflectDir = reflect(normalize(v_viewPosition), normalize(v_viewNormal));
-  outputColor = textureCube(cubeMap, normalize(v_objectPosition));
+  outputColor = texture(cubeMap, normalize(v_objectPosition));
 
 }
