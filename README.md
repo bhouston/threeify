@@ -14,7 +14,7 @@
 Feature overview:
 
 - Modern: Typescript, Tree Shakable, Small Build Files
-- Rendering: WebGL 1, WebGL 2 (coming soon) and WebGPU (coming soon)
+- Rendering: WebGL 2 and WebGPU (coming soon)
 - Materials: Physically based materials
 - Post Effects: DOF (coming soon), Motion Blur ((coming soon)), SOA (coming soon), TRAA (coming soon)
 - Animation: Clips (coming soon), Mixer (coming soon)
