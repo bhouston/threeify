@@ -6,17 +6,19 @@
 //
 
 import { hashFloat2 } from '../core/hash.js';
-import { ICloneable, IEquatable, IHashable } from '../core/types.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
-export class Line3 implements ICloneable<Line3>, IEquatable<Line3>, IHashable {
-  constructor(public start = new Vector3(), public end = new Vector3()) {}
+export class Line3 {
+  constructor(
+    public readonly start = new Vec3(),
+    public readonly end = new Vec3()
+  ) {}
 
   getHashCode(): number {
     return hashFloat2(this.start.getHashCode(), this.end.getHashCode());
   }
 
-  set(start: Vector3, end: Vector3): this {
+  set(start: Vec3, end: Vec3): this {
     this.start.copy(start);
     this.end.copy(end);
 
@@ -32,9 +34,5 @@ export class Line3 implements ICloneable<Line3>, IEquatable<Line3>, IHashable {
     this.end.copy(l.end);
 
     return this;
-  }
-
-  equals(l: Line3): boolean {
-    return l.start.equals(this.start) && l.end.equals(this.end);
   }
 }

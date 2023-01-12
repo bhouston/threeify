@@ -3,13 +3,13 @@ import { icosahedronGeometry } from '../../../lib/geometry/primitives/polyhedron
 import { ShaderMaterial } from '../../../lib/materials/ShaderMaterial.js';
 import { Euler3 } from '../../../lib/math/Euler3.js';
 import {
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation
-} from '../../../lib/math/Matrix4.Functions.js';
-import { Matrix4 } from '../../../lib/math/Matrix4.js';
-import { Vector2 } from '../../../lib/math/Vector2.js';
-import { Vector3 } from '../../../lib/math/Vector3.js';
+  euler3ToMat4,
+  mat4PerspectiveFov,
+  translation3ToMat4
+} from '../../../lib/math/Mat4.Functions.js';
+import { Mat4 } from '../../../lib/math/Mat4.js';
+import { Vec2 } from '../../../lib/math/Vec2.js';
+import { Vec3 } from '../../../lib/math/Vec3.js';
 import { makeBufferGeometryFromGeometry } from '../../../lib/renderers/webgl/buffers/BufferGeometry.js';
 import {
   DepthTestFunc,
@@ -46,7 +46,7 @@ async function init(): Promise<null> {
   garageTexture.wrapT = TextureWrap.ClampToEdge;
   garageTexture.minFilter = TextureFilter.Linear;
 
-  const imageSize = new Vector2(1024, 1024);
+  const imageSize = new Vec2(1024, 1024);
   const lambertianCubeTexture = new CubeMapTexture([
     imageSize,
     imageSize,
@@ -67,7 +67,7 @@ async function init(): Promise<null> {
   const envCubeMap = makeTexImage2DFromEquirectangularTexture(
     context,
     garageTexture,
-    new Vector2(1024, 1024)
+    new Vec2(1024, 1024)
   );
 
   const samplerGeometry = passGeometry();
@@ -105,9 +105,9 @@ async function init(): Promise<null> {
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
+    viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -122,7 +122,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     const now = Date.now();
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );

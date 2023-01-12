@@ -3,14 +3,14 @@ import {
   DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4Inverse,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromQuaternion,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
+  mat4Inverse,
+  mat4PerspectiveFov,
   Orbit,
   passGeometry,
+  quatToMat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -44,7 +44,6 @@ async function init(): Promise<null> {
           texture.wrapT = TextureWrap.ClampToEdge;
           texture.minFilter = TextureFilter.Linear;
           textures[i] = texture;
-
           texImage2Ds[i] = makeTexImage2DFromTexture(context, texture);
         }
       )
@@ -60,9 +59,9 @@ async function init(): Promise<null> {
 
   const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
   const passUniforms = {
-    viewToWorld: new Matrix4(),
-    screenToView: makeMatrix4Inverse(
-      makeMatrix4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+    viewToWorld: new Mat4(),
+    screenToView: mat4Inverse(
+      mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
     ),
     equirectangularMap: texImage2Ds[0]
   };
@@ -73,11 +72,9 @@ async function init(): Promise<null> {
 
     const now = Date.now();
 
-    passUniforms.viewToWorld = makeMatrix4Inverse(
-      makeMatrix4RotationFromQuaternion(orbit.orientation)
-    );
-    passUniforms.screenToView = makeMatrix4Inverse(
-      makeMatrix4PerspectiveFov(
+    passUniforms.viewToWorld = mat4Inverse(quatToMat4(orbit.orientation));
+    passUniforms.screenToView = mat4Inverse(
+      mat4PerspectiveFov(
         15 * (1 - orbit.zoom) + 15,
         0.1,
         4,
@@ -105,7 +102,8 @@ async function init(): Promise<null> {
     (event) => {
       if (event.key !== undefined) {
         imageIndex =
-          (event.key.charCodeAt(0) - '0'.charCodeAt(0)) % images.length;
+          ((event.key.codePointAt(0) || 0) - ('0'.codePointAt(0) || 0)) %
+          images.length;
         // Handle the event with KeyboardEvent.key and set handled true.
       }
     },

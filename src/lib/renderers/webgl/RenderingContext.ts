@@ -43,10 +43,6 @@ export class RenderingContext {
   readonly resources: ResourceMap = {};
   nextResourceId = 0;
 
-  // readonly texImage2DPool: TexImage2DPool;
-  // readonly programPool: ProgramPool;
-  // readonly bufferPool: BufferPool;
-
   #program: Program | undefined = undefined;
   #framebuffer: VirtualFramebuffer;
   #scissor: Box2 = new Box2();
@@ -80,9 +76,6 @@ export class RenderingContext {
     this.glxo = new OptionalExtensions(this.gl);
 
     this.canvasFramebuffer = new CanvasFramebuffer(this);
-    // this.texImage2DPool = new TexImage2DPool(this);
-    // this.programPool = new ProgramPool(this);
-    // this.bufferPool = new BufferPool(this);
     this.#framebuffer = this.canvasFramebuffer;
   }
 
@@ -149,10 +142,7 @@ export class RenderingContext {
   }
 
   set scissor(s: Box2) {
-    if (!this.#scissor.equals(s)) {
-      this.gl.scissor(s.x, s.y, s.width, s.height);
-      this.#scissor.copy(s);
-    }
+    this.gl.scissor(s.x, s.y, s.width, s.height);
   }
 
   // specifies the affine transformation of x and y from normalized device coordinates to window coordinates.
@@ -161,10 +151,7 @@ export class RenderingContext {
   }
 
   set viewport(v: Box2) {
-    if (!this.#viewport.equals(v)) {
-      this.gl.viewport(v.x, v.y, v.width, v.height);
-      this.#viewport.copy(v);
-    }
+    this.gl.viewport(v.x, v.y, v.width, v.height);
   }
 
   get blendState(): BlendState {
@@ -172,22 +159,20 @@ export class RenderingContext {
   }
 
   set blendState(bs: BlendState) {
-    if (!this.#blendState.equals(bs)) {
-      this.gl.enable(GL.BLEND);
-      this.gl.blendEquation(bs.equation);
-      this.gl.blendFuncSeparate(
-        bs.sourceRGBFactor,
-        bs.destRGBFactor,
-        bs.sourceAlphaFactor,
-        bs.destAlphaFactor
-      );
-      /* console.log(
+    this.gl.enable(GL.BLEND);
+    this.gl.blendEquation(bs.equation);
+    this.gl.blendFuncSeparate(
+      bs.sourceRGBFactor,
+      bs.destRGBFactor,
+      bs.sourceAlphaFactor,
+      bs.destAlphaFactor
+    );
+    /* console.log(
         `Blend ${BlendEquation[bs.equation]} srcRGB ${BlendFunc[bs.sourceRGBFactor]} destRGB ${
           BlendFunc[bs.destRGBFactor]
         } srcA ${BlendFunc[bs.sourceAlphaFactor]} destA ${BlendFunc[bs.destAlphaFactor]}`,
       ); */
-      this.#blendState.copy(bs);
-    }
+    this.#blendState.copy(bs);
   }
 
   get depthTestState(): DepthTestState {
@@ -195,15 +180,13 @@ export class RenderingContext {
   }
 
   set depthTestState(dts: DepthTestState) {
-    if (!this.#depthTestState.equals(dts)) {
-      if (dts.enabled) {
-        this.gl.enable(GL.DEPTH_TEST);
-      } else {
-        this.gl.disable(GL.DEPTH_TEST);
-      }
-      this.gl.depthFunc(dts.func);
-      this.#depthTestState.copy(dts);
+    if (dts.enabled) {
+      this.gl.enable(GL.DEPTH_TEST);
+    } else {
+      this.gl.disable(GL.DEPTH_TEST);
     }
+    this.gl.depthFunc(dts.func);
+    this.#depthTestState.copy(dts);
   }
 
   get clearState(): ClearState {
@@ -211,12 +194,10 @@ export class RenderingContext {
   }
 
   set clearState(cs: ClearState) {
-    if (!this.#clearState.equals(cs)) {
-      this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
-      this.gl.clearDepth(cs.depth);
-      this.gl.clearStencil(cs.stencil);
-      this.#clearState.copy(cs);
-    }
+    this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
+    this.gl.clearDepth(cs.depth);
+    this.gl.clearStencil(cs.stencil);
+    this.#clearState.copy(cs);
   }
 
   get maskState(): MaskState {
@@ -224,12 +205,10 @@ export class RenderingContext {
   }
 
   set maskState(ms: MaskState) {
-    if (!this.#maskState.equals(ms)) {
-      this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
-      this.gl.depthMask(ms.depth);
-      this.gl.stencilMask(ms.stencil);
-      this.#maskState.copy(ms);
-    }
+    this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
+    this.gl.depthMask(ms.depth);
+    this.gl.stencilMask(ms.stencil);
+    this.#maskState.copy(ms);
   }
 
   get cullingState(): CullingState {
@@ -237,15 +216,13 @@ export class RenderingContext {
   }
 
   set cullingState(cs: CullingState) {
-    if (!this.#cullingState.equals(cs)) {
-      if (cs.enabled) {
-        this.gl.enable(GL.CULL_FACE);
-      } else {
-        this.gl.disable(GL.CULL_FACE);
-      }
-      this.gl.frontFace(cs.windingOrder);
-      this.gl.cullFace(cs.sides);
-      this.#cullingState.copy(cs);
+    if (cs.enabled) {
+      this.gl.enable(GL.CULL_FACE);
+    } else {
+      this.gl.disable(GL.CULL_FACE);
     }
+    this.gl.frontFace(cs.windingOrder);
+    this.gl.cullFace(cs.sides);
+    this.#cullingState.copy(cs);
   }
 }

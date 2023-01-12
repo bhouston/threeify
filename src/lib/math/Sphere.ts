@@ -1,38 +1,22 @@
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
 export class Sphere {
-  constructor(public center = new Vector3(), public radius = -1) {}
+  constructor(public readonly center = new Vec3(), public radius = -1) {}
 
-  set(center: Vector3, radius: number): this {
-    this.center.copy(center);
+  set(center: Vec3, radius: number): this {
+    center.clone(this.center);
     this.radius = radius;
 
     return this;
   }
 
-  clone(): Sphere {
-    return new Sphere().copy(this);
+  clone(result = new Sphere()): Sphere {
+    this.center.clone(result.center);
+    result.radius = this.radius;
+    return result;
   }
 
-  copy(sphere: Sphere): this {
-    this.center.copy(sphere.center);
-    this.radius = sphere.radius;
-
-    return this;
-  }
-
-  isEmpty(): boolean {
-    return this.radius < 0;
-  }
-
-  makeEmpty(): this {
-    this.center.set(0, 0, 0);
-    this.radius = -1;
-
-    return this;
-  }
-
-  equals(s: Sphere): boolean {
-    return s.center.equals(this.center) && s.radius === this.radius;
+  copy(s: Sphere): this {
+    return this.set(s.center, s.radius);
   }
 }

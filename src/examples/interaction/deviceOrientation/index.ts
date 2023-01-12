@@ -5,18 +5,18 @@ import {
   DeviceOrientation,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4Inverse,
-  makeMatrix4Perspective,
-  makeMatrix4RotationFromQuaternion,
-  makeMatrix4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
+  mat4Inverse,
+  mat4Perspective,
+  quatToMat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector3
+  translation3ToMat4,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -36,10 +36,10 @@ async function init(): Promise<null> {
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
-    viewLightPosition: new Vector3(0, 0, 0),
+    localToWorld: new Mat4(),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
+    viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
+    viewLightPosition: new Vec3(0, 0, 0),
     map: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -62,8 +62,8 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
 
     if (deviceOrientation !== undefined) {
-      uniforms.localToWorld = makeMatrix4Inverse(
-        makeMatrix4RotationFromQuaternion(deviceOrientation.orientation)
+      uniforms.localToWorld = mat4Inverse(
+        quatToMat4(deviceOrientation.orientation)
       );
     }
     renderBufferGeometry(

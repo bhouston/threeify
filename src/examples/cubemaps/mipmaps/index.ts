@@ -6,16 +6,16 @@ import {
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
+  mat4PerspectiveFov,
+  euler3ToMat4,
+  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
-  Matrix4,
+  Mat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Vector3
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -44,9 +44,9 @@ async function init(): Promise<null> {
 
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -3)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
+    viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -64,7 +64,7 @@ async function init(): Promise<null> {
     requestAnimationFrame(animate);
     const now = Date.now();
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );

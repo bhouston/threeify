@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { makeMatrix4PerspectiveFov } from '../../math/Matrix4.Functions.js';
-import { Matrix4 } from '../../math/Matrix4.js';
+import { mat4PerspectiveFov } from '../../math/Mat4.Functions.js';
+import { Mat4 } from '../../math/Mat4.js';
 import { Camera } from './Camera.js';
 
 export class PerspectiveCamera extends Camera {
@@ -19,8 +19,8 @@ export class PerspectiveCamera extends Camera {
     super();
   }
 
-  getProjection(viewAspectRatio = 1, result = new Matrix4()): Matrix4 {
-    return makeMatrix4PerspectiveFov(
+  getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {
+    return mat4PerspectiveFov(
       this.verticalFov,
       this.near,
       this.far,

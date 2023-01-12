@@ -3,24 +3,25 @@ import {
   BufferBit,
   ClearState,
   Color3,
+  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   EulerOrder3,
   fetchImage,
   makeBufferGeometryFromGeometry,
-  makeMatrix4PerspectiveFov,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector3
+  translation3ToMat4,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -47,9 +48,9 @@ async function init(): Promise<null> {
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -2)),
-    viewToScreen: makeMatrix4PerspectiveFov(
+    localToWorld: new Mat4(),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
+    viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -58,8 +59,8 @@ async function init(): Promise<null> {
     ),
 
     // lights
-    pointLightViewPosition: new Vector3(2, 0, 3),
-    pointLightIntensity: new Color3(1, 1, 1).multiplyByScalar(10),
+    pointLightViewPosition: new Vec3(2, 0, 3),
+    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 10),
     pointLightRange: 12,
 
     // materials
@@ -75,17 +76,17 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.Less
   );
-  canvasFramebuffer.clearState = new ClearState(new Vector3(0, 0, 0), 1);
+  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
 
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
-    uniforms.pointLightViewPosition = new Vector3(
+    uniforms.pointLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 3,
       Math.cos(now * 0.002) * 2,
       0.5

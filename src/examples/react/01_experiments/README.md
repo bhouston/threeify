@@ -9,11 +9,11 @@ A: https://marketplace.visualstudio.com/items?itemName=boyswan.glsl-literal
 ```javascript
 const glsl = (x) => x;
 
-export function sampler2D({ title: Sampler2D, uv: Vector2 }) {
+export function sampler2D({ title: Sampler2D, uv: Vec2 }) {
   return glsl`sampler2D( ${title}, ${uv} );`;
 }
 
-export function sampler2D({ title: Sampler2D, uv: Vector2 }) {
+export function sampler2D({ title: Sampler2D, uv: Vec2 }) {
   return glsl`sampler2D( ${title}, ${uv} );`;
 }
 ```

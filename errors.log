@@ -1,0 +1,9 @@
+
+> threeify@2.0.2 build
+> tgt && tsc
+
+171 files transpile successfully.
+src/lib/loaders/glTF/imageLoader.ts(1,55): error TS1005: ';' expected.
+src/lib/loaders/glTF/imageLoader.ts(48,41): error TS1005: ';' expected.
+src/lib/loaders/glTF/index.ts(21,12): error TS1005: ',' expected.
+src/lib/loaders/glTF/index.ts(21,16): error TS1005: ',' expected.

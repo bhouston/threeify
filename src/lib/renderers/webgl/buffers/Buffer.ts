@@ -1,6 +1,4 @@
 import { IDisposable } from '../../../core/types.js';
-import { AttributeData } from '../../../geometry/AttributeData.js';
-import { Pool } from '../../Pool.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { BufferTarget } from './BufferTarget.js';
 import { BufferUsage } from './BufferUsage.js';
@@ -61,24 +59,5 @@ export class Buffer implements IDisposable {
       this.context.disposeResource(this);
       this.disposed = true;
     }
-  }
-}
-
-export class BufferPool extends Pool<AttributeData, Buffer> {
-  constructor(context: RenderingContext) {
-    super(
-      context,
-      (
-        context: RenderingContext,
-        attribute: AttributeData,
-        buffer: Buffer | undefined
-      ) => {
-        if (buffer === undefined) {
-          return new Buffer(context, attribute.arrayBuffer, attribute.target);
-        }
-        buffer.update(attribute.arrayBuffer, attribute.target);
-        return buffer;
-      }
-    );
   }
 }

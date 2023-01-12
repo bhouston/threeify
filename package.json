@@ -1,6 +1,6 @@
 {
   "name": "threeify",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
   "main": "dist/lib",
@@ -56,5 +56,9 @@
     "format": "npm run prettier:fix && npm run lint:fix",
     "docs": "typedoc",
     "test": "jest ./src"
+  },
+  "dependencies": {
+    "@gltf-transform/core": "^2.5.1",
+    "@gltf-transform/extensions": "^2.5.1"
   }
 }

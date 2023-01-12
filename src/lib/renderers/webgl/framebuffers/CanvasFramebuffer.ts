@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { VirtualFramebuffer } from './VirtualFramebuffer.js';
 
@@ -36,8 +36,8 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
     }
   }
 
-  get size(): Vector2 {
-    return new Vector2(
+  get size(): Vec2 {
+    return new Vec2(
       this.context.gl.drawingBufferWidth,
       this.context.gl.drawingBufferHeight
     );

@@ -3,5 +3,10 @@
         {
             "path": "."
         }
-    ]
+    ],
+    "settings": {
+        "cSpell.words": [
+            "clearcoat"
+        ]
+    }
 }

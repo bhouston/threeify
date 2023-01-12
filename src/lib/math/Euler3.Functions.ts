@@ -1,26 +1,39 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import { clamp } from './Functions.js';
-import { makeMatrix4RotationFromQuaternion } from './Matrix4.Functions.js';
-import { Matrix4 } from './Matrix4.js';
-import { Quaternion } from './Quaternion.js';
+import { clamp, delta } from './Functions.js';
+import { mat4ToMat3, quatToMat3 } from './Mat3.Functions.js';
+import { Mat3 } from './Mat3.js';
+import { Mat4 } from './Mat4.js';
+import { Quat } from './Quat.js';
 
-export function makeEulerFromRotationMatrix4(
-  m: Matrix4,
-  order: EulerOrder3 = EulerOrder3.Default,
+export function euler3Delta(a: Euler3, b: Euler3): number {
+  return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z);
+}
+
+export function mat4ToEuler3(
+  m: Mat4,
+  order: EulerOrder3 = EulerOrder3.XYZ,
+  result = new Euler3()
+): Euler3 {
+  return mat3ToEuler3(mat4ToMat3(m), order, result);
+}
+
+export function mat3ToEuler3(
+  m: Mat3,
+  order: EulerOrder3 = EulerOrder3.XYZ,
   result = new Euler3()
 ): Euler3 {
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
   const te = m.elements;
   const m11 = te[0];
-  const m12 = te[4];
-  const m13 = te[8];
+  const m12 = te[3];
+  const m13 = te[6];
   const m21 = te[1];
-  const m22 = te[5];
-  const m23 = te[9];
+  const m22 = te[4];
+  const m23 = te[7];
   const m31 = te[2];
-  const m32 = te[6];
-  const m33 = te[10];
+  const m32 = te[5];
+  const m33 = te[8];
 
   let x = 0;
   let y = 0;
@@ -109,11 +122,11 @@ export function makeEulerFromRotationMatrix4(
   return result.set(x, y, z, order);
 }
 
-export function makeEulerFromQuaternion(
-  q: Quaternion,
-  order: EulerOrder3,
+export function quatToEuler3(
+  q: Quat,
+  order: EulerOrder3 = EulerOrder3.XYZ,
   result = new Euler3()
 ): Euler3 {
-  const m = makeMatrix4RotationFromQuaternion(q);
-  return makeEulerFromRotationMatrix4(m, order, result);
+  const m = quatToMat3(q);
+  return mat3ToEuler3(m, order, result);
 }

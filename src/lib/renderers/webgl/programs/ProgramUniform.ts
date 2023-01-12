@@ -1,15 +1,15 @@
 import {
-  linearizeColor3FloatArray,
-  linearizeMatrix3FloatArray,
-  linearizeMatrix4FloatArray,
-  linearizeVector2FloatArray,
-  linearizeVector3FloatArray
+  color3ArrayToFloat32Array,
+  mat3ArrayToFloat32Array,
+  mat4ArrayToFloat32Array,
+  vec2ArrayToFloat32Array,
+  vec3ArrayToFloat32Array
 } from '../../../math/arrays/Linearizers.js';
-import { Color3 } from '../../../math/index.js';
-import { Matrix3 } from '../../../math/Matrix3.js';
-import { Matrix4 } from '../../../math/Matrix4.js';
-import { Vector2 } from '../../../math/Vector2.js';
-import { Vector3 } from '../../../math/Vector3.js';
+import { Color3 } from '../../../math/Color3.js';
+import { Mat3 } from '../../../math/Mat3.js';
+import { Mat4 } from '../../../math/Mat4.js';
+import { Vec2 } from '../../../math/Vec2.js';
+import { Vec3 } from '../../../math/Vec3.js';
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
@@ -18,17 +18,17 @@ import { UniformType } from './UniformType.js';
 
 export type UniformValue =
   | number
-  | Vector2
-  | Vector3
+  | Vec2
+  | Vec3
   | Color3
-  | Matrix3
-  | Matrix4
+  | Mat3
+  | Mat4
   | TexImage2D
   | number[]
-  | Vector2[]
-  | Vector3[]
+  | Vec2[]
+  | Vec3[]
   | Color3[]
-  | Matrix4[];
+  | Mat4[];
 export type UniformValueMap = { [key: string]: UniformValue };
 
 const array1dRegexp = /^(\w+)\[\d+]$/;
@@ -125,7 +125,7 @@ export class ProgramUniform {
         }
         break;
       case UniformType.FloatVec2:
-        if (value instanceof Vector2) {
+        if (value instanceof Vec2) {
           const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
             gl.uniform2f(this.glLocation, value.x, value.y);
@@ -136,16 +136,16 @@ export class ProgramUniform {
         if (
           value instanceof Array &&
           value.length > 0 &&
-          value[0] instanceof Vector2
+          value[0] instanceof Vec2
         ) {
-          const array = linearizeVector2FloatArray(value as Vector2[]);
+          const array = vec2ArrayToFloat32Array(value as Vec2[]);
           gl.uniform2fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
         }
         break;
       case UniformType.FloatVec3:
-        if (value instanceof Vector3) {
+        if (value instanceof Vec3) {
           const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
             gl.uniform3f(this.glLocation, value.x, value.y, value.z);
@@ -164,9 +164,9 @@ export class ProgramUniform {
         if (
           value instanceof Array &&
           value.length > 0 &&
-          value[0] instanceof Vector3
+          value[0] instanceof Vec3
         ) {
-          const array = linearizeVector3FloatArray(value as Vector3[]);
+          const array = vec3ArrayToFloat32Array(value as Vec3[]);
           gl.uniform3fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
@@ -176,7 +176,7 @@ export class ProgramUniform {
           value.length > 0 &&
           value[0] instanceof Color3
         ) {
-          const array = linearizeColor3FloatArray(value as Color3[]);
+          const array = color3ArrayToFloat32Array(value as Color3[]);
           gl.uniform3fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
@@ -188,7 +188,7 @@ export class ProgramUniform {
       // case UniformType.FloatMat2x4:
       // case UniformType.FloatMat3x2:
       case UniformType.FloatMat3:
-        if (value instanceof Matrix3) {
+        if (value instanceof Mat3) {
           const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
             gl.uniformMatrix3fv(this.glLocation, false, value.elements);
@@ -199,9 +199,9 @@ export class ProgramUniform {
         if (
           value instanceof Array &&
           value.length > 0 &&
-          value[0] instanceof Matrix4
+          value[0] instanceof Mat4
         ) {
-          const array = linearizeMatrix3FloatArray(value as Matrix3[]);
+          const array = mat3ArrayToFloat32Array(value as Mat3[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
           return this;
@@ -211,7 +211,7 @@ export class ProgramUniform {
       // case UniformType.FloatMat4x2:
       // case UniformType.FloatMat4x3:
       case UniformType.FloatMat4:
-        if (value instanceof Matrix4) {
+        if (value instanceof Mat4) {
           const hashCode = value.getHashCode();
           if (hashCode !== this.valueHashCode) {
             gl.uniformMatrix4fv(this.glLocation, false, value.elements);
@@ -222,9 +222,9 @@ export class ProgramUniform {
         if (
           value instanceof Array &&
           value.length > 0 &&
-          value[0] instanceof Matrix4
+          value[0] instanceof Mat4
         ) {
-          const array = linearizeMatrix4FloatArray(value as Matrix4[]);
+          const array = mat4ArrayToFloat32Array(value as Mat4[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
           return this;

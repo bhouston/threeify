@@ -7,7 +7,6 @@
 
 import { IDisposable } from '../../../core/types.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import { Pool } from '../../Pool.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { Shader } from '../shaders/Shader.js';
@@ -168,8 +167,7 @@ export class Program implements IDisposable {
   setAttributeBuffers(vao: VertexArrayObject): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
-    const { gl, glx } = this.context;
-    const { OES_vertex_array_object } = glx;
+    const { gl } = this.context;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
       for (const name in this.attributes) {
@@ -187,7 +185,7 @@ export class Program implements IDisposable {
       }
     } else if (buffers instanceof VertexArrayObject) {
       const vao = buffers as VertexArrayObject;
-      OES_vertex_array_object.bindVertexArrayOES(vao.glVertexArrayObject);
+      gl.bindVertexArray(vao.glVertexArrayObject);
     } else {
       throw new TypeError('not implemented');
     }
@@ -216,22 +214,4 @@ export function makeProgramFromShaderMaterial(
     shaderMaterial.fragmentShaderCode,
     shaderMaterial.glslVersion
   );
-}
-
-export class ProgramPool extends Pool<ShaderMaterial, Program> {
-  constructor(context: RenderingContext) {
-    super(
-      context,
-      (
-        context: RenderingContext,
-        shaderCodeMaterial: ShaderMaterial,
-        program: Program | undefined
-      ) => {
-        if (program !== undefined) {
-          program.dispose();
-        }
-        return makeProgramFromShaderMaterial(context, shaderCodeMaterial);
-      }
-    );
-  }
 }

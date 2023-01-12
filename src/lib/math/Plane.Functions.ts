@@ -1,39 +1,70 @@
+import { delta } from './Functions.js';
 import { Plane } from './Plane.js';
 import { Sphere } from './Sphere.js';
 import { Triangle3 } from './Triangle3.js';
-import { crossFromCoplanarPoints } from './Vector3.Functions.js';
-import { Vector3 } from './Vector3.js';
+import {
+  crossFromCoplanarPoints as vec3CrossFromCoplanarPoints,
+  vec3Add,
+  vec3Delta,
+  vec3Dot,
+  vec3Equals,
+  vec3Length,
+  vec3MultiplyByScalar,
+  vec3Negate,
+  vec3Normalize
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
-export function makePlaneFromCoplanarPoints(
-  a: Vector3,
-  b: Vector3,
-  c: Vector3,
-  result = new Plane()
-): Plane {
-  crossFromCoplanarPoints(a, b, c, result.normal);
-  result.normal.normalize();
-  return makePlaneFromNormalAndCoplanarPoint(result.normal, a, result);
+export function planeDelta(a: Plane, b: Plane): number {
+  return vec3Delta(a.normal, b.normal) + delta(a.constant, b.constant);
 }
 
-export function makePlaneFromTriangle(
-  t: Triangle3,
-  result = new Plane()
-): Plane {
-  return makePlaneFromCoplanarPoints(t.a, t.b, t.c, result);
-}
+export function planeNormalize(p: Plane, result = new Plane()): Plane {
+  // Note: will lead to a divide by zero if the plane is invalid.
+  const inverseNormalLength = 1 / vec3Length(p.normal);
+  vec3MultiplyByScalar(p.normal, inverseNormalLength, result.normal);
+  result.constant = p.constant * inverseNormalLength;
 
-export function makePlaneFromNormalAndCoplanarPoint(
-  normal: Vector3,
-  point: Vector3,
-  result: Plane = new Plane()
-): Plane {
-  result.normal.copy(normal);
-  result.constant = -point.dot(normal);
+  return result;
+}
+export function planeInvert(p: Plane, result = new Plane()): Plane {
+  result.constant = p.constant * -1;
+  vec3Negate(p.normal, result.normal);
+
   return result;
 }
 
-export function planePointDistance(plane: Plane, point: Vector3): number {
-  return plane.normal.dot(point) + plane.constant;
+export function planeEquals(a: Plane, b: Plane): boolean {
+  return vec3Equals(a.normal, b.normal) && a.constant === b.constant;
+}
+
+export function coplanarPointsToPlane(
+  a: Vec3,
+  b: Vec3,
+  c: Vec3,
+  result = new Plane()
+): Plane {
+  vec3CrossFromCoplanarPoints(a, b, c, result.normal);
+  vec3Normalize(result.normal, result.normal);
+  return normalAndCoplanarPointToPlane(result.normal, a, result);
+}
+
+export function triangleToPlane(t: Triangle3, result = new Plane()): Plane {
+  return coplanarPointsToPlane(t.a, t.b, t.c, result);
+}
+
+export function normalAndCoplanarPointToPlane(
+  normal: Vec3,
+  point: Vec3,
+  result: Plane = new Plane()
+): Plane {
+  normal.clone(result.normal);
+  result.constant = -vec3Dot(point, normal);
+  return result;
+}
+
+export function planePointDistance(plane: Plane, point: Vec3): number {
+  return vec3Dot(plane.normal, point) + plane.constant;
 }
 
 // TODO: organize the function naming always in alphabetical if equivalent
@@ -42,14 +73,15 @@ export function planeSphereDistance(plane: Plane, sphere: Sphere): number {
 }
 
 export function projectPointOntoPlane(
-  point: Vector3,
+  point: Vec3,
   plane: Plane,
-  result: Vector3 = new Vector3()
-): Vector3 {
+  result: Vec3 = new Vec3()
+): Vec3 {
   // TODO: Determine if this is even correct
   const v = point.clone();
-  return result
-    .copy(plane.normal)
-    .multiplyByScalar(-planePointDistance(plane, v))
-    .add(v);
+  plane.normal.clone(result);
+  const delta = -planePointDistance(plane, v);
+  vec3MultiplyByScalar(result, delta, result);
+  vec3Add(v, result, result);
+  return result;
 }

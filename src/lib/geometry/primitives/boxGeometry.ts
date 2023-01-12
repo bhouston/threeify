@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vector3 } from '../../math/Vector3.js';
+import { Vec3 } from '../../math/Vec3.js';
 import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
 import { Geometry } from '../Geometry.js';
 
@@ -50,7 +50,7 @@ export function boxGeometry(
     const gridX1 = gridX + 1;
     const gridY1 = gridY + 1;
 
-    const vector = new Vector3();
+    const vector = new Vec3();
 
     // generate vertices, normals and uvs
 
@@ -76,7 +76,7 @@ export function boxGeometry(
         vector.setComponent(v, 0);
         vector.setComponent(w, depth > 0 ? 1 : -1);
 
-        // now apply vector to normal buffer
+        // now apply vector to normalds buffer
 
         normals.push(vector.x, vector.y, vector.z);
 

@@ -1,14 +1,11 @@
 import { hashFloat3 } from '../core/hash.js';
-import { ICloneable, IEquatable, IHashable } from '../core/types.js';
-import { Vector3 } from './Vector3.js';
+import { Vec3 } from './Vec3.js';
 
-export class Triangle3
-  implements ICloneable<Triangle3>, IEquatable<Triangle3>, IHashable
-{
+export class Triangle3 {
   constructor(
-    public a = new Vector3(),
-    public b = new Vector3(),
-    public c = new Vector3()
+    public readonly a = new Vec3(),
+    public readonly b = new Vec3(),
+    public readonly c = new Vec3()
   ) {}
 
   getHashCode(): number {
@@ -19,7 +16,7 @@ export class Triangle3
     );
   }
 
-  set(a: Vector3, b: Vector3, c: Vector3): this {
+  set(a: Vec3, b: Vec3, c: Vec3): this {
     this.a.copy(a);
     this.b.copy(b);
     this.c.copy(c);
@@ -35,7 +32,33 @@ export class Triangle3
     return this.set(t.a, t.b, t.c);
   }
 
-  equals(t: Triangle3): boolean {
-    return t.a.equals(this.a) && t.b.equals(this.b) && t.c.equals(this.c);
+  getComponent(index: number): Vec3 {
+    switch (index) {
+      case 0:
+        return this.a;
+      case 1:
+        return this.b;
+      case 2:
+        return this.c;
+      default:
+        throw new Error(`index is out of range: ${index}`);
+    }
+  }
+
+  setComponent(index: number, v: Vec3): this {
+    switch (index) {
+      case 0:
+        this.a.copy(v);
+        break;
+      case 1:
+        this.b.copy(v);
+        break;
+      case 2:
+        this.c.copy(v);
+        break;
+      default:
+        throw new Error(`index is out of range: ${index}`);
+    }
+    return this;
   }
 }

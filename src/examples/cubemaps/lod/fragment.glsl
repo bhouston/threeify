@@ -16,6 +16,6 @@ void main() {
     0.0,
     float(mipCount)
   );
-  outputColor = textureCubeLodEXT(cubeMap, reflectDir, lod);
+  outputColor = texture(cubeMap, reflectDir, lod);
 
 }

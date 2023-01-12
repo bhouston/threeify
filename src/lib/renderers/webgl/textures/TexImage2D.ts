@@ -8,7 +8,7 @@
 
 import { IDisposable } from '../../../core/types.js';
 import { isPow2 } from '../../../math/Functions.js';
-import { Vector2 } from '../../../math/Vector2.js';
+import { Vec2 } from '../../../math/Vec2.js';
 import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
@@ -22,7 +22,7 @@ export class TexImage2D implements IDisposable {
   public readonly id: number;
   public disposed = false;
   public glTexture: WebGLTexture;
-  public size = new Vector2();
+  public size = new Vec2();
 
   constructor(
     public context: RenderingContext,
@@ -75,7 +75,7 @@ export class TexImage2D implements IDisposable {
     }
 
     if (texParameters.generateMipmaps) {
-      if (isPow2(this.size.width) && isPow2(this.size.height)) {
+      if (isPow2(this.size.x) && isPow2(this.size.y)) {
         gl.generateMipmap(this.target);
       }
     }
@@ -97,7 +97,7 @@ export class TexImage2D implements IDisposable {
     if (!this.texParameters.generateMipmaps) {
       return 1;
     }
-    return Math.floor(Math.log2(Math.max(this.size.width, this.size.height)));
+    return Math.floor(Math.log2(Math.max(this.size.x, this.size.y)));
   }
 
   dispose(): void {
@@ -113,7 +113,7 @@ export class TexImage2D implements IDisposable {
     gl.bindTexture(this.target, this.glTexture);
     if (images.length === 1) {
       this.loadImage(images[0]);
-    } else if (this.target === TextureTarget.TextureCubeMap) {
+    } else if (this.target === TextureTarget.textureMap) {
       const numLevels = Math.floor(this.images.length / 6);
       for (let level = 0; level < numLevels; level++) {
         for (let face = 0; face < 6; face++) {
@@ -134,20 +134,20 @@ export class TexImage2D implements IDisposable {
   ): void {
     const { gl } = this.context;
 
-    if (image instanceof Vector2) {
+    if (image instanceof Vec2) {
       gl.texImage2D(
         target ?? this.target,
         level,
         this.internalFormat,
-        image.width,
-        image.height,
+        image.x,
+        image.y,
         0,
         this.pixelFormat,
         this.dataType,
         null
       );
       if (level === 0) {
-        this.size.set(image.width, image.height);
+        this.size.set(image.x, image.y);
       }
     } else if (image instanceof ArrayBufferImage) {
       gl.texImage2D(

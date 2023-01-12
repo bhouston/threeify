@@ -19,7 +19,7 @@ void main() {
     float(mipCount)
   );
   outputColor.rgb = pow(
-    rgbdToLinear(textureCubeLodEXT(cubeMap, reflectDir, lod), 16.0),
+    rgbdToLinear(texture(cubeMap, reflectDir, lod), 16.0),
     vec3(0.5)
   );
 

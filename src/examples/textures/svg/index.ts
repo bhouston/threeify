@@ -10,7 +10,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector2
+  Vec2
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -19,13 +19,13 @@ async function init(): Promise<null> {
   const fgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/fg75.svg',
-      new Vector2(1024, 1024)
+      new Vec2(1024, 1024)
     )
   );
   const bgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/bg.svg',
-      new Vector2(1024, 1024)
+      new Vec2(1024, 1024)
     )
   );
   const material = new ShaderMaterial(vertexSource, fragmentSource);

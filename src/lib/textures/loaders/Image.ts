@@ -5,11 +5,11 @@
 // * @bhouston
 //
 
-import { Vector2 } from '../../math/Vector2.js';
+import { Vec2 } from '../../math/Vec2.js';
 
 export function fetchImageElement(
   url: string,
-  size = new Vector2()
+  size = new Vec2()
 ): Promise<HTMLImageElement> {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();

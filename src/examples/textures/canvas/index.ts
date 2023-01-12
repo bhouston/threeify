@@ -2,24 +2,25 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
+  Color3,
+  color3ToHexString,
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
+  hslToColor3,
   makeBufferGeometryFromGeometry,
-  makeColor3FromHSL,
-  makeHexStringFromColor3,
-  makeMatrix4OrthographicSimple,
-  makeMatrix4RotationFromEuler,
-  makeMatrix4Translation,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Matrix4,
+  Mat4,
+  mat4OrthographicSimple,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vector2,
-  Vector3
+  translation3ToMat4,
+  Vec2,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -34,15 +35,11 @@ function updateCanvas(
   const grd = ctx.createLinearGradient(0, 0, 256, frameNumber % 256);
   grd.addColorStop(
     0,
-    `#${makeHexStringFromColor3(
-      makeColor3FromHSL(frameNumber / 256, 0.5, 0.5)
-    )}`
+    `#${color3ToHexString(hslToColor3(new Vec3(frameNumber / 256, 0.5, 0.5)))}`
   );
   grd.addColorStop(
     1,
-    `#${makeHexStringFromColor3(
-      makeColor3FromHSL(frameNumber / 193, 0.5, 0.5)
-    )}`
+    `#${color3ToHexString(hslToColor3(new Vec3(frameNumber / 193, 0.5, 0.5)))}`
   );
 
   ctx.fillStyle = grd;
@@ -75,28 +72,28 @@ async function init(): Promise<null> {
   const texture = new Texture(canvas);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
   const uniforms = {
-    localToWorld: new Matrix4(),
-    worldToView: makeMatrix4Translation(new Vector3(0, 0, -1)),
-    viewToScreen: makeMatrix4OrthographicSimple(
+    localToWorld: new Mat4(),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
+    viewToScreen: mat4OrthographicSimple(
       1.5,
-      new Vector2(),
+      new Vec2(),
       0.1,
       2,
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vector3(0, 0, 0),
+    viewLightPosition: new Vec3(0, 0, 0),
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  const whiteClearState = new ClearState(new Vector3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   let frameNumber = 0;
   function animate(): void {
     frameNumber++;
     const now = Date.now();
-    uniforms.localToWorld = makeMatrix4RotationFromEuler(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld
     );
