@@ -1,10 +1,10 @@
-import { Node } from './Node';
+import { SceneNode } from './SceneNode';
 
 // visitors
 
 export function depthFirstVisitor(
-  node: Node,
-  callback: (node: Node) => void
+  node: SceneNode,
+  callback: (node: SceneNode) => void
 ): void {
   node.children.forEach((child) => {
     depthFirstVisitor(child, callback);
@@ -13,8 +13,8 @@ export function depthFirstVisitor(
 }
 
 export function breadthFirstVisitor(
-  node: Node,
-  callback: (node: Node) => void
+  node: SceneNode,
+  callback: (node: SceneNode) => void
 ): void {
   callback(node);
   node.children.forEach((child) => {
@@ -23,8 +23,8 @@ export function breadthFirstVisitor(
 }
 
 export function rootLastVisitor(
-  node: Node,
-  callback: (node: Node) => void
+  node: SceneNode,
+  callback: (node: SceneNode) => void
 ): void {
   callback(node);
   if (node.parent !== undefined) {
@@ -33,8 +33,8 @@ export function rootLastVisitor(
 }
 
 export function rootFirstVisitor(
-  node: Node,
-  callback: (node: Node) => void
+  node: SceneNode,
+  callback: (node: SceneNode) => void
 ): void {
   if (node.parent !== undefined) {
     rootFirstVisitor(node.parent, callback);

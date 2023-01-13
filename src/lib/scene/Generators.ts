@@ -1,6 +1,6 @@
-import { Node } from './Node.js';
+import { SceneNode } from './SceneNode.js';
 
-export function* traverse(root: Node): Generator<Node, void, void> {
+export function* traverse(root: SceneNode): Generator<SceneNode, void, void> {
   const stack = [];
   stack.push(root);
   while (stack.length > 0) {

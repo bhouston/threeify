@@ -8,8 +8,8 @@
 import { IDisposable } from '../../../core/types.js';
 import { Box2 } from '../../../math/Box2.js';
 import { Vec2 } from '../../../math/Vec2.js';
-import { Camera } from '../../../nodes/cameras/Camera.js';
-import { Node } from '../../../nodes/Node.js';
+import { Camera } from '../../../scene/cameras/Camera.js';
+import { SceneNode } from '../../../scene/SceneNode.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
@@ -48,7 +48,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     gl.clear(attachmentBits);
   }
 
-  render(node: Node, camera: Camera, clear = false): void {
+  render(node: SceneNode, camera: Camera, clear = false): void {
     this.context.framebuffer = this;
     if (clear) {
       this.clear();

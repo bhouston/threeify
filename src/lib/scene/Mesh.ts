@@ -7,13 +7,13 @@
 
 import { Geometry } from '../geometry/Geometry.js';
 import { Material } from '../materials/Material.js';
-import { INode, Node } from './Node.js';
+import { ISceneNode, SceneNode } from './SceneNode.js';
 
-export interface IMesh extends INode {
+export interface IMesh extends ISceneNode {
   geometry: Geometry;
   material: Material;
 }
-export class Mesh extends Node {
+export class Mesh extends SceneNode {
   public geometry: Geometry;
   public material: Material;
 

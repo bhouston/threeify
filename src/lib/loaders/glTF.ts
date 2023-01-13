@@ -2,9 +2,9 @@ import { WebIO } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 
 import { mat4FromArray } from '../math/Mat4.Functions';
-import { Node } from '../nodes/Node';
+import { SceneNode } from '../scene/SceneNode';
 
-export async function loadGLTF(url: string): Promise<Node> {
+export async function loadGLTF(url: string): Promise<SceneNode> {
   const io = new WebIO();
   io.registerExtensions(KHRONOS_EXTENSIONS);
 
@@ -12,10 +12,10 @@ export async function loadGLTF(url: string): Promise<Node> {
   const root = document.getRoot();
   const scene = root.listScenes()[0];
 
-  const rootNode = new Node();
+  const rootNode = new SceneNode();
 
   scene.listChildren().forEach((node) => {
-    const localNode = new Node();
+    const localNode = new SceneNode();
     const localTransform = mat4FromArray(node.getMatrix());
 
     console.log('localTransform', localTransform);
@@ -31,7 +31,7 @@ export async function loadGLTF(url: string): Promise<Node> {
     rootNode.children.add(localNode);
   });
 
-  return new Promise<Node>((resolve) => {
+  return new Promise<SceneNode>((resolve) => {
     resolve(rootNode);
   });
 }

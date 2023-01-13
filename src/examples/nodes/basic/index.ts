@@ -25,7 +25,7 @@ import {
   translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
-import { SpotLight } from '../../../lib/nodes/lights/SpotLight.js';
+import { SpotLight } from '../../../lib/scene/lights/SpotLight.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

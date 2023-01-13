@@ -6,13 +6,13 @@
 //
 
 import { Color3 } from '../../math/Color3.js';
-import { INode, Node } from '../Node.js';
+import { ISceneNode, SceneNode } from '../SceneNode.js';
 
-export interface ILight extends INode {
+export interface ILight extends ISceneNode {
   color?: Color3;
   intensity?: number;
 }
-export class Light extends Node {
+export class Light extends SceneNode {
   public color = new Color3(1, 1, 1);
   public intensity = 1;
 

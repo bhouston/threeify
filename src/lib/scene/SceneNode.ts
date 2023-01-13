@@ -11,7 +11,7 @@ import { Mat4 } from '../math/Mat4.js';
 import { Quat } from '../math/Quat.js';
 import { Vec3 } from '../math/Vec3.js';
 
-export interface INode {
+export interface ISceneNode {
   id?: string;
   name?: string;
   position?: Vec3;
@@ -20,17 +20,17 @@ export interface INode {
   visible?: boolean;
 }
 
-export class Node {
+export class SceneNode {
   public id;
   public name = '';
-  public parent: Node | undefined = undefined;
-  public readonly children: Node[] = [];
+  public parent: SceneNode | undefined = undefined;
+  public readonly children: SceneNode[] = [];
   public readonly position: Vec3 = new Vec3(0, 0, 0);
   public readonly rotation: Quat = new Quat(0, 0, 0, 1);
   public readonly scale: Vec3 = new Vec3(1, 1, 1);
   public visible = true;
 
-  constructor(props: INode = {}) {
+  constructor(props: ISceneNode = {}) {
     this.id = props.id || generateUUID();
     this.name = props.name || this.name;
     if (props.position !== undefined) this.position.copy(props.position);
