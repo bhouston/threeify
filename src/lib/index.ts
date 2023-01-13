@@ -50,7 +50,7 @@ export * from './textures/loaders/Image.js';
 export * from './loaders/OBJ.js';
 
 export * from './materials/Blending.js';
-export * from './materials/Material.js';
+export * from './materials/IMaterial.js';
 export * from './materials/OutputChannels.js';
 export * from './materials/PhysicalMaterial.js';
 export * from './materials/ShaderMaterial.js';

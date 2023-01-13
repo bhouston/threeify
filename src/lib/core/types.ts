@@ -22,7 +22,6 @@ export interface IEquatable<T> {
 }
 
 export interface IDisposable {
-  disposed: boolean;
   dispose(): void;
 }
 

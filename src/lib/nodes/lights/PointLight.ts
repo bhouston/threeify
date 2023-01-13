@@ -8,37 +8,25 @@
 // * @bhouston
 //
 
-import { Color3 } from '../../math/Color3.js';
-import { Light } from './Light.js';
-import { LightType } from './LightType.js';
+import { ILight, Light } from './Light.js';
 
-/**
- * Point lights emit light in all directions from their position in space; rotation and
- * scale are ignored except for their effect on the inherited node position. The brightness
- * of the light attenuates in a physically correct manner as distance increases from the
- * light's position (i.e. brightness goes like the inverse square of the distance). Point
- * light intensity is defined in candela, which is lumens per square radian (lm/sr).
- */
+export interface IPointLight extends ILight {
+  range?: number;
+  power?: number;
+}
+
 export class PointLight extends Light {
-  /**
-   * @param color - RGB value for light's color in linear space.
-   * @param intensity - Luminous intensity in candela (lm/sr)
-   * @param range - The distance cutoff at which the light's intensity reaches zero.  If <= 0, assumed to be infinite.
-   */
-  constructor(color = new Color3(1, 1, 1), intensity = 1, public range = -1) {
-    super(LightType.Point, color, intensity);
+  public range = -1;
+
+  constructor(props: IPointLight) {
+    super(props);
+    if (props.power !== undefined) this.power = props.power;
+    if (props.range !== undefined) this.range = props.range;
   }
 
-  /**
-   * luminous power, AKA luminous flux (lm)
-   */
   get power(): number {
     return this.intensity * 4 * Math.PI;
   }
-
-  /**
-   * luminous power, AKA luminous flux (lm)
-   */
   set power(value: number) {
     this.intensity = value / (4 * Math.PI);
   }

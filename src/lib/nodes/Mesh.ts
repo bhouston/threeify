@@ -6,11 +6,20 @@
 //
 
 import { Geometry } from '../geometry/Geometry.js';
-import { Material } from '../materials/Material.js';
-import { Node } from './Node.js';
+import { IMaterial } from '../materials/IMaterial.js';
+import { INode, Node } from './Node.js';
 
+export interface IMesh extends INode {
+  geometry: Geometry;
+  material: IMaterial;
+}
 export class Mesh extends Node {
-  constructor(public geometry: Geometry, public material: Material) {
-    super();
+  public geometry: Geometry;
+  public material: IMaterial;
+
+  constructor(props: IMesh) {
+    super(props);
+    this.geometry = props.geometry;
+    this.material = props.material;
   }
 }

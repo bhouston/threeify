@@ -5,42 +5,37 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../core/generateUuid.js';
-import { IDisposable, IIdentifiable } from '../core/types.js';
-import { Euler3 } from '../math/Euler3.js';
-import { composeMat4, mat4Inverse } from '../math/Mat4.Functions.js';
+import { composeMat4 } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
-import { euler3ToQuat } from '../math/Quat.Functions.js';
+import { Quat } from '../math/Quat.js';
 import { Vec3 } from '../math/Vec3.js';
-import { NodeCollection } from './NodeCollection.js';
 
-export class Node implements IIdentifiable, IDisposable {
-  disposed = false;
-  readonly uuid: string = generateUUID();
-  version = 0;
-  parent: Node | undefined = undefined;
-  name = '';
-  children: NodeCollection;
-  position: Vec3 = new Vec3();
-  rotation: Euler3 = new Euler3();
-  scale: Vec3 = new Vec3(1, 1, 1);
-  visible = true;
+export interface INode {
+  name?: string;
+  position?: Vec3;
+  rotation?: Quat;
+  scale?: Vec3;
+  visible?: boolean;
+}
 
-  constructor() {
-    this.children = new NodeCollection(this);
-  }
+export class Node {
+  public name = '';
+  public parent: Node | undefined = undefined;
+  public readonly children: Node[] = [];
+  public readonly position: Vec3 = new Vec3(0, 0, 0);
+  public readonly rotation: Quat = new Quat(0, 0, 0, 1);
+  public readonly scale: Vec3 = new Vec3(1, 1, 1);
+  public visible = true;
 
-  dispose(): void {
-    if (!this.disposed) {
-      this.disposed = true;
-    }
+  constructor(props: INode) {
+    this.name = props.name || this.name;
+    if (props.position !== undefined) this.position.copy(props.position);
+    if (props.rotation !== undefined) this.rotation.copy(props.rotation);
+    if (props.scale !== undefined) this.scale.copy(props.scale);
+    this.visible = props.visible || this.visible;
   }
 
   get localToParentTransform(): Mat4 {
-    return composeMat4(this.position, euler3ToQuat(this.rotation), this.scale);
-  }
-
-  get parentToLocalTransform(): Mat4 {
-    return mat4Inverse(this.localToParentTransform);
+    return composeMat4(this.position, this.rotation, this.scale);
   }
 }

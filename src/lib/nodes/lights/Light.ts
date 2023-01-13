@@ -6,19 +6,19 @@
 //
 
 import { Color3 } from '../../math/Color3.js';
-import { Node } from '../Node.js';
-import { LightType } from './LightType.js';
+import { INode, Node } from '../Node.js';
 
+export interface ILight extends INode {
+  color?: Color3;
+  intensity?: number;
+}
 export class Light extends Node {
-  /**
-   * @param color - RGB value for light's color in linear space.
-   * @param intensity - Brightness of light.  Units depend on the light type.
-   */
-  constructor(
-    public readonly type: LightType,
-    public color = new Color3(1, 1, 1),
-    public intensity = 1
-  ) {
-    super();
+  public color = new Color3(1, 1, 1);
+  public intensity = 1;
+
+  constructor(props: ILight) {
+    super(props);
+    if (props.color !== undefined) this.color.copy(props.color);
+    if (props.intensity !== undefined) this.intensity = props.intensity;
   }
 }
