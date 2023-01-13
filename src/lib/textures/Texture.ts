@@ -14,7 +14,6 @@ import {
   TextureSource,
   VirtualTexture
 } from './VirtualTexture.js';
-
 export class Texture extends VirtualTexture {
   constructor(
     public image: TextureSource,

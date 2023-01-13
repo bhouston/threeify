@@ -24,8 +24,7 @@ export function getTextureSourceSize(textureSource: TextureSource): Vec2 {
 
 export class VirtualTexture {
   disposed = false;
-  uuid: string = generateUUID();
-  version = 0;
+  id: string = generateUUID();
   name = '';
   size: Vec2 = new Vec2();
 
@@ -46,14 +45,9 @@ export class VirtualTexture {
     return Math.floor(Math.log2(Math.max(this.size.x, this.size.y)));
   }
 
-  dirty(): void {
-    this.version++;
-  }
-
   dispose(): void {
     if (!this.disposed) {
       this.disposed = true;
-      this.dirty();
     }
   }
 }

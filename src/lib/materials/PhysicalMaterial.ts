@@ -10,7 +10,7 @@ import { Vec2 } from '../math/Vec2.js';
 import { Vec3 } from '../math/Vec3.js';
 import { Texture } from '../textures/Texture.js';
 import { Blending } from './Blending.js';
-import { IMaterial } from './IMaterial.js';
+import { IMaterial } from './Material.js';
 import { OutputChannels } from './OutputChannels.js';
 
 export class PhysicalMaterial implements IMaterial {

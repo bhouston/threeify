@@ -5,12 +5,14 @@
 // * @bhouston
 //
 
-import { composeMat4 } from '../math/Mat4.Functions.js';
+import { generateUUID } from '../core/generateUuid.js';
+import { composeMat4, mat4Multiply } from '../math/Mat4.Functions.js';
 import { Mat4 } from '../math/Mat4.js';
 import { Quat } from '../math/Quat.js';
 import { Vec3 } from '../math/Vec3.js';
 
 export interface INode {
+  id?: string;
   name?: string;
   position?: Vec3;
   rotation?: Quat;
@@ -19,6 +21,7 @@ export interface INode {
 }
 
 export class Node {
+  public id;
   public name = '';
   public parent: Node | undefined = undefined;
   public readonly children: Node[] = [];
@@ -27,7 +30,8 @@ export class Node {
   public readonly scale: Vec3 = new Vec3(1, 1, 1);
   public visible = true;
 
-  constructor(props: INode) {
+  constructor(props: INode = {}) {
+    this.id = props.id || generateUUID();
     this.name = props.name || this.name;
     if (props.position !== undefined) this.position.copy(props.position);
     if (props.rotation !== undefined) this.rotation.copy(props.rotation);
@@ -35,7 +39,14 @@ export class Node {
     this.visible = props.visible || this.visible;
   }
 
-  get localToParentTransform(): Mat4 {
+  get localToParent(): Mat4 {
     return composeMat4(this.position, this.rotation, this.scale);
+  }
+  get localToWorld(): Mat4 {
+    const result = this.localToParent;
+    if (this.parent !== undefined) {
+      mat4Multiply(result, this.parent.localToWorld);
+    }
+    return result;
   }
 }

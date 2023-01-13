@@ -12,11 +12,11 @@ import { Camera } from './Camera.js';
 export class PerspectiveCamera extends Camera {
   constructor(
     public verticalFov: number,
-    public near: number,
-    public far: number,
+    near: number,
+    far: number,
     public zoom = 1
   ) {
-    super();
+    super(near, far);
   }
 
   getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {

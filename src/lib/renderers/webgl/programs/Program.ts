@@ -35,8 +35,12 @@ export class Program implements IDisposable {
     public context: RenderingContext,
     vertexShaderCode: string,
     fragmentShaderCode: string,
-    glslVersion: number
+    glslVersion: number,
+    public readonly shaderDefines: string[] = []
   ) {
+    if (shaderDefines.length > 0)
+      throw new Error('Shader defines not yet supported');
+
     this.vertexShader = new Shader(
       this.context,
       vertexShaderCode,
@@ -206,12 +210,14 @@ export class Program implements IDisposable {
 
 export function makeProgramFromShaderMaterial(
   context: RenderingContext,
-  shaderMaterial: ShaderMaterial
+  shaderMaterial: ShaderMaterial,
+  shaderDefines: string[] = []
 ): Program {
   return new Program(
     context,
     shaderMaterial.vertexShaderCode,
     shaderMaterial.fragmentShaderCode,
-    shaderMaterial.glslVersion
+    shaderMaterial.glslVersion,
+    shaderDefines
   );
 }

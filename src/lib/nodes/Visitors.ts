@@ -12,6 +12,16 @@ export function depthFirstVisitor(
   callback(node);
 }
 
+export function breadthFirstVisitor(
+  node: Node,
+  callback: (node: Node) => void
+): void {
+  callback(node);
+  node.children.forEach((child) => {
+    breadthFirstVisitor(child, callback);
+  });
+}
+
 export function rootLastVisitor(
   node: Node,
   callback: (node: Node) => void
