@@ -10,12 +10,16 @@ import { NodeUniforms } from './NodeUniforms';
 
 export class SceneCache {
   public breathFirstNodes: SceneNode[] = [];
+
   public cameraUniforms = new CameraUniforms();
   public lightUniforms = new LightUniforms();
+
+  public nodeIdToUniforms: Map<string, NodeUniforms> = new Map();
   public geometryIdToBufferGeometry: Map<string, BufferGeometry> = new Map();
+
   public shaderNameToProgram: Map<string, Program> = new Map();
   public materialIdToUniforms: Map<string, MaterialUniforms> = new Map();
-  public nodeIdToUniforms: Map<string, NodeUniforms> = new Map();
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
+
   public meshBatches: MeshBatch[] = [];
 }

@@ -78,13 +78,11 @@ async function init(): Promise<null> {
   root.children.push(camera);
 
   updateNodeTree(root); // update the node tree (matrices, parents, etc.)
-  console.log('root', root);
 
   const sceneCache = sceneToSceneCache(context, root, camera, () => {
     return shaderMaterial;
   });
 
-  console.log('sceneCache', sceneCache);
   canvasFramebuffer.depthTestState = new DepthTestState(
     true,
     DepthTestFunc.Less
@@ -95,7 +93,7 @@ async function init(): Promise<null> {
   function animate(): void {
     canvasFramebuffer.clear(BufferBit.All);
 
-    renderSceneViaSceneCache(canvasFramebuffer, root, sceneCache);
+    renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
 
     requestAnimationFrame(animate);
   }

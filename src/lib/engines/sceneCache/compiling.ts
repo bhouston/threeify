@@ -126,7 +126,6 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
     new Vec3(0, 0, 0)
   );
   const lightColor = light.color;
-  console.log('lightWorldPosition', lightWorldPosition);
 
   let lightType = LightType.Directional;
   let lightWorldDirection = new Vec3();
@@ -169,12 +168,10 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
 function createMeshBatches(sceneCache: SceneCache) {
   const {
     breathFirstNodes,
-    cameraUniforms,
     geometryIdToBufferGeometry,
     shaderNameToProgram,
     materialIdToUniforms,
     nodeIdToUniforms,
-    lightUniforms,
     meshBatches
   } = sceneCache;
 
@@ -202,17 +199,12 @@ function createMeshBatches(sceneCache: SceneCache) {
       if (nodeUniforms === undefined)
         throw new Error('Node Uniforms not found');
 
-      // combine uniforms
-      const uniforms = [
-        materialUniforms,
-        nodeUniforms,
-        cameraUniforms,
-        lightUniforms
-      ];
-
       // create mesh batch
       meshBatches.push(
-        new MeshBatch(program, bufferGeometry, uniforms as UniformValueMap[])
+        new MeshBatch(program, bufferGeometry, [
+          materialUniforms,
+          nodeUniforms
+        ] as UniformValueMap[])
       );
     }
   }
