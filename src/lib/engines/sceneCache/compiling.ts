@@ -18,10 +18,10 @@ import { Mesh } from '../../scene/Mesh';
 import { SceneNode as SceneNode } from '../../scene/SceneNode';
 import { breadthFirstVisitor } from '../../scene/Visitors';
 import { Texture } from '../../textures/Texture';
+import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
 import { NodeUniforms } from './NodeUniforms';
 import { SceneCache } from './SceneCache';
-import { SceneUniforms } from './SceneUniforms';
 
 export function sceneToSceneCache(
   context: RenderingContext,
@@ -34,7 +34,7 @@ export function sceneToSceneCache(
 
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
     const nodeUniforms = new NodeUniforms();
-    nodeUniforms.localToWorld = node.localToWorldMatrix;
+    nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
     nodeIdToUniforms.set(node.id, nodeUniforms);
 
     if (
@@ -56,9 +56,9 @@ export function sceneToSceneCache(
   return sceneCache;
 }
 
-function cameraToSceneCache(camera: Camera, cameraUniforms: SceneUniforms) {
-  cameraUniforms.viewToScreen = camera.getProjection(1); // TODO, use a dynamic aspect ratio
-  cameraUniforms.worldToView = camera.parentToLocalMatrix;
+function cameraToSceneCache(camera: Camera, cameraUniforms: CameraUniforms) {
+  cameraUniforms.viewToScreen.copy(camera.getProjection(1)); // TODO, use a dynamic aspect ratio
+  cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
   cameraUniforms.cameraNear = camera.near;
   cameraUniforms.cameraFar = camera.far;
 }
@@ -148,6 +148,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
       new Vec3(0, 0, -1)
     );
   }
+  lightUniforms.numPunctualLights++;
   lightUniforms.punctualLightType.push(LightType.Spot, lightType);
   lightUniforms.punctualLightColor.push(lightColor);
   lightUniforms.punctualLightWorldPosition.push(lightWorldPosition);

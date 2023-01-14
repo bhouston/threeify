@@ -8,8 +8,8 @@ uniform vec3 pointLightViewPosition;
 uniform vec3 pointLightIntensity;
 uniform float pointLightRange;
 
-uniform vec3 albedoModulator;
-uniform sampler2D albedoMap;
+uniform vec3 albedo;
+uniform sampler2D albedoTexture;
 
 out vec4 outputColor;
 
@@ -18,7 +18,7 @@ out vec4 outputColor;
 #pragma include <color/spaces/srgb>
 
 void main() {
-  vec3 albedo = albedoModulator * sRGBToLinear(texture(albedoMap, v_uv0).rgb);
+  vec3 albedoColor = albedo * sRGBToLinear(texture(albedoTexture, v_uv0).rgb);
 
   PunctualLight punctualLight;
   punctualLight.type = LightType_Point;
@@ -40,9 +40,9 @@ void main() {
 
   vec3 outgoingRadiance;
   outgoingRadiance +=
-    directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
+    directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedoColor);
 
-  outputColor.rgb = linearTosRGB(outgoingRadiance);
+  outputColor.rgb = vec3( 1.0, 0.0, 0.5 ); // linearTosRGB(outgoingRadiance);
   outputColor.a = 1.0;
 
 }

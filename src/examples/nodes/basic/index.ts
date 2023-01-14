@@ -38,7 +38,7 @@ async function init(): Promise<null> {
 
   const root = new SceneNode({ name: 'root' });
   const sphereMesh = new Mesh({
-    position: new Vec3(0, 0, 0),
+    position: new Vec3(0, 0, 3),
     geometry: icosahedronGeometry(0.75, 5),
     material: new KhronosPhysicalMaterial({
       albedo: new Color3(1, 1, 1),
@@ -53,15 +53,18 @@ async function init(): Promise<null> {
     color: color3MultiplyByScalar(new Color3(1, 1, 1), 1000)
   });
   root.children.push(pointLight);
-  const camera = new PerspectiveCamera(45, 0.1, 4, 1);
+  const camera = new PerspectiveCamera(45, 0.1, 10, 1);
   camera.position.set(0, 0, -3);
   root.children.push(camera);
 
   updateNodeTree(root); // update the node tree (matrices, parents, etc.)
+  console.log('root', root);
+
   const sceneCache = sceneToSceneCache(context, root, camera, () => {
     return shaderMaterial;
   });
 
+  console.log('sceneCache', sceneCache);
   canvasFramebuffer.depthTestState = new DepthTestState(
     true,
     DepthTestFunc.Less

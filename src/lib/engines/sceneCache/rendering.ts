@@ -14,8 +14,7 @@ export function renderSceneViaSceneCache(
 ) {
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
     if (node instanceof Mesh) {
-      const mesh = node as Mesh;
-      renderMeshViaSceneCache(framebuffer, mesh, sceneCache);
+      renderMeshViaSceneCache(framebuffer, node as Mesh, sceneCache);
     }
   });
 }
@@ -26,7 +25,7 @@ export function renderMeshViaSceneCache(
   sceneCache: SceneCache
 ) {
   const {
-    cameraUniforms: sceneUniforms,
+    cameraUniforms,
     geometryIdToBufferGeometry,
     shaderNameToProgram,
     materialIdToUniforms,
@@ -43,7 +42,7 @@ export function renderMeshViaSceneCache(
   const shaderMaterial = mesh.material;
   const program = shaderNameToProgram.get(shaderMaterial.shaderName);
   if (program === undefined) throw new Error('Program not found');
-
+  console.log('program', program.uniforms);
   // get material uniforms
   const materialUniforms = materialIdToUniforms.get(shaderMaterial.id);
   if (materialUniforms === undefined)
@@ -57,9 +56,11 @@ export function renderMeshViaSceneCache(
   const uniforms = {
     ...materialUniforms,
     ...nodeUniforms,
-    ...sceneUniforms,
+    ...cameraUniforms,
     ...lightUniforms
   };
+
+  console.log('uniforms', uniforms);
 
   renderBufferGeometry(framebuffer, program, uniforms, bufferGeometry);
 }
