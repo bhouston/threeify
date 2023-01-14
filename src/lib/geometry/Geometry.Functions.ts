@@ -98,9 +98,7 @@ export function computeVertexNormals(geometry: Geometry): void {
   const positions = makeVec3View(positionAttribute);
   const normals = makeVec3View(normalAttribute);
 
-  for (let i = 0, il = normals.count; i < il; i++) {
-    normals.set(i, new Vec3());
-  }
+  normals.clear();
 
   const pA = new Vec3();
   const pB = new Vec3();

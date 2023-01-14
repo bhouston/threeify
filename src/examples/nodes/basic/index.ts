@@ -8,6 +8,8 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
+  Euler3,
+  euler3ToQuat,
   fetchImage,
   icosahedronGeometry,
   KhronosPhysicalMaterial,
@@ -35,30 +37,28 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const geometry = icosahedronGeometry(0.1, 5);
   const root = new SceneNode({ name: 'root' });
-  const sphereMesh = new Mesh({
-    position: new Vec3(0, 0, 0),
-    scale: new Vec3(0.5, 0.7, 0.9),
-    geometry: icosahedronGeometry(0.75, 5),
-    material: new KhronosPhysicalMaterial({
-      albedo: new Color3(0, 0, 1),
-      albedoTexture: texture,
-      roughness: 0.5,
-      metallic: 0.5
-    })
-  });
-  root.children.push(sphereMesh);
-  const sphereMesh2 = new Mesh({
-    position: new Vec3(0.5, 0, 0),
-    geometry: icosahedronGeometry(0.75, 5),
-    material: new KhronosPhysicalMaterial({
-      albedo: new Color3(1, 0, 0),
-      albedoTexture: texture,
-      roughness: 0.5,
-      metallic: 0.5
-    })
-  });
-  root.children.push(sphereMesh2);
+  for (let i = 0; i < 100; i++) {
+    const sphereMesh = new Mesh({
+      position: new Vec3(
+        Math.random() * 2 - 1,
+        Math.random() * 2 - 1,
+        Math.random() * 2 - 1
+      ),
+      rotation: euler3ToQuat(
+        new Euler3(Math.random() * 6, Math.random() * 6, Math.random() * 6)
+      ),
+      geometry,
+      material: new KhronosPhysicalMaterial({
+        albedo: new Color3(Math.random(), Math.random(), Math.random()),
+        albedoTexture: texture,
+        roughness: Math.random(),
+        metallic: Math.random()
+      })
+    });
+    root.children.push(sphereMesh);
+  }
   const pointLight = new SpotLight({
     position: new Vec3(1, 0, -0.5),
     color: new Color3(0, 0, 1),
@@ -97,7 +97,7 @@ async function init(): Promise<null> {
 
     renderSceneViaSceneCache(canvasFramebuffer, root, sceneCache);
 
-    //requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
   animate();

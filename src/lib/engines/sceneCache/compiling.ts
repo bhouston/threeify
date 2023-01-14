@@ -20,6 +20,7 @@ import { breadthFirstVisitor } from '../../scene/Visitors';
 import { Texture } from '../../textures/Texture';
 import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
+import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
 import { SceneCache } from './SceneCache';
 
@@ -30,9 +31,12 @@ export function sceneToSceneCache(
   shaderResolver: (shaderName: string) => ShaderMaterial
 ) {
   const sceneCache = new SceneCache();
-  const { nodeIdToUniforms, cameraUniforms, lightUniforms } = sceneCache;
+  const { nodeIdToUniforms, cameraUniforms, lightUniforms, breathFirstNodes } =
+    sceneCache;
 
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
+    breathFirstNodes.push(node);
+
     const nodeUniforms = new NodeUniforms();
     nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
     nodeIdToUniforms.set(node.id, nodeUniforms);
@@ -52,6 +56,8 @@ export function sceneToSceneCache(
       meshToSceneCache(context, node, shaderResolver, sceneCache);
     }
   });
+
+  createMeshBatches(sceneCache);
 
   return sceneCache;
 }
@@ -157,4 +163,56 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   lightUniforms.punctualLightRange.push(lightRange);
   lightUniforms.punctualLightInnerCos.push(lightInnerCos);
   lightUniforms.punctualLightOuterCos.push(lightOuterCos);
+}
+
+function createMeshBatches(sceneCache: SceneCache) {
+  const {
+    breathFirstNodes,
+    cameraUniforms,
+    geometryIdToBufferGeometry,
+    shaderNameToProgram,
+    materialIdToUniforms,
+    nodeIdToUniforms,
+    lightUniforms,
+    meshBatches
+  } = sceneCache;
+
+  for (const node of breathFirstNodes) {
+    if (node instanceof Mesh) {
+      const mesh = node as Mesh;
+
+      // get buffer geometry
+      const bufferGeometry = geometryIdToBufferGeometry.get(mesh.id);
+      if (bufferGeometry === undefined)
+        throw new Error('Buffer Geometry not found');
+
+      // get shader program
+      const shaderMaterial = mesh.material;
+      const program = shaderNameToProgram.get(shaderMaterial.shaderName);
+      if (program === undefined) throw new Error('Program not found');
+
+      // get material uniforms
+      const materialUniforms = materialIdToUniforms.get(shaderMaterial.id);
+      if (materialUniforms === undefined)
+        throw new Error('Material Uniforms not found');
+
+      // get node uniforms
+      const nodeUniforms = nodeIdToUniforms.get(mesh.id);
+      if (nodeUniforms === undefined)
+        throw new Error('Node Uniforms not found');
+
+      // combine uniforms
+      const uniforms = {
+        ...materialUniforms,
+        ...nodeUniforms,
+        ...cameraUniforms,
+        ...lightUniforms
+      };
+
+      // create mesh batch
+      const meshBatch = new MeshBatch(program, bufferGeometry, uniforms);
+
+      meshBatches.push(meshBatch);
+    }
+  }
 }

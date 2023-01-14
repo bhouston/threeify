@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { box2Equals } from '../../math/Box2.Functions.js';
 import { Box2 } from '../../math/Box2.js';
 import { BlendState } from './BlendState.js';
 import { Buffer } from './buffers/Buffer.js';
@@ -151,7 +152,10 @@ export class RenderingContext {
   }
 
   set viewport(v: Box2) {
-    this.gl.viewport(v.x, v.y, v.width, v.height);
+    if (!box2Equals(this.#viewport, v)) {
+      this.gl.viewport(v.x, v.y, v.width, v.height);
+      this.#viewport.copy(v);
+    }
   }
 
   get blendState(): BlendState {

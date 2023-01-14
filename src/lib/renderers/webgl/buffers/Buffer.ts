@@ -31,7 +31,8 @@ export class Buffer implements IDisposable {
 
     // load data
     // console.log(`gl.bufferData(${this.target}, ${arrayBuffer}, ${this.usage})`);
-    gl.bufferData(this.target, arrayBuffer, this.usage);
+    gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
+    gl.bufferSubData(this.target, 0, arrayBuffer);
 
     this.id = this.context.registerResource(this);
   }
