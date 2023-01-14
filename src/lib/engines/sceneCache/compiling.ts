@@ -6,6 +6,7 @@ import {
 } from '../../math/Vec3.Functions';
 import { makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
 import { makeProgramFromShaderMaterial } from '../../renderers/webgl/programs/Program';
+import { UniformValueMap } from '../../renderers/webgl/programs/ProgramUniform';
 import { RenderingContext } from '../../renderers/webgl/RenderingContext';
 import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
 import { Camera } from '../../scene/cameras/Camera';
@@ -202,17 +203,17 @@ function createMeshBatches(sceneCache: SceneCache) {
         throw new Error('Node Uniforms not found');
 
       // combine uniforms
-      const uniforms = {
-        ...materialUniforms,
-        ...nodeUniforms,
-        ...cameraUniforms,
-        ...lightUniforms
-      };
+      const uniforms = [
+        materialUniforms,
+        nodeUniforms,
+        cameraUniforms,
+        lightUniforms
+      ];
 
       // create mesh batch
-      const meshBatch = new MeshBatch(program, bufferGeometry, uniforms);
-
-      meshBatches.push(meshBatch);
+      meshBatches.push(
+        new MeshBatch(program, bufferGeometry, uniforms as UniformValueMap[])
+      );
     }
   }
 }

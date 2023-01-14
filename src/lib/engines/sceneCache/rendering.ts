@@ -12,7 +12,7 @@ export function renderSceneViaSceneCache(
 ) {
   const { meshBatches } = sceneCache;
   for (const meshBatch of meshBatches) {
-    const { program, uniforms, bufferGeometry } = meshBatch;
-    renderBufferGeometry(framebuffer, program, uniforms, bufferGeometry);
+    const { program, uniformsArray, bufferGeometry } = meshBatch;
+    renderBufferGeometry(framebuffer, program, uniformsArray, bufferGeometry);
   }
 }

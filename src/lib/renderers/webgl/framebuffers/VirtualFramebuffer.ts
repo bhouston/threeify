@@ -71,7 +71,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
 export function renderBufferGeometry(
   framebuffer: VirtualFramebuffer,
   program: Program,
-  uniforms: UniformValueMap,
+  uniforms: UniformValueMap | UniformValueMap[],
   bufferGeometry: BufferGeometry,
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
@@ -89,7 +89,13 @@ export function renderBufferGeometry(
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
-  context.program.setUniformValues(uniforms);
+  if (uniforms instanceof Array) {
+    for (const uniform of uniforms) {
+      context.program.setUniformValues(uniform);
+    }
+  } else {
+    context.program.setUniformValues(uniforms);
+  }
   context.program.setAttributeBuffers(bufferGeometry);
   context.viewport = new Box2(new Vec2(), framebuffer.size);
 
