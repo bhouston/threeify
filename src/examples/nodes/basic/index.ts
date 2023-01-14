@@ -5,7 +5,6 @@ import {
   BufferBit,
   ClearState,
   Color3,
-  color3MultiplyByScalar,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -38,23 +37,44 @@ async function init(): Promise<null> {
 
   const root = new SceneNode({ name: 'root' });
   const sphereMesh = new Mesh({
-    position: new Vec3(0, 0, 3),
+    position: new Vec3(0, 0, 0),
+    scale: new Vec3(0.5, 0.7, 0.9),
     geometry: icosahedronGeometry(0.75, 5),
     material: new KhronosPhysicalMaterial({
-      albedo: new Color3(1, 1, 1),
+      albedo: new Color3(0, 0, 1),
       albedoTexture: texture,
       roughness: 0.5,
       metallic: 0.5
     })
   });
   root.children.push(sphereMesh);
+  const sphereMesh2 = new Mesh({
+    position: new Vec3(0.5, 0, 0),
+    geometry: icosahedronGeometry(0.75, 5),
+    material: new KhronosPhysicalMaterial({
+      albedo: new Color3(1, 0, 0),
+      albedoTexture: texture,
+      roughness: 0.5,
+      metallic: 0.5
+    })
+  });
+  root.children.push(sphereMesh2);
   const pointLight = new SpotLight({
     position: new Vec3(1, 0, -0.5),
-    color: color3MultiplyByScalar(new Color3(1, 1, 1), 1000)
+    color: new Color3(0, 0, 1),
+    intensity: 100,
+    range: 6
   });
   root.children.push(pointLight);
-  const camera = new PerspectiveCamera(45, 0.1, 10, 1);
-  camera.position.set(0, 0, -3);
+  const pointLight2 = new SpotLight({
+    position: new Vec3(-1, 0, -0.5),
+    color: new Color3(1, 0, 0),
+    intensity: 100,
+    range: 6
+  });
+  root.children.push(pointLight2);
+  const camera = new PerspectiveCamera(25, 0.1, 4, 1);
+  camera.position.set(0, 0, 3);
   root.children.push(camera);
 
   updateNodeTree(root); // update the node tree (matrices, parents, etc.)
@@ -77,7 +97,7 @@ async function init(): Promise<null> {
 
     renderSceneViaSceneCache(canvasFramebuffer, root, sceneCache);
 
-    requestAnimationFrame(animate);
+    //requestAnimationFrame(animate);
   }
 
   animate();

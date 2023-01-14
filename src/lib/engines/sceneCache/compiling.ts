@@ -119,6 +119,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
     new Vec3(0, 0, 0)
   );
   const lightColor = light.color;
+  console.log('lightWorldPosition', lightWorldPosition);
 
   let lightType = LightType.Directional;
   let lightWorldDirection = new Vec3();
