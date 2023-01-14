@@ -1,5 +1,4 @@
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { mat4Inverse } from '../../math/Mat4.Functions';
 import { Vec3 } from '../../math/Vec3';
 import {
   mat4TransformNormal3 as mat4TransformDirection3,
@@ -35,7 +34,7 @@ export function sceneToSceneCache(
 
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
     const nodeUniforms = new NodeUniforms();
-    nodeUniforms.localToWorld = node.localToWorld;
+    nodeUniforms.localToWorld = node.localToWorldMatrix;
     nodeIdToUniforms.set(node.id, nodeUniforms);
 
     if (
@@ -59,7 +58,7 @@ export function sceneToSceneCache(
 
 function cameraToSceneCache(camera: Camera, cameraUniforms: SceneUniforms) {
   cameraUniforms.viewToScreen = camera.getProjection(1); // TODO, use a dynamic aspect ratio
-  cameraUniforms.worldToView = mat4Inverse(camera.localToParent);
+  cameraUniforms.worldToView = camera.parentToLocalMatrix;
   cameraUniforms.cameraNear = camera.near;
   cameraUniforms.cameraFar = camera.far;
 }
@@ -116,7 +115,7 @@ function meshToSceneCache(
 
 function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   const lightWorldPosition = mat4TransformVec3(
-    light.localToWorld,
+    light.localToWorldMatrix,
     new Vec3(0, 0, 0)
   );
   const lightColor = light.color;
@@ -130,7 +129,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   if (light instanceof SpotLight) {
     lightType = LightType.Spot;
     lightWorldDirection = mat4TransformDirection3(
-      light.localToWorld,
+      light.localToWorldMatrix,
       new Vec3(0, 0, -1)
     );
 
@@ -145,7 +144,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   if (light instanceof DirectionalLight) {
     lightType = LightType.Directional;
     lightWorldDirection = mat4TransformDirection3(
-      light.localToWorld,
+      light.localToWorldMatrix,
       new Vec3(0, 0, -1)
     );
   }

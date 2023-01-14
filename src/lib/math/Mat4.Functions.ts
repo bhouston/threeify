@@ -1001,7 +1001,7 @@ export function shearToMat4(
   return result.set([1, y, z, 0, x, 1, z, 0, x, y, 1, 0, 0, 0, 0, 1]);
 }
 
-export function composeMat4(
+export function mat4Compose(
   translation: Vec3,
   rotation: Quat,
   scale: Vec3,
@@ -1045,7 +1045,7 @@ export function composeMat4(
   ]);
 }
 
-export function decomposeMat4(
+export function mat4Decompose(
   m: Mat4,
   translation = new Vec3(),
   rotation = new Quat(),

@@ -7,13 +7,11 @@ import { SceneNode as SceneNode } from '../../scene/SceneNode';
 import { breadthFirstVisitor } from '../../scene/Visitors';
 import { SceneCache } from './SceneCache';
 
-
 export function renderSceneViaSceneCache(
   framebuffer: VirtualFramebuffer,
   rootNode: SceneNode,
   sceneCache: SceneCache
 ) {
-  // render nodes
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
     if (node instanceof Mesh) {
       const mesh = node as Mesh;
@@ -21,13 +19,19 @@ export function renderSceneViaSceneCache(
     }
   });
 }
-function renderMeshViaSceneCache(
+
+export function renderMeshViaSceneCache(
   framebuffer: VirtualFramebuffer,
   mesh: Mesh,
   sceneCache: SceneCache
 ) {
   const {
-    cameraUniforms: sceneUniforms, geometryIdToBufferGeometry, shaderNameToProgram, materialIdToUniforms, nodeIdToUniforms, lightUniforms
+    cameraUniforms: sceneUniforms,
+    geometryIdToBufferGeometry,
+    shaderNameToProgram,
+    materialIdToUniforms,
+    nodeIdToUniforms,
+    lightUniforms
   } = sceneCache;
 
   // get buffer geometry
@@ -38,8 +42,7 @@ function renderMeshViaSceneCache(
   // get shader program
   const shaderMaterial = mesh.material;
   const program = shaderNameToProgram.get(shaderMaterial.shaderName);
-  if (program === undefined)
-    throw new Error('Program not found');
+  if (program === undefined) throw new Error('Program not found');
 
   // get material uniforms
   const materialUniforms = materialIdToUniforms.get(shaderMaterial.id);
@@ -48,8 +51,7 @@ function renderMeshViaSceneCache(
 
   // get node uniforms
   const nodeUniforms = nodeIdToUniforms.get(mesh.id);
-  if (nodeUniforms === undefined)
-    throw new Error('Node Uniforms not found');
+  if (nodeUniforms === undefined) throw new Error('Node Uniforms not found');
 
   // combine uniforms
   const uniforms = {
