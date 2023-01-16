@@ -8,7 +8,6 @@
 import { box2Equals } from '../../math/Box2.Functions.js';
 import { Box2 } from '../../math/Box2.js';
 import { BlendState } from './BlendState.js';
-import { Buffer } from './buffers/Buffer.js';
 import { ClearState } from './ClearState.js';
 import { CullingState } from './CullingState.js';
 import { DepthTestState } from './DepthTestState.js';
@@ -21,28 +20,14 @@ import { GL } from './GL.js';
 import { MaskState } from './MaskState.js';
 import { getParameterAsString } from './Parameters.js';
 import { Program } from './programs/Program.js';
-import { Renderbuffer } from './Renderbuffer.js';
-import { Shader } from './shaders/Shader.js';
-import { TexImage2D } from './textures/TexImage2D.js';
-import { VertexArrayObject } from './VertexArrayObject.js';
-
-export type Resource =
-  | VertexArrayObject
-  | TexImage2D
-  | Program
-  | Shader
-  | Framebuffer
-  | Buffer
-  | Renderbuffer;
-export type ResourceMap = { [id: number]: Resource };
+import { Resources } from './Resources.js';
 
 export class RenderingContext {
-  readonly gl: WebGL2RenderingContext;
+  public readonly gl: WebGL2RenderingContext;
   readonly glx: Extensions;
   readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
-  readonly resources: ResourceMap = {};
-  nextResourceId = 0;
+  public readonly resources: Resources;
 
   #program: Program | undefined = undefined;
   #framebuffer: VirtualFramebuffer;
@@ -76,18 +61,10 @@ export class RenderingContext {
     this.glx = new Extensions(this.gl);
     this.glxo = new OptionalExtensions(this.gl);
 
+    this.resources = new Resources(this);
+
     this.canvasFramebuffer = new CanvasFramebuffer(this);
     this.#framebuffer = this.canvasFramebuffer;
-  }
-
-  registerResource(resource: Resource): number {
-    const id = this.nextResourceId++;
-    this.resources[id] = resource;
-    return id;
-  }
-
-  disposeResource(resource: Resource): void {
-    delete this.resources[resource.id];
   }
 
   get debugVendor(): string {

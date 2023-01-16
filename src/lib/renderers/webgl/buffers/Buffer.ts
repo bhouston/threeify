@@ -1,10 +1,11 @@
-import { IDisposable } from '../../../core/types.js';
+import { generateUUID } from '../../../core/generateUuid.js';
+import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { BufferTarget } from './BufferTarget.js';
 import { BufferUsage } from './BufferUsage.js';
 
-export class Buffer implements IDisposable {
-  readonly id: number;
+export class Buffer implements IResource {
+  public readonly id = generateUUID();
   disposed = false;
   glBuffer: WebGLBuffer;
 
@@ -14,7 +15,7 @@ export class Buffer implements IDisposable {
     public target: BufferTarget = BufferTarget.Array,
     public usage: BufferUsage = BufferUsage.StaticDraw
   ) {
-    const { gl } = context;
+    const { gl, resources } = context;
     // Create a buffer and put three 2d clip space points in it
     {
       const glBuffer = gl.createBuffer();
@@ -34,7 +35,7 @@ export class Buffer implements IDisposable {
     gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
     gl.bufferSubData(this.target, 0, arrayBuffer);
 
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   update(
@@ -56,8 +57,9 @@ export class Buffer implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
-      this.context.gl.deleteBuffer(this.glBuffer);
-      this.context.disposeResource(this);
+      const { gl, resources } = this.context;
+      gl.deleteBuffer(this.glBuffer);
+      resources.unregister(this);
       this.disposed = true;
     }
   }

@@ -5,8 +5,10 @@
 // * @bhouston
 //
 
+import { generateUUID } from '../../../core/generateUuid.js';
 import { Vec2 } from '../../../math/Vec2.js';
 import { GL } from '../GL.js';
+import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
 import { Attachment } from './Attachment.js';
@@ -14,8 +16,8 @@ import { VirtualFramebuffer } from './VirtualFramebuffer.js';
 
 export type AttachmentMap = { [point: number]: TexImage2D | undefined };
 
-export class Framebuffer extends VirtualFramebuffer {
-  readonly id: number;
+export class Framebuffer extends VirtualFramebuffer implements IResource {
+  public readonly id = generateUUID();
   readonly glFramebuffer: WebGLFramebuffer;
   readonly #size: Vec2 = new Vec2();
   private _attachments: AttachmentMap = {};
@@ -23,7 +25,7 @@ export class Framebuffer extends VirtualFramebuffer {
   constructor(context: RenderingContext) {
     super(context);
 
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
 
     {
       const glFramebuffer = gl.createFramebuffer();
@@ -34,7 +36,7 @@ export class Framebuffer extends VirtualFramebuffer {
       this.glFramebuffer = glFramebuffer;
     }
 
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   attach(
@@ -68,9 +70,9 @@ export class Framebuffer extends VirtualFramebuffer {
 
   dispose(): void {
     if (!this.disposed) {
-      const { gl } = this.context;
+      const { gl, resources } = this.context;
       gl.deleteFramebuffer(this.glFramebuffer);
-      this.context.disposeResource(this);
+      resources.unregister(this);
       this.disposed = true;
     }
   }

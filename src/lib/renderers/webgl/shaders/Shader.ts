@@ -5,8 +5,9 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types.js';
+import { generateUUID } from '../../../core/generateUuid.js';
 import { GL } from '../GL.js';
+import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { ShaderType } from './ShaderType.js';
 
@@ -75,8 +76,8 @@ function removeDeadCode(source: string): string {
     .replace(/[\n\r]+/g, '\n');
 }
 
-export class Shader implements IDisposable {
-  readonly id: number;
+export class Shader implements IResource {
+  public readonly id = generateUUID();
   disposed = false;
   glShader: WebGLShader;
   #validated = false;
@@ -88,7 +89,7 @@ export class Shader implements IDisposable {
     public shaderType: ShaderType,
     public glslVersion = 300
   ) {
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
 
     // Create the shader object
     {
@@ -122,8 +123,7 @@ export class Shader implements IDisposable {
     // Compile the shader
     gl.compileShader(this.glShader);
 
-    // NOTE: purposely not checking if this compiled.
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   get translatedSource(): string {
@@ -140,7 +140,7 @@ export class Shader implements IDisposable {
     }
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
     // Check if it compiled
     const compileStatus = gl.getShaderParameter(
       this.glShader,
@@ -153,6 +153,7 @@ export class Shader implements IDisposable {
       const errorMessage = `could not compile shader:\n${infoLog}`;
       console.error(errorMessage);
       console.error(insertLineNumbers(this.finalSource));
+      resources.unregister(this);
       this.disposed = true;
       throw new Error(errorMessage);
     }
@@ -161,8 +162,9 @@ export class Shader implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
-      this.context.gl.deleteShader(this.glShader);
-      this.context.disposeResource(this);
+      const { gl, resources } = this.context;
+      gl.deleteShader(this.glShader);
+      resources.unregister(this);
       this.disposed = true;
     }
   }

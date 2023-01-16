@@ -1,4 +1,5 @@
 import { generateUUID } from '../core/generateUuid';
+import { IIdentifiable, IVersionable } from '../core/types';
 import { Color3 } from '../math/Color3';
 import { Color4 } from '../math/Color4';
 import { Mat3 } from '../math/Mat3';
@@ -29,11 +30,12 @@ export interface IMaterialProps {
   name?: string;
 }
 
-export class Material {
-  public id;
+export class Material implements IVersionable, IIdentifiable {
+  public readonly id;
+  public version = 0;
   public name = '';
   public shaderName: string;
-  public shaderDefines: string[] = [];
+  public shaderDefines: ShaderDefines = {};
   constructor(props: IMaterialProps) {
     this.id = props.id || generateUUID();
     this.shaderName = props.shaderName;
@@ -43,5 +45,9 @@ export class Material {
 
   getUniforms(): MaterialUniforms {
     return {};
+  }
+
+  dirty(): void {
+    this.version++;
   }
 }
