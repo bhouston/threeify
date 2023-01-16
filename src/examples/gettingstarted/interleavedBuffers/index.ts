@@ -1,5 +1,9 @@
 import {
   convertToInterleavedGeometry,
+  CullingSide,
+  CullingState,
+  DepthTestFunc,
+  DepthTestState,
   Geometry,
   makeBufferGeometryFromGeometry,
   makeFloat32Attribute,
@@ -35,5 +39,8 @@ window.addEventListener('resize', () => canvasFramebuffer.resize());
 const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 const program = makeProgramFromShaderMaterial(context, material);
 const uniforms = {};
+
+context.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+context.cullingState = new CullingState(false, CullingSide.Back);
 
 renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);

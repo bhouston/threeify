@@ -21,11 +21,12 @@ import { Program } from './Program.js';
 import { UniformType } from './UniformType.js';
 import { UniformValue } from './UniformValueMap.js';
 
-const array1dRegexp = /^(\w+)\[\d+]$/;
+const array1dRegexp = /^(\w+([\d+])?)+\[\d+]$/;
 // glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
 
 export class ProgramUniform {
   context: RenderingContext;
+  fullName: string;
   name: string;
   size: number;
   dimensions: number;
@@ -46,7 +47,8 @@ export class ProgramUniform {
         throw new Error(`Can not find uniform with index: ${index}`);
       }
 
-      const array1dMatch = activeInfo.name.match(array1dRegexp);
+      this.fullName = activeInfo.name;
+      const array1dMatch = this.fullName.match(array1dRegexp);
       if (array1dMatch !== null) {
         this.name = array1dMatch[1];
         this.dimensions = 1;
