@@ -5,6 +5,7 @@
 // * @bhouston
 //
 
+import { makeVec3View } from '../../math/arrays/PrimitiveView.js';
 import { Vec2 } from '../../math/Vec2.js';
 import {
   vec3Add,
@@ -21,19 +22,27 @@ export function tetrahedronGeometry(radius = 1, detail = 0): Geometry {
   const vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];
   const indices = [2, 1, 0, 0, 3, 2, 1, 3, 0, 2, 3, 1];
 
-  return polyhedronGeometry(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail, false);
 }
 
-export function octahedronGeometry(radius = 1, detail = 0): Geometry {
+export function octahedronGeometry(
+  radius = 1,
+  detail = 0,
+  smoothNormals = false
+): Geometry {
   const vertices = [1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1];
   const indices = [
     0, 2, 4, 0, 4, 3, 0, 3, 5, 0, 5, 2, 1, 2, 5, 1, 5, 3, 1, 3, 4, 1, 4, 2
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, details, moothNormals);
 }
 
-export function icosahedronGeometry(radius = 1, detail = 0): Geometry {
+export function icosahedronGeometry(
+  radius = 1,
+  detail = 0,
+  smoothNormals = false
+): Geometry {
   const t = (1 + Math.sqrt(5)) / 2;
 
   const vertices = [
@@ -81,9 +90,13 @@ export function icosahedronGeometry(radius = 1, detail = 0): Geometry {
     2, 4, 11, 6, 2, 10, 8, 6, 7, 9, 8, 1
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail, smoothNormals);
 }
-export function dodecahedronGeometry(radius = 1, detail = 0): Geometry {
+export function dodecahedronGeometry(
+  radius = 1,
+  detail = 0,
+  smoothNormals
+): Geometry {
   const t = (1 + Math.sqrt(5)) / 2;
   const r = 1 / t;
 
@@ -165,14 +178,15 @@ export function dodecahedronGeometry(radius = 1, detail = 0): Geometry {
     19, 7, 19, 5, 14, 19, 14, 4, 19, 4, 17, 1, 12, 14, 1, 14, 5, 1, 5, 9
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, detail);
+  return polyhedronGeometry(vertices, indices, radius, detail, smoothNormals);
 }
 
 export function polyhedronGeometry(
   vertices: number[],
   indices: number[],
   radius = 1,
-  detail = 0
+  detail = 0,
+  smoothNormals = false
 ): Geometry {
   // default buffer data
   const vertexBuffer: number[] = [];
@@ -193,11 +207,26 @@ export function polyhedronGeometry(
   // build non-indexed geometry
 
   const geometry = new Geometry();
-  geometry.attributes.position = makeFloat32Attribute(vertexBuffer, 3);
-  geometry.attributes.normal = makeFloat32Attribute(vertexBuffer.slice(), 3);
-  geometry.attributes.uv = makeFloat32Attribute(uvBuffer, 2);
+  const { attributes } = geometry;
+  attributes.position = makeFloat32Attribute(vertexBuffer, 3);
+  attributes.normal = makeFloat32Attribute(vertexBuffer.slice(), 3);
+  attributes.uv = makeFloat32Attribute(uvBuffer, 2);
 
-  computeVertexNormals(geometry);
+  if (smoothNormals) {
+    console.log('computing smooth normals');
+    const positions = makeVec3View(
+      attributes.position.attributeData.arrayBuffer
+    );
+    const normals = makeVec3View(attributes.normal.attributeData.arrayBuffer);
+    const temp = new Vec3();
+    for (let i = 0; i < positions.count; i++) {
+      positions.get(i, temp);
+      vec3Normalize(temp, temp);
+      normals.set(i, temp);
+    }
+  } else {
+    computeVertexNormals(geometry);
+  }
 
   // helper functions
 

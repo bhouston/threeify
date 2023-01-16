@@ -37,7 +37,7 @@ import { samplerMaterial } from './sampler/SamplerMaterial.js';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = icosahedronGeometry(0.75, 2);
+  const geometry = icosahedronGeometry(0.75, 2, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const garageTexture = new Texture(
     await fetchImage('/assets/textures/cube/garage/latLong.jpg')

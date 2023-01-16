@@ -28,7 +28,7 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = icosahedronGeometry(0.75, 5);
+  const geometry = icosahedronGeometry(0.75, 5, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const normalsTexture = new Texture(
     await fetchImage('/assets/textures/golfball/normals2.jpg')

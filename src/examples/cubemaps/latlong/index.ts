@@ -4,17 +4,17 @@ import {
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromEquirectangularTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  Vec3,
-  Vec2
+  translation3ToMat4,
+  Vec2,
+  Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -24,7 +24,7 @@ async function init(): Promise<null> {
     await fetchImage('/assets/textures/cube/debug/latLong.png')
   );
 
-  const geometry = icosahedronGeometry(0.75, 4);
+  const geometry = icosahedronGeometry(0.75, 4, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
   const context = new RenderingContext(

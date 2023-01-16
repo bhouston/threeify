@@ -14,10 +14,7 @@ out vec2 v_uv0;
 
 void main() {
   mat4 localToView = worldToView * localToWorld;
-  v_viewSurfaceNormal = mat4TransformDirection(
-    localToView,
-    normalize(position)
-  );
+v_viewSurfaceNormal = mat4TransformDirection( localToView, normalize( normal ) );
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv * 0.5;
 

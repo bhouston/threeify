@@ -4,25 +4,27 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   fetchCubeImages,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
-  euler3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
+  const geometry = convertToInterleavedGeometry(
+    icosahedronGeometry(0.75, 2, true)
+  );
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const cubeTexture = new CubeMapTexture(
     await fetchCubeImages('/assets/textures/cube/pisa/*.png')
