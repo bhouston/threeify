@@ -11,6 +11,7 @@ import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { Shader } from '../shaders/Shader.js';
+import { ShaderDefines } from '../shaders/ShaderDefines.js';
 import { ShaderType } from '../shaders/ShaderType.js';
 import { VertexArrayObject } from '../VertexArrayObject.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
@@ -36,23 +37,19 @@ export class Program implements IResource {
     public context: RenderingContext,
     vertexShaderCode: string,
     fragmentShaderCode: string,
-    glslVersion: number,
-    public readonly shaderDefines: string[] = []
+    shaderDefines: ShaderDefines = {}
   ) {
-    if (shaderDefines.length > 0)
-      throw new Error('Shader defines not yet supported');
-
     this.vertexShader = new Shader(
       this.context,
       vertexShaderCode,
       ShaderType.Vertex,
-      glslVersion
+      shaderDefines
     );
     this.fragmentShader = new Shader(
       this.context,
       fragmentShaderCode,
       ShaderType.Fragment,
-      glslVersion
+      shaderDefines
     );
 
     const { gl, resources } = this.context;

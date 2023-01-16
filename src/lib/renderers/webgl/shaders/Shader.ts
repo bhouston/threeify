@@ -9,6 +9,7 @@ import { generateUUID } from '../../../core/generateUuid.js';
 import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
+import { ShaderDefines } from './ShaderDefines.js';
 import { ShaderType } from './ShaderType.js';
 
 function insertLineNumbers(source: string): string {
@@ -78,16 +79,16 @@ function removeDeadCode(source: string): string {
 
 export class Shader implements IResource {
   public readonly id = generateUUID();
-  disposed = false;
-  glShader: WebGLShader;
+  public disposed = false;
+  public readonly glShader: WebGLShader;
   #validated = false;
   finalSource: string;
 
   constructor(
-    public context: RenderingContext,
-    public source: string,
-    public shaderType: ShaderType,
-    public glslVersion = 300
+    public readonly context: RenderingContext,
+    public readonly source: string,
+    public readonly shaderType: ShaderType,
+    public readonly shaderDefines: ShaderDefines = {}
   ) {
     const { gl, resources } = this.context;
 
@@ -102,16 +103,11 @@ export class Shader implements IResource {
     }
 
     const prefix = [];
-    if (glslVersion === 300) {
-      prefix.push('#version 300 es');
-    }
-    /*
-    if (shaderType === ShaderType.Fragment) {
-      const { glxo } = context;
-      if (glxo.EXT_shader_texture_lod !== null) {
-        prefix.push('#extension GL_EXT_shader_texture_lod : enable');
-      }
-    }*/
+    prefix.push('#version 300 es');
+    Object.keys(this.shaderDefines).forEach((key) => {
+      const value = this.shaderDefines[key];
+      prefix.push(`#define ${key} ${value}`);
+    });
 
     const combinedSource = `${prefix.join('\n')}\n${source}`;
 
