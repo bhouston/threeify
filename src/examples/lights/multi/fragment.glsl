@@ -36,52 +36,32 @@ void main() {
   vec3 normal = normalize(v_viewSurfaceNormal);
   vec3 viewDirection = normalize(-v_viewSurfacePosition);
 
-  mat3 tangentToView = tangentToViewFromPositionNormalUV(
-    position,
-    normal,
-    v_uv0
-  );
+  mat3 tangentToView = tangentToViewFromPositionNormalUV(position, normal, v_uv0);
   normal = tangentToView[2];
 
   vec3 outgoingRadiance;
 
-  for (int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++) {
-    if (i >= numPunctualLights) break;
+  for(int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++) {
+    if(i >= numPunctualLights)
+      break;
 
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
-    punctualLight.position = punctualLightViewPosition[i];
-    punctualLight.direction = punctualLightViewDirection[i];
+    punctualLight.position = mat4TransformPosition(worldToView, vec3(0., 0., 2)); // punctualLightWorldPosition[i] );
+    punctualLight.direction = mat4TransformDirection(worldToView, punctualLightWorldDirection[i]);
     punctualLight.intensity = punctualLightColor[i];
     punctualLight.range = punctualLightRange[i];
     punctualLight.innerConeCos = punctualLightInnerCos[i];
     punctualLight.outerConeCos = punctualLightOuterCos[i];
 
-    DirectLight directLight;
-    if (punctualLight.type == 0) {
-      pointLightToDirectLight(position, punctualLight, directLight);
-    }
-    if (punctualLight.type == 1) {
-      spotLightToDirectLight(position, punctualLight, directLight);
-    }
-    if (punctualLight.type == 2) {
-      directionalLightToDirectLight(punctualLight, directLight);
-    }
+    DirectLight directLight = punctualLightToDirectLight(position, punctualLight);
 
     float dotNL = saturate(dot(directLight.direction, normal));
 
-    outgoingRadiance +=
-      directLight.radiance *
+    outgoingRadiance += directLight.radiance *
       dotNL *
-      BRDF_Specular_GGX(
-        normal,
-        viewDirection,
-        directLight.direction,
-        specularF0,
-        specularRoughness
-      );
-    outgoingRadiance +=
-      directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
+      BRDF_Specular_GGX(normal, viewDirection, directLight.direction, specularF0, specularRoughness);
+    outgoingRadiance += directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   }
 

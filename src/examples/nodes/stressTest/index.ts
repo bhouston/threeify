@@ -15,10 +15,10 @@ import {
   Mesh,
   PerspectiveCamera,
   PhysicalMaterial,
+  PointLight,
   RenderingContext,
   SceneNode,
   ShaderMaterial,
-  SpotLight,
   Texture,
   Vec3
 } from '../../../lib/index.js';
@@ -59,20 +59,12 @@ async function init(): Promise<null> {
     });
     root.children.push(sphereMesh);
   }
-  const pointLight = new SpotLight({
-    position: new Vec3(1, 0, -0.5),
-    color: new Color3(0, 0, 1),
-    intensity: 100,
-    range: 6
+  const directionalLight = new PointLight({
+    position: new Vec3(0, 0, 0),
+    color: new Color3(1, 1, 1),
+    intensity: 10
   });
-  root.children.push(pointLight);
-  const pointLight2 = new SpotLight({
-    position: new Vec3(-1, 0, -0.5),
-    color: new Color3(1, 0, 0),
-    intensity: 100,
-    range: 6
-  });
-  root.children.push(pointLight2);
+  root.children.push(directionalLight);
   const camera = new PerspectiveCamera(25, 0.1, 4, 1);
   camera.position.set(0, 0, 3);
   root.children.push(camera);

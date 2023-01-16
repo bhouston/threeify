@@ -13,10 +13,10 @@ import {
   Mesh,
   PerspectiveCamera,
   PhysicalMaterial,
+  PointLight,
   RenderingContext,
   SceneNode,
   ShaderMaterial,
-  SpotLight,
   Texture,
   Vec3
 } from '../../../lib/index.js';
@@ -43,16 +43,16 @@ async function init(): Promise<null> {
     material: new PhysicalMaterial({
       albedo: new Color3(1, 1, 1),
       albedoTexture: texture,
-      specularRoughness: 0.2,
-      metallic: 0
+      specularRoughness: 0,
+      metallic: 1
     })
   });
   root.children.push(sphereMesh);
-  const pointLight = new SpotLight({
-    position: new Vec3(1, 0, -0.5),
+  const pointLight = new PointLight({
+    position: new Vec3(2, 0, 2),
     color: new Color3(1, 1, 1),
-    intensity: 100,
-    range: 6
+    intensity: 10,
+    range: 20
   });
   root.children.push(pointLight);
   const camera = new PerspectiveCamera(25, 0.1, 4, 1);

@@ -1,15 +1,19 @@
 import {
   color3ArrayToFloat32Array,
+  color4ArrayToFloat32Array,
   mat3ArrayToFloat32Array,
   mat4ArrayToFloat32Array,
   vec2ArrayToFloat32Array,
-  vec3ArrayToFloat32Array
+  vec3ArrayToFloat32Array,
+  vec4ArrayToFloat32Array
 } from '../../../math/arrays/Linearizers.js';
 import { Color3 } from '../../../math/Color3.js';
+import { Color4 } from '../../../math/Color4.js';
 import { Mat3 } from '../../../math/Mat3.js';
 import { Mat4 } from '../../../math/Mat4.js';
 import { Vec2 } from '../../../math/Vec2.js';
 import { Vec3 } from '../../../math/Vec3.js';
+import { Vec4 } from '../../../math/Vec4.js';
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
@@ -164,6 +168,44 @@ export class ProgramUniform {
         ) {
           const array = color3ArrayToFloat32Array(value as Color3[]);
           gl.uniform3fv(this.glLocation, array);
+          this.valueHashCode = -1;
+          return this;
+        }
+        break;
+      case UniformType.FloatVec4:
+        if (value instanceof Vec4) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniform4f(this.glLocation, value.x, value.y, value.z, value.w);
+            this.valueHashCode = hashCode;
+          }
+          return this;
+        }
+        if (value instanceof Color4) {
+          const hashCode = value.getHashCode();
+          if (hashCode !== this.valueHashCode) {
+            gl.uniform4f(this.glLocation, value.r, value.g, value.b, value.a);
+            this.valueHashCode = hashCode;
+          }
+          return this;
+        }
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Vec4
+        ) {
+          const array = vec4ArrayToFloat32Array(value as Vec4[]);
+          gl.uniform4fv(this.glLocation, array);
+          this.valueHashCode = -1;
+          return this;
+        }
+        if (
+          value instanceof Array &&
+          value.length > 0 &&
+          value[0] instanceof Color4
+        ) {
+          const array = color4ArrayToFloat32Array(value as Color4[]);
+          gl.uniform4fv(this.glLocation, array);
           this.valueHashCode = -1;
           return this;
         }

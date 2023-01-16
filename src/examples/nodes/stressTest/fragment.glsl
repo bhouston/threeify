@@ -28,49 +28,38 @@ out vec4 outputColor;
 #pragma include <math/mat4>
 #pragma include <brdfs/specular/ggx>
 
-void main( ) {
-  vec3 albedoColor = albedo * sRGBToLinear( texture( albedoTexture, v_uv0 ).rgb );
+void main() {
+  vec3 albedoColor = albedo * sRGBToLinear(texture(albedoTexture, v_uv0).rgb);
 
   vec3 position = v_viewSurfacePosition;
-  vec3 normal = normalize( v_viewSurfaceNormal );
-  vec3 viewDirection = normalize( -v_viewSurfacePosition );
+  vec3 normal = normalize(v_viewSurfaceNormal);
+  vec3 viewDirection = normalize(-v_viewSurfacePosition);
 
   vec3 outgoingRadiance;
 
-  for( int i = 0; i < numPunctualLights; i++ ) {
+  for(int i = 0; i < numPunctualLights; i++) {
 
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
-    punctualLight.position = mat4TransformPosition( worldToView, punctualLightWorldPosition[i] );
-    punctualLight.direction = mat4TransformDirection( worldToView, punctualLightWorldDirection[i] );
+    punctualLight.position = mat4TransformPosition(worldToView, punctualLightWorldPosition[i]);
+    punctualLight.direction = mat4TransformDirection(worldToView, punctualLightWorldDirection[i]);
     punctualLight.intensity = punctualLightColor[i];
     punctualLight.range = punctualLightRange[i];
     punctualLight.innerConeCos = punctualLightInnerCos[i];
     punctualLight.outerConeCos = punctualLightOuterCos[i];
 
-    DirectLight directLight;
-    switch( punctualLight.type ) {
-      case 0:
-        pointLightToDirectLight( position, punctualLight, directLight );
-        break;
-      case 1:
-        spotLightToDirectLight( position, punctualLight, directLight );
-        break;
-      case 2:
-        directionalLightToDirectLight( punctualLight, directLight );
-        break;
-    }
+    DirectLight directLight = punctualLightToDirectLight(position, punctualLight);
 
-    float dotNL = saturate( dot( directLight.direction, normal ) );
+    float dotNL = saturate(dot(directLight.direction, normal));
 
     outgoingRadiance += directLight.radiance *
       dotNL *
-      BRDF_Specular_GGX( normal, viewDirection, directLight.direction, vec3(0.04), roughness );
-    outgoingRadiance += directLight.radiance * dotNL * BRDF_Diffuse_Lambert( albedoColor );
+      BRDF_Specular_GGX(normal, viewDirection, directLight.direction, vec3(0.04), roughness);
+    outgoingRadiance += directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedoColor);
 
   }
 
-  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.rgb = linearTosRGB(outgoingRadiance);
   outputColor.a = 1.0;
 
 }

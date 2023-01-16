@@ -1,4 +1,5 @@
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { color3MultiplyByScalar } from '../../math/Color3.Functions';
 import { Vec3 } from '../../math/Vec3';
 import {
   mat4TransformNormal3 as mat4TransformDirection3,
@@ -59,6 +60,8 @@ export function sceneToSceneCache(
   });
 
   createMeshBatches(sceneCache);
+
+  console.log('lightUniforms', lightUniforms);
 
   return sceneCache;
 }
@@ -128,7 +131,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
     light.localToWorldMatrix,
     new Vec3(0, 0, 0)
   );
-  const lightColor = light.color;
+  const lightColor = color3MultiplyByScalar(light.color, light.intensity);
 
   let lightType = LightType.Directional;
   let lightWorldDirection = new Vec3();
