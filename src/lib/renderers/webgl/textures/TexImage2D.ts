@@ -21,6 +21,7 @@ import { TextureTarget } from './TextureTarget.js';
 
 export class TexImage2D implements IResource {
   public readonly id = generateUUID();
+  public version = 0;
   public disposed = false;
   public glTexture: WebGLTexture;
   public size = new Vec2();

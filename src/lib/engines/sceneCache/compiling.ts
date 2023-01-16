@@ -6,7 +6,7 @@ import {
 } from '../../math/Vec3.Functions';
 import { makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
 import { makeProgramFromShaderMaterial } from '../../renderers/webgl/programs/Program';
-import { UniformValueMap } from '../../renderers/webgl/programs/ProgramUniform';
+import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
 import { RenderingContext } from '../../renderers/webgl/RenderingContext';
 import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
 import { Camera } from '../../scene/cameras/Camera';
@@ -100,10 +100,11 @@ function meshToSceneCache(
 
   // make material uniforms
   if (materialIdToUniforms.get(material.id) === undefined) {
-    const materialUniforms = material.getUniforms();
-
-    for (const uniformName of Object.keys(materialUniforms)) {
-      const uniformValue = materialUniforms[uniformName];
+    const materialParameters = material.getParameters();
+    const materialUniforms: UniformValueMap = {};
+    for (const uniformName of Object.keys(materialParameters)) {
+      const uniformValue = materialParameters[uniformName];
+      // convert from Parameters to Uniforms
       if (uniformValue instanceof Texture) {
         const texture = uniformValue as Texture;
         const textureId = texture.id;
@@ -113,6 +114,8 @@ function meshToSceneCache(
           textureIdToTexImage2D.set(textureId, texImage2D);
         }
         materialUniforms[uniformName] = texImage2D;
+      } else {
+        materialUniforms[uniformName] = uniformValue;
       }
     }
 
@@ -156,7 +159,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
     );
   }
   lightUniforms.numPunctualLights++;
-  lightUniforms.punctualLightType.push(LightType.Spot, lightType);
+  lightUniforms.punctualLightType.push(lightType);
   lightUniforms.punctualLightColor.push(lightColor);
   lightUniforms.punctualLightWorldPosition.push(lightWorldPosition);
   lightUniforms.punctualLightWorldDirection.push(lightWorldDirection);

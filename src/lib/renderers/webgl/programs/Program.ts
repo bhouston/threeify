@@ -15,8 +15,9 @@ import { ShaderDefines } from '../shaders/ShaderDefines.js';
 import { ShaderType } from '../shaders/ShaderType.js';
 import { VertexArrayObject } from '../VertexArrayObject.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
-import { ProgramUniform, UniformValueMap } from './ProgramUniform.js';
+import { ProgramUniform } from './ProgramUniform.js';
 import { numTextureUnits } from './UniformType.js';
+import { UniformValueMap } from './UniformValueMap.js';
 
 export type UniformMap = { [key: string]: ProgramUniform | undefined };
 export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
@@ -211,13 +212,12 @@ export class Program implements IResource {
 export function makeProgramFromShaderMaterial(
   context: RenderingContext,
   shaderMaterial: ShaderMaterial,
-  shaderDefines: string[] = []
+  shaderDefines: ShaderDefines = {}
 ): Program {
   return new Program(
     context,
     shaderMaterial.vertexShaderCode,
     shaderMaterial.fragmentShaderCode,
-    shaderMaterial.glslVersion,
     shaderDefines
   );
 }

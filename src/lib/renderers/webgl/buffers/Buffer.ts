@@ -6,8 +6,9 @@ import { BufferUsage } from './BufferUsage.js';
 
 export class Buffer implements IResource {
   public readonly id = generateUUID();
-  disposed = false;
-  glBuffer: WebGLBuffer;
+  public disposed = false;
+  public version = 0;
+  public glBuffer: WebGLBuffer;
 
   constructor(
     public context: RenderingContext,

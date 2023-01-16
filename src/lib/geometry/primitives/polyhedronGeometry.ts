@@ -35,7 +35,7 @@ export function octahedronGeometry(
     0, 2, 4, 0, 4, 3, 0, 3, 5, 0, 5, 2, 1, 2, 5, 1, 5, 3, 1, 3, 4, 1, 4, 2
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, details, moothNormals);
+  return polyhedronGeometry(vertices, indices, radius, detail, smoothNormals);
 }
 
 export function icosahedronGeometry(
@@ -95,7 +95,7 @@ export function icosahedronGeometry(
 export function dodecahedronGeometry(
   radius = 1,
   detail = 0,
-  smoothNormals
+  smoothNormals = false
 ): Geometry {
   const t = (1 + Math.sqrt(5)) / 2;
   const r = 1 / t;

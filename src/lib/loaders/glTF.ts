@@ -28,7 +28,7 @@ export async function loadGLTF(url: string): Promise<SceneNode> {
         });
       });
     }
-    rootNode.children.add(localNode);
+    rootNode.children.push(localNode);
   });
 
   return new Promise<SceneNode>((resolve) => {

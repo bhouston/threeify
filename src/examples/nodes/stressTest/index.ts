@@ -12,9 +12,9 @@ import {
   euler3ToQuat,
   fetchImage,
   icosahedronGeometry,
-  KhronosPhysicalMaterial,
   Mesh,
   PerspectiveCamera,
+  PhysicalMaterial,
   RenderingContext,
   SceneNode,
   ShaderMaterial,
@@ -50,10 +50,10 @@ async function init(): Promise<null> {
         new Euler3(Math.random() * 6, Math.random() * 6, Math.random() * 6)
       ),
       geometry,
-      material: new KhronosPhysicalMaterial({
+      material: new PhysicalMaterial({
         albedo: new Color3(Math.random(), Math.random(), Math.random()),
         albedoTexture: texture,
-        roughness: Math.random(),
+        specularRoughness: Math.random(),
         metallic: Math.random()
       })
     });

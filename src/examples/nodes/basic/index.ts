@@ -10,9 +10,9 @@ import {
   DepthTestState,
   fetchImage,
   icosahedronGeometry,
-  KhronosPhysicalMaterial,
   Mesh,
   PerspectiveCamera,
+  PhysicalMaterial,
   RenderingContext,
   SceneNode,
   ShaderMaterial,
@@ -40,10 +40,10 @@ async function init(): Promise<null> {
   const sphereMesh = new Mesh({
     position: new Vec3(0, 0, 0),
     geometry,
-    material: new KhronosPhysicalMaterial({
+    material: new PhysicalMaterial({
       albedo: new Color3(1, 1, 1),
       albedoTexture: texture,
-      roughness: 0.2,
+      specularRoughness: 0.2,
       metallic: 0
     })
   });

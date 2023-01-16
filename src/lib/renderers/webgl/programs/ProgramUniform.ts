@@ -15,21 +15,7 @@ import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
 import { Program } from './Program.js';
 import { UniformType } from './UniformType.js';
-
-export type UniformValue =
-  | number
-  | Vec2
-  | Vec3
-  | Color3
-  | Mat3
-  | Mat4
-  | TexImage2D
-  | number[]
-  | Vec2[]
-  | Vec3[]
-  | Color3[]
-  | Mat4[];
-export type UniformValueMap = { [key: string]: UniformValue };
+import { UniformValue } from './UniformValueMap.js';
 
 const array1dRegexp = /^(\w+)\[\d+]$/;
 // glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
