@@ -88,11 +88,12 @@ void directionalLightToDirectLight(
   directLight.radiance = punctualLight.intensity;
 }
 
-
-
-DirectLight punctualLightToDirectLight(vec3 position, PunctualLight punctualLight) {
+DirectLight punctualLightToDirectLight(
+  vec3 position,
+  PunctualLight punctualLight
+) {
   DirectLight directLight;
-  switch(punctualLight.type) {
+  switch (punctualLight.type) {
     case LightType_Point:
       pointLightToDirectLight(position, punctualLight, directLight);
       break;

@@ -35,10 +35,11 @@ void main() {
 
   vec3 specular = vec3(0.15);
   vec3 specularF0 = specularIntensityToF0(specular);
+  vec3 specularF90 = vec3(1.0);
   float specularRoughness =
     texture(specularRoughnessMap, v_uv0).r * specularRoughnessFactor;
 
-  vec3 clearCoatF0 = vec3(clearCoatStrength) * clearCoatTint;
+  vec3 clearCoatF0 = specularIntensityToF0(clearCoatStrength * 0.16) * clearCoatTint;
   float clearCoatRoughness =
     texture(clearCoatRoughnessMap, v_uv0).r * clearCoatRoughnessFactor;
 
@@ -82,6 +83,7 @@ void main() {
       viewDirection,
       directLight.direction,
       clearCoatF0,
+      vec(1.0),
       clearCoatRoughness
     );
   outgoingRadiance +=
@@ -92,6 +94,7 @@ void main() {
       viewDirection,
       directLight.direction,
       specularF0,
+      specularF90,
       specularRoughness
     );
   outgoingRadiance +=

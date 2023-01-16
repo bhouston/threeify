@@ -92,6 +92,7 @@ void main() {
       viewDirection,
       directLight.direction,
       specularF0,
+      specularF90,
       specularRoughness
     );
   outgoingRadiance +=

@@ -37,25 +37,42 @@ void main() {
 
   vec3 outgoingRadiance;
 
-  for(int i = 0; i < numPunctualLights; i++) {
-
+  for (int i = 0; i < numPunctualLights; i++) {
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
-    punctualLight.position = mat4TransformPosition(worldToView, punctualLightWorldPosition[i]);
-    punctualLight.direction = mat4TransformDirection(worldToView, punctualLightWorldDirection[i]);
+    punctualLight.position = mat4TransformPosition(
+      worldToView,
+      punctualLightWorldPosition[i]
+    );
+    punctualLight.direction = mat4TransformDirection(
+      worldToView,
+      punctualLightWorldDirection[i]
+    );
     punctualLight.intensity = punctualLightColor[i];
     punctualLight.range = punctualLightRange[i];
     punctualLight.innerConeCos = punctualLightInnerCos[i];
     punctualLight.outerConeCos = punctualLightOuterCos[i];
 
-    DirectLight directLight = punctualLightToDirectLight(position, punctualLight);
+    DirectLight directLight = punctualLightToDirectLight(
+      position,
+      punctualLight
+    );
 
     float dotNL = saturate(dot(directLight.direction, normal));
 
-    outgoingRadiance += directLight.radiance *
+    outgoingRadiance +=
+      directLight.radiance *
       dotNL *
-      BRDF_Specular_GGX(normal, viewDirection, directLight.direction, vec3(0.04), roughness);
-    outgoingRadiance += directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedoColor);
+      BRDF_Specular_GGX(
+        normal,
+        viewDirection,
+        directLight.direction,
+        vec3(0.04),
+        vec3(1.),
+        roughness
+      );
+    outgoingRadiance +=
+      directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedoColor);
 
   }
 

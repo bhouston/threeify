@@ -1,4 +1,5 @@
 import { Color3 } from '../math/Color3';
+import { color3MultiplyByScalar } from '../math/Color3.Functions';
 import { Vec2 } from '../math/Vec2';
 import { Vec3 } from '../math/Vec3';
 import { SolidTextures } from '../textures/loaders/SolidTextures';
@@ -58,7 +59,7 @@ export interface IPhysicalMaterialProps {
 
   sheenColorFactor?: Color3;
   sheenColorTexture?: Texture;
-  sheenRoughnessFactor?: Color3;
+  sheenRoughnessFactor?: number;
   sheenRoughnessTexture?: Texture;
 
   iridescenceFactor?: number;
@@ -120,7 +121,7 @@ export class PhysicalMaterial extends Material {
 
   public sheenColorFactor = new Color3(0, 0, 0);
   public sheenColorTexture?: Texture;
-  public sheenRoughnessFactor = new Color3(0, 0, 0);
+  public sheenRoughnessFactor = 1;
   public sheenRoughnessTexture?: Texture;
 
   public iridescenceFactor = 0;
@@ -192,9 +193,8 @@ export class PhysicalMaterial extends Material {
 
     this.sheenColorFactor.copy(props.sheenColorFactor || this.sheenColorFactor);
     this.sheenColorTexture = props.sheenColorTexture;
-    this.sheenRoughnessFactor.copy(
-      props.sheenRoughnessFactor || this.sheenRoughnessFactor
-    );
+    this.sheenRoughnessFactor =
+      props.sheenRoughnessFactor || this.sheenRoughnessFactor;
     this.sheenRoughnessTexture = props.sheenRoughnessTexture;
 
     this.iridescenceFactor = props.iridescenceFactor || this.iridescenceFactor;
@@ -217,6 +217,9 @@ export class PhysicalMaterial extends Material {
 
   getParameters(): MaterialParameters {
     return {
+      alpha: this.alpha,
+      alphaTexture: this.alphaTexture || SolidTextures.White,
+
       albedo: this.albedo,
       albedoTexture: this.albedoTexture || SolidTextures.White,
 
@@ -236,9 +239,11 @@ export class PhysicalMaterial extends Material {
       normalScale: this.normalScale,
       normalTexture: this.normalTexture || SolidTextures.FlatNormal,
 
-      emissiveColor: this.emissiveColor,
+      emissiveColor: color3MultiplyByScalar(
+        this.emissiveColor,
+        this.emissiveIntensity
+      ),
       emissiveTexture: this.emissiveTexture || SolidTextures.White,
-      emissiveIntensity: this.emissiveIntensity,
 
       ior: this.ior,
 
