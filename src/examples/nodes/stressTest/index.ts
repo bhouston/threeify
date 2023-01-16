@@ -2,11 +2,9 @@ import { sceneToSceneCache } from '../../../lib/engines/sceneCache/compiling.js'
 import { renderSceneViaSceneCache } from '../../../lib/engines/sceneCache/rendering.js';
 import { updateNodeTree } from '../../../lib/engines/sceneCache/updating.js';
 import {
-  BufferBit,
   ClearState,
   Color3,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToQuat,
@@ -75,15 +73,12 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less
-  );
-  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
 
     renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
 

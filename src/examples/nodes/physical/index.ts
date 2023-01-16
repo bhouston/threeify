@@ -2,11 +2,9 @@ import { sceneToSceneCache } from '../../../lib/engines/sceneCache/compiling.js'
 import { renderSceneViaSceneCache } from '../../../lib/engines/sceneCache/rendering.js';
 import { updateNodeTree } from '../../../lib/engines/sceneCache/updating.js';
 import {
-  BufferBit,
   ClearState,
   Color3,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   fetchImage,
   icosahedronGeometry,
@@ -28,6 +26,12 @@ async function init(): Promise<null> {
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
   );
+  const scratchesTexture = new Texture(
+    await fetchImage('/assets/textures/golfball/scratches.png')
+  );
+  const golfballNormalTexture = new Texture(
+    await fetchImage('/assets/textures/golfball/normals2.jpg')
+  );
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
@@ -43,10 +47,14 @@ async function init(): Promise<null> {
     material: new PhysicalMaterial({
       albedo: new Color3(1, 1, 1),
       albedoTexture: texture,
-      specularRoughness: 0,
-      metallic: 1,
-      clearcoatFactor: 0.2,
-      clearcoatRoughnessFactor: 0
+      specularFactor: 0.16,
+      specularColor: new Color3(0.5, 0.5, 1),
+      specularRoughness: 0.4,
+      metallic: 0,
+      clearcoatFactor: 0.5,
+      clearcoatRoughnessFactor: 0.4,
+      clearcoatNormalTexture: golfballNormalTexture,
+      sheenColorFactor: new Color3(1, 0.2, 0.8)
     })
   });
   root.children.push(sphereMesh);
@@ -67,15 +75,12 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less
-  );
-  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
 
     renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
 

@@ -31,8 +31,10 @@ uniform sampler2D emissiveTexture;
 uniform float ior;
 uniform float clearcoatFactor;
 uniform sampler2D clearcoatFactorTexture;
-uniform float clearcoatRoughness;
+uniform float clearcoatRoughnessFactor;
 uniform sampler2D clearcoatRoughnessTexture;
+uniform vec2 clearcoatNormalScale;
+uniform sampler2D clearcoatNormalTexture;
 uniform vec3 clearcoatTint;
 uniform sampler2D clearcoatTintTexture;
 uniform vec3 sheenColorFactor;
@@ -44,44 +46,14 @@ uniform mat4 worldToView;
 
 out vec4 outputColor;
 
-struct PhysicalMaterial {
-  float alpha;
-
-  vec3 albedo;
-  float specularFactor;
-  vec3 specularColor;
-  float specularRoughness;
-  float metallic;
-
-  float ior;
-
-  vec3 emissive;
-
-  float clearcoatFactor;
-  float clearcoatRoughness;
-  vec3 clearcoatTint;
-
-  vec3 sheenColor;
-  float sheenRoughness;
-
-  float anisotropic;
-  vec2 anisotropicDirection;
-
-  float transmission;
-  float transmissionRoughness;
-
-  float iridescenceIor;
-  float iridescenceThickness;
-
-  float attentionDistance;
-  vec3 attentionColor;
-};
-
 #pragma include <lighting/punctual>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <color/spaces/srgb>
 #pragma include <math/mat4>
 #pragma include <brdfs/specular/ggx>
+#pragma include <materials/physical>
+#pragma include <normals/normalPacking>
+#pragma include <normals/tangentSpace>
 
 void main() {
   PhysicalMaterial material;
@@ -95,18 +67,24 @@ void main() {
   material.emissive = emissive * sRGBToLinear(texture(emissiveTexture, v_uv0).rgb);
   material.ior = ior;
   material.clearcoatFactor = clearcoatFactor * texture(clearcoatFactorTexture, v_uv0).r;
-  material.clearcoatRoughness = clearcoatRoughness * texture(clearcoatRoughnessTexture, v_uv0).r;
+  material.clearcoatRoughness = clearcoatRoughnessFactor * texture(clearcoatRoughnessTexture, v_uv0).r;
   material.clearcoatTint = clearcoatTint * sRGBToLinear(texture(clearcoatTintTexture, v_uv0).rgb);
   material.sheenColor = sheenColorFactor * sRGBToLinear(texture(sheenColorFactorTexture, v_uv0).rgb);
   material.sheenRoughness = sheenRoughnessFactor * texture(sheenRoughnessFactorTexture, v_uv0).r;
 
- vec3 clearCoatF0 = specularIntensityToF0(material.clearcoatFactor * vec3(0.16)) * material.clearcoatTint;
+  vec3 clearcoatNormalDelta = vec3(clearcoatNormalScale, 1.0) * rgbToNormal(texture(clearcoatNormalTexture, v_uv0).rgb);
+
+
+ vec3 clearCoatF0 = specularIntensityToF0(vec3(1.)) * material.clearcoatTint;
  
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
   vec3 viewDirection = normalize(-v_viewSurfacePosition);
-  vec3 clearcoatNormal = normal;
+
+  mat3 tangentToView = tangentToViewFromPositionNormalUV(position, normal, v_uv0);
+  tangentToView *= mat3(vec3(1.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0), normalize(clearcoatNormalDelta));
+  vec3 clearcoatNormal = tangentToView[2];
 
   vec3 outgoingRadiance;
 
@@ -128,16 +106,15 @@ void main() {
   // this lack energy conservation.
     outgoingRadiance += directLight.radiance *
       clearcoatDotNL *
-      BRDF_Specular_GGX(clearcoatNormal, viewDirection, directLight.direction, clearCoatF0, vec3(1.), material.clearcoatRoughness);
-    outgoingRadiance += (1. - material.clearcoatFactor) * directLight.radiance *
+      BRDF_Specular_GGX(clearcoatNormal, viewDirection, directLight.direction, vec3(0.16), vec3(1.), material.clearcoatRoughness);
+    outgoingRadiance += (1. - material.clearcoatFactor) * directLight.radiance  *
       dotNL *
       BRDF_Specular_GGX(normal, viewDirection, directLight.direction, material.specularColor * material.specularFactor, material.specularColor, material.specularRoughness);
-    outgoingRadiance += (1. - material.clearcoatFactor) * directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
+    outgoingRadiance += (1. - material.clearcoatFactor) * directLight.radiance * dotNL * BRDF_Diffuse_Lambert(material.albedo);
 
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.r += 0.5;
   outputColor.a = 1.0;
 
 }

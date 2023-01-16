@@ -12,6 +12,8 @@ import { Color3 } from '../../math/Color3.js';
 export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>
 {
+  public static readonly Black = new ClearState(new Color3(0, 0, 0), 1);
+
   // TODO: Should be intialized to default WebGL states
   constructor(
     public color = new Color3(1, 1, 1),

@@ -38,7 +38,9 @@ export abstract class VirtualFramebuffer implements IDisposable {
   abstract get size(): Vec2;
 
   clear(
-    attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
+    attachmentBits: BufferBit = BufferBit.Color |
+      BufferBit.Depth |
+      BufferBit.Stencil,
     clearState: ClearState | undefined = undefined
   ): void {
     this.context.framebuffer = this;
