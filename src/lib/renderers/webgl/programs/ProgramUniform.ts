@@ -25,17 +25,22 @@ const array1dRegexp = /^(\w+([\d+])?)+\[\d+]$/;
 // glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
 
 export class ProgramUniform {
-  context: RenderingContext;
-  fullName: string;
-  name: string;
-  size: number;
-  dimensions: number;
-  uniformType: UniformType;
-  glLocation: WebGLUniformLocation;
+  readonly context: RenderingContext;
+  readonly fullName: string;
+  readonly name: string;
+  readonly size: number;
+  readonly dimensions: number;
+  readonly uniformType: UniformType;
+  readonly glLocation: WebGLUniformLocation | undefined = undefined;
   valueHashCode = 982345792759832448; // large random hashcode so to never get a hit
   textureUnit = -1;
 
-  constructor(public program: Program, public index: number) {
+  constructor(
+    public readonly program: Program,
+    public readonly index: number,
+    public readonly blockIndex: number = -1,
+    public readonly blockOffset: number = -1
+  ) {
     this.context = program.context;
 
     const { gl } = program.context;
@@ -59,16 +64,24 @@ export class ProgramUniform {
       this.size = activeInfo.size;
       this.uniformType = activeInfo.type as UniformType;
 
-      const glLocation = gl.getUniformLocation(program.glProgram, this.name);
-      if (glLocation === null) {
-        throw new Error(`can not find uniform named: ${this.name}`);
-      }
+      console.log(
+        `uniform: ${this.fullName} ${this.name} ${this.uniformType} ${this.size} ${this.dimensions} ${this.blockIndex} ${this.blockOffset}}`
+      );
 
-      this.glLocation = glLocation;
+      if (this.blockIndex === -1) {
+        const glLocation = gl.getUniformLocation(program.glProgram, this.name);
+        if (glLocation === null) {
+          throw new Error(`can not find uniform named: ${this.name}`);
+        }
+        this.glLocation = glLocation;
+      }
     }
   }
 
-  set(value: UniformValue): ProgramUniform {
+  set(value: UniformValue): this {
+    if (this.glLocation === undefined) {
+      throw new Error('Can not set uniform value for a uniform block - yet');
+    }
     if (value instanceof Array && value.length > 0) {
       return this.setArray(value as UniformPrimitiveValue[]);
     }
@@ -201,7 +214,10 @@ export class ProgramUniform {
     );
   }
 
-  setArray(value: UniformPrimitiveValue[]): ProgramUniform {
+  setArray(value: UniformPrimitiveValue[]): this {
+    if (this.glLocation === undefined) {
+      throw new Error('Can not set uniform value for a uniform block - yet');
+    }
     if (value.length === 0) {
       return this;
     }

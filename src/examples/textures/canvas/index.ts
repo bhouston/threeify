@@ -4,7 +4,6 @@ import {
   ClearState,
   Color3,
   color3ToHexString,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
@@ -86,7 +85,7 @@ async function init(): Promise<null> {
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   let frameNumber = 0;
@@ -102,13 +101,7 @@ async function init(): Promise<null> {
     uniforms.map = uvTestTexture;
 
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    renderBufferGeometry(
-      canvasFramebuffer,
-      program,
-      uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);
   }

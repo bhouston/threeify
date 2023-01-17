@@ -1,21 +1,20 @@
 import {
   convertToInterleavedGeometry,
   CubeMapTexture,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   fetchCubeHDRs,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
-  euler3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -50,7 +49,7 @@ async function init(): Promise<null> {
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     const now = Date.now();
@@ -59,13 +58,7 @@ async function init(): Promise<null> {
       uniforms.localToWorld
     );
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
-    renderBufferGeometry(
-      canvasFramebuffer,
-      program,
-      uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);
   }

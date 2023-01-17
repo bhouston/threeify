@@ -15,12 +15,16 @@ import { ShaderDefines } from '../shaders/ShaderDefines.js';
 import { ShaderType } from '../shaders/ShaderType.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
 import { ProgramUniform } from './ProgramUniform.js';
+import { ProgramUniformBlock } from './ProgramUniformBlock.js';
 import { ProgramVertexArray } from './ProgramVertexArray.js';
 import { numTextureUnits } from './UniformType.js';
 import { UniformValueMap } from './UniformValueMap.js';
 
-export type UniformMap = { [key: string]: ProgramUniform | undefined };
-export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
+export type UniformMap = { [key: string]: ProgramUniform };
+export type UniformBlockMap = {
+  [key: string]: ProgramUniformBlock;
+};
+export type AttributeMap = { [key: string]: ProgramAttribute };
 
 export class Program implements IResource {
   public readonly id = generateUUID();
@@ -31,6 +35,7 @@ export class Program implements IResource {
   #validated = false;
   #uniformsInitialized = false;
   #uniforms: UniformMap = {};
+  #uniformBlocks: UniformBlockMap = {};
   #attributesInitialized = false;
   #attributes: AttributeMap = {};
 
@@ -118,24 +123,60 @@ export class Program implements IResource {
     return true;
   }
 
+  initializeUniformsAndUniformBlocks(): void {
+    const { gl } = this.context;
+    const numUniforms = gl.getProgramParameter(
+      this.glProgram,
+      gl.ACTIVE_UNIFORMS
+    );
+    const indices = [...Array(numUniforms).keys()];
+    const blockIndices = gl.getActiveUniforms(
+      this.glProgram,
+      indices,
+      gl.UNIFORM_BLOCK_INDEX
+    );
+    const blockOffsets = gl.getActiveUniforms(
+      this.glProgram,
+      indices,
+      gl.UNIFORM_OFFSET
+    );
+
+    let textureUnitCount = 0;
+
+    const uniformBlocks: { [blockIndex: number]: ProgramUniformBlock } = {};
+    for (let i = 0; i < numUniforms; ++i) {
+      const blockIndex = blockIndices[i];
+      const blockOffset = blockOffsets[i];
+      const uniform = new ProgramUniform(this, i, blockIndex, blockOffset);
+      this.#uniforms[uniform.name] = uniform;
+
+      if (numTextureUnits(uniform.uniformType) > 0) {
+        uniform.textureUnit = textureUnitCount;
+        textureUnitCount++;
+      }
+
+      if (blockIndex !== -1) {
+        let uniformBlock = uniformBlocks[blockIndex];
+        if (uniformBlock === undefined) {
+          uniformBlock = new ProgramUniformBlock(this, blockIndex);
+          this.#uniformBlocks[blockIndex] = uniformBlock;
+        }
+        uniformBlock.uniforms[uniform.name] = uniform;
+      }
+    }
+    this.#uniformsInitialized = true;
+  }
+
+  get uniformBlocks(): UniformBlockMap {
+    if (!this.#uniformsInitialized) {
+      this.initializeUniformsAndUniformBlocks();
+    }
+    return this.#uniformBlocks;
+  }
+
   get uniforms(): UniformMap {
     if (!this.#uniformsInitialized) {
-      let textureUnitCount = 0;
-      const { gl } = this.context;
-
-      const numActiveUniforms = gl.getProgramParameter(
-        this.glProgram,
-        gl.ACTIVE_UNIFORMS
-      );
-      for (let i = 0; i < numActiveUniforms; ++i) {
-        const uniform = new ProgramUniform(this, i);
-        if (numTextureUnits(uniform.uniformType) > 0) {
-          uniform.textureUnit = textureUnitCount;
-          textureUnitCount++;
-        }
-        this.#uniforms[uniform.name] = uniform;
-      }
-      this.#uniformsInitialized = true;
+      this.initializeUniformsAndUniformBlocks();
     }
     return this.#uniforms;
   }

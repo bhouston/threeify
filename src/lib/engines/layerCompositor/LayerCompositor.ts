@@ -407,6 +407,7 @@ export class LayerCompositor {
       uniforms,
       this.#bufferGeometry,
       undefined,
+      undefined,
       blendState
     );
 
@@ -482,6 +483,7 @@ export class LayerCompositor {
         this.#program,
         uniforms,
         this.#bufferGeometry,
+        undefined,
         undefined,
         blendState
       );

@@ -1,6 +1,5 @@
 import {
   boxGeometry,
-  DepthTestFunc,
   DepthTestState,
   DeviceOrientation,
   fetchImage,
@@ -43,7 +42,7 @@ async function init(): Promise<null> {
     map: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   let deviceOrientation: DeviceOrientation | undefined;
 
@@ -66,13 +65,7 @@ async function init(): Promise<null> {
         quatToMat4(deviceOrientation.orientation)
       );
     }
-    renderBufferGeometry(
-      canvasFramebuffer,
-      program,
-      uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
   }
 
   animate();

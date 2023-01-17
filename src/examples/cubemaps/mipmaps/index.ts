@@ -1,6 +1,5 @@
 import {
   CubeMapTexture,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
@@ -58,7 +57,7 @@ async function init(): Promise<null> {
     mipCount: cubeTexture.mipCount
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -70,13 +69,7 @@ async function init(): Promise<null> {
     );
     uniforms.perceptualRoughness = Math.sin(now * 0.005) * 0.5 + 0.5;
 
-    renderBufferGeometry(
-      canvasFramebuffer,
-      program,
-      uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
   }
 
   animate();
