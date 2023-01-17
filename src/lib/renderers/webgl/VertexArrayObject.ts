@@ -5,13 +5,14 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../core/types.js';
+import { generateUUID } from '../../core/generateUuid.js';
 import { BufferGeometry } from './buffers/BufferGeometry.js';
 import { PrimitiveType } from './buffers/PrimitiveType.js';
+import { IResource } from './IResource.js';
 import { Program } from './programs/Program.js';
 
-export class VertexArrayObject implements IDisposable {
-  readonly id: number;
+export class VertexArrayObject implements IResource {
+  public readonly id = generateUUID();
   disposed = false;
   glVertexArrayObject: WebGLVertexArrayObject;
   primitive: PrimitiveType = PrimitiveType.Triangles;
@@ -25,7 +26,7 @@ export class VertexArrayObject implements IDisposable {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;
 
-    const gl = this.program.context.gl;
+    const { gl, resources } = this.program.context;
 
     {
       // Create a vertex array object (attribute state)
@@ -41,14 +42,14 @@ export class VertexArrayObject implements IDisposable {
 
     program.setAttributeBuffers(bufferGeometry);
 
-    this.id = this.program.context.registerResource(this);
+    resources.register(this);
   }
 
   dispose(): void {
     if (!this.disposed) {
-      const gl = this.program.context.gl;
+      const { gl, resources } = this.program.context;
       gl.deleteVertexArray(this.glVertexArrayObject);
-      this.program.context.disposeResource(this);
+      resources.unregister(this);
       this.disposed = true;
     }
   }

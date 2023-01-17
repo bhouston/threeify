@@ -33,7 +33,7 @@ export function makeTexImage2DFromTexture(
   params.minFilter = texture.minFilter;
   params.wrapS = texture.wrapS;
   params.wrapT = texture.wrapT;
-  return new TexImage2D(
+  const texImage2D = new TexImage2D(
     context,
     [texture.image],
     texture.pixelFormat,
@@ -42,6 +42,8 @@ export function makeTexImage2DFromTexture(
     TextureTarget.Texture2D,
     params
   );
+  texImage2D.version = texture.version;
+  return texImage2D;
 }
 
 export function makeTexImage2DFromCubeTexture(
@@ -56,7 +58,7 @@ export function makeTexImage2DFromCubeTexture(
   params.minFilter = texture.minFilter;
   params.wrapS = TextureWrap.ClampToEdge;
   params.wrapT = TextureWrap.ClampToEdge;
-  return new TexImage2D(
+  const texImage2D = new TexImage2D(
     context,
     texture.images,
     texture.pixelFormat,
@@ -65,6 +67,8 @@ export function makeTexImage2DFromCubeTexture(
     TextureTarget.textureMap,
     params
   );
+  texImage2D.version = texture.version;
+  return texImage2D;
 }
 
 export function makeTexImage2DFromEquirectangularTexture(
@@ -132,8 +136,9 @@ export function makeTexImage2DFromEquirectangularTexture(
   cubeFaceFramebuffer.dispose();
   // cubeFaceBufferGeometry.dispose(); - causes crashes.  Huh?
   cubeFaceProgram.dispose();
-  cubeFaceGeometry.dispose();
   latLongMap.dispose();
+
+  cubeMap.version = latLongTexture.version;
 
   return cubeMap;
 }

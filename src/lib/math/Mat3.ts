@@ -40,4 +40,8 @@ export class Mat3 {
     }
     return this;
   }
+
+  copy(m: Mat3): this {
+    return this.set(m.elements);
+  }
 }

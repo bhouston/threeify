@@ -8,8 +8,8 @@
 import { IDisposable } from '../../../core/types.js';
 import { Box2 } from '../../../math/Box2.js';
 import { Vec2 } from '../../../math/Vec2.js';
-import { Camera } from '../../../nodes/cameras/Camera.js';
-import { Node } from '../../../nodes/Node.js';
+import { Camera } from '../../../scene/cameras/Camera.js';
+import { SceneNode } from '../../../scene/SceneNode.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
@@ -17,7 +17,7 @@ import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
 import { MaskState } from '../MaskState.js';
 import { Program } from '../programs/Program.js';
-import { UniformValueMap } from '../programs/ProgramUniform.js';
+import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { VertexArrayObject } from '../VertexArrayObject.js';
 import { BufferBit } from './BufferBit.js';
@@ -38,7 +38,9 @@ export abstract class VirtualFramebuffer implements IDisposable {
   abstract get size(): Vec2;
 
   clear(
-    attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
+    attachmentBits: BufferBit = BufferBit.Color |
+      BufferBit.Depth |
+      BufferBit.Stencil,
     clearState: ClearState | undefined = undefined
   ): void {
     this.context.framebuffer = this;
@@ -48,7 +50,7 @@ export abstract class VirtualFramebuffer implements IDisposable {
     gl.clear(attachmentBits);
   }
 
-  render(node: Node, camera: Camera, clear = false): void {
+  render(node: SceneNode, camera: Camera, clear = false): void {
     this.context.framebuffer = this;
     if (clear) {
       this.clear();
@@ -71,14 +73,14 @@ export abstract class VirtualFramebuffer implements IDisposable {
 export function renderBufferGeometry(
   framebuffer: VirtualFramebuffer,
   program: Program,
-  uniforms: UniformValueMap,
+  uniforms: UniformValueMap | UniformValueMap[],
   bufferGeometry: BufferGeometry,
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
   cullingState: CullingState | undefined = undefined
 ): void {
-  const { context } = framebuffer;
+  const { context, size } = framebuffer;
 
   context.framebuffer = framebuffer;
   context.blendState =
@@ -89,9 +91,15 @@ export function renderBufferGeometry(
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
-  context.program.setUniformValues(uniforms);
+  if (uniforms instanceof Array) {
+    for (const uniform of uniforms) {
+      context.program.setUniformValues(uniform);
+    }
+  } else {
+    context.program.setUniformValues(uniforms);
+  }
   context.program.setAttributeBuffers(bufferGeometry);
-  context.viewport = new Box2(new Vec2(), framebuffer.size);
+  context.viewport = new Box2(new Vec2(), size);
 
   // draw
   const { gl } = context;

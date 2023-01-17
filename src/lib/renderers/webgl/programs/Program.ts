@@ -5,22 +5,25 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types.js';
+import { generateUUID } from '../../../core/generateUuid.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { Shader } from '../shaders/Shader.js';
+import { ShaderDefines } from '../shaders/ShaderDefines.js';
 import { ShaderType } from '../shaders/ShaderType.js';
 import { VertexArrayObject } from '../VertexArrayObject.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
-import { ProgramUniform, UniformValueMap } from './ProgramUniform.js';
+import { ProgramUniform } from './ProgramUniform.js';
 import { numTextureUnits } from './UniformType.js';
+import { UniformValueMap } from './UniformValueMap.js';
 
 export type UniformMap = { [key: string]: ProgramUniform | undefined };
 export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
 
-export class Program implements IDisposable {
-  readonly id: number;
+export class Program implements IResource {
+  public readonly id = generateUUID();
   disposed = false;
   vertexShader: Shader;
   fragmentShader: Shader;
@@ -35,22 +38,22 @@ export class Program implements IDisposable {
     public context: RenderingContext,
     vertexShaderCode: string,
     fragmentShaderCode: string,
-    glslVersion: number
+    shaderDefines: ShaderDefines = {}
   ) {
     this.vertexShader = new Shader(
       this.context,
       vertexShaderCode,
       ShaderType.Vertex,
-      glslVersion
+      shaderDefines
     );
     this.fragmentShader = new Shader(
       this.context,
       fragmentShaderCode,
       ShaderType.Fragment,
-      glslVersion
+      shaderDefines
     );
 
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
 
     // create a program.
     {
@@ -70,7 +73,7 @@ export class Program implements IDisposable {
     gl.linkProgram(this.glProgram);
 
     // NOTE: purposely not checking here if it compiled.
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   // TODO: Convert this to a promise with a setTimeout(0) until the completion status is true
@@ -82,7 +85,7 @@ export class Program implements IDisposable {
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
 
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
     // Check if it linked.
     /* const { glxo } = this.context;
     const { KHR_parallel_shader_compile } = glxo;
@@ -107,6 +110,7 @@ export class Program implements IDisposable {
       console.error(infoLog);
       this.vertexShader.dispose();
       this.fragmentShader.dispose();
+      resources.unregister(this);
       this.disposed = true;
       throw new Error(`program filed to link: ${infoLog}`);
     }
@@ -195,10 +199,11 @@ export class Program implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
+      const { gl, resources } = this.context;
       this.vertexShader.dispose();
       this.fragmentShader.dispose();
-      this.context.gl.deleteProgram(this.glProgram);
-      this.context.disposeResource(this);
+      gl.deleteProgram(this.glProgram);
+      resources.unregister(this);
       this.disposed = true;
     }
   }
@@ -206,12 +211,13 @@ export class Program implements IDisposable {
 
 export function makeProgramFromShaderMaterial(
   context: RenderingContext,
-  shaderMaterial: ShaderMaterial
+  shaderMaterial: ShaderMaterial,
+  shaderDefines: ShaderDefines = {}
 ): Program {
   return new Program(
     context,
     shaderMaterial.vertexShaderCode,
     shaderMaterial.fragmentShaderCode,
-    shaderMaterial.glslVersion
+    shaderDefines
   );
 }

@@ -1,15 +1,16 @@
-import { IDisposable } from '../../core/types.js';
+import { generateUUID } from '../../core/generateUuid.js';
 import { ClearState } from './ClearState.js';
+import { IResource } from './IResource.js';
 import { RenderingContext } from './RenderingContext.js';
 
-export class Renderbuffer implements IDisposable {
-  readonly id: number;
+export class Renderbuffer implements IResource {
+  public readonly id = generateUUID();
   disposed = false;
   glRenderbuffer: WebGLRenderbuffer;
   #clearState: ClearState = new ClearState();
 
   constructor(public context: RenderingContext) {
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
 
     {
       const glRenderbuffer = gl.createRenderbuffer();
@@ -20,14 +21,14 @@ export class Renderbuffer implements IDisposable {
       this.glRenderbuffer = glRenderbuffer;
     }
 
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   dispose(): void {
     if (!this.disposed) {
-      const { gl } = this.context;
+      const { gl, resources } = this.context;
       gl.deleteRenderbuffer(this.glRenderbuffer);
-      this.context.disposeResource(this);
+      resources.unregister(this);
       this.disposed = true;
     }
   }

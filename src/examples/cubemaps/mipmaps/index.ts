@@ -3,25 +3,25 @@ import {
   DepthTestFunc,
   DepthTestState,
   Euler3,
+  euler3ToMat4,
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  mat4PerspectiveFov,
-  euler3ToMat4,
-  translation3ToMat4,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
   Mat4,
+  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  translation3ToMat4,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = icosahedronGeometry(0.75, 4);
+  const geometry = icosahedronGeometry(0.75, 4, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const images = [];
   for (let level = 0; level < 9; level++) {

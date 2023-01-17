@@ -54,6 +54,7 @@ export * from './materials/Material.js';
 export * from './materials/OutputChannels.js';
 export * from './materials/PhysicalMaterial.js';
 export * from './materials/ShaderMaterial.js';
+export * from './materials/PhysicalMaterial.js';
 
 export * from './math/Box2.js';
 export * from './math/Box2.Functions.js';
@@ -127,3 +128,22 @@ export * from './textures/TextureAccessor.js';
 export * from './textures/VirtualTexture.js';
 
 export * from './renderers/PunctualLightTranslator.js';
+
+export * from './scene/SceneNode.js';
+export * from './scene/Mesh.js';
+export * from './scene/Generators.js';
+export * from './scene/Visitors.js';
+
+export * from './scene/lights/DirectionalLight.js';
+export * from './scene/lights/SpotLight.js';
+export * from './scene/lights/PointLight.js';
+export * from './scene/lights/Light.js';
+export * from './scene/lights/LightType.js';
+
+export * from './scene/cameras/Camera.js';
+export * from './scene/cameras/PerspectiveCamera.js';
+export * from './scene/cameras/OrthographicCamera.js';
+
+export * from './engines/sceneCache/compiling.js';
+export * from './engines/sceneCache/updating.js';
+export * from './engines/sceneCache/rendering.js';

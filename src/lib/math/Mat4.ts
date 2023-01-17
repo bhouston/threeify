@@ -43,4 +43,8 @@ export class Mat4 {
     }
     return this;
   }
+
+  copy(m: Mat4): this {
+    return this.set(m.elements);
+  }
 }

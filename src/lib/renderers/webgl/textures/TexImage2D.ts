@@ -6,20 +6,22 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types.js';
+import { generateUUID } from '../../../core/generateUuid.js';
 import { isPow2 } from '../../../math/Functions.js';
 import { Vec2 } from '../../../math/Vec2.js';
 import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
+import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType } from './DataType.js';
 import { PixelFormat } from './PixelFormat.js';
 import { TexParameters } from './TexParameters.js';
 import { TextureTarget } from './TextureTarget.js';
 
-export class TexImage2D implements IDisposable {
-  public readonly id: number;
+export class TexImage2D implements IResource {
+  public readonly id = generateUUID();
+  public version = 0;
   public disposed = false;
   public glTexture: WebGLTexture;
   public size = new Vec2();
@@ -33,7 +35,7 @@ export class TexImage2D implements IDisposable {
     public target = TextureTarget.Texture2D,
     public texParameters = new TexParameters()
   ) {
-    const { gl } = this.context;
+    const { gl, glxo, resources } = this.context;
     // Create a texture.
     {
       const glTexture = gl.createTexture();
@@ -60,7 +62,7 @@ export class TexImage2D implements IDisposable {
     );
 
     if (texParameters.anisotropyLevels > 1) {
-      const tfa = this.context.glxo.EXT_texture_filter_anisotropic;
+      const tfa = glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
         // TODO: Cache this at some point for speed improvements
         const maxAllowableAnisotropy = gl.getParameter(
@@ -82,7 +84,7 @@ export class TexImage2D implements IDisposable {
 
     gl.bindTexture(this.target, null);
 
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   generateMipmaps(): void {
@@ -102,8 +104,9 @@ export class TexImage2D implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
-      this.context.gl.deleteTexture(this.glTexture);
-      this.context.disposeResource(this);
+      const { gl, resources } = this.context;
+      gl.deleteTexture(this.glTexture);
+      resources.unregister(this);
       this.disposed = true;
     }
   }

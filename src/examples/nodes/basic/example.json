@@ -1,0 +1,9 @@
+{
+  "slug": "nodes_basic",
+  "theme": "dark",
+  "en": {
+    "name": "Basic Node Scene",
+    "description": "A basic test of the node scene graph rendering system.",
+    "keywords": ["nodes"]
+  }
+}

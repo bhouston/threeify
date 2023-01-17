@@ -47,6 +47,11 @@ export enum DepthTestFunc {
 export class DepthTestState
   implements ICloneable<DepthTestState>, IEquatable<DepthTestState>
 {
+  public static readonly Default = new DepthTestState(
+    false,
+    DepthTestFunc.Less
+  );
+
   // TODO: Should be intialized to default WebGL states
   constructor(public enabled = false, public func = DepthTestFunc.Less) {}
 

@@ -84,6 +84,11 @@ export class PrimitiveView<PrimitiveType> {
     );
     return v;
   }
+
+  clear(): this {
+    this.floatArray.fill(0);
+    return this;
+  }
 }
 
 export function makeVec2View(

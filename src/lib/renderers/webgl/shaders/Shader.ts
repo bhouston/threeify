@@ -5,9 +5,11 @@
 // * @bhouston
 //
 
-import { IDisposable } from '../../../core/types.js';
+import { generateUUID } from '../../../core/generateUuid.js';
 import { GL } from '../GL.js';
+import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
+import { ShaderDefines } from './ShaderDefines.js';
 import { ShaderType } from './ShaderType.js';
 
 function insertLineNumbers(source: string): string {
@@ -75,20 +77,20 @@ function removeDeadCode(source: string): string {
     .replace(/[\n\r]+/g, '\n');
 }
 
-export class Shader implements IDisposable {
-  readonly id: number;
-  disposed = false;
-  glShader: WebGLShader;
+export class Shader implements IResource {
+  public readonly id = generateUUID();
+  public disposed = false;
+  public readonly glShader: WebGLShader;
   #validated = false;
   finalSource: string;
 
   constructor(
-    public context: RenderingContext,
-    public source: string,
-    public shaderType: ShaderType,
-    public glslVersion = 300
+    public readonly context: RenderingContext,
+    public readonly source: string,
+    public readonly shaderType: ShaderType,
+    public readonly shaderDefines: ShaderDefines = {}
   ) {
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
 
     // Create the shader object
     {
@@ -101,16 +103,11 @@ export class Shader implements IDisposable {
     }
 
     const prefix = [];
-    if (glslVersion === 300) {
-      prefix.push('#version 300 es');
-    }
-    /*
-    if (shaderType === ShaderType.Fragment) {
-      const { glxo } = context;
-      if (glxo.EXT_shader_texture_lod !== null) {
-        prefix.push('#extension GL_EXT_shader_texture_lod : enable');
-      }
-    }*/
+    prefix.push('#version 300 es');
+    Object.keys(this.shaderDefines).forEach((key) => {
+      const value = this.shaderDefines[key];
+      prefix.push(`#define ${key} ${value}`);
+    });
 
     const combinedSource = `${prefix.join('\n')}\n${source}`;
 
@@ -122,8 +119,7 @@ export class Shader implements IDisposable {
     // Compile the shader
     gl.compileShader(this.glShader);
 
-    // NOTE: purposely not checking if this compiled.
-    this.id = this.context.registerResource(this);
+    resources.register(this);
   }
 
   get translatedSource(): string {
@@ -140,7 +136,7 @@ export class Shader implements IDisposable {
     }
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
-    const { gl } = this.context;
+    const { gl, resources } = this.context;
     // Check if it compiled
     const compileStatus = gl.getShaderParameter(
       this.glShader,
@@ -153,6 +149,7 @@ export class Shader implements IDisposable {
       const errorMessage = `could not compile shader:\n${infoLog}`;
       console.error(errorMessage);
       console.error(insertLineNumbers(this.finalSource));
+      resources.unregister(this);
       this.disposed = true;
       throw new Error(errorMessage);
     }
@@ -161,8 +158,9 @@ export class Shader implements IDisposable {
 
   dispose(): void {
     if (!this.disposed) {
-      this.context.gl.deleteShader(this.glShader);
-      this.context.disposeResource(this);
+      const { gl, resources } = this.context;
+      gl.deleteShader(this.glShader);
+      resources.unregister(this);
       this.disposed = true;
     }
   }
