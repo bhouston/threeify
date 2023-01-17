@@ -9,6 +9,8 @@ struct PhysicalMaterial {
     float specularRoughness;
     float metallic;
 
+    vec3 normal;
+
     float ior;
 
     vec3 emissive;
@@ -16,6 +18,7 @@ struct PhysicalMaterial {
     float clearcoatFactor;
     float clearcoatRoughness;
     vec3 clearcoatTint;
+    vec3 clearcoatNormal;
 
     vec3 sheenColor;
     float sheenRoughness;

@@ -16,6 +16,7 @@ import {
   SceneNode,
   ShaderMaterial,
   Texture,
+  Vec2,
   Vec3
 } from '../../../lib/index.js';
 import fragmentSource from './fragment.glsl';
@@ -25,6 +26,9 @@ async function init(): Promise<null> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
+  );
+  const flooringNormalTexture = new Texture(
+    await fetchImage('/assets/textures/metal_flooring_normals.jpg')
   );
   const scratchesTexture = new Texture(
     await fetchImage('/assets/textures/golfball/scratches.png')
@@ -47,6 +51,8 @@ async function init(): Promise<null> {
     material: new PhysicalMaterial({
       albedo: new Color3(1, 1, 1),
       albedoTexture: texture,
+      normalScale: new Vec2(-1, -1),
+      normalTexture: flooringNormalTexture,
       specularFactor: 0.16,
       specularColor: new Color3(0.5, 0.5, 1),
       specularRoughness: 0.4,
@@ -54,7 +60,8 @@ async function init(): Promise<null> {
       clearcoatFactor: 0.5,
       clearcoatRoughnessFactor: 0.4,
       clearcoatNormalTexture: golfballNormalTexture,
-      sheenColorFactor: new Color3(1, 0.2, 0.8)
+      sheenColorFactor: new Color3(1, 0.2, 0.8),
+      sheenRoughnessFactor: 0.5
     })
   });
   root.children.push(sphereMesh);
