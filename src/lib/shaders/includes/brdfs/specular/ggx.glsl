@@ -10,6 +10,7 @@ vec3 BRDF_Specular_GGX(
   const vec3 viewDirection,
   const vec3 lightDirection,
   const vec3 F0,
+  const vec3 F90,
   const float specularRoughness
 ) {
   float alphaRoughness = pow2(specularRoughness); // UE4's roughness
@@ -21,7 +22,7 @@ vec3 BRDF_Specular_GGX(
   float NdotH = saturate(dot(normal, halfDirection));
   float VdotH = saturate(dot(viewDirection, halfDirection));
 
-  vec3 F = F_Schlick(F0, VdotH);
+  vec3 F = F_Schlick_2(F0, F90, VdotH);
   float V = V_GGX_SmithCorrelated(alphaRoughness, NdotL, NdotV);
   float D = D_GGX(alphaRoughness, NdotH);
 

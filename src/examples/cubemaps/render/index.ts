@@ -32,7 +32,7 @@ async function init(): Promise<null> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.
   // const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
-  const geometry = icosahedronGeometry(0.75, 4);
+  const geometry = icosahedronGeometry(0.75, 4, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const imageSize = new Vec2(1024, 1024);
   const cubeTexture = new CubeMapTexture([

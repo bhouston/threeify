@@ -1,0 +1,34 @@
+#pragma once
+
+struct PhysicalMaterial {
+    float alpha;
+
+    vec3 albedo;
+    float specularFactor;
+    vec3 specularColor;
+    float specularRoughness;
+    float metallic;
+
+    float ior;
+
+    vec3 emissive;
+
+    float clearcoatFactor;
+    float clearcoatRoughness;
+    vec3 clearcoatTint;
+
+    vec3 sheenColor;
+    float sheenRoughness;
+
+    float anisotropic;
+    vec2 anisotropicDirection;
+
+    float transmission;
+    float transmissionRoughness;
+
+    float iridescenceIor;
+    float iridescenceThickness;
+
+    float attentionDistance;
+    vec3 attentionColor;
+};

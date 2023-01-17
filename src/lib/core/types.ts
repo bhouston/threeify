@@ -26,7 +26,7 @@ export interface IDisposable {
 }
 
 export interface IIdentifiable {
-  uuid: string;
+  id: string;
 }
 
 export interface IVersionable {

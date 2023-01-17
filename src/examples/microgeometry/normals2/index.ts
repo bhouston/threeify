@@ -1,10 +1,8 @@
 import {
-  BufferBit,
   ClearState,
   Color3,
   color3MultiplyByScalar,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
@@ -66,11 +64,8 @@ async function init(): Promise<null> {
     normalMap: normalsMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less
-  );
-  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
@@ -91,7 +86,7 @@ async function init(): Promise<null> {
       1.5
     );
 
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 
     requestAnimationFrame(animate);

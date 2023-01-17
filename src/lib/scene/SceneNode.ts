@@ -6,6 +6,7 @@
 //
 
 import { generateUUID } from '../core/generateUuid.js';
+import { IIdentifiable, IVersionable } from '../core/types.js';
 import { Mat4 } from '../math/Mat4.js';
 import { Quat } from '../math/Quat.js';
 import { Vec3 } from '../math/Vec3.js';
@@ -19,8 +20,9 @@ export interface ISceneNode {
   visible?: boolean;
 }
 
-export class SceneNode {
-  public id;
+export class SceneNode implements IIdentifiable, IVersionable {
+  public readonly id;
+  public version = 0;
   public name = '';
   public parent: SceneNode | undefined = undefined;
   public readonly children: SceneNode[] = [];
@@ -41,5 +43,9 @@ export class SceneNode {
     if (props.rotation !== undefined) this.rotation.copy(props.rotation);
     if (props.scale !== undefined) this.scale.copy(props.scale);
     this.visible = props.visible || this.visible;
+  }
+
+  dirty(): void {
+    this.version++;
   }
 }

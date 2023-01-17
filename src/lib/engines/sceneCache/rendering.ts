@@ -2,7 +2,7 @@ import {
   renderBufferGeometry,
   VirtualFramebuffer
 } from '../../renderers/webgl/framebuffers/VirtualFramebuffer';
-import { UniformValueMap } from '../../renderers/webgl/programs/ProgramUniform';
+import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
 import { SceneCache } from './SceneCache';
 
 export function renderSceneViaSceneCache(

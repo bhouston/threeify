@@ -24,6 +24,7 @@ void main() {
   vec3 specular = vec3(0.25);
   float specularRoughness = 0.5;
   vec3 specularF0 = specularIntensityToF0(specular);
+  vec3 specularF90 = vec3(1.0);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -54,6 +55,7 @@ void main() {
       viewDirection,
       directLight.direction,
       specularF0,
+      specularF90,
       specularRoughness
     );
   outgoingRadiance +=

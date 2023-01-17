@@ -17,7 +17,7 @@ import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
 import { MaskState } from '../MaskState.js';
 import { Program } from '../programs/Program.js';
-import { UniformValueMap } from '../programs/ProgramUniform.js';
+import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { VertexArrayObject } from '../VertexArrayObject.js';
 import { BufferBit } from './BufferBit.js';
@@ -38,7 +38,9 @@ export abstract class VirtualFramebuffer implements IDisposable {
   abstract get size(): Vec2;
 
   clear(
-    attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth,
+    attachmentBits: BufferBit = BufferBit.Color |
+      BufferBit.Depth |
+      BufferBit.Stencil,
     clearState: ClearState | undefined = undefined
   ): void {
     this.context.framebuffer = this;
@@ -78,7 +80,7 @@ export function renderBufferGeometry(
   maskState: MaskState | undefined = undefined,
   cullingState: CullingState | undefined = undefined
 ): void {
-  const { context } = framebuffer;
+  const { context, size } = framebuffer;
 
   context.framebuffer = framebuffer;
   context.blendState =
@@ -97,7 +99,7 @@ export function renderBufferGeometry(
     context.program.setUniformValues(uniforms);
   }
   context.program.setAttributeBuffers(bufferGeometry);
-  context.viewport = new Box2(new Vec2(), framebuffer.size);
+  context.viewport = new Box2(new Vec2(), size);
 
   // draw
   const { gl } = context;

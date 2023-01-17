@@ -1,4 +1,5 @@
 import { generateUUID } from '../core/generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
 import { Vec2 } from '../math/Vec2.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
@@ -22,11 +23,14 @@ export function getTextureSourceSize(textureSource: TextureSource): Vec2 {
   return new Vec2(textureSource.width, textureSource.height);
 }
 
-export class VirtualTexture {
-  disposed = false;
-  id: string = generateUUID();
-  name = '';
-  size: Vec2 = new Vec2();
+export class VirtualTexture
+  implements IDisposable, IIdentifiable, IVersionable
+{
+  public readonly id: string = generateUUID();
+  public version = 0;
+  public disposed = false;
+  public name = '';
+  public size: Vec2 = new Vec2();
 
   constructor(
     public level = 0,
@@ -46,8 +50,10 @@ export class VirtualTexture {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      this.disposed = true;
-    }
+    this.disposed = true;
+  }
+
+  dirty(): void {
+    this.version++;
   }
 }

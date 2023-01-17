@@ -1,7 +1,6 @@
 import {
   Blending,
   blendModeToBlendState,
-  BufferBit,
   ClearState,
   Color3,
   fetchImage,
@@ -78,7 +77,7 @@ async function init(): Promise<null> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
-  const blackClearState = new ClearState(new Color3(0, 0, 0), 1);
+  const blackClearState = ClearState.Black;
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   function animate(): void {
@@ -88,7 +87,7 @@ async function init(): Promise<null> {
       Math.floor((time * 0.0005) / Math.PI) % 2 === 0
         ? blackClearState
         : whiteClearState;
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
 
     premultipliedAlphas.forEach((premultipliedAlpha, pIndex) => {
       fgMaps.forEach((fgMap, mIndex) => {

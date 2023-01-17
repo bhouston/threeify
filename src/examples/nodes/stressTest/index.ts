@@ -2,23 +2,21 @@ import { sceneToSceneCache } from '../../../lib/engines/sceneCache/compiling.js'
 import { renderSceneViaSceneCache } from '../../../lib/engines/sceneCache/rendering.js';
 import { updateNodeTree } from '../../../lib/engines/sceneCache/updating.js';
 import {
-  BufferBit,
   ClearState,
   Color3,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToQuat,
   fetchImage,
   icosahedronGeometry,
-  KhronosPhysicalMaterial,
   Mesh,
   PerspectiveCamera,
+  PhysicalMaterial,
+  PointLight,
   RenderingContext,
   SceneNode,
   ShaderMaterial,
-  SpotLight,
   Texture,
   Vec3
 } from '../../../lib/index.js';
@@ -37,9 +35,9 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const geometry = icosahedronGeometry(0.1, 5);
+  const geometry = icosahedronGeometry(0.1, 5, true);
   const root = new SceneNode({ name: 'root' });
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 100; i++) {
     const sphereMesh = new Mesh({
       position: new Vec3(
         Math.random() * 2 - 1,
@@ -50,28 +48,23 @@ async function init(): Promise<null> {
         new Euler3(Math.random() * 6, Math.random() * 6, Math.random() * 6)
       ),
       geometry,
-      material: new KhronosPhysicalMaterial({
+      material: new PhysicalMaterial({
         albedo: new Color3(Math.random(), Math.random(), Math.random()),
         albedoTexture: texture,
-        roughness: Math.random(),
+        specularRoughness: Math.random(),
         metallic: Math.random()
       })
     });
     root.children.push(sphereMesh);
   }
-  for (let i = 0; i < 10; i++) {
-    const pointLight = new SpotLight({
-      position: new Vec3(
-        Math.random() * 2 - 1,
-        Math.random() * 2 - 1,
-        Math.random() * 2 - 1
-      ),
-      color: new Color3(0.1, 0.1, 0.1),
-      intensity: 1,
-      range: 0.3
-    });
-    root.children.push(pointLight);
-  }
+
+  const directionalLight = new PointLight({
+    position: new Vec3(0, 0, 0),
+    color: new Color3(1, 1, 1),
+    intensity: 10
+  });
+  root.children.push(directionalLight);
+
   const camera = new PerspectiveCamera(25, 0.1, 4, 1);
   camera.position.set(0, 0, 3);
   root.children.push(camera);
@@ -82,15 +75,12 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less
-  );
-  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
 
     renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
 

@@ -1,6 +1,6 @@
 import { BufferGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
 import { Program } from '../../renderers/webgl/programs/Program';
-import { UniformValueMap } from '../../renderers/webgl/programs/ProgramUniform';
+import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
 
 export class MeshBatch {
   constructor(

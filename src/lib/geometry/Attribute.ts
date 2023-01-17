@@ -12,9 +12,9 @@ import {
 import { AttributeData } from './AttributeData.js';
 
 export class Attribute {
-  count: number;
-  bytesPerVertex: number;
-  bytesPerComponent: number;
+  public count: number;
+  public readonly bytesPerVertex: number;
+  public readonly bytesPerComponent: number;
 
   constructor(
     public attributeData: AttributeData,

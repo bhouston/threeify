@@ -2,21 +2,19 @@ import { sceneToSceneCache } from '../../../lib/engines/sceneCache/compiling.js'
 import { renderSceneViaSceneCache } from '../../../lib/engines/sceneCache/rendering.js';
 import { updateNodeTree } from '../../../lib/engines/sceneCache/updating.js';
 import {
-  BufferBit,
   ClearState,
   Color3,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   fetchImage,
   icosahedronGeometry,
-  KhronosPhysicalMaterial,
   Mesh,
   PerspectiveCamera,
+  PhysicalMaterial,
+  PointLight,
   RenderingContext,
   SceneNode,
   ShaderMaterial,
-  SpotLight,
   Texture,
   Vec3
 } from '../../../lib/index.js';
@@ -35,24 +33,26 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const geometry = icosahedronGeometry(0.75, 5);
+  const geometry = icosahedronGeometry(0.75, 5, true);
   const root = new SceneNode({ name: 'root' });
   const sphereMesh = new Mesh({
+    position: new Vec3(0, 0, 0),
     geometry,
-    material: new KhronosPhysicalMaterial({
+    material: new PhysicalMaterial({
       albedo: new Color3(1, 1, 1),
       albedoTexture: texture,
-      roughness: Math.random(),
-      metallic: Math.random()
+      specularRoughness: 0,
+      metallic: 1
     })
   });
   root.children.push(sphereMesh);
-  const pointLight = new SpotLight({
-    position: new Vec3(1, 0, -0.5),
+  const pointLight = new PointLight({
+    position: new Vec3(2, 0, 2),
     color: new Color3(1, 1, 1),
-    intensity: 100,
-    range: 6
+    intensity: 10,
+    range: 20
   });
+
   root.children.push(pointLight);
   const camera = new PerspectiveCamera(25, 0.1, 4, 1);
   camera.position.set(0, 0, 3);
@@ -64,15 +64,12 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less
-  );
-  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
 
     renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
 

@@ -17,11 +17,12 @@ import { BufferTarget } from './BufferTarget.js';
 import { PrimitiveType } from './PrimitiveType.js';
 
 export class BufferGeometry implements IDisposable {
-  disposed = false;
-  bufferAccessors: { [key: string]: BufferAccessor | undefined } = {};
-  indices: BufferAccessor | undefined = undefined;
-  primitive: PrimitiveType = PrimitiveType.Triangles;
-  count = -1;
+  public version = 0;
+  public disposed = false;
+  public bufferAccessors: { [key: string]: BufferAccessor | undefined } = {};
+  public indices: BufferAccessor | undefined = undefined;
+  public primitive: PrimitiveType = PrimitiveType.Triangles;
+  public count = -1;
 
   constructor(public context: RenderingContext) {}
 

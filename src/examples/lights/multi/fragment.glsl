@@ -31,6 +31,7 @@ void main() {
   vec3 specular = vec3(0.5);
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0(specular);
+  vec3 specularF90 = vec3(1.0);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -50,23 +51,23 @@ void main() {
 
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
-    punctualLight.position = punctualLightViewPosition[i];
-    punctualLight.direction = punctualLightViewDirection[i];
+    punctualLight.position = mat4TransformPosition(
+      worldToView,
+      vec3(0.0, 0.0, 2)
+    ); // punctualLightWorldPosition[i] );
+    punctualLight.direction = mat4TransformDirection(
+      worldToView,
+      punctualLightWorldDirection[i]
+    );
     punctualLight.intensity = punctualLightColor[i];
     punctualLight.range = punctualLightRange[i];
     punctualLight.innerConeCos = punctualLightInnerCos[i];
     punctualLight.outerConeCos = punctualLightOuterCos[i];
 
-    DirectLight directLight;
-    if (punctualLight.type == 0) {
-      pointLightToDirectLight(position, punctualLight, directLight);
-    }
-    if (punctualLight.type == 1) {
-      spotLightToDirectLight(position, punctualLight, directLight);
-    }
-    if (punctualLight.type == 2) {
-      directionalLightToDirectLight(punctualLight, directLight);
-    }
+    DirectLight directLight = punctualLightToDirectLight(
+      position,
+      punctualLight
+    );
 
     float dotNL = saturate(dot(directLight.direction, normal));
 
@@ -78,6 +79,7 @@ void main() {
         viewDirection,
         directLight.direction,
         specularF0,
+        specularF90,
         specularRoughness
       );
     outgoingRadiance +=

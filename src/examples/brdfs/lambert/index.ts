@@ -1,10 +1,8 @@
 import {
-  BufferBit,
   ClearState,
   Color3,
   color3MultiplyByScalar,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
@@ -27,7 +25,7 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
-  const geometry = icosahedronGeometry(0.75, 5);
+  const geometry = icosahedronGeometry(0.75, 5, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
@@ -62,11 +60,8 @@ async function init(): Promise<null> {
     albedoMap: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less
-  );
-  canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
@@ -89,7 +84,7 @@ async function init(): Promise<null> {
       0.5
     );
 
-    canvasFramebuffer.clear(BufferBit.All);
+    canvasFramebuffer.clear();
 
     renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
 

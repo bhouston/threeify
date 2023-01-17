@@ -5,9 +5,9 @@ import { mat3Equals, mat4ToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import {
   basis3ToMat4,
-  composeMat4,
-  decomposeMat4,
   mat4Add,
+  mat4Compose,
+  mat4Decompose,
   mat4Delta,
   mat4Equals,
   mat4Identity,
@@ -274,11 +274,11 @@ describe('Mat4 Functions', () => {
   });
 
   // compose the matrix and then decompose the matrix, the results hsould be the same within the EPLISON tolerance
-  describe('composeMat4', () => {
+  describe('mat4Compose', () => {
     const translation = new Vec3(1, 2, 3);
     const rotation = quatNormalize(new Quat(1, 2, -3, 4));
     const scale = new Vec3(1, 2, 3);
-    const m = composeMat4(translation, rotation, scale);
+    const m = mat4Compose(translation, rotation, scale);
 
     test('explicit compose', () => {
       const m2 = new Mat4([
@@ -303,12 +303,12 @@ describe('Mat4 Functions', () => {
       expect(m.elements[14]).toBeCloseTo(m2.elements[14], EPSILON);
       expect(m.elements[15]).toBeCloseTo(m2.elements[15], EPSILON);
     });
-    test('composeMat4/decomposeMat4', () => {
+    test('mat4Compose/mat4Decompose', () => {
       const {
         translation: translation2,
         rotation: rotation2,
         scale: scale2
-      } = decomposeMat4(m);
+      } = mat4Decompose(m);
       expect(translation2.x).toBeCloseTo(translation.x, EPSILON);
       expect(translation2.y).toBeCloseTo(translation.y, EPSILON);
       expect(translation2.z).toBeCloseTo(translation.z, EPSILON);

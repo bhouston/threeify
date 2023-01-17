@@ -54,7 +54,7 @@ export * from './materials/Material.js';
 export * from './materials/OutputChannels.js';
 export * from './materials/PhysicalMaterial.js';
 export * from './materials/ShaderMaterial.js';
-export * from './materials/KhronosPhysicalMaterial.js';
+export * from './materials/PhysicalMaterial.js';
 
 export * from './math/Box2.js';
 export * from './math/Box2.Functions.js';

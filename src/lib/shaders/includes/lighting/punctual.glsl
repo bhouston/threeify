@@ -9,9 +9,9 @@
 // see https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_lights_punctual
 struct PunctualLight {
   int type;
-  vec3 position;
   vec3 intensity;
-  vec3 direction;
+  vec3 position; // assumed to be in view space
+  vec3 direction; // assumed to be in view space
   float range;
   float innerConeCos;
   float outerConeCos;
@@ -86,4 +86,23 @@ void directionalLightToDirectLight(
 ) {
   directLight.direction = -punctualLight.direction;
   directLight.radiance = punctualLight.intensity;
+}
+
+DirectLight punctualLightToDirectLight(
+  vec3 position,
+  PunctualLight punctualLight
+) {
+  DirectLight directLight;
+  switch (punctualLight.type) {
+    case LightType_Point:
+      pointLightToDirectLight(position, punctualLight, directLight);
+      break;
+    case LightType_Spot:
+      spotLightToDirectLight(position, punctualLight, directLight);
+      break;
+    case LightType_Directional:
+      directionalLightToDirectLight(punctualLight, directLight);
+      break;
+  }
+  return directLight;
 }
