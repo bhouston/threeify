@@ -60,6 +60,7 @@ async function init(): Promise<null> {
       clearcoatFactor: 0.5,
       clearcoatRoughnessFactor: 0.4,
       clearcoatNormalTexture: golfballNormalTexture,
+      clearcoatTint: new Color3(0.5, 0.2, 0),
       sheenColorFactor: new Color3(1, 0.2, 0.8),
       sheenRoughnessFactor: 0.5
     })

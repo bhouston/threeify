@@ -11,12 +11,14 @@ export function renderSceneViaSceneCache(
 ) {
   const { meshBatches, cameraUniforms, lightUniforms } = sceneCache;
   for (const meshBatch of meshBatches) {
-    const { program, uniformsArray, bufferGeometry } = meshBatch;
+    const { program, uniformsArray, bufferGeometry, programVertexArray } =
+      meshBatch;
     renderBufferGeometry(
       framebuffer,
       program,
       [...uniformsArray, cameraUniforms, lightUniforms] as UniformValueMap[],
-      bufferGeometry
+      bufferGeometry,
+      programVertexArray
     );
   }
 }

@@ -13,9 +13,9 @@ import { RenderingContext } from '../RenderingContext.js';
 import { Shader } from '../shaders/Shader.js';
 import { ShaderDefines } from '../shaders/ShaderDefines.js';
 import { ShaderType } from '../shaders/ShaderType.js';
-import { VertexArrayObject } from '../VertexArrayObject.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
 import { ProgramUniform } from './ProgramUniform.js';
+import { ProgramVertexArray } from './ProgramVertexArray.js';
 import { numTextureUnits } from './UniformType.js';
 import { UniformValueMap } from './UniformValueMap.js';
 
@@ -168,9 +168,9 @@ export class Program implements IResource {
     return this;
   }
 
-  setAttributeBuffers(vao: VertexArrayObject): this;
+  setAttributeBuffers(vao: ProgramVertexArray): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
-  setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
+  setAttributeBuffers(buffers: ProgramVertexArray | BufferGeometry): this {
     const { gl } = this.context;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
@@ -187,8 +187,8 @@ export class Program implements IResource {
           bufferGeometry.indices.buffer.glBuffer
         );
       }
-    } else if (buffers instanceof VertexArrayObject) {
-      const vao = buffers as VertexArrayObject;
+    } else if (buffers instanceof ProgramVertexArray) {
+      const vao = buffers as ProgramVertexArray;
       gl.bindVertexArray(vao.glVertexArrayObject);
     } else {
       throw new TypeError('not implemented');

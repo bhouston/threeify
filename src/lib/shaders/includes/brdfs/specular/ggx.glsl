@@ -11,8 +11,7 @@ vec3 BRDF_Specular_GGX(
   const vec3 lightDirection,
   const vec3 F0,
   const vec3 F90,
-  const float specularRoughness,
-  out vec3 remainingWeight
+  const float specularRoughness
 ) {
   float alphaRoughness = pow2(specularRoughness); // UE4's roughness
 
@@ -27,8 +26,7 @@ vec3 BRDF_Specular_GGX(
   float V = V_GGX_SmithCorrelated(alphaRoughness, NdotL, NdotV);
   float D = D_GGX(alphaRoughness, NdotH);
 
-  remainingWeight = vec3(1. - max( max(F.x, F.y), F.z ) );
-
+ 
   return F * (V * D) * PI;
 
 } // validated

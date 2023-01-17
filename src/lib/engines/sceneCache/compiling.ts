@@ -7,6 +7,7 @@ import {
 } from '../../math/Vec3.Functions';
 import { makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
 import { makeProgramFromShaderMaterial } from '../../renderers/webgl/programs/Program';
+import { ProgramVertexArray } from '../../renderers/webgl/programs/ProgramVertexArray';
 import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
 import { RenderingContext } from '../../renderers/webgl/RenderingContext';
 import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
@@ -88,8 +89,10 @@ function meshToSceneCache(
 
   // make buffer geometry
   const geometry = mesh.geometry;
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  geometryIdToBufferGeometry.set(mesh.id, bufferGeometry);
+  if (geometryIdToBufferGeometry.get(geometry.id) === undefined) {
+    const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+    geometryIdToBufferGeometry.set(geometry.id, bufferGeometry);
+  }
 
   const material = mesh.material;
 
@@ -178,6 +181,7 @@ function createMeshBatches(sceneCache: SceneCache) {
     shaderNameToProgram,
     materialIdToUniforms,
     nodeIdToUniforms,
+    programBufferGeometryToProgramVertexArray,
     meshBatches
   } = sceneCache;
 
@@ -186,7 +190,8 @@ function createMeshBatches(sceneCache: SceneCache) {
       const mesh = node as Mesh;
 
       // get buffer geometry
-      const bufferGeometry = geometryIdToBufferGeometry.get(mesh.id);
+      const geometry = mesh.geometry;
+      const bufferGeometry = geometryIdToBufferGeometry.get(geometry.id);
       if (bufferGeometry === undefined)
         throw new Error('Buffer Geometry not found');
 
@@ -194,6 +199,18 @@ function createMeshBatches(sceneCache: SceneCache) {
       const shaderMaterial = mesh.material;
       const program = shaderNameToProgram.get(shaderMaterial.shaderName);
       if (program === undefined) throw new Error('Program not found');
+
+      const programBufferGeometryId = `${program.id}-${mesh.id}`;
+      let programVertexArray = programBufferGeometryToProgramVertexArray.get(
+        programBufferGeometryId
+      );
+      if (programVertexArray === undefined) {
+        programVertexArray = new ProgramVertexArray(program, bufferGeometry);
+        programBufferGeometryToProgramVertexArray.set(
+          programBufferGeometryId,
+          programVertexArray
+        );
+      }
 
       // get material uniforms
       const materialUniforms = materialIdToUniforms.get(shaderMaterial.id);
@@ -207,7 +224,7 @@ function createMeshBatches(sceneCache: SceneCache) {
 
       // create mesh batch
       meshBatches.push(
-        new MeshBatch(program, bufferGeometry, [
+        new MeshBatch(program, bufferGeometry, programVertexArray, [
           materialUniforms,
           nodeUniforms
         ] as UniformValueMap[])

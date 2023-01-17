@@ -105,7 +105,7 @@ export * from './renderers/webgl/MaskState.js';
 export * from './renderers/webgl/Parameters.js';
 export * from './renderers/webgl/Renderbuffer.js';
 export * from './renderers/webgl/RenderingContext.js';
-export * from './renderers/webgl/VertexArrayObject.js';
+export * from './renderers/webgl/programs/ProgramVertexArray.js';
 
 export * from './renderers/webgl/shaders/Shader.js';
 export * from './renderers/webgl/shaders/ShaderType.js';

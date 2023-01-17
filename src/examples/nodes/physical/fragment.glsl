@@ -26,9 +26,6 @@ void main() {
     material.specularColor *
     material.specularFactor;
   vec3 dielectricSpecularF90 = vec3(material.specularFactor);
-
-  vec3 clearCoatF0 = specularIntensityToF0(vec3(1.0)) * material.clearcoatTint;
-
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
   vec3 viewDirection = normalize(-v_viewSurfacePosition);
@@ -56,8 +53,6 @@ void main() {
       dot(directLight.direction, clearcoatNormal)
     );
 
-    vec3 remainingWeight;
-    vec3 culmulativeWeight = vec3(1.0);
 
     // this lack energy conservation.
     outgoingRadiance +=
@@ -78,31 +73,26 @@ void main() {
         clearcoatNormal,
         viewDirection,
         directLight.direction,
-        vec3(0.04),
-        vec3(1.0),
-        material.clearcoatRoughness,
-        remainingWeight
+        vec3(0.04) * material.clearcoatTint * material.clearcoatFactor,
+        vec3(1.0) * material.clearcoatFactor,
+        material.clearcoatRoughness
       );
-    culmulativeWeight *= remainingWeight;
     outgoingRadiance +=
       directLight.radiance *
       dotNL *
-      culmulativeWeight * 
       BRDF_Specular_GGX(
         normal,
         viewDirection,
         directLight.direction,
         dielectricSpecularF0,
         dielectricSpecularF90,
-        material.specularRoughness,
-        remainingWeight
+        material.specularRoughness
       );
-   culmulativeWeight *= remainingWeight;
      vec3 c_diffuse =
       directLight.radiance *
       dotNL *
       BRDF_Diffuse_Lambert(material.albedo);
-    outgoingRadiance += culmulativeWeight * mix( c_diffuse, vec3(0.), material.metallic );
+    outgoingRadiance += mix( c_diffuse, vec3(0.), material.metallic );
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);

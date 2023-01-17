@@ -17,9 +17,9 @@ import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
 import { MaskState } from '../MaskState.js';
 import { Program } from '../programs/Program.js';
+import { ProgramVertexArray } from '../programs/ProgramVertexArray.js';
 import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
-import { VertexArrayObject } from '../VertexArrayObject.js';
 import { BufferBit } from './BufferBit.js';
 
 const GL = WebGL2RenderingContext;
@@ -75,6 +75,7 @@ export function renderBufferGeometry(
   program: Program,
   uniforms: UniformValueMap | UniformValueMap[],
   bufferGeometry: BufferGeometry,
+  programVertexArray: ProgramVertexArray | undefined = undefined,
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
@@ -98,7 +99,11 @@ export function renderBufferGeometry(
   } else {
     context.program.setUniformValues(uniforms);
   }
-  context.program.setAttributeBuffers(bufferGeometry);
+  if (programVertexArray !== undefined) {
+    context.program.setAttributeBuffers(programVertexArray);
+  } else {
+    context.program.setAttributeBuffers(bufferGeometry);
+  }
   context.viewport = new Box2(new Vec2(), size);
 
   // draw
@@ -119,7 +124,7 @@ export function renderVertexArrayObject(
   framebuffer: VirtualFramebuffer,
   program: Program,
   uniforms: UniformValueMap,
-  vao: VertexArrayObject,
+  vao: ProgramVertexArray,
   depthTestState: DepthTestState | undefined = undefined,
   blendState: BlendState | undefined = undefined,
   maskState: MaskState | undefined = undefined,
