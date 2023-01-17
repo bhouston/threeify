@@ -18,10 +18,8 @@ export class SceneCache {
   public nodeIdToUniforms: Map<string, NodeUniforms> = new Map();
   public geometryIdToBufferGeometry: Map<string, BufferGeometry> = new Map();
 
-  public programBufferGeometryToProgramVertexArray: Map<
-    string,
-    ProgramVertexArray
-  > = new Map();
+  public programGeometryToProgramVertexArray: Map<string, ProgramVertexArray> =
+    new Map();
 
   public shaderNameToProgram: Map<string, Program> = new Map();
   public materialIdToUniforms: Map<string, UniformValueMap> = new Map();

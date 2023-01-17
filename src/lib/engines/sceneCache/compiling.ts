@@ -62,8 +62,6 @@ export function sceneToSceneCache(
 
   createMeshBatches(sceneCache);
 
-  console.log('lightUniforms', lightUniforms);
-
   return sceneCache;
 }
 
@@ -181,7 +179,7 @@ function createMeshBatches(sceneCache: SceneCache) {
     shaderNameToProgram,
     materialIdToUniforms,
     nodeIdToUniforms,
-    programBufferGeometryToProgramVertexArray,
+    programGeometryToProgramVertexArray,
     meshBatches
   } = sceneCache;
 
@@ -200,13 +198,13 @@ function createMeshBatches(sceneCache: SceneCache) {
       const program = shaderNameToProgram.get(shaderMaterial.shaderName);
       if (program === undefined) throw new Error('Program not found');
 
-      const programBufferGeometryId = `${program.id}-${mesh.id}`;
-      let programVertexArray = programBufferGeometryToProgramVertexArray.get(
+      const programBufferGeometryId = `${program.id}-${geometry.id}`;
+      let programVertexArray = programGeometryToProgramVertexArray.get(
         programBufferGeometryId
       );
       if (programVertexArray === undefined) {
         programVertexArray = new ProgramVertexArray(program, bufferGeometry);
-        programBufferGeometryToProgramVertexArray.set(
+        programGeometryToProgramVertexArray.set(
           programBufferGeometryId,
           programVertexArray
         );
