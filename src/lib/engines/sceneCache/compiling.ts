@@ -7,6 +7,7 @@ import {
 } from '../../math/Vec3.Functions';
 import { makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
 import { makeProgramFromShaderMaterial } from '../../renderers/webgl/programs/Program';
+import { UniformBufferMap } from '../../renderers/webgl/programs/ProgramUniformBlock';
 import { ProgramVertexArray } from '../../renderers/webgl/programs/ProgramVertexArray';
 import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
 import { RenderingContext } from '../../renderers/webgl/RenderingContext';
@@ -220,12 +221,36 @@ function createMeshBatches(sceneCache: SceneCache) {
       if (nodeUniforms === undefined)
         throw new Error('Node Uniforms not found');
 
+      const uniformValueMaps: UniformValueMap[] = [materialUniforms];
+
+      const uniformBufferMap: UniformBufferMap = {};
+
+      const nodeUniformBlock = program.uniformBlocks['Node'];
+      if (nodeUniformBlock !== undefined) {
+        const nodeUniformBuffer = nodeUniformBlock.allocateUniformBuffer();
+
+        nodeUniformBlock.setUniformsIntoBuffer(
+          nodeUniforms as unknown as UniformValueMap,
+          nodeUniformBuffer
+        );
+        uniformBufferMap['Node'] = nodeUniformBuffer;
+      } else {
+        uniformValueMaps.push(nodeUniforms as unknown as UniformValueMap);
+      }
+
+      /*const materialUniformBlock = program.uniformBlocks['Material'];
+      const lightingUniformBlock = program.uniformBlocks['Lighting'];
+      const cameraUniformBlock = program.uniformBlocks['Camera'];*/
+
       // create mesh batch
       meshBatches.push(
-        new MeshBatch(program, bufferGeometry, programVertexArray, [
-          materialUniforms,
-          nodeUniforms
-        ] as UniformValueMap[])
+        new MeshBatch(
+          program,
+          bufferGeometry,
+          programVertexArray,
+          uniformValueMaps,
+          uniformBufferMap
+        )
       );
     }
   }
