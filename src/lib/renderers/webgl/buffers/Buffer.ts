@@ -57,11 +57,11 @@ export class Buffer implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      gl.deleteBuffer(this.glBuffer);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    gl.deleteBuffer(this.glBuffer);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }

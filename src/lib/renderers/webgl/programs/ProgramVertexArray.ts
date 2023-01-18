@@ -48,11 +48,11 @@ export class ProgramVertexArray implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.program.context;
-      gl.deleteVertexArray(this.glVertexArrayObject);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.program.context;
+    gl.deleteVertexArray(this.glVertexArrayObject);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }

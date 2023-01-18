@@ -77,13 +77,13 @@ export class LayerImage implements IDisposable {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      this.texImage2D.dispose();
-      releaseImage(this.image);
-      this.image = undefined;
-      this.disposed = true;
-      // console.log(`layerImage.dispose: ${this.url}`);
-    }
+    if (this.disposed) return;
+
+    this.texImage2D.dispose();
+    releaseImage(this.image);
+    this.image = undefined;
+    this.disposed = true;
+    // console.log(`layerImage.dispose: ${this.url}`);
   }
 }
 

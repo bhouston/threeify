@@ -1,9 +1,16 @@
+import { generateUUID } from '../../../core/generateUuid';
+import { IResource } from '../IResource';
 import { ProgramUniformBlock } from './ProgramUniformBlock';
 import { uniformTypeInfo } from './UniformType';
+import { uniformValueToArrayBuffer } from './UniformValue';
 import { UniformValue } from './UniformValueMap';
 
-export class UniformBuffer {
-  public readonly glUniformBuffer: WebGLBuffer;
+export class ProgramUniformBuffer implements IResource {
+  public readonly id = generateUUID();
+  disposed = false;
+  static nextBindTarget = 0;
+
+  public readonly glBuffer: WebGLBuffer;
 
   constructor(public readonly programUniformBlock: ProgramUniformBlock) {
     const { gl } = programUniformBlock.program.context;
@@ -11,10 +18,10 @@ export class UniformBuffer {
     // Create Uniform Buffer to store our data
     const uboBuffer = gl.createBuffer();
     if (uboBuffer === null) throw new Error('Failed to create buffer.');
-    this.glUniformBuffer = uboBuffer;
+    this.glBuffer = uboBuffer;
 
     // Bind it to tell WebGL we are working on this buffer
-    gl.bindBuffer(gl.UNIFORM_BUFFER, this.glUniformBuffer);
+    gl.bindBuffer(gl.UNIFORM_BUFFER, this.glBuffer);
 
     // Allocate memory for our buffer equal to the size of our Uniform Block
     // We use dynamic draw because we expect to respect the contents of the buffer frequently
@@ -24,16 +31,19 @@ export class UniformBuffer {
       gl.DYNAMIC_DRAW
     );
 
-    // Bind the buffer to a binding point
-    // Think of it as storing the buffer into a special UBO ArrayList
-    // The second argument is the index you want to store your Uniform Buffer in
-    // Let's say you have 2 unique UBO, you'll store the first one in index 0 and the second one in index 1
-    gl.bindBufferBase(gl.UNIFORM_BUFFER, 0, uboBuffer);
+    return this;
+  }
+
+  dispose() {
+    if (this.disposed) return;
+
+    const { gl } = this.programUniformBlock.program.context;
+    gl.deleteBuffer(this.glBuffer);
+    this.disposed = true;
   }
 
   set(uniformName: string, uniformValue: UniformValue): this {
     const { gl } = this.programUniformBlock.program.context;
-    const { glProgram } = this.programUniformBlock.program;
 
     const uniform = this.programUniformBlock.uniforms[uniformName];
     if (uniform === undefined) {
@@ -44,18 +54,18 @@ export class UniformBuffer {
     const typeInfo = uniformTypeInfo(uniformType);
 
     const numElements = typeInfo.numElements * size;
+    const sizeInBytes = numElements * typeInfo.bytesPerElement;
 
     // Bind the buffer to tell WebGL we are working on this buffer
-    gl.bindBuffer(gl.UNIFORM_BUFFER, this.glUniformBuffer);
+    gl.bindBuffer(gl.UNIFORM_BUFFER, this.glBuffer);
 
     // Write data into the buffer
     gl.bufferSubData(
       gl.UNIFORM_BUFFER,
       blockOffset,
-      uniformValue,
+      uniformValueToArrayBuffer(uniformType, uniformValue),
       0,
-      numElements,
-      typeInfo.glType
+      sizeInBytes
     );
 
     return this;

@@ -30,18 +30,18 @@ export class BufferGeometry implements IDisposable {
     console.warn(
       'This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.'
     );
-    if (!this.disposed) {
-      for (const name in this.bufferAccessors) {
-        const bufferAccessor = this.bufferAccessors[name];
-        if (bufferAccessor !== undefined) {
-          bufferAccessor.buffer.dispose();
-        }
+    if (this.disposed) return;
+
+    for (const name in this.bufferAccessors) {
+      const bufferAccessor = this.bufferAccessors[name];
+      if (bufferAccessor !== undefined) {
+        bufferAccessor.buffer.dispose();
       }
-      if (this.indices !== undefined) {
-        this.indices.buffer.dispose();
-      }
-      this.disposed = true;
     }
+    if (this.indices !== undefined) {
+      this.indices.buffer.dispose();
+    }
+    this.disposed = true;
   }
 }
 

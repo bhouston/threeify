@@ -1,5 +1,6 @@
 import { Program } from './Program';
 import { ProgramUniform } from './ProgramUniform';
+import { ProgramUniformBuffer } from './ProgramUniformBuffer';
 
 // based on https://gist.github.com/jialiang/2880d4cc3364df117320e8cb324c2880
 
@@ -30,5 +31,24 @@ export class ProgramUniformBlock {
       this.blockIndex,
       gl.UNIFORM_BLOCK_DATA_SIZE
     );
+  }
+
+  allocateUniformBuffer(): ProgramUniformBuffer {
+    return new ProgramUniformBuffer(this);
+  }
+
+  bind(programUniformBuffer: ProgramUniformBuffer): void {
+    const { gl } = this.program.context;
+    const { glProgram } = this.program;
+
+    // Bind the Uniform Buffer to the binding point
+    gl.bindBufferBase(
+      gl.UNIFORM_BUFFER,
+      this.blockIndex,
+      programUniformBuffer.glBuffer
+    );
+
+    // Bind the Uniform Buffer to the uniform block
+    gl.uniformBlockBinding(glProgram, this.blockIndex, this.blockIndex);
   }
 }

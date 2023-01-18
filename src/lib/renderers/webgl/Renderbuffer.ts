@@ -25,11 +25,11 @@ export class Renderbuffer implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      gl.deleteRenderbuffer(this.glRenderbuffer);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    gl.deleteRenderbuffer(this.glRenderbuffer);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }

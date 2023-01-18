@@ -239,14 +239,14 @@ export class Program implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      this.vertexShader.dispose();
-      this.fragmentShader.dispose();
-      gl.deleteProgram(this.glProgram);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    this.vertexShader.dispose();
+    this.fragmentShader.dispose();
+    gl.deleteProgram(this.glProgram);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }
 

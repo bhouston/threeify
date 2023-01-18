@@ -86,9 +86,9 @@ export class DeviceOrientation implements IDisposable {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      this.onDispose();
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    this.onDispose();
+    this.disposed = true;
   }
 }
