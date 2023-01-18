@@ -33,7 +33,6 @@ export class Buffer implements IResource {
     gl.bindBuffer(this.target, this.glBuffer);
 
     // load data
-    // console.log(`gl.bufferData(${this.target}, ${arrayBuffer}, ${this.usage})`);
     gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
     gl.bufferSubData(this.target, 0, arrayBuffer);
 
@@ -55,11 +54,10 @@ export class Buffer implements IResource {
 
   writeSubData(
     arrayBufferView: ArrayBufferView,
-    offsetInBytes: number,
-    sizeInBytes: number
+    writeOffsetInBytes: number,
+    readOffsetInElements = 0,
+    sizeInElements: number
   ): void {
-    if (arrayBufferView.byteLength > sizeInBytes)
-      throw new Error('arrayBufferView.byteLength > sizeInBytes');
     const { gl } = this.context;
     // Bind the buffer to tell WebGL we are working on this buffer
     gl.bindBuffer(this.target, this.glBuffer);
@@ -67,10 +65,10 @@ export class Buffer implements IResource {
     // Write data into the buffer
     gl.bufferSubData(
       gl.UNIFORM_BUFFER,
-      offsetInBytes,
+      writeOffsetInBytes,
       arrayBufferView,
-      0,
-      sizeInBytes
+      readOffsetInElements,
+      sizeInElements
     );
   }
 

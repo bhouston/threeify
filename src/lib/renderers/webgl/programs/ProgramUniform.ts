@@ -93,10 +93,10 @@ export class ProgramUniform {
       );
     }
 
-    const { blockOffset, uniformType, sizeInBytes } = this;
+    const { blockOffset, uniformType, numElements } = this;
 
     const arrayBufferView = uniformValueToArrayBuffer(uniformType, value);
-    buffer.writeSubData(arrayBufferView, blockOffset, sizeInBytes);
+    buffer.writeSubData(arrayBufferView, blockOffset, 0, numElements);
 
     return this;
   }
