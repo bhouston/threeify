@@ -39,14 +39,7 @@ export class Buffer implements IResource {
     resources.register(this);
   }
 
-  update(
-    arrayBuffer: ArrayBuffer,
-    target: BufferTarget = BufferTarget.Array,
-    usage: BufferUsage = BufferUsage.StaticDraw
-  ): void {
-    this.target = target;
-    this.usage = usage;
-
+  write(arrayBuffer: ArrayBuffer): void {
     const { gl } = this.context;
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
@@ -54,6 +47,27 @@ export class Buffer implements IResource {
 
     // load data
     gl.bufferData(this.target, arrayBuffer, this.usage);
+  }
+
+  writeSubData(
+    arrayBufferView: ArrayBufferView,
+    offsetInBytes: number,
+    sizeInBytes: number
+  ): void {
+    if (arrayBufferView.byteLength > sizeInBytes)
+      throw new Error('arrayBufferView.byteLength > sizeInBytes');
+    const { gl } = this.context;
+    // Bind the buffer to tell WebGL we are working on this buffer
+    gl.bindBuffer(this.target, this.glBuffer);
+
+    // Write data into the buffer
+    gl.bufferSubData(
+      gl.UNIFORM_BUFFER,
+      offsetInBytes,
+      arrayBufferView,
+      0,
+      sizeInBytes
+    );
   }
 
   dispose(): void {

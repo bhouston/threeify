@@ -203,7 +203,7 @@ export class Program implements IResource {
     for (const uniformName in uniformValueMap) {
       const uniform = this.uniforms[uniformName];
       if (uniform !== undefined) {
-        uniform.set(uniformValueMap[uniformName]);
+        uniform.setIntoLocation(uniformValueMap[uniformName]);
       }
     }
     return this;
