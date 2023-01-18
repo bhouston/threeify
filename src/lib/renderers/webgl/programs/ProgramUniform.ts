@@ -116,6 +116,8 @@ export class ProgramUniform {
     if (value instanceof Array && value.length > 0) {
       return this.setArrayIntoLocation(value as UniformPrimitiveValue[]);
     }
+    this.program.context.program = this.program;
+
     const { gl } = this.context;
     switch (this.uniformType) {
       // case UniformType.Bool:
@@ -252,6 +254,8 @@ export class ProgramUniform {
     if (value.length === 0) {
       return this;
     }
+
+    this.program.context.program = this.program;
     const { gl } = this.context;
     const firstElement = value[0];
     switch (this.uniformType) {

@@ -109,7 +109,12 @@ async function init(): Promise<null> {
       videoMap.loadImages([video]);
     }
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
 
     requestAnimationFrame(animate);
   }

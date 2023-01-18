@@ -65,7 +65,12 @@ async function init(): Promise<null> {
         quatToMat4(deviceOrientation.orientation)
       );
     }
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
   }
 
   animate();

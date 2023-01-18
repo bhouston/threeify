@@ -45,8 +45,18 @@ async function init(): Promise<null> {
   const geometry = planeGeometry(1, 1, 1, 1);
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
-  renderBufferGeometry(canvasFramebuffer, program, bgUniforms, bufferGeometry);
-  renderBufferGeometry(canvasFramebuffer, program, fgUniforms, bufferGeometry);
+  renderBufferGeometry({
+    framebuffer: canvasFramebuffer,
+    program,
+    uniforms: bgUniforms,
+    bufferGeometry
+  });
+  renderBufferGeometry({
+    framebuffer: canvasFramebuffer,
+    program,
+    uniforms: fgUniforms,
+    bufferGeometry
+  });
 
   return null;
 }

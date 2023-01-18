@@ -92,12 +92,12 @@ async function init(): Promise<null> {
     framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
     samplerUniforms.faceIndex = index;
 
-    renderBufferGeometry(
+    renderBufferGeometry({
       framebuffer,
-      samplerProgram,
-      samplerUniforms,
-      samplerBufferGeometry
-    );
+      program: samplerProgram,
+      uniforms: samplerUniforms,
+      bufferGeometry: samplerBufferGeometry
+    });
   });
 
   const program = makeProgramFromShaderMaterial(context, material);
@@ -124,7 +124,12 @@ async function init(): Promise<null> {
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
   }
 
   animate();

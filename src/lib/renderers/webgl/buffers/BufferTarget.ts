@@ -1,10 +1,3 @@
-//
-// OpenGL-compatible texture constants
-//
-// Authors:
-// * @bhouston
-//
-
 import { GL } from '../GL.js';
 
 export enum BufferTarget {

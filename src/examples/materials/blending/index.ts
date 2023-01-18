@@ -106,12 +106,12 @@ async function init(): Promise<null> {
             Blending.Over,
             premultipliedAlpha
           );
-          renderBufferGeometry(
-            canvasFramebuffer,
+          renderBufferGeometry({
+            framebuffer: canvasFramebuffer,
             program,
-            bgUniforms,
+            uniforms: bgUniforms,
             bufferGeometry
-          );
+          });
 
           fgUniforms.localToWorld = localToWorld;
           fgUniforms.premultipliedAlpha = premultipliedAlpha ? 1 : 0;
@@ -121,12 +121,12 @@ async function init(): Promise<null> {
             blending,
             premultipliedAlpha
           );
-          renderBufferGeometry(
-            canvasFramebuffer,
+          renderBufferGeometry({
+            framebuffer: canvasFramebuffer,
             program,
-            fgUniforms,
+            uniforms: fgUniforms,
             bufferGeometry
-          );
+          });
         });
       });
     });

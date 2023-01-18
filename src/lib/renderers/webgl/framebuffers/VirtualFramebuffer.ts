@@ -17,6 +17,7 @@ import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
 import { MaskState } from '../MaskState.js';
 import { Program } from '../programs/Program.js';
+import { UniformBufferMap } from '../programs/ProgramUniformBlock.js';
 import { ProgramVertexArray } from '../programs/ProgramVertexArray.js';
 import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
@@ -70,20 +71,35 @@ export abstract class VirtualFramebuffer implements IDisposable {
   abstract dispose(): void;
 }
 
-export function renderBufferGeometry(
-  framebuffer: VirtualFramebuffer,
-  program: Program,
-  uniforms: UniformValueMap | UniformValueMap[],
-  bufferGeometry: BufferGeometry,
-  programVertexArray: ProgramVertexArray | undefined = undefined,
-  depthTestState: DepthTestState | undefined = undefined,
-  blendState: BlendState | undefined = undefined,
-  maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined
-): void {
+export function renderBufferGeometry(props: {
+  framebuffer: VirtualFramebuffer;
+  program: Program;
+  bufferGeometry: BufferGeometry;
+  uniforms?: UniformValueMap | UniformValueMap[];
+  uniformBuffers?: UniformBufferMap;
+  programVertexArray?: ProgramVertexArray;
+  depthTestState?: DepthTestState;
+  blendState?: BlendState;
+  maskState?: MaskState;
+  cullingState?: CullingState;
+}): void {
+  const {
+    framebuffer,
+    blendState,
+    depthTestState,
+    maskState,
+    cullingState,
+    program,
+    uniforms: uniformValueMaps,
+    uniformBuffers: uniformBufferMap,
+    bufferGeometry,
+    programVertexArray
+  } = props;
   const { context, size } = framebuffer;
 
   context.framebuffer = framebuffer;
+  context.program = program;
+
   context.blendState =
     blendState ?? framebuffer.blendState ?? context.blendState;
   context.depthTestState =
@@ -91,14 +107,35 @@ export function renderBufferGeometry(
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
-  context.program = program;
-  if (uniforms instanceof Array) {
-    for (const uniform of uniforms) {
-      context.program.setUniformValues(uniform);
+
+  for (const uniformValueMap of uniformValueMaps instanceof Array
+    ? uniformValueMaps
+    : [uniformValueMaps]) {
+    for (const uniformName in uniformValueMap) {
+      const uniform = context.program.uniforms[uniformName];
+      if (uniform !== undefined && uniform.block === undefined) {
+        uniform.setIntoLocation(uniformValueMap[uniformName]);
+      } else {
+        console.warn(
+          `Uniform ${uniformName} not found in program ${program.name}`
+        );
+      }
     }
-  } else {
-    context.program.setUniformValues(uniforms);
   }
+
+  if (uniformBufferMap !== undefined) {
+    for (const uniformBufferName in uniformBufferMap) {
+      const uniformBlock = context.program.uniformBlocks[uniformBufferName];
+      if (uniformBlock !== undefined) {
+        uniformBlock.bind(uniformBufferMap[uniformBufferName]);
+      } else {
+        console.warn(
+          `Uniform block ${uniformBufferName} not found in program ${program.name}`
+        );
+      }
+    }
+  }
+
   if (programVertexArray !== undefined) {
     context.program.setAttributeBuffers(programVertexArray);
   } else {
@@ -141,7 +178,7 @@ export function renderVertexArrayObject(
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
-  context.program.setUniformValues(uniforms);
+  context.program.setUniformsIntoLocations(uniforms);
   context.viewport = new Box2(new Vec2(), framebuffer.size);
 
   // draw
@@ -169,7 +206,7 @@ export function renderPass(
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
   context.program = program;
-  context.program.setUniformValues(uniforms);
+  context.program.setUniformsIntoLocations(uniforms);
   context.viewport = new Box2(new Vec2(), framebuffer.size);
 
   throw new Error('Not implemented');

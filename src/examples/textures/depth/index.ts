@@ -74,11 +74,21 @@ async function init(): Promise<null> {
     uniforms.map = uvTestTexture;
 
     framebuffer.clear(BufferBit.All, whiteClearState);
-    renderBufferGeometry(framebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
 
     uniforms.map = depthAttachment;
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
 
     requestAnimationFrame(animate);
   }

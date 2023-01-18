@@ -14,7 +14,8 @@ export class Buffer implements IResource {
     public context: RenderingContext,
     arrayBuffer: ArrayBuffer,
     public target: BufferTarget = BufferTarget.Array,
-    public usage: BufferUsage = BufferUsage.StaticDraw
+    public usage: BufferUsage = BufferUsage.StaticDraw,
+    public binding = -1
   ) {
     const { gl, resources } = context;
     // Create a buffer and put three 2d clip space points in it
@@ -36,6 +37,9 @@ export class Buffer implements IResource {
     gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
     gl.bufferSubData(this.target, 0, arrayBuffer);
 
+    if (this.binding !== -1) {
+      gl.bindBufferBase(this.target, this.binding, this.glBuffer);
+    }
     resources.register(this);
   }
 

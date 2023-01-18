@@ -101,7 +101,12 @@ async function init(): Promise<null> {
     uniforms.map = uvTestTexture;
 
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
 
     requestAnimationFrame(animate);
   }

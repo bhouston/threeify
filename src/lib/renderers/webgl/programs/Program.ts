@@ -18,7 +18,6 @@ import { ProgramUniform } from './ProgramUniform.js';
 import { ProgramUniformBlock } from './ProgramUniformBlock.js';
 import { ProgramVertexArray } from './ProgramVertexArray.js';
 import { numTextureUnits } from './UniformType.js';
-import { UniformValueMap } from './UniformValueMap.js';
 
 export type UniformMap = { [key: string]: ProgramUniform };
 export type UniformBlockMap = {
@@ -28,10 +27,12 @@ export type AttributeMap = { [key: string]: ProgramAttribute };
 
 export class Program implements IResource {
   public readonly id = generateUUID();
+  public readonly name: string;
+  public readonly context: RenderingContext;
   disposed = false;
-  vertexShader: Shader;
-  fragmentShader: Shader;
-  glProgram: WebGLProgram;
+  public readonly vertexShader: Shader;
+  public readonly fragmentShader: Shader;
+  public readonly glProgram: WebGLProgram;
   #validated = false;
   #uniformsInitialized = false;
   #uniforms: UniformMap = {};
@@ -39,12 +40,23 @@ export class Program implements IResource {
   #attributesInitialized = false;
   #attributes: AttributeMap = {};
 
-  constructor(
-    public context: RenderingContext,
-    vertexShaderCode: string,
-    fragmentShaderCode: string,
-    shaderDefines: ShaderDefines = {}
-  ) {
+  constructor(props: {
+    context: RenderingContext;
+    vertexShaderCode: string;
+    fragmentShaderCode: string;
+    shaderDefines?: ShaderDefines;
+    name?: string;
+  }) {
+    const {
+      context,
+      vertexShaderCode,
+      fragmentShaderCode,
+      shaderDefines,
+      name
+    } = props;
+    this.context = context;
+    this.name = name ?? '';
+
     this.vertexShader = new Shader(
       this.context,
       vertexShaderCode,
@@ -197,18 +209,6 @@ export class Program implements IResource {
     return this.#attributes;
   }
 
-  setUniformValues(uniformValueMap: UniformValueMap): this {
-    this.context.program = this;
-
-    for (const uniformName in uniformValueMap) {
-      const uniform = this.uniforms[uniformName];
-      if (uniform !== undefined) {
-        uniform.setIntoLocation(uniformValueMap[uniformName]);
-      }
-    }
-    return this;
-  }
-
   setAttributeBuffers(vao: ProgramVertexArray): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
   setAttributeBuffers(buffers: ProgramVertexArray | BufferGeometry): this {
@@ -255,10 +255,10 @@ export function makeProgramFromShaderMaterial(
   shaderMaterial: ShaderMaterial,
   shaderDefines: ShaderDefines = {}
 ): Program {
-  return new Program(
+  return new Program({
     context,
-    shaderMaterial.vertexShaderCode,
-    shaderMaterial.fragmentShaderCode,
+    vertexShaderCode: shaderMaterial.vertexShaderCode,
+    fragmentShaderCode: shaderMaterial.fragmentShaderCode,
     shaderDefines
-  );
+  });
 }

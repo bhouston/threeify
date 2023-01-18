@@ -1,14 +1,20 @@
+import { Buffer } from '../buffers/Buffer';
+import { BufferTarget } from '../buffers/BufferTarget';
+import { BufferUsage } from '../buffers/BufferUsage';
 import { Program } from './Program';
 import { ProgramUniform } from './ProgramUniform';
-import { ProgramUniformBuffer } from './ProgramUniformBuffer';
+import { UniformValueMap } from './UniformValueMap';
 
 // based on https://gist.github.com/jialiang/2880d4cc3364df117320e8cb324c2880
+export type UniformBufferMap = { [name: string]: Buffer };
 
 export class ProgramUniformBlock {
+  static nextBindIndex = 0;
+
   public readonly blockName: string;
   public readonly blockSize: number;
   public readonly uniforms: { [name: string]: ProgramUniform } = {};
-  public bindTarget = -1;
+  public binding = -1;
 
   constructor(
     public readonly program: Program,
@@ -34,16 +40,19 @@ export class ProgramUniformBlock {
     );
   }
 
-  allocateUniformBuffer(): ProgramUniformBuffer {
-    return new ProgramUniformBuffer(this);
+  allocateUniformBuffer(): Buffer {
+    return new Buffer(
+      this.program.context,
+      new ArrayBuffer(this.blockSize),
+      BufferTarget.Uniform,
+      BufferUsage.DynamicDraw,
+      ProgramUniformBlock.nextBindIndex++
+    );
   }
 
-  bind(programUniformBuffer: ProgramUniformBuffer): void {
-    if (programUniformBuffer.programUniformBlock !== this)
-      throw new Error('Uniform buffer does not belong to this block.');
-
+  bind(buffer: Buffer): void {
     // nothing to do, already bound.
-    if (this.bindTarget === programUniformBuffer.bindTarget) return;
+    if (this.binding === buffer.binding) return;
 
     const { gl } = this.program.context;
     const { glProgram } = this.program;
@@ -52,7 +61,20 @@ export class ProgramUniformBlock {
     gl.uniformBlockBinding(
       glProgram,
       this.blockIndex,
-      (this.bindTarget = programUniformBuffer.bindTarget)
+      (this.binding = buffer.binding)
     );
+  }
+
+  setUniformsIntoBuffer(
+    uniformValueMap: UniformValueMap,
+    buffer: Buffer
+  ): this {
+    for (const uniformName in uniformValueMap) {
+      const uniform = this.uniforms[uniformName];
+      if (uniform !== undefined) {
+        uniform.setIntoBuffer(uniformValueMap[uniformName], buffer);
+      }
+    }
+    return this;
   }
 }

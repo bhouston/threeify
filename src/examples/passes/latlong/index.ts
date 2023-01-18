@@ -84,12 +84,12 @@ async function init(): Promise<null> {
     );
     passUniforms.equirectangularMap = texImage2Ds[imageIndex];
 
-    renderBufferGeometry(
-      canvasFramebuffer,
-      passProgram,
-      passUniforms,
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program: passProgram,
+      uniforms: passUniforms,
       bufferGeometry
-    );
+    });
 
     orbit.update();
   }

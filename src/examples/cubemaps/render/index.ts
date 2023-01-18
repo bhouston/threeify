@@ -94,19 +94,24 @@ async function init(): Promise<null> {
         new Vec3(index / 6 + now * 0.0001, 0.5, 0.5)
       );
 
-      renderBufferGeometry(
+      renderBufferGeometry({
         framebuffer,
-        patternProgram,
-        patternUniforms,
-        patternBufferGeometry
-      );
+        program: patternProgram,
+        uniforms: patternUniforms,
+        bufferGeometry: patternBufferGeometry
+      });
     });
 
     uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
   }
 
   animate();
