@@ -67,12 +67,15 @@ export class ProgramUniformBlock {
     uniformValueMap: UniformValueMap,
     buffer: Buffer
   ): this {
+    console.log('setting uniforms into buffer', uniformValueMap);
     for (const uniformName in uniformValueMap) {
       const uniform = this.uniforms[uniformName];
+      console.log('setting uniform', uniformName, uniform);
       if (uniform !== undefined) {
         uniform.setIntoBuffer(uniformValueMap[uniformName], buffer);
       }
     }
+    console.log('done setting uniforms into buffer');
     return this;
   }
 }

@@ -10,7 +10,6 @@ import { Box2 } from '../../../math/Box2.js';
 import { Vec2 } from '../../../math/Vec2.js';
 import { Camera } from '../../../scene/cameras/Camera.js';
 import { SceneNode } from '../../../scene/SceneNode.js';
-import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
@@ -145,10 +144,10 @@ function setProgramUniforms(
       if (uniform !== undefined && uniform.block === undefined) {
         uniform.setIntoLocation(uniformValueMap[uniformName]);
       } else {
-        warnOnce(
+        /*    warnOnce(
           `Uniform ${uniformName} not found in program ${program.name}`,
           uniform
-        );
+        );*/
       }
     }
   }
@@ -159,9 +158,9 @@ function setProgramUniforms(
       if (uniformBlock !== undefined) {
         uniformBlock.bind(uniformBufferMap[uniformBufferName]);
       } else {
-        warnOnce(
+        /*   warnOnce(
           `Uniform block ${uniformBufferName} not found in program ${program.name}`
-        );
+        );*/
       }
     }
   }

@@ -34,6 +34,7 @@ export class ProgramUniform {
   public readonly arrayLength: number;
   public readonly arrayDimensions: number;
   public readonly uniformType: UniformType;
+  public readonly bytesPerElement: number;
   public readonly glLocation: WebGLUniformLocation | undefined = undefined;
   public readonly numElements: number;
   public readonly glType: number;
@@ -71,9 +72,9 @@ export class ProgramUniform {
       this.uniformType = activeInfo.type as UniformType;
 
       const typeInfo = uniformTypeInfo(this.uniformType);
-
+      this.bytesPerElement = typeInfo.bytesPerElement;
       this.numElements = typeInfo.numElements * this.arrayLength;
-      this.sizeInBytes = this.numElements * typeInfo.bytesPerElement;
+      this.sizeInBytes = this.numElements * this.bytesPerElement;
       this.glType = typeInfo.glType;
 
       if (this.block === undefined) {
@@ -93,10 +94,16 @@ export class ProgramUniform {
       );
     }
 
-    const { blockOffset, uniformType, numElements } = this;
+    const { blockOffset, uniformType, numElements, bytesPerElement } = this;
 
     const arrayBufferView = uniformValueToArrayBuffer(uniformType, value);
-    buffer.writeSubData(arrayBufferView, blockOffset, 0, numElements);
+    console.log('writing to buffer', arrayBufferView, blockOffset, numElements);
+    buffer.writeSubData(
+      arrayBufferView,
+      blockOffset,
+      0,
+      arrayBufferView.byteLength / bytesPerElement
+    );
 
     return this;
   }

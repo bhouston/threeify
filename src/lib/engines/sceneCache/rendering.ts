@@ -24,18 +24,21 @@ export function renderSceneViaSceneCache(
       uniformBuffers
     } = meshBatch;
 
+    let uniforms = [
+      ...uniformsArray,
+      cameraUniforms,
+      lightUniforms
+    ] as UniformValueMap[];
     const lightingBuffer = shaderNameToLightingUniformBuffers.get(program.name);
     if (uniformBuffers !== undefined && lightingBuffer !== undefined) {
       uniformBuffers['Lighting'] = lightingBuffer;
+
+      uniforms = [...uniformsArray, cameraUniforms] as UniformValueMap[];
     }
     renderBufferGeometry({
       framebuffer,
       program,
-      uniforms: [
-        ...uniformsArray,
-        cameraUniforms,
-        lightUniforms
-      ] as UniformValueMap[],
+      uniforms,
       uniformBuffers,
       bufferGeometry,
       programVertexArray
