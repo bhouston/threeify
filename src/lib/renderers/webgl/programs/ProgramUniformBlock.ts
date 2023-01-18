@@ -8,6 +8,7 @@ export class ProgramUniformBlock {
   public readonly blockName: string;
   public readonly blockSize: number;
   public readonly uniforms: { [name: string]: ProgramUniform } = {};
+  public bindTarget = -1;
 
   constructor(
     public readonly program: Program,
@@ -38,17 +39,20 @@ export class ProgramUniformBlock {
   }
 
   bind(programUniformBuffer: ProgramUniformBuffer): void {
+    if (programUniformBuffer.programUniformBlock !== this)
+      throw new Error('Uniform buffer does not belong to this block.');
+
+    // nothing to do, already bound.
+    if (this.bindTarget === programUniformBuffer.bindTarget) return;
+
     const { gl } = this.program.context;
     const { glProgram } = this.program;
 
-    // Bind the Uniform Buffer to the binding point
-    gl.bindBufferBase(
-      gl.UNIFORM_BUFFER,
-      this.blockIndex,
-      programUniformBuffer.glBuffer
-    );
-
     // Bind the Uniform Buffer to the uniform block
-    gl.uniformBlockBinding(glProgram, this.blockIndex, this.blockIndex);
+    gl.uniformBlockBinding(
+      glProgram,
+      this.blockIndex,
+      (this.bindTarget = programUniformBuffer.bindTarget)
+    );
   }
 }

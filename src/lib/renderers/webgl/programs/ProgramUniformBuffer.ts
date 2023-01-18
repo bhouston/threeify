@@ -5,10 +5,15 @@ import { uniformTypeInfo } from './UniformType';
 import { uniformValueToArrayBuffer } from './UniformValue';
 import { UniformValue } from './UniformValueMap';
 
+// NOTE: currently this uniform buffer is directly tied to the program & its uniform block.
+// TODO: in the future it may be possible to have different programs that have identical uniform blocks,
+// thus allowing one to reuse the same uniform buffer for multiple programs.
 export class ProgramUniformBuffer implements IResource {
+  static nextBindTarget = 0;
+
   public readonly id = generateUUID();
   disposed = false;
-  static nextBindTarget = 0;
+  bindTarget: number;
 
   public readonly glBuffer: WebGLBuffer;
 
@@ -31,6 +36,13 @@ export class ProgramUniformBuffer implements IResource {
       gl.DYNAMIC_DRAW
     );
 
+    // Bind the Uniform Buffer to the binding point, pre-bind all buffers with unique bind targets
+    // so that it is already ready to be used.
+    gl.bindBufferBase(
+      gl.UNIFORM_BUFFER,
+      (this.bindTarget = ProgramUniformBuffer.nextBindTarget++),
+      this.glBuffer
+    );
     return this;
   }
 
