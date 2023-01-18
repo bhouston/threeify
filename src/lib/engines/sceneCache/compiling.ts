@@ -61,6 +61,8 @@ export function sceneToSceneCache(
     }
   });
 
+  createLightingUniformBuffers(sceneCache);
+
   createMeshBatches(sceneCache);
 
   return sceneCache;
@@ -99,6 +101,7 @@ function meshToSceneCache(
   if (shaderNameToProgram.get(material.shaderName) === undefined) {
     // get shader material
     const shaderMaterial = shaderResolver(material.shaderName);
+    shaderMaterial.name = material.shaderName;
     const program = makeProgramFromShaderMaterial(context, shaderMaterial);
     shaderNameToProgram.set(material.shaderName, program);
   }
@@ -222,9 +225,7 @@ function createMeshBatches(sceneCache: SceneCache) {
         throw new Error('Node Uniforms not found');
 
       const uniformValueMaps: UniformValueMap[] = [materialUniforms];
-
       const uniformBufferMap: UniformBufferMap = {};
-
       const nodeUniformBlock = program.uniformBlocks['Node'];
       if (nodeUniformBlock !== undefined) {
         const nodeUniformBuffer = nodeUniformBlock.allocateUniformBuffer();
@@ -252,6 +253,32 @@ function createMeshBatches(sceneCache: SceneCache) {
           uniformBufferMap
         )
       );
+    }
+  }
+}
+function createLightingUniformBuffers(sceneCache: SceneCache) {
+  const {
+    shaderNameToProgram,
+    lightUniforms,
+    shaderNameToLightUniformBuffers
+  } = sceneCache;
+  console.log('shaderNameToProgram', shaderNameToProgram);
+
+  for (const shaderName of shaderNameToProgram.keys()) {
+    console.log('shaderName', shaderName);
+    const program = shaderNameToProgram.get(shaderName);
+    if (program === undefined) throw new Error('Program not found');
+    const lightingUniformBlock = program.uniformBlocks['Lighting'];
+    console.log('lightingUniformBlock', lightingUniformBlock);
+    if (lightingUniformBlock !== undefined) {
+      const lightingUniformBuffer =
+        lightingUniformBlock.allocateUniformBuffer();
+      lightingUniformBlock.setUniformsIntoBuffer(
+        lightUniforms as unknown as UniformValueMap,
+        lightingUniformBuffer
+      );
+      console.log('created lighting uniform buffer', lightUniforms);
+      shaderNameToLightUniformBuffers.set(shaderName, lightingUniformBuffer);
     }
   }
 }

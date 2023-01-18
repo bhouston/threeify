@@ -9,7 +9,12 @@ export function renderSceneViaSceneCache(
   framebuffer: VirtualFramebuffer,
   sceneCache: SceneCache
 ) {
-  const { meshBatches, cameraUniforms, lightUniforms } = sceneCache;
+  const {
+    meshBatches,
+    cameraUniforms,
+    lightUniforms,
+    shaderNameToLightUniformBuffers: shaderNameToLightingUniformBuffers
+  } = sceneCache;
   for (const meshBatch of meshBatches) {
     const {
       program,
@@ -18,6 +23,11 @@ export function renderSceneViaSceneCache(
       programVertexArray,
       uniformBuffers
     } = meshBatch;
+
+    const lightingBuffer = shaderNameToLightingUniformBuffers.get(program.name);
+    if (uniformBuffers !== undefined && lightingBuffer !== undefined) {
+      uniformBuffers['Lighting'] = lightingBuffer;
+    }
     renderBufferGeometry({
       framebuffer,
       program,

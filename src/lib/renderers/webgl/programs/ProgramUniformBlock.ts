@@ -14,7 +14,7 @@ export class ProgramUniformBlock {
   public readonly name: string;
   public readonly blockSize: number;
   public readonly uniforms: { [name: string]: ProgramUniform } = {};
-  public binding = -1;
+  public binding = ProgramUniformBlock.nextBindIndex++;
 
   constructor(
     public readonly program: Program,
@@ -45,24 +45,22 @@ export class ProgramUniformBlock {
       this.program.context,
       new ArrayBuffer(this.blockSize),
       BufferTarget.Uniform,
-      BufferUsage.DynamicDraw,
-      ProgramUniformBlock.nextBindIndex++
+      BufferUsage.DynamicDraw
     );
   }
 
   bind(buffer: Buffer): void {
     // nothing to do, already bound.
-    if (this.binding === buffer.binding) return;
 
     const { gl } = this.program.context;
     const { glProgram } = this.program;
 
+    if (this.binding !== -1) {
+      gl.bindBufferBase(buffer.target, this.binding, buffer.glBuffer);
+    }
+
     // Bind the Uniform Buffer to the uniform block
-    gl.uniformBlockBinding(
-      glProgram,
-      this.blockIndex,
-      (this.binding = buffer.binding)
-    );
+    gl.uniformBlockBinding(glProgram, this.blockIndex, this.binding);
   }
 
   setUniformsIntoBuffer(

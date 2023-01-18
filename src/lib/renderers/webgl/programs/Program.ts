@@ -27,7 +27,7 @@ export type AttributeMap = { [key: string]: ProgramAttribute };
 
 export class Program implements IResource {
   public readonly id = generateUUID();
-  public readonly name: string;
+  public name: string;
   public readonly context: RenderingContext;
   disposed = false;
   public readonly vertexShader: Shader;
@@ -167,6 +167,7 @@ export class Program implements IResource {
         if (uniformBlock === undefined) {
           uniformBlock = new ProgramUniformBlock(this, blockIndex);
         }
+        uniformBlocks[blockIndex] = uniformBlock;
       }
 
       const uniform = new ProgramUniform(this, i, uniformBlock, blockOffset);
@@ -260,10 +261,12 @@ export function makeProgramFromShaderMaterial(
   shaderMaterial: ShaderMaterial,
   shaderDefines: ShaderDefines = {}
 ): Program {
-  return new Program({
+  const program = new Program({
     context,
     vertexShaderCode: shaderMaterial.vertexShaderCode,
     fragmentShaderCode: shaderMaterial.fragmentShaderCode,
     shaderDefines
   });
+  program.name = shaderMaterial.name;
+  return program;
 }
