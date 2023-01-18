@@ -10,6 +10,7 @@ import { Box2 } from '../../../math/Box2.js';
 import { Vec2 } from '../../../math/Vec2.js';
 import { Camera } from '../../../scene/cameras/Camera.js';
 import { SceneNode } from '../../../scene/SceneNode.js';
+import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
@@ -108,33 +109,7 @@ export function renderBufferGeometry(props: {
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
 
-  for (const uniformValueMap of uniformValueMaps instanceof Array
-    ? uniformValueMaps
-    : [uniformValueMaps]) {
-    for (const uniformName in uniformValueMap) {
-      const uniform = context.program.uniforms[uniformName];
-      if (uniform !== undefined && uniform.block === undefined) {
-        uniform.setIntoLocation(uniformValueMap[uniformName]);
-      } else {
-        console.warn(
-          `Uniform ${uniformName} not found in program ${program.name}`
-        );
-      }
-    }
-  }
-
-  if (uniformBufferMap !== undefined) {
-    for (const uniformBufferName in uniformBufferMap) {
-      const uniformBlock = context.program.uniformBlocks[uniformBufferName];
-      if (uniformBlock !== undefined) {
-        uniformBlock.bind(uniformBufferMap[uniformBufferName]);
-      } else {
-        console.warn(
-          `Uniform block ${uniformBufferName} not found in program ${program.name}`
-        );
-      }
-    }
-  }
+  setProgramUniforms(context.program, uniformValueMaps, uniformBufferMap);
 
   if (programVertexArray !== undefined) {
     context.program.setAttributeBuffers(programVertexArray);
@@ -157,58 +132,37 @@ export function renderBufferGeometry(props: {
   }
 }
 
-export function renderVertexArrayObject(
-  framebuffer: VirtualFramebuffer,
+function setProgramUniforms(
   program: Program,
-  uniforms: UniformValueMap,
-  vao: ProgramVertexArray,
-  depthTestState: DepthTestState | undefined = undefined,
-  blendState: BlendState | undefined = undefined,
-  maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined
-): void {
-  const { context } = framebuffer;
+  uniformValueMaps?: UniformValueMap | UniformValueMap[],
+  uniformBufferMap?: UniformBufferMap
+) {
+  for (const uniformValueMap of uniformValueMaps instanceof Array
+    ? uniformValueMaps
+    : [uniformValueMaps]) {
+    for (const uniformName in uniformValueMap) {
+      const uniform = program.uniforms[uniformName];
+      if (uniform !== undefined && uniform.block === undefined) {
+        uniform.setIntoLocation(uniformValueMap[uniformName]);
+      } else {
+        warnOnce(
+          `Uniform ${uniformName} not found in program ${program.name}`,
+          uniform
+        );
+      }
+    }
+  }
 
-  context.framebuffer = framebuffer;
-  context.blendState =
-    blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState =
-    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
-  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState =
-    cullingState ?? framebuffer.cullingState ?? context.cullingState;
-  context.program = program;
-  context.program.setUniformsIntoLocations(uniforms);
-  context.viewport = new Box2(new Vec2(), framebuffer.size);
-
-  // draw
-  const { gl } = context;
-  gl.drawArrays(vao.primitive, vao.offset, vao.count);
-}
-
-export function renderPass(
-  framebuffer: VirtualFramebuffer,
-  program: Program,
-  uniforms: UniformValueMap,
-  depthTestState: DepthTestState | undefined = undefined,
-  blendState: BlendState | undefined = undefined,
-  maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined
-): void {
-  const { context } = framebuffer;
-
-  context.framebuffer = framebuffer;
-  context.blendState =
-    blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState =
-    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
-  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState =
-    cullingState ?? framebuffer.cullingState ?? context.cullingState;
-  context.program = program;
-  context.program.setUniformsIntoLocations(uniforms);
-  context.viewport = new Box2(new Vec2(), framebuffer.size);
-
-  throw new Error('Not implemented');
-  // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
+  if (uniformBufferMap !== undefined) {
+    for (const uniformBufferName in uniformBufferMap) {
+      const uniformBlock = program.uniformBlocks[uniformBufferName];
+      if (uniformBlock !== undefined) {
+        uniformBlock.bind(uniformBufferMap[uniformBufferName]);
+      } else {
+        warnOnce(
+          `Uniform block ${uniformBufferName} not found in program ${program.name}`
+        );
+      }
+    }
+  }
 }

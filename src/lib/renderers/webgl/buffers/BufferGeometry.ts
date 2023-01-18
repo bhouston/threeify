@@ -8,6 +8,7 @@
 
 import { IDisposable } from '../../../core/types.js';
 import { Geometry } from '../../../geometry/Geometry.js';
+import { warnOnce } from '../../../warnOnce.js';
 import { RenderingContext } from '../RenderingContext.js';
 import {
   BufferAccessor,
@@ -27,7 +28,7 @@ export class BufferGeometry implements IDisposable {
   constructor(public context: RenderingContext) {}
 
   dispose(): void {
-    console.warn(
+    warnOnce(
       'This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.'
     );
     if (this.disposed) return;

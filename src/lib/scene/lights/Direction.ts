@@ -4,6 +4,7 @@ import { euler3ToMat4 } from '../../math/Mat4.Functions.js';
 import { Mat4 } from '../../math/Mat4.js';
 import { vec3Length } from '../../math/Vec3.Functions.js';
 import { Vec3 } from '../../math/Vec3.js';
+import { warnOnce } from '../../warnOnce.js';
 
 export function negativeZDirectionToEuler(
   d: Vec3,
@@ -11,7 +12,7 @@ export function negativeZDirectionToEuler(
 ): Euler3 {
   // NOTE: This has never been tested.  It may not work.
   // found on stackoverflow.
-  console.warn('This has never been tested.');
+  warnOnce('This has never been tested.');
 
   /* Find cosφ and sinφ */
   const c1 = vec3Length(d);
@@ -49,7 +50,7 @@ export function eulerToNegativeZDirection(
   e: Euler3,
   result = new Vec3()
 ): Vec3 {
-  console.warn('This has never been tested.');
+  warnOnce('This has never been tested.');
   const m = euler3ToMat4(e);
   const te = m.elements;
   return result.set(te[2], te[6], te[10]);

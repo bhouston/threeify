@@ -11,7 +11,7 @@ export type UniformBufferMap = { [name: string]: Buffer };
 export class ProgramUniformBlock {
   static nextBindIndex = 0;
 
-  public readonly blockName: string;
+  public readonly name: string;
   public readonly blockSize: number;
   public readonly uniforms: { [name: string]: ProgramUniform } = {};
   public binding = -1;
@@ -25,11 +25,11 @@ export class ProgramUniformBlock {
 
     const name = gl.getActiveUniformBlockName(glProgram, this.blockIndex);
     if (name === null) throw new Error('Failed to get uniform block name.');
-    this.blockName = name;
+    this.name = name;
 
     // TODO: remove this, this is just a sanity check
     // Get the index of the Uniform Block from any program
-    if (this.blockIndex !== gl.getUniformBlockIndex(glProgram, this.blockName))
+    if (this.blockIndex !== gl.getUniformBlockIndex(glProgram, this.name))
       throw new Error('Uniform block index inconsistency.');
 
     // Get the size of the Uniform Block in bytes

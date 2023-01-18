@@ -19,9 +19,9 @@ import { ProgramUniformBlock } from './ProgramUniformBlock.js';
 import { ProgramVertexArray } from './ProgramVertexArray.js';
 import { numTextureUnits } from './UniformType.js';
 
-export type UniformMap = { [key: string]: ProgramUniform };
+export type UniformMap = { [name: string]: ProgramUniform };
 export type UniformBlockMap = {
-  [key: string]: ProgramUniformBlock;
+  [name: string]: ProgramUniformBlock;
 };
 export type AttributeMap = { [key: string]: ProgramAttribute };
 
@@ -159,20 +159,25 @@ export class Program implements IResource {
     for (let i = 0; i < numUniforms; ++i) {
       const blockIndex = blockIndices[i];
       const blockOffset = blockOffsets[i];
-      const uniform = new ProgramUniform(this, i, blockIndex, blockOffset);
+
+      let uniformBlock;
+
+      if (blockIndex !== -1) {
+        uniformBlock = uniformBlocks[blockIndex];
+        if (uniformBlock === undefined) {
+          uniformBlock = new ProgramUniformBlock(this, blockIndex);
+        }
+      }
+
+      const uniform = new ProgramUniform(this, i, uniformBlock, blockOffset);
       this.#uniforms[uniform.name] = uniform;
 
       if (numTextureUnits(uniform.uniformType) > 0) {
         uniform.textureUnit = textureUnitCount;
         textureUnitCount++;
       }
-
-      if (blockIndex !== -1) {
-        let uniformBlock = uniformBlocks[blockIndex];
-        if (uniformBlock === undefined) {
-          uniformBlock = new ProgramUniformBlock(this, blockIndex);
-          this.#uniformBlocks[blockIndex] = uniformBlock;
-        }
+      if (uniformBlock !== undefined) {
+        this.#uniformBlocks[uniformBlock.name] = uniformBlock;
         uniformBlock.uniforms[uniform.name] = uniform;
       }
     }

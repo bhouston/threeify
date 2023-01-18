@@ -44,7 +44,7 @@ export class ProgramUniform {
   constructor(
     public readonly program: Program,
     public readonly index: number,
-    public readonly block: ProgramUniformBlock | undefined = undefined,
+    public readonly block?: ProgramUniformBlock,
     public readonly blockOffset: number = -1
   ) {
     this.context = program.context;
@@ -75,14 +75,6 @@ export class ProgramUniform {
       this.numElements = typeInfo.numElements * this.arrayLength;
       this.sizeInBytes = this.numElements * typeInfo.bytesPerElement;
       this.glType = typeInfo.glType;
-
-      console.log(
-        `uniform: ${this.fullName} ${this.name} ${this.uniformType} ${
-          this.arrayLength
-        } ${this.arrayDimensions} ${this.block?.blockIndex || -1} ${
-          this.blockOffset
-        }}`
-      );
 
       if (this.block === undefined) {
         const glLocation = gl.getUniformLocation(program.glProgram, this.name);
