@@ -122,7 +122,6 @@ export function uniformValueArrayToArrayBuffer(
     // case UniformType.BoolVec4:
     case UniformType.Int:
       if (typeof firstElement === 'number') {
-        console.log('value', value);
         return new Int32Array(value as number[]);
       }
       break;

@@ -38,6 +38,7 @@ export class RenderingContext {
   #clearState: ClearState = new ClearState();
   #maskState: MaskState = new MaskState();
   #cullingState: CullingState = new CullingState();
+  initialMode = true;
 
   constructor(
     public canvas: HTMLCanvasElement,
@@ -65,6 +66,13 @@ export class RenderingContext {
 
     this.canvasFramebuffer = new CanvasFramebuffer(this);
     this.#framebuffer = this.canvasFramebuffer;
+    this.depthTestState = this.#depthTestState;
+    this.cullingState = this.#cullingState;
+    this.clearState = this.#clearState;
+    this.blendState = this.#blendState;
+    this.maskState = this.#maskState;
+
+    this.initialMode = false;
   }
 
   get debugVendor(): string {
@@ -129,10 +137,10 @@ export class RenderingContext {
   }
 
   set viewport(v: Box2) {
-    if (!box2Equals(this.#viewport, v)) {
-      this.gl.viewport(v.x, v.y, v.width, v.height);
-      this.#viewport.copy(v);
-    }
+    if (!this.initialMode && box2Equals(this.#viewport, v)) return;
+
+    this.gl.viewport(v.x, v.y, v.width, v.height);
+    this.#viewport.copy(v);
   }
 
   get blendState(): BlendState {
@@ -140,6 +148,8 @@ export class RenderingContext {
   }
 
   set blendState(bs: BlendState) {
+    if (!this.initialMode && bs.equals(this.#blendState)) return;
+
     this.gl.enable(GL.BLEND);
     this.gl.blendEquation(bs.equation);
     this.gl.blendFuncSeparate(
@@ -161,6 +171,8 @@ export class RenderingContext {
   }
 
   set depthTestState(dts: DepthTestState) {
+    if (!this.initialMode && dts.equals(this.#depthTestState)) return;
+
     if (dts.enabled) {
       this.gl.enable(GL.DEPTH_TEST);
     } else {
@@ -175,6 +187,8 @@ export class RenderingContext {
   }
 
   set clearState(cs: ClearState) {
+    if (!this.initialMode && cs.equals(this.#clearState)) return;
+
     this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
     this.gl.clearDepth(cs.depth);
     this.gl.clearStencil(cs.stencil);
@@ -186,6 +200,8 @@ export class RenderingContext {
   }
 
   set maskState(ms: MaskState) {
+    if (!this.initialMode && ms.equals(this.#maskState)) return;
+
     this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
     this.gl.depthMask(ms.depth);
     this.gl.stencilMask(ms.stencil);
@@ -197,6 +213,8 @@ export class RenderingContext {
   }
 
   set cullingState(cs: CullingState) {
+    if (!this.initialMode && cs.equals(this.#cullingState)) return;
+
     if (cs.enabled) {
       this.gl.enable(GL.CULL_FACE);
     } else {

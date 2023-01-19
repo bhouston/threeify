@@ -15,6 +15,7 @@ export class ProgramUniformBlock {
   public readonly blockSize: number;
   public readonly uniforms: { [name: string]: ProgramUniform } = {};
   public binding = ProgramUniformBlock.nextBindIndex++;
+  public boundBuffer?: Buffer;
 
   constructor(
     public readonly program: Program,
@@ -55,27 +56,31 @@ export class ProgramUniformBlock {
     const { gl } = this.program.context;
     const { glProgram } = this.program;
 
-    if (this.binding !== -1) {
-      gl.bindBufferBase(buffer.target, this.binding, buffer.glBuffer);
-    }
+    if (this.boundBuffer !== buffer) {
+      if (this.binding !== -1) {
+        gl.bindBufferBase(buffer.target, this.binding, buffer.glBuffer);
+      }
 
-    // Bind the Uniform Buffer to the uniform block
-    gl.uniformBlockBinding(glProgram, this.blockIndex, this.binding);
+      // Bind the Uniform Buffer to the uniform block
+      gl.uniformBlockBinding(glProgram, this.blockIndex, this.binding);
+
+      this.boundBuffer = buffer;
+    }
   }
 
   setUniformsIntoBuffer(
     uniformValueMap: UniformValueMap,
     buffer: Buffer
   ): this {
-    console.log('setting uniforms into buffer', uniformValueMap);
+    //console.log('setting uniforms into buffer', uniformValueMap);
     for (const uniformName in uniformValueMap) {
       const uniform = this.uniforms[uniformName];
-      console.log('setting uniform', uniformName, uniform);
+      //console.log('setting uniform', uniformName, uniform);
       if (uniform !== undefined) {
         uniform.setIntoBuffer(uniformValueMap[uniformName], buffer);
       }
     }
-    console.log('done setting uniforms into buffer');
+    //console.log('done setting uniforms into buffer');
     return this;
   }
 }

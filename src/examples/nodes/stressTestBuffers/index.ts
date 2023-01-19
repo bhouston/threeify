@@ -35,9 +35,10 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const geometry = icosahedronGeometry(0.1, 5, true);
+  const geometry = icosahedronGeometry(0.1, 1, true);
+  console.log('num faces', geometry.attributes.position?.count);
   const root = new SceneNode({ name: 'root' });
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const sphereMesh = new Mesh({
       position: new Vec3(
         Math.random() * 2 - 1,

@@ -262,14 +262,14 @@ function createLightingUniformBuffers(sceneCache: SceneCache) {
     lightUniforms,
     shaderNameToLightUniformBuffers
   } = sceneCache;
-  console.log('shaderNameToProgram', shaderNameToProgram);
+  // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const shaderName of shaderNameToProgram.keys()) {
-    console.log('shaderName', shaderName);
+    // console.log('shaderName', shaderName);
     const program = shaderNameToProgram.get(shaderName);
     if (program === undefined) throw new Error('Program not found');
     const lightingUniformBlock = program.uniformBlocks['Lighting'];
-    console.log('lightingUniformBlock', lightingUniformBlock);
+    //console.log('lightingUniformBlock', lightingUniformBlock);
     if (lightingUniformBlock !== undefined) {
       const lightingUniformBuffer =
         lightingUniformBlock.allocateUniformBuffer();
@@ -277,7 +277,7 @@ function createLightingUniformBuffers(sceneCache: SceneCache) {
         lightUniforms as unknown as UniformValueMap,
         lightingUniformBuffer
       );
-      console.log('created lighting uniform buffer', lightUniforms);
+      //console.log('created lighting uniform buffer', lightUniforms);
       shaderNameToLightUniformBuffers.set(shaderName, lightingUniformBuffer);
     }
   }

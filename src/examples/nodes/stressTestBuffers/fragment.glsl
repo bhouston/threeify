@@ -21,7 +21,7 @@ uniform vec3 albedo;
 uniform sampler2D albedoTexture;
 uniform float roughness;
 
-mat4 worldToView;
+uniform  mat4 worldToView;
 
 out vec4 outputColor;
 
