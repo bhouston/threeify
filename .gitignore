@@ -21,3 +21,4 @@ output.txt
 docs
 .gitignore
 .DS_Store
+*.tsbuildinfo

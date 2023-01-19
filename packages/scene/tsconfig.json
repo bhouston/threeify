@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
     "target": "ES2020",
     "module": "ES2020",
-    "declaration": true,
     "sourceMap": true,
-    "declarationMap": true,
-    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -21,14 +23,6 @@
     "**/*.test.ts"
   ],
   "references": [
-    { "path": "./packages/core" },
-    { "path": "./packages/scene" },
-    { "path": "./examples" },
-  ],
-  "typedocOptions": {
-    "mode": "modules",
-    "out": "./docs",
-    "gaID": "UA-172098276-1",
-    "gaID": "threeify.org"
-  }
+    { "path": "../core" }
+  ]
 }
