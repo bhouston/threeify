@@ -18,7 +18,7 @@ import {
   Vec2
 } from '@threeify/core';
 import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
-import { glslTestSuites } from '../../../lib/shaders/testSuites.js';
+import { glslTestSuites } from './testSuites';
 
 async function init(): Promise<null> {
   const geometry = passGeometry();

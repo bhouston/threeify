@@ -1,5 +1,3 @@
-
-import { Mesh } from '@gltf-transform/core';
 import {
   ClearState,
   Color3,
@@ -15,7 +13,14 @@ import {
   Texture,
   Vec3
 } from '@threeify/core';
-import { SceneNode, PointLight, PerspectiveCamera, updateNodeTree, sceneToSceneCache, renderSceneViaSceneCache } from '@threeify/scene';
+import {
+  SceneNode,
+  PointLight,
+  Mesh, PerspectiveCamera,
+  updateNodeTree,
+  sceneToSceneCache,
+  renderSceneViaSceneCache
+} from '@threeify/scene';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
