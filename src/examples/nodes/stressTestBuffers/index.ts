@@ -38,7 +38,7 @@ async function init(): Promise<null> {
 
   const geometry = icosahedronGeometry(0.01, 1, true);
   const root = new SceneNode({ name: 'root' });
-  for (let i = 0; i < 100000; i++) {
+  for (let i = 0; i < 10000; i++) {
     const sphereMesh = new Mesh({
       position: new Vec3(
         Math.random() * 2 - 1,
