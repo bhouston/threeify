@@ -1,10 +1,10 @@
 {
-  "name": "@threeify",
+  "name": "@threeify/examples",
   "version": "2.1.0",
   "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
-  "main": "dist/lib",
-  "types": "dist/lib/index.d.ts",
+  "main": "dist/core",
+  "types": "dist/core/index.d.ts",
   "files": [
     "dist"
   ],
@@ -48,22 +48,11 @@
   "scripts": {
     "build": "tgt && tsc",
     "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
-    "start": "npm run watch & web-dev-server --watch --app-index examples --node-resolve --open",
-    "lint": "npx eslint \"src/**/*.{ts,json}\"",
-    "lint:fix": "npm run lint -- --fix",
-    "prettier": "npx prettier \"src/**/*.{ts,json,glsl}\" --check",
-    "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix",
     "docs": "typedoc",
     "test": "jest ./src"
   },
-  "workspaces": [
-    "packages/core",
-    "packages/scene",
-    "examples"
-  ],
   "dependencies": {
-    "@gltf-transform/core": "^2.5.1",
-    "@gltf-transform/extensions": "^2.5.1"
+    "@threeify/core": "*",
+    "@threeify/scene": "*"
   }
 }
