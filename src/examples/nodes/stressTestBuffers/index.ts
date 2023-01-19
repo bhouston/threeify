@@ -5,6 +5,7 @@ import {
   ClearState,
   Color3,
   CullingState,
+  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToQuat,
@@ -35,10 +36,9 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const geometry = icosahedronGeometry(0.1, 1, true);
-  console.log('num faces', geometry.attributes.position?.count);
+  const geometry = icosahedronGeometry(0.01, 1, true);
   const root = new SceneNode({ name: 'root' });
-  for (let i = 0; i < 10000; i++) {
+  for (let i = 0; i < 100000; i++) {
     const sphereMesh = new Mesh({
       position: new Vec3(
         Math.random() * 2 - 1,
@@ -76,7 +76,10 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
+  canvasFramebuffer.depthTestState = new DepthTestState(
+    true,
+    DepthTestFunc.LessOrEqual
+  );
   canvasFramebuffer.clearState = ClearState.Black;
   canvasFramebuffer.cullingState = new CullingState(true);
 

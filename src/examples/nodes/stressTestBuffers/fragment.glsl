@@ -21,7 +21,10 @@ uniform vec3 albedo;
 uniform sampler2D albedoTexture;
 uniform float roughness;
 
-uniform  mat4 worldToView;
+uniform Camera {
+  mat4 worldToView;
+  mat4 viewToScreen;
+};
 
 out vec4 outputColor;
 

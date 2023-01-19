@@ -25,6 +25,7 @@ export class SceneCache {
   public materialIdToUniforms: Map<string, UniformValueMap> = new Map();
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
 
-  public shaderNameToLightUniformBuffers: Map<string, Buffer> = new Map();
+  public shaderNameToLightingUniformBuffers: Map<string, Buffer> = new Map();
+  public shaderNameToCameraUniformBuffers: Map<string, Buffer> = new Map();
   public meshBatches: MeshBatch[] = [];
 }

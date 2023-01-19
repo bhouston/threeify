@@ -6,8 +6,10 @@ uniform Node {
   mat4 localToWorld;
 };
 
-uniform mat4 worldToView;
-uniform mat4 viewToScreen;
+uniform Camera {
+  mat4 worldToView;
+  mat4 viewToScreen;
+};
 
 out vec3 v_viewSurfacePosition;
 out vec3 v_viewSurfaceNormal;

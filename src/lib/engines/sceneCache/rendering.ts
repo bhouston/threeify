@@ -13,7 +13,8 @@ export function renderSceneViaSceneCache(
     meshBatches,
     cameraUniforms,
     lightUniforms,
-    shaderNameToLightUniformBuffers: shaderNameToLightingUniformBuffers
+    shaderNameToLightingUniformBuffers,
+    shaderNameToCameraUniformBuffers
   } = sceneCache;
   for (const meshBatch of meshBatches) {
     const {
@@ -24,16 +25,19 @@ export function renderSceneViaSceneCache(
       uniformBuffers
     } = meshBatch;
 
-    let uniforms = [
-      ...uniformsArray,
-      cameraUniforms,
-      lightUniforms
-    ] as UniformValueMap[];
+    const uniforms = [...uniformsArray] as UniformValueMap[];
+
     const lightingBuffer = shaderNameToLightingUniformBuffers.get(program.name);
     if (uniformBuffers !== undefined && lightingBuffer !== undefined) {
       uniformBuffers['Lighting'] = lightingBuffer;
-
-      uniforms = [...uniformsArray, cameraUniforms] as UniformValueMap[];
+    } else {
+      uniforms.push(lightUniforms as unknown as UniformValueMap);
+    }
+    const cameraBuffer = shaderNameToCameraUniformBuffers.get(program.name);
+    if (uniformBuffers !== undefined && cameraBuffer !== undefined) {
+      uniformBuffers['Camera'] = cameraBuffer;
+    } else {
+      uniforms.push(cameraUniforms as unknown as UniformValueMap);
     }
     renderBufferGeometry({
       framebuffer,
