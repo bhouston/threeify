@@ -1,5 +1,4 @@
 import {
-  DepthTestFunc,
   DepthTestState,
   fetchImage,
   icosahedronGeometry,
@@ -55,7 +54,7 @@ async function init(): Promise<null> {
     perceptualRoughness: 0
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -67,13 +66,12 @@ async function init(): Promise<null> {
     ); */
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
 
-    renderBufferGeometry(
-      canvasFramebuffer,
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+      bufferGeometry
+    });
   }
 
   animate();

@@ -47,17 +47,17 @@ export class Orbit implements IDisposable {
   }
 
   dispose() {
-    if (!this.disposed) {
-      this.disposed = true;
-      this.domElement.removeEventListener(
-        'pointerdown',
-        this.onPointerDownHandler
-      );
-      this.domElement.removeEventListener(
-        'pointercancel',
-        this.onPointerCancelHandler
-      );
-    }
+    if (this.disposed) return;
+
+    this.disposed = true;
+    this.domElement.removeEventListener(
+      'pointerdown',
+      this.onPointerDownHandler
+    );
+    this.domElement.removeEventListener(
+      'pointercancel',
+      this.onPointerCancelHandler
+    );
   }
 
   onPointerDown(pe: PointerEvent) {

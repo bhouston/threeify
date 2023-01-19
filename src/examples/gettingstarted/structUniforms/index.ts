@@ -48,7 +48,12 @@ function animate(): void {
     uniforms.color
   );
 
-  renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+  renderBufferGeometry({
+    framebuffer: canvasFramebuffer,
+    program,
+    uniforms,
+    bufferGeometry
+  });
 }
 
 animate();

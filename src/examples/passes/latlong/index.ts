@@ -1,5 +1,4 @@
 import {
-  DepthTestFunc,
   DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
@@ -66,7 +65,8 @@ async function init(): Promise<null> {
     equirectangularMap: texImage2Ds[0]
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+
   function animate(): void {
     requestAnimationFrame(animate);
 
@@ -84,13 +84,12 @@ async function init(): Promise<null> {
     );
     passUniforms.equirectangularMap = texImage2Ds[imageIndex];
 
-    renderBufferGeometry(
-      canvasFramebuffer,
-      passProgram,
-      passUniforms,
-      bufferGeometry,
-      depthTestState
-    );
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program: passProgram,
+      uniforms: passUniforms,
+      bufferGeometry
+    });
 
     orbit.update();
   }

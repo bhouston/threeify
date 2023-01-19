@@ -118,12 +118,12 @@ export function makeTexImage2DFromEquirectangularTexture(
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
-    renderBufferGeometry(
-      cubeFaceFramebuffer,
-      cubeFaceProgram,
-      cubeFaceUniforms,
-      cubeFaceBufferGeometry
-    );
+    renderBufferGeometry({
+      framebuffer: cubeFaceFramebuffer,
+      program: cubeFaceProgram,
+      uniforms: cubeFaceUniforms,
+      bufferGeometry: cubeFaceBufferGeometry
+    });
   });
 
   if (generateMipmaps) {

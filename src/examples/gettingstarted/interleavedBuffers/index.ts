@@ -43,4 +43,9 @@ const uniforms = {};
 context.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
 context.cullingState = new CullingState(false, CullingSide.Back);
 
-renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+renderBufferGeometry({
+  framebuffer: canvasFramebuffer,
+  program,
+  uniforms,
+  bufferGeometry
+});

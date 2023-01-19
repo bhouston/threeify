@@ -69,11 +69,11 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      gl.deleteFramebuffer(this.glFramebuffer);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    gl.deleteFramebuffer(this.glFramebuffer);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }

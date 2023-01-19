@@ -13,33 +13,50 @@ import { RenderingContext } from '../RenderingContext.js';
 import { Shader } from '../shaders/Shader.js';
 import { ShaderDefines } from '../shaders/ShaderDefines.js';
 import { ShaderType } from '../shaders/ShaderType.js';
-import { VertexArrayObject } from '../VertexArrayObject.js';
 import { ProgramAttribute } from './ProgramAttribute.js';
 import { ProgramUniform } from './ProgramUniform.js';
+import { ProgramUniformBlock } from './ProgramUniformBlock.js';
+import { ProgramVertexArray } from './ProgramVertexArray.js';
 import { numTextureUnits } from './UniformType.js';
-import { UniformValueMap } from './UniformValueMap.js';
 
-export type UniformMap = { [key: string]: ProgramUniform | undefined };
-export type AttributeMap = { [key: string]: ProgramAttribute | undefined };
+export type UniformMap = { [name: string]: ProgramUniform };
+export type UniformBlockMap = {
+  [name: string]: ProgramUniformBlock;
+};
+export type AttributeMap = { [key: string]: ProgramAttribute };
 
 export class Program implements IResource {
   public readonly id = generateUUID();
+  public name: string;
+  public readonly context: RenderingContext;
   disposed = false;
-  vertexShader: Shader;
-  fragmentShader: Shader;
-  glProgram: WebGLProgram;
+  public readonly vertexShader: Shader;
+  public readonly fragmentShader: Shader;
+  public readonly glProgram: WebGLProgram;
   #validated = false;
   #uniformsInitialized = false;
   #uniforms: UniformMap = {};
+  #uniformBlocks: UniformBlockMap = {};
   #attributesInitialized = false;
   #attributes: AttributeMap = {};
 
-  constructor(
-    public context: RenderingContext,
-    vertexShaderCode: string,
-    fragmentShaderCode: string,
-    shaderDefines: ShaderDefines = {}
-  ) {
+  constructor(props: {
+    context: RenderingContext;
+    vertexShaderCode: string;
+    fragmentShaderCode: string;
+    shaderDefines?: ShaderDefines;
+    name?: string;
+  }) {
+    const {
+      context,
+      vertexShaderCode,
+      fragmentShaderCode,
+      shaderDefines,
+      name
+    } = props;
+    this.context = context;
+    this.name = name ?? '';
+
     this.vertexShader = new Shader(
       this.context,
       vertexShaderCode,
@@ -118,24 +135,66 @@ export class Program implements IResource {
     return true;
   }
 
+  initializeUniformsAndUniformBlocks(): void {
+    const { gl } = this.context;
+    const numUniforms = gl.getProgramParameter(
+      this.glProgram,
+      gl.ACTIVE_UNIFORMS
+    );
+    const indices = [...Array(numUniforms).keys()];
+    const blockIndices = gl.getActiveUniforms(
+      this.glProgram,
+      indices,
+      gl.UNIFORM_BLOCK_INDEX
+    );
+    const blockOffsets = gl.getActiveUniforms(
+      this.glProgram,
+      indices,
+      gl.UNIFORM_OFFSET
+    );
+
+    let textureUnitCount = 0;
+
+    const uniformBlocks: { [blockIndex: number]: ProgramUniformBlock } = {};
+    for (let i = 0; i < numUniforms; ++i) {
+      const blockIndex = blockIndices[i];
+      const blockOffset = blockOffsets[i];
+
+      let uniformBlock;
+
+      if (blockIndex !== -1) {
+        uniformBlock = uniformBlocks[blockIndex];
+        if (uniformBlock === undefined) {
+          uniformBlock = new ProgramUniformBlock(this, blockIndex);
+        }
+        uniformBlocks[blockIndex] = uniformBlock;
+      }
+
+      const uniform = new ProgramUniform(this, i, uniformBlock, blockOffset);
+      this.#uniforms[uniform.name] = uniform;
+
+      if (numTextureUnits(uniform.uniformType) > 0) {
+        uniform.textureUnit = textureUnitCount;
+        textureUnitCount++;
+      }
+      if (uniformBlock !== undefined) {
+        this.#uniformBlocks[uniformBlock.name] = uniformBlock;
+        uniformBlock.uniforms[uniform.name] = uniform;
+      }
+    }
+    this.#uniformsInitialized = true;
+  }
+
+  get uniformBlocks(): UniformBlockMap {
+    if (!this.#uniformsInitialized) {
+      this.initializeUniformsAndUniformBlocks();
+    }
+    return this.#uniformBlocks;
+  }
+
   get uniforms(): UniformMap {
     if (!this.#uniformsInitialized) {
-      let textureUnitCount = 0;
-      const { gl } = this.context;
-
-      const numActiveUniforms = gl.getProgramParameter(
-        this.glProgram,
-        gl.ACTIVE_UNIFORMS
-      );
-      for (let i = 0; i < numActiveUniforms; ++i) {
-        const uniform = new ProgramUniform(this, i);
-        if (numTextureUnits(uniform.uniformType) > 0) {
-          uniform.textureUnit = textureUnitCount;
-          textureUnitCount++;
-        }
-        this.#uniforms[uniform.name] = uniform;
-      }
-      this.#uniformsInitialized = true;
+      this.initializeUniformsAndUniformBlocks();
     }
     return this.#uniforms;
   }
@@ -156,21 +215,9 @@ export class Program implements IResource {
     return this.#attributes;
   }
 
-  setUniformValues(uniformValueMap: UniformValueMap): this {
-    this.context.program = this;
-
-    for (const uniformName in uniformValueMap) {
-      const uniform = this.uniforms[uniformName];
-      if (uniform !== undefined) {
-        uniform.set(uniformValueMap[uniformName]);
-      }
-    }
-    return this;
-  }
-
-  setAttributeBuffers(vao: VertexArrayObject): this;
+  setAttributeBuffers(vao: ProgramVertexArray): this;
   setAttributeBuffers(bufferGeometry: BufferGeometry): this;
-  setAttributeBuffers(buffers: VertexArrayObject | BufferGeometry): this {
+  setAttributeBuffers(buffers: ProgramVertexArray | BufferGeometry): this {
     const { gl } = this.context;
     if (buffers instanceof BufferGeometry) {
       const bufferGeometry = buffers as BufferGeometry;
@@ -187,8 +234,8 @@ export class Program implements IResource {
           bufferGeometry.indices.buffer.glBuffer
         );
       }
-    } else if (buffers instanceof VertexArrayObject) {
-      const vao = buffers as VertexArrayObject;
+    } else if (buffers instanceof ProgramVertexArray) {
+      const vao = buffers as ProgramVertexArray;
       gl.bindVertexArray(vao.glVertexArrayObject);
     } else {
       throw new TypeError('not implemented');
@@ -198,14 +245,14 @@ export class Program implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      this.vertexShader.dispose();
-      this.fragmentShader.dispose();
-      gl.deleteProgram(this.glProgram);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    this.vertexShader.dispose();
+    this.fragmentShader.dispose();
+    gl.deleteProgram(this.glProgram);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }
 
@@ -214,10 +261,12 @@ export function makeProgramFromShaderMaterial(
   shaderMaterial: ShaderMaterial,
   shaderDefines: ShaderDefines = {}
 ): Program {
-  return new Program(
+  const program = new Program({
     context,
-    shaderMaterial.vertexShaderCode,
-    shaderMaterial.fragmentShaderCode,
+    vertexShaderCode: shaderMaterial.vertexShaderCode,
+    fragmentShaderCode: shaderMaterial.fragmentShaderCode,
     shaderDefines
-  );
+  });
+  program.name = shaderMaterial.name;
+  return program;
 }

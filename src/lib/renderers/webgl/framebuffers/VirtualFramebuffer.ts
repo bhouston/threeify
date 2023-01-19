@@ -17,9 +17,10 @@ import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
 import { MaskState } from '../MaskState.js';
 import { Program } from '../programs/Program.js';
+import { UniformBufferMap } from '../programs/ProgramUniformBlock.js';
+import { ProgramVertexArray } from '../programs/ProgramVertexArray.js';
 import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
-import { VertexArrayObject } from '../VertexArrayObject.js';
 import { BufferBit } from './BufferBit.js';
 
 const GL = WebGL2RenderingContext;
@@ -70,19 +71,35 @@ export abstract class VirtualFramebuffer implements IDisposable {
   abstract dispose(): void;
 }
 
-export function renderBufferGeometry(
-  framebuffer: VirtualFramebuffer,
-  program: Program,
-  uniforms: UniformValueMap | UniformValueMap[],
-  bufferGeometry: BufferGeometry,
-  depthTestState: DepthTestState | undefined = undefined,
-  blendState: BlendState | undefined = undefined,
-  maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined
-): void {
+export function renderBufferGeometry(props: {
+  framebuffer: VirtualFramebuffer;
+  program: Program;
+  bufferGeometry: BufferGeometry;
+  uniforms?: UniformValueMap | UniformValueMap[];
+  uniformBuffers?: UniformBufferMap;
+  programVertexArray?: ProgramVertexArray;
+  depthTestState?: DepthTestState;
+  blendState?: BlendState;
+  maskState?: MaskState;
+  cullingState?: CullingState;
+}): void {
+  const {
+    framebuffer,
+    blendState,
+    depthTestState,
+    maskState,
+    cullingState,
+    program,
+    uniforms: uniformValueMaps,
+    uniformBuffers: uniformBufferMap,
+    bufferGeometry,
+    programVertexArray
+  } = props;
   const { context, size } = framebuffer;
 
   context.framebuffer = framebuffer;
+  context.program = program;
+
   context.blendState =
     blendState ?? framebuffer.blendState ?? context.blendState;
   context.depthTestState =
@@ -90,15 +107,14 @@ export function renderBufferGeometry(
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
-  context.program = program;
-  if (uniforms instanceof Array) {
-    for (const uniform of uniforms) {
-      context.program.setUniformValues(uniform);
-    }
+
+  setProgramUniforms(context.program, uniformValueMaps, uniformBufferMap);
+
+  if (programVertexArray !== undefined) {
+    context.program.setAttributeBuffers(programVertexArray);
   } else {
-    context.program.setUniformValues(uniforms);
+    context.program.setAttributeBuffers(bufferGeometry);
   }
-  context.program.setAttributeBuffers(bufferGeometry);
   context.viewport = new Box2(new Vec2(), size);
 
   // draw
@@ -115,58 +131,37 @@ export function renderBufferGeometry(
   }
 }
 
-export function renderVertexArrayObject(
-  framebuffer: VirtualFramebuffer,
+function setProgramUniforms(
   program: Program,
-  uniforms: UniformValueMap,
-  vao: VertexArrayObject,
-  depthTestState: DepthTestState | undefined = undefined,
-  blendState: BlendState | undefined = undefined,
-  maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined
-): void {
-  const { context } = framebuffer;
+  uniformValueMaps?: UniformValueMap | UniformValueMap[],
+  uniformBufferMap?: UniformBufferMap
+) {
+  for (const uniformValueMap of uniformValueMaps instanceof Array
+    ? uniformValueMaps
+    : [uniformValueMaps]) {
+    for (const uniformName in uniformValueMap) {
+      const uniform = program.uniforms[uniformName];
+      if (uniform !== undefined && uniform.block === undefined) {
+        uniform.setIntoLocation(uniformValueMap[uniformName]);
+      } else {
+        /*    warnOnce(
+          `Uniform ${uniformName} not found in program ${program.name}`,
+          uniform
+        );*/
+      }
+    }
+  }
 
-  context.framebuffer = framebuffer;
-  context.blendState =
-    blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState =
-    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
-  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState =
-    cullingState ?? framebuffer.cullingState ?? context.cullingState;
-  context.program = program;
-  context.program.setUniformValues(uniforms);
-  context.viewport = new Box2(new Vec2(), framebuffer.size);
-
-  // draw
-  const { gl } = context;
-  gl.drawArrays(vao.primitive, vao.offset, vao.count);
-}
-
-export function renderPass(
-  framebuffer: VirtualFramebuffer,
-  program: Program,
-  uniforms: UniformValueMap,
-  depthTestState: DepthTestState | undefined = undefined,
-  blendState: BlendState | undefined = undefined,
-  maskState: MaskState | undefined = undefined,
-  cullingState: CullingState | undefined = undefined
-): void {
-  const { context } = framebuffer;
-
-  context.framebuffer = framebuffer;
-  context.blendState =
-    blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState =
-    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
-  context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState =
-    cullingState ?? framebuffer.cullingState ?? context.cullingState;
-  context.program = program;
-  context.program.setUniformValues(uniforms);
-  context.viewport = new Box2(new Vec2(), framebuffer.size);
-
-  throw new Error('Not implemented');
-  // context.renderPass(program, uniforms); // just executes a pre-determined node and camera setup.
+  if (uniformBufferMap !== undefined) {
+    for (const uniformBufferName in uniformBufferMap) {
+      const uniformBlock = program.uniformBlocks[uniformBufferName];
+      if (uniformBlock !== undefined) {
+        uniformBlock.bind(uniformBufferMap[uniformBufferName]);
+      } else {
+        /*   warnOnce(
+          `Uniform block ${uniformBufferName} not found in program ${program.name}`
+        );*/
+      }
+    }
+  }
 }

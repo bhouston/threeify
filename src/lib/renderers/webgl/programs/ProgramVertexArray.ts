@@ -5,13 +5,13 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../../core/generateUuid.js';
-import { BufferGeometry } from './buffers/BufferGeometry.js';
-import { PrimitiveType } from './buffers/PrimitiveType.js';
-import { IResource } from './IResource.js';
-import { Program } from './programs/Program.js';
+import { generateUUID } from '../../../core/generateUuid.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { PrimitiveType } from '../buffers/PrimitiveType.js';
+import { IResource } from '../IResource.js';
+import { Program } from './Program.js';
 
-export class VertexArrayObject implements IResource {
+export class ProgramVertexArray implements IResource {
   public readonly id = generateUUID();
   disposed = false;
   glVertexArrayObject: WebGLVertexArrayObject;
@@ -42,15 +42,17 @@ export class VertexArrayObject implements IResource {
 
     program.setAttributeBuffers(bufferGeometry);
 
+    gl.bindVertexArray(null);
+
     resources.register(this);
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.program.context;
-      gl.deleteVertexArray(this.glVertexArrayObject);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.program.context;
+    gl.deleteVertexArray(this.glVertexArrayObject);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }

@@ -7,6 +7,8 @@ import {
 } from '../../math/Vec3.Functions';
 import { makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
 import { makeProgramFromShaderMaterial } from '../../renderers/webgl/programs/Program';
+import { UniformBufferMap } from '../../renderers/webgl/programs/ProgramUniformBlock';
+import { ProgramVertexArray } from '../../renderers/webgl/programs/ProgramVertexArray';
 import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
 import { RenderingContext } from '../../renderers/webgl/RenderingContext';
 import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
@@ -59,9 +61,10 @@ export function sceneToSceneCache(
     }
   });
 
-  createMeshBatches(sceneCache);
+  createLightingUniformBuffers(sceneCache);
+  createCameraUniformBuffers(sceneCache);
 
-  console.log('lightUniforms', lightUniforms);
+  createMeshBatches(sceneCache);
 
   return sceneCache;
 }
@@ -88,8 +91,10 @@ function meshToSceneCache(
 
   // make buffer geometry
   const geometry = mesh.geometry;
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  geometryIdToBufferGeometry.set(mesh.id, bufferGeometry);
+  if (geometryIdToBufferGeometry.get(geometry.id) === undefined) {
+    const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+    geometryIdToBufferGeometry.set(geometry.id, bufferGeometry);
+  }
 
   const material = mesh.material;
 
@@ -97,6 +102,7 @@ function meshToSceneCache(
   if (shaderNameToProgram.get(material.shaderName) === undefined) {
     // get shader material
     const shaderMaterial = shaderResolver(material.shaderName);
+    shaderMaterial.name = material.shaderName;
     const program = makeProgramFromShaderMaterial(context, shaderMaterial);
     shaderNameToProgram.set(material.shaderName, program);
   }
@@ -178,6 +184,7 @@ function createMeshBatches(sceneCache: SceneCache) {
     shaderNameToProgram,
     materialIdToUniforms,
     nodeIdToUniforms,
+    programGeometryToProgramVertexArray,
     meshBatches
   } = sceneCache;
 
@@ -186,7 +193,8 @@ function createMeshBatches(sceneCache: SceneCache) {
       const mesh = node as Mesh;
 
       // get buffer geometry
-      const bufferGeometry = geometryIdToBufferGeometry.get(mesh.id);
+      const geometry = mesh.geometry;
+      const bufferGeometry = geometryIdToBufferGeometry.get(geometry.id);
       if (bufferGeometry === undefined)
         throw new Error('Buffer Geometry not found');
 
@@ -194,6 +202,18 @@ function createMeshBatches(sceneCache: SceneCache) {
       const shaderMaterial = mesh.material;
       const program = shaderNameToProgram.get(shaderMaterial.shaderName);
       if (program === undefined) throw new Error('Program not found');
+
+      const programBufferGeometryId = `${program.id}-${geometry.id}`;
+      let programVertexArray = programGeometryToProgramVertexArray.get(
+        programBufferGeometryId
+      );
+      if (programVertexArray === undefined) {
+        programVertexArray = new ProgramVertexArray(program, bufferGeometry);
+        programGeometryToProgramVertexArray.set(
+          programBufferGeometryId,
+          programVertexArray
+        );
+      }
 
       // get material uniforms
       const materialUniforms = materialIdToUniforms.get(shaderMaterial.id);
@@ -205,13 +225,88 @@ function createMeshBatches(sceneCache: SceneCache) {
       if (nodeUniforms === undefined)
         throw new Error('Node Uniforms not found');
 
+      const uniformValueMaps: UniformValueMap[] = [materialUniforms];
+      const uniformBufferMap: UniformBufferMap = {};
+      const nodeUniformBlock = program.uniformBlocks['Node'];
+      if (nodeUniformBlock !== undefined) {
+        const nodeUniformBuffer = nodeUniformBlock.allocateUniformBuffer();
+
+        nodeUniformBlock.setUniformsIntoBuffer(
+          nodeUniforms as unknown as UniformValueMap,
+          nodeUniformBuffer
+        );
+        uniformBufferMap['Node'] = nodeUniformBuffer;
+      } else {
+        uniformValueMaps.push(nodeUniforms as unknown as UniformValueMap);
+      }
+
+      /*const materialUniformBlock = program.uniformBlocks['Material'];
+      const lightingUniformBlock = program.uniformBlocks['Lighting'];
+      const cameraUniformBlock = program.uniformBlocks['Camera'];*/
+
       // create mesh batch
       meshBatches.push(
-        new MeshBatch(program, bufferGeometry, [
-          materialUniforms,
-          nodeUniforms
-        ] as UniformValueMap[])
+        new MeshBatch(
+          program,
+          bufferGeometry,
+          programVertexArray,
+          uniformValueMaps,
+          uniformBufferMap
+        )
       );
+    }
+  }
+}
+
+function createLightingUniformBuffers(sceneCache: SceneCache) {
+  const {
+    shaderNameToProgram,
+    lightUniforms,
+    shaderNameToLightingUniformBuffers
+  } = sceneCache;
+  // console.log('shaderNameToProgram', shaderNameToProgram);
+
+  for (const shaderName of shaderNameToProgram.keys()) {
+    // console.log('shaderName', shaderName);
+    const program = shaderNameToProgram.get(shaderName);
+    if (program === undefined) throw new Error('Program not found');
+    const lightingUniformBlock = program.uniformBlocks['Lighting'];
+    //console.log('lightingUniformBlock', lightingUniformBlock);
+    if (lightingUniformBlock !== undefined) {
+      const lightingUniformBuffer =
+        lightingUniformBlock.allocateUniformBuffer();
+      lightingUniformBlock.setUniformsIntoBuffer(
+        lightUniforms as unknown as UniformValueMap,
+        lightingUniformBuffer
+      );
+      //console.log('created lighting uniform buffer', lightUniforms);
+      shaderNameToLightingUniformBuffers.set(shaderName, lightingUniformBuffer);
+    }
+  }
+}
+
+function createCameraUniformBuffers(sceneCache: SceneCache) {
+  const {
+    shaderNameToProgram,
+    cameraUniforms,
+    shaderNameToCameraUniformBuffers
+  } = sceneCache;
+  // console.log('shaderNameToProgram', shaderNameToProgram);
+
+  for (const shaderName of shaderNameToProgram.keys()) {
+    // console.log('shaderName', shaderName);
+    const program = shaderNameToProgram.get(shaderName);
+    if (program === undefined) throw new Error('Program not found');
+    const cameraUniformBlock = program.uniformBlocks['Camera'];
+    //console.log('lightingUniformBlock', lightingUniformBlock);
+    if (cameraUniformBlock !== undefined) {
+      const cameraUniformBuffer = cameraUniformBlock.allocateUniformBuffer();
+      cameraUniformBlock.setUniformsIntoBuffer(
+        cameraUniforms as unknown as UniformValueMap,
+        cameraUniformBuffer
+      );
+      //console.log('created lighting uniform buffer', lightUniforms);
+      shaderNameToCameraUniformBuffers.set(shaderName, cameraUniformBuffer);
     }
   }
 }

@@ -103,12 +103,12 @@ export class TexImage2D implements IResource {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      gl.deleteTexture(this.glTexture);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    gl.deleteTexture(this.glTexture);
+    resources.unregister(this);
+    this.disposed = true;
   }
 
   public loadImages(images: TextureSource[]): void {

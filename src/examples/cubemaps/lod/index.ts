@@ -1,7 +1,6 @@
 import {
   convertToInterleavedGeometry,
   CubeMapTexture,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
@@ -53,7 +52,7 @@ async function init(): Promise<null> {
   };
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     const now = Date.now();
@@ -62,13 +61,12 @@ async function init(): Promise<null> {
       uniforms.localToWorld
     );
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
-    renderBufferGeometry(
-      canvasFramebuffer,
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+      bufferGeometry
+    });
 
     requestAnimationFrame(animate);
   }

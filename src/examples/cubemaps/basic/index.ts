@@ -1,6 +1,5 @@
 import {
   CubeMapTexture,
-  DepthTestFunc,
   DepthTestState,
   Euler3,
   euler3ToMat4,
@@ -47,7 +46,7 @@ async function init(): Promise<null> {
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -57,13 +56,12 @@ async function init(): Promise<null> {
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
-    renderBufferGeometry(
-      canvasFramebuffer,
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+      bufferGeometry
+    });
   }
 
   animate();

@@ -43,6 +43,42 @@ export enum UniformType {
   // Sampler2DArrayShadow = GL2.SAMPLER_2D_ARRAY_SHADOW,
 }
 
+export class UniformTypeInfo {
+  constructor(
+    public readonly numElements: number,
+    public readonly bytesPerElement: number,
+    public readonly glType: number
+  ) {}
+}
+
+const uniformTypeToInfo = new Map<UniformType, UniformTypeInfo>([
+  [UniformType.Bool, new UniformTypeInfo(1, 1, GL.BOOL)],
+  [UniformType.Int, new UniformTypeInfo(1, 4, GL.INT)],
+  [UniformType.Float, new UniformTypeInfo(1, 4, GL.FLOAT)],
+  [UniformType.BoolVec2, new UniformTypeInfo(2, 1, GL.BOOL)],
+  [UniformType.IntVec2, new UniformTypeInfo(2, 4, GL.INT)],
+  [UniformType.FloatVec2, new UniformTypeInfo(2, 4, GL.FLOAT)],
+  [UniformType.BoolVec3, new UniformTypeInfo(3, 1, GL.BOOL)],
+
+  [UniformType.IntVec3, new UniformTypeInfo(3, 4, GL.INT)],
+  [UniformType.FloatVec3, new UniformTypeInfo(3, 4, GL.FLOAT)],
+  [UniformType.BoolVec4, new UniformTypeInfo(4, 1, GL.BOOL)],
+  [UniformType.IntVec4, new UniformTypeInfo(4, 4, GL.INT)],
+  [UniformType.FloatVec4, new UniformTypeInfo(4, 4, GL.FLOAT)],
+  [UniformType.FloatMat2, new UniformTypeInfo(4, 4, GL.FLOAT)],
+  [UniformType.FloatMat3, new UniformTypeInfo(9, 4, GL.FLOAT)],
+  [UniformType.FloatMat4, new UniformTypeInfo(16, 4, GL.FLOAT)],
+  [UniformType.Sampler2D, new UniformTypeInfo(1, 4, GL.SAMPLER_2D)],
+  [UniformType.SamplerCube, new UniformTypeInfo(1, 4, GL.SAMPLER_CUBE)]
+]);
+
+export function uniformTypeInfo(uniformType: UniformType): UniformTypeInfo {
+  if (uniformTypeToInfo.has(uniformType)) {
+    return uniformTypeToInfo.get(uniformType)!;
+  }
+  throw new Error('Unknown uniform type: ' + uniformType);
+}
+
 export function numTextureUnits(uniformType: UniformType): number {
   switch (uniformType) {
     case UniformType.Sampler2D:

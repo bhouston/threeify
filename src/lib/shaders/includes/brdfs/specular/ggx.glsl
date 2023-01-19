@@ -26,6 +26,7 @@ vec3 BRDF_Specular_GGX(
   float V = V_GGX_SmithCorrelated(alphaRoughness, NdotL, NdotV);
   float D = D_GGX(alphaRoughness, NdotH);
 
+ 
   return F * (V * D) * PI;
 
 } // validated

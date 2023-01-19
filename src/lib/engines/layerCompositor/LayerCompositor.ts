@@ -77,13 +77,13 @@ export class LayerImage implements IDisposable {
   }
 
   dispose(): void {
-    if (!this.disposed) {
-      this.texImage2D.dispose();
-      releaseImage(this.image);
-      this.image = undefined;
-      this.disposed = true;
-      // console.log(`layerImage.dispose: ${this.url}`);
-    }
+    if (this.disposed) return;
+
+    this.texImage2D.dispose();
+    releaseImage(this.image);
+    this.image = undefined;
+    this.disposed = true;
+    // console.log(`layerImage.dispose: ${this.url}`);
   }
 }
 
@@ -401,14 +401,13 @@ export class LayerCompositor {
     const blendState = blendModeToBlendState(Blending.Over, true);
 
     // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-    renderBufferGeometry(
-      canvasFramebuffer,
-      this.#program,
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program: this.#program,
       uniforms,
-      this.#bufferGeometry,
-      undefined,
+      bufferGeometry: this.#bufferGeometry,
       blendState
-    );
+    });
 
     if (this.autoDiscard) {
       for (const url in this.layerImageCache) {
@@ -428,7 +427,7 @@ export class LayerCompositor {
     }
     this.#offlineLayerVersion = this.#layerVersion;
 
-    const { offscreenFramebuffer } = this;
+    const { offscreenFramebuffer, offscreenSize } = this;
     if (offscreenFramebuffer === undefined) {
       return;
     }
@@ -439,9 +438,9 @@ export class LayerCompositor {
 
     const imageToOffscreen = mat4Orthographic(
       0,
-      this.offscreenSize.x,
+      offscreenSize.x,
       0,
-      this.offscreenSize.y,
+      offscreenSize.y,
       -1,
       1
     );
@@ -477,20 +476,19 @@ export class LayerCompositor {
       const blendState = blendModeToBlendState(Blending.Over, true);
 
       // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry(
-        offscreenFramebuffer,
-        this.#program,
+      renderBufferGeometry({
+        framebuffer: offscreenFramebuffer,
+        program: this.#program,
         uniforms,
-        this.#bufferGeometry,
-        undefined,
+        bufferGeometry: this.#bufferGeometry,
         blendState
-      );
+      });
     });
 
     // generate mipmaps.
-    const colorAttachment = this.offscreenColorAttachment;
-    if (colorAttachment !== undefined) {
-      colorAttachment.generateMipmaps();
+    const { offscreenColorAttachment } = this;
+    if (offscreenColorAttachment !== undefined) {
+      offscreenColorAttachment.generateMipmaps();
     }
   }
 }

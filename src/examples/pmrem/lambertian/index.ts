@@ -11,10 +11,7 @@ import { Mat4 } from '../../../lib/math/Mat4.js';
 import { Vec2 } from '../../../lib/math/Vec2.js';
 import { Vec3 } from '../../../lib/math/Vec3.js';
 import { makeBufferGeometryFromGeometry } from '../../../lib/renderers/webgl/buffers/BufferGeometry.js';
-import {
-  DepthTestFunc,
-  DepthTestState
-} from '../../../lib/renderers/webgl/DepthTestState.js';
+import { DepthTestState } from '../../../lib/renderers/webgl/DepthTestState.js';
 import { Attachment } from '../../../lib/renderers/webgl/framebuffers/Attachment.js';
 import { Framebuffer } from '../../../lib/renderers/webgl/framebuffers/Framebuffer.js';
 import { renderBufferGeometry } from '../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer.js';
@@ -95,12 +92,12 @@ async function init(): Promise<null> {
     framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
     samplerUniforms.faceIndex = index;
 
-    renderBufferGeometry(
+    renderBufferGeometry({
       framebuffer,
-      samplerProgram,
-      samplerUniforms,
-      samplerBufferGeometry
-    );
+      program: samplerProgram,
+      uniforms: samplerUniforms,
+      bufferGeometry: samplerBufferGeometry
+    });
   });
 
   const program = makeProgramFromShaderMaterial(context, material);
@@ -117,7 +114,8 @@ async function init(): Promise<null> {
     cubeMap: lambertianCubeMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  canvasFramebuffer.depthTestState = DepthTestState.Default;
+
   function animate(): void {
     requestAnimationFrame(animate);
 
@@ -126,13 +124,12 @@ async function init(): Promise<null> {
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
-    renderBufferGeometry(
-      canvasFramebuffer,
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      depthTestState
-    );
+      bufferGeometry
+    });
   }
 
   animate();

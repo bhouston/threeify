@@ -66,12 +66,12 @@ async function init(): Promise<null> {
       const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
 
       framebuffer.clear(BufferBit.All);
-      renderBufferGeometry(
+      renderBufferGeometry({
         framebuffer,
-        unitProgram,
-        unitUniforms,
+        program: unitProgram,
+        uniforms: unitUniforms,
         bufferGeometry
-      );
+      });
 
       const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
 

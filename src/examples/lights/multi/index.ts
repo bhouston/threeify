@@ -105,7 +105,12 @@ async function init(): Promise<null> {
     uniforms.punctualLightOuterCos[1] = 0.97 + 0.025 * Math.cos(now * 0.0017);
 
     canvasFramebuffer.clear();
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
 
     requestAnimationFrame(animate);
   }

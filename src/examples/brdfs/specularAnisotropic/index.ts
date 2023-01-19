@@ -88,7 +88,12 @@ async function init(): Promise<null> {
         : anisotropicFlow2Map;
 
     canvasFramebuffer.clear();
-    renderBufferGeometry(canvasFramebuffer, program, uniforms, bufferGeometry);
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry
+    });
 
     requestAnimationFrame(animate);
   }

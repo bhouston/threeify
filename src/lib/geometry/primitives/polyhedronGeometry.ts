@@ -213,7 +213,7 @@ export function polyhedronGeometry(
   attributes.uv = makeFloat32Attribute(uvBuffer, 2);
 
   if (smoothNormals) {
-    console.log('computing smooth normals');
+    //console.log('computing smooth normals');
     const positions = makeVec3View(
       attributes.position.attributeData.arrayBuffer
     );

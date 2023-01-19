@@ -32,21 +32,13 @@ export class Buffer implements IResource {
     gl.bindBuffer(this.target, this.glBuffer);
 
     // load data
-    // console.log(`gl.bufferData(${this.target}, ${arrayBuffer}, ${this.usage})`);
     gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
     gl.bufferSubData(this.target, 0, arrayBuffer);
 
     resources.register(this);
   }
 
-  update(
-    arrayBuffer: ArrayBuffer,
-    target: BufferTarget = BufferTarget.Array,
-    usage: BufferUsage = BufferUsage.StaticDraw
-  ): void {
-    this.target = target;
-    this.usage = usage;
-
+  write(arrayBuffer: ArrayBuffer): void {
     const { gl } = this.context;
 
     // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
@@ -56,12 +48,32 @@ export class Buffer implements IResource {
     gl.bufferData(this.target, arrayBuffer, this.usage);
   }
 
+  writeSubData(
+    arrayBufferView: ArrayBufferView,
+    writeOffsetInBytes: number,
+    readOffsetInElements = 0,
+    sizeInElements: number
+  ): void {
+    const { gl } = this.context;
+    // Bind the buffer to tell WebGL we are working on this buffer
+    gl.bindBuffer(this.target, this.glBuffer);
+
+    // Write data into the buffer
+    gl.bufferSubData(
+      gl.UNIFORM_BUFFER,
+      writeOffsetInBytes,
+      arrayBufferView,
+      readOffsetInElements,
+      sizeInElements
+    );
+  }
+
   dispose(): void {
-    if (!this.disposed) {
-      const { gl, resources } = this.context;
-      gl.deleteBuffer(this.glBuffer);
-      resources.unregister(this);
-      this.disposed = true;
-    }
+    if (this.disposed) return;
+
+    const { gl, resources } = this.context;
+    gl.deleteBuffer(this.glBuffer);
+    resources.unregister(this);
+    this.disposed = true;
   }
 }

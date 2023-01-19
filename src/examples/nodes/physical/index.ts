@@ -56,10 +56,11 @@ async function init(): Promise<null> {
       specularFactor: 0.16,
       specularColor: new Color3(0.5, 0.5, 1),
       specularRoughness: 0.4,
-      metallic: 0,
+      metallic: 0.5,
       clearcoatFactor: 0.5,
       clearcoatRoughnessFactor: 0.4,
       clearcoatNormalTexture: golfballNormalTexture,
+      clearcoatTint: new Color3(0.5, 0.2, 0),
       sheenColorFactor: new Color3(1, 0.2, 0.8),
       sheenRoughnessFactor: 0.5
     })
