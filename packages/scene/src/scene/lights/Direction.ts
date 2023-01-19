@@ -1,4 +1,4 @@
-
+import { Vec3, Euler3, EulerOrder3, euler3ToMat4, Mat4, mat4ToEuler3, vec3Length, warnOnce } from '@threeify/core';
 
 export function negativeZDirectionToEuler(
   d: Vec3,

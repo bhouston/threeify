@@ -21,5 +21,9 @@
   "include": ["./**/*.ts"],
   "exclude": [
     "./**/*.test.ts"
+  ],
+  "references": [
+    { "path": "../packages/core" },
+    { "path": "../packages/scene" }
   ]
 }

@@ -1,13 +1,5 @@
-//
-// basic node
-//
-// Authors:
-// * @bhouston
-//
-
-import { Geometry } from '../geometry/Geometry.js';
-import { Material } from '../materials/Material.js';
-import { ISceneNode, SceneNode } from './SceneNode.js';
+import { Geometry, Material } from "@threeify/core";
+import { ISceneNode, SceneNode } from "./SceneNode";
 
 export interface IMesh extends ISceneNode {
   geometry: Geometry;

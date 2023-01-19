@@ -1,12 +1,5 @@
-//
-// basic light node initially based on Light from Three.js
-//
-// Authors:
-// * @bhouston
-//
-
-import { Color3 } from '../../math/Color3.js';
-import { ISceneNode, SceneNode } from '../SceneNode.js';
+import { Color3 } from "@threeify/core";
+import { ISceneNode, SceneNode } from "../SceneNode";
 
 export interface ILight extends ISceneNode {
   color?: Color3;

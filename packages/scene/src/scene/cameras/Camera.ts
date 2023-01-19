@@ -1,12 +1,5 @@
-//
-// based on Camera from Three.js
-//
-// Authors:
-// * @bhouston
-//
-
-import { Mat4 } from '../../math/Mat4.js';
-import { SceneNode } from '../SceneNode.js';
+import { Mat4 } from "@threeify/core";
+import { SceneNode } from "../SceneNode";
 
 export abstract class Camera extends SceneNode {
   pixelAspectRatio = 1;

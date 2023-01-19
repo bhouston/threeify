@@ -1,8 +1,5 @@
-import { BufferGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
-import { Program } from '../../renderers/webgl/programs/Program';
-import { UniformBufferMap } from '../../renderers/webgl/programs/ProgramUniformBlock';
-import { ProgramVertexArray } from '../../renderers/webgl/programs/ProgramVertexArray';
-import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
+import { Program, BufferGeometry, ProgramVertexArray, UniformBufferMap, UniformValueMap } from "@threeify/core";
+
 
 export class MeshBatch {
   constructor(

@@ -1,14 +1,4 @@
-//
-// point light initially based on PointLight from Three.js
-//
-// parameters modeled on the glTF punctual light standard:
-// https://github.com/KhronosGroup/glTF/tree/master/extensions/2.0/Khronos/KHR_lights_punctual
-//
-// Authors:
-// * @bhouston
-//
-
-import { ILight, Light } from './Light.js';
+import { ILight, Light } from "./Light";
 
 export interface IPointLight extends ILight {
   range?: number;

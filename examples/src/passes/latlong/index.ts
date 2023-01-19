@@ -17,7 +17,7 @@ import {
   Texture,
   TextureFilter,
   TextureWrap
-} from '../../../lib/index.js';
+} from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

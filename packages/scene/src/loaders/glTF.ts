@@ -1,8 +1,9 @@
 import { WebIO } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
+import { mat4FromArray } from '@threeify/core';
+import { SceneNode } from '../scene/SceneNode';
 
-import { mat4FromArray } from '../../../../core/src/math/Mat4.Functions';
-import { SceneNode } from '../SceneNode';
+
 
 export async function loadGLTF(url: string): Promise<SceneNode> {
   const io = new WebIO();

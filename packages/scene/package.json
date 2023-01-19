@@ -3,8 +3,9 @@
   "version": "2.1.0",
   "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
-  "main": "dist/core",
-  "types": "dist/core/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

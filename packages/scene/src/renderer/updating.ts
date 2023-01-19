@@ -1,9 +1,6 @@
-import {
-  mat4Compose,
-  mat4Inverse,
-  mat4Multiply
-} from '../../math/Mat4.Functions';
-import { SceneNode } from '../scene/SceneNode';
+import { mat4Compose, mat4Inverse, mat4Multiply } from "@threeify/core";
+import { SceneNode } from "../scene/SceneNode";
+
 
 export function updateNodeTree(
   node: SceneNode,

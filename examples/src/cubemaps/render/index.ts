@@ -22,7 +22,7 @@ import {
   translation3ToMat4,
   Vec2,
   Vec3
-} from '../../../lib/index.js';
+} from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import { patternMaterial } from './pattern/PatternMaterial.js';
 import vertexSource from './vertex.glsl';

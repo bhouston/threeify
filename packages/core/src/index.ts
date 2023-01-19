@@ -1,3 +1,5 @@
+export * from './warnOnce';
+
 export * from './controllers/DeviceOrientation.js';
 export * from './controllers/Orbit.js';
 
@@ -31,6 +33,10 @@ export * from './renderers/webgl/framebuffers/CanvasFramebuffer.js';
 export * from './renderers/webgl/framebuffers/Framebuffer.js';
 export * from './renderers/webgl/framebuffers/Framebuffer.Functions.js';
 export * from './renderers/webgl/framebuffers/VirtualFramebuffer.js';
+
+
+export * from './renderers/webgl/programs/ProgramUniformBlock';
+export * from './renderers/webgl/programs/UniformValueMap';
 
 export * from './geometry/Attribute.js';
 export * from './geometry/AttributeData.js';

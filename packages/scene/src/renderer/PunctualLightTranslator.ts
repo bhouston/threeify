@@ -1,13 +1,11 @@
-import { color3MultiplyByScalar } from '../../../core/src/math/Color3.Functions.js';
-import { Color3 } from '../../../core/src/math/Color3.js';
-import { Vec3 } from '../../../core/src/math/Vec3.js';
-import { DirectionalLight } from '../scene/lights/DirectionalLight.js';
-import { Light } from '../scene/lights/Light.js';
-import { LightType } from '../scene/lights/LightType.js';
-import { PointLight } from '../scene/lights/PointLight.js';
-import { SpotLight } from '../scene/lights/SpotLight.js';
-import { SceneNode } from '../scene/SceneNode.js';
-import { depthFirstVisitor } from '../scene/Visitors.js';
+import { Vec3, Color3, color3MultiplyByScalar } from '@threeify/core';
+import { DirectionalLight } from "../scene/lights/DirectionalLight";
+import { LightType } from "../scene/lights/LightType";
+import { PointLight } from "../scene/lights/PointLight";
+import { SpotLight } from "../scene/lights/SpotLight";
+import { SceneNode } from "../scene/SceneNode";
+import { depthFirstVisitor } from "../scene/Visitors";
+import { Light } from '../scene/lights/Light';
 
 export class PunctualLightUniforms {
   numLights = 0;

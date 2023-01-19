@@ -3,8 +3,9 @@
   "version": "2.1.0",
   "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
-  "main": "dist/core",
-  "types": "dist/core/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -46,9 +47,8 @@
   },
   "scripts": {
     "build": "tgt && tsc",
-    "watch": "tsc --watch --preserveWatchOutput & tgt --watch",   
+    "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
     "test": "jest ./src"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

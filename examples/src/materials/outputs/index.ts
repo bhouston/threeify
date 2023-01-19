@@ -26,7 +26,7 @@ import {
   Vec2,
   vec2MultiplyByScalar,
   Vec3
-} from '../../../lib/index.js';
+} from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

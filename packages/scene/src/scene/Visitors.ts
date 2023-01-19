@@ -1,6 +1,4 @@
-import { SceneNode } from './SceneNode';
-
-// visitors
+import { SceneNode } from "./SceneNode";
 
 export function depthFirstVisitor(
   node: SceneNode,

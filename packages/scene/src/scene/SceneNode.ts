@@ -1,13 +1,4 @@
-//
-// basic node
-//
-// Authors:
-// * @bhouston
-//
-
-import { Vec3 } from "../../../core/src/math/Vec3";
-
-
+import { Vec3, Quat, IIdentifiable, IVersionable, Mat4, generateUUID } from "@threeify/core";
 
 export interface ISceneNode {
   id?: string;

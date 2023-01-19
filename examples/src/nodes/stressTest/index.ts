@@ -1,6 +1,5 @@
-import { sceneToSceneCache } from '../../../lib/engines/sceneCache/compiling.js';
-import { renderSceneViaSceneCache } from '../../../lib/engines/sceneCache/rendering.js';
-import { updateNodeTree } from '../../../lib/engines/sceneCache/updating.js';
+
+import { Mesh } from '@gltf-transform/core';
 import {
   ClearState,
   Color3,
@@ -10,16 +9,13 @@ import {
   euler3ToQuat,
   fetchImage,
   icosahedronGeometry,
-  Mesh,
-  PerspectiveCamera,
   PhysicalMaterial,
-  PointLight,
   RenderingContext,
-  SceneNode,
   ShaderMaterial,
   Texture,
   Vec3
-} from '../../../lib/index.js';
+} from '@threeify/core';
+import { SceneNode, PointLight, PerspectiveCamera, updateNodeTree, sceneToSceneCache, renderSceneViaSceneCache } from '@threeify/scene';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

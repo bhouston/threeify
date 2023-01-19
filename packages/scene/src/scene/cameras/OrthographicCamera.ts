@@ -1,14 +1,5 @@
-//
-// based on OrthographicCamera from Three.js
-//
-// Authors:
-// * @bhouston
-//
-
-import { mat4OrthographicSimple } from '../../math/Mat4.Functions.js';
-import { Mat4 } from '../../math/Mat4.js';
-import { Vec2 } from '../../math/Vec2.js';
-import { Camera } from './Camera.js';
+import { Vec2, Mat4, mat4OrthographicSimple } from "@threeify/core";
+import { Camera } from "./Camera";
 
 export class OrthographicCamera extends Camera {
   constructor(

@@ -20,7 +20,7 @@ import {
   translation3ToMat4,
   Vec3,
   vec3Normalize
-} from '../../../lib/index.js';
+} from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

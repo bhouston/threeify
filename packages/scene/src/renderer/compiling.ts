@@ -1,32 +1,32 @@
-import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { color3MultiplyByScalar } from '../../math/Color3.Functions';
-import { Vec3 } from '../../math/Vec3';
+
+import { Light } from "../scene/lights/Light";
 import {
-  mat4TransformNormal3 as mat4TransformDirection3,
-  mat4TransformVec3
-} from '../../math/Vec3.Functions';
-import { makeBufferGeometryFromGeometry } from '../../renderers/webgl/buffers/BufferGeometry';
-import { makeProgramFromShaderMaterial } from '../../renderers/webgl/programs/Program';
-import { UniformBufferMap } from '../../renderers/webgl/programs/ProgramUniformBlock';
-import { ProgramVertexArray } from '../../renderers/webgl/programs/ProgramVertexArray';
-import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
-import { RenderingContext } from '../../renderers/webgl/RenderingContext';
-import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
-import { Camera } from '../scene/cameras/Camera';
-import { DirectionalLight } from '../scene/lights/DirectionalLight';
-import { Light } from '../scene/lights/Light';
-import { LightType } from '../scene/lights/LightType';
-import { PointLight } from '../scene/lights/PointLight';
-import { SpotLight } from '../scene/lights/SpotLight';
+  ShaderMaterial,
+  RenderingContext, makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  UniformValueMap,
+  makeTexImage2DFromTexture,
+  mat4TransformVec3,
+  Vec3,
+  color3MultiplyByScalar,
+  ProgramVertexArray,
+  UniformBufferMap,
+  mat4TransformNormal3,
+  Texture
+} from '@threeify/core';
+import { DirectionalLight } from "../scene/lights/DirectionalLight";
+import { LightType } from "../scene/lights/LightType";
+import { PointLight } from "../scene/lights/PointLight";
+import { SpotLight } from "../scene/lights/SpotLight";
 import { Mesh } from '../scene/Mesh';
-import { SceneNode as SceneNode } from '../scene/SceneNode';
-import { breadthFirstVisitor } from '../scene/Visitors';
-import { Texture } from '../../textures/Texture';
-import { CameraUniforms } from './CameraUniforms';
-import { LightUniforms } from './LightUniforms';
-import { MeshBatch } from './MeshBatch';
-import { NodeUniforms } from './NodeUniforms';
-import { SceneCache } from './SceneCache';
+import { Camera } from '../scene/cameras/Camera';
+import { breadthFirstVisitor } from "../scene/Visitors";
+import { CameraUniforms } from "./CameraUniforms";
+import { LightUniforms } from "./LightUniforms";
+import { MeshBatch } from "./MeshBatch";
+import { NodeUniforms } from "./NodeUniforms";
+import { SceneCache } from "./SceneCache";
+import { SceneNode } from "../scene/SceneNode";
 
 export function sceneToSceneCache(
   context: RenderingContext,
@@ -147,7 +147,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
 
   if (light instanceof SpotLight) {
     lightType = LightType.Spot;
-    lightWorldDirection = mat4TransformDirection3(
+    lightWorldDirection = mat4TransformNormal3(
       light.localToWorldMatrix,
       new Vec3(0, 0, -1)
     );
@@ -162,7 +162,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   }
   if (light instanceof DirectionalLight) {
     lightType = LightType.Directional;
-    lightWorldDirection = mat4TransformDirection3(
+    lightWorldDirection = mat4TransformNormal3(
       light.localToWorldMatrix,
       new Vec3(0, 0, -1)
     );

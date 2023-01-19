@@ -1,34 +1,5 @@
-import { passGeometry } from '../../../lib/geometry/primitives/passGeometry.js';
-import { icosahedronGeometry } from '../../../lib/geometry/primitives/polyhedronGeometry.js';
-import { ShaderMaterial } from '../../../lib/materials/ShaderMaterial.js';
-import { Euler3 } from '../../../lib/math/Euler3.js';
-import {
-  euler3ToMat4,
-  mat4PerspectiveFov,
-  translation3ToMat4
-} from '../../../lib/math/Mat4.Functions.js';
-import { Mat4 } from '../../../lib/math/Mat4.js';
-import { Vec2 } from '../../../lib/math/Vec2.js';
-import { Vec3 } from '../../../lib/math/Vec3.js';
-import { makeBufferGeometryFromGeometry } from '../../../lib/renderers/webgl/buffers/BufferGeometry.js';
-import { DepthTestState } from '../../../lib/renderers/webgl/DepthTestState.js';
-import { Attachment } from '../../../lib/renderers/webgl/framebuffers/Attachment.js';
-import { Framebuffer } from '../../../lib/renderers/webgl/framebuffers/Framebuffer.js';
-import { renderBufferGeometry } from '../../../lib/renderers/webgl/framebuffers/VirtualFramebuffer.js';
-import { makeProgramFromShaderMaterial } from '../../../lib/renderers/webgl/programs/Program.js';
-import { RenderingContext } from '../../../lib/renderers/webgl/RenderingContext.js';
-import {
-  makeTexImage2DFromCubeTexture,
-  makeTexImage2DFromEquirectangularTexture
-} from '../../../lib/renderers/webgl/textures/TexImage2D.Functions.js';
-import { TextureFilter } from '../../../lib/renderers/webgl/textures/TextureFilter.js';
-import { TextureWrap } from '../../../lib/renderers/webgl/textures/TextureWrap.js';
-import {
-  cubeFaceTargets,
-  CubeMapTexture
-} from '../../../lib/textures/CubeTexture.js';
-import { fetchImage } from '../../../lib/textures/loaders/Image.js';
-import { Texture } from '../../../lib/textures/Texture.js';
+
+import { icosahedronGeometry, ShaderMaterial, Texture, fetchImage, TextureWrap, TextureFilter, Vec2, CubeMapTexture, RenderingContext, makeTexImage2DFromEquirectangularTexture, passGeometry, makeProgramFromShaderMaterial, makeBufferGeometryFromGeometry, makeTexImage2DFromCubeTexture, Framebuffer, cubeFaceTargets, Attachment, renderBufferGeometry, Mat4, translation3ToMat4, Vec3, mat4PerspectiveFov, DepthTestState, euler3ToMat4, Euler3 } from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import { samplerMaterial } from './sampler/SamplerMaterial.js';
 import vertexSource from './vertex.glsl';

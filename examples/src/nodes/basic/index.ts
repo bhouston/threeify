@@ -1,23 +1,18 @@
-import { sceneToSceneCache } from '../../../lib/engines/sceneCache/compiling.js';
-import { renderSceneViaSceneCache } from '../../../lib/engines/sceneCache/rendering.js';
-import { updateNodeTree } from '../../../lib/engines/sceneCache/updating.js';
+
 import {
-  ClearState,
-  Color3,
-  CullingState,
-  DepthTestState,
-  fetchImage,
-  icosahedronGeometry,
-  Mesh,
-  PerspectiveCamera,
-  PhysicalMaterial,
-  PointLight,
-  RenderingContext,
-  SceneNode,
   ShaderMaterial,
   Texture,
-  Vec3
-} from '../../../lib/index.js';
+  fetchImage,
+  RenderingContext,
+  icosahedronGeometry,
+  Vec3,
+  PhysicalMaterial,
+  Color3,
+  DepthTestState,
+  ClearState,
+  CullingState
+} from '@threeify/core';
+import { SceneNode, PointLight, PerspectiveCamera, updateNodeTree, sceneToSceneCache, renderSceneViaSceneCache, Mesh } from '@threeify/scene';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

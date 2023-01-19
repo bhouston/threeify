@@ -1,4 +1,4 @@
-import { SceneNode } from './SceneNode.js';
+import { SceneNode } from "./SceneNode";
 
 export function* traverse(root: SceneNode): Generator<SceneNode, void, void> {
   const stack = [];

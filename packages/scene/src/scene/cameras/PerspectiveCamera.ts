@@ -1,13 +1,5 @@
-//
-// based on PerspectiveCamera from Three.js
-//
-// Authors:
-// * @bhouston
-//
-
-import { mat4PerspectiveFov } from '../../math/Mat4.Functions.js';
-import { Mat4 } from '../../math/Mat4.js';
-import { Camera } from './Camera.js';
+import { Mat4, mat4PerspectiveFov } from "@threeify/core";
+import { Camera } from "./Camera";
 
 export class PerspectiveCamera extends Camera {
   constructor(

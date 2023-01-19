@@ -11,7 +11,7 @@ import {
   ShaderMaterial,
   Texture,
   Vec2
-} from '../../../lib/index.js';
+} from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
