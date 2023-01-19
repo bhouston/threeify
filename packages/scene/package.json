@@ -46,9 +46,8 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "build": "tgt && tsc",
-    "watch": "tsc --watch --preserveWatchOutput & tgt --watch",
-    "docs": "typedoc",
+    "build": "tgt && tsc --build",
+    "watch": "tsc --build --watch --preserveWatchOutput & tgt --watch",
     "test": "jest ./src"
   },
   "dependencies": {

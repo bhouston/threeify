@@ -2,7 +2,7 @@
   "glsl": {
     "rootDir": "./src",
     "includeDirs": [
-      "../packages/core/dist/shaders/includes"
+      "./src/shaders/includes"
     ],
     "outDir": "./dist",
     "extensions": [
