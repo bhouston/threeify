@@ -1,13 +1,8 @@
 {
   "name": "@threeify",
   "version": "2.1.0",
-  "type": "module",
+  "private": true,
   "description": "Typescript 3D Library loosely based on three.js",
-  "main": "dist/lib",
-  "types": "dist/lib/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "threeify",
     "webgl",
@@ -25,6 +20,7 @@
     "url": "https://github.com/threeify/threeify"
   },
   "devDependencies": {
+    "@threeify/shader-transpiler": "*",
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
@@ -39,15 +35,14 @@
     "jest": "^29.1.2",
     "prettier": "^2.7.1",
     "prettier-plugin-glsl": "^0.0.8",
-    "threeify-glsl-transpiler": "^2.0.7",
     "ts-jest": "^29.0.3",
     "ts-jest-resolver": "^2.0.0",
     "typedoc": "^0.23.15",
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "build": "tsc --build & tgt",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tgt --watch",
+    "build": "tsc --build & tst",
+    "watch": "tsc --build  --watch --preserveWatchOutput & tst --watch",
     "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
     "lint": "npx eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\"",
     "lint:fix": "npm run lint -- --fix",
@@ -58,6 +53,7 @@
     "test": "jest ./src"
   },
   "workspaces": [
+    "packages/shader-transpiler",
     "packages/core",
     "packages/scene",
     "examples"

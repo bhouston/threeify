@@ -11,21 +11,13 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "removeComments": true,
+    "removeComments": false,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false
   },
   "include": ["src/**/*.ts"],
-  "exclude": [
-    "**/*.test.ts"
-  ],
-  "references": [
-    { "path": "./packages/shader-transpiler" },
-    { "path": "./packages/core" },
-    { "path": "./packages/scene" },
-    { "path": "./examples" }
-  ],
+  "exclude": ["*.test.ts"],
   "typedocOptions": {
     "mode": "modules",
     "out": "./docs",
