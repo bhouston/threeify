@@ -21,7 +21,7 @@ import {
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
 
@@ -107,8 +107,6 @@ async function init(): Promise<null> {
     },
     true
   );
-
-  return null;
 }
 
 init();

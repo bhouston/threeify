@@ -20,7 +20,7 @@ import { KhronosModels } from '../../KhronosModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
@@ -62,8 +62,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

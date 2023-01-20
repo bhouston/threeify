@@ -24,7 +24,7 @@ import {
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
@@ -93,8 +93,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

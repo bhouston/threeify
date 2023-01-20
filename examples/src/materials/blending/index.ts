@@ -24,7 +24,7 @@ import {
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const fgTexture = new Texture(
     await fetchImageElement(
@@ -136,8 +136,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

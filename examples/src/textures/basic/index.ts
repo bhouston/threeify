@@ -13,7 +13,7 @@ import {
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = planeGeometry(1, 1, 1, 1);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const texture = new Texture(
@@ -36,8 +36,6 @@ async function init(): Promise<null> {
     uniforms,
     bufferGeometry
   });
-
-  return null;
 }
 
 init();

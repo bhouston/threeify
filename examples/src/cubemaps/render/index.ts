@@ -27,7 +27,7 @@ import fragmentSource from './fragment.glsl';
 import { patternMaterial } from './pattern/PatternMaterial.js';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.
   // const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
@@ -114,8 +114,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();
