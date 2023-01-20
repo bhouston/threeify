@@ -24,7 +24,9 @@ import { UniformType, uniformTypeInfo } from './UniformType.js';
 import { uniformValueToArrayBuffer } from './UniformValue.js';
 import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
-const array1dRegexp = /^(\w+([\d+])?)+\[\d+]$/;
+// TODO: Rewrite this regular expression, it is ultra slow
+const array1dRegexp = /^(\w+(\[\d+])?)+\[\d+]$/;
+
 // glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
 
 export class ProgramUniform {
