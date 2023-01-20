@@ -17,10 +17,6 @@ import {
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
 
-async function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 const semanticToThreeifyName: { [key: string]: string } = {
   POSITION: 'position',
   NORMAL: 'normal',
