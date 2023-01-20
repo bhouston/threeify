@@ -9,14 +9,14 @@
   </a>
 </p>
 
-**threeify-glsl-transpiler** is glsl to JS module transpiler. It is part of the threeify ecosystem.
+**@threeify/shader-transpiler** is glsl to JS module transpiler. It is part of the threeify ecosystem.
 
 The purpose of this is to allow one to use raw glsl files in JavaScript in the most easy fashion possible. Keeping glsl files as \*.glsl files has the benefits that syntax highlighers work out of the box as do linters. This allows one to maximize their productivity.
 
 ## Usage
 
 ```
-Usage: threeify-glsl-transpiler [options]
+Usage: tst [options]
 
 Options:
   -V, --version               output the version number
@@ -52,7 +52,7 @@ Just run it to transform all glsl files from the input directory into the corres
 glsl.js JavaScript modules in the output directory.
 
 ```
-yarn start -p ../threeify
+npm run start -p ../threeify
 ```
 
 ### Watch
@@ -60,7 +60,7 @@ yarn start -p ../threeify
 To have the transpiler constantly run and transpile files incrementally on change use the watch option:
 
 ```
-yarn start -p ../threeify -w
+npm run -p ../threeify -w
 ```
 
 ## Features
