@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "start": "npx tsc&& node --enable-source-maps ./dist/index.js"
+    "start": "tsc && node --enable-source-maps ./dist/index.js"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
