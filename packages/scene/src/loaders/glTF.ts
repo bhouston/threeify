@@ -1,28 +1,19 @@
-import {
-  Material as GLTFMaterial,
-  Mesh as GLTFMesh,
-  Texture as GLTFTexture,
-  WebIO
-} from '@gltf-transform/core';
-import { equalsObject } from '@gltf-transform/core/dist/utils';
+import { Texture as GLTFTexture, WebIO } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import {
   Attribute,
   AttributeData,
-  ComponentType,
+  Color3,
+  createImageBitmapFromArrayBuffer,
   Geometry,
   geometryToBoundingBox,
-  makeFloat32Attribute,
-  mat4FromArray,
   PhysicalMaterial,
-  Vec3,
   Quat,
-  Color3,
   Texture,
   Vec2,
-  ArrayBufferImage,
-  createImageBitmapFromArrayBuffer
+  Vec3
 } from '@threeify/core';
+
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
 
@@ -116,10 +107,6 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
             -1,
             0,
             attribute.getNormalized()
-          );
-          console.log(
-            semanticToThreeifyName[semantic],
-            geometry.attributes[semanticToThreeifyName[semantic]]
           );
         });
         const material = primitive.getMaterial();
