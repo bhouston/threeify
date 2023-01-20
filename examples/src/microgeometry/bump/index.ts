@@ -70,9 +70,6 @@ async function init(): Promise<null> {
     )
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();

@@ -85,7 +85,7 @@ async function init(): Promise<null> {
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
+
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   let frameNumber = 0;

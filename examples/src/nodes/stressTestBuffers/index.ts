@@ -38,28 +38,28 @@ async function init(): Promise<null> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
- const geometry = icosahedronGeometry(0.1, 5, true);
-     const root = new SceneNode({ name: 'root' });
-    for (let i = 0; i < 1000; i++) {
-      const sphereMesh = new MeshNode({
-        translation: new Vec3(
-          Math.random() * 2 - 1,
-          Math.random() * 2 - 1,
-          Math.random() * 2 - 1
-        ),
-        rotation: euler3ToQuat(
-          new Euler3(Math.random() * 6, Math.random() * 6, Math.random() * 6)
-        ),
-        geometry,
-        material: new PhysicalMaterial({
-          albedo: new Color3(Math.random(), Math.random(), Math.random()),
-          albedoTexture: texture,
-          specularRoughness: Math.random(),
-          metallic: Math.random()
-        })
-      });
-      root.children.push(sphereMesh);
-    }
+  const geometry = icosahedronGeometry(0.1, 5, true);
+  const root = new SceneNode({ name: 'root' });
+  for (let i = 0; i < 1000; i++) {
+    const sphereMesh = new MeshNode({
+      translation: new Vec3(
+        Math.random() * 2 - 1,
+        Math.random() * 2 - 1,
+        Math.random() * 2 - 1
+      ),
+      rotation: euler3ToQuat(
+        new Euler3(Math.random() * 6, Math.random() * 6, Math.random() * 6)
+      ),
+      geometry,
+      material: new PhysicalMaterial({
+        albedo: new Color3(Math.random(), Math.random(), Math.random()),
+        albedoTexture: texture,
+        specularRoughness: Math.random(),
+        metallic: Math.random()
+      })
+    });
+    root.children.push(sphereMesh);
+  }
 
   const directionalLight = new PointLight({
     translation: new Vec3(0, 0, 0),
@@ -82,8 +82,6 @@ async function init(): Promise<null> {
     true,
     DepthTestFunc.LessOrEqual
   );
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     canvasFramebuffer.clear();

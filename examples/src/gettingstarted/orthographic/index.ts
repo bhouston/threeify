@@ -49,7 +49,6 @@ async function init(): Promise<null> {
     map: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     const now = Date.now();

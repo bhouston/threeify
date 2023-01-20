@@ -39,11 +39,11 @@ async function init(): Promise<null> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
-  glTFModel.rotation = quatRotateZ( quatRotateY(
-    glTFModel.rotation,
+  glTFModel.rotation = quatRotateZ(
+    quatRotateY(glTFModel.rotation, Math.PI * 0.25, glTFModel.rotation),
     Math.PI * 0.25,
     glTFModel.rotation
-  ), Math.PI *0.25, glTFModel.rotation);
+  );
   root.children.push(glTFModel);
   const pointLight = new PointLight({
     translation: new Vec3(5, 5, 5),
@@ -61,10 +61,6 @@ async function init(): Promise<null> {
   const sceneCache = sceneToSceneCache(context, root, camera, () => {
     return shaderMaterial;
   });
-
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     canvasFramebuffer.clear();

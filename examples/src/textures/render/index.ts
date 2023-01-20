@@ -67,7 +67,6 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     const now = Date.now();

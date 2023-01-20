@@ -54,7 +54,6 @@ async function init(): Promise<null> {
     perceptualRoughness: 0
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);

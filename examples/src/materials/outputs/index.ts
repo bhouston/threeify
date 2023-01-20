@@ -86,9 +86,6 @@ async function init(): Promise<null> {
     time: 0
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   const fragmentOutputs = [
     OutputChannels.Depth,

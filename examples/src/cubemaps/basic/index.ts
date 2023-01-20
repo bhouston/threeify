@@ -46,7 +46,6 @@ async function init(): Promise<null> {
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);

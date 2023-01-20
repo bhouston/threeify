@@ -117,7 +117,10 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
             0,
             attribute.getNormalized()
           );
-          console.log( semanticToThreeifyName[semantic], geometry.attributes[semanticToThreeifyName[semantic]]);
+          console.log(
+            semanticToThreeifyName[semantic],
+            geometry.attributes[semanticToThreeifyName[semantic]]
+          );
         });
         const material = primitive.getMaterial();
 

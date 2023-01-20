@@ -200,7 +200,7 @@ export function geometryToBoundingBox(geometry: Geometry): Box3 {
   const bb = new Box3();
   const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
-    box3ExpandByPoint3( bb, positions.get(i, v), bb );
+    box3ExpandByPoint3(bb, positions.get(i, v), bb);
   }
   return bb;
 }

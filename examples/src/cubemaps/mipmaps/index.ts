@@ -57,7 +57,6 @@ async function init(): Promise<null> {
     mipCount: cubeTexture.mipCount
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
