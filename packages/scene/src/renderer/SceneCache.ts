@@ -1,4 +1,4 @@
-import { BufferGeometry, ProgramVertexArray, Buffer, Program, TexImage2D, UniformValueMap } from "@threeify/core";
+import { BufferGeometry, ProgramVertexArray, Buffer, Program, TexImage2D, UniformValueMap, Material } from "@threeify/core";
 import { SceneNode } from "../scene/SceneNode";
 import { CameraUniforms } from "./CameraUniforms";
 import { LightUniforms } from "./LightUniforms";
@@ -18,7 +18,9 @@ export class SceneCache {
     new Map();
 
   public shaderNameToProgram: Map<string, Program> = new Map();
+  public materialIdToMaterial: Map<string, Material> = new Map();
   public materialIdToUniforms: Map<string, UniformValueMap> = new Map();
+  public materialIdToMaterialUniformBuffers: Map<string, Buffer> = new Map();
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
 
   public shaderNameToLightingUniformBuffers: Map<string, Buffer> = new Map();
