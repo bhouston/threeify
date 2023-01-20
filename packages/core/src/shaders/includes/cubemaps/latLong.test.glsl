@@ -2,11 +2,11 @@
 #pragma include "latLong"
 
 void testEquivalency(inout TestSuite suite, int testId, vec3 dir) {
-  vec2 uv = directionToLatLongUV(dir);
-  vec3 dir2 = latLongUvToDirection(uv);
+  vec2 uv0 = directionToLatLongUV(dir);
+  vec3 dir2 = latLongUvToDirection(uv0);
   vec2 uv2 = directionToLatLongUV(dir2);
   assert(suite, testId, eqAbs(dir, dir2, 0.00001));
-  assert(suite, testId + 1, eqAbs(uv, uv2, 0.00001));
+  assert(suite, testId + 1, eqAbs(uv0, uv2, 0.00001));
 }
 
 void tests(inout TestSuite suite) {

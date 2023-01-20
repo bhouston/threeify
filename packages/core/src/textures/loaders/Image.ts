@@ -26,6 +26,11 @@ export function fetchImageElement(
   });
 }
 
+export function createImageBitmapFromArrayBuffer( arrayBufferView: ArrayBufferView,  mimeType: string ): Promise<ImageBitmap> {
+   var blob = new Blob([arrayBufferView], { type: mimeType });
+    return createImageBitmap( blob );
+}
+
 export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
   return new Promise<ImageBitmap>((resolve, reject) => {
     fetch(url)

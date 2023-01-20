@@ -25,9 +25,9 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const geometry = planeGeometry(1, 0.5);
-  const uvs = geometry.attributes.uv;
-  if (uvs !== undefined) {
-    const uvView = makeVec2View(uvs.attributeData.arrayBuffer);
+  const uv0 = geometry.attributes.uv0;
+  if (uv0 !== undefined) {
+    const uvView = makeVec2View(uv0.attributeData.arrayBuffer);
     const uv = new Vec2();
     for (let u = 0; u < uvView.count; u++) {
       uvView.get(u, uv);

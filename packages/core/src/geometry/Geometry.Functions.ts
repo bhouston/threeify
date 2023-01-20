@@ -1,4 +1,6 @@
 import { makeVec3View } from '../math/arrays/PrimitiveView.js';
+import { box3ExpandByPoint3 } from '../math/Box3.Functions.js';
+import { Box3 } from '../math/Box3.js';
 import { Mat4 } from '../math/Mat4.js';
 import {
   mat4TransformNormal3,
@@ -186,4 +188,19 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
       normals.set(i, v);
     }
   }
+}
+
+export function geometryToBoundingBox(geometry: Geometry): Box3 {
+  const positionAttribute = geometry.attributes.position;
+  if (positionAttribute === undefined) {
+    throw new Error('missing position attribute');
+  }
+  const positions = makeVec3View(positionAttribute);
+
+  const bb = new Box3();
+  const v = new Vec3();
+  for (let i = 0; i < positions.count; i++) {
+    box3ExpandByPoint3( bb, positions.get(i, v), bb );
+  }
+  return bb;
 }

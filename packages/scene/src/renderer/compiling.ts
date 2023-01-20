@@ -19,7 +19,7 @@ import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { LightType } from '../scene/lights/LightType';
 import { PointLight } from '../scene/lights/PointLight';
 import { SpotLight } from '../scene/lights/SpotLight';
-import { Mesh } from '../scene/Mesh';
+import { MeshNode } from '../scene/Mesh';
 import { Camera } from '../scene/cameras/Camera';
 import { breadthFirstVisitor } from '../scene/Visitors';
 import { CameraUniforms } from './CameraUniforms';
@@ -57,7 +57,7 @@ export function sceneToSceneCache(
       lightToSceneCache(node as Light, lightUniforms);
     }
 
-    if (node instanceof Mesh) {
+    if (node instanceof MeshNode) {
       meshToSceneCache(context, node, shaderResolver, sceneCache);
     }
   });
@@ -80,7 +80,7 @@ function cameraToSceneCache(camera: Camera, cameraUniforms: CameraUniforms) {
 
 function meshToSceneCache(
   context: RenderingContext,
-  mesh: Mesh,
+  mesh: MeshNode,
   shaderResolver: (shaderName: string) => ShaderMaterial,
   sceneCache: SceneCache
 ) {
@@ -197,8 +197,8 @@ function createMeshBatches(sceneCache: SceneCache) {
   } = sceneCache;
 
   for (const node of breathFirstNodes) {
-    if (node instanceof Mesh) {
-      const mesh = node as Mesh;
+    if (node instanceof MeshNode) {
+      const mesh = node as MeshNode;
 
       // get buffer geometry
       const geometry = mesh.geometry;

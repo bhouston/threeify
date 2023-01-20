@@ -210,7 +210,7 @@ export function polyhedronGeometry(
   const { attributes } = geometry;
   attributes.position = makeFloat32Attribute(vertexBuffer, 3);
   attributes.normal = makeFloat32Attribute(vertexBuffer.slice(), 3);
-  attributes.uv = makeFloat32Attribute(uvBuffer, 2);
+  attributes.uv0 = makeFloat32Attribute(uvBuffer, 2);
 
   if (smoothNormals) {
     //console.log('computing smooth normals');

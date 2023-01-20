@@ -128,7 +128,7 @@ export function cylinderGeometry(
     normalsTop.concat(normalsBottom).concat(normalsSide),
     3
   );
-  geometry.attributes.uv = makeFloat32Attribute(
+  geometry.attributes.uv0 = makeFloat32Attribute(
     uvsTop.concat(uvsBottom).concat(uvsSide),
     2
   );

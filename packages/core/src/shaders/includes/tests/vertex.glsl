@@ -1,11 +1,11 @@
 in vec3 position;
-in vec2 uv;
+in vec2 uv0;
 
 out vec4 v_homogeneousVertexPosition;
 out vec2 v_uv;
 
 void main() {
-  v_uv = uv;
+  v_uv = uv0;
 
   // homogeneous vertex position
   gl_Position.xy = position.xy;

@@ -14,7 +14,7 @@ import {
 } from '@threeify/core';
 import {
   SceneNode,
-  Mesh,
+  MeshNode,
   PointLight,
   PerspectiveCamera,
   updateNodeTree,
@@ -47,8 +47,8 @@ async function init(): Promise<null> {
 
   const geometry = icosahedronGeometry(0.75, 5, true);
   const root = new SceneNode({ name: 'root' });
-  const sphereMesh = new Mesh({
-    position: new Vec3(0, 0, 0),
+  const sphereMesh = new MeshNode({
+    translation: new Vec3(0, 0, 0),
     geometry,
     material: new PhysicalMaterial({
       albedo: new Color3(1, 1, 1),
@@ -69,14 +69,14 @@ async function init(): Promise<null> {
   });
   root.children.push(sphereMesh);
   const pointLight = new PointLight({
-    position: new Vec3(2, 0, 2),
+    translation: new Vec3(2, 0, 2),
     color: new Color3(1, 1, 1),
     intensity: 10,
     range: 20
   });
   root.children.push(pointLight);
   const camera = new PerspectiveCamera(25, 0.1, 4, 1);
-  camera.position.set(0, 0, 3);
+  camera.translation.set(0, 0, 3);
   root.children.push(camera);
 
   updateNodeTree(root); // update the node tree (matrices, parents, etc.)

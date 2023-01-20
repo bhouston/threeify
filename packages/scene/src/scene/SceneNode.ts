@@ -10,7 +10,7 @@ import {
 export interface ISceneNode {
   id?: string;
   name?: string;
-  position?: Vec3;
+  translation?: Vec3;
   rotation?: Quat;
   scale?: Vec3;
   visible?: boolean;
@@ -22,7 +22,7 @@ export class SceneNode implements IIdentifiable, IVersionable {
   public name = '';
   public parent: SceneNode | undefined = undefined;
   public readonly children: SceneNode[] = [];
-  public position = new Vec3(0, 0, 0);
+  public translation = new Vec3(0, 0, 0);
   public rotation = new Quat(0, 0, 0, 1);
   public scale = new Vec3(1, 1, 1);
   public visible = true;
@@ -35,7 +35,7 @@ export class SceneNode implements IIdentifiable, IVersionable {
   constructor(props: ISceneNode = {}) {
     this.id = props.id || generateUUID();
     this.name = props.name || this.name;
-    if (props.position !== undefined) this.position.copy(props.position);
+    if (props.translation !== undefined) this.translation.copy(props.translation);
     if (props.rotation !== undefined) this.rotation.copy(props.rotation);
     if (props.scale !== undefined) this.scale.copy(props.scale);
     this.visible = props.visible || this.visible;
