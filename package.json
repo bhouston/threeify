@@ -20,7 +20,6 @@
     "url": "https://github.com/threeify/threeify"
   },
   "devDependencies": {
-    "@threeify/shader-transpiler": "*",
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
@@ -60,6 +59,7 @@
   ],
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
-    "@gltf-transform/extensions": "^2.5.1"
+    "@gltf-transform/extensions": "^2.5.1",
+    "@threeify/shader-transpiler": "^2.0.7"
   }
 }

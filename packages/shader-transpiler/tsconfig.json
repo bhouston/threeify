@@ -1,27 +1,25 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
     "target": "ES2020",
     "module": "ES2020",
-    "declaration": true,
     "sourceMap": true,
-    "declarationMap": true,
-    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "removeComments": false,
+    "removeComments": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["*.test.ts"],
-  "typedocOptions": {
-    "mode": "modules",
-    "out": "./docs",
-    "gaID": "UA-172098276-1",
-    "gaID": "threeify.org"
-  }
+  "exclude": [
+    "**/*.test.ts"
+  ]
 }
