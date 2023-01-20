@@ -1,4 +1,3 @@
-
 import {
   ShaderMaterial,
   Texture,
@@ -12,7 +11,15 @@ import {
   ClearState,
   CullingState
 } from '@threeify/core';
-import { SceneNode, PointLight, PerspectiveCamera, updateNodeTree, sceneToSceneCache, renderSceneViaSceneCache, Mesh } from '@threeify/scene';
+import {
+  SceneNode,
+  PointLight,
+  PerspectiveCamera,
+  updateNodeTree,
+  sceneToSceneCache,
+  renderSceneViaSceneCache,
+  Mesh
+} from '@threeify/scene';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

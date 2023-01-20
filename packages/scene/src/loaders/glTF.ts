@@ -3,8 +3,6 @@ import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import { mat4FromArray } from '@threeify/core';
 import { SceneNode } from '../scene/SceneNode';
 
-
-
 export async function loadGLTF(url: string): Promise<SceneNode> {
   const io = new WebIO();
   io.registerExtensions(KHRONOS_EXTENSIONS);

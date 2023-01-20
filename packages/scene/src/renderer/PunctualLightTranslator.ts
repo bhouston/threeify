@@ -1,10 +1,10 @@
 import { Vec3, Color3, color3MultiplyByScalar } from '@threeify/core';
-import { DirectionalLight } from "../scene/lights/DirectionalLight";
-import { LightType } from "../scene/lights/LightType";
-import { PointLight } from "../scene/lights/PointLight";
-import { SpotLight } from "../scene/lights/SpotLight";
-import { SceneNode } from "../scene/SceneNode";
-import { depthFirstVisitor } from "../scene/Visitors";
+import { DirectionalLight } from '../scene/lights/DirectionalLight';
+import { LightType } from '../scene/lights/LightType';
+import { PointLight } from '../scene/lights/PointLight';
+import { SpotLight } from '../scene/lights/SpotLight';
+import { SceneNode } from '../scene/SceneNode';
+import { depthFirstVisitor } from '../scene/Visitors';
 import { Light } from '../scene/lights/Light';
 
 export class PunctualLightUniforms {

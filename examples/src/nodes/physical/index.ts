@@ -1,4 +1,3 @@
-
 import {
   ClearState,
   Color3,
@@ -13,7 +12,15 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
-import { SceneNode, Mesh, PointLight, PerspectiveCamera, updateNodeTree, sceneToSceneCache, renderSceneViaSceneCache } from '@threeify/scene';
+import {
+  SceneNode,
+  Mesh,
+  PointLight,
+  PerspectiveCamera,
+  updateNodeTree,
+  sceneToSceneCache,
+  renderSceneViaSceneCache
+} from '@threeify/scene';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

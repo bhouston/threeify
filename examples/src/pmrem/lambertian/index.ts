@@ -1,5 +1,30 @@
-
-import { icosahedronGeometry, ShaderMaterial, Texture, fetchImage, TextureWrap, TextureFilter, Vec2, CubeMapTexture, RenderingContext, makeTexImage2DFromEquirectangularTexture, passGeometry, makeProgramFromShaderMaterial, makeBufferGeometryFromGeometry, makeTexImage2DFromCubeTexture, Framebuffer, cubeFaceTargets, Attachment, renderBufferGeometry, Mat4, translation3ToMat4, Vec3, mat4PerspectiveFov, DepthTestState, euler3ToMat4, Euler3 } from '@threeify/core';
+import {
+  icosahedronGeometry,
+  ShaderMaterial,
+  Texture,
+  fetchImage,
+  TextureWrap,
+  TextureFilter,
+  Vec2,
+  CubeMapTexture,
+  RenderingContext,
+  makeTexImage2DFromEquirectangularTexture,
+  passGeometry,
+  makeProgramFromShaderMaterial,
+  makeBufferGeometryFromGeometry,
+  makeTexImage2DFromCubeTexture,
+  Framebuffer,
+  cubeFaceTargets,
+  Attachment,
+  renderBufferGeometry,
+  Mat4,
+  translation3ToMat4,
+  Vec3,
+  mat4PerspectiveFov,
+  DepthTestState,
+  euler3ToMat4,
+  Euler3
+} from '@threeify/core';
 import fragmentSource from './fragment.glsl';
 import { samplerMaterial } from './sampler/SamplerMaterial.js';
 import vertexSource from './vertex.glsl';

@@ -1,4 +1,4 @@
-import { SceneNode } from "./SceneNode";
+import { SceneNode } from './SceneNode';
 
 export function depthFirstVisitor(
   node: SceneNode,

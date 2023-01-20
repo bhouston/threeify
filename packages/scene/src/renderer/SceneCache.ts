@@ -1,9 +1,17 @@
-import { BufferGeometry, ProgramVertexArray, Buffer, Program, TexImage2D, UniformValueMap, Material } from "@threeify/core";
-import { SceneNode } from "../scene/SceneNode";
-import { CameraUniforms } from "./CameraUniforms";
-import { LightUniforms } from "./LightUniforms";
-import { MeshBatch } from "./MeshBatch";
-import { NodeUniforms } from "./NodeUniforms";
+import {
+  BufferGeometry,
+  ProgramVertexArray,
+  Buffer,
+  Program,
+  TexImage2D,
+  UniformValueMap,
+  Material
+} from '@threeify/core';
+import { SceneNode } from '../scene/SceneNode';
+import { CameraUniforms } from './CameraUniforms';
+import { LightUniforms } from './LightUniforms';
+import { MeshBatch } from './MeshBatch';
+import { NodeUniforms } from './NodeUniforms';
 
 export class SceneCache {
   public breathFirstNodes: SceneNode[] = [];

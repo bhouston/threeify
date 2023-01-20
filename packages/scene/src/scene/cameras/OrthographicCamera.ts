@@ -1,5 +1,5 @@
-import { Vec2, Mat4, mat4OrthographicSimple } from "@threeify/core";
-import { Camera } from "./Camera";
+import { Vec2, Mat4, mat4OrthographicSimple } from '@threeify/core';
+import { Camera } from './Camera';
 
 export class OrthographicCamera extends Camera {
   constructor(

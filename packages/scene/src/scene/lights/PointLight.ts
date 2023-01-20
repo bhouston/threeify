@@ -1,4 +1,4 @@
-import { ILight, Light } from "./Light";
+import { ILight, Light } from './Light';
 
 export interface IPointLight extends ILight {
   range?: number;

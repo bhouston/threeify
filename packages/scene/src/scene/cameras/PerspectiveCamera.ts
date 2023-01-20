@@ -1,5 +1,5 @@
-import { Mat4, mat4PerspectiveFov } from "@threeify/core";
-import { Camera } from "./Camera";
+import { Mat4, mat4PerspectiveFov } from '@threeify/core';
+import { Camera } from './Camera';
 
 export class PerspectiveCamera extends Camera {
   constructor(

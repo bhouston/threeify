@@ -1,5 +1,5 @@
-import { Vec3 } from "@threeify/core";
-import { ILight, Light } from "./Light";
+import { Vec3 } from '@threeify/core';
+import { ILight, Light } from './Light';
 
 export interface IDirectionalLight extends ILight {
   direction?: Vec3;

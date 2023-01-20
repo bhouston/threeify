@@ -1,5 +1,9 @@
-import { VirtualFramebuffer, renderBufferGeometry, UniformValueMap } from "@threeify/core";
-import { SceneCache } from "./SceneCache";
+import {
+  VirtualFramebuffer,
+  renderBufferGeometry,
+  UniformValueMap
+} from '@threeify/core';
+import { SceneCache } from './SceneCache';
 
 export function renderSceneViaSceneCache(
   framebuffer: VirtualFramebuffer,

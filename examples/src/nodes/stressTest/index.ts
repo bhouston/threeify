@@ -16,7 +16,8 @@ import {
 import {
   SceneNode,
   PointLight,
-  Mesh, PerspectiveCamera,
+  Mesh,
+  PerspectiveCamera,
   updateNodeTree,
   sceneToSceneCache,
   renderSceneViaSceneCache

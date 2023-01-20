@@ -1,4 +1,11 @@
-import { Vec3, Quat, IIdentifiable, IVersionable, Mat4, generateUUID } from "@threeify/core";
+import {
+  Vec3,
+  Quat,
+  IIdentifiable,
+  IVersionable,
+  Mat4,
+  generateUUID
+} from '@threeify/core';
 
 export interface ISceneNode {
   id?: string;
