@@ -1,5 +1,4 @@
 import {
-  DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -18,6 +17,7 @@ import {
   TextureFilter,
   TextureWrap
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

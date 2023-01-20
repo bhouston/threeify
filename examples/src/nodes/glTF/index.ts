@@ -1,30 +1,21 @@
 import {
-  ClearState,
   Color3,
-  CullingState,
-  DepthTestState,
-  fetchImage,
-  icosahedronGeometry,
-  PhysicalMaterial,
-  quatRotateX,
   quatRotateY,
   quatRotateZ,
   RenderingContext,
   ShaderMaterial,
-  Texture,
-  Vec2,
   Vec3
 } from '@threeify/core';
 import {
-  SceneNode,
-  MeshNode,
-  PointLight,
+  glTFToSceneNode,
   PerspectiveCamera,
-  updateNodeTree,
-  sceneToSceneCache,
+  PointLight,
   renderSceneViaSceneCache,
-  glTFToSceneNode
+  SceneNode,
+  sceneToSceneCache,
+  updateNodeTree
 } from '@threeify/scene';
+
 import { KhronosModels } from '../../KhronosModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

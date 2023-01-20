@@ -1,9 +1,6 @@
 import {
-  ClearState,
   Color3,
   color3MultiplyByScalar,
-  CullingState,
-  DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -18,6 +15,7 @@ import {
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

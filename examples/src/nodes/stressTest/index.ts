@@ -1,8 +1,5 @@
 import {
-  ClearState,
   Color3,
-  CullingState,
-  DepthTestState,
   Euler3,
   euler3ToQuat,
   fetchImage,
@@ -14,14 +11,15 @@ import {
   Vec3
 } from '@threeify/core';
 import {
-  SceneNode,
-  PointLight,
   MeshNode,
   PerspectiveCamera,
-  updateNodeTree,
+  PointLight,
+  renderSceneViaSceneCache,
+  SceneNode,
   sceneToSceneCache,
-  renderSceneViaSceneCache
+  updateNodeTree
 } from '@threeify/scene';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

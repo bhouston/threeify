@@ -3,7 +3,6 @@ import {
   Color3,
   cubeFaceTargets,
   CubeMapTexture,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   Framebuffer,
@@ -23,6 +22,7 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import { patternMaterial } from './pattern/PatternMaterial.js';
 import vertexSource from './vertex.glsl';

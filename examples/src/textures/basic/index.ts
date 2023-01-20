@@ -9,6 +9,7 @@ import {
   ShaderMaterial,
   Texture
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

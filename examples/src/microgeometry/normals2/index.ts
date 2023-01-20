@@ -1,9 +1,6 @@
 import {
-  ClearState,
   Color3,
   color3MultiplyByScalar,
-  CullingState,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   EulerOrder3,
@@ -23,6 +20,7 @@ import {
   vec2MultiplyByScalar,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

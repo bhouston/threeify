@@ -1,5 +1,5 @@
 {
-  "name": "@threeify",
+  "name": "threeify",
   "version": "2.1.0",
   "private": true,
   "description": "Typescript 3D Library loosely based on three.js",

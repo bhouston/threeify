@@ -4,7 +4,6 @@ import {
   BufferBit,
   ClearState,
   Color3,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   fetchImage,
@@ -23,6 +22,7 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

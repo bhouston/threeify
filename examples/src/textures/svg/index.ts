@@ -12,6 +12,7 @@ import {
   Texture,
   Vec2
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

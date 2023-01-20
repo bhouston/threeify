@@ -1,25 +1,23 @@
 import {
+  Color3,
+  fetchImage,
+  icosahedronGeometry,
+  PhysicalMaterial,
+  RenderingContext,
   ShaderMaterial,
   Texture,
-  fetchImage,
-  RenderingContext,
-  icosahedronGeometry,
-  Vec3,
-  PhysicalMaterial,
-  Color3,
-  DepthTestState,
-  ClearState,
-  CullingState
+  Vec3
 } from '@threeify/core';
 import {
-  SceneNode,
-  PointLight,
+  MeshNode,
   PerspectiveCamera,
-  updateNodeTree,
-  sceneToSceneCache,
+  PointLight,
   renderSceneViaSceneCache,
-  MeshNode
+  SceneNode,
+  sceneToSceneCache,
+  updateNodeTree
 } from '@threeify/scene';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
