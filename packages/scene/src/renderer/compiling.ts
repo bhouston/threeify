@@ -12,7 +12,8 @@ import {
   ProgramVertexArray,
   UniformBufferMap,
   mat4TransformNormal3,
-  Texture
+  Texture,
+  ProgramUniform
 } from '@threeify/core';
 import { DirectionalLight } from "../scene/lights/DirectionalLight";
 import { LightType } from "../scene/lights/LightType";
@@ -244,7 +245,6 @@ function createMeshBatches(sceneCache: SceneCache) {
       }
 
       const materialUniformBlock = program.uniformBlocks['Material'];
-      console.log( 'program.uniformBlocks', program.uniformBlocks);
       if (materialUniformBlock !== undefined) {
         const materialUniformBuffer = materialIdToMaterialUniformBuffers.get(
           material.id
@@ -258,11 +258,10 @@ function createMeshBatches(sceneCache: SceneCache) {
         if (materialUniforms === undefined)
           throw new Error('Material Uniforms not found');
 
-        uniformValueMaps.push(materialUniforms as unknown as UniformValueMap);
+        uniformValueMaps.push(
+          filterUniforms(materialUniforms as unknown as UniformValueMap, Object.values( program.uniforms)));
       }
 
-      console.log( 'uniformValueMaps', uniformValueMaps);
-      console.log( 'uniformBufferMap', uniformBufferMap);
 
       /*const materialUniformBlock = program.uniformBlocks['Material'];
       const lightingUniformBlock = program.uniformBlocks['Lighting'];
@@ -280,6 +279,18 @@ function createMeshBatches(sceneCache: SceneCache) {
       );
     }
   }
+}
+
+
+function filterUniforms( uniforms: UniformValueMap, prgramUniforms: ProgramUniform[] ) {
+  const filteredUniforms: UniformValueMap = {};
+  for (const programUniform of prgramUniforms) {
+    const uniformValue = uniforms[programUniform.name];
+    if (uniformValue !== undefined) {
+      filteredUniforms[programUniform.name] = uniformValue;
+    }
+  }
+  return filteredUniforms;
 }
 
 function createLightingUniformBuffers(sceneCache: SceneCache) {

@@ -1,6 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env node --experimental-modules "$0" "$@"
 /* eslint-disable no-console */
-':'; //# comment; exec /usr/bin/env node --experimental-modules "$0" "$@"
 import fs from 'node:fs';
 import path from 'node:path';
 import process, { exit } from 'node:process';
@@ -19,7 +18,7 @@ function commaSeparatedList(value: string): string[] {
 const packageJson = JSON.parse(fs.readFileSync('./package.json').toString());
 
 program
-  .name('threeify-glsl-transpiler')
+  .name('@threeify/shader-transpiler')
   .version(packageJson.version)
   .option(
     '-p, --projectDir <dirpath>',

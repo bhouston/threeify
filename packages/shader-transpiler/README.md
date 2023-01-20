@@ -1,11 +1,11 @@
-<h1 align="center" style="border-bottom: none;">threeify-glsl-transpiler</h1>
+<h1 align="center" style="border-bottom: none;">@threeify/shader-transpiler</h1>
 <h3 align="center">A glsl to JS module transpiler.</h3>
 <p align="center">
-  <a href="https://www.npmjs.com/package/threeify-glsl-transpiler">
-    <img alt="npm latest version" src="https://img.shields.io/npm/v/threeify-glsl-transpiler/latest.svg">
+  <a href="https://www.npmjs.com/package/@threeify/shader-transpiler">
+    <img alt="npm latest version" src="https://img.shields.io/npm/v/@threeify/shader-transpiler/latest.svg">
   </a>
   <a href="https://www.npmjs.com/package/threeify">
-    <img alt="npm next version" src="https://img.shields.io/npm/v/threeify-glsl-transpiler/next.svg">
+    <img alt="npm next version" src="https://img.shields.io/npm/v/@threeify/shader-transpiler/next.svg">
   </a>
 </p>
 
