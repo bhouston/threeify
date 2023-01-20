@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-modules "$0" "$@"
+#!/usr/bin/env -S node --experimental-modules
 /* eslint-disable no-console */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -120,16 +120,18 @@ if (!options.rootDir) {
   console.error(`no rootDir specified`);
   exit(0);
 }
-if (!fs.existsSync(options.rootDir)) {
-  console.error(`rootDir doesn't exist: ${options.rootDir}`);
-  exit(0);
-}
 if (!options.outDir) {
   console.error(`no outDir specified`);
   exit(0);
 }
 
 options.rootDir = path.normalize(path.join(projectDir, options.rootDir));
+
+if (!fs.existsSync(options.rootDir)) {
+  console.error(`rootDir doesn't exist: ${options.rootDir}`);
+  exit(0);
+}
+
 options.outDir = path.normalize(path.join(projectDir, options.outDir));
 options.includeDirs = options.includeDirs.map((includeDir) =>
   path.normalize(path.join(projectDir, includeDir))

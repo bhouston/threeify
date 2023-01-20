@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "tsc --build & tst",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tst --watch",
+    "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch  & tst --watch --projectDir \"./examples\"",
     "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
     "lint": "eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\"",
     "lint:fix": "npm run lint -- --fix",
