@@ -38,22 +38,24 @@ uniform sampler2D sheenRoughnessFactorTexture;
 
 PhysicalMaterial readPhysicalMaterialFromUniforms() {
 
+    vec2 uv = v_uv0;
+
     PhysicalMaterial material;
-    material.alpha = alpha * texture( alphaTexture, v_uv0 ).r;
-    material.albedo = albedo * sRGBToLinear( texture( albedoTexture, v_uv0 ).rgb );
-    material.specularFactor = specularFactor * texture( specularFactorTexture, v_uv0 ).r;
-    material.specularColor = specularColor * sRGBToLinear( texture( specularColorTexture, v_uv0 ).rgb );
-    material.specularRoughness = specularRoughness * texture( specularRoughnessTexture, v_uv0 ).r;
-    material.metallic = metallic * texture( metallicTexture, v_uv0 ).r;
-    material.emissive = emissive * sRGBToLinear( texture( emissiveTexture, v_uv0 ).rgb );
-    material.normal = vec3( normalScale, 1.0 ) * rgbToNormal( texture( normalTexture, v_uv0 ).rgb );
+    material.alpha = alpha * texture(alphaTexture, uv).r;
+    material.albedo = albedo * sRGBToLinear(texture(albedoTexture, uv).rgb);
+    material.specularFactor = specularFactor * texture(specularFactorTexture, uv).r;
+    material.specularColor = specularColor * sRGBToLinear(texture(specularColorTexture, uv).rgb);
+    material.specularRoughness = specularRoughness * texture(specularRoughnessTexture, uv).b;
+    material.metallic = metallic * texture(metallicTexture, uv).r;
+    material.emissive = emissive * sRGBToLinear(texture(emissiveTexture, uv).rgb);
+    material.normal = vec3(normalScale, 1.0) * rgbToNormal(texture(normalTexture, uv).rgb);
     material.ior = ior;
-    material.clearcoatFactor = clearcoatFactor * texture( clearcoatFactorTexture, v_uv0 ).r;
-    material.clearcoatRoughness = clearcoatRoughnessFactor * texture( clearcoatRoughnessTexture, v_uv0 ).r;
-    material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( texture( clearcoatNormalTexture, v_uv0 ).rgb );
-    material.clearcoatTint = clearcoatTint * sRGBToLinear( texture( clearcoatTintTexture, v_uv0 ).rgb );
-    material.sheenColor = sheenColorFactor * sRGBToLinear( texture( sheenColorFactorTexture, v_uv0 ).rgb );
-    material.sheenRoughness = sheenRoughnessFactor * texture( sheenRoughnessFactorTexture, v_uv0 ).r;
+    material.clearcoatFactor = clearcoatFactor * texture(clearcoatFactorTexture, uv).r;
+    material.clearcoatRoughness = clearcoatRoughnessFactor * texture(clearcoatRoughnessTexture, uv).r;
+    material.clearcoatNormal = vec3(clearcoatNormalScale, 1.0) * rgbToNormal(texture(clearcoatNormalTexture, uv).rgb);
+    material.clearcoatTint = clearcoatTint * sRGBToLinear(texture(clearcoatTintTexture, uv).rgb);
+    material.sheenColor = sheenColorFactor * sRGBToLinear(texture(sheenColorFactorTexture, uv).rgb);
+    material.sheenRoughness = sheenRoughnessFactor * texture(sheenRoughnessFactorTexture, uv).r;
 
     return material;
 }

@@ -1,4 +1,10 @@
-import { Mesh, WebIO } from '@gltf-transform/core';
+import {
+  Material as GLTFMaterial,
+  Mesh as GLTFMesh,
+  Texture as GLTFTexture,
+  WebIO
+} from '@gltf-transform/core';
+import { equalsObject } from '@gltf-transform/core/dist/utils';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import {
   Attribute,
@@ -10,10 +16,19 @@ import {
   mat4FromArray,
   PhysicalMaterial,
   Vec3,
-  Quat
+  Quat,
+  Color3,
+  Texture,
+  Vec2,
+  ArrayBufferImage,
+  createImageBitmapFromArrayBuffer
 } from '@threeify/core';
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
+
+async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const semanticToThreeifyName: { [key: string]: string } = {
   POSITION: 'position',
@@ -26,6 +41,28 @@ const semanticToThreeifyName: { [key: string]: string } = {
   WEIGHTS_0: 'weights0'
 };
 
+async function toTexture(
+  texture: GLTFTexture | null
+): Promise<Texture | undefined> {
+  const size = toVec2(texture?.getSize() || [1, 1]);
+  const imageData = texture?.getImage();
+  if (imageData === null || imageData === undefined) {
+    return undefined;
+  }
+  const imageBitmap = await createImageBitmapFromArrayBuffer(
+    imageData,
+    texture?.getMimeType() || 'image/png'
+  );
+  return new Texture(imageBitmap);
+}
+
+function toColor3(values: number[]): Color3 {
+  return new Color3(values[0], values[1], values[2]);
+}
+
+function toVec2(values: number[]): Vec2 {
+  return new Vec2(values[0], values[1]);
+}
 function toVec3(values: number[]): Vec3 {
   return new Vec3(values[0], values[1], values[2]);
 }
@@ -42,17 +79,22 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
 
   const rootNode = new SceneNode();
 
-  scene.listChildren().forEach((node) => {
+  for (const node of scene.listChildren()) {
     const translation = toVec3(node.getTranslation());
     const rotation = toQuat(node.getRotation());
     const scale = toVec3(node.getScale());
 
+    const localNode = new SceneNode({ translation, scale, rotation });
+    rootNode.children.push(localNode);
+
     const mesh = node.getMesh();
     if (mesh !== null) {
       const geometry = new Geometry();
-      mesh.listPrimitives().forEach((primitive) => {
-        console.log('primitive', primitive.getName(), primitive);
-        console.log('indices', primitive.getIndices());
+      for (const primitive of mesh.listPrimitives()) {
+        let physicalMaterial = new PhysicalMaterial({});
+
+        geometry.primitive = primitive.getMode();
+
         const indices = primitive.getIndices();
         if (indices !== null) {
           geometry.indices = new Attribute(
@@ -75,26 +117,43 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
             0,
             attribute.getNormalized()
           );
+          console.log( semanticToThreeifyName[semantic], geometry.attributes[semanticToThreeifyName[semantic]]);
         });
-      });
+        const material = primitive.getMaterial();
 
-      const material = new PhysicalMaterial({});
-      const meshNode = new MeshNode({
-        translation,
-        scale,
-        rotation,
-        geometry,
-        material
-      });
-      const bb = geometryToBoundingBox(geometry);
-      console.log('boundingBox', bb);
-      rootNode.children.push(meshNode);
-    } else {
-      const localNode = new SceneNode({ translation, scale, rotation });
+        if (material !== null) {
+          const metallicRoughnessTexture = await toTexture(
+            material.getMetallicRoughnessTexture()
+          );
+          physicalMaterial = new PhysicalMaterial({
+            albedo: toColor3(material.getBaseColorFactor()),
+            albedoTexture: await toTexture(material.getBaseColorTexture()),
+            metallic: material.getMetallicFactor(),
+            metallicTexture: metallicRoughnessTexture,
+            specularRoughness: material.getRoughnessFactor(),
+            specularRoughnessTexture: metallicRoughnessTexture,
+            emissiveColor: toColor3(material.getEmissiveFactor()),
+            emissiveTexture: await toTexture(material.getEmissiveTexture()),
+            normalScale: toVec2([
+              material.getNormalScale(),
+              material.getNormalScale()
+            ]),
+            normalTexture: await toTexture(material.getNormalTexture())
+          });
 
-      rootNode.children.push(localNode);
+          const meshNode = new MeshNode({
+            translation,
+            scale,
+            rotation,
+            geometry,
+            material: physicalMaterial
+          });
+          const bb = geometryToBoundingBox(geometry);
+          localNode.children.push(meshNode);
+        }
+      }
     }
-  });
+  }
 
   return new Promise<SceneNode>((resolve) => {
     resolve(rootNode);

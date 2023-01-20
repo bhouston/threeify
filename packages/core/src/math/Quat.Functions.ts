@@ -146,6 +146,24 @@ export function quatMultiply(a: Quat, b: Quat, result = new Quat()): Quat {
   );
 }
 
+export function quatRotateX( q: Quat, angle: number, result = new Quat() ): Quat {
+  const halfAngle = angle * 0.5;
+  const s = Math.sin(halfAngle);
+  return result.set(s, 0, 0, Math.cos(halfAngle));
+}
+
+export function quatRotateY( q: Quat, angle: number, result = new Quat() ): Quat {
+  const halfAngle = angle * 0.5;
+  const s = Math.sin(halfAngle);
+  return result.set(0, s, 0, Math.cos(halfAngle));
+}
+
+export function quatRotateZ( q: Quat, angle: number, result = new Quat() ): Quat {
+  const halfAngle = angle * 0.5;
+  const s = Math.sin(halfAngle);
+  return result.set(0, 0, s, Math.cos(halfAngle));
+}
+
 export function quatTransformPoint3(
   q: Quat,
   p: Vec3,

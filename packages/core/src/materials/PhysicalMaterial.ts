@@ -83,16 +83,16 @@ export class PhysicalMaterial extends Material {
   public albedo = new Color3(1, 1, 1);
   public albedoTexture?: Texture;
 
-  public specularFactor = 1;
+  public specularFactor = 0.5;
   public specularFactorTexture?: Texture;
 
   public specularColor = new Color3(1, 1, 1);
   public specularColorTexture?: Texture;
 
-  public specularRoughness = 0;
+  public specularRoughness = 0.5;
   public specularRoughnessTexture?: Texture;
 
-  public metallic = 0;
+  public metallic = 1;
   public metallicTexture?: Texture;
 
   public normalScale = new Vec2(1, 1);
@@ -106,7 +106,7 @@ export class PhysicalMaterial extends Material {
 
   public anisotropy = 0;
   public anisotropyTexture?: Texture;
-  public anisotropyDirection = new Vec3(1, 0, 0);
+  public anisotropyDirection = new Vec3(0, 0, 1);
   public anisotropyDirectionTexture?: Texture;
 
   public clearcoatFactor = 0;

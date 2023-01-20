@@ -6,6 +6,9 @@ import {
   fetchImage,
   icosahedronGeometry,
   PhysicalMaterial,
+  quatRotateX,
+  quatRotateY,
+  quatRotateZ,
   RenderingContext,
   ShaderMaterial,
   Texture,
@@ -28,19 +31,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<null> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
-  );
-  const flooringNormalTexture = new Texture(
-    await fetchImage('/assets/textures/metal_flooring_normals.jpg')
-  );
-  const scratchesTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/scratches.png')
-  );
-  const golfballNormalTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/normals2.jpg')
-  );
-
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
   );
@@ -49,16 +39,21 @@ async function init(): Promise<null> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
+  glTFModel.rotation = quatRotateZ( quatRotateY(
+    glTFModel.rotation,
+    Math.PI * 0.25,
+    glTFModel.rotation
+  ), Math.PI *0.25, glTFModel.rotation);
   root.children.push(glTFModel);
   const pointLight = new PointLight({
-    translation: new Vec3(0, 0, 10),
+    translation: new Vec3(5, 5, 5),
     color: new Color3(1, 1, 1),
-    intensity: 10,
+    intensity: 100,
     range: 1000
   });
   root.children.push(pointLight);
   const camera = new PerspectiveCamera(25, 0.1, 1000, 1);
-  camera.translation.set(0, 0, 10);
+  camera.translation.set(0, 0, 5);
   root.children.push(camera);
 
   updateNodeTree(root); // update the node tree (matrices, parents, etc.)

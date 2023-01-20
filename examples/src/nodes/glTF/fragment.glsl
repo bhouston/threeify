@@ -21,11 +21,6 @@ out vec4 outputColor;
 void main() {
   PhysicalMaterial material = readPhysicalMaterialFromUniforms();
 
-  vec3 dielectricSpecularF0 =
-    min(pow2((ior - 1.0) / (ior + 1.0)), 1.0) *
-    material.specularColor *
-    material.specularFactor;
-  vec3 dielectricSpecularF90 = vec3(material.specularFactor);
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
   vec3 viewDirection = normalize(-v_viewSurfacePosition);
@@ -35,7 +30,6 @@ void main() {
     normal,
     v_uv0
   );
-  vec3 clearcoatNormal = adjustNormal(tangentToView, material.clearcoatNormal);
   normal = adjustNormal(tangentToView, material.normal);
 
   vec3 outgoingRadiance;
@@ -49,34 +43,7 @@ void main() {
     );
 
     float dotNL = saturate(dot(directLight.direction, normal));
-    float clearcoatDotNL = saturate(
-      dot(directLight.direction, clearcoatNormal)
-    );
 
-
-    // this lack energy conservation.
-    outgoingRadiance +=
-      directLight.radiance *
-      dotNL *
-      BRDF_Sheen_Charlie(
-        normal,
-        viewDirection,
-        directLight.direction,
-        material.sheenColor,
-        0.5,
-        material.sheenRoughness
-      );
-    outgoingRadiance +=
-      directLight.radiance *
-      clearcoatDotNL *
-      BRDF_Specular_GGX(
-        clearcoatNormal,
-        viewDirection,
-        directLight.direction,
-        vec3(0.04) * material.clearcoatTint * material.clearcoatFactor,
-        vec3(1.0) * material.clearcoatFactor,
-        material.clearcoatRoughness
-      );
     outgoingRadiance +=
       directLight.radiance *
       dotNL *
@@ -84,8 +51,8 @@ void main() {
         normal,
         viewDirection,
         directLight.direction,
-        dielectricSpecularF0,
-        dielectricSpecularF90,
+        vec3( 1.0 ),
+        vec3( 1.0 ),
         material.specularRoughness
       );
      vec3 c_diffuse =
@@ -96,7 +63,6 @@ void main() {
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.r = 1.0;
   outputColor.a = 1.0;
 
 }
