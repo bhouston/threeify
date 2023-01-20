@@ -9,7 +9,7 @@
 vec2 directionToLatLongUV(vec3 dir) {
   vec2 s = cartesianToNZSpherical(dir);
   return vec2(
-    fract(s.x * RECIPROCAL_PI2 + 0.75), // this makes maps -z dir to the center of the UV space.
+    fract(s.x * RECIPROCAL_PI2 + 0.75), // this makes maps -z dir to the center of the uv0 space.
     s.y / PI
   );
 }

@@ -5,7 +5,7 @@ export interface IMesh extends ISceneNode {
   geometry: Geometry;
   material: Material;
 }
-export class Mesh extends SceneNode {
+export class MeshNode extends SceneNode {
   public geometry: Geometry;
   public material: Material;
 

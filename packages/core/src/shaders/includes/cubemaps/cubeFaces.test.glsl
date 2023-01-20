@@ -6,13 +6,13 @@ void testDirectionToCubeFaceUV(
   int testId,
   vec3 dir,
   int face,
-  vec2 uv
+  vec2 uv0
 ) {
   int face2;
   vec2 uv2;
   directionToCubeFaceUV(dir, face2, uv2);
   assert(suite, testId, face2 == face);
-  assert(suite, testId + 1, eqAbs(uv, uv2, 0.00001));
+  assert(suite, testId + 1, eqAbs(uv0, uv2, 0.00001));
 
   vec3 dir2 = cubeFaceUVToDirection(face2, uv2);
   assert(suite, testId + 5, eqAbs(dir, dir2, 0.0001));

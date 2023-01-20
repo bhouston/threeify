@@ -49,7 +49,7 @@ export function parseOBJ(text: string): Geometry[] {
     geometry.indices = makeUint32Attribute(indices);
     geometry.attributes.position = makeFloat32Attribute(positions, 3);
     geometry.attributes.normal = makeFloat32Attribute(normals, 3);
-    geometry.attributes.uv = makeFloat32Attribute(uvs, 2);
+    geometry.attributes.uv0 = makeFloat32Attribute(uvs, 2);
 
     indices = [];
     positions = [];

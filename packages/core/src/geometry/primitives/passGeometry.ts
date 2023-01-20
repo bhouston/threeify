@@ -30,7 +30,7 @@ export function passGeometry(
 
   // texture space is not the same as clip space.  Thus this goes to the same locations but it has different
   // values
-  geometry.attributes.uv = makeFloat32Attribute([0, 1, 0, 0, 1, 0, 1, 1], 2);
+  geometry.attributes.uv0 = makeFloat32Attribute([0, 1, 0, 0, 1, 0, 1, 1], 2);
 
   // because -z points forward, the normals for this to point towards would have to be +z.
   geometry.attributes.normal = makeFloat32Attribute(

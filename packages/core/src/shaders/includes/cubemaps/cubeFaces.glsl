@@ -1,7 +1,7 @@
 #pragma once
 
 // reference: https://github.com/tmarrinan/cube2equirect
-void directionToCubeFaceUV(vec3 dir, out int face, out vec2 uv) {
+void directionToCubeFaceUV(vec3 dir, out int face, out vec2 uv0) {
   vec3 temp;
 
   // X dominant
@@ -37,13 +37,13 @@ void directionToCubeFaceUV(vec3 dir, out int face, out vec2 uv) {
   vec2 clipXY = temp.xy / temp.z;
 
   // clip space to texture space
-  uv = clipXY * 0.5 + 0.5;
+  uv0 = clipXY * 0.5 + 0.5;
 }
 
 // Ben believes this is good based on the visual results.
-vec3 cubeFaceUVToDirection(int face, vec2 uv) {
+vec3 cubeFaceUVToDirection(int face, vec2 uv0) {
   // texture space to clip space.
-  vec2 clipXY = uv * 2.0 - 1.0;
+  vec2 clipXY = uv0 * 2.0 - 1.0;
 
   vec3 result;
   if (face == 0) {

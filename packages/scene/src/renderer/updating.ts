@@ -16,7 +16,7 @@ export function updateNode(node: SceneNode, parentNode: SceneNode | undefined) {
   node.parent = parentNode;
 
   mat4Compose(
-    node.position,
+    node.translation,
     node.rotation,
     node.scale,
     node.localToParentMatrix

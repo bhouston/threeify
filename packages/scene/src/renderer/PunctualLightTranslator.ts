@@ -30,7 +30,7 @@ export function punctualLightsTranslator(
     }
     const light = node as Light;
     result.numLights++;
-    result.lightPositions.push(light.position);
+    result.lightPositions.push(light.translation);
     result.lightColors.push(
       color3MultiplyByScalar(light.color, light.intensity)
     );

@@ -1,6 +1,6 @@
 in vec3 position;
 in vec3 normal;
-in vec2 uv;
+in vec2 uv0;
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
@@ -21,11 +21,11 @@ void main() {
   mat4 localToView = worldToView * localToWorld;
   v_viewSurfaceNormal = mat4TransformDirection(localToView, normalize(normal));
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
-  v_uv0 = uv;
+  v_uv0 = uv0;
 
   if ((featureFlags & 0x8000) != 0) {
     float displacementAmount =
-      texture(displacementMap, vec2(1.0) - uv).x * displacementScale;
+      texture(displacementMap, vec2(1.0) - uv0).x * displacementScale;
     v_viewSurfacePosition = displacePosition(
       v_viewSurfacePosition,
       v_viewSurfaceNormal,

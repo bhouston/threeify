@@ -1,6 +1,6 @@
 attribute vec3 position;
 attribute vec3 normal;
-attribute vec2 uv;
+attribute vec2 uv0;
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
@@ -15,7 +15,7 @@ void main() {
     (worldToView * localToWorld * vec4(normal, 0.0)).xyz
   );
   v_viewPosition = (worldToView * localToWorld * vec4(position, 1.0)).xyz;
-  v_uv = uv;
+  v_uv = uv0;
 
   gl_Position = viewToScreen * vec4(v_viewPosition, 1.0);
 

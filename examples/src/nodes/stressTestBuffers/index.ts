@@ -16,7 +16,7 @@ import {
 } from '@threeify/core';
 import {
   SceneNode,
-  Mesh,
+  MeshNode,
   PointLight,
   PerspectiveCamera,
   updateNodeTree,
@@ -41,8 +41,8 @@ async function init(): Promise<null> {
  const geometry = icosahedronGeometry(0.1, 5, true);
      const root = new SceneNode({ name: 'root' });
     for (let i = 0; i < 1000; i++) {
-      const sphereMesh = new Mesh({
-        position: new Vec3(
+      const sphereMesh = new MeshNode({
+        translation: new Vec3(
           Math.random() * 2 - 1,
           Math.random() * 2 - 1,
           Math.random() * 2 - 1
@@ -62,14 +62,14 @@ async function init(): Promise<null> {
     }
 
   const directionalLight = new PointLight({
-    position: new Vec3(0, 0, 0),
+    translation: new Vec3(0, 0, 0),
     color: new Color3(1, 1, 1),
     intensity: 10
   });
   root.children.push(directionalLight);
 
   const camera = new PerspectiveCamera(25, 0.1, 4, 1);
-  camera.position.set(0, 0, 3);
+  camera.translation.set(0, 0, 3);
   root.children.push(camera);
 
   updateNodeTree(root); // update the node tree (matrices, parents, etc.)
