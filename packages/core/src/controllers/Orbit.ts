@@ -8,12 +8,14 @@ import { Vec2 } from '../math/Vec2.js';
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vec2();
   public rotation = new Quat();
+  public rotationVersion = -1;
   public onPointerDownHandler: (ev: PointerEvent) => any;
   public onPointerCancelHandler: (ev: PointerEvent) => any;
   public onPointerUpHandler: (ev: PointerEvent) => any;
   public onPointerMoveHandler: (ev: PointerEvent) => any;
   public onMouseWheelHandler: (ev: WheelEvent) => any;
   public disposed = false;
+  public version = -1;
 
   // public spherical = new Spherical( 1.0, Math.PI * 0.5, 0.0 );
   public euler = new Euler3();
@@ -46,6 +48,10 @@ export class Orbit implements IDisposable {
     this.domElement.addEventListener('wheel', this.onMouseWheelHandler, false);
   }
 
+  dirty(): void {
+    this.version++;
+  }
+
   dispose() {
     if (this.disposed) return;
 
@@ -61,7 +67,7 @@ export class Orbit implements IDisposable {
   }
 
   onPointerDown(pe: PointerEvent) {
-    // console.log("pointer down");
+    //console.log('pointer down');
     this.domElement.setPointerCapture(pe.pointerId);
     this.domElement.addEventListener(
       'pointermove',
@@ -78,7 +84,7 @@ export class Orbit implements IDisposable {
   }
 
   onPointerUp(pe: PointerEvent) {
-    // console.log("pointer up");
+    //console.log('pointer up');
     this.domElement.releasePointerCapture(pe.pointerId);
     this.domElement.removeEventListener(
       'pointermove',
@@ -88,12 +94,13 @@ export class Orbit implements IDisposable {
   }
 
   onMouseWheel(we: WheelEvent) {
-    // console.log("wheel");
+    //console.log('wheel');
     this.zoomMomentum += we.deltaY * this.damping * 0.002;
+    this.dirty();
   }
 
   onPointerMove(pe: PointerEvent) {
-    // console.log("pointer move", pe);
+    //console.log('pointer move', pe);
     const pointerClient = new Vec2(pe.clientX, pe.clientY);
     const pointerClientDelta = vec2Subtract(
       pointerClient,
@@ -106,8 +113,10 @@ export class Orbit implements IDisposable {
 
     this.eulerMomentum.x += pointerClientDelta.y * Math.PI * this.damping;
     this.eulerMomentum.y += pointerClientDelta.x * Math.PI * this.damping;
+    //console.log('pointerClientDelta', pointerClientDelta);
 
-    this.lastPointerClient.clone(pointerClient);
+    this.lastPointerClient.copy(pointerClient);
+    this.dirty();
   }
 
   update() {
@@ -121,6 +130,8 @@ export class Orbit implements IDisposable {
     const newZoom = this.zoom + this.zoomMomentum;
     this.zoomMomentum *= 1 - this.damping;
     this.zoom = Math.min(1, Math.max(0, newZoom));
+
+    this.rotationVersion = this.version;
   }
 
   onPointerCancel(pe: PointerEvent) {

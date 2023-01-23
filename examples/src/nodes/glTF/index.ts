@@ -1,8 +1,6 @@
 import {
   Color3,
   Orbit,
-  quatRotateY,
-  quatRotateZ,
   RenderingContext,
   ShaderMaterial,
   Vec3
@@ -35,12 +33,12 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
-  glTFModel.rotation = quatRotateZ(
-    quatRotateY(glTFModel.rotation, Math.PI * 0.25, glTFModel.rotation),
-    Math.PI * 0.25,
-    glTFModel.rotation
-  );
-  root.children.push(glTFModel);
+  const orbitNode = new SceneNode({
+    name: 'orbit',
+    translation: new Vec3(0, 0, 4)
+  });
+  orbitNode.children.push(glTFModel);
+  root.children.push(orbitNode);
   const pointLight = new PointLight({
     translation: new Vec3(5, 5, 5),
     color: new Color3(1, 1, 1),
@@ -59,9 +57,9 @@ async function init(): Promise<void> {
   function animate(): void {
     canvasFramebuffer.clear();
 
-    root.rotation = orbitController.rotation;
-    console.log('root.rotation', root.rotation);
-    root.dirty();
+    orbitController.update();
+    orbitNode.rotation = orbitController.rotation;
+    orbitNode.dirty();
 
     updateNodeTree(root);
     updateDirtyNodes(sceneCache);
