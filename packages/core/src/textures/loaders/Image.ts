@@ -30,18 +30,20 @@ export function createImageBitmapFromArrayBuffer(
   arrayBufferView: ArrayBufferView,
   mimeType: string
 ): Promise<ImageBitmap> {
-  var blob = new Blob([arrayBufferView], { type: mimeType });
+  const blob = new Blob([arrayBufferView], { type: mimeType });
   return createImageBitmap(blob);
 }
 
 export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
   return new Promise<ImageBitmap>((resolve, reject) => {
+    // eslint-disable-next-line promise/catch-or-return
     fetch(url)
       .then((response: Response) => {
         if (response.status === 200) {
           return response.blob();
         }
         reject(`Unable to load resource with url ${url}`);
+        return undefined;
       })
 
       // Turn it into an ImageBitmap.
@@ -49,6 +51,8 @@ export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
         if (blobData !== undefined) {
           return createImageBitmap(blobData);
         }
+        reject(`Unable to create image from blobData ${blobData}`);
+        return undefined;
       })
 
       // Post it back to main thread.
