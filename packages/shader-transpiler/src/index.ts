@@ -1,4 +1,4 @@
-#!/usr/bin/env node --experimental-modules "$0" "$@"
+#!/usr/bin/env node --experimental-modules
 /* eslint-disable no-console */
 import fs from 'node:fs';
 import path from 'node:path';

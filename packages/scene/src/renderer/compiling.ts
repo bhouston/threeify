@@ -285,13 +285,13 @@ function createMeshBatches(sceneCache: SceneCache) {
 
 function filterUniforms(
   uniforms: UniformValueMap,
-  prgramUniforms: ProgramUniform[]
+  programUniforms: ProgramUniform[]
 ) {
   const filteredUniforms: UniformValueMap = {};
-  for (const programUniform of prgramUniforms) {
-    const uniformValue = uniforms[programUniform.name];
+  for (const programUniform of programUniforms) {
+    const uniformValue = uniforms[programUniform.variableName];
     if (uniformValue !== undefined) {
-      filteredUniforms[programUniform.name] = uniformValue;
+      filteredUniforms[programUniform.variableName] = uniformValue;
     }
   }
   return filteredUniforms;
