@@ -20,7 +20,6 @@ uniform Lighting {
 uniform vec3 albedo;
 uniform sampler2D albedoTexture;
 uniform float roughness;
-uniform sampler2D albedoTexture;
 
 uniform Camera {
   mat4 worldToView;

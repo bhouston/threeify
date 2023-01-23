@@ -67,7 +67,6 @@ export class ProgramUniform {
       const match = this.fullName.match(regexUniformParser);
       if( match === null || match.groups === undefined ) { throw new Error(`Can not parse uniform name: ${this.fullName}`); } 
 
-      console.log( match.groups );
       if( match.groups.struct !== null ) {
         this.structName = match.groups.struct;
         if( match.groups.structIndexer !== null ) {
