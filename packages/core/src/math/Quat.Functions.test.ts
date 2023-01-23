@@ -227,7 +227,7 @@ describe('Quat Functions', () => {
   });
 
   test('euler3ToQuat/mat4ToQuat', () => {
-    // ensure euler conversion for Quaternion matches that of Matrix4
+    // ensure euler conversion for Quaternion matches that of Mat4
     for (let i = 0; i < testOrders.length; i++) {
       const q = euler3ToQuat(changeEulerOrder(eulerAngles, testOrders[i]));
       const m = euler3ToMat4(changeEulerOrder(eulerAngles, testOrders[i]));
@@ -286,7 +286,7 @@ describe('Quat Functions', () => {
       new Euler3(0, 0, 1)
     ];
 
-    // ensure euler conversion for Quaternion matches that of Matrix4
+    // ensure euler conversion for Quaternion matches that of Mat4
     for (let i = 0; i < testOrders.length; i++) {
       for (let j = 0; j < angles.length; j++) {
         const q = euler3ToQuat(changeEulerOrder(angles[j], testOrders[i]));
