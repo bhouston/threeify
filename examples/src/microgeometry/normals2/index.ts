@@ -1,9 +1,6 @@
 import {
-  ClearState,
   Color3,
   color3MultiplyByScalar,
-  CullingState,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   EulerOrder3,
@@ -23,10 +20,11 @@ import {
   vec2MultiplyByScalar,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
@@ -64,9 +62,6 @@ async function init(): Promise<null> {
     normalMap: normalsMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
@@ -98,8 +93,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

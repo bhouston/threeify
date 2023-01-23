@@ -4,7 +4,6 @@ import {
   ClearState,
   Color3,
   color3ToHexString,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   hslToColor3,
@@ -21,6 +20,7 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -50,7 +50,7 @@ function updateCanvas(
   ctx.fillText('Canvas Texture', 128, 100);
   ctx.fillText(`Frame #${frameNumber}`, 128, 156);
 }
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
 
@@ -85,7 +85,7 @@ async function init(): Promise<null> {
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
+
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   let frameNumber = 0;
@@ -112,8 +112,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

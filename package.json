@@ -1,5 +1,5 @@
 {
-  "name": "@threeify",
+  "name": "threeify",
   "version": "2.1.0",
   "private": true,
   "description": "Typescript 3D Library loosely based on three.js",
@@ -40,8 +40,8 @@
     "typescript": "4.8.4"
   },
   "scripts": {
-    "build": "tsc --build & tst",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tst --watch",
+    "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./examples\"",
+    "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch  & tst --watch --projectDir \"./examples\"",
     "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
     "lint": "eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\"",
     "lint:fix": "npm run lint -- --fix",

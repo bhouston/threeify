@@ -1,35 +1,35 @@
 import {
+  Attachment,
+  cubeFaceTargets,
+  CubeMapTexture,
+  Euler3,
+  euler3ToMat4,
+  fetchImage,
+  Framebuffer,
   icosahedronGeometry,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromCubeTexture,
+  makeTexImage2DFromEquirectangularTexture,
+  Mat4,
+  mat4PerspectiveFov,
+  passGeometry,
+  renderBufferGeometry,
+  RenderingContext,
   ShaderMaterial,
   Texture,
-  fetchImage,
-  TextureWrap,
   TextureFilter,
-  Vec2,
-  CubeMapTexture,
-  RenderingContext,
-  makeTexImage2DFromEquirectangularTexture,
-  passGeometry,
-  makeProgramFromShaderMaterial,
-  makeBufferGeometryFromGeometry,
-  makeTexImage2DFromCubeTexture,
-  Framebuffer,
-  cubeFaceTargets,
-  Attachment,
-  renderBufferGeometry,
-  Mat4,
+  TextureWrap,
   translation3ToMat4,
-  Vec3,
-  mat4PerspectiveFov,
-  DepthTestState,
-  euler3ToMat4,
-  Euler3
+  Vec2,
+  Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import { samplerMaterial } from './sampler/SamplerMaterial.js';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const garageTexture = new Texture(
@@ -110,7 +110,6 @@ async function init(): Promise<null> {
     cubeMap: lambertianCubeMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -129,8 +128,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

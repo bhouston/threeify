@@ -12,10 +12,11 @@ import {
   Texture,
   Vec2
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const fgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/fg75.svg',
@@ -57,8 +58,6 @@ async function init(): Promise<null> {
     uniforms: fgUniforms,
     bufferGeometry
   });
-
-  return null;
 }
 
 init();

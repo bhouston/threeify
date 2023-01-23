@@ -1,9 +1,6 @@
 import {
-  ClearState,
   Color3,
   color3MultiplyByScalar,
-  CullingState,
-  DepthTestState,
   diskGeometry,
   Euler3,
   euler3ToMat4,
@@ -21,10 +18,11 @@ import {
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = diskGeometry(0.5, 64);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const anisotropicFlow1Texture = new Texture(
@@ -71,9 +69,6 @@ async function init(): Promise<null> {
     specularAnisotropicFlowMap: anisotropicFlow1Map
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
@@ -99,8 +94,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

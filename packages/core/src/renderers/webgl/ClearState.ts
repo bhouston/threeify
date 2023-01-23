@@ -16,7 +16,7 @@ export class ClearState
 
   // TODO: Should be intialized to default WebGL states
   constructor(
-    public color = new Color3(1, 1, 1),
+    public color = new Color3(0, 0, 0),
     public alpha = 0,
     public depth = 1,
     public stencil = 0

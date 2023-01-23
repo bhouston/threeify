@@ -17,10 +17,11 @@ import {
   ShaderMaterial,
   Vec2
 } from '@threeify/core';
+
 import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = passGeometry();
 
   const context = new RenderingContext(
@@ -130,8 +131,6 @@ async function init(): Promise<null> {
   if (textElement !== null) {
     textElement.innerHTML = output.join('<br/>');
   }
-
-  return null;
 }
 
 init();

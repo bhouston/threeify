@@ -1,8 +1,5 @@
 import {
-  ClearState,
   Color3,
-  CullingState,
-  DepthTestState,
   fetchImage,
   icosahedronGeometry,
   PhysicalMaterial,
@@ -13,18 +10,19 @@ import {
   Vec3
 } from '@threeify/core';
 import {
-  SceneNode,
   MeshNode,
-  PointLight,
   PerspectiveCamera,
-  updateNodeTree,
+  PointLight,
+  renderSceneViaSceneCache,
+  SceneNode,
   sceneToSceneCache,
-  renderSceneViaSceneCache
+  updateNodeTree
 } from '@threeify/scene';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
@@ -85,10 +83,6 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
-
   function animate(): void {
     canvasFramebuffer.clear();
 
@@ -98,8 +92,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

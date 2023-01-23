@@ -1,35 +1,26 @@
 import {
-  ClearState,
   Color3,
-  CullingState,
-  DepthTestState,
-  fetchImage,
-  icosahedronGeometry,
-  PhysicalMaterial,
-  quatRotateX,
   quatRotateY,
   quatRotateZ,
   RenderingContext,
   ShaderMaterial,
-  Texture,
-  Vec2,
   Vec3
 } from '@threeify/core';
 import {
-  SceneNode,
-  MeshNode,
-  PointLight,
+  glTFToSceneNode,
   PerspectiveCamera,
-  updateNodeTree,
-  sceneToSceneCache,
+  PointLight,
   renderSceneViaSceneCache,
-  glTFToSceneNode
+  SceneNode,
+  sceneToSceneCache,
+  updateNodeTree
 } from '@threeify/scene';
+
 import { KhronosModels } from '../../KhronosModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
@@ -39,11 +30,11 @@ async function init(): Promise<null> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
-  glTFModel.rotation = quatRotateZ( quatRotateY(
-    glTFModel.rotation,
+  glTFModel.rotation = quatRotateZ(
+    quatRotateY(glTFModel.rotation, Math.PI * 0.25, glTFModel.rotation),
     Math.PI * 0.25,
     glTFModel.rotation
-  ), Math.PI *0.25, glTFModel.rotation);
+  );
   root.children.push(glTFModel);
   const pointLight = new PointLight({
     translation: new Vec3(5, 5, 5),
@@ -62,10 +53,6 @@ async function init(): Promise<null> {
     return shaderMaterial;
   });
 
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
-
   function animate(): void {
     canvasFramebuffer.clear();
 
@@ -75,8 +62,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();
