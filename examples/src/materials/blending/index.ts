@@ -78,7 +78,7 @@ async function init(): Promise<void> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
-  const blackClearState = ClearState.Black;
+  const blackClearState = new ClearState(new Color3(0, 0, 0), 1);
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
 
   function animate(): void {

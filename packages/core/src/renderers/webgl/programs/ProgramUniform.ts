@@ -24,7 +24,8 @@ import { UniformType, uniformTypeInfo } from './UniformType.js';
 import { uniformValueToArrayBuffer } from './UniformValue.js';
 import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
-const regexUniformParser = /^((?<struct>[a-zA-Z0-9_]+)(\[(?<structIndexer>[0-9]+)\])?\.)?(?<variable>[a-zA-Z0-9_]+)(\[(?<variableIndexer>[0-9]+)\])?$/;
+const regexUniformParser =
+  /^((?<struct>[a-zA-Z0-9_]+)(\[(?<structIndexer>[0-9]+)\])?\.)?(?<variable>[a-zA-Z0-9_]+)(\[(?<variableIndexer>[0-9]+)\])?$/;
 
 export class ProgramUniform {
   readonly context: RenderingContext;
@@ -34,7 +35,7 @@ export class ProgramUniform {
   public readonly variableIndex: number = -1;
 
   public readonly structName: string | undefined;
-  public readonly structIndex: number  = -1;
+  public readonly structIndex: number = -1;
 
   public readonly arrayLength: number;
   public readonly uniformType: UniformType;
@@ -65,16 +66,18 @@ export class ProgramUniform {
 
       this.fullName = activeInfo.name;
       const match = this.fullName.match(regexUniformParser);
-      if( match === null || match.groups === undefined ) { throw new Error(`Can not parse uniform name: ${this.fullName}`); } 
+      if (match === null || match.groups === undefined) {
+        throw new Error(`Can not parse uniform name: ${this.fullName}`);
+      }
 
-      if( match.groups.struct !== null ) {
+      if (match.groups.struct !== null) {
         this.structName = match.groups.struct;
-        if( match.groups.structIndexer !== null ) {
+        if (match.groups.structIndexer !== null) {
           this.structIndex = parseInt(match.groups.structIndexer);
         }
       }
       this.variableName = match.groups.variable;
-      if( match.groups.variableIndexer !== null ) {
+      if (match.groups.variableIndexer !== null) {
         this.variableIndex = parseInt(match.groups.variableIndexer);
       }
 

@@ -1,43 +1,64 @@
-import { Light } from '../scene/lights/Light';
 import {
-  ShaderMaterial,
-  RenderingContext,
+  color3MultiplyByScalar,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  UniformValueMap,
   makeTexImage2DFromTexture,
-  mat4TransformVec3,
-  Vec3,
-  color3MultiplyByScalar,
-  ProgramVertexArray,
-  UniformBufferMap,
   mat4TransformNormal3,
+  mat4TransformVec3,
+  ProgramUniform,
+  ProgramVertexArray,
+  RenderingContext,
+  ShaderMaterial,
   Texture,
-  ProgramUniform
+  UniformBufferMap,
+  UniformValueMap,
+  Vec3
 } from '@threeify/core';
+
+import { Camera } from '../scene/cameras/Camera';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
+import { Light } from '../scene/lights/Light';
 import { LightType } from '../scene/lights/LightType';
 import { PointLight } from '../scene/lights/PointLight';
 import { SpotLight } from '../scene/lights/SpotLight';
 import { MeshNode } from '../scene/Mesh';
-import { Camera } from '../scene/cameras/Camera';
+import { SceneNode } from '../scene/SceneNode';
 import { breadthFirstVisitor } from '../scene/Visitors';
 import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
 import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
 import { SceneCache } from './SceneCache';
-import { SceneNode } from '../scene/SceneNode';
+
+export function updateDirtyNodes(sceneCache: SceneCache) {
+  const { nodeIdToUniforms, nodeIdToVersion, breathFirstNodes } = sceneCache;
+  for (const node of breathFirstNodes) {
+    const oldVersion = nodeIdToVersion.get(node.id) || -1;
+    if (oldVersion !== node.version) {
+      {
+        const nodeUniforms =
+          nodeIdToUniforms.get(node.id) || new NodeUniforms();
+        nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
+        nodeIdToUniforms.set(node.id, nodeUniforms);
+      }
+    }
+  }
+}
 
 export function sceneToSceneCache(
   context: RenderingContext,
   rootNode: SceneNode,
   activeCamera: Camera | undefined,
-  shaderResolver: (shaderName: string) => ShaderMaterial
+  shaderResolver: (shaderName: string) => ShaderMaterial,
+  sceneCache: SceneCache = new SceneCache()
 ) {
-  const sceneCache = new SceneCache();
-  const { nodeIdToUniforms, cameraUniforms, lightUniforms, breathFirstNodes } =
-    sceneCache;
+  const {
+    nodeIdToUniforms,
+    nodeIdToVersion,
+    cameraUniforms,
+    lightUniforms,
+    breathFirstNodes
+  } = sceneCache;
 
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
     breathFirstNodes.push(node);
@@ -45,6 +66,8 @@ export function sceneToSceneCache(
     const nodeUniforms = new NodeUniforms();
     nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
     nodeIdToUniforms.set(node.id, nodeUniforms);
+
+    nodeIdToVersion.set(node.id, node.version);
 
     if (
       node instanceof Camera &&

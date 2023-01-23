@@ -7,7 +7,7 @@ import { Vec2 } from '../math/Vec2.js';
 
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vec2();
-  public orientation = new Quat();
+  public rotation = new Quat();
   public onPointerDownHandler: (ev: PointerEvent) => any;
   public onPointerCancelHandler: (ev: PointerEvent) => any;
   public onPointerUpHandler: (ev: PointerEvent) => any;
@@ -116,11 +116,11 @@ export class Orbit implements IDisposable {
     this.eulerMomentum.x *= 1 - this.damping;
     this.eulerMomentum.y *= 1 - this.damping;
 
-    this.orientation = euler3ToQuat(this.euler, this.orientation);
+    this.rotation = euler3ToQuat(this.euler, this.rotation);
 
-    this.zoom += this.zoomMomentum;
+    const newZoom = this.zoom + this.zoomMomentum;
     this.zoomMomentum *= 1 - this.damping;
-    this.zoom = Math.min(1, Math.max(0, this.zoom));
+    this.zoom = Math.min(1, Math.max(0, newZoom));
   }
 
   onPointerCancel(pe: PointerEvent) {
