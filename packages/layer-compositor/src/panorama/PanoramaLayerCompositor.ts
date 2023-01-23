@@ -1,29 +1,27 @@
-import { transformGeometry } from '../../../geometry/Geometry.Functions';
-import { octahedronGeometry } from '../../../geometry/primitives/polyhedronGeometry';
-import { ShaderMaterial } from '../../../materials/ShaderMaterial';
-import { Color3 } from '../../../math/Color3';
-import { Euler3, EulerOrder3 } from '../../../math/Euler3';
 import {
   angleAxisToMat4,
+  BufferGeometry,
+  ClearState,
+  Color3,
+  Euler3,
   euler3ToMat4,
+  EulerOrder3,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
   mat4Inverse,
   mat4Multiply,
   mat4PerspectiveFov,
-  scale3ToMat4
-} from '../../../math/Mat4.Functions';
-import { Vec3 } from '../../../math/Vec3';
-import {
-  BufferGeometry,
-  makeBufferGeometryFromGeometry
-} from '../../../renderers/webgl/buffers/BufferGeometry';
-import { ClearState } from '../../../renderers/webgl/ClearState';
-import { renderBufferGeometry } from '../../../renderers/webgl/framebuffers/VirtualFramebuffer';
-import {
-  makeProgramFromShaderMaterial,
-  Program
-} from '../../../renderers/webgl/programs/Program';
-import { UniformValueMap } from '../../../renderers/webgl/programs/UniformValueMap';
-import { TextureWrap } from '../../../renderers/webgl/textures/TextureWrap';
+  octahedronGeometry,
+  Program,
+  renderBufferGeometry,
+  scale3ToMat4,
+  ShaderMaterial,
+  TextureWrap,
+  transformGeometry,
+  UniformValueMap,
+  Vec3
+} from '@threeify/core';
+
 import { copySourceBlendState } from '../Layer';
 import {
   ImageFitMode,

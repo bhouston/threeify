@@ -1,14 +1,16 @@
-import { Mat3 } from '../../math/Mat3';
-import { Mat4 } from '../../math/Mat4';
 import {
+  BlendFunc,
+  BlendState,
+  Mat3,
+  Mat4,
   mat4Multiply,
   scale3ToMat4,
-  translation3ToMat4
-} from '../../math/Mat4.Functions';
-import { Vec2 } from '../../math/Vec2';
-import { Vec3 } from '../../math/Vec3';
-import { BlendFunc, BlendState } from '../../renderers/webgl/BlendState';
-import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
+  TexImage2D,
+  translation3ToMat4,
+  Vec2,
+  Vec3
+} from '@threeify/core';
+
 import { LayerCompositor } from './LayerCompositor';
 import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';
 
@@ -40,11 +42,7 @@ class LayerTexture {
     );
     this.planeToImage = mat4Multiply(layerToImage, planeToLayer);
 
-    this.viewToLayerUv = viewToMat3LayerUv(
-      this.size,
-      this.offset,
-      false
-    );
+    this.viewToLayerUv = viewToMat3LayerUv(this.size, this.offset, false);
   }
 }
 
