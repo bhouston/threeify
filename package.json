@@ -49,7 +49,7 @@
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix && npm run lint:fix",
     "docs": "typedoc",
-    "test": "jest ./src"
+    "test": "jest"
   },
   "workspaces": [
     "packages/shader-transpiler",
