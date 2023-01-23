@@ -1,22 +1,37 @@
 attribute vec3 position;
-attribute vec3 normal;
-attribute vec2 uv0;
 
-uniform mat4 localToWorld;
-uniform mat4 worldToView;
+uniform mat4 localToView;
 uniform mat4 viewToScreen;
 
-varying vec3 v_viewPosition;
-varying vec3 v_viewNormal;
-varying vec2 v_uv;
+uniform mat3 viewToImageUv;
+uniform mat3 viewToLayerUv;
+uniform mat3 viewToMaskUv;
 
-void main() {
-  v_viewNormal = normalize(
-    (worldToView * localToWorld * vec4(normal, 0.0)).xyz
-  );
-  v_viewPosition = (worldToView * localToWorld * vec4(position, 1.0)).xyz;
-  v_uv = uv0;
+varying vec2 v_image_uv;
+varying vec2 v_layer_uv;
+varying vec2 v_mask_uv;
 
-  gl_Position = viewToScreen * vec4(v_viewPosition, 1.0);
+vec2 getUv(vec2 globalPosition, vec2 offset, vec2 size, int isFbo) {
+
+  vec2 pos = (globalPosition - offset) / size;
+  if(isFbo == 1)
+    pos = vec2(pos.x, 1.0 - pos.y);
+
+  return pos;
 
 }
+
+void main() {
+
+  vec4 viewPos = localToView * vec4(position, 1.);
+
+  vec3 viewPos2d = vec3(viewPos.xy, 1.0);
+
+  v_image_uv = (viewToImageUv * viewPos2d).xy;
+  v_layer_uv = (viewToLayerUv * viewPos2d).xy;
+  v_mask_uv = (viewToMaskUv * viewPos2d).xy;
+
+  gl_Position = viewToScreen * viewPos;
+
+}
+

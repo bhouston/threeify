@@ -1,61 +1,54 @@
-import { IDisposable } from '../../core/types.js';
-import { transformGeometry } from '../../geometry/Geometry.Functions.js';
-import { planeGeometry } from '../../geometry/primitives/planeGeometry.js';
-import { Blending } from '../../materials/Blending.js';
-import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
-import { Color3 } from '../../math/Color3.js';
-import { ceilPow2 } from '../../math/Functions.js';
+import { IDisposable } from '../../core/types';
+import { transformGeometry } from '../../geometry/Geometry.Functions';
+import { planeGeometry } from '../../geometry/primitives/planeGeometry';
+import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { Color3 } from '../../math/Color3';
+import { ceilPow2 } from '../../math/Functions';
 import {
-  makeMat3Concatenation,
-  scale2ToMat3,
-  translation2ToMat3
-} from '../../math/Mat3.Functions.js';
-import {
-  mat4Inverse,
   mat4Orthographic,
   mat4OrthographicSimple,
   scale3ToMat4,
   translation3ToMat4
-} from '../../math/Mat4.Functions.js';
-import { Mat4 } from '../../math/Mat4.js';
+} from '../../math/Mat4.Functions';
+import { Vec2 } from '../../math/Vec2';
 import {
   vec2Add,
   vec2Equals,
   vec2MultiplyByScalar,
   vec2Subtract
-} from '../../math/Vec2.Functions.js';
-import { Vec2 } from '../../math/Vec2.js';
-import { Vec3 } from '../../math/Vec3.js';
-import { isFirefox, isiOS, isMacOS } from '../../platform/Detection.js';
-import { blendModeToBlendState } from '../../renderers/webgl/BlendState.js';
+} from '../../math/Vec2.Functions';
+import { Vec3 } from '../../math/Vec3';
+import { isiOS, isMacOS } from '../../platform/Detection';
 import {
   BufferGeometry,
   makeBufferGeometryFromGeometry
-} from '../../renderers/webgl/buffers/BufferGeometry.js';
-import { ClearState } from '../../renderers/webgl/ClearState.js';
-import { Attachment } from '../../renderers/webgl/framebuffers/Attachment.js';
-import { Framebuffer } from '../../renderers/webgl/framebuffers/Framebuffer.js';
-import { renderBufferGeometry } from '../../renderers/webgl/framebuffers/VirtualFramebuffer.js';
+} from '../../renderers/webgl/buffers/BufferGeometry';
+import { ClearState } from '../../renderers/webgl/ClearState';
+import { Attachment } from '../../renderers/webgl/framebuffers/Attachment';
+import { Framebuffer } from '../../renderers/webgl/framebuffers/Framebuffer';
+import { renderBufferGeometry } from '../../renderers/webgl/framebuffers/VirtualFramebuffer';
 import {
   makeProgramFromShaderMaterial,
   Program
-} from '../../renderers/webgl/programs/Program.js';
-import { RenderingContext } from '../../renderers/webgl/RenderingContext.js';
-import { DataType } from '../../renderers/webgl/textures/DataType.js';
-import { PixelFormat } from '../../renderers/webgl/textures/PixelFormat.js';
-import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions.js';
-import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D.js';
-import { TexParameters } from '../../renderers/webgl/textures/TexParameters.js';
-import { TextureFilter } from '../../renderers/webgl/textures/TextureFilter.js';
-import { TextureTarget } from '../../renderers/webgl/textures/TextureTarget.js';
-import { TextureWrap } from '../../renderers/webgl/textures/TextureWrap.js';
+} from '../../renderers/webgl/programs/Program';
+import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
+import { RenderingContext } from '../../renderers/webgl/RenderingContext';
+import { DataType } from '../../renderers/webgl/textures/DataType';
+import { PixelFormat } from '../../renderers/webgl/textures/PixelFormat';
+import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
+import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
+import { TexParameters } from '../../renderers/webgl/textures/TexParameters';
+import { TextureFilter } from '../../renderers/webgl/textures/TextureFilter';
+import { TextureTarget } from '../../renderers/webgl/textures/TextureTarget';
+import { TextureWrap } from '../../renderers/webgl/textures/TextureWrap';
 import {
   fetchImage,
   isImageBitmapSupported
-} from '../../textures/loaders/Image.js';
-import { Texture } from '../../textures/Texture.js';
+} from '../../textures/loaders/Image';
+import { Texture } from '../../textures/Texture';
 import fragmentSource from './fragment.glsl';
-import { Layer } from './Layer.js';
+import { copySourceBlendState, Layer } from './Layer';
+import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';
 import vertexSource from './vertex.glsl';
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
@@ -77,13 +70,13 @@ export class LayerImage implements IDisposable {
   }
 
   dispose(): void {
-    if (this.disposed) return;
-
-    this.texImage2D.dispose();
-    releaseImage(this.image);
-    this.image = undefined;
-    this.disposed = true;
-    // console.log(`layerImage.dispose: ${this.url}`);
+    if (!this.disposed) {
+      this.texImage2D.dispose();
+      releaseImage(this.image);
+      this.image = undefined;
+      this.disposed = true;
+      // console.log(`layerImage.dispose: ${this.url}`);
+    }
   }
 }
 
@@ -95,13 +88,17 @@ export type TexImage2DPromiseMap = {
 export function makeColorMipmapAttachment(
   context: RenderingContext,
   size: Vec2,
-  dataType: DataType | undefined = undefined
+  dataType: DataType | undefined = undefined,
+  options: {
+    wrapS?: TextureWrap;
+    wrapT?: TextureWrap;
+  } = {}
 ): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = true;
   texParams.anisotropyLevels = 1;
-  texParams.wrapS = TextureWrap.ClampToEdge;
-  texParams.wrapT = TextureWrap.ClampToEdge;
+  texParams.wrapS = options.wrapS ?? TextureWrap.ClampToEdge;
+  texParams.wrapT = options.wrapT ?? TextureWrap.ClampToEdge;
   texParams.magFilter = TextureFilter.Linear;
   texParams.minFilter = TextureFilter.LinearMipmapLinear;
   return new TexImage2D(
@@ -135,9 +132,11 @@ export class LayerCompositor {
   #offlineLayerVersion = -1;
   firstRender = true;
   clearState = new ClearState(new Color3(1, 1, 1), 0);
-  offscreenFramebuffer: Framebuffer | undefined;
   offscreenSize = new Vec2(0, 0);
-  offscreenColorAttachment: TexImage2D | undefined;
+  offscreenWriteFramebuffer: Framebuffer | undefined;
+  offscreenWriteColorAttachment: TexImage2D | undefined;
+  offscreenReadFramebuffer: Framebuffer | undefined;
+  offscreenReadColorAttachment: TexImage2D | undefined;
   renderId = 0;
   autoDiscard = false;
 
@@ -162,18 +161,16 @@ export class LayerCompositor {
   }
 
   snapshot(mimeFormat = 'image/jpeg', quality = 1): string {
-    const { canvas } = this.context.canvasFramebuffer;
+    const canvas = this.context.canvasFramebuffer.canvas;
     if (canvas instanceof HTMLCanvasElement) {
       return canvas.toDataURL(mimeFormat, quality);
     }
     throw new Error('snapshot not supported');
   }
-
   set layers(layers: Layer[]) {
     this.#layers = layers;
     this.#layerVersion++;
   }
-
   updateOffscreen(): void {
     // but to enable mipmaps (for filtering) we need it to be up-rounded to a power of 2 in width/height.
     const offscreenSize = new Vec2(
@@ -181,30 +178,43 @@ export class LayerCompositor {
       ceilPow2(this.imageSize.y)
     );
     if (
-      this.offscreenFramebuffer === undefined ||
+      this.offscreenWriteFramebuffer === undefined ||
+      this.offscreenReadFramebuffer === undefined ||
       !vec2Equals(this.offscreenSize, offscreenSize)
     ) {
+      this.offscreenSize.copy(offscreenSize);
       // console.log("updating framebuffer");
 
-      if (this.offscreenFramebuffer !== undefined) {
-        this.offscreenFramebuffer.dispose();
-        this.offscreenFramebuffer = undefined;
+      if (this.offscreenWriteFramebuffer !== undefined) {
+        this.offscreenWriteFramebuffer.dispose();
+        this.offscreenWriteFramebuffer = undefined;
       }
-      this.offscreenColorAttachment = makeColorMipmapAttachment(
-        this.context,
-        offscreenSize
-      );
-      this.offscreenFramebuffer = new Framebuffer(this.context);
-      this.offscreenFramebuffer.attach(
+
+      this.offscreenWriteColorAttachment = this.makeColorMipmapAttachment();
+      this.offscreenWriteFramebuffer = new Framebuffer(this.context);
+      this.offscreenWriteFramebuffer.attach(
         Attachment.Color0,
-        this.offscreenColorAttachment
+        this.offscreenWriteColorAttachment
+      );
+
+      if (this.offscreenReadFramebuffer !== undefined) {
+        this.offscreenReadFramebuffer.dispose();
+        this.offscreenReadFramebuffer = undefined;
+      }
+
+      this.offscreenReadColorAttachment = this.makeColorMipmapAttachment();
+      this.offscreenReadFramebuffer = new Framebuffer(this.context);
+      this.offscreenReadFramebuffer.attach(
+        Attachment.Color0,
+        this.offscreenReadColorAttachment
       );
 
       // frame buffer is pixel aligned with layer images.
       // framebuffer view is [ (0,0)-(framebuffer.with, framebuffer.height) ].
-
-      this.offscreenSize.copy(offscreenSize);
     }
+  }
+  makeColorMipmapAttachment() {
+    return makeColorMipmapAttachment(this.context, this.offscreenSize);
   }
 
   loadTexImage2D(
@@ -213,7 +223,7 @@ export class LayerCompositor {
   ): Promise<TexImage2D> {
     const layerImagePromise = this.texImage2DPromiseCache[url];
     if (layerImagePromise !== undefined) {
-      console.log(`loading: ${url} (reusing promise)`);
+      // console.log(`loading: ${url} (reusing promise)`);
       return layerImagePromise;
     }
 
@@ -240,7 +250,7 @@ export class LayerCompositor {
           texture.anisotropicLevels = 1;
           texture.name = url;
 
-          console.log(`loading: ${url}`);
+          // console.log(`loading: ${url}`);
           // load texture onto the GPU
           const texImage2D = makeTexImage2DFromTexture(
             compositor.context,
@@ -255,9 +265,10 @@ export class LayerCompositor {
         }
 
         if (image === undefined) {
-          fetchImage(url).then((image: HTMLImageElement | ImageBitmap) =>
-            resolve(createTexture(this, image))
-          );
+          // eslint-disable-next-line promise/catch-or-return
+          fetchImage(url).then((image: HTMLImageElement | ImageBitmap) => {
+            return resolve(createTexture(this, image));
+          });
         } else if (
           image instanceof HTMLImageElement ||
           image instanceof ImageBitmap
@@ -275,7 +286,7 @@ export class LayerCompositor {
     // check for texture in cache.
     const layerImage = this.layerImageCache[url];
     if (layerImage !== undefined) {
-      console.log(`discarding: ${url}`);
+      // console.log(`discarding: ${url}`);
       layerImage.dispose();
       delete this.layerImageCache[url];
       return true;
@@ -290,20 +301,26 @@ export class LayerCompositor {
     this.renderId++;
     // console.log(`render id: ${this.renderId}`);
 
-    const { canvasFramebuffer } = this.context;
+    this.renderLayersToFramebuffer();
+
+    const offscreenColorAttachment = this.offscreenWriteColorAttachment;
+    if (offscreenColorAttachment === undefined) {
+      return;
+    }
+
+    const canvasFramebuffer = this.context.canvasFramebuffer;
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.x / canvasSize.y;
 
     const imageToCanvasScale =
       this.imageFitMode === ImageFitMode.FitWidth
-        ? canvasSize.x / this.imageSize.y
-        : canvasSize.x / this.imageSize.y;
+        ? canvasSize.x / this.imageSize.x
+        : canvasSize.y / this.imageSize.y;
 
     const canvasImageSize = vec2MultiplyByScalar(
       this.imageSize,
       imageToCanvasScale
     );
-
     const canvasImageCenter = vec2MultiplyByScalar(canvasImageSize, 0.5);
 
     if (this.zoomScale > 1) {
@@ -356,57 +373,46 @@ export class LayerCompositor {
     );
     /* console.log(
       `Canvas Camera: height ( ${canvasSize.height} ), center ( ${scaledImageCenter.x}, ${scaledImageCenter.y} ) `,
-    ); */
-
-    const canvasToImage = mat4Inverse(imageToCanvas);
+    );*/
 
     const planeToImage = scale3ToMat4(
       new Vec3(canvasImageSize.x, canvasImageSize.y, 1)
     );
 
-    this.renderLayersToFramebuffer();
-
-    const layerUVScale = new Vec2(
-      this.imageSize.x / this.offscreenSize.x,
-      this.imageSize.y / this.offscreenSize.y
+    const offscreenScaledSize = vec2MultiplyByScalar(
+      this.offscreenSize,
+      imageToCanvasScale
     );
-
-    const uvScale = scale2ToMat3(layerUVScale);
-    const uvTranslation = translation2ToMat3(
-      new Vec2(
-        0,
-        (this.offscreenSize.y - this.imageSize.y) / this.offscreenSize.y
-      )
+    const viewToLayerUv = viewToMat3LayerUv(
+      offscreenScaledSize,
+      undefined,
+      true
     );
-    const uvToTexture = makeMat3Concatenation(uvTranslation, uvScale);
 
     canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
     canvasFramebuffer.clear();
 
-    const { offscreenColorAttachment } = this;
-    if (offscreenColorAttachment === undefined) {
-      return;
-    }
-    const uniforms = {
+    const uniforms: UniformValueMap = {
+      localToView: planeToImage,
       viewToScreen: imageToCanvas,
-      screenToView: canvasToImage,
-      worldToView: new Mat4(),
-      localToWorld: planeToImage,
-      layerMap: offscreenColorAttachment,
-      uvToTexture,
+
       mipmapBias: 0,
-      convertToPremultipliedAlpha: 0
+      convertToPremultipliedAlpha: 0,
+
+      layerMap: offscreenColorAttachment!,
+      viewToLayerUv,
+
+      maskMode: 0,
+      blendMode: 0
     };
 
-    const blendState = blendModeToBlendState(Blending.Over, true);
-
-    // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
+    //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program: this.#program,
       uniforms,
       bufferGeometry: this.#bufferGeometry,
-      blendState
+      blendState: copySourceBlendState
     });
 
     if (this.autoDiscard) {
@@ -427,68 +433,135 @@ export class LayerCompositor {
     }
     this.#offlineLayerVersion = this.#layerVersion;
 
-    const { offscreenFramebuffer, offscreenSize } = this;
-    if (offscreenFramebuffer === undefined) {
+    const offscreenWriteFramebuffer = this.offscreenWriteFramebuffer;
+    const offscreenReadFramebuffer = this.offscreenReadFramebuffer;
+    if (
+      offscreenWriteFramebuffer === undefined ||
+      offscreenReadFramebuffer === undefined
+    ) {
       return;
     }
 
     // clear to black and full alpha.
-    offscreenFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
-    offscreenFramebuffer.clear();
+    offscreenWriteFramebuffer.clearState = new ClearState(
+      new Color3(0, 0, 0),
+      0
+    );
+    offscreenWriteFramebuffer.clear();
+
+    offscreenReadFramebuffer.clearState = new ClearState(
+      new Color3(0, 0, 0),
+      0
+    );
+    offscreenReadFramebuffer.clear();
 
     const imageToOffscreen = mat4Orthographic(
       0,
-      offscreenSize.x,
+      this.offscreenSize.x,
       0,
-      offscreenSize.y,
+      this.offscreenSize.y,
       -1,
       1
     );
     /* console.log(
       `Canvas Camera: height ( ${this.offscreenSize.height} ), center ( ${offscreenCenter.x}, ${offscreenCenter.y} ) `,
-    ); */
-    const offscreenToImage = mat4Inverse(imageToOffscreen);
+    );*/
 
     // Ben on 2020-10-31
     // - does not understand why this is necessary.
     // - this means it may be working around a bug, and thus this will break in the future.
     // - the bug would be in chrome as it seems to be the inverse of the current query
-    const convertToPremultipliedAlpha = !(isMacOS() || isiOS() || isFirefox())
-      ? 0
-      : 1;
+    // Antoine on 2022-04-08
+    // - Firefox now also sends premultiplied textures to the shader, which seems to indicate the problem rests with the IOS/Mac implementation
+    const convertToPremultipliedAlpha = isMacOS() || isiOS() ? 1 : 0;
 
-    this.#layers.forEach((layer) => {
+    // const offscreenLocalToView = makeMat4Scale(new Vec3(this.offscreenSize.x, this.offscreenSize.y, 1.0));
+    const viewToImageUv = viewToMat3LayerUv(
+      this.offscreenSize,
+      undefined,
+      true
+    );
+
+    this.#layers.forEach((layer, idx) => {
       const layerImage = this.layerImageCache[layer.url];
       if (layerImage !== undefined) {
         layerImage.renderId = this.renderId;
       }
-      const uniforms = {
-        viewToScreen: imageToOffscreen,
-        screenToView: offscreenToImage,
-        worldToView: new Mat4(),
-        localToWorld: layer.planeToImage,
-        layerMap: layer.texImage2D,
-        uvToTexture: layer.uvToTexture,
-        mipmapBias: 0,
-        convertToPremultipliedAlpha
-      };
 
-      const blendState = blendModeToBlendState(Blending.Over, true);
+      const mask = layer.mask;
+      const maskImage = mask && this.layerImageCache[mask.url];
+      if (maskImage !== undefined) {
+        maskImage.renderId = this.renderId;
+      }
 
-      // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
-      renderBufferGeometry({
-        framebuffer: offscreenFramebuffer,
-        program: this.#program,
-        uniforms,
-        bufferGeometry: this.#bufferGeometry,
-        blendState
-      });
+      // Can't be accomplished with blendState alone, so we need to copy a section of the writeBuffer to the read buffer
+      if (!layer.isTriviallyBlended) {
+        const uniforms: UniformValueMap = {
+          // Only copies the section the layer needs for compositing
+          localToView: layer.planeToImage,
+          viewToScreen: imageToOffscreen,
+
+          mipmapBias: 0,
+          convertToPremultipliedAlpha: 0,
+
+          imageMap: this.offscreenWriteColorAttachment!, // Not used, but avoids framebuffer loop
+          viewToImageUv,
+
+          layerMap: this.offscreenWriteColorAttachment!,
+          viewToLayerUv: viewToImageUv,
+
+          maskMode: 0,
+          blendMode: 0
+        };
+
+        renderBufferGeometry({
+          framebuffer: this.offscreenReadFramebuffer!,
+          program: this.#program,
+          uniforms,
+          bufferGeometry: this.#bufferGeometry,
+          blendState: copySourceBlendState
+        });
+      }
+
+      // Layering
+      {
+        let uniforms: UniformValueMap = {
+          localToView: layer.planeToImage,
+          viewToScreen: imageToOffscreen,
+
+          mipmapBias: 0,
+          convertToPremultipliedAlpha,
+
+          imageMap: this.offscreenReadColorAttachment!,
+          viewToImageUv,
+
+          layerMap: layer.texImage2D,
+          viewToLayerUv: layer.viewToLayerUv,
+
+          maskMode: 0,
+          blendMode: layer.blendModeUniformValue
+        };
+
+        if (mask) {
+          uniforms = {
+            ...uniforms,
+            maskMode: mask.mode,
+            maskMap: mask.texImage2D,
+            viewToMaskUv: mask.viewToLayerUv
+          };
+        }
+
+        // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
+        renderBufferGeometry({
+          framebuffer: this.offscreenWriteFramebuffer!,
+          program: this.#program,
+          uniforms,
+          bufferGeometry: this.#bufferGeometry,
+          blendState: layer.blendModeBlendState
+        });
+      }
     });
 
-    // generate mipmaps.
-    const { offscreenColorAttachment } = this;
-    if (offscreenColorAttachment !== undefined) {
-      offscreenColorAttachment.generateMipmaps();
-    }
+    this.offscreenWriteColorAttachment!.generateMipmaps();
   }
 }
