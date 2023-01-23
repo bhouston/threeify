@@ -24,15 +24,19 @@ import { UniformType, uniformTypeInfo } from './UniformType.js';
 import { uniformValueToArrayBuffer } from './UniformValue.js';
 import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
-const array1dRegexp = /^(\w+([\d+])?)+\[\d+]$/;
-// glsl v3+ only const array2dRegexp = /^[a-zA-Z_0-9]+\[[0-9]+,[0-9]+\]$/;
+const regexUniformParser = /^((?<struct>[a-zA-Z0-9_]+)(\[(?<structIndexer>[0-9]+)\])?\.)?(?<variable>[a-zA-Z0-9_]+)(\[(?<variableIndexer>[0-9]+)\])?$/;
 
 export class ProgramUniform {
   readonly context: RenderingContext;
   public readonly fullName: string;
-  public readonly name: string;
+
+  public readonly variableName: string;
+  public readonly variableIndex: number = -1;
+
+  public readonly structName: string | undefined;
+  public readonly structIndex: number  = -1;
+
   public readonly arrayLength: number;
-  public readonly arrayDimensions: number;
   public readonly uniformType: UniformType;
   public readonly bytesPerElement: number;
   public readonly glLocation: WebGLUniformLocation | undefined = undefined;
@@ -60,14 +64,20 @@ export class ProgramUniform {
       }
 
       this.fullName = activeInfo.name;
-      const array1dMatch = this.fullName.match(array1dRegexp);
-      if (array1dMatch !== null) {
-        this.name = array1dMatch[1];
-        this.arrayDimensions = 1;
-      } else {
-        this.name = activeInfo.name;
-        this.arrayDimensions = 0;
+      const match = this.fullName.match(regexUniformParser);
+      if( match === null || match.groups === undefined ) { throw new Error(`Can not parse uniform name: ${this.fullName}`); } 
+
+      if( match.groups.struct !== null ) {
+        this.structName = match.groups.struct;
+        if( match.groups.structIndexer !== null ) {
+          this.structIndex = parseInt(match.groups.structIndexer);
+        }
       }
+      this.variableName = match.groups.variable;
+      if( match.groups.variableIndexer !== null ) {
+        this.variableIndex = parseInt(match.groups.variableIndexer);
+      }
+
       this.arrayLength = activeInfo.size;
       this.uniformType = activeInfo.type as UniformType;
 
@@ -78,9 +88,12 @@ export class ProgramUniform {
       this.glType = typeInfo.glType;
 
       if (this.block === undefined) {
-        const glLocation = gl.getUniformLocation(program.glProgram, this.name);
+        const glLocation = gl.getUniformLocation(
+          program.glProgram,
+          this.fullName
+        );
         if (glLocation === null) {
-          throw new Error(`can not find uniform named: ${this.name}`);
+          throw new Error(`can not find uniform named: ${this.fullName}`);
         }
         this.glLocation = glLocation;
       }
@@ -242,7 +255,7 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.name}'`
+      }(${this.uniformType}) on '${this.variableName}'`
     );
   }
 
@@ -345,7 +358,7 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.name}'`
+      }(${this.uniformType}) on '${this.variableName}'`
     );
   }
 }

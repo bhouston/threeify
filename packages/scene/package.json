@@ -3,9 +3,9 @@
   "version": "2.1.0",
   "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
-  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -40,8 +40,8 @@
     "test": "jest ./src"
   },
   "dependencies": {
-    "@threeify/core": "*",
     "@gltf-transform/core": "^2.5.1",
-    "@gltf-transform/extensions": "^2.5.1"
+    "@gltf-transform/extensions": "^2.5.1",
+    "@threeify/core": "^2.1.0"
   }
 }

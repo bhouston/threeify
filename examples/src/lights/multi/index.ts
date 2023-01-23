@@ -1,8 +1,5 @@
 import {
-  ClearState,
   Color3,
-  CullingState,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   EulerOrder3,
@@ -21,10 +18,11 @@ import {
   Vec3,
   vec3Normalize
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const texture = new Texture(
@@ -78,9 +76,6 @@ async function init(): Promise<null> {
   };
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
-  canvasFramebuffer.clearState = ClearState.Black;
-  canvasFramebuffer.cullingState = new CullingState(true);
 
   function animate(): void {
     const now = Date.now();
@@ -116,8 +111,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

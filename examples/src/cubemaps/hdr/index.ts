@@ -1,7 +1,6 @@
 import {
   convertToInterleavedGeometry,
   CubeMapTexture,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   fetchCubeHDRs,
@@ -17,10 +16,11 @@ import {
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const cubeTexture = new CubeMapTexture(
@@ -49,7 +49,6 @@ async function init(): Promise<null> {
     cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     const now = Date.now();
@@ -69,8 +68,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

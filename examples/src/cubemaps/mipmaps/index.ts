@@ -1,6 +1,5 @@
 import {
   CubeMapTexture,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   fetchImage,
@@ -16,10 +15,11 @@ import {
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 4, true);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const images = [];
@@ -57,7 +57,6 @@ async function init(): Promise<null> {
     mipCount: cubeTexture.mipCount
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -78,8 +77,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

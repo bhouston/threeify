@@ -1,5 +1,4 @@
 import {
-  DepthTestState,
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
@@ -15,10 +14,11 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const debugTexture = new Texture(
     await fetchImage('/assets/textures/cube/debug/latLong.png')
   );
@@ -54,7 +54,6 @@ async function init(): Promise<null> {
     perceptualRoughness: 0
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -75,8 +74,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

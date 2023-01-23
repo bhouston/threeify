@@ -4,7 +4,6 @@ import {
   BufferBit,
   ClearState,
   Color3,
-  DepthTestState,
   Euler3,
   euler3ToMat4,
   fetchImage,
@@ -24,10 +23,11 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
   const material = new ShaderMaterial(vertexSource, fragmentSource);
   const texture = new Texture(
@@ -67,7 +67,6 @@ async function init(): Promise<null> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     const now = Date.now();
@@ -98,8 +97,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();

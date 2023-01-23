@@ -1,5 +1,4 @@
 import {
-  DepthTestState,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -18,10 +17,11 @@ import {
   TextureFilter,
   TextureWrap
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
 
@@ -65,7 +65,6 @@ async function init(): Promise<null> {
     equirectangularMap: texImage2Ds[0]
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  canvasFramebuffer.depthTestState = DepthTestState.Default;
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -108,8 +107,6 @@ async function init(): Promise<null> {
     },
     true
   );
-
-  return null;
 }
 
 init();

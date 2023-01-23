@@ -20,10 +20,11 @@ import {
   Vec2,
   Vec3
 } from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<null> {
+async function init(): Promise<void> {
   const geometry = planeGeometry(1, 0.5);
   const uv0 = geometry.attributes.uv0;
   if (uv0 !== undefined) {
@@ -120,8 +121,6 @@ async function init(): Promise<null> {
   }
 
   animate();
-
-  return null;
 }
 
 init();
