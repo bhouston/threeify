@@ -1,51 +1,45 @@
-import { IDisposable } from '../../core/types';
-import { transformGeometry } from '../../geometry/Geometry.Functions';
-import { planeGeometry } from '../../geometry/primitives/planeGeometry';
-import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { Color3 } from '../../math/Color3';
-import { ceilPow2 } from '../../math/Functions';
 import {
+  Attachment,
+  BufferGeometry,
+  ceilPow2,
+  ClearState,
+  Color3,
+  DataType,
+  fetchImage,
+  Framebuffer,
+  IDisposable,
+  isImageBitmapSupported,
+  isiOS,
+  isMacOS,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
   mat4Orthographic,
   mat4OrthographicSimple,
+  PixelFormat,
+  planeGeometry,
+  Program,
+  renderBufferGeometry,
+  RenderingContext,
   scale3ToMat4,
-  translation3ToMat4
-} from '../../math/Mat4.Functions';
-import { Vec2 } from '../../math/Vec2';
-import {
+  ShaderMaterial,
+  TexImage2D,
+  TexParameters,
+  Texture,
+  TextureFilter,
+  TextureTarget,
+  TextureWrap,
+  transformGeometry,
+  translation3ToMat4,
+  UniformValueMap,
+  Vec2,
   vec2Add,
   vec2Equals,
   vec2MultiplyByScalar,
-  vec2Subtract
-} from '../../math/Vec2.Functions';
-import { Vec3 } from '../../math/Vec3';
-import { isiOS, isMacOS } from '../../platform/Detection';
-import {
-  BufferGeometry,
-  makeBufferGeometryFromGeometry
-} from '../../renderers/webgl/buffers/BufferGeometry';
-import { ClearState } from '../../renderers/webgl/ClearState';
-import { Attachment } from '../../renderers/webgl/framebuffers/Attachment';
-import { Framebuffer } from '../../renderers/webgl/framebuffers/Framebuffer';
-import { renderBufferGeometry } from '../../renderers/webgl/framebuffers/VirtualFramebuffer';
-import {
-  makeProgramFromShaderMaterial,
-  Program
-} from '../../renderers/webgl/programs/Program';
-import { UniformValueMap } from '../../renderers/webgl/programs/UniformValueMap';
-import { RenderingContext } from '../../renderers/webgl/RenderingContext';
-import { DataType } from '../../renderers/webgl/textures/DataType';
-import { PixelFormat } from '../../renderers/webgl/textures/PixelFormat';
-import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
-import { makeTexImage2DFromTexture } from '../../renderers/webgl/textures/TexImage2D.Functions';
-import { TexParameters } from '../../renderers/webgl/textures/TexParameters';
-import { TextureFilter } from '../../renderers/webgl/textures/TextureFilter';
-import { TextureTarget } from '../../renderers/webgl/textures/TextureTarget';
-import { TextureWrap } from '../../renderers/webgl/textures/TextureWrap';
-import {
-  fetchImage,
-  isImageBitmapSupported
-} from '../../textures/loaders/Image';
-import { Texture } from '../../textures/Texture';
+  vec2Subtract,
+  Vec3
+} from '@threeify/core';
+
 import fragmentSource from './fragment.glsl';
 import { copySourceBlendState, Layer } from './Layer';
 import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';

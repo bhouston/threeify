@@ -1,14 +1,14 @@
 // Takes a layer size, optional offset, and if the layer is a texture or framebuffer.
 
-import { Mat3 } from '../../math/Mat3';
 import {
+  Mat3,
   mat3Identity,
   mat3Multiply,
   scale2ToMat3,
-  translation2ToMat3
-} from '../../math/Mat3.Functions';
-import { Vec2 } from '../../math/Vec2';
-import { vec2Negate } from '../../math/Vec2.Functions';
+  translation2ToMat3,
+  Vec2,
+  vec2Negate
+} from '@threeify/core';
 
 // Returns a matrix that transforms from image coordinates ( (0,0) in top left ) to UV coordinates for that layer.
 export function viewToMat3LayerUv(

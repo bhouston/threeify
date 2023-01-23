@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "incremental": true,
+    "outDir": "./dist",
     "target": "ES2020",
     "module": "ES2020",
-    "declaration": true,
     "sourceMap": true,
-    "declarationMap": true,
-    "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,23 +16,13 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false
+    "esModuleInterop": true
   },
   "include": ["src/**/*.ts"],
   "exclude": [
     "**/*.test.ts"
   ],
   "references": [
-    { "path": "./packages/shader-transpiler" },
-    { "path": "./packages/core" },
-    { "path": "./packages/scene" },
-    { "path": "./packages/layer-compositor" },
-    { "path": "./examples" }
-  ],
-  "typedocOptions": {
-    "mode": "modules",
-    "out": "./docs",
-    "gaID": "UA-172098276-1",
-    "gaID": "threeify.org"
-  }
+    { "path": "../core" }
+  ]
 }

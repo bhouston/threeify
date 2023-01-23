@@ -1,14 +1,13 @@
 export * from './warnOnce';
 
+export * from './platform/Detection.js';
+
 export * from './controllers/DeviceOrientation.js';
 export * from './controllers/Orbit.js';
 
 export * from './math/arrays/Conversions.js';
 export * from './math/arrays/Linearizers.js';
 export * from './math/arrays/PrimitiveView.js';
-
-export * from './engines/layerCompositor/Layer.js';
-export * from './engines/layerCompositor/LayerCompositor.js';
 
 export * from './renderers/webgl/buffers/Buffer.js';
 export * from './renderers/webgl/buffers/BufferAccessor.js';
