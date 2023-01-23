@@ -11,7 +11,7 @@ import { Vec2 } from '../../math/Vec2';
 import { vec2Negate } from '../../math/Vec2.Functions';
 
 // Returns a matrix that transforms from image coordinates ( (0,0) in top left ) to UV coordinates for that layer.
-export function makeMat3FromViewToLayerUv(
+export function viewToMat3LayerUv(
   layerSize: Vec2,
   layerOffset: Vec2 | undefined,
   layerIsFramebuffer = false,

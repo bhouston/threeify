@@ -48,7 +48,7 @@ import {
 import { Texture } from '../../textures/Texture';
 import fragmentSource from './fragment.glsl';
 import { copySourceBlendState, Layer } from './Layer';
-import { makeMat3FromViewToLayerUv } from './makeMatrix3FromViewToLayerUv';
+import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';
 import vertexSource from './vertex.glsl';
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
@@ -383,7 +383,7 @@ export class LayerCompositor {
       this.offscreenSize,
       imageToCanvasScale
     );
-    const viewToLayerUv = makeMat3FromViewToLayerUv(
+    const viewToLayerUv = viewToMat3LayerUv(
       offscreenScaledSize,
       undefined,
       true
@@ -476,7 +476,7 @@ export class LayerCompositor {
     const convertToPremultipliedAlpha = isMacOS() || isiOS() ? 1 : 0;
 
     // const offscreenLocalToView = makeMat4Scale(new Vec3(this.offscreenSize.x, this.offscreenSize.y, 1.0));
-    const viewToImageUv = makeMat3FromViewToLayerUv(
+    const viewToImageUv = viewToMat3LayerUv(
       this.offscreenSize,
       undefined,
       true

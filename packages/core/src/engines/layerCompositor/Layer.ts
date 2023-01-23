@@ -10,7 +10,7 @@ import { Vec3 } from '../../math/Vec3';
 import { BlendFunc, BlendState } from '../../renderers/webgl/BlendState';
 import { TexImage2D } from '../../renderers/webgl/textures/TexImage2D';
 import { LayerCompositor } from './LayerCompositor';
-import { makeMat3FromViewToLayerUv } from './makeMatrix3FromViewToLayerUv';
+import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';
 
 class LayerTexture {
   disposed = false;
@@ -40,7 +40,7 @@ class LayerTexture {
     );
     this.planeToImage = mat4Multiply(layerToImage, planeToLayer);
 
-    this.viewToLayerUv = makeMat3FromViewToLayerUv(
+    this.viewToLayerUv = viewToMat3LayerUv(
       this.size,
       this.offset,
       false
