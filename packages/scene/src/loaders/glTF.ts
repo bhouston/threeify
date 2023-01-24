@@ -98,7 +98,7 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
 async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
   if (glTFMesh.listPrimitives().length > 1) {
     console.log('mesh.listPrimitives()', glTFMesh.listPrimitives());
-    throw new Error('Mesh has more than one primitive');
+    //throw new Error('Mesh has more than one primitive');
   }
 
   const primitive = glTFMesh.listPrimitives()[0];

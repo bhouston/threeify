@@ -14,6 +14,7 @@ import {
   PerspectiveCamera,
   PointLight,
   renderSceneViaSceneCache,
+  SceneCache,
   SceneNode,
   sceneToSceneCache,
   updateDirtyNodes,
@@ -36,8 +37,8 @@ async function init(): Promise<void> {
   const orbitController = new Orbit(canvasHtmlElement);
 
   const root = new SceneNode({ name: 'root' });
-  const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
-  updateNodeTree(glTFModel);
+  const glTFModel = await glTFToSceneNode(KhronosModels.DragonAttenuation);
+  updateNodeTree(glTFModel, new SceneCache());
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   //console.log(glTFBoundingBox.clone());
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
@@ -70,7 +71,7 @@ async function init(): Promise<void> {
     orbitNode.rotation = orbitController.rotation;
     orbitNode.dirty();
 
-    updateNodeTree(root);
+    updateNodeTree(root, sceneCache);
     updateDirtyNodes(sceneCache);
     renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
 

@@ -31,7 +31,11 @@ import { NodeUniforms } from './NodeUniforms';
 import { SceneCache } from './SceneCache';
 
 export function updateDirtyNodes(sceneCache: SceneCache) {
-  const { nodeIdToUniforms, nodeIdToVersion, breathFirstNodes } = sceneCache;
+  const {
+    nodeIdToUniforms,
+    nodeIdToRenderVersion: nodeIdToVersion,
+    breathFirstNodes
+  } = sceneCache;
   for (const node of breathFirstNodes) {
     const oldVersion = nodeIdToVersion.get(node.id) || -1;
     if (oldVersion !== node.version) {
@@ -54,7 +58,7 @@ export function sceneToSceneCache(
 ) {
   const {
     nodeIdToUniforms,
-    nodeIdToVersion,
+    nodeIdToRenderVersion: nodeIdToVersion,
     cameraUniforms,
     lightUniforms,
     breathFirstNodes

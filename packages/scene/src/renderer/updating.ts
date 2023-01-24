@@ -10,25 +10,34 @@ import {
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
+import { SceneCache } from './SceneCache';
 
-export function updateNodeTree(node: SceneNode) {
-  nodeVisitor(node);
+export function updateNodeTree(node: SceneNode, sceneCache: SceneCache) {
+  nodeVisitor(node, undefined, sceneCache);
 }
 
 export function nodeVisitor(
   node: SceneNode,
-  parentNode: SceneNode | undefined = undefined
+  parentNode: SceneNode | undefined = undefined,
+  sceneCache: SceneCache
 ) {
-  preOrderUpdateNode(node, parentNode);
+  const nodeIdToUpdateVersion = sceneCache.nodeIdToUpdateVersion;
 
-  node.children.forEach((child) => {
-    nodeVisitor(child, node);
-  });
+  preOrderUpdateNode(node, parentNode, sceneCache);
 
-  postOrderUpdateNode(node);
+  for (const child of node.children) {
+    nodeVisitor(child, node, sceneCache);
+  }
+
+  postOrderUpdateNode(node, sceneCache);
+
+  nodeIdToUpdateVersion.set(node.id, node.version);
 }
 
-export function postOrderUpdateNode(node: SceneNode) {
+export function postOrderUpdateNode(node: SceneNode, sceneCache: SceneCache) {
+  const nodeIdToUpdateVersion = sceneCache.nodeIdToUpdateVersion;
+  if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
+
   // calculate subtree bounding box
   node.subTreeBoundingBox.copy(node.nodeBoundingBox);
   const tempBox = new Box3();
@@ -47,8 +56,12 @@ export function postOrderUpdateNode(node: SceneNode) {
 
 export function preOrderUpdateNode(
   node: SceneNode,
-  parentNode: SceneNode | undefined
+  parentNode: SceneNode | undefined,
+  sceneCache: SceneCache
 ) {
+  const nodeIdToUpdateVersion = sceneCache.nodeIdToUpdateVersion;
+  if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
+
   node.parent = parentNode;
 
   // update local to parent matrices
