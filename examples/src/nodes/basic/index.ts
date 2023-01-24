@@ -13,7 +13,7 @@ import {
   PerspectiveCamera,
   PointLight,
   renderSceneViaSceneCache,
-  SceneCache,
+  SceneRenderCache,
   SceneNode,
   sceneToSceneCache,
   updateNodeTree
@@ -59,7 +59,7 @@ async function init(): Promise<void> {
   camera.translation.set(0, 0, 3);
   root.children.push(camera);
 
-  updateNodeTree(root, new SceneCache()); // update the node tree (matrices, parents, etc.)
+  updateNodeTree(root, new SceneRenderCache()); // update the node tree (matrices, parents, etc.)
 
   const sceneCache = sceneToSceneCache(context, root, camera, () => {
     return shaderMaterial;

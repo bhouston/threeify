@@ -8,15 +8,12 @@ import {
   UniformValueMap
 } from '@threeify/core';
 
-import { SceneNode } from '../scene/SceneNode';
 import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
 import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
 
-export class SceneCache {
-  public breathFirstNodes: SceneNode[] = [];
-
+export class SceneRenderCache {
   public cameraUniforms = new CameraUniforms();
   public lightUniforms = new LightUniforms();
 

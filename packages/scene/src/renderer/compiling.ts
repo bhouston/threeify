@@ -28,9 +28,9 @@ import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
 import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
-import { SceneCache } from './SceneCache';
+import { SceneRenderCache } from './SceneRenderCache';
 
-export function updateDirtyNodes(sceneCache: SceneCache) {
+export function updateDirtyNodes(sceneCache: SceneRenderCache) {
   const {
     nodeIdToUniforms,
     nodeIdToRenderVersion: nodeIdToVersion,
@@ -54,7 +54,7 @@ export function sceneToSceneCache(
   rootNode: SceneNode,
   activeCamera: Camera | undefined,
   shaderResolver: (shaderName: string) => ShaderMaterial,
-  sceneCache: SceneCache = new SceneCache()
+  sceneCache: SceneRenderCache = new SceneRenderCache()
 ) {
   const {
     nodeIdToUniforms,
@@ -109,7 +109,7 @@ function meshToSceneCache(
   context: RenderingContext,
   mesh: MeshNode,
   shaderResolver: (shaderName: string) => ShaderMaterial,
-  sceneCache: SceneCache
+  sceneCache: SceneRenderCache
 ) {
   const {
     geometryIdToBufferGeometry,
@@ -211,7 +211,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   lightUniforms.punctualLightOuterCos.push(lightOuterCos);
 }
 
-function createMeshBatches(sceneCache: SceneCache) {
+function createMeshBatches(sceneCache: SceneRenderCache) {
   const {
     breathFirstNodes,
     geometryIdToBufferGeometry,
@@ -324,7 +324,7 @@ function filterUniforms(
   return filteredUniforms;
 }
 
-function createLightingUniformBuffers(sceneCache: SceneCache) {
+function createLightingUniformBuffers(sceneCache: SceneRenderCache) {
   const {
     shaderNameToProgram,
     lightUniforms,
@@ -351,7 +351,7 @@ function createLightingUniformBuffers(sceneCache: SceneCache) {
   }
 }
 
-function createCameraUniformBuffers(sceneCache: SceneCache) {
+function createCameraUniformBuffers(sceneCache: SceneRenderCache) {
   const {
     shaderNameToProgram,
     cameraUniforms,
@@ -377,7 +377,7 @@ function createCameraUniformBuffers(sceneCache: SceneCache) {
   }
 }
 
-function createMaterialUniformBuffers(sceneCache: SceneCache) {
+function createMaterialUniformBuffers(sceneCache: SceneRenderCache) {
   const {
     shaderNameToProgram,
     materialIdToUniforms,

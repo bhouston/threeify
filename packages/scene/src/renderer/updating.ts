@@ -10,11 +10,11 @@ import {
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
-import { SceneUpdateCache } from './SceneUpdateCache';
+import { SceneTreeCache } from './SceneTreeCache';
 
 export function updateNodeTree(
   node: SceneNode,
-  sceneUpdateCache: SceneUpdateCache
+  sceneUpdateCache: SceneTreeCache
 ) {
   nodeVisitor(node, undefined, sceneUpdateCache);
 }
@@ -22,7 +22,7 @@ export function updateNodeTree(
 export function nodeVisitor(
   node: SceneNode,
   parentNode: SceneNode | undefined = undefined,
-  sceneUpdateCache: SceneUpdateCache
+  sceneUpdateCache: SceneTreeCache
 ) {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
 
@@ -39,7 +39,7 @@ export function nodeVisitor(
 
 export function postOrderUpdateNode(
   node: SceneNode,
-  sceneUpdateCache: SceneUpdateCache
+  sceneUpdateCache: SceneTreeCache
 ) {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
   if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
@@ -63,7 +63,7 @@ export function postOrderUpdateNode(
 export function preOrderUpdateNode(
   node: SceneNode,
   parentNode: SceneNode | undefined,
-  sceneUpdateCache: SceneUpdateCache
+  sceneUpdateCache: SceneTreeCache
 ) {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
   if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;

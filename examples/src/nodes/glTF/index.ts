@@ -14,7 +14,7 @@ import {
   PerspectiveCamera,
   PointLight,
   renderSceneViaSceneCache,
-  SceneCache,
+  SceneRenderCache,
   SceneNode,
   sceneToSceneCache,
   updateDirtyNodes,
@@ -38,7 +38,7 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(KhronosModels.DragonAttenuation);
-  updateNodeTree(glTFModel, new SceneCache());
+  updateNodeTree(glTFModel, new SceneRenderCache());
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   //console.log(glTFBoundingBox.clone());
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));

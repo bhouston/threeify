@@ -3,11 +3,11 @@ import {
   renderBufferGeometry,
   UniformValueMap
 } from '@threeify/core';
-import { SceneCache } from './SceneCache';
+import { SceneRenderCache } from './SceneRenderCache';
 
 export function renderSceneViaSceneCache(
   framebuffer: VirtualFramebuffer,
-  sceneCache: SceneCache
+  sceneCache: SceneRenderCache
 ) {
   const {
     meshBatches,
