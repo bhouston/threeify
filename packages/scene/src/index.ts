@@ -19,5 +19,6 @@ export * from './renderer/compiling.js';
 export * from './renderer/updating.js';
 export * from './renderer/rendering.js';
 export * from './renderer/SceneCache.js';
+export * from './renderer/SceneUpdateCache.js';
 
 export * from './loaders/glTF.js';

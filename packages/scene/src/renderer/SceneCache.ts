@@ -20,7 +20,6 @@ export class SceneCache {
   public cameraUniforms = new CameraUniforms();
   public lightUniforms = new LightUniforms();
 
-  public nodeIdToUpdateVersion: Map<string, number> = new Map();
   public nodeIdToRenderVersion: Map<string, number> = new Map();
 
   public nodeIdToUniforms: Map<string, NodeUniforms> = new Map();

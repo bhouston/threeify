@@ -10,32 +10,38 @@ import {
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
-import { SceneCache } from './SceneCache';
+import { SceneUpdateCache } from './SceneUpdateCache';
 
-export function updateNodeTree(node: SceneNode, sceneCache: SceneCache) {
-  nodeVisitor(node, undefined, sceneCache);
+export function updateNodeTree(
+  node: SceneNode,
+  sceneUpdateCache: SceneUpdateCache
+) {
+  nodeVisitor(node, undefined, sceneUpdateCache);
 }
 
 export function nodeVisitor(
   node: SceneNode,
   parentNode: SceneNode | undefined = undefined,
-  sceneCache: SceneCache
+  sceneUpdateCache: SceneUpdateCache
 ) {
-  const nodeIdToUpdateVersion = sceneCache.nodeIdToUpdateVersion;
+  const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
 
-  preOrderUpdateNode(node, parentNode, sceneCache);
+  preOrderUpdateNode(node, parentNode, sceneUpdateCache);
 
   for (const child of node.children) {
-    nodeVisitor(child, node, sceneCache);
+    nodeVisitor(child, node, sceneUpdateCache);
   }
 
-  postOrderUpdateNode(node, sceneCache);
+  postOrderUpdateNode(node, sceneUpdateCache);
 
   nodeIdToUpdateVersion.set(node.id, node.version);
 }
 
-export function postOrderUpdateNode(node: SceneNode, sceneCache: SceneCache) {
-  const nodeIdToUpdateVersion = sceneCache.nodeIdToUpdateVersion;
+export function postOrderUpdateNode(
+  node: SceneNode,
+  sceneUpdateCache: SceneUpdateCache
+) {
+  const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
   if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
 
   // calculate subtree bounding box
@@ -57,9 +63,9 @@ export function postOrderUpdateNode(node: SceneNode, sceneCache: SceneCache) {
 export function preOrderUpdateNode(
   node: SceneNode,
   parentNode: SceneNode | undefined,
-  sceneCache: SceneCache
+  sceneUpdateCache: SceneUpdateCache
 ) {
-  const nodeIdToUpdateVersion = sceneCache.nodeIdToUpdateVersion;
+  const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
   if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
 
   node.parent = parentNode;
