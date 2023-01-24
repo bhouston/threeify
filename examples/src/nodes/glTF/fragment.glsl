@@ -64,6 +64,7 @@ void main() {
       dotNL *
       BRDF_Diffuse_Lambert(material.albedo);
     outgoingRadiance += mix( c_diffuse, vec3(0.), material.metallic );
+    outgoingRadiance += material.emissive;
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);

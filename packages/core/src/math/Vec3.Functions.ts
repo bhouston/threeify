@@ -41,6 +41,9 @@ export function vec3MultiplyByScalar(
 export function vec3Negate(a: Vec3, result = new Vec3()): Vec3 {
   return result.set(-a.x, -a.y, -a.z);
 }
+export function vec3Reciprocal(a: Vec3, result = new Vec3()): Vec3 {
+  return result.set(1 / a.x, 1 / -a.y, 1 / -a.z);
+}
 export function vec3LengthSq(a: Vec3): number {
   return vec3Dot(a, a);
 }

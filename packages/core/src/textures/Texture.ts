@@ -17,8 +17,8 @@ import {
 export class Texture extends VirtualTexture {
   constructor(
     public image: TextureSource,
-    public wrapS = TextureWrap.ClampToEdge,
-    public wrapT = TextureWrap.ClampToEdge,
+    public wrapS = TextureWrap.Repeat,
+    public wrapT = TextureWrap.Repeat,
     level = 0,
     magFilter = TextureFilter.Linear,
     minFilter = TextureFilter.LinearMipmapLinear,

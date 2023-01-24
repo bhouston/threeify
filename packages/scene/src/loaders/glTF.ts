@@ -11,7 +11,6 @@ import {
   Color3,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  geometryToBoundingBox,
   PhysicalMaterial,
   Quat,
   Texture,
@@ -70,7 +69,6 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   const glTFScene = glTFRoot.listScenes()[0];
 
   const rootNode = new SceneNode();
-  console.log('scene.listChildren()', glTFScene.listChildren());
 
   for (const glTFChildNode of glTFScene.listChildren()) {
     rootNode.children.push(await translateNode(glTFChildNode));
@@ -79,8 +77,6 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
 }
 
 async function translateNode(glTFNode: Node): Promise<SceneNode> {
-  console.log('translateNode', glTFNode);
-
   const translation = toVec3(glTFNode.getTranslation());
   const rotation = toQuat(glTFNode.getRotation());
   const scale = toVec3(glTFNode.getScale());
@@ -138,18 +134,7 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
       0,
       attribute.getNormalized()
     );
-
-    if (threekitName === 'uv0') {
-      console.log(
-        'uv0',
-        geometry.attributes[semanticToThreeifyName[semantic]]?.attributeData
-          .arrayBuffer
-      );
-    }
   });
-
-  const bb = geometryToBoundingBox(geometry);
-  console.log('bb', bb);
 
   const glTFMaterial = primitive.getMaterial();
 
@@ -160,6 +145,7 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
     physicalMaterial = new PhysicalMaterial({
       albedo: toColor3(glTFMaterial.getBaseColorFactor()),
       albedoTexture: await toTexture(glTFMaterial.getBaseColorTexture()),
+      alpha: glTFMaterial.getAlpha(),
       metallic: glTFMaterial.getMetallicFactor(),
       metallicTexture: metallicRoughnessTexture,
       specularRoughness: glTFMaterial.getRoughnessFactor(),
@@ -172,8 +158,6 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
       ]),
       normalTexture: await toTexture(glTFMaterial.getNormalTexture())
     });
-
-    console.log('matphysicalMaterialrial', physicalMaterial);
   }
 
   return new MeshNode({
