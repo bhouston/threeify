@@ -63,6 +63,7 @@ export function preOrderUpdateNode(
   sceneUpdateCache: SceneTreeCache
 ) {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
+  console.log(nodeIdToUpdateVersion.get(node.id), node.version);
   if (nodeIdToUpdateVersion.get(node.id) !== node.version) {
     node.parent = parentNode;
 
