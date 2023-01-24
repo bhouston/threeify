@@ -32,22 +32,22 @@ async function init(): Promise<void> {
   const orbitController = new Orbit(canvasHtmlElement);
 
   const root = new SceneNode({ name: 'root' });
-  const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
+  const glTFModel = await glTFToSceneNode(KhronosModels.Duck);
   const orbitNode = new SceneNode({
     name: 'orbit',
-    translation: new Vec3(0, 0, 4)
+    translation: new Vec3(0, -70, -400)
   });
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
   const pointLight = new PointLight({
-    translation: new Vec3(5, 5, 5),
-    color: new Color3(1, 1, 1),
-    intensity: 100,
+    translation: new Vec3(300, 0, 0),
+    color: new Color3(0.5, 0.5, 0.5),
+    intensity: 10,
     range: 1000
   });
   root.children.push(pointLight);
   const camera = new PerspectiveCamera(25, 0.1, 1000, 1);
-  camera.translation.set(0, 0, 5);
+  camera.translation.set(0, 0, 300);
   root.children.push(camera);
 
   const sceneCache = sceneToSceneCache(context, root, camera, () => {

@@ -16,13 +16,16 @@ export function updateNodeTree(
 export function updateNode(node: SceneNode, parentNode: SceneNode | undefined) {
   node.parent = parentNode;
 
-  mat4Compose(
+  node.localToParentMatrix = mat4Compose(
     node.translation,
     node.rotation,
     node.scale,
     node.localToParentMatrix
   );
-  mat4Inverse(node.localToParentMatrix, node.parentToLocalMatrix);
+  node.parentToLocalMatrix = mat4Inverse(
+    node.localToParentMatrix,
+    node.parentToLocalMatrix
+  );
 
   if (node.parent !== undefined) {
     mat4Multiply(
