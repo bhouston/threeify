@@ -13,11 +13,11 @@ import {
   MeshNode,
   PerspectiveCamera,
   PointLight,
-  renderSceneViaSceneCache,
-  SceneRenderCache,
+  renderScene as renderScene,
   SceneNode,
-  sceneToSceneCache,
-  updateNodeTree
+  SceneTreeCache,
+  updateNodeTree,
+  updateRenderCache
 } from '@threeify/scene';
 
 import fragmentSource from './fragment.glsl';
@@ -44,6 +44,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const sceneTreeCache = new SceneTreeCache();
   const geometry = icosahedronGeometry(0.75, 5, true);
   const root = new SceneNode({ name: 'root' });
   const sphereMesh = new MeshNode({
@@ -78,16 +79,22 @@ async function init(): Promise<void> {
   camera.translation.set(0, 0, 3);
   root.children.push(camera);
 
-  updateNodeTree(root, new SceneRenderCache()); // update the node tree (matrices, parents, etc.)
+  updateNodeTree(root, sceneTreeCache); // update the node tree (matrices, parents, etc.)
 
-  const sceneCache = sceneToSceneCache(context, root, camera, () => {
-    return shaderMaterial;
-  });
+  const renderCache = updateRenderCache(
+    context,
+    root,
+    camera,
+    () => {
+      return shaderMaterial;
+    },
+    sceneTreeCache
+  );
 
   function animate(): void {
     canvasFramebuffer.clear();
 
-    renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
+    renderScene(canvasFramebuffer, renderCache);
 
     requestAnimationFrame(animate);
   }

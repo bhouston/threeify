@@ -41,9 +41,6 @@ export function postOrderUpdateNode(
   node: SceneNode,
   sceneUpdateCache: SceneTreeCache
 ) {
-  const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
-  if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
-
   // calculate subtree bounding box
   node.subTreeBoundingBox.copy(node.nodeBoundingBox);
   const tempBox = new Box3();
@@ -66,21 +63,21 @@ export function preOrderUpdateNode(
   sceneUpdateCache: SceneTreeCache
 ) {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
-  if ((nodeIdToUpdateVersion.get(node.id) || -2) === node.version) return;
+  if (nodeIdToUpdateVersion.get(node.id) !== node.version) {
+    node.parent = parentNode;
 
-  node.parent = parentNode;
-
-  // update local to parent matrices
-  node.localToParentMatrix = mat4Compose(
-    node.translation,
-    node.rotation,
-    node.scale,
-    node.localToParentMatrix
-  );
-  node.parentToLocalMatrix = mat4Inverse(
-    node.localToParentMatrix,
-    node.parentToLocalMatrix
-  );
+    // update local to parent matrices
+    node.localToParentMatrix = mat4Compose(
+      node.translation,
+      node.rotation,
+      node.scale,
+      node.localToParentMatrix
+    );
+    node.parentToLocalMatrix = mat4Inverse(
+      node.localToParentMatrix,
+      node.parentToLocalMatrix
+    );
+  }
 
   // update local to world matrices.
   if (node.parent !== undefined) {
@@ -96,13 +93,15 @@ export function preOrderUpdateNode(
   }
 
   // node-only bounding box
-  if (node instanceof MeshNode) {
-    const meshNode = node as MeshNode;
-    node.nodeBoundingBox = positionAttributeToBoundingBox(
-      meshNode.geometry.attributes.position,
-      node.nodeBoundingBox
-    );
-  } else {
-    node.nodeBoundingBox = new Box3();
+  if (nodeIdToUpdateVersion.get(node.id) !== node.version) {
+    if (node instanceof MeshNode) {
+      const meshNode = node as MeshNode;
+      node.nodeBoundingBox = positionAttributeToBoundingBox(
+        meshNode.geometry.attributes.position,
+        node.nodeBoundingBox
+      );
+    } else {
+      node.nodeBoundingBox = new Box3();
+    }
   }
 }

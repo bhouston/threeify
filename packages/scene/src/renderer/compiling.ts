@@ -28,14 +28,18 @@ import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
 import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
-import { SceneRenderCache } from './SceneRenderCache';
+import { RenderCache } from './RenderCache';
+import { SceneTreeCache } from './SceneTreeCache';
 
-export function updateDirtyNodes(sceneCache: SceneRenderCache) {
+export function updateDirtyNodes(
+  sceneTreeCache: SceneTreeCache,
+  renderCache: RenderCache
+) {
   const {
     nodeIdToUniforms,
     nodeIdToRenderVersion: nodeIdToVersion,
     breathFirstNodes
-  } = sceneCache;
+  } = renderCache;
   for (const node of breathFirstNodes) {
     const oldVersion = nodeIdToVersion.get(node.id) || -1;
     if (oldVersion !== node.version) {
@@ -49,12 +53,13 @@ export function updateDirtyNodes(sceneCache: SceneRenderCache) {
   }
 }
 
-export function sceneToSceneCache(
+export function updateRenderCache(
   context: RenderingContext,
   rootNode: SceneNode,
   activeCamera: Camera | undefined,
   shaderResolver: (shaderName: string) => ShaderMaterial,
-  sceneCache: SceneRenderCache = new SceneRenderCache()
+  sceneTreeCache: SceneTreeCache,
+  renderCache: RenderCache = new RenderCache()
 ) {
   const {
     nodeIdToUniforms,
@@ -62,7 +67,7 @@ export function sceneToSceneCache(
     cameraUniforms,
     lightUniforms,
     breathFirstNodes
-  } = sceneCache;
+  } = renderCache;
 
   breadthFirstVisitor(rootNode, (node: SceneNode) => {
     breathFirstNodes.push(node);
@@ -77,28 +82,28 @@ export function sceneToSceneCache(
       node instanceof Camera &&
       (activeCamera === undefined || node === activeCamera)
     ) {
-      cameraToSceneCache(node as Camera, cameraUniforms);
+      updateCameraUniforms(node as Camera, cameraUniforms);
     }
 
     if (node instanceof Light) {
-      lightToSceneCache(node as Light, lightUniforms);
+      updateLightUniforms(node as Light, lightUniforms);
     }
 
     if (node instanceof MeshNode) {
-      meshToSceneCache(context, node, shaderResolver, sceneCache);
+      meshToSceneCache(context, node, shaderResolver, renderCache);
     }
   });
 
-  createLightingUniformBuffers(sceneCache);
-  createCameraUniformBuffers(sceneCache);
-  createMaterialUniformBuffers(sceneCache);
+  createLightingUniformBuffers(renderCache);
+  createCameraUniformBuffers(renderCache);
+  createMaterialUniformBuffers(renderCache);
 
-  createMeshBatches(sceneCache);
+  createMeshBatches(renderCache);
 
-  return sceneCache;
+  return renderCache;
 }
 
-function cameraToSceneCache(camera: Camera, cameraUniforms: CameraUniforms) {
+function updateCameraUniforms(camera: Camera, cameraUniforms: CameraUniforms) {
   cameraUniforms.viewToScreen.copy(camera.getProjection(1)); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
   cameraUniforms.cameraNear = camera.near;
@@ -109,7 +114,7 @@ function meshToSceneCache(
   context: RenderingContext,
   mesh: MeshNode,
   shaderResolver: (shaderName: string) => ShaderMaterial,
-  sceneCache: SceneRenderCache
+  renderCache: RenderCache
 ) {
   const {
     geometryIdToBufferGeometry,
@@ -117,7 +122,7 @@ function meshToSceneCache(
     materialIdToUniforms,
     textureIdToTexImage2D,
     materialIdToMaterial
-  } = sceneCache;
+  } = renderCache;
 
   // make buffer geometry
   const geometry = mesh.geometry;
@@ -166,7 +171,7 @@ function meshToSceneCache(
   }
 }
 
-function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
+function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
   const lightWorldPosition = mat4TransformVec3(
     light.localToWorldMatrix,
     new Vec3(0, 0, 0)
@@ -211,7 +216,7 @@ function lightToSceneCache(light: Light, lightUniforms: LightUniforms) {
   lightUniforms.punctualLightOuterCos.push(lightOuterCos);
 }
 
-function createMeshBatches(sceneCache: SceneRenderCache) {
+function createMeshBatches(renderCache: RenderCache) {
   const {
     breathFirstNodes,
     geometryIdToBufferGeometry,
@@ -221,7 +226,7 @@ function createMeshBatches(sceneCache: SceneRenderCache) {
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
     meshBatches
-  } = sceneCache;
+  } = renderCache;
 
   for (const node of breathFirstNodes) {
     if (node instanceof MeshNode) {
@@ -324,12 +329,12 @@ function filterUniforms(
   return filteredUniforms;
 }
 
-function createLightingUniformBuffers(sceneCache: SceneRenderCache) {
+function createLightingUniformBuffers(renderCache: RenderCache) {
   const {
     shaderNameToProgram,
     lightUniforms,
     shaderNameToLightingUniformBuffers
-  } = sceneCache;
+  } = renderCache;
   // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const shaderName of shaderNameToProgram.keys()) {
@@ -351,12 +356,12 @@ function createLightingUniformBuffers(sceneCache: SceneRenderCache) {
   }
 }
 
-function createCameraUniformBuffers(sceneCache: SceneRenderCache) {
+function createCameraUniformBuffers(renderCache: RenderCache) {
   const {
     shaderNameToProgram,
     cameraUniforms,
     shaderNameToCameraUniformBuffers
-  } = sceneCache;
+  } = renderCache;
   // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const shaderName of shaderNameToProgram.keys()) {
@@ -377,14 +382,14 @@ function createCameraUniformBuffers(sceneCache: SceneRenderCache) {
   }
 }
 
-function createMaterialUniformBuffers(sceneCache: SceneRenderCache) {
+function createMaterialUniformBuffers(renderCache: RenderCache) {
   const {
     shaderNameToProgram,
     materialIdToUniforms,
     cameraUniforms,
     materialIdToMaterial,
     materialIdToMaterialUniformBuffers
-  } = sceneCache;
+  } = renderCache;
   // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const materialId of materialIdToUniforms.keys()) {

@@ -19,7 +19,7 @@ export interface ISceneNode {
 
 export class SceneNode implements IIdentifiable, IVersionable {
   public readonly id;
-  public version = 0;
+  public version = -1;
   public name = '';
   public parent: SceneNode | undefined = undefined;
   public readonly children: SceneNode[] = [];

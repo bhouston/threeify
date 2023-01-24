@@ -13,12 +13,12 @@ import {
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
-  renderSceneViaSceneCache,
-  SceneRenderCache,
+  renderScene,
   SceneNode,
-  sceneToSceneCache,
+  SceneTreeCache,
   updateDirtyNodes,
-  updateNodeTree
+  updateNodeTree,
+  updateRenderCache
 } from '@threeify/scene';
 
 import { KhronosModels } from '../../KhronosModels';
@@ -36,13 +36,17 @@ async function init(): Promise<void> {
 
   const orbitController = new Orbit(canvasHtmlElement);
 
+  const sceneTreeCache = new SceneTreeCache();
+
   const root = new SceneNode({ name: 'root' });
-  const glTFModel = await glTFToSceneNode(KhronosModels.DragonAttenuation);
-  updateNodeTree(glTFModel, new SceneRenderCache());
+  const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
+
+  updateNodeTree(glTFModel, sceneTreeCache);
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   //console.log(glTFBoundingBox.clone());
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
   glTFModel.scale = vec3Reciprocal(box3Size(glTFBoundingBox));
+  glTFModel.dirty();
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -3)
@@ -60,9 +64,15 @@ async function init(): Promise<void> {
   camera.translation.set(0, 0, 30);
   root.children.push(camera);
 
-  const sceneCache = sceneToSceneCache(context, root, camera, () => {
-    return shaderMaterial;
-  });
+  const renderCache = updateRenderCache(
+    context,
+    root,
+    camera,
+    () => {
+      return shaderMaterial;
+    },
+    sceneTreeCache
+  );
 
   function animate(): void {
     canvasFramebuffer.clear();
@@ -71,9 +81,9 @@ async function init(): Promise<void> {
     orbitNode.rotation = orbitController.rotation;
     orbitNode.dirty();
 
-    updateNodeTree(root, sceneCache);
-    updateDirtyNodes(sceneCache);
-    renderSceneViaSceneCache(canvasFramebuffer, sceneCache);
+    updateNodeTree(root, sceneTreeCache);
+    updateDirtyNodes(sceneTreeCache, renderCache);
+    renderScene(canvasFramebuffer, renderCache);
 
     requestAnimationFrame(animate);
   }
