@@ -1,5 +1,5 @@
 import { makeVec3View } from '../math/arrays/PrimitiveView.js';
-import { box3ExpandByPoint3 } from '../math/Box3.Functions.js';
+import { box3Empty, box3ExpandByPoint3 } from '../math/Box3.Functions.js';
 import { Box3 } from '../math/Box3.js';
 import { Mat4 } from '../math/Mat4.js';
 import {
@@ -190,17 +190,23 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
   }
 }
 
-export function geometryToBoundingBox(geometry: Geometry): Box3 {
-  const positionAttribute = geometry.attributes.position;
+export function positionAttributeToBoundingBox(
+  positionAttribute?: Attribute,
+  result = new Box3()
+): Box3 {
   if (positionAttribute === undefined) {
     throw new Error('missing position attribute');
   }
   const positions = makeVec3View(positionAttribute);
 
-  const bb = new Box3();
+  box3Empty(result);
   const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
-    box3ExpandByPoint3(bb, positions.get(i, v), bb);
+    box3ExpandByPoint3(result, positions.get(i, v), result);
   }
-  return bb;
+  return result;
+}
+
+export function geometryToBoundingBox(geometry: Geometry): Box3 {
+  return positionAttributeToBoundingBox(geometry.attributes.position);
 }

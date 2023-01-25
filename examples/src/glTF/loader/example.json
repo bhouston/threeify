@@ -1,9 +1,0 @@
-{
-  "slug": "gltf_loader",
-  "theme": "dark",
-  "en": {
-    "name": "glTF Loader",
-    "description": "A test of gltf-transform as a mesh and material loader.",
-    "keywords": ["gltf", "loader"]
-  }
-}

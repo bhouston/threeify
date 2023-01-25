@@ -44,6 +44,10 @@ void main() {
 
     float dotNL = saturate(dot(directLight.direction, normal));
 
+    vec3 specularF90 = mix( vec3( material.specularFactor ),vec3( 1.0 ), material.metallic );
+    vec3 specularF0 = mix( material.specularColor, material.albedo, material.metallic );
+
+
     outgoingRadiance +=
       directLight.radiance *
       dotNL *
@@ -51,8 +55,8 @@ void main() {
         normal,
         viewDirection,
         directLight.direction,
-        vec3( 1.0 ),
-        vec3( 1.0 ),
+        specularF0,
+        specularF90,
         material.specularRoughness
       );
      vec3 c_diffuse =
@@ -60,6 +64,7 @@ void main() {
       dotNL *
       BRDF_Diffuse_Lambert(material.albedo);
     outgoingRadiance += mix( c_diffuse, vec3(0.), material.metallic );
+    outgoingRadiance += material.emissive;
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);

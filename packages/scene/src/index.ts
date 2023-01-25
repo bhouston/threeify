@@ -18,5 +18,7 @@ export * from './scene/cameras/OrthographicCamera.js';
 export * from './renderer/compiling.js';
 export * from './renderer/updating.js';
 export * from './renderer/rendering.js';
+export * from './renderer/RenderCache.js';
+export * from './renderer/SceneTreeCache.js';
 
 export * from './loaders/glTF.js';

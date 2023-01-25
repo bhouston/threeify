@@ -1,13 +1,14 @@
 import {
-  VirtualFramebuffer,
   renderBufferGeometry,
-  UniformValueMap
+  UniformValueMap,
+  VirtualFramebuffer
 } from '@threeify/core';
-import { SceneCache } from './SceneCache';
 
-export function renderSceneViaSceneCache(
+import { RenderCache } from './RenderCache';
+
+export function renderScene(
   framebuffer: VirtualFramebuffer,
-  sceneCache: SceneCache
+  renderCache: RenderCache
 ) {
   const {
     meshBatches,
@@ -15,7 +16,7 @@ export function renderSceneViaSceneCache(
     lightUniforms,
     shaderNameToLightingUniformBuffers,
     shaderNameToCameraUniformBuffers
-  } = sceneCache;
+  } = renderCache;
   for (const meshBatch of meshBatches) {
     const {
       program,

@@ -1,13 +1,14 @@
 import {
-  Vec3,
-  Quat,
+  Box3,
+  generateUUID,
   IIdentifiable,
   IVersionable,
   Mat4,
-  generateUUID
+  Quat,
+  Vec3
 } from '@threeify/core';
 
-export interface ISceneNode {
+export interface ISceneNodeProps {
   id?: string;
   name?: string;
   translation?: Vec3;
@@ -27,12 +28,15 @@ export class SceneNode implements IIdentifiable, IVersionable {
   public scale = new Vec3(1, 1, 1);
   public visible = true;
 
+  // derived
   public localToParentMatrix = new Mat4();
   public parentToLocalMatrix = new Mat4();
   public localToWorldMatrix = new Mat4();
   public worldToLocalMatrix = new Mat4();
+  public nodeBoundingBox = new Box3();
+  public subTreeBoundingBox = new Box3();
 
-  constructor(props: ISceneNode = {}) {
+  constructor(props: ISceneNodeProps = {}) {
     this.id = props.id || generateUUID();
     this.name = props.name || this.name;
     if (props.translation !== undefined)

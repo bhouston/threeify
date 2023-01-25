@@ -1,4 +1,9 @@
-import { Texture as GLTFTexture, WebIO } from '@gltf-transform/core';
+import {
+  Mesh,
+  Node,
+  Texture as GLTFTexture,
+  WebIO
+} from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import {
   Attribute,
@@ -6,7 +11,6 @@ import {
   Color3,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  geometryToBoundingBox,
   PhysicalMaterial,
   Quat,
   Texture,
@@ -61,87 +65,104 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   io.registerExtensions(KHRONOS_EXTENSIONS);
 
   const document = await io.read(url);
-  const root = document.getRoot();
-  const scene = root.listScenes()[0];
+  const glTFRoot = document.getRoot();
+  const glTFScene = glTFRoot.listScenes()[0];
 
-  const rootNode = new SceneNode();
+  const rootNode = new SceneNode({ name: 'glTF' });
 
-  for (const node of scene.listChildren()) {
-    const translation = toVec3(node.getTranslation());
-    const rotation = toQuat(node.getRotation());
-    const scale = toVec3(node.getScale());
+  for (const glTFChildNode of glTFScene.listChildren()) {
+    rootNode.children.push(await translateNode(glTFChildNode));
+  }
+  return rootNode;
+}
 
-    const localNode = new SceneNode({ translation, scale, rotation });
-    rootNode.children.push(localNode);
+async function translateNode(glTFNode: Node): Promise<SceneNode> {
+  const translation = toVec3(glTFNode.getTranslation());
+  const rotation = toQuat(glTFNode.getRotation());
+  const scale = toVec3(glTFNode.getScale());
 
-    const mesh = node.getMesh();
-    if (mesh !== null) {
-      const geometry = new Geometry();
-      for (const primitive of mesh.listPrimitives()) {
-        let physicalMaterial = new PhysicalMaterial({});
+  const sceneNode = new SceneNode({ translation, scale, rotation });
 
-        geometry.primitive = primitive.getMode();
-
-        const indices = primitive.getIndices();
-        if (indices !== null) {
-          geometry.indices = new Attribute(
-            new AttributeData(indices.getArray() || new Float32Array()),
-            indices.getElementSize(),
-            indices.getComponentType(),
-            -1,
-            0,
-            indices.getNormalized()
-          );
-        }
-        primitive.listSemantics().forEach((semantic, index) => {
-          const attribute = primitive.listAttributes()[index];
-
-          geometry.attributes[semanticToThreeifyName[semantic]] = new Attribute(
-            new AttributeData(attribute.getArray() || new Float32Array()),
-            attribute.getElementSize(),
-            attribute.getComponentType(),
-            -1,
-            0,
-            attribute.getNormalized()
-          );
-        });
-        const material = primitive.getMaterial();
-
-        if (material !== null) {
-          const metallicRoughnessTexture = await toTexture(
-            material.getMetallicRoughnessTexture()
-          );
-          physicalMaterial = new PhysicalMaterial({
-            albedo: toColor3(material.getBaseColorFactor()),
-            albedoTexture: await toTexture(material.getBaseColorTexture()),
-            metallic: material.getMetallicFactor(),
-            metallicTexture: metallicRoughnessTexture,
-            specularRoughness: material.getRoughnessFactor(),
-            specularRoughnessTexture: metallicRoughnessTexture,
-            emissiveColor: toColor3(material.getEmissiveFactor()),
-            emissiveTexture: await toTexture(material.getEmissiveTexture()),
-            normalScale: toVec2([
-              material.getNormalScale(),
-              material.getNormalScale()
-            ]),
-            normalTexture: await toTexture(material.getNormalTexture())
-          });
-
-          const meshNode = new MeshNode({
-            translation,
-            scale,
-            rotation,
-            geometry,
-            material: physicalMaterial
-          });
-          const bb = geometryToBoundingBox(geometry);
-          localNode.children.push(meshNode);
-        }
-      }
-    }
+  const glTFMesh: Mesh | null = glTFNode.getMesh();
+  if (glTFMesh !== null) {
+    sceneNode.children.push(await translateMesh(glTFMesh));
   }
 
-  return new Promise<SceneNode>((resolve) => {
-    resolve(rootNode);
+  for (const glTFChildNode of glTFNode.listChildren()) {
+    sceneNode.children.push(await translateNode(glTFChildNode));
+  }
+
+  return sceneNode;
+}
+
+async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
+  if (glTFMesh.listPrimitives().length > 1) {
+    console.log('mesh.listPrimitives()', glTFMesh.listPrimitives());
+    //throw new Error('Mesh has more than one primitive');
+  }
+
+  const primitive = glTFMesh.listPrimitives()[0];
+
+  const geometry = new Geometry();
+  let physicalMaterial = new PhysicalMaterial({});
+
+  geometry.primitive = primitive.getMode();
+
+  const indices = primitive.getIndices();
+  if (indices !== null) {
+    geometry.indices = new Attribute(
+      new AttributeData(indices.getArray() || new Float32Array()),
+      indices.getElementSize(),
+      indices.getComponentType(),
+      -1,
+      0,
+      indices.getNormalized()
+    );
+  }
+  primitive.listSemantics().forEach((semantic, index) => {
+    const attribute = primitive.listAttributes()[index];
+
+    const threekitName = semanticToThreeifyName[semantic];
+    if (threekitName === undefined)
+      throw new Error(`Unknown semantic ${semantic}`);
+
+    geometry.attributes[semanticToThreeifyName[semantic]] = new Attribute(
+      new AttributeData(attribute.getArray() || new Float32Array()),
+      attribute.getElementSize(),
+      attribute.getComponentType(),
+      -1,
+      0,
+      attribute.getNormalized()
+    );
+  });
+
+  const glTFMaterial = primitive.getMaterial();
+
+  if (glTFMaterial !== null) {
+    const metallicRoughnessTexture = await toTexture(
+      glTFMaterial.getMetallicRoughnessTexture()
+    );
+    physicalMaterial = new PhysicalMaterial({
+      albedo: toColor3(glTFMaterial.getBaseColorFactor()),
+      albedoTexture: await toTexture(glTFMaterial.getBaseColorTexture()),
+      alpha: glTFMaterial.getAlpha(),
+      metallic: glTFMaterial.getMetallicFactor(),
+      metallicTexture: metallicRoughnessTexture,
+      specularRoughness: glTFMaterial.getRoughnessFactor(),
+      specularRoughnessTexture: metallicRoughnessTexture,
+      emissiveColor: toColor3(glTFMaterial.getEmissiveFactor()),
+      emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
+      normalScale: toVec2([
+        glTFMaterial.getNormalScale(),
+        glTFMaterial.getNormalScale()
+      ]),
+      normalTexture: await toTexture(glTFMaterial.getNormalTexture())
+    });
+  }
+
+  return new MeshNode({
+    name: 'glTFMesh',
+    geometry,
+    material: physicalMaterial
   });
 }

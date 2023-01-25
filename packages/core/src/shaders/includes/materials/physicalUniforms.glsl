@@ -45,9 +45,9 @@ PhysicalMaterial readPhysicalMaterialFromUniforms() {
     material.albedo = albedo * sRGBToLinear(texture(albedoTexture, uv).rgb);
     material.specularFactor = specularFactor * texture(specularFactorTexture, uv).r;
     material.specularColor = specularColor * sRGBToLinear(texture(specularColorTexture, uv).rgb);
-    material.specularRoughness = specularRoughness * texture(specularRoughnessTexture, uv).b;
-    material.metallic = metallic * texture(metallicTexture, uv).r;
-    material.emissive = emissive * sRGBToLinear(texture(emissiveTexture, uv).rgb);
+    material.specularRoughness = specularRoughness * texture(specularRoughnessTexture, uv).g;
+    material.metallic = metallic * texture(metallicTexture, uv).b;
+    material.emissive = emissive + sRGBToLinear(texture(emissiveTexture, uv).rgb);
     material.normal = vec3(normalScale, 1.0) * rgbToNormal(texture(normalTexture, uv).rgb);
     material.ior = ior;
     material.clearcoatFactor = clearcoatFactor * texture(clearcoatFactorTexture, uv).r;

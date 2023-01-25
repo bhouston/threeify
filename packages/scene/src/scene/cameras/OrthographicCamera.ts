@@ -1,15 +1,20 @@
-import { Vec2, Mat4, mat4OrthographicSimple } from '@threeify/core';
-import { Camera } from './Camera';
+import { Mat4, mat4OrthographicSimple, Vec2 } from '@threeify/core';
+
+import { Camera, ICameraProps } from './Camera';
+
+export interface IOrthographicCameraProps extends ICameraProps {
+  height?: number;
+  center?: Vec2;
+}
 
 export class OrthographicCamera extends Camera {
-  constructor(
-    public height: number,
-    near: number,
-    far: number,
-    public center = new Vec2(),
-    public zoom = 1
-  ) {
-    super(near, far);
+  public height = 1;
+  public center = new Vec2(0, 0);
+
+  constructor(props: IOrthographicCameraProps = {}) {
+    super(props);
+    this.height = props.height || this.height;
+    if (props.center !== undefined) this.center.copy(props.center);
   }
 
   getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {
