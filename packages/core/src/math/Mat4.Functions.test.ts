@@ -398,4 +398,22 @@ describe('Mat4 Functions', () => {
     expect(m.elements[14]).toBeCloseTo(m2.elements[14], EPSILON);
     expect(m.elements[15]).toBeCloseTo(m2.elements[15], EPSILON);
   });
+
+  test('mat4Multiply-translation-scale', () => {
+    const t1 = translation3ToMat4(new Vec3(1, 0, 0));
+    const t2 = translation3ToMat4(new Vec3(0, 1, 0));
+    const s1 = scale3ToMat4(new Vec3(2, 2, 2));
+
+    // s1 happens first, then t1.
+    const m1 = mat4Multiply(t1, s1);
+    expect(m1.elements[0]).toBeCloseTo(2, EPSILON);
+    expect(m1.elements[5]).toBeCloseTo(2, EPSILON);
+    expect(m1.elements[12]).toBeCloseTo(1, EPSILON);
+
+    // t2 happens first, then s1.
+    const m2 = mat4Multiply(s1, t1);
+    expect(m2.elements[0]).toBeCloseTo(2, EPSILON);
+    expect(m2.elements[5]).toBeCloseTo(2, EPSILON);
+    expect(m2.elements[12]).toBeCloseTo(2, EPSILON);
+  });
 });

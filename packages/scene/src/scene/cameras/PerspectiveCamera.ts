@@ -1,6 +1,6 @@
 import { Mat4, mat4PerspectiveFov } from '@threeify/core';
 
-import { Camera, ICameraProps } from './Camera';
+import { CameraNode, ICameraProps } from './CameraNode';
 
 export interface IPerspectiveCameraProps extends ICameraProps {
   verticalFov?: number;
@@ -8,7 +8,7 @@ export interface IPerspectiveCameraProps extends ICameraProps {
   pixelAspectRatio?: number;
 }
 
-export class PerspectiveCamera extends Camera {
+export class PerspectiveCamera extends CameraNode {
   public verticalFov = Math.PI / 3;
 
   constructor(props: IPerspectiveCameraProps = {}) {

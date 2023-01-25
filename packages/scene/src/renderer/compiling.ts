@@ -15,7 +15,7 @@ import {
   Vec3
 } from '@threeify/core';
 
-import { Camera } from '../scene/cameras/Camera';
+import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { Light } from '../scene/lights/Light';
 import { LightType } from '../scene/lights/LightType';
@@ -38,25 +38,25 @@ export function updateDirtyNodes(
   const {
     nodeIdToUniforms,
     nodeIdToRenderVersion: nodeIdToVersion,
-    breathFirstNodes
+    breathFirstNodes,
+    activeCamera,
+    cameraUniforms
   } = renderCache;
   for (const node of breathFirstNodes) {
-    const oldVersion = nodeIdToVersion.get(node.id) || -1;
-    if (oldVersion !== node.version) {
-      {
-        const nodeUniforms =
-          nodeIdToUniforms.get(node.id) || new NodeUniforms();
-        nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
-        nodeIdToUniforms.set(node.id, nodeUniforms);
-      }
-    }
+    const nodeUniforms = nodeIdToUniforms.get(node.id) || new NodeUniforms();
+    nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
+    nodeIdToUniforms.set(node.id, nodeUniforms);
+  }
+
+  if (activeCamera !== undefined) {
+    updateCameraUniforms(activeCamera, cameraUniforms);
   }
 }
 
 export function updateRenderCache(
   context: RenderingContext,
   rootNode: SceneNode,
-  activeCamera: Camera | undefined,
+  activeCamera: CameraNode | undefined,
   shaderResolver: (shaderName: string) => ShaderMaterial,
   sceneTreeCache: SceneTreeCache,
   renderCache: RenderCache = new RenderCache()
@@ -79,10 +79,11 @@ export function updateRenderCache(
     nodeIdToVersion.set(node.id, node.version);
 
     if (
-      node instanceof Camera &&
+      node instanceof CameraNode &&
       (activeCamera === undefined || node === activeCamera)
     ) {
-      updateCameraUniforms(node as Camera, cameraUniforms);
+      renderCache.activeCamera = node;
+      updateCameraUniforms(node as CameraNode, cameraUniforms);
     }
 
     if (node instanceof Light) {
@@ -103,7 +104,10 @@ export function updateRenderCache(
   return renderCache;
 }
 
-function updateCameraUniforms(camera: Camera, cameraUniforms: CameraUniforms) {
+function updateCameraUniforms(
+  camera: CameraNode,
+  cameraUniforms: CameraUniforms
+) {
   cameraUniforms.viewToScreen.copy(camera.getProjection(1)); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
   cameraUniforms.cameraNear = camera.near;

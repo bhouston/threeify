@@ -45,7 +45,8 @@ export function nodeVisitor(
   );
 
   let childrenNodesChanged = false;
-  node.children.forEach((child, index) => {
+  node.children.forEach((child) => {
+    child.parent = node;
     const childNodeChanged = nodeVisitor(
       child,
       node,
@@ -106,8 +107,15 @@ export function preOrderUpdateNode(
   if (!parentNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version)
     return false;
 
+  /*console.log(
+    'local transform',
+    node.translation.clone(),
+    node.rotation.clone(),
+    node.scale.clone()
+  );*/
+
   // update local to parent matrices
-  if (nodeIdToUpdateVersion.get(node.id) == node.version) {
+  if (nodeIdToUpdateVersion.get(node.id) !== node.version) {
     node.localToParentMatrix = mat4Compose(
       node.translation,
       node.rotation,
@@ -122,6 +130,7 @@ export function preOrderUpdateNode(
 
   // update local to world matrices.
   if (node.parent !== undefined) {
+    // localToParentMatrix happens first, and then parent.localToWorldMatrix - this is correct
     mat4Multiply(
       node.parent.localToWorldMatrix,
       node.localToParentMatrix,
@@ -132,6 +141,19 @@ export function preOrderUpdateNode(
     node.localToWorldMatrix.copy(node.localToParentMatrix);
     node.worldToLocalMatrix.copy(node.parentToLocalMatrix);
   }
+
+  /*if (node.parent !== undefined) {
+    const parentLocalToWorldTransform = mat4Decompose(
+      node.parent.localToWorldMatrix
+    );
+    console.log('parentLocalToWorldTransform', parentLocalToWorldTransform);
+  }*/
+
+  //const localToParentTransform = mat4Decompose(node.localToParentMatrix);
+  //console.log('localToParentMatrix', localToParentTransform);
+
+  // const worldTransform = mat4Decompose(node.localToWorldMatrix);
+  // console.log('worldTransform', worldTransform);
 
   // node-only bounding box - convert to checking the attribute version.
   if (nodeIdToUpdateVersion.get(node.id) !== node.version) {

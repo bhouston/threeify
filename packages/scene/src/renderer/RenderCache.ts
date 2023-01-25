@@ -8,6 +8,7 @@ import {
   UniformValueMap
 } from '@threeify/core';
 
+import { CameraNode } from '../scene/cameras/CameraNode';
 import { SceneNode } from '../scene/SceneNode';
 import { CameraUniforms } from './CameraUniforms';
 import { LightUniforms } from './LightUniforms';
@@ -18,6 +19,7 @@ export class RenderCache {
   public breathFirstNodes: SceneNode[] = [];
 
   // cameraCache
+  public activeCamera?: CameraNode;
   public cameraUniforms = new CameraUniforms();
   public shaderNameToCameraUniformBuffers: Map<string, Buffer> = new Map();
 

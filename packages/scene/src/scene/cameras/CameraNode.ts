@@ -9,7 +9,7 @@ export interface ICameraProps extends ISceneNodeProps {
   zoom?: number;
 }
 
-export abstract class Camera extends SceneNode {
+export abstract class CameraNode extends SceneNode {
   public pixelAspectRatio = 1;
   public near = 0.1;
   public far = 1000;
