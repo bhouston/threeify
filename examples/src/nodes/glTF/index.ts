@@ -54,14 +54,21 @@ async function init(): Promise<void> {
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
   const pointLight = new PointLight({
+    name: 'PointLight',
     translation: new Vec3(10, 0, 0),
     color: new Color3(1, 1, 1),
     intensity: 30,
     range: 1000
   });
   root.children.push(pointLight);
-  const camera = new PerspectiveCamera(25, 0.1, 1000, 1);
-  camera.translation.set(0, 0, 30);
+  const camera = new PerspectiveCamera({
+    name: 'Camera',
+    verticalFov: 25,
+    near: 0.1,
+    far: 1000,
+    zoom: 1,
+    translation: new Vec3(0, 0, 30)
+  });
   root.children.push(camera);
 
   const renderCache = updateRenderCache(

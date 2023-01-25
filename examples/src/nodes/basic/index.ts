@@ -55,8 +55,13 @@ async function init(): Promise<void> {
   });
 
   root.children.push(pointLight);
-  const camera = new PerspectiveCamera(25, 0.1, 4, 1);
-  camera.translation.set(0, 0, 3);
+  const camera = new PerspectiveCamera({
+    verticalFov: 25,
+    near: 0.1,
+    far: 4,
+    zoom: 1,
+    translation: new Vec3(0, 0, 3)
+  });
   root.children.push(camera);
 
   const sceneTreeCache = new SceneTreeCache();

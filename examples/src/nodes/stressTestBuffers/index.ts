@@ -70,8 +70,12 @@ async function init(): Promise<void> {
   });
   root.children.push(directionalLight);
 
-  const camera = new PerspectiveCamera(25, 0.1, 4, 1);
-  camera.translation.set(0, 0, 3);
+  const camera = new PerspectiveCamera({
+    verticalFov: 25,
+    near: 0.1,
+    far: 4,
+    translation: new Vec3(0, 0, 3)
+  });
   root.children.push(camera);
 
   updateNodeTree(root, sceneTreeCache); // update the node tree (matrices, parents, etc.)

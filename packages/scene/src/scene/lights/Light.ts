@@ -1,7 +1,7 @@
 import { Color3 } from '@threeify/core';
-import { ISceneNode, SceneNode } from '../SceneNode';
+import { ISceneNodeProps, SceneNode } from '../SceneNode';
 
-export interface ILight extends ISceneNode {
+export interface ILight extends ISceneNodeProps {
   color?: Color3;
   intensity?: number;
 }

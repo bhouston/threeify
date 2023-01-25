@@ -68,7 +68,7 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   const glTFRoot = document.getRoot();
   const glTFScene = glTFRoot.listScenes()[0];
 
-  const rootNode = new SceneNode();
+  const rootNode = new SceneNode({ name: 'glTF' });
 
   for (const glTFChildNode of glTFScene.listChildren()) {
     rootNode.children.push(await translateNode(glTFChildNode));
@@ -161,6 +161,7 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
   }
 
   return new MeshNode({
+    name: 'glTFMesh',
     geometry,
     material: physicalMaterial
   });

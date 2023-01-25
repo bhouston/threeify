@@ -8,7 +8,7 @@ import {
   Vec3
 } from '@threeify/core';
 
-export interface ISceneNode {
+export interface ISceneNodeProps {
   id?: string;
   name?: string;
   translation?: Vec3;
@@ -36,7 +36,7 @@ export class SceneNode implements IIdentifiable, IVersionable {
   public nodeBoundingBox = new Box3();
   public subTreeBoundingBox = new Box3();
 
-  constructor(props: ISceneNode = {}) {
+  constructor(props: ISceneNodeProps = {}) {
     this.id = props.id || generateUUID();
     this.name = props.name || this.name;
     if (props.translation !== undefined)

@@ -17,6 +17,7 @@ export function updateNodeTree(
   node: SceneNode,
   sceneUpdateCache: SceneTreeCache
 ) {
+  console.log('updateNodeTree');
   nodeVisitor(node, undefined, false, sceneUpdateCache);
 }
 
@@ -90,7 +91,12 @@ export function preOrderUpdateNode(
   sceneUpdateCache: SceneTreeCache
 ): boolean {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
-  console.log(nodeIdToUpdateVersion.get(node.id), node.version);
+  console.log(
+    node.constructor.name,
+    node.name,
+    nodeIdToUpdateVersion.get(node.id),
+    node.version
+  );
   if (!parentNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version)
     return false;
 
