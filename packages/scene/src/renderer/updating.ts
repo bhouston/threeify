@@ -17,7 +17,6 @@ export function updateNodeTree(
   node: SceneNode,
   sceneUpdateCache: SceneTreeCache
 ) {
-  console.log('updateNodeTree');
   nodeVisitor(node, undefined, false, sceneUpdateCache);
 }
 
@@ -31,6 +30,13 @@ export function nodeVisitor(
 ): boolean {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
 
+  /*console.group(
+    node.constructor.name,
+    node.name,
+    nodeIdToUpdateVersion.get(node.id),
+    node.version
+  );*/
+
   const parentOrNodeChanged = preOrderUpdateNode(
     node,
     parentNode,
@@ -38,21 +44,26 @@ export function nodeVisitor(
     sceneUpdateCache
   );
 
-  let childNodeChanged = false;
-  for (const child of node.children) {
-    childNodeChanged =
-      childNodeChanged ||
-      nodeVisitor(child, node, parentOrNodeChanged, sceneUpdateCache);
-  }
+  let childrenNodesChanged = false;
+  node.children.forEach((child, index) => {
+    const childNodeChanged = nodeVisitor(
+      child,
+      node,
+      parentOrNodeChanged,
+      sceneUpdateCache
+    );
+    childrenNodesChanged = childrenNodesChanged || childNodeChanged;
+  });
 
   const childOrNodeChanged = postOrderUpdateNode(
     node,
-    childNodeChanged,
+    childrenNodesChanged,
     sceneUpdateCache
   );
 
   nodeIdToUpdateVersion.set(node.id, node.version);
 
+  //console.groupEnd();
   return childOrNodeChanged;
 }
 
@@ -91,12 +102,7 @@ export function preOrderUpdateNode(
   sceneUpdateCache: SceneTreeCache
 ): boolean {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
-  console.log(
-    node.constructor.name,
-    node.name,
-    nodeIdToUpdateVersion.get(node.id),
-    node.version
-  );
+
   if (!parentNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version)
     return false;
 
