@@ -43,7 +43,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( ) {
     vec2 uv = v_uv0;
 
     PhysicalMaterial material;
-    material.alpha = alpha * texture( alphaTexture, uv ).r;
+    material.alpha = alpha * texture( alphaTexture, uv ).a;
     material.albedo = albedoFactor * sRGBToLinear( texture( albedoTexture, uv ).rgb );
     material.specularFactor = specularFactor * texture( specularFactorTexture, uv ).r;
     material.specularColor = specularColor * sRGBToLinear( texture( specularColorTexture, uv ).rgb );
