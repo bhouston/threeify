@@ -40,10 +40,10 @@ async function init(): Promise<void> {
     translation: new Vec3(0, 0, 0),
     geometry,
     material: new PhysicalMaterial({
-      albedo: new Color3(1, 1, 1),
+      albedoFactor: new Color3(1, 1, 1),
       albedoTexture: texture,
-      specularRoughness: 0,
-      metallic: 1
+      specularRoughnessFactor: 0,
+      metallicFactor: 1
     })
   });
   root.children.push(sphereMesh);

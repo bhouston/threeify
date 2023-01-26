@@ -7,7 +7,8 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  TextureBindings
 } from '@threeify/core';
 
 import fragmentSource from './fragment.glsl';
@@ -28,13 +29,18 @@ async function init(): Promise<void> {
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const program = makeProgramFromShaderMaterial(context, material);
-  const uniforms = { map: makeTexImage2DFromTexture(context, texture) };
+  const texImage2D = makeTexImage2DFromTexture(context, texture);
+
+  const textureBindings = new TextureBindings();
+
+  const uniforms = { map: textureBindings.bind(texImage2D) };
 
   renderBufferGeometry({
     framebuffer: canvasFramebuffer,
     program,
     uniforms,
-    bufferGeometry
+    bufferGeometry,
+    textureBindings
   });
 }
 

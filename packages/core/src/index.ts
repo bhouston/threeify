@@ -59,6 +59,7 @@ export * from './materials/OutputChannels.js';
 export * from './materials/PhysicalMaterial.js';
 export * from './materials/ShaderMaterial.js';
 export * from './materials/PhysicalMaterial.js';
+export * from './materials/AlphaMode.js';
 
 export * from './math/Box2.js';
 export * from './math/Box2.Functions.js';
@@ -111,6 +112,8 @@ export * from './renderers/webgl/Renderbuffer.js';
 export * from './renderers/webgl/RenderingContext.js';
 export * from './renderers/webgl/programs/ProgramVertexArray.js';
 
+export * from './renderers/webgl/textures/TextureBindings.js';
+
 export * from './renderers/webgl/shaders/Shader.js';
 export * from './renderers/webgl/shaders/ShaderType.js';
 
@@ -130,3 +133,5 @@ export * from './textures/PixelEncoding.js';
 export * from './textures/Texture.js';
 export * from './textures/TextureAccessor.js';
 export * from './textures/VirtualTexture.js';
+export * from './textures/loaders/ImageData.js';
+export * from './textures/loaders/SolidTextures.js';

@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@threeify/shader-transpiler": "*",
+    "@types/draco3dgltf": "^1.4.0",
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "jest": "^29.1.2",
@@ -42,6 +43,7 @@
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
-    "@threeify/core": "^2.1.0"
+    "@threeify/core": "^2.1.0",
+    "draco3dgltf": "^1.5.5"
   }
 }

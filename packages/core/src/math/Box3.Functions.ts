@@ -276,6 +276,11 @@ export function box3Size(b: Box3): Vec3 {
   return vec3Subtract(b.max, b.min);
 }
 
+export function box3MaxSize(b: Box3): number {
+  const { max, min } = b;
+  return Math.max(max.x - min.x, max.y - min.y, max.z - min.z);
+}
+
 export function box3Scale(b: Box3, scale: Vec3, result = new Box3()): Box3 {
   result.min.x = b.min.x * scale.x;
   result.min.y = b.min.y * scale.y;

@@ -15,6 +15,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
@@ -42,6 +43,9 @@ async function init(): Promise<void> {
   const clearCoatBumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
   const specularRoughnessMap = clearCoatBumpMap;
   const clearCoatRoughnessMap = specularRoughnessMap;
+
+  const textureBindings = new TextureBindings();
+
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
@@ -62,18 +66,18 @@ async function init(): Promise<void> {
 
     // materials
     albedoColor: new Color3(0.9, 0.9, 0.9),
-    albedoMap,
+    albedoMap: textureBindings.bind(albedoMap),
 
     specularRoughnessFactor: 0.5,
-    specularRoughnessMap,
+    specularRoughnessMap: textureBindings.bind(specularRoughnessMap),
 
     clearCoatStrength: 0.5,
     clearCoatTint: new Color3(1, 1, 1),
 
-    clearCoatBumpMap,
+    clearCoatBumpMap: textureBindings.bind(clearCoatBumpMap),
 
     clearCoatRoughnessFactor: 0.1,
-    clearCoatRoughnessMap
+    clearCoatRoughnessMap: textureBindings.bind(clearCoatRoughnessMap)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -95,7 +99,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
 
     requestAnimationFrame(animate);

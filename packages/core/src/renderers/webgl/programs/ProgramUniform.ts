@@ -15,9 +15,7 @@ import { Vec2 } from '../../../math/Vec2.js';
 import { Vec3 } from '../../../math/Vec3.js';
 import { Vec4 } from '../../../math/Vec4.js';
 import { Buffer } from '../buffers/Buffer.js';
-import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
-import { TexImage2D } from '../textures/TexImage2D.js';
 import { Program } from './Program.js';
 import { ProgramUniformBlock } from './ProgramUniformBlock.js';
 import { UniformType, uniformTypeInfo } from './UniformType.js';
@@ -25,7 +23,7 @@ import { uniformValueToArrayBuffer } from './UniformValue.js';
 import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
 const regexUniformParser =
-  /^((?<struct>[a-zA-Z0-9_]+)(\[(?<structIndexer>[0-9]+)\])?\.)?(?<variable>[a-zA-Z0-9_]+)(\[(?<variableIndexer>[0-9]+)\])?$/;
+  /^((?<struct>\w+)(\[(?<structIndexer>\d+)])?\.)?(?<variable>\w+)(\[(?<variableIndexer>\d+)])?$/;
 
 export class ProgramUniform {
   readonly context: RenderingContext;
@@ -73,12 +71,12 @@ export class ProgramUniform {
       if (match.groups.struct !== null) {
         this.structName = match.groups.struct;
         if (match.groups.structIndexer !== null) {
-          this.structIndex = parseInt(match.groups.structIndexer);
+          this.structIndex = Number.parseInt(match.groups.structIndexer);
         }
       }
       this.variableName = match.groups.variable;
       if (match.groups.variableIndexer !== null) {
-        this.variableIndex = parseInt(match.groups.variableIndexer);
+        this.variableIndex = Number.parseInt(match.groups.variableIndexer);
       }
 
       this.arrayLength = activeInfo.size;
@@ -238,19 +236,15 @@ export class ProgramUniform {
         // case UniformType.IntSampler2D:
         // case UniformType.UnsignedIntSampler2D:
         // case UniformType.Sampler2DShadow:
-        if (value instanceof TexImage2D) {
-          gl.activeTexture(GL.TEXTURE0 + this.textureUnit);
-          gl.bindTexture(GL.TEXTURE_2D, value.glTexture);
-          gl.uniform1i(this.glLocation, this.textureUnit);
+        if (typeof value === 'number') {
+          gl.uniform1i(this.glLocation, value);
           return this;
         }
         break;
       case UniformType.SamplerCube:
         // case UniformType.SamplerCubeShadow:
-        if (value instanceof TexImage2D) {
-          gl.activeTexture(GL.TEXTURE0 + this.textureUnit);
-          gl.bindTexture(GL.TEXTURE_CUBE_MAP, value.glTexture);
-          gl.uniform1i(this.glLocation, this.textureUnit);
+        if (typeof value === 'number') {
+          gl.uniform1i(this.glLocation, value);
           return this;
         }
         break;
@@ -354,6 +348,16 @@ export class ProgramUniform {
           const array = mat4ArrayToFloat32Array(value as Mat4[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
           this.valueHashCode = -1;
+          return this;
+        }
+        break;
+
+      case UniformType.Sampler2D:
+        // case UniformType.IntSampler2D:
+        // case UniformType.UnsignedIntSampler2D:
+        // case UniformType.Sampler2DShadow:
+        if (typeof firstElement === 'number') {
+          gl.uniform1iv(this.glLocation, value as number[]);
           return this;
         }
         break;

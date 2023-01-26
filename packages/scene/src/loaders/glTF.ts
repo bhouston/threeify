@@ -6,6 +6,7 @@ import {
 } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import {
+  AlphaMode,
   Attribute,
   AttributeData,
   Color3,
@@ -59,6 +60,19 @@ function toVec3(values: number[]): Vec3 {
 }
 function toQuat(values: number[]): Quat {
   return new Quat(values[0], values[1], values[2], values[3]);
+}
+
+function toAlphaMode(alphaMode: string): AlphaMode {
+  switch (alphaMode) {
+    case 'BLEND':
+      return AlphaMode.Blend;
+    case 'MASK':
+      return AlphaMode.Mask;
+    case 'OPAQUE':
+      return AlphaMode.Opaque;
+    default:
+      return AlphaMode.Opaque;
+  }
 }
 export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   const io = new WebIO();
@@ -139,24 +153,34 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
   const glTFMaterial = primitive.getMaterial();
 
   if (glTFMaterial !== null) {
+    // convert to simultaneously resolving promises
+
     const metallicRoughnessTexture = await toTexture(
       glTFMaterial.getMetallicRoughnessTexture()
     );
+    const albedoAlphaTexture = await toTexture(
+      glTFMaterial.getBaseColorTexture()
+    );
+
     physicalMaterial = new PhysicalMaterial({
-      albedo: toColor3(glTFMaterial.getBaseColorFactor()),
-      albedoTexture: await toTexture(glTFMaterial.getBaseColorTexture()),
+      alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
+      albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
+      albedoTexture: albedoAlphaTexture,
       alpha: glTFMaterial.getAlpha(),
-      metallic: glTFMaterial.getMetallicFactor(),
+      alphaTexture: albedoAlphaTexture,
+      metallicFactor: glTFMaterial.getMetallicFactor(),
       metallicTexture: metallicRoughnessTexture,
-      specularRoughness: glTFMaterial.getRoughnessFactor(),
+      specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
       specularRoughnessTexture: metallicRoughnessTexture,
-      emissiveColor: toColor3(glTFMaterial.getEmissiveFactor()),
+      emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
       emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
       normalScale: toVec2([
         glTFMaterial.getNormalScale(),
         glTFMaterial.getNormalScale()
       ]),
-      normalTexture: await toTexture(glTFMaterial.getNormalTexture())
+      normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
+      occlusionFactor: glTFMaterial.getOcclusionStrength(),
+      occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture())
     });
   }
 

@@ -1,4 +1,5 @@
 import {
+  AlphaMode,
   color3MultiplyByScalar,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -10,12 +11,13 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   UniformBufferMap,
   UniformValueMap,
   Vec3
 } from '@threeify/core';
 
-import { Camera } from '../scene/cameras/Camera';
+import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { Light } from '../scene/lights/Light';
 import { LightType } from '../scene/lights/LightType';
@@ -38,25 +40,25 @@ export function updateDirtyNodes(
   const {
     nodeIdToUniforms,
     nodeIdToRenderVersion: nodeIdToVersion,
-    breathFirstNodes
+    breathFirstNodes,
+    activeCamera,
+    cameraUniforms
   } = renderCache;
   for (const node of breathFirstNodes) {
-    const oldVersion = nodeIdToVersion.get(node.id) || -1;
-    if (oldVersion !== node.version) {
-      {
-        const nodeUniforms =
-          nodeIdToUniforms.get(node.id) || new NodeUniforms();
-        nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
-        nodeIdToUniforms.set(node.id, nodeUniforms);
-      }
-    }
+    const nodeUniforms = nodeIdToUniforms.get(node.id) || new NodeUniforms();
+    nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
+    nodeIdToUniforms.set(node.id, nodeUniforms);
+  }
+
+  if (activeCamera !== undefined) {
+    updateCameraUniforms(activeCamera, cameraUniforms);
   }
 }
 
 export function updateRenderCache(
   context: RenderingContext,
   rootNode: SceneNode,
-  activeCamera: Camera | undefined,
+  activeCamera: CameraNode | undefined,
   shaderResolver: (shaderName: string) => ShaderMaterial,
   sceneTreeCache: SceneTreeCache,
   renderCache: RenderCache = new RenderCache()
@@ -79,10 +81,11 @@ export function updateRenderCache(
     nodeIdToVersion.set(node.id, node.version);
 
     if (
-      node instanceof Camera &&
+      node instanceof CameraNode &&
       (activeCamera === undefined || node === activeCamera)
     ) {
-      updateCameraUniforms(node as Camera, cameraUniforms);
+      renderCache.activeCamera = node;
+      updateCameraUniforms(node as CameraNode, cameraUniforms);
     }
 
     if (node instanceof Light) {
@@ -103,7 +106,10 @@ export function updateRenderCache(
   return renderCache;
 }
 
-function updateCameraUniforms(camera: Camera, cameraUniforms: CameraUniforms) {
+function updateCameraUniforms(
+  camera: CameraNode,
+  cameraUniforms: CameraUniforms
+) {
   cameraUniforms.viewToScreen.copy(camera.getProjection(1)); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
   cameraUniforms.cameraNear = camera.near;
@@ -120,6 +126,7 @@ function meshToSceneCache(
     geometryIdToBufferGeometry,
     shaderNameToProgram,
     materialIdToUniforms,
+    materialIdToTextureBindings,
     textureIdToTexImage2D,
     materialIdToMaterial
   } = renderCache;
@@ -150,6 +157,7 @@ function meshToSceneCache(
   if (!materialIdToUniforms.has(material.id)) {
     const materialParameters = material.getParameters();
     const materialUniforms: UniformValueMap = {};
+    const materialTextureBindings = new TextureBindings();
     for (const uniformName of Object.keys(materialParameters)) {
       const uniformValue = materialParameters[uniformName];
       // convert from Parameters to Uniforms
@@ -161,13 +169,15 @@ function meshToSceneCache(
           texImage2D = makeTexImage2DFromTexture(context, texture);
           textureIdToTexImage2D.set(textureId, texImage2D);
         }
-        materialUniforms[uniformName] = texImage2D;
+        materialUniforms[uniformName] =
+          materialTextureBindings.bind(texImage2D);
       } else {
         materialUniforms[uniformName] = uniformValue;
       }
     }
 
     materialIdToUniforms.set(material.id, materialUniforms);
+    materialIdToTextureBindings.set(material.id, materialTextureBindings);
   }
 }
 
@@ -206,10 +216,12 @@ function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
       new Vec3(0, 0, -1)
     );
   }
+
   lightUniforms.numPunctualLights++;
   lightUniforms.punctualLightType.push(lightType);
   lightUniforms.punctualLightColor.push(lightColor);
   lightUniforms.punctualLightWorldPosition.push(lightWorldPosition);
+
   lightUniforms.punctualLightWorldDirection.push(lightWorldDirection);
   lightUniforms.punctualLightRange.push(lightRange);
   lightUniforms.punctualLightInnerCos.push(lightInnerCos);
@@ -225,7 +237,9 @@ function createMeshBatches(renderCache: RenderCache) {
     nodeIdToUniforms,
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
-    meshBatches
+    materialIdToTextureBindings,
+    opaqueMeshBatches,
+    blendMeshBatches
   } = renderCache;
 
   for (const node of breathFirstNodes) {
@@ -297,20 +311,28 @@ function createMeshBatches(renderCache: RenderCache) {
         );
       }
 
+      const textureBindings = materialIdToTextureBindings.get(material.id);
+      if (textureBindings === undefined)
+        throw new Error('Texture Bindings not found');
+
       /*const materialUniformBlock = program.uniformBlocks['Material'];
       const lightingUniformBlock = program.uniformBlocks['Lighting'];
       const cameraUniformBlock = program.uniformBlocks['Camera'];*/
 
       // create mesh batch
-      meshBatches.push(
-        new MeshBatch(
-          program,
-          bufferGeometry,
-          programVertexArray,
-          uniformValueMaps,
-          uniformBufferMap
-        )
+      const meshBatch = new MeshBatch(
+        program,
+        bufferGeometry,
+        programVertexArray,
+        uniformValueMaps,
+        uniformBufferMap,
+        textureBindings
       );
+      if (material.alphaMode === AlphaMode.Opaque) {
+        opaqueMeshBatches.push(meshBatch);
+      } else if (material.alphaMode === AlphaMode.Blend) {
+        blendMeshBatches.push(meshBatch);
+      }
     }
   }
 }

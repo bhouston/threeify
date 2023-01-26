@@ -16,6 +16,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   translation3ToMat4,
   Vec2,
   Vec3
@@ -70,6 +71,9 @@ async function init(): Promise<void> {
 
   const texture = new Texture(canvas);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
+
+  const textureBindings = new TextureBindings();
+
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
@@ -82,7 +86,7 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     ),
     viewLightPosition: new Vec3(0, 0, 0),
-    map: uvTestTexture
+    map: textureBindings.bind(uvTestTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -98,14 +102,15 @@ async function init(): Promise<void> {
     );
     updateCanvas(ctx, frameNumber);
     uvTestTexture.loadImages([canvas]);
-    uniforms.map = uvTestTexture;
+    uniforms.map = textureBindings.bind(uvTestTexture);
 
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
 
     requestAnimationFrame(animate);

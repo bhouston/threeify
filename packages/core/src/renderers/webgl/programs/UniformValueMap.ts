@@ -21,6 +21,7 @@ export type UniformPrimitiveValue =
 export type UniformValue =
   | UniformPrimitiveValue
   | UniformPrimitiveValue[]
-  | TexImage2D;
+  | TexImage2D
+  | TexImage2D[];
 
 export type UniformValueMap = { [key: string]: UniformValue };

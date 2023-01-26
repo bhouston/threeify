@@ -175,8 +175,9 @@ export class Program implements IResource {
 
       if (numTextureUnits(uniform.uniformType) > 0) {
         uniform.textureUnit = textureUnitCount;
-        textureUnitCount++;
+        textureUnitCount += uniform.arrayLength;
       }
+
       if (uniformBlock !== undefined) {
         this.#uniformBlocks[uniformBlock.name] = uniformBlock;
         uniformBlock.uniforms[uniform.variableName] = uniform;

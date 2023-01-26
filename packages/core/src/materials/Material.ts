@@ -1,6 +1,7 @@
 import { generateUUID } from '../core/generateUuid';
 import { IIdentifiable, IVersionable } from '../core/types';
 import { ShaderDefines } from '../renderers/webgl/shaders/ShaderDefines';
+import { AlphaMode } from './AlphaMode';
 import { MaterialParameters } from './MaterialParameters';
 
 export interface IMaterialProps {
@@ -16,6 +17,8 @@ export class Material implements IVersionable, IIdentifiable {
   public name = '';
   public shaderName: string;
   public shaderDefines: ShaderDefines = {};
+  public alphaMode = AlphaMode.Opaque;
+
   constructor(props: IMaterialProps) {
     this.id = props.id || generateUUID();
     this.shaderName = props.shaderName;

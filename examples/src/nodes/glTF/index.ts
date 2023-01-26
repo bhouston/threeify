@@ -1,13 +1,12 @@
 import {
   box3Center,
-  box3Size,
+  box3MaxSize,
   Color3,
   Orbit,
   RenderingContext,
   ShaderMaterial,
   Vec3,
-  vec3Negate,
-  vec3Reciprocal
+  vec3Negate
 } from '@threeify/core';
 import {
   glTFToSceneNode,
@@ -21,9 +20,11 @@ import {
   updateRenderCache
 } from '@threeify/scene';
 
-import { KhronosModels } from '../../KhronosModels';
+import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
+
+//const stats = new Stats();
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
@@ -35,41 +36,61 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const orbitController = new Orbit(canvasHtmlElement);
+  orbitController.zoom = 0.8;
 
   const sceneTreeCache = new SceneTreeCache();
 
   const root = new SceneNode({ name: 'root' });
-  const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
+  const glTFModel = await glTFToSceneNode(
+    getGLTFUrl(GLTFModel.DamagedHelmet, GLTFFormat.glTF)
+  );
 
   updateNodeTree(glTFModel, sceneTreeCache);
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
-  //console.log(glTFBoundingBox.clone());
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
-  glTFModel.scale = vec3Reciprocal(box3Size(glTFBoundingBox));
+  const maxSize = box3MaxSize(glTFBoundingBox);
   glTFModel.dirty();
   const orbitNode = new SceneNode({
     name: 'orbit',
-    translation: new Vec3(0, 0, -3)
+    translation: new Vec3(0, 0, -2),
+    scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize)
   });
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
-  const pointLight = new PointLight({
-    name: 'PointLight',
-    translation: new Vec3(10, 0, 0),
-    color: new Color3(1, 1, 1),
-    intensity: 30,
+  const pointLight1 = new PointLight({
+    name: 'PointLight1',
+    translation: new Vec3(5, 0, 0),
+    color: new Color3(0.7, 0.8, 0.9),
+    intensity: 100,
     range: 1000
   });
-  root.children.push(pointLight);
+  root.children.push(pointLight1);
+  const pointLight2 = new PointLight({
+    name: 'PointLight2',
+    translation: new Vec3(-5, 0, 0),
+    color: new Color3(1, 0.9, 0.7),
+    intensity: 100,
+    range: 1000
+  });
+  root.children.push(pointLight2);
+  const pointLight3 = new PointLight({
+    name: 'PointLight3',
+    translation: new Vec3(0, 5, 0),
+    color: new Color3(0.8, 1, 0.7),
+    intensity: 100,
+    range: 1000
+  });
+  root.children.push(pointLight3);
   const camera = new PerspectiveCamera({
     name: 'Camera',
     verticalFov: 25,
     near: 0.1,
     far: 1000,
-    zoom: 1,
-    translation: new Vec3(0, 0, 30)
+    translation: new Vec3(0, 0, 0)
   });
   root.children.push(camera);
+
+  updateNodeTree(root, sceneTreeCache);
 
   const renderCache = updateRenderCache(
     context,
@@ -81,18 +102,26 @@ async function init(): Promise<void> {
     sceneTreeCache
   );
 
+  console.log('# of nodes: ', renderCache.breathFirstNodes.length);
+
+  canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
+
   function animate(): void {
+    requestAnimationFrame(animate);
+
+    // stats.time(() => {
     canvasFramebuffer.clear();
 
     orbitController.update();
     orbitNode.rotation = orbitController.rotation;
+    camera.zoom = orbitController.zoom;
+    camera.dirty();
     orbitNode.dirty();
 
     updateNodeTree(root, sceneTreeCache);
     updateDirtyNodes(sceneTreeCache, renderCache);
     renderScene(canvasFramebuffer, renderCache);
-
-    requestAnimationFrame(animate);
+    // });
   }
 
   animate();

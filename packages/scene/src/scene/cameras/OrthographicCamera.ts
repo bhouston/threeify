@@ -1,13 +1,13 @@
 import { Mat4, mat4OrthographicSimple, Vec2 } from '@threeify/core';
 
-import { Camera, ICameraProps } from './Camera';
+import { CameraNode, ICameraProps } from './CameraNode';
 
 export interface IOrthographicCameraProps extends ICameraProps {
   height?: number;
   center?: Vec2;
 }
 
-export class OrthographicCamera extends Camera {
+export class OrthographicCamera extends CameraNode {
   public height = 1;
   public center = new Vec2(0, 0);
 

@@ -15,6 +15,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
@@ -34,6 +35,8 @@ async function init(): Promise<void> {
   );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+
+  const textureBindings = new TextureBindings();
 
   const map = makeTexImage2DFromTexture(context, texture);
   const program = makeProgramFromShaderMaterial(context, material);
@@ -56,11 +59,11 @@ async function init(): Promise<void> {
 
     // materials
     albedoModulator: new Vec3(1, 1, 1),
-    albedoMap: map,
+    albedoMap: textureBindings.bind(map),
     specularModulator: new Vec3(1, 1, 1),
-    specularMap: map,
+    specularMap: textureBindings.bind(map),
     specularRoughnessModulator: 1,
-    specularRoughnessMap: map
+    specularRoughnessMap: textureBindings.bind(map)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -82,7 +85,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
 
     requestAnimationFrame(animate);

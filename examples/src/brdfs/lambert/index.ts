@@ -15,6 +15,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
@@ -35,7 +36,9 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const textureBindings = new TextureBindings();
   const program = makeProgramFromShaderMaterial(context, material);
+  const albedoMap = makeTexImage2DFromTexture(context, texture);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -55,7 +58,7 @@ async function init(): Promise<void> {
 
     // materials
     albedoModulator: new Vec3(1, 1, 1),
-    albedoMap: makeTexImage2DFromTexture(context, texture)
+    albedoMap: textureBindings.bind(albedoMap)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -85,7 +88,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
 
     requestAnimationFrame(animate);

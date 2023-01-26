@@ -13,6 +13,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  TextureBindings,
   translation3ToMat4,
   Vec3
 } from '@threeify/core';
@@ -35,7 +36,10 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const textureBindings = new TextureBindings();
+
   const program = makeProgramFromShaderMaterial(context, material);
+  const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
@@ -48,7 +52,7 @@ async function init(): Promise<void> {
     ),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount,
-    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture)
+    cubeMap: textureBindings.bind(cubeMap)
   };
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -64,7 +68,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
 
     requestAnimationFrame(animate);
