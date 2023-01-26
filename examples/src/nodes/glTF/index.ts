@@ -21,11 +21,10 @@ import {
 } from '@threeify/scene';
 
 import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
-import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-const stats = new Stats();
+//const stats = new Stats();
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
@@ -110,19 +109,19 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    stats.time(() => {
-      canvasFramebuffer.clear();
+    // stats.time(() => {
+    canvasFramebuffer.clear();
 
-      orbitController.update();
-      orbitNode.rotation = orbitController.rotation;
-      camera.zoom = orbitController.zoom;
-      camera.dirty();
-      orbitNode.dirty();
+    orbitController.update();
+    orbitNode.rotation = orbitController.rotation;
+    camera.zoom = orbitController.zoom;
+    camera.dirty();
+    orbitNode.dirty();
 
-      updateNodeTree(root, sceneTreeCache);
-      updateDirtyNodes(sceneTreeCache, renderCache);
-      renderScene(canvasFramebuffer, renderCache);
-    });
+    updateNodeTree(root, sceneTreeCache);
+    updateDirtyNodes(sceneTreeCache, renderCache);
+    renderScene(canvasFramebuffer, renderCache);
+    // });
   }
 
   animate();
