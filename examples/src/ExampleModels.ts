@@ -45,7 +45,5 @@ export function getGLTFUrl(model: GLTFModel, format: GLTFFormat): string {
   const modelName = GLTFModel[model];
   const formatFolder = glTFFormatToFolder[format];
   const extension = glTFFormatToExtension[format];
-  const url = `https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/${modelName}/${formatFolder}/${modelName}.${extension}`;
-  console.log(model, format, url);
-  return url;
+  return `https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/${modelName}/${formatFolder}/${modelName}.${extension}`;
 }

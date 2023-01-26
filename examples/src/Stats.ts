@@ -1,3 +1,4 @@
+// TypeScript conversion and refactor of THREE.js stats.module.js
 export class Stats {
   private mode = 0;
   private container: HTMLDivElement;
@@ -8,7 +9,9 @@ export class Stats {
   private msPanel: Panel;
   public REVISION = 16;
 
-  constructor(document: Document) {
+  constructor() {
+    if (document === undefined) throw new Error('Stats: document is undefined');
+
     this.container = document.createElement('div');
     this.container.style.cssText =
       'position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
@@ -20,6 +23,7 @@ export class Stats {
       },
       false
     );
+    document.body.appendChild(this.container);
 
     this.beginTime = (performance || Date).now();
     this.prevTime = this.beginTime;
@@ -67,6 +71,12 @@ export class Stats {
     }
 
     return time;
+  }
+
+  public time(body: () => void) {
+    this.begin();
+    body();
+    this.end();
   }
 
   public update() {

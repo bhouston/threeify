@@ -20,19 +20,14 @@ import {
   updateRenderCache
 } from '@threeify/scene';
 
-import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../KhronosModels';
+import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
 import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
+const stats = new Stats();
+
 async function init(): Promise<void> {
-  const containerDivElement = document.getElementById(
-    'container'
-  ) as HTMLDivElement;
-  const stats = new Stats(document);
-
-  containerDivElement.appendChild(stats.dom);
-
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
@@ -113,21 +108,20 @@ async function init(): Promise<void> {
 
   function animate(): void {
     requestAnimationFrame(animate);
-    stats.begin();
 
-    canvasFramebuffer.clear();
+    stats.time(() => {
+      canvasFramebuffer.clear();
 
-    orbitController.update();
-    orbitNode.rotation = orbitController.rotation;
-    camera.zoom = orbitController.zoom;
-    camera.dirty();
-    orbitNode.dirty();
+      orbitController.update();
+      orbitNode.rotation = orbitController.rotation;
+      camera.zoom = orbitController.zoom;
+      camera.dirty();
+      orbitNode.dirty();
 
-    updateNodeTree(root, sceneTreeCache);
-    updateDirtyNodes(sceneTreeCache, renderCache);
-    renderScene(canvasFramebuffer, renderCache);
-
-    stats.end();
+      updateNodeTree(root, sceneTreeCache);
+      updateDirtyNodes(sceneTreeCache, renderCache);
+      renderScene(canvasFramebuffer, renderCache);
+    });
   }
 
   animate();

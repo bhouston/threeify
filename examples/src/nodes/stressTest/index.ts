@@ -21,8 +21,11 @@ import {
   updateRenderCache
 } from '@threeify/scene';
 
+import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
+
+const stats = new Stats();
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
@@ -90,11 +93,12 @@ async function init(): Promise<void> {
   );
 
   function animate(): void {
-    canvasFramebuffer.clear();
-
-    renderScene(canvasFramebuffer, renderCache);
-
     requestAnimationFrame(animate);
+    stats.time(() => {
+      canvasFramebuffer.clear();
+
+      renderScene(canvasFramebuffer, renderCache);
+    });
   }
 
   animate();
