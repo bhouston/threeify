@@ -9,6 +9,8 @@ struct PhysicalMaterial {
     float specularRoughness;
     float metallic;
 
+    float occlusion;
+
     vec3 normal;
 
     float ior;

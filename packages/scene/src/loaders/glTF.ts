@@ -139,24 +139,32 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
   const glTFMaterial = primitive.getMaterial();
 
   if (glTFMaterial !== null) {
+    // convert to simultaneously resolving promises
+
     const metallicRoughnessTexture = await toTexture(
       glTFMaterial.getMetallicRoughnessTexture()
     );
+    const albedoAlphaTexture = await toTexture(
+      glTFMaterial.getBaseColorTexture()
+    );
     physicalMaterial = new PhysicalMaterial({
-      albedo: toColor3(glTFMaterial.getBaseColorFactor()),
-      albedoTexture: await toTexture(glTFMaterial.getBaseColorTexture()),
+      albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
+      albedoTexture: albedoAlphaTexture,
       alpha: glTFMaterial.getAlpha(),
-      metallic: glTFMaterial.getMetallicFactor(),
+      alphaTexture: albedoAlphaTexture,
+      metallicFactor: glTFMaterial.getMetallicFactor(),
       metallicTexture: metallicRoughnessTexture,
-      specularRoughness: glTFMaterial.getRoughnessFactor(),
+      specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
       specularRoughnessTexture: metallicRoughnessTexture,
-      emissiveColor: toColor3(glTFMaterial.getEmissiveFactor()),
+      emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
       emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
       normalScale: toVec2([
         glTFMaterial.getNormalScale(),
         glTFMaterial.getNormalScale()
       ]),
-      normalTexture: await toTexture(glTFMaterial.getNormalTexture())
+      normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
+      occlusionFactor: glTFMaterial.getOcclusionStrength(),
+      occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture())
     });
   }
 

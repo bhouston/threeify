@@ -18,15 +18,16 @@ import {
 } from '@threeify/scene';
 
 import { KhronosModels } from '../../KhronosModels';
-import Stats from '../../Stats.js';
+import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const stats = new Stats();
   const containerDivElement = document.getElementById(
     'container'
   ) as HTMLDivElement;
+  const stats = new Stats(document);
+
   containerDivElement.appendChild(stats.dom);
 
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
@@ -86,6 +87,7 @@ async function init(): Promise<void> {
 
   function animate(): void {
     requestAnimationFrame(animate);
+    stats.begin();
 
     canvasFramebuffer.clear();
 
@@ -99,7 +101,7 @@ async function init(): Promise<void> {
     updateDirtyNodes(sceneTreeCache, renderCache);
     renderScene(canvasFramebuffer, renderCache);
 
-    stats.update();
+    stats.end();
   }
 
   animate();

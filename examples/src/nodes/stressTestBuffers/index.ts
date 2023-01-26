@@ -54,10 +54,10 @@ async function init(): Promise<void> {
       ),
       geometry,
       material: new PhysicalMaterial({
-        albedo: new Color3(Math.random(), Math.random(), Math.random()),
+        albedoFactor: new Color3(Math.random(), Math.random(), Math.random()),
         albedoTexture: texture,
-        specularRoughness: Math.random(),
-        metallic: Math.random()
+        specularRoughnessFactor: Math.random(),
+        metallicFactor: Math.random()
       })
     });
     root.children.push(sphereMesh);

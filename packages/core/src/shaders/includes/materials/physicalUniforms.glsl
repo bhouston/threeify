@@ -4,20 +4,22 @@
 
 uniform float alpha;
 uniform sampler2D alphaTexture;
-uniform vec3 albedo;
+uniform vec3 albedoFactor;
 uniform sampler2D albedoTexture;
 uniform float specularFactor;
 uniform sampler2D specularFactorTexture;
 uniform vec3 specularColor;
 uniform sampler2D specularColorTexture;
-uniform float specularRoughness;
+uniform float specularRoughnessFactor;
 uniform sampler2D specularRoughnessTexture;
-uniform float metallic;
+uniform float metallicFactor;
 uniform sampler2D metallicTexture;
-uniform vec3 emissive;
+uniform vec3 emissiveFactor;
 uniform sampler2D emissiveTexture;
 uniform vec2 normalScale;
 uniform sampler2D normalTexture;
+uniform float occlusionFactor;
+uniform sampler2D occlusionTexture;
 uniform float ior;
 uniform float clearcoatFactor;
 uniform sampler2D clearcoatFactorTexture;
@@ -36,26 +38,27 @@ uniform sampler2D sheenRoughnessFactorTexture;
 #pragma include <color/spaces/srgb>
 #pragma include <normals/normalMapping>
 
-PhysicalMaterial readPhysicalMaterialFromUniforms() {
+PhysicalMaterial readPhysicalMaterialFromUniforms( ) {
 
     vec2 uv = v_uv0;
 
     PhysicalMaterial material;
-    material.alpha = alpha * texture(alphaTexture, uv).r;
-    material.albedo = albedo * sRGBToLinear(texture(albedoTexture, uv).rgb);
-    material.specularFactor = specularFactor * texture(specularFactorTexture, uv).r;
-    material.specularColor = specularColor * sRGBToLinear(texture(specularColorTexture, uv).rgb);
-    material.specularRoughness = specularRoughness * texture(specularRoughnessTexture, uv).g;
-    material.metallic = metallic * texture(metallicTexture, uv).b;
-    material.emissive = emissive + sRGBToLinear(texture(emissiveTexture, uv).rgb);
-    material.normal = vec3(normalScale, 1.0) * rgbToNormal(texture(normalTexture, uv).rgb);
+    material.alpha = alpha * texture( alphaTexture, uv ).r;
+    material.albedo = albedoFactor * sRGBToLinear( texture( albedoTexture, uv ).rgb );
+    material.specularFactor = specularFactor * texture( specularFactorTexture, uv ).r;
+    material.specularColor = specularColor * sRGBToLinear( texture( specularColorTexture, uv ).rgb );
+    material.specularRoughness = specularRoughnessFactor * texture( specularRoughnessTexture, uv ).g;
+    material.metallic = metallicFactor * texture( metallicTexture, uv ).b;
+    material.emissive = emissiveFactor * sRGBToLinear( texture( emissiveTexture, uv ).rgb );
+    material.normal = vec3( normalScale, 1.0 ) * rgbToNormal( texture( normalTexture, uv ).rgb );
+    material.occlusion = ( texture( occlusionTexture, uv ).r - 1.0 ) * occlusionFactor + 1.0;
     material.ior = ior;
-    material.clearcoatFactor = clearcoatFactor * texture(clearcoatFactorTexture, uv).r;
-    material.clearcoatRoughness = clearcoatRoughnessFactor * texture(clearcoatRoughnessTexture, uv).r;
-    material.clearcoatNormal = vec3(clearcoatNormalScale, 1.0) * rgbToNormal(texture(clearcoatNormalTexture, uv).rgb);
-    material.clearcoatTint = clearcoatTint * sRGBToLinear(texture(clearcoatTintTexture, uv).rgb);
-    material.sheenColor = sheenColorFactor * sRGBToLinear(texture(sheenColorFactorTexture, uv).rgb);
-    material.sheenRoughness = sheenRoughnessFactor * texture(sheenRoughnessFactorTexture, uv).r;
+    material.clearcoatFactor = clearcoatFactor * texture( clearcoatFactorTexture, uv ).r;
+    material.clearcoatRoughness = clearcoatRoughnessFactor * texture( clearcoatRoughnessTexture, uv ).r;
+    material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( texture( clearcoatNormalTexture, uv ).rgb );
+    material.clearcoatTint = clearcoatTint * sRGBToLinear( texture( clearcoatTintTexture, uv ).rgb );
+    material.sheenColor = sheenColorFactor * sRGBToLinear( texture( sheenColorFactorTexture, uv ).rgb );
+    material.sheenRoughness = sheenRoughnessFactor * texture( sheenRoughnessFactorTexture, uv ).r;
 
     return material;
 }

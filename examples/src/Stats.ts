@@ -1,4 +1,4 @@
-class Stats {
+export class Stats {
   private mode = 0;
   private container: HTMLDivElement;
   private beginTime: number;
@@ -6,7 +6,6 @@ class Stats {
   private frames = 0;
   private fpsPanel: Panel;
   private msPanel: Panel;
-  private memPanel: Panel | undefined;
   public REVISION = 16;
 
   constructor(document: Document) {
@@ -25,12 +24,8 @@ class Stats {
     this.beginTime = (performance || Date).now();
     this.prevTime = this.beginTime;
 
-    this.fpsPanel = new Panel('FPS', '#0ff', '#002');
-    this.msPanel = new Panel('MS', '#0f0', '#020');
-
-    if (window.performance && window.performance.memory) {
-      this.memPanel = new Panel('MB', '#f08', '#201');
-    }
+    this.fpsPanel = this.addPanel(new Panel('FPS', '#0ff', '#002'));
+    this.msPanel = this.addPanel(new Panel('MS', '#0f0', '#020'));
 
     this.showPanel(0);
   }
@@ -69,14 +64,6 @@ class Stats {
 
       this.prevTime = time;
       this.frames = 0;
-
-      if (this.memPanel) {
-        const memory = performance.memory;
-        this.memPanel.update(
-          memory.usedJSHeapSize / 1048576,
-          memory.jsHeapSizeLimit / 1048576
-        );
-      }
     }
 
     return time;
@@ -106,7 +93,7 @@ const GRAPH_Y = 15 * PR;
 const GRAPH_WIDTH = 74 * PR;
 const GRAPH_HEIGHT = 30 * PR;
 
-class Panel {
+export class Panel {
   private min = Number.POSITIVE_INFINITY;
   private max = 0;
   private canvas: HTMLCanvasElement;
@@ -149,7 +136,7 @@ class Panel {
     context.fillText(
       round(value) +
         ' ' +
-        name +
+        this.name +
         ' (' +
         round(this.min) +
         '-' +

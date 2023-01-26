@@ -17,6 +17,7 @@ out vec4 outputColor;
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
 #pragma include <math/mat4>
+#pragma include <ao/ao>
 
 void main() {
   PhysicalMaterial material = readPhysicalMaterialFromUniforms();
@@ -43,11 +44,13 @@ void main() {
     );
 
     float dotNL = saturate(dot(directLight.direction, normal));
+    float dotNV = saturate(dot(viewDirection, normal));
 
     vec3 specularF90 = mix( vec3( material.specularFactor ),vec3( 1.0 ), material.metallic );
     vec3 specularF0 = mix( material.specularColor, material.albedo, material.metallic );
 
 
+    // specular
     outgoingRadiance +=
       directLight.radiance *
       dotNL *
@@ -58,12 +61,16 @@ void main() {
         specularF0,
         specularF90,
         material.specularRoughness
-      );
+      ) * specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
+
+    // diffuse
      vec3 c_diffuse =
       directLight.radiance *
       dotNL *
-      BRDF_Diffuse_Lambert(material.albedo);
+      BRDF_Diffuse_Lambert(material.albedo) * material.occlusion;
+    // metallic
     outgoingRadiance += mix( c_diffuse, vec3(0.), material.metallic );
+    // emissive
     outgoingRadiance += material.emissive;
   }
 

@@ -18,7 +18,7 @@ export interface IPhysicalMaterialProps {
   alpha?: number;
   alphaTexture?: Texture;
 
-  albedo?: Color3;
+  albedoFactor?: Color3;
   albedoTexture?: Texture;
 
   specularFactor?: number;
@@ -27,16 +27,19 @@ export interface IPhysicalMaterialProps {
   specularColor?: Color3;
   specularColorTexture?: Texture;
 
-  specularRoughness?: number;
+  specularRoughnessFactor?: number;
   specularRoughnessTexture?: Texture;
 
-  metallic?: number;
+  metallicFactor?: number;
   metallicTexture?: Texture;
 
   normalScale?: Vec2;
   normalTexture?: Texture;
 
-  emissiveColor?: Color3;
+  occlusionFactor?: number;
+  occlusionTexture?: Texture;
+
+  emissiveFactor?: Color3;
   emissiveTexture?: Texture;
   emissiveIntensity?: number;
 
@@ -80,7 +83,7 @@ export class PhysicalMaterial extends Material {
   public alpha = 1;
   public alphaTexture?: Texture;
 
-  public albedo = new Color3(1, 1, 1);
+  public albedoFactor = new Color3(1, 1, 1);
   public albedoTexture?: Texture;
 
   public specularFactor = 0.5;
@@ -89,16 +92,19 @@ export class PhysicalMaterial extends Material {
   public specularColor = new Color3(1, 1, 1);
   public specularColorTexture?: Texture;
 
-  public specularRoughness = 0.5;
+  public specularRoughnessFactor = 0.5;
   public specularRoughnessTexture?: Texture;
 
-  public metallic = 1;
+  public metallicFactor = 1;
   public metallicTexture?: Texture;
 
   public normalScale = new Vec2(1, 1);
   public normalTexture?: Texture;
 
-  public emissiveColor = new Color3(0, 0, 0);
+  public occlusionFactor = 1;
+  public occlusionTexture?: Texture;
+
+  public emissiveFactor = new Color3(0, 0, 0);
   public emissiveTexture?: Texture;
   public emissiveIntensity = 1;
 
@@ -147,7 +153,7 @@ export class PhysicalMaterial extends Material {
     this.alpha = props.alpha || this.alpha;
     this.alphaTexture = props.alphaTexture || SolidTextures.White;
 
-    this.albedo.copy(props.albedo || this.albedo);
+    this.albedoFactor.copy(props.albedoFactor || this.albedoFactor);
     this.albedoTexture = props.albedoTexture;
 
     this.specularFactor = props.specularFactor || this.specularFactor;
@@ -156,16 +162,20 @@ export class PhysicalMaterial extends Material {
     this.specularColor.copy(props.specularColor || this.specularColor);
     this.specularColorTexture = props.specularColorTexture;
 
-    this.specularRoughness = props.specularRoughness || this.specularRoughness;
+    this.specularRoughnessFactor =
+      props.specularRoughnessFactor || this.specularRoughnessFactor;
     this.specularRoughnessTexture = props.specularRoughnessTexture;
 
-    this.metallic = props.metallic || this.metallic;
+    this.metallicFactor = props.metallicFactor || this.metallicFactor;
     this.metallicTexture = props.metallicTexture;
 
     this.normalScale.copy(props.normalScale || this.normalScale);
     this.normalTexture = props.normalTexture;
 
-    this.emissiveColor.copy(props.emissiveColor || this.emissiveColor);
+    this.occlusionFactor = props.occlusionFactor || this.occlusionFactor;
+    this.occlusionTexture = props.occlusionTexture;
+
+    this.emissiveFactor.copy(props.emissiveFactor || this.emissiveFactor);
     this.emissiveTexture = props.emissiveTexture;
     this.emissiveIntensity = props.emissiveIntensity || this.emissiveIntensity;
 
@@ -220,7 +230,7 @@ export class PhysicalMaterial extends Material {
       alpha: this.alpha,
       alphaTexture: this.alphaTexture || SolidTextures.White,
 
-      albedo: this.albedo,
+      albedoFactor: this.albedoFactor,
       albedoTexture: this.albedoTexture || SolidTextures.White,
 
       specularFactor: this.specularFactor,
@@ -229,18 +239,21 @@ export class PhysicalMaterial extends Material {
       specularColor: this.specularColor,
       specularColorTexture: this.specularColorTexture || SolidTextures.White,
 
-      specularRoughness: this.specularRoughness,
+      specularRoughnessFactor: this.specularRoughnessFactor,
       specularRoughnessTexture:
         this.specularRoughnessTexture || SolidTextures.White,
 
-      metallic: this.metallic,
+      metallicFactor: this.metallicFactor,
       metallicTexture: this.metallicTexture || SolidTextures.White,
 
       normalScale: this.normalScale,
       normalTexture: this.normalTexture || SolidTextures.FlatNormal,
 
-      emissiveColor: color3MultiplyByScalar(
-        this.emissiveColor,
+      occlusionFactor: this.occlusionFactor,
+      occlusionTexture: this.occlusionTexture || SolidTextures.White,
+
+      emissiveFactor: color3MultiplyByScalar(
+        this.emissiveFactor,
         this.emissiveIntensity
       ),
       emissiveTexture: this.emissiveTexture || SolidTextures.White,
