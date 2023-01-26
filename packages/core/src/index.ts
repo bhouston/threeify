@@ -112,6 +112,8 @@ export * from './renderers/webgl/Renderbuffer.js';
 export * from './renderers/webgl/RenderingContext.js';
 export * from './renderers/webgl/programs/ProgramVertexArray.js';
 
+export * from './renderers/webgl/textureUnits/TextureUnits.js';
+
 export * from './renderers/webgl/shaders/Shader.js';
 export * from './renderers/webgl/shaders/ShaderType.js';
 
@@ -131,3 +133,5 @@ export * from './textures/PixelEncoding.js';
 export * from './textures/Texture.js';
 export * from './textures/TextureAccessor.js';
 export * from './textures/VirtualTexture.js';
+export * from './textures/loaders/ImageData.js';
+export * from './textures/loaders/SolidTextures.js';

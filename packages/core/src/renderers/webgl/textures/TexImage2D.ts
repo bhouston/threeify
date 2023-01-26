@@ -116,7 +116,7 @@ export class TexImage2D implements IResource {
     gl.bindTexture(this.target, this.glTexture);
     if (images.length === 1) {
       this.loadImage(images[0]);
-    } else if (this.target === TextureTarget.textureMap) {
+    } else if (this.target === TextureTarget.TextureCubeMap) {
       const numLevels = Math.floor(this.images.length / 6);
       for (let level = 0; level < numLevels; level++) {
         for (let face = 0; face < 6; face++) {

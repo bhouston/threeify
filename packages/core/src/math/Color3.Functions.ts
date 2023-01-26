@@ -193,7 +193,7 @@ export function color3ToHex(rgb: Color3): number {
 }
 
 export function color3ToHexString(rgb: Color3): string {
-  return `#${color3ToHex(rgb).toString(16)}`;
+  return `${color3ToHex(rgb).toString(16)}`;
 }
 
 export function hexStringToColor3(hex: string, result = new Color3()): Color3 {

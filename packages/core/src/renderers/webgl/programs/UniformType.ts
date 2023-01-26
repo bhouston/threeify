@@ -32,12 +32,12 @@ export enum UniformType {
   // IntSampler3D = GL2.INT_SAMPLER_3D,
   // UnsignedIntSampler3D = GL2.UNSIGNED_INT_SAMPLER_3D,
   // setValueT6
-  SamplerCube = GL.SAMPLER_CUBE
+  SamplerCube = GL.SAMPLER_CUBE,
   // IntSamplerCube = GL2.INT_SAMPLER_CUBE,
   // UnsignedIntSamplerCube = GL2.UNSIGNED_INT_SAMPLER_CUBE,
   // SamplerCubeShadow = GL2.SAMPLER_CUBE_SHADOW,
   // setValueT2DArray1
-  // Sampler2DArray = GL2.SAMPLER_2D_ARRAY,
+  Sampler2DArray = GL.SAMPLER_2D_ARRAY
   // IntSampler2DArray = GL2.INT_SAMPLER_2D_ARRAY,
   // UnsignedIntSampler2DArray = GL2.UNSIGNED_INT_SAMPLER_2D_ARRAY,
   // Sampler2DArrayShadow = GL2.SAMPLER_2D_ARRAY_SHADOW,
@@ -98,7 +98,9 @@ export function numTextureUnits(uniformType: UniformType): number {
       // case UniformType.SamplerCubeShadow:
       return 1; // cube textures only take one slot
 
-    // case UniformType.Sampler2DArray:
+    case UniformType.Sampler2DArray:
+      return 1;
+
     // case UniformType.IntSampler2DArray:
     // case UniformType.UnsignedIntSampler2DArray:
     // case UniformType.Sampler2DArrayShadow:

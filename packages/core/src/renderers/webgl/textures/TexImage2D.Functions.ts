@@ -64,7 +64,7 @@ export function makeTexImage2DFromCubeTexture(
     texture.pixelFormat,
     texture.dataType,
     internalFormat,
-    TextureTarget.textureMap,
+    TextureTarget.TextureCubeMap,
     params
   );
   texImage2D.version = texture.version;
