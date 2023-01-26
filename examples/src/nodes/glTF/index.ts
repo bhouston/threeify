@@ -20,7 +20,7 @@ import {
   updateRenderCache
 } from '@threeify/scene';
 
-import { KhronosModels } from '../../KhronosModels';
+import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../KhronosModels';
 import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -47,7 +47,9 @@ async function init(): Promise<void> {
   const sceneTreeCache = new SceneTreeCache();
 
   const root = new SceneNode({ name: 'root' });
-  const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
+  const glTFModel = await glTFToSceneNode(
+    getGLTFUrl(GLTFModel.DamagedHelmet, GLTFFormat.glTF)
+  );
 
   updateNodeTree(glTFModel, sceneTreeCache);
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;

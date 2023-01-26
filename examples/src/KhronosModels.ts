@@ -1,24 +1,51 @@
-export class KhronosModels {
-  static readonly DamagedHelmet = '/assets/models/DamagedHelmet.glb';
-  static readonly AntiqueCamera = '/assets/models/AntiqueCamera.glb';
-  static readonly BoomBox = '/assets/models/BoomBox.glb';
-  static readonly BoxTextured = '/assets/models/BoxTextured.glb';
-  static readonly Duck = '/assets/models/Duck.glb';
-  static readonly DragonAttenuation = '/assets/models/DragonAttenuation.glb';
-  static readonly CesiumMilkTruck = '/assets/models/CesiumMilkTruck.glb';
-  static readonly WaterBottle = '/assets/models/WaterBottle.glb';
-  static readonly TextureEncodingTest =
-    '/assets/models/TextureEncodingTest.glb';
-  static readonly TextureCoordinateTest =
-    '/assets/models/TextureCoordinateTest.glb';
-  static readonly SpecularTest = '/assets/models/SpecularTest.glb';
-  static readonly MetalRoughSpheresNoTexture =
-    '/assets/models/MetalRoughSpheresNoTexture.glb';
-  static readonly MetalRoughSpheres = '/assets/models/MetalRoughSpheres.glb';
-  static readonly IridescenceLamp = '/assets/models/IridescenceLamp.glb';
-  static readonly GlamVelvetSofa = '/assets/models/GlamVelvetSofa.glb';
-  static readonly BoxTexturedNonPowerOfTwo =
-    '/assets/models/BoxTexturedNonPowerOfTwo.glb';
-  static readonly GearboxAssy = '/assets/models/GearboxAssy.glb';
-  static readonly Lantern = '/assets/models/Lantern.glb';
+export enum GLTFModel {
+  DamagedHelmet,
+  AntiqueCamera,
+  BoomBox,
+  BoxTextured,
+  Duck,
+  DragonAttenuation,
+  CesiumMilkTruck,
+  WaterBottle,
+  TextureEncodingTest,
+  TextureCoordinateTest,
+  SpecularTest,
+  MetalRoughSpheresNoTexture,
+  MetalRoughSpheres,
+  IridescenceLamp,
+  GlamVelvetSofa,
+  BoxTexturedNonPowerOfTwo,
+  GearboxAssy,
+  Lantern,
+  Avocado
+}
+
+export enum GLTFFormat {
+  glTF,
+  glTFBinary,
+  glTFDraco,
+  glTFEmbedded
+}
+
+const glTFFormatToFolder = {
+  [GLTFFormat.glTF]: 'glTF',
+  [GLTFFormat.glTFBinary]: 'glTF-Binary',
+  [GLTFFormat.glTFDraco]: 'glTF-Draco',
+  [GLTFFormat.glTFEmbedded]: 'glTF-Embedded'
+};
+
+const glTFFormatToExtension = {
+  [GLTFFormat.glTF]: 'gltf',
+  [GLTFFormat.glTFBinary]: 'glb',
+  [GLTFFormat.glTFDraco]: 'gltf',
+  [GLTFFormat.glTFEmbedded]: 'gltf'
+};
+
+export function getGLTFUrl(model: GLTFModel, format: GLTFFormat): string {
+  const modelName = GLTFModel[model];
+  const formatFolder = glTFFormatToFolder[format];
+  const extension = glTFFormatToExtension[format];
+  const url = `https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/${modelName}/${formatFolder}/${modelName}.${extension}`;
+  console.log(model, format, url);
+  return url;
 }
