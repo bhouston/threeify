@@ -46,10 +46,12 @@ async function init(): Promise<void> {
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
+
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
-  const maxSize = box3MaxSize(glTFBoundingBox);
   glTFModel.dirty();
+  const maxSize = box3MaxSize(glTFBoundingBox);
+
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
