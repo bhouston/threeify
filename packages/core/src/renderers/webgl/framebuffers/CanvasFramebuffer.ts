@@ -20,7 +20,6 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
     if (window !== undefined) {
       this.devicePixelRatio = window.devicePixelRatio;
     }
-    console.log(this.devicePixelRatio);
     this.resize();
   }
 

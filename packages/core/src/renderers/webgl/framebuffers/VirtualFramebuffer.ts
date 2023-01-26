@@ -19,7 +19,10 @@ import { UniformBufferMap } from '../programs/ProgramUniformBlock.js';
 import { ProgramVertexArray } from '../programs/ProgramVertexArray.js';
 import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
-import { bindTextures, TextureUnits } from '../textureUnits/TextureUnits.js';
+import {
+  bindTextures,
+  TextureBindings
+} from '../textureBindings/TextureBindings.js';
 import { BufferBit } from './BufferBit.js';
 
 const GL = WebGL2RenderingContext;
@@ -67,7 +70,7 @@ export function renderBufferGeometry(props: {
   bufferGeometry: BufferGeometry;
   uniforms?: UniformValueMap | UniformValueMap[];
   uniformBuffers?: UniformBufferMap;
-  textureUnits?: TextureUnits;
+  textureBindings?: TextureBindings;
   programVertexArray?: ProgramVertexArray;
   depthTestState?: DepthTestState;
   blendState?: BlendState;
@@ -85,7 +88,7 @@ export function renderBufferGeometry(props: {
     uniformBuffers: uniformBufferMap,
     bufferGeometry,
     programVertexArray,
-    textureUnits
+    textureBindings
   } = props;
   const { context, size } = framebuffer;
 
@@ -100,8 +103,8 @@ export function renderBufferGeometry(props: {
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
 
-  if (textureUnits !== undefined) {
-    bindTextures(context, textureUnits);
+  if (textureBindings !== undefined) {
+    bindTextures(context, textureBindings);
   }
 
   setProgramUniforms(context.program, uniformValueMaps, uniformBufferMap);

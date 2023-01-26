@@ -112,7 +112,7 @@ export * from './renderers/webgl/Renderbuffer.js';
 export * from './renderers/webgl/RenderingContext.js';
 export * from './renderers/webgl/programs/ProgramVertexArray.js';
 
-export * from './renderers/webgl/textureUnits/TextureUnits.js';
+export * from './renderers/webgl/textureBindings/TextureBindings.js';
 
 export * from './renderers/webgl/shaders/Shader.js';
 export * from './renderers/webgl/shaders/ShaderType.js';

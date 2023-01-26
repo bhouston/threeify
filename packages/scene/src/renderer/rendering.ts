@@ -40,7 +40,8 @@ export function renderMeshes(
       uniformsArray,
       bufferGeometry,
       programVertexArray,
-      uniformBuffers
+      uniformBuffers,
+      textureBindings
     } = meshBatch;
 
     const uniforms = [...uniformsArray] as UniformValueMap[];
@@ -63,7 +64,8 @@ export function renderMeshes(
       uniforms,
       uniformBuffers,
       bufferGeometry,
-      programVertexArray
+      programVertexArray,
+      textureBindings
     });
   }
 }

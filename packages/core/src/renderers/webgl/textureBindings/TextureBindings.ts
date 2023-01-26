@@ -1,7 +1,7 @@
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
 
-export class TextureUnits {
+export class TextureBindings {
   public texImage2DToUnitMap = new Map<string, number>();
   public texImage2Ds: TexImage2D[] = [];
 
@@ -32,11 +32,11 @@ export class TextureUnits {
 
 export function bindTextures(
   context: RenderingContext,
-  textureUnits: TextureUnits
+  textureBindings: TextureBindings
 ) {
   const { gl } = context;
-  for (const texImage2D of textureUnits.texImage2Ds) {
-    const unitIndex = textureUnits.bind(texImage2D);
+  for (const texImage2D of textureBindings.texImage2Ds) {
+    const unitIndex = textureBindings.bind(texImage2D);
     gl.activeTexture(gl.TEXTURE0 + unitIndex);
     gl.bindTexture(texImage2D.target, texImage2D.glTexture);
   }

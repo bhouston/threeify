@@ -1,7 +1,8 @@
 import {
-  Program,
   BufferGeometry,
+  Program,
   ProgramVertexArray,
+  TextureBindings,
   UniformBufferMap,
   UniformValueMap
 } from '@threeify/core';
@@ -12,6 +13,7 @@ export class MeshBatch {
     public bufferGeometry: BufferGeometry,
     public programVertexArray: ProgramVertexArray,
     public uniformsArray: UniformValueMap[],
-    public uniformBuffers: UniformBufferMap
+    public uniformBuffers: UniformBufferMap,
+    public textureBindings: TextureBindings
   ) {}
 }

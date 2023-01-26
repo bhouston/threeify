@@ -11,6 +11,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   UniformBufferMap,
   UniformValueMap,
   Vec3
@@ -100,7 +101,7 @@ export function updateRenderCache(
   createCameraUniformBuffers(renderCache);
   createMaterialUniformBuffers(renderCache);
 
-  createopaqueMeshBatches(renderCache);
+  createMeshBatches(renderCache);
 
   return renderCache;
 }
@@ -125,6 +126,7 @@ function meshToSceneCache(
     geometryIdToBufferGeometry,
     shaderNameToProgram,
     materialIdToUniforms,
+    materialIdToTextureBindings,
     textureIdToTexImage2D,
     materialIdToMaterial
   } = renderCache;
@@ -155,6 +157,7 @@ function meshToSceneCache(
   if (!materialIdToUniforms.has(material.id)) {
     const materialParameters = material.getParameters();
     const materialUniforms: UniformValueMap = {};
+    const materialTextureBindings = new TextureBindings();
     for (const uniformName of Object.keys(materialParameters)) {
       const uniformValue = materialParameters[uniformName];
       // convert from Parameters to Uniforms
@@ -166,13 +169,15 @@ function meshToSceneCache(
           texImage2D = makeTexImage2DFromTexture(context, texture);
           textureIdToTexImage2D.set(textureId, texImage2D);
         }
-        materialUniforms[uniformName] = texImage2D;
+        materialUniforms[uniformName] =
+          materialTextureBindings.bind(texImage2D);
       } else {
         materialUniforms[uniformName] = uniformValue;
       }
     }
 
     materialIdToUniforms.set(material.id, materialUniforms);
+    materialIdToTextureBindings.set(material.id, materialTextureBindings);
   }
 }
 
@@ -223,7 +228,7 @@ function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
   lightUniforms.punctualLightOuterCos.push(lightOuterCos);
 }
 
-function createopaqueMeshBatches(renderCache: RenderCache) {
+function createMeshBatches(renderCache: RenderCache) {
   const {
     breathFirstNodes,
     geometryIdToBufferGeometry,
@@ -232,6 +237,7 @@ function createopaqueMeshBatches(renderCache: RenderCache) {
     nodeIdToUniforms,
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
+    materialIdToTextureBindings,
     opaqueMeshBatches,
     blendMeshBatches
   } = renderCache;
@@ -305,6 +311,10 @@ function createopaqueMeshBatches(renderCache: RenderCache) {
         );
       }
 
+      const textureBindings = materialIdToTextureBindings.get(material.id);
+      if (textureBindings === undefined)
+        throw new Error('Texture Bindings not found');
+
       /*const materialUniformBlock = program.uniformBlocks['Material'];
       const lightingUniformBlock = program.uniformBlocks['Lighting'];
       const cameraUniformBlock = program.uniformBlocks['Camera'];*/
@@ -315,7 +325,8 @@ function createopaqueMeshBatches(renderCache: RenderCache) {
         bufferGeometry,
         programVertexArray,
         uniformValueMaps,
-        uniformBufferMap
+        uniformBufferMap,
+        textureBindings
       );
       if (material.alphaMode === AlphaMode.Opaque) {
         opaqueMeshBatches.push(meshBatch);

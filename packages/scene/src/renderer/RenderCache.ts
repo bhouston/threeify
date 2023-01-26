@@ -5,6 +5,7 @@ import {
   Program,
   ProgramVertexArray,
   TexImage2D,
+  TextureBindings,
   UniformValueMap
 } from '@threeify/core';
 
@@ -42,6 +43,7 @@ export class RenderCache {
   // materialCache
   public materialIdToMaterial: Map<string, Material> = new Map();
   public materialIdToUniforms: Map<string, UniformValueMap> = new Map();
+  public materialIdToTextureBindings: Map<string, TextureBindings> = new Map();
   public materialIdToMaterialUniformBuffers: Map<string, Buffer> = new Map();
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
 
