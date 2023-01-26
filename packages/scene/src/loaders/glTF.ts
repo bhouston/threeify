@@ -6,6 +6,7 @@ import {
 } from '@gltf-transform/core';
 import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import {
+  AlphaMode,
   Attribute,
   AttributeData,
   Color3,
@@ -59,6 +60,19 @@ function toVec3(values: number[]): Vec3 {
 }
 function toQuat(values: number[]): Quat {
   return new Quat(values[0], values[1], values[2], values[3]);
+}
+
+function toAlphaMode(alphaMode: string): AlphaMode {
+  switch (alphaMode) {
+    case 'BLEND':
+      return AlphaMode.Blend;
+    case 'MASK':
+      return AlphaMode.Mask;
+    case 'OPAQUE':
+      return AlphaMode.Opaque;
+    default:
+      return AlphaMode.Opaque;
+  }
 }
 export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   const io = new WebIO();
@@ -147,7 +161,9 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
     const albedoAlphaTexture = await toTexture(
       glTFMaterial.getBaseColorTexture()
     );
+
     physicalMaterial = new PhysicalMaterial({
+      alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
       albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
       albedoTexture: albedoAlphaTexture,
       alpha: glTFMaterial.getAlpha(),

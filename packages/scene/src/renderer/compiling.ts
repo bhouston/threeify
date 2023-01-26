@@ -1,4 +1,5 @@
 import {
+  AlphaMode,
   color3MultiplyByScalar,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -99,7 +100,7 @@ export function updateRenderCache(
   createCameraUniformBuffers(renderCache);
   createMaterialUniformBuffers(renderCache);
 
-  createMeshBatches(renderCache);
+  createopaqueMeshBatches(renderCache);
 
   return renderCache;
 }
@@ -222,7 +223,7 @@ function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
   lightUniforms.punctualLightOuterCos.push(lightOuterCos);
 }
 
-function createMeshBatches(renderCache: RenderCache) {
+function createopaqueMeshBatches(renderCache: RenderCache) {
   const {
     breathFirstNodes,
     geometryIdToBufferGeometry,
@@ -231,7 +232,8 @@ function createMeshBatches(renderCache: RenderCache) {
     nodeIdToUniforms,
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
-    meshBatches
+    opaqueMeshBatches,
+    blendMeshBatches
   } = renderCache;
 
   for (const node of breathFirstNodes) {
@@ -308,15 +310,18 @@ function createMeshBatches(renderCache: RenderCache) {
       const cameraUniformBlock = program.uniformBlocks['Camera'];*/
 
       // create mesh batch
-      meshBatches.push(
-        new MeshBatch(
-          program,
-          bufferGeometry,
-          programVertexArray,
-          uniformValueMaps,
-          uniformBufferMap
-        )
+      const meshBatch = new MeshBatch(
+        program,
+        bufferGeometry,
+        programVertexArray,
+        uniformValueMaps,
+        uniformBufferMap
       );
+      if (material.alphaMode === AlphaMode.Opaque) {
+        opaqueMeshBatches.push(meshBatch);
+      } else if (material.alphaMode === AlphaMode.Blend) {
+        blendMeshBatches.push(meshBatch);
+      }
     }
   }
 }

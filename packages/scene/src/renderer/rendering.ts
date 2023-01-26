@@ -1,22 +1,39 @@
 import {
+  Blending,
+  blendModeToBlendState,
+  BlendState,
   renderBufferGeometry,
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
 
+import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
 
 export function renderScene(
   framebuffer: VirtualFramebuffer,
   renderCache: RenderCache
 ) {
+  const { opaqueMeshBatches, blendMeshBatches } = renderCache;
+
+  framebuffer.blendState = BlendState.None;
+  renderMeshes(framebuffer, renderCache, opaqueMeshBatches);
+  framebuffer.blendState = blendModeToBlendState(Blending.Over, true);
+  renderMeshes(framebuffer, renderCache, blendMeshBatches);
+}
+
+export function renderMeshes(
+  framebuffer: VirtualFramebuffer,
+  renderCache: RenderCache,
+  meshBatches: MeshBatch[]
+) {
   const {
-    meshBatches,
     cameraUniforms,
     lightUniforms,
     shaderNameToLightingUniformBuffers,
     shaderNameToCameraUniformBuffers
   } = renderCache;
+
   for (const meshBatch of meshBatches) {
     const {
       program,

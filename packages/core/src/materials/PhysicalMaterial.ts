@@ -4,6 +4,7 @@ import { Vec2 } from '../math/Vec2';
 import { Vec3 } from '../math/Vec3';
 import { SolidTextures } from '../textures/loaders/SolidTextures';
 import { Texture } from '../textures/Texture';
+import { AlphaMode } from './AlphaMode';
 import { Material } from './Material';
 import { MaterialParameters } from './MaterialParameters';
 
@@ -11,12 +12,15 @@ import { MaterialParameters } from './MaterialParameters';
 // TODO: Add support for alpha blending
 
 // TODO: This class has a lot of repetitive code. Unsure how to address this?  Maybe ask ChatGPT for help?
+
+// This purposely does not extend IMaterialProps because it forcibly defined many of those props itself.
 export interface IPhysicalMaterialProps {
   id?: string;
   name?: string;
 
   alpha?: number;
   alphaTexture?: Texture;
+  alphaMode?: AlphaMode;
 
   albedoFactor?: Color3;
   albedoTexture?: Texture;
@@ -82,6 +86,7 @@ export interface IPhysicalMaterialProps {
 export class PhysicalMaterial extends Material {
   public alpha = 1;
   public alphaTexture?: Texture;
+  public alphaMode = AlphaMode.Opaque;
 
   public albedoFactor = new Color3(1, 1, 1);
   public albedoTexture?: Texture;
@@ -152,6 +157,10 @@ export class PhysicalMaterial extends Material {
 
     this.alpha = props.alpha || this.alpha;
     this.alphaTexture = props.alphaTexture || SolidTextures.White;
+
+    if (props.alphaMode !== undefined) {
+      this.alphaMode = props.alphaMode;
+    }
 
     this.albedoFactor.copy(props.albedoFactor || this.albedoFactor);
     this.albedoTexture = props.albedoTexture;

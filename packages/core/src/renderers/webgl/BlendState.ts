@@ -92,6 +92,8 @@ export enum BlendFunc {
 export class BlendState
   implements ICloneable<BlendState>, IEquatable<BlendState>
 {
+  static readonly None = new BlendState();
+
   // TODO: Should be initialized to default WebGL states
   constructor(
     public sourceRGBFactor = BlendFunc.One,

@@ -1,6 +1,6 @@
 import {
   box3Center,
-  box3Size,
+  box3MaxSize,
   Color3,
   Orbit,
   RenderingContext,
@@ -43,14 +43,13 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.DamagedHelmet, GLTFFormat.glTF)
+    getGLTFUrl(GLTFModel.FlightHelmet, GLTFFormat.glTF)
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
-  const size = box3Size(glTFBoundingBox);
-  const maxSize = Math.max(size.x, size.y, size.z);
+  const maxSize = box3MaxSize(glTFBoundingBox);
   glTFModel.dirty();
   const orbitNode = new SceneNode({
     name: 'orbit',
@@ -103,6 +102,8 @@ async function init(): Promise<void> {
     },
     sceneTreeCache
   );
+
+  console.log('# of nodes: ', renderCache.breathFirstNodes.length);
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
 

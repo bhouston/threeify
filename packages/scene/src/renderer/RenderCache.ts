@@ -46,5 +46,6 @@ export class RenderCache {
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
 
   // mesh batches - separate.
-  public meshBatches: MeshBatch[] = [];
+  public opaqueMeshBatches: MeshBatch[] = [];
+  public blendMeshBatches: MeshBatch[] = [];
 }
