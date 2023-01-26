@@ -1,9 +1,13 @@
 import {
+  box3Center,
+  box3Size,
   Color3,
   Orbit,
   RenderingContext,
   ShaderMaterial,
-  Vec3
+  Vec3,
+  vec3Negate,
+  vec3Reciprocal
 } from '@threeify/core';
 import {
   glTFToSceneNode,
@@ -39,7 +43,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const orbitController = new Orbit(canvasHtmlElement);
-  orbitController.zoom = 1;
+  orbitController.zoom = 0.8;
 
   const sceneTreeCache = new SceneTreeCache();
 
@@ -47,25 +51,36 @@ async function init(): Promise<void> {
   const glTFModel = await glTFToSceneNode(KhronosModels.DamagedHelmet);
 
   updateNodeTree(glTFModel, sceneTreeCache);
-  //const glTFBoundingBox = glTFModel.subTreeBoundingBox;
+  const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   //console.log(glTFBoundingBox.clone());
-  //glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
-  //glTFModel.scale = vec3Reciprocal(box3Size(glTFBoundingBox));
+  glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
+  console.log('glTFBoundingBox', glTFBoundingBox);
+  console.log('size', box3Size(glTFBoundingBox));
+  glTFModel.scale = vec3Reciprocal(box3Size(glTFBoundingBox));
+  console.log('glTFModel.scale', glTFModel.scale);
   glTFModel.dirty();
   const orbitNode = new SceneNode({
     name: 'orbit',
-    translation: new Vec3(0, 0, -5)
+    translation: new Vec3(0, 0, -2)
   });
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
-  const pointLight = new PointLight({
-    name: 'PointLight',
-    translation: new Vec3(5, 0, 5),
-    color: new Color3(1, 1, 1),
-    intensity: 30,
+  const pointLight1 = new PointLight({
+    name: 'PointLight1',
+    translation: new Vec3(5, 0, 0),
+    color: new Color3(0.7, 0.8, 0.9),
+    intensity: 10,
     range: 1000
   });
-  root.children.push(pointLight);
+  root.children.push(pointLight1);
+  const pointLight2 = new PointLight({
+    name: 'PointLight2',
+    translation: new Vec3(-5, 0, 0),
+    color: new Color3(1, 0.9, 0.7),
+    intensity: 10,
+    range: 1000
+  });
+  root.children.push(pointLight2);
   const camera = new PerspectiveCamera({
     name: 'Camera',
     verticalFov: 25,
@@ -74,6 +89,8 @@ async function init(): Promise<void> {
     translation: new Vec3(0, 0, 0)
   });
   root.children.push(camera);
+
+  updateNodeTree(root, sceneTreeCache);
 
   const renderCache = updateRenderCache(
     context,
