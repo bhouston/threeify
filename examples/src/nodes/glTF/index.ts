@@ -66,7 +66,7 @@ async function init(): Promise<void> {
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.7, 0.8, 0.9),
-    intensity: 25,
+    intensity: 100,
     range: 1000
   });
   root.children.push(pointLight1);
@@ -74,7 +74,7 @@ async function init(): Promise<void> {
     name: 'PointLight2',
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
-    intensity: 25,
+    intensity: 100,
     range: 1000
   });
   root.children.push(pointLight2);
@@ -82,7 +82,7 @@ async function init(): Promise<void> {
     name: 'PointLight3',
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
-    intensity: 25,
+    intensity: 100,
     range: 1000
   });
   root.children.push(pointLight3);
@@ -106,6 +106,8 @@ async function init(): Promise<void> {
     },
     sceneTreeCache
   );
+
+  canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
 
   function animate(): void {
     requestAnimationFrame(animate);

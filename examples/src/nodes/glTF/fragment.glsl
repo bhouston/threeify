@@ -31,10 +31,10 @@ void main( ) {
 
   vec3 outgoingRadiance;
 
-  /*material.albedo = vec3( 1. );
-  material.metallic = 0.;
-  material.emissive = vec3( 0. );
-  material.specularRoughness = 0.;*/
+  //material.albedo = vec3( 1. );
+  //material.metallic = 0.;
+  //material.emissive = vec3( 0. );
+  //material.specularRoughness = 0.5;
 
   for( int i = 0; i < numPunctualLights; i++ ) {
     PunctualLight punctualLight = readPunctualLightFromUniforms( i, worldToView );
@@ -45,7 +45,7 @@ void main( ) {
     float dotNV = saturate( dot( viewDirection, normal ) );
 
     vec3 specularF90 = mix( vec3( material.specularFactor ), vec3( 1.0 ), material.metallic );
-    vec3 specularF0 = mix( material.specularColor, material.albedo, material.metallic );
+    vec3 specularF0 = mix( material.specularColor * 0.04, material.albedo, material.metallic );
 
     // specular
     outgoingRadiance += directLight.radiance *

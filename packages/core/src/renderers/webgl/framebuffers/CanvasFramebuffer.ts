@@ -17,6 +17,10 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
   constructor(context: RenderingContext) {
     super(context);
     this.canvas = context.gl.canvas;
+    if (window !== undefined) {
+      this.devicePixelRatio = window.devicePixelRatio;
+    }
+    console.log(this.devicePixelRatio);
     this.resize();
   }
 
@@ -25,10 +29,10 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
    * taking into account the device pixel ratio.
    */
   resize(): void {
-    const { canvas } = this;
+    const { canvas, devicePixelRatio } = this;
     if (canvas instanceof HTMLCanvasElement) {
-      const width = Math.floor(canvas.clientWidth * this.devicePixelRatio);
-      const height = Math.floor(canvas.clientHeight * this.devicePixelRatio);
+      const width = Math.floor(canvas.clientWidth * devicePixelRatio);
+      const height = Math.floor(canvas.clientHeight * devicePixelRatio);
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;

@@ -5,7 +5,6 @@ import { CameraNode, ICameraProps } from './CameraNode';
 export interface IPerspectiveCameraProps extends ICameraProps {
   verticalFov?: number;
   far?: number;
-  pixelAspectRatio?: number;
 }
 
 export class PerspectiveCamera extends CameraNode {
