@@ -24,8 +24,8 @@ export class Stats {
     this.beginTime = (performance || Date).now();
     this.prevTime = this.beginTime;
 
-    this.fpsPanel = this.addPanel(new Panel('FPS', '#0ff', '#002'));
     this.msPanel = this.addPanel(new Panel('MS', '#0f0', '#020'));
+    this.fpsPanel = this.addPanel(new Panel('FPS', '#0ff', '#002'));
 
     this.showPanel(0);
   }

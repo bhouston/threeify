@@ -6,8 +6,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Vec3,
-  vec3Negate,
-  vec3Reciprocal
+  vec3Negate
 } from '@threeify/core';
 import {
   glTFToSceneNode,
@@ -52,16 +51,14 @@ async function init(): Promise<void> {
 
   updateNodeTree(glTFModel, sceneTreeCache);
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
-  //console.log(glTFBoundingBox.clone());
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
-  console.log('glTFBoundingBox', glTFBoundingBox);
-  console.log('size', box3Size(glTFBoundingBox));
-  glTFModel.scale = vec3Reciprocal(box3Size(glTFBoundingBox));
-  console.log('glTFModel.scale', glTFModel.scale);
+  const size = box3Size(glTFBoundingBox);
+  const maxSize = Math.max(size.x, size.y, size.z);
   glTFModel.dirty();
   const orbitNode = new SceneNode({
     name: 'orbit',
-    translation: new Vec3(0, 0, -2)
+    translation: new Vec3(0, 0, -2),
+    scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize)
   });
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
@@ -69,7 +66,7 @@ async function init(): Promise<void> {
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.7, 0.8, 0.9),
-    intensity: 10,
+    intensity: 25,
     range: 1000
   });
   root.children.push(pointLight1);
@@ -77,10 +74,18 @@ async function init(): Promise<void> {
     name: 'PointLight2',
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
-    intensity: 10,
+    intensity: 25,
     range: 1000
   });
   root.children.push(pointLight2);
+  const pointLight3 = new PointLight({
+    name: 'PointLight3',
+    translation: new Vec3(0, 5, 0),
+    color: new Color3(0.8, 1, 0.7),
+    intensity: 25,
+    range: 1000
+  });
+  root.children.push(pointLight3);
   const camera = new PerspectiveCamera({
     name: 'Camera',
     verticalFov: 25,

@@ -210,7 +210,6 @@ function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
       new Vec3(0, 0, -1)
     );
   }
-  console.log('lightWorldPosition', lightWorldPosition);
 
   lightUniforms.numPunctualLights++;
   lightUniforms.punctualLightType.push(lightType);
