@@ -22,7 +22,7 @@ import { RenderingContext } from '../RenderingContext.js';
 import {
   bindTextures,
   TextureBindings
-} from '../textureBindings/TextureBindings.js';
+} from '../textures/TextureBindings.js';
 import { BufferBit } from './BufferBit.js';
 
 const GL = WebGL2RenderingContext;
