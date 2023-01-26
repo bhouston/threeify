@@ -43,7 +43,7 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.FlightHelmet, GLTFFormat.glTF)
+    getGLTFUrl(GLTFModel.AntiqueCamera, GLTFFormat.glTF)
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
