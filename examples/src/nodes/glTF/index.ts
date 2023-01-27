@@ -15,16 +15,18 @@ import {
   renderScene,
   SceneNode,
   SceneTreeCache,
+  subTreeStats,
   updateDirtyNodes,
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
 
 import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
+import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-//const stats = new Stats();
+const stats = new Stats();
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
@@ -42,14 +44,16 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.DamagedHelmet, GLTFFormat.glTF)
+    getGLTFUrl(GLTFModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
+
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
-  const maxSize = box3MaxSize(glTFBoundingBox);
   glTFModel.dirty();
+  const maxSize = box3MaxSize(glTFBoundingBox);
+
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
@@ -61,7 +65,7 @@ async function init(): Promise<void> {
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.7, 0.8, 0.9),
-    intensity: 100,
+    intensity: 25,
     range: 1000
   });
   root.children.push(pointLight1);
@@ -69,7 +73,7 @@ async function init(): Promise<void> {
     name: 'PointLight2',
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
-    intensity: 100,
+    intensity: 50,
     range: 1000
   });
   root.children.push(pointLight2);
@@ -77,7 +81,7 @@ async function init(): Promise<void> {
     name: 'PointLight3',
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
-    intensity: 100,
+    intensity: 25,
     range: 1000
   });
   root.children.push(pointLight3);
@@ -92,6 +96,10 @@ async function init(): Promise<void> {
 
   updateNodeTree(root, sceneTreeCache);
 
+  const treeStats = subTreeStats(root);
+
+  console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
+
   const renderCache = updateRenderCache(
     context,
     root,
@@ -102,26 +110,24 @@ async function init(): Promise<void> {
     sceneTreeCache
   );
 
-  console.log('# of nodes: ', renderCache.breathFirstNodes.length);
-
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
 
   function animate(): void {
     requestAnimationFrame(animate);
 
-    // stats.time(() => {
-    canvasFramebuffer.clear();
+    stats.time(() => {
+      canvasFramebuffer.clear();
 
-    orbitController.update();
-    orbitNode.rotation = orbitController.rotation;
-    camera.zoom = orbitController.zoom;
-    camera.dirty();
-    orbitNode.dirty();
+      orbitController.update();
+      orbitNode.rotation = orbitController.rotation;
+      camera.zoom = orbitController.zoom;
+      camera.dirty();
+      orbitNode.dirty();
 
-    updateNodeTree(root, sceneTreeCache);
-    updateDirtyNodes(sceneTreeCache, renderCache);
-    renderScene(canvasFramebuffer, renderCache);
-    // });
+      updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
+      updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+      renderScene(canvasFramebuffer, renderCache);
+    });
   }
 
   animate();

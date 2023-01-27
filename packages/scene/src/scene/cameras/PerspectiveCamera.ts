@@ -15,13 +15,13 @@ export class PerspectiveCamera extends CameraNode {
     this.verticalFov = props.verticalFov || this.verticalFov;
   }
 
-  getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {
+  getProjection(result = new Mat4()): Mat4 {
     return mat4PerspectiveFov(
       this.verticalFov,
       this.near,
       this.far,
       this.zoom,
-      this.pixelAspectRatio * viewAspectRatio,
+      this.pixelAspectRatio * this.viewAspectRatio,
       result
     );
   }

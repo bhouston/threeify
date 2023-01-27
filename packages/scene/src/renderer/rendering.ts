@@ -14,12 +14,14 @@ export function renderScene(
   framebuffer: VirtualFramebuffer,
   renderCache: RenderCache
 ) {
-  const { opaqueMeshBatches, blendMeshBatches } = renderCache;
+  const { opaqueMeshBatches, blendMeshBatches, maskMeshBatches } = renderCache;
 
   framebuffer.blendState = BlendState.None;
   renderMeshes(framebuffer, renderCache, opaqueMeshBatches);
   framebuffer.blendState = blendModeToBlendState(Blending.Over, true);
   renderMeshes(framebuffer, renderCache, blendMeshBatches);
+  framebuffer.blendState = BlendState.None;
+  renderMeshes(framebuffer, renderCache, maskMeshBatches);
 }
 
 export function renderMeshes(
@@ -58,6 +60,7 @@ export function renderMeshes(
     } else {
       uniforms.push(cameraUniforms as unknown as UniformValueMap);
     }
+
     renderBufferGeometry({
       framebuffer,
       program,

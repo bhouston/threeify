@@ -14,7 +14,8 @@ import {
   TextureBindings,
   UniformBufferMap,
   UniformValueMap,
-  Vec3
+  Vec3,
+  VirtualFramebuffer
 } from '@threeify/core';
 
 import { CameraNode } from '../scene/cameras/CameraNode';
@@ -35,15 +36,11 @@ import { SceneTreeCache } from './SceneTreeCache';
 
 export function updateDirtyNodes(
   sceneTreeCache: SceneTreeCache,
-  renderCache: RenderCache
+  renderCache: RenderCache,
+  framebuffer: VirtualFramebuffer | undefined = undefined
 ) {
-  const {
-    nodeIdToUniforms,
-    nodeIdToRenderVersion: nodeIdToVersion,
-    breathFirstNodes,
-    activeCamera,
-    cameraUniforms
-  } = renderCache;
+  const { nodeIdToUniforms, breathFirstNodes, activeCamera, cameraUniforms } =
+    renderCache;
   for (const node of breathFirstNodes) {
     const nodeUniforms = nodeIdToUniforms.get(node.id) || new NodeUniforms();
     nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
@@ -51,6 +48,10 @@ export function updateDirtyNodes(
   }
 
   if (activeCamera !== undefined) {
+    if (framebuffer !== undefined) {
+      const renderTargetSize = framebuffer.size;
+      activeCamera.viewAspectRatio = renderTargetSize.x / renderTargetSize.y;
+    }
     updateCameraUniforms(activeCamera, cameraUniforms);
   }
 }
@@ -110,7 +111,7 @@ function updateCameraUniforms(
   camera: CameraNode,
   cameraUniforms: CameraUniforms
 ) {
-  cameraUniforms.viewToScreen.copy(camera.getProjection(1)); // TODO, use a dynamic aspect ratio
+  cameraUniforms.viewToScreen.copy(camera.getProjection()); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
   cameraUniforms.cameraNear = camera.near;
   cameraUniforms.cameraFar = camera.far;
@@ -239,7 +240,8 @@ function createMeshBatches(renderCache: RenderCache) {
     materialIdToMaterialUniformBuffers,
     materialIdToTextureBindings,
     opaqueMeshBatches,
-    blendMeshBatches
+    blendMeshBatches,
+    maskMeshBatches
   } = renderCache;
 
   for (const node of breathFirstNodes) {
@@ -328,10 +330,23 @@ function createMeshBatches(renderCache: RenderCache) {
         uniformBufferMap,
         textureBindings
       );
-      if (material.alphaMode === AlphaMode.Opaque) {
-        opaqueMeshBatches.push(meshBatch);
-      } else if (material.alphaMode === AlphaMode.Blend) {
-        blendMeshBatches.push(meshBatch);
+      switch (material.alphaMode) {
+        case AlphaMode.Opaque: {
+          opaqueMeshBatches.push(meshBatch);
+
+          break;
+        }
+        case AlphaMode.Blend: {
+          blendMeshBatches.push(meshBatch);
+
+          break;
+        }
+        case AlphaMode.Mask: {
+          maskMeshBatches.push(meshBatch);
+
+          break;
+        }
+        // No default
       }
     }
   }
@@ -408,7 +423,6 @@ function createMaterialUniformBuffers(renderCache: RenderCache) {
   const {
     shaderNameToProgram,
     materialIdToUniforms,
-    cameraUniforms,
     materialIdToMaterial,
     materialIdToMaterialUniformBuffers
   } = renderCache;
