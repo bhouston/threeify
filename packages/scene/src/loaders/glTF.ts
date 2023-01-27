@@ -8,6 +8,7 @@ import {
 import {
   Clearcoat,
   KHRONOS_EXTENSIONS,
+  Sheen,
   Transform as TextureTransform
 } from '@gltf-transform/extensions';
 import {
@@ -231,6 +232,19 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         glTFClearcoat?.getClearcoatNormalTextureInfo() || null
       );
 
+      const glTFSheen = glTFMaterial.getExtension(
+        'KHR_materials_sheen'
+      ) as Sheen;
+
+      const sheenColorTextureAccessor = await getTextureAccessor(
+        glTFSheen?.getSheenColorTexture() || null,
+        glTFSheen?.getSheenColorTextureInfo() || null
+      );
+      const sheenRoughnessTextureAccessor = await getTextureAccessor(
+        glTFSheen?.getSheenRoughnessTexture() || null,
+        glTFSheen?.getSheenRoughnessTextureInfo() || null
+      );
+
       console.log('loaded textures?');
 
       physicalMaterial = new PhysicalMaterial({
@@ -238,27 +252,41 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         alphaTextureAccessor: albedoAlphaTextureAccessor,
         alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
         alphaCutoff: glTFMaterial.getAlphaCutoff(),
+
         albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
         albedoTextureAccessor: albedoAlphaTextureAccessor,
+
         metallicFactor: glTFMaterial.getMetallicFactor(),
         metallicTextureAccessor: metallicRoughnessTextureAccessor,
+
         specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
         specularRoughnessTextureAccessor: metallicRoughnessTextureAccessor,
+
         emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
         emissiveTextureAccessor: emissiveTextureAccessor,
+
         normalScale: toVec2([
           glTFMaterial.getNormalScale(),
           glTFMaterial.getNormalScale()
         ]),
         normalTextureAccessor: normalTextureAccessor,
+
         occlusionFactor: glTFMaterial.getOcclusionStrength(),
         occlusionTextureAccessor: occlusionTextureAccessor,
+
         clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
         clearcoatRoughnessFactor:
           glTFClearcoat?.getClearcoatRoughnessFactor() || 0,
         clearcoatTextureAccessor: clearcoatTextureAccessor,
         clearcoatRoughnessTextureAccessor: clearcoatRoughnessTextureAccessor,
-        clearcoatNormalTextureAccessor: clearcoatNormalTextureAccessor
+        clearcoatNormalTextureAccessor: clearcoatNormalTextureAccessor,
+
+        sheenColorFactor: toColor3(
+          glTFSheen?.getSheenColorFactor() || [0, 0, 0]
+        ),
+        sheenColorTextureAccessor: sheenColorTextureAccessor,
+        sheenRoughnessFactor: glTFSheen?.getSheenRoughnessFactor() || 0,
+        sheenRoughnessTextureAccessor: sheenRoughnessTextureAccessor
       });
     }
 

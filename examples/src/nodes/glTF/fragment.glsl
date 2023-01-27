@@ -18,6 +18,7 @@ out vec4 outputColor;
 
 #pragma include <normals/tangentSpace>
 #pragma include <brdfs/diffuse/lambert>
+
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
 #pragma include <math/mat4>
@@ -73,30 +74,36 @@ void main( ) {
 
     vec3 clearcoatF = F_Schlick_2( vec3( 0.08 ), vec3( 1.0 ), VdotH ) * material.clearcoatFactor;
 
+    vec3 irradiance = directLight.radiance * dotNL;
+ 
+    float reduction = 1.0; // - length( material.sheenColor );
+   
     // clearcoat
-    outgoingRadiance += directLight.radiance *
+    outgoingRadiance += reduction * directLight.radiance *
       clearCoatDotNL *
       BRDF_Specular_GGX( clearcoatNormal, viewDirection, directLight.direction, vec3( 0.08 ), vec3( 1.0 ), material.clearcoatRoughness ) * material.clearcoatFactor;
 
-    float reduction = 1.0 - length( clearcoatF );
+    // sheen
+    outgoingRadiance += reduction * irradiance *
+      BRDF_Sheen_Charlie( normal, viewDirection, directLight.direction, material.sheenColor, material.sheenRoughness );
+
+    reduction *= (1.0 - material.clearcoatFactor);
+
+    // iridescence
+    // outgoingRadiance += reduction * irradiance * BRDF_GGX_Iridescence( normal, viewDirection, directLight.direction, specularF0, specularF90, material.iridescence, material.iridescenceIor, material.iridescenceThickness. material.specularRoughness);
+
     // specular
-    outgoingRadiance += reduction * directLight.radiance *
-      dotNL *
+    outgoingRadiance += reduction * irradiance *
       BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularF90, material.specularRoughness ) * specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
 
-    // diffuse
-    vec3 c_diffuse = directLight.radiance *
-      dotNL *
-      BRDF_Diffuse_Lambert( material.albedo ) * material.occlusion;
-
-    // metallic
-    outgoingRadiance += reduction * mix( c_diffuse, vec3( 0. ), material.metallic );
+    // diffuse + metallic
+    outgoingRadiance += reduction * irradiance * mix( BRDF_Diffuse_Lambert( material.albedo ) * material.occlusion, vec3( 0. ), material.metallic );
 
     // emissive
     outgoingRadiance += material.emissive;
   }
 
-  outputColor.rgb =  tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
+  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
   outputColor.a = material.alpha;
 
 }

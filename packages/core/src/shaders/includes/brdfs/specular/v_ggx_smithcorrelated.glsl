@@ -1,4 +1,5 @@
 #pragma once
+
 #pragma include <math/math>
 
 // Moving Frostbite to Physically Based Rendering 3.0 - page 12, listing 2

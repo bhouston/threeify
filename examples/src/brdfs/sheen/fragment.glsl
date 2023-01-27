@@ -9,7 +9,6 @@ uniform vec3 pointLightIntensity;
 uniform float pointLightRange;
 
 uniform vec3 sheenColor;
-uniform float sheenIntensity;
 uniform float sheenRoughness;
 
 out vec4 outputColor;
@@ -59,11 +58,9 @@ void main() {
       viewDirection,
       directLight.direction,
       sheenColor,
-      sheenIntensity,
       sheenRoughness
     );
   outgoingRadiance +=
-    (1.0 - sheenIntensity) *
     directLight.radiance *
     dotNL *
     BRDF_Specular_GGX(

@@ -58,7 +58,6 @@ async function init(): Promise<void> {
     pointLightRange: 6,
 
     // materials
-    sheenIntensity: 1,
     sheenColor: new Color3(0.3, 0.3, 1),
     sheenRoughness: 0.5
   };

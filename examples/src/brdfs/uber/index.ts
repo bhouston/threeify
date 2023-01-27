@@ -92,7 +92,6 @@ async function init(): Promise<void> {
     specularAnisotropicStrength: 0.5,
     specularAnisotropicFlowMap,
 
-    sheenIntensity: 1,
     sheenColor: new Color3(0.3, 0.3, 1),
     sheenMap,
 
