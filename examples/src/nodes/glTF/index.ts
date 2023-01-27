@@ -44,7 +44,7 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.AlphaBlendModeTest, GLTFFormat.glTF)
+    getGLTFUrl(GLTFModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
@@ -96,9 +96,9 @@ async function init(): Promise<void> {
 
   updateNodeTree(root, sceneTreeCache);
 
-  console.log(subTreeStats(root));
+  const treeStats = subTreeStats(root);
 
-  console.log(canvasFramebuffer.size);
+  console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
   const renderCache = updateRenderCache(
     context,
@@ -109,8 +109,6 @@ async function init(): Promise<void> {
     },
     sceneTreeCache
   );
-
-  console.log('# of nodes: ', renderCache.breathFirstNodes.length);
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
 
