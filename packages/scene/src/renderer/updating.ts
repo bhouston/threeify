@@ -6,12 +6,29 @@ import {
   mat4Inverse,
   mat4Multiply,
   mat4TransformBox3,
-  positionAttributeToBoundingBox
+  positionAttributeToBoundingBox,
+  primitiveCount
 } from '@threeify/core';
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
+import { breadthFirstVisitor } from '../scene/Visitors';
 import { SceneTreeCache } from './SceneTreeCache';
+
+export function subTreeStats(node: SceneNode): {
+  numPrimitives: number;
+  numNodes: number;
+} {
+  let numPrimitives = 0;
+  let numNodes = 0;
+  breadthFirstVisitor(node, (node) => {
+    numNodes++;
+    if (node instanceof MeshNode) {
+      numPrimitives += primitiveCount((node as MeshNode).geometry);
+    }
+  });
+  return { numPrimitives, numNodes };
+}
 
 export function updateNodeTree(
   node: SceneNode,

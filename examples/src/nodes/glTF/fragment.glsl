@@ -4,7 +4,7 @@ in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;
 
-#define MAX_PUNCTUAL_LIGHTS (4)
+#define MAX_PUNCTUAL_LIGHTS (3)
 #pragma include <lighting/punctualUniforms>
 #pragma include <materials/physicalUniforms>
 
@@ -17,7 +17,8 @@ out vec4 outputColor;
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
 #pragma include <math/mat4>
-#pragma include <ao/ao>
+#pragma include <operations/occlusion>
+#pragma include <operations/tonemapping>
 
 void main( ) {
   PhysicalMaterial material = readPhysicalMaterialFromUniforms( );
@@ -28,6 +29,8 @@ void main( ) {
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV( position, normal, v_uv0 );
   normal = adjustNormal( tangentToView, material.normal );
+  vec3 clearcoatNormal = adjustNormal( tangentToView, material.clearcoatNormal );
+
 
   vec3 outgoingRadiance;
 
@@ -41,14 +44,27 @@ void main( ) {
 
     DirectLight directLight = punctualLightToDirectLight( position, punctualLight );
 
+    float clearCoatDotNL = saturate( dot( directLight.direction, clearcoatNormal ) );
     float dotNL = saturate( dot( directLight.direction, normal ) );
     float dotNV = saturate( dot( viewDirection, normal ) );
+
+  vec3 halfDirection = normalize( directLight.direction + viewDirection );
+    float VdotH = saturate( dot( viewDirection, halfDirection ) );
+
 
     vec3 specularF90 = mix( vec3( material.specularFactor ), vec3( 1.0 ), material.metallic );
     vec3 specularF0 = mix( material.specularColor * 0.04, material.albedo, material.metallic );
 
+vec3 clearcoatF = F_Schlick_2( vec3( 0.08 ), vec3( 1.0 ), VdotH ) * material.clearcoatFactor;
+
+// clearcoat
+  outgoingRadiance += directLight.radiance *
+      clearCoatDotNL *
+      BRDF_Specular_GGX( clearcoatNormal, viewDirection, directLight.direction, vec3(0.08), vec3( 1.0 ), material.clearcoatRoughness ) * material.clearcoatFactor;
+
+  float reduction = 1.0 - length( clearcoatF );
     // specular
-    outgoingRadiance += directLight.radiance *
+    outgoingRadiance += reduction * directLight.radiance *
       dotNL *
       BRDF_Specular_GGX( normal, viewDirection, directLight.direction, specularF0, specularF90, material.specularRoughness ) * specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
 
@@ -58,13 +74,13 @@ void main( ) {
       BRDF_Diffuse_Lambert( material.albedo ) * material.occlusion;
 
     // metallic
-    outgoingRadiance += mix( c_diffuse, vec3( 0. ), material.metallic );
+    outgoingRadiance += reduction * mix( c_diffuse, vec3( 0. ), material.metallic );
 
     // emissive
     outgoingRadiance += material.emissive;
   }
 
-  outputColor.rgb = linearTosRGB( outgoingRadiance );
+  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
   outputColor.a = material.alpha;
 
 }

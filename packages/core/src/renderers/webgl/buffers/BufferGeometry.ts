@@ -46,6 +46,31 @@ export class BufferGeometry implements IDisposable {
   }
 }
 
+export function primitiveCount(target: BufferGeometry | Geometry): number {
+  const count =
+    target instanceof Geometry
+      ? target.indices?.count ?? target.attributes.positions?.count ?? 0
+      : target.count;
+  const primitive = target.primitive;
+  switch (primitive) {
+    case PrimitiveType.Points:
+      return count;
+    case PrimitiveType.Lines:
+      return count / 2;
+    case PrimitiveType.LineStrip:
+      return count - 1;
+    case PrimitiveType.Triangles:
+      return count / 3;
+    case PrimitiveType.TriangleFan:
+      return count - 2;
+    case PrimitiveType.TriangleStrip:
+      return count - 2;
+
+    default:
+      throw new Error(`Unknown primitive type: ${primitive}`);
+  }
+}
+
 export function makeBufferGeometryFromGeometry(
   context: RenderingContext,
   geometry: Geometry

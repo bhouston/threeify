@@ -4,7 +4,7 @@ import {
   Texture as GLTFTexture,
   WebIO
 } from '@gltf-transform/core';
-import { KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
+import { Clearcoat, KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
 import {
   AlphaMode,
   Attribute,
@@ -162,6 +162,10 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
       glTFMaterial.getBaseColorTexture()
     );
 
+    const glTFClearcoat = glTFMaterial.getExtension(
+      'KHR_materials_clearcoat'
+    ) as Clearcoat;
+
     physicalMaterial = new PhysicalMaterial({
       alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
       albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
@@ -180,7 +184,18 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
       ]),
       normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
       occlusionFactor: glTFMaterial.getOcclusionStrength(),
-      occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture())
+      occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture()),
+      clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
+      clearcoatRoughnessFactor:
+        glTFClearcoat?.getClearcoatRoughnessFactor() || 0,
+      clearcoatTexture:
+        glTFClearcoat?.getClearcoatTexture() !== null
+          ? await toTexture(glTFClearcoat?.getClearcoatTexture())
+          : undefined,
+      clearcoatRoughnessTexture:
+        glTFClearcoat?.getClearcoatRoughnessTexture() !== null
+          ? await toTexture(glTFClearcoat?.getClearcoatRoughnessTexture())
+          : undefined
     });
   }
 

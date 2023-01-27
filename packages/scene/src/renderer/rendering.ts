@@ -58,6 +58,7 @@ export function renderMeshes(
     } else {
       uniforms.push(cameraUniforms as unknown as UniformValueMap);
     }
+
     renderBufferGeometry({
       framebuffer,
       program,

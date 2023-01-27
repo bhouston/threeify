@@ -21,8 +21,10 @@ export class Orbit implements IDisposable {
   public euler = new Euler3();
   public eulerMomentum = new Euler3();
 
-  public zoom = 0;
+  public zoom = 1;
   public zoomMomentum = 0;
+  public zoomMin = 0.5;
+  public zoomMax = 3;
 
   public damping = 0.1;
 
@@ -129,7 +131,7 @@ export class Orbit implements IDisposable {
 
     const newZoom = this.zoom + this.zoomMomentum;
     this.zoomMomentum *= 1 - this.damping;
-    this.zoom = Math.min(1, Math.max(0, newZoom));
+    this.zoom = Math.min(this.zoomMax, Math.max(this.zoomMin, newZoom));
 
     this.rotationVersion = this.version;
   }
