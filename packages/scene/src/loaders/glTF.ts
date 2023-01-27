@@ -119,7 +119,7 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
 function getUVTransform(textureInfo: TextureInfo | null): Mat3 {
   if (textureInfo === null) return new Mat3();
   const extension = textureInfo?.getExtension('KHR_texture_transform');
-  if (extension === undefined) return new Mat3();
+  if (extension === null) return new Mat3();
   const glTFTransform = extension as TextureTransform;
   const translation = toVec2(glTFTransform.getOffset());
   const rotation = glTFTransform.getRotation();
@@ -130,7 +130,7 @@ function getUVTransform(textureInfo: TextureInfo | null): Mat3 {
 function getUVIndex(textureInfo: TextureInfo | null): number {
   if (textureInfo === null) return 0;
   const extension = textureInfo?.getExtension('KHR_texture_transform');
-  if (extension === undefined) return 0;
+  if (extension === null) return 0;
   const glTFTransform = extension as TextureTransform;
   const uvIndex = glTFTransform.getTexCoord();
   if (uvIndex === null) return 0;
