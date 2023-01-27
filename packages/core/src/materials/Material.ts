@@ -2,7 +2,10 @@ import { generateUUID } from '../core/generateUuid';
 import { IIdentifiable, IVersionable } from '../core/types';
 import { ShaderDefines } from '../renderers/webgl/shaders/ShaderDefines';
 import { AlphaMode } from './AlphaMode';
-import { MaterialParameters } from './MaterialParameters';
+import {
+  IMaterialParametersProvider,
+  MaterialParameters
+} from './MaterialParameters';
 
 export interface IMaterialProps {
   id?: string;
@@ -11,7 +14,9 @@ export interface IMaterialProps {
   name?: string;
 }
 
-export class Material implements IVersionable, IIdentifiable {
+export class Material
+  implements IVersionable, IIdentifiable, IMaterialParametersProvider
+{
   public readonly id;
   public version = 0;
   public name = '';

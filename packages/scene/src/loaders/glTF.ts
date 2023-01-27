@@ -203,6 +203,8 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         'KHR_materials_clearcoat'
       ) as Clearcoat;
 
+      console.log('loaded textures?');
+
       physicalMaterial = new PhysicalMaterial({
         alpha: glTFMaterial.getAlpha(),
         alphaTexture: albedoAlphaTexture,
