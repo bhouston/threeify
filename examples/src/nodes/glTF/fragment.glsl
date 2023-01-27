@@ -1,5 +1,7 @@
 precision highp float;
 
+#define NUM_UV_CHANNELS 3
+
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;
@@ -24,7 +26,7 @@ out vec4 outputColor;
 #pragma include <materials/alpha_mode>
 
 void main( ) {
-  vec2 uvs[3];
+  vec2 uvs[NUM_UV_CHANNELS];
   uvs[0] = v_uv0;
   uvs[1] = v_uv1;
   uvs[2] = v_uv2;
@@ -45,6 +47,7 @@ void main( ) {
   vec3 outgoingRadiance;
 
   //material.albedo = vec3( 1. );
+  //material.occlusion = 1.;
   //material.metallic = 0.;
   //material.emissive = vec3( 0. );
   //material.specularRoughness = 0.5;

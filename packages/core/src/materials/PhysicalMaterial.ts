@@ -304,7 +304,7 @@ export class PhysicalMaterial extends Material {
       anisotropyDirection: this.anisotropyDirection,
       anisotropyDirectionTextureAccessor:
         this.anisotropyDirectionTextureAccessor ||
-        SolidTextures.NeutralDirection,
+        new TextureAccessor(SolidTextures.NeutralDirection),
 
       clearcoatFactor: this.clearcoatFactor,
       clearcoatTextureAccessor:

@@ -6,6 +6,7 @@ import {
   makeTexImage2DFromTexture,
   mat4TransformNormal3,
   mat4TransformVec3,
+  MaterialParameters,
   ProgramUniform,
   ProgramVertexArray,
   RenderingContext,
@@ -117,6 +118,28 @@ function updateCameraUniforms(
   cameraUniforms.cameraFar = camera.far;
 }
 
+function flattenMaterialParameters(
+  parameters: MaterialParameters
+): MaterialParameters {
+  const flattenedParameters: MaterialParameters = {};
+  for (const key in parameters) {
+    const value = parameters[key];
+    if (value === null && value === undefined) {
+      continue;
+    }
+    if (typeof value === 'object' && 'getParameters' in value) {
+      const flattenedValue = flattenMaterialParameters(value.getParameters());
+      for (const flattenedKey in flattenedValue) {
+        flattenedParameters[key + '.' + flattenedKey] =
+          flattenedValue[flattenedKey];
+      }
+      continue;
+    }
+    flattenedParameters[key] = value;
+  }
+  return flattenedParameters;
+}
+
 function meshToSceneCache(
   context: RenderingContext,
   mesh: MeshNode,
@@ -152,11 +175,15 @@ function meshToSceneCache(
     shaderMaterial.name = material.shaderName;
     const program = makeProgramFromShaderMaterial(context, shaderMaterial);
     shaderNameToProgram.set(material.shaderName, program);
+    console.log('program uniforms', program.uniforms);
   }
 
   // make material uniforms
   if (!materialIdToUniforms.has(material.id)) {
-    const materialParameters = material.getParameters();
+    const materialParameters = flattenMaterialParameters(
+      material.getParameters()
+    );
+    console.log('material Properties flattened', materialParameters);
     const materialUniforms: UniformValueMap = {};
     const materialTextureBindings = new TextureBindings();
     for (const uniformName of Object.keys(materialParameters)) {
@@ -172,10 +199,18 @@ function meshToSceneCache(
         }
         materialUniforms[uniformName] =
           materialTextureBindings.bind(texImage2D);
+      } else if (
+        typeof uniformValue === 'object' &&
+        'getParameters' in uniformValue
+      ) {
+        throw new Error(
+          `nested parameters are not supported here, should already be flattened, ${uniformName}}`
+        );
       } else {
         materialUniforms[uniformName] = uniformValue;
       }
     }
+    console.log('material uniform values', materialUniforms);
 
     materialIdToUniforms.set(material.id, materialUniforms);
     materialIdToTextureBindings.set(material.id, materialTextureBindings);

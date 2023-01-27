@@ -10,9 +10,9 @@ export type MaterialPropertyValue =
   | Mat3
   | Mat4
   | Texture
-  | IMaterialParametersProvider;
+  | IMaterialParameterProvider;
 
-export interface IMaterialParametersProvider {
+export interface IMaterialParameterProvider {
   getParameters(): MaterialParameters;
 }
 

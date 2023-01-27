@@ -1,11 +1,11 @@
 import {
-  IMaterialParametersProvider,
+  IMaterialParameterProvider,
   MaterialParameters
 } from '../materials/MaterialParameters.js';
 import { Mat3 } from '../math/Mat3.js';
 import { Texture } from './Texture.js';
 
-export class TextureAccessor implements IMaterialParametersProvider {
+export class TextureAccessor implements IMaterialParameterProvider {
   constructor(
     public texture: Texture,
     public uvTransform = new Mat3(),

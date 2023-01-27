@@ -82,3 +82,7 @@ vec3 mat4UntransformDirection(const mat4 m, const vec3 dir) {
   // upper-left 3x3 of matrix is assumed to be orthogonal
   return normalize((vec4(dir, 0.0) * m).xyz);
 }
+
+vec2 mat3TransformUV( const mat3 m, const vec2 uv ) {
+  return ( m * vec3( uv, 1.0 ) ).xy;
+}

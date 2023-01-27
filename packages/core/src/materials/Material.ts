@@ -3,7 +3,7 @@ import { IIdentifiable, IVersionable } from '../core/types';
 import { ShaderDefines } from '../renderers/webgl/shaders/ShaderDefines';
 import { AlphaMode } from './AlphaMode';
 import {
-  IMaterialParametersProvider,
+  IMaterialParameterProvider,
   MaterialParameters
 } from './MaterialParameters';
 
@@ -15,7 +15,7 @@ export interface IMaterialProps {
 }
 
 export class Material
-  implements IVersionable, IIdentifiable, IMaterialParametersProvider
+  implements IVersionable, IIdentifiable, IMaterialParameterProvider
 {
   public readonly id;
   public version = 0;

@@ -8,6 +8,7 @@
 import { IDisposable } from '../../../core/types.js';
 import { Box2 } from '../../../math/Box2.js';
 import { Vec2 } from '../../../math/Vec2.js';
+import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
@@ -19,10 +20,7 @@ import { UniformBufferMap } from '../programs/ProgramUniformBlock.js';
 import { ProgramVertexArray } from '../programs/ProgramVertexArray.js';
 import { UniformValueMap } from '../programs/UniformValueMap.js';
 import { RenderingContext } from '../RenderingContext.js';
-import {
-  bindTextures,
-  TextureBindings
-} from '../textures/TextureBindings.js';
+import { bindTextures, TextureBindings } from '../textures/TextureBindings.js';
 import { BufferBit } from './BufferBit.js';
 
 const GL = WebGL2RenderingContext;
@@ -143,10 +141,7 @@ function setProgramUniforms(
       if (uniform !== undefined && uniform.block === undefined) {
         uniform.setIntoLocation(uniformValueMap[uniformName]);
       } else {
-        /*    warnOnce(
-          `Uniform ${uniformName} not found in program ${program.name}`,
-          uniform
-        );*/
+        warnOnce(`Uniform ${uniformName} not found in program ${program.name}`);
       }
     }
   }
