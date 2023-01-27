@@ -1,3 +1,5 @@
+#pragma once
+
 // Anisotropic GGX NDF with a single anisotropy parameter controlling the normal orientation.
 // See https://google.github.io/filament/Filament.html#materialsystem/anisotropicmodel
 // T: Tanget, B: Bi-tanget

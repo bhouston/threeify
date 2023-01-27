@@ -220,8 +220,8 @@ export class PhysicalMaterial extends Material {
 
     this.sheenColorFactor.copy(props.sheenColorFactor || this.sheenColorFactor);
     this.sheenColorTextureAccessor = props.sheenColorTextureAccessor;
-    this.sheenRoughnessFactor =
-      props.sheenRoughnessFactor || this.sheenRoughnessFactor;
+    if (props.sheenRoughnessFactor !== undefined)
+      this.sheenRoughnessFactor = props.sheenRoughnessFactor;
     this.sheenRoughnessTextureAccessor = props.sheenRoughnessTextureAccessor;
 
     if (props.iridescenceFactor !== undefined)

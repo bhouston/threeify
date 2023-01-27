@@ -48,6 +48,13 @@ uniform TextureAccessor sheenColorTextureAccessor;
 uniform float sheenRoughnessFactor;
 uniform TextureAccessor sheenRoughnessTextureAccessor;
 
+uniform float iridescenceFactor;
+//uniform TextureAccessor iridescenceFactorTextureAccessor;
+uniform float iridescenceIor;
+//uniform float iridescenceThicknessMinimum;
+//uniform float iridescenceThicknessMaximum;
+//uniform TextureAccessor iridescenceThicknessTextureAccessor;
+
 #pragma include <normals/normalPacking>
 #pragma include <color/spaces/srgb>
 #pragma include <normals/normalMapping>
@@ -73,6 +80,9 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.clearcoatTint = clearcoatTint * sRGBToLinear( sampleTexture( clearcoatTintTextureAccessor, uvs ).rgb );
     material.sheenColor = sheenColorFactor * sRGBToLinear( sampleTexture( sheenColorTextureAccessor, uvs ).rgb );
     material.sheenRoughness = sheenRoughnessFactor * sampleTexture( sheenRoughnessTextureAccessor, uvs ).r;
+	material.iridescence = iridescenceFactor; // * sampleTexture( iridescenceFactorTextureAccessor, uvs ).r;
+    material.iridescenceIor = iridescenceIor;
+   //material.iridescenceThickness = ( iridescenceThicknessMaximum - iridescenceThicknessMinimum ) * sampleTexture( iridescenceThicknessTextureAccessor, uvs ).g + iridescenceThicknessMinimum;
 
     return material;
 }

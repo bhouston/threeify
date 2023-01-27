@@ -34,6 +34,7 @@ struct PhysicalMaterial {
     float transmission;
     float transmissionRoughness;
 
+    float iridescence;
     float iridescenceIor;
     float iridescenceThickness;
 

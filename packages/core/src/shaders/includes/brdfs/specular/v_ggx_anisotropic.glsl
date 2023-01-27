@@ -1,3 +1,5 @@
+#pragma once
+
 // Anisotropic GGX visibility function, with height correlation.
 // T: Tanget, B: Bi-tanget
 float V_GGX_anisotropic(

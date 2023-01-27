@@ -8,7 +8,7 @@
 #pragma once
 #pragma include <math/math>
 #pragma include "d_charlie"
-#pragma include "v_charlie"
+#pragma include "v_neubelt"
 
 // f_sheen
 vec3 BRDF_Sheen_Charlie(
@@ -16,7 +16,6 @@ vec3 BRDF_Sheen_Charlie(
   const vec3 viewDirection,
   const vec3 lightDirection,
   const vec3 sheenColor,
-  const float sheenIntensity,
   const float sheenRoughness
 ) {
   vec3 halfDirection = normalize(lightDirection + viewDirection);
@@ -28,8 +27,8 @@ vec3 BRDF_Sheen_Charlie(
   float NdotH = saturate(dot(normal, halfDirection));
 
   float sheenDistribution = D_Charlie(safeSheenRoughness, NdotH);
-  float sheenVisibility = V_Charlie(safeSheenRoughness, NdotL, NdotV);
+  float sheenVisibility = V_Neubelt(NdotV, NdotL);
 
-  return sheenColor * sheenIntensity * sheenDistribution * sheenVisibility;
+  return sheenColor * saturate( sheenDistribution * sheenVisibility );
 
 }
