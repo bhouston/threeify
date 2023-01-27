@@ -1,5 +1,5 @@
 export enum AlphaMode {
-  Opaque,
-  Blend,
-  Mask
+  Opaque = 0,
+  Blend = 1,
+  Mask = 2
 }

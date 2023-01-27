@@ -50,4 +50,5 @@ export class RenderCache {
   // mesh batches - separate.
   public opaqueMeshBatches: MeshBatch[] = [];
   public blendMeshBatches: MeshBatch[] = [];
+  public maskMeshBatches: MeshBatch[] = [];
 }

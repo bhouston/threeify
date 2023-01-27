@@ -1,6 +1,9 @@
 #pragma once
 
 struct PhysicalMaterial {
+    int alphaMode;
+    float alphaCutoff;
+    
     float alpha;
 
     vec3 albedo;

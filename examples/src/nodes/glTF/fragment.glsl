@@ -19,10 +19,14 @@ out vec4 outputColor;
 #pragma include <math/mat4>
 #pragma include <operations/occlusion>
 #pragma include <operations/tonemapping>
+#pragma include <materials/alpha_mode>
 
 void main( ) {
   PhysicalMaterial material = readPhysicalMaterialFromUniforms( );
 
+  if( material.alphaMode == ALPHAMODE_MASK && material.alpha < material.alphaCutoff ) {
+    discard;
+  }
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize( v_viewSurfaceNormal );
   vec3 viewDirection = normalize( -v_viewSurfacePosition );

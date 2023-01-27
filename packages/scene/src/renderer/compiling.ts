@@ -239,7 +239,8 @@ function createMeshBatches(renderCache: RenderCache) {
     materialIdToMaterialUniformBuffers,
     materialIdToTextureBindings,
     opaqueMeshBatches,
-    blendMeshBatches
+    blendMeshBatches,
+    maskMeshBatches
   } = renderCache;
 
   for (const node of breathFirstNodes) {
@@ -328,10 +329,23 @@ function createMeshBatches(renderCache: RenderCache) {
         uniformBufferMap,
         textureBindings
       );
-      if (material.alphaMode === AlphaMode.Opaque) {
-        opaqueMeshBatches.push(meshBatch);
-      } else if (material.alphaMode === AlphaMode.Blend) {
-        blendMeshBatches.push(meshBatch);
+      switch (material.alphaMode) {
+        case AlphaMode.Opaque: {
+          opaqueMeshBatches.push(meshBatch);
+
+          break;
+        }
+        case AlphaMode.Blend: {
+          blendMeshBatches.push(meshBatch);
+
+          break;
+        }
+        case AlphaMode.Mask: {
+          maskMeshBatches.push(meshBatch);
+
+          break;
+        }
+        // No default
       }
     }
   }
@@ -408,7 +422,6 @@ function createMaterialUniformBuffers(renderCache: RenderCache) {
   const {
     shaderNameToProgram,
     materialIdToUniforms,
-    cameraUniforms,
     materialIdToMaterial,
     materialIdToMaterialUniformBuffers
   } = renderCache;

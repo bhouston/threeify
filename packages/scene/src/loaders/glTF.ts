@@ -167,11 +167,12 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
     ) as Clearcoat;
 
     physicalMaterial = new PhysicalMaterial({
-      alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
       albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
       albedoTexture: albedoAlphaTexture,
       alpha: glTFMaterial.getAlpha(),
       alphaTexture: albedoAlphaTexture,
+      alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
+      alphaCutoff: glTFMaterial.getAlphaCutoff(),
       metallicFactor: glTFMaterial.getMetallicFactor(),
       metallicTexture: metallicRoughnessTexture,
       specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),

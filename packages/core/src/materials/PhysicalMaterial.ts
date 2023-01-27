@@ -21,6 +21,7 @@ export interface IPhysicalMaterialProps {
   alpha?: number;
   alphaTexture?: Texture;
   alphaMode?: AlphaMode;
+  alphaCutoff?: number;
 
   albedoFactor?: Color3;
   albedoTexture?: Texture;
@@ -87,6 +88,7 @@ export class PhysicalMaterial extends Material {
   public alpha = 1;
   public alphaTexture?: Texture;
   public alphaMode = AlphaMode.Opaque;
+  public alphaCutoff = 0.5;
 
   public albedoFactor = new Color3(1, 1, 1);
   public albedoTexture?: Texture;
@@ -155,52 +157,56 @@ export class PhysicalMaterial extends Material {
       shaderName: 'KhronosPhysicalMaterial'
     });
 
-    this.alpha = props.alpha || this.alpha;
+    if (props.alpha !== undefined) this.alpha = props.alpha;
     this.alphaTexture = props.alphaTexture || SolidTextures.White;
 
-    if (props.alphaMode !== undefined) {
-      this.alphaMode = props.alphaMode;
-    }
+    if (props.alphaMode !== undefined) this.alphaMode = props.alphaMode;
+    if (props.alphaCutoff !== undefined) this.alphaCutoff = props.alphaCutoff;
 
     this.albedoFactor.copy(props.albedoFactor || this.albedoFactor);
     this.albedoTexture = props.albedoTexture;
 
-    this.specularFactor = props.specularFactor || this.specularFactor;
+    if (props.specularFactor !== undefined)
+      this.specularFactor = props.specularFactor;
     this.specularFactorTexture = props.specularFactorTexture;
 
     this.specularColor.copy(props.specularColor || this.specularColor);
     this.specularColorTexture = props.specularColorTexture;
 
-    this.specularRoughnessFactor =
-      props.specularRoughnessFactor || this.specularRoughnessFactor;
+    if (props.specularRoughnessFactor !== undefined)
+      this.specularRoughnessFactor = props.specularRoughnessFactor;
     this.specularRoughnessTexture = props.specularRoughnessTexture;
 
-    this.metallicFactor = props.metallicFactor || this.metallicFactor;
+    if (props.metallicFactor !== undefined)
+      this.metallicFactor = props.metallicFactor;
     this.metallicTexture = props.metallicTexture;
 
     this.normalScale.copy(props.normalScale || this.normalScale);
     this.normalTexture = props.normalTexture;
 
-    this.occlusionFactor = props.occlusionFactor || this.occlusionFactor;
+    if (props.occlusionFactor !== undefined)
+      this.occlusionFactor = props.occlusionFactor;
     this.occlusionTexture = props.occlusionTexture;
 
     this.emissiveFactor.copy(props.emissiveFactor || this.emissiveFactor);
     this.emissiveTexture = props.emissiveTexture;
-    this.emissiveIntensity = props.emissiveIntensity || this.emissiveIntensity;
+    if (props.emissiveIntensity !== undefined)
+      this.emissiveIntensity = props.emissiveIntensity;
 
-    this.ior = props.ior || this.ior;
+    if (props.ior !== undefined) this.ior = props.ior;
 
-    this.anisotropy = props.anisotropy || this.anisotropy;
+    if (props.anisotropy !== undefined) this.anisotropy = props.anisotropy;
     this.anisotropyTexture = props.anisotropyTexture;
     this.anisotropyDirection.copy(
       props.anisotropyDirection || this.anisotropyDirection
     );
     this.anisotropyDirectionTexture = props.anisotropyDirectionTexture;
 
-    this.clearcoatFactor = props.clearcoatFactor || this.clearcoatFactor;
+    if (props.clearcoatFactor !== undefined)
+      this.clearcoatFactor = props.clearcoatFactor;
     this.clearcoatTexture = props.clearcoatTexture;
-    this.clearcoatRoughnessFactor =
-      props.clearcoatRoughnessFactor || this.clearcoatRoughnessFactor;
+    if (props.clearcoatRoughnessFactor !== undefined)
+      this.clearcoatRoughnessFactor = props.clearcoatRoughnessFactor;
     this.clearcoatRoughnessTexture = props.clearcoatRoughnessTexture;
     this.clearcoatNormalScale.copy(
       props.clearcoatNormalScale || this.clearcoatNormalScale
@@ -216,21 +222,23 @@ export class PhysicalMaterial extends Material {
       props.sheenRoughnessFactor || this.sheenRoughnessFactor;
     this.sheenRoughnessTexture = props.sheenRoughnessTexture;
 
-    this.iridescenceFactor = props.iridescenceFactor || this.iridescenceFactor;
+    if (props.iridescenceFactor !== undefined)
+      this.iridescenceFactor = props.iridescenceFactor;
     this.iridescenceTexture = props.iridescenceTexture;
-    this.iridescenceIor = props.iridescenceIor || this.iridescenceIor;
-    this.iridescenceThicknessMinimum =
-      props.iridescenceThicknessMinimum || this.iridescenceThicknessMinimum;
-    this.iridescenceThicknessMaximum =
-      props.iridescenceThicknessMaximum || this.iridescenceThicknessMaximum;
+    if (props.iridescenceIor !== undefined)
+      this.iridescenceIor = props.iridescenceIor;
+    if (props.iridescenceThicknessMinimum !== undefined)
+      this.iridescenceThicknessMinimum = props.iridescenceThicknessMinimum;
+    if (props.iridescenceThicknessMaximum !== undefined)
+      this.iridescenceThicknessMaximum = props.iridescenceThicknessMaximum;
     this.iridescenceThicknessTexture = props.iridescenceThicknessTexture;
 
-    this.transmissionFactor =
-      props.transmissionFactor || this.transmissionFactor;
+    if (props.transmissionFactor !== undefined)
+      this.transmissionFactor = props.transmissionFactor;
     this.transmissionTexture = props.transmissionTexture;
 
-    this.attenuationDistance =
-      props.attenuationDistance || this.attenuationDistance;
+    if (props.attenuationDistance !== undefined)
+      this.attenuationDistance = props.attenuationDistance;
     this.attenuationColor.copy(props.attenuationColor || this.attenuationColor);
   }
 
@@ -238,6 +246,8 @@ export class PhysicalMaterial extends Material {
     return {
       alpha: this.alpha,
       alphaTexture: this.alphaTexture || SolidTextures.White,
+      alphaMode: this.alphaMode,
+      alphaCutoff: this.alphaCutoff,
 
       albedoFactor: this.albedoFactor,
       albedoTexture: this.albedoTexture || SolidTextures.White,

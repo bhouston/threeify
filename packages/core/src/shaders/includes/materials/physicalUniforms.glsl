@@ -2,6 +2,8 @@
 
 #pragma include <materials/physical>
 
+uniform int alphaMode;
+uniform float alphaCutoff;
 uniform float alpha;
 uniform sampler2D alphaTexture;
 uniform vec3 albedoFactor;
@@ -43,6 +45,8 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( ) {
     vec2 uv = v_uv0;
 
     PhysicalMaterial material;
+    material.alphaMode = alphaMode;
+    material.alphaCutoff = alphaCutoff;
     material.alpha = alpha * texture( alphaTexture, uv ).a;
     material.albedo = albedoFactor * sRGBToLinear( texture( albedoTexture, uv ).rgb );
     material.specularFactor = specularFactor * texture( specularFactorTexture, uv ).r;
