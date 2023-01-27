@@ -3,6 +3,7 @@ precision highp float;
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;
+in vec2 v_uv1;
 
 #define MAX_PUNCTUAL_LIGHTS (3)
 #pragma include <lighting/punctualUniforms>
@@ -22,7 +23,11 @@ out vec4 outputColor;
 #pragma include <materials/alpha_mode>
 
 void main( ) {
-  PhysicalMaterial material = readPhysicalMaterialFromUniforms( );
+  vec2 uvs[2];
+  uvs[0] = v_uv0;
+  uvs[1] = v_uv1;
+
+  PhysicalMaterial material = readPhysicalMaterialFromUniforms( uvs );
 
   if( material.alphaMode == ALPHAMODE_MASK && material.alpha < material.alphaCutoff ) {
     discard;

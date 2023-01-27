@@ -22,12 +22,14 @@ export interface IPhysicalMaterialProps {
   alpha?: number;
   alphaTexture?: Texture;
   alphaUVTransform?: Mat3;
+  alphaUVIndex?: number;
   alphaMode?: AlphaMode;
   alphaCutoff?: number;
 
   albedoFactor?: Color3;
   albedoTexture?: Texture;
   albedoUVTransform?: Mat3;
+  albedoUVIndex?: number;
 
   specularFactor?: number;
   specularFactorTexture?: Texture;
@@ -38,18 +40,22 @@ export interface IPhysicalMaterialProps {
   specularRoughnessFactor?: number;
   specularRoughnessTexture?: Texture;
   specularRoughnessUVTransform?: Mat3;
+  specularRoughnessUVIndex?: number;
 
   metallicFactor?: number;
   metallicTexture?: Texture;
   metallicUVTransform?: Mat3;
+  metallicUVIndex?: number;
 
   normalScale?: Vec2;
   normalTexture?: Texture;
   normalUVTransform?: Mat3;
+  normalUVIndex?: number;
 
   occlusionFactor?: number;
   occlusionTexture?: Texture;
   occlusionUVTransform?: Mat3;
+  occlusionUVIndex?: number;
 
   emissiveFactor?: Color3;
   emissiveTexture?: Texture;
@@ -95,12 +101,14 @@ export class PhysicalMaterial extends Material {
   public alpha = 1;
   public alphaTexture?: Texture;
   public alphaUVTransform = new Mat3();
+  public alphaUVIndex = 0;
   public alphaMode = AlphaMode.Opaque;
   public alphaCutoff = 0.5;
 
   public albedoFactor = new Color3(1, 1, 1);
   public albedoTexture?: Texture;
   public albedoUVTransform = new Mat3();
+  public albedoUVIndex = 0;
 
   public specularFactor = 0.5;
   public specularFactorTexture?: Texture;
@@ -111,18 +119,22 @@ export class PhysicalMaterial extends Material {
   public specularRoughnessFactor = 0.5;
   public specularRoughnessTexture?: Texture;
   public specularRoughnessUVTransform = new Mat3();
+  public specularRoughnessUVIndex = 0;
 
   public metallicFactor = 1;
   public metallicTexture?: Texture;
   public metallicUVTransform = new Mat3();
+  public metallicUVIndex = 0;
 
   public normalScale = new Vec2(1, 1);
   public normalTexture?: Texture;
   public normalUVTransform = new Mat3();
+  public normalUVIndex = 0;
 
   public occlusionFactor = 1;
   public occlusionTexture?: Texture;
   public occlusionUVTransform = new Mat3();
+  public occlusionUVIndex = 0;
 
   public emissiveFactor = new Color3(0, 0, 0);
   public emissiveTexture?: Texture;
@@ -173,6 +185,8 @@ export class PhysicalMaterial extends Material {
     if (props.alpha !== undefined) this.alpha = props.alpha;
     this.alphaTexture = props.alphaTexture || SolidTextures.White;
     this.alphaUVTransform.copy(props.alphaUVTransform || this.alphaUVTransform);
+    this.alphaUVIndex =
+      props.alphaUVIndex !== undefined ? props.alphaUVIndex : this.alphaUVIndex;
     if (props.alphaMode !== undefined) this.alphaMode = props.alphaMode;
     if (props.alphaCutoff !== undefined) this.alphaCutoff = props.alphaCutoff;
 
@@ -181,6 +195,10 @@ export class PhysicalMaterial extends Material {
     this.albedoUVTransform.copy(
       props.albedoUVTransform || this.albedoUVTransform
     );
+    this.albedoUVIndex =
+      props.albedoUVIndex !== undefined
+        ? props.albedoUVIndex
+        : this.albedoUVIndex;
 
     if (props.specularFactor !== undefined)
       this.specularFactor = props.specularFactor;
@@ -195,6 +213,10 @@ export class PhysicalMaterial extends Material {
     this.specularRoughnessUVTransform.copy(
       props.specularRoughnessUVTransform || this.specularRoughnessUVTransform
     );
+    this.specularRoughnessUVIndex =
+      props.specularRoughnessUVIndex !== undefined
+        ? props.specularRoughnessUVIndex
+        : this.specularRoughnessUVIndex;
 
     if (props.metallicFactor !== undefined)
       this.metallicFactor = props.metallicFactor;
@@ -202,12 +224,20 @@ export class PhysicalMaterial extends Material {
     this.metallicUVTransform.copy(
       props.metallicUVTransform || this.metallicUVTransform
     );
+    this.metallicUVIndex =
+      props.metallicUVIndex !== undefined
+        ? props.metallicUVIndex
+        : this.metallicUVIndex;
 
     this.normalScale.copy(props.normalScale || this.normalScale);
     this.normalTexture = props.normalTexture;
     this.normalUVTransform.copy(
       props.normalUVTransform || this.normalUVTransform
     );
+    this.normalUVIndex =
+      props.normalUVIndex !== undefined
+        ? props.normalUVIndex
+        : this.normalUVIndex;
 
     if (props.occlusionFactor !== undefined)
       this.occlusionFactor = props.occlusionFactor;
@@ -215,6 +245,10 @@ export class PhysicalMaterial extends Material {
     this.occlusionUVTransform.copy(
       props.occlusionUVTransform || this.occlusionUVTransform
     );
+    this.occlusionUVIndex =
+      props.occlusionUVIndex !== undefined
+        ? props.occlusionUVIndex
+        : this.occlusionUVIndex;
 
     this.emissiveFactor.copy(props.emissiveFactor || this.emissiveFactor);
     this.emissiveTexture = props.emissiveTexture;
@@ -275,12 +309,14 @@ export class PhysicalMaterial extends Material {
       alpha: this.alpha,
       alphaTexture: this.alphaTexture || SolidTextures.White,
       alphaUVTransform: this.alphaUVTransform,
+      alphaUVIndex: this.alphaUVIndex,
       alphaMode: this.alphaMode,
       alphaCutoff: this.alphaCutoff,
 
       albedoFactor: this.albedoFactor,
       albedoTexture: this.albedoTexture || SolidTextures.White,
       albedoUVTransform: this.albedoUVTransform,
+      albedoUVIndex: this.albedoUVIndex,
 
       specularFactor: this.specularFactor,
       specularFactorTexture: this.specularFactorTexture || SolidTextures.White,
@@ -292,18 +328,22 @@ export class PhysicalMaterial extends Material {
       specularRoughnessTexture:
         this.specularRoughnessTexture || SolidTextures.White,
       specularRoughnessUVTransform: this.specularRoughnessUVTransform,
+      specularRoughnessUVIndex: this.specularRoughnessUVIndex,
 
       metallicFactor: this.metallicFactor,
       metallicTexture: this.metallicTexture || SolidTextures.White,
       metallicUVTransform: this.metallicUVTransform,
+      metallicUVIndex: this.metallicUVIndex,
 
       normalScale: this.normalScale,
       normalTexture: this.normalTexture || SolidTextures.FlatNormal,
       normalUVTransform: this.normalUVTransform,
+      normalUVIndex: this.normalUVIndex,
 
       occlusionFactor: this.occlusionFactor,
       occlusionTexture: this.occlusionTexture || SolidTextures.White,
       occlusionUVTransform: this.occlusionUVTransform,
+      occlusionUVIndex: this.occlusionUVIndex,
 
       emissiveFactor: color3MultiplyByScalar(
         this.emissiveFactor,
