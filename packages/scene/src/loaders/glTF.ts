@@ -2,16 +2,23 @@ import {
   Mesh,
   Node,
   Texture as GLTFTexture,
+  TextureInfo,
   WebIO
 } from '@gltf-transform/core';
-import { Clearcoat, KHRONOS_EXTENSIONS } from '@gltf-transform/extensions';
+import {
+  Clearcoat,
+  KHRONOS_EXTENSIONS,
+  Transform as TextureTransform
+} from '@gltf-transform/extensions';
 import {
   AlphaMode,
   Attribute,
   AttributeData,
   Color3,
+  composeMat3,
   createImageBitmapFromArrayBuffer,
   Geometry,
+  Mat3,
   PhysicalMaterial,
   Quat,
   Texture,
@@ -109,6 +116,17 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
   return sceneNode;
 }
 
+function getUVTransform(textureInfo: TextureInfo | null): Mat3 {
+  if (textureInfo === null) return new Mat3();
+  const extension = textureInfo?.getExtension('KHR_texture_transform');
+  if (extension === undefined) return new Mat3();
+  const glTFTransform = extension as TextureTransform;
+  const translation = toVec2(glTFTransform.getOffset());
+  const rotation = glTFTransform.getRotation();
+  const scale = toVec2(glTFTransform.getScale());
+  return composeMat3(translation, rotation, scale);
+}
+
 async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
   if (glTFMesh.listPrimitives().length > 1) {
     console.log('mesh.listPrimitives()', glTFMesh.listPrimitives());
@@ -158,8 +176,14 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
     const metallicRoughnessTexture = await toTexture(
       glTFMaterial.getMetallicRoughnessTexture()
     );
+    const metallicRoughnessUVTransform = getUVTransform(
+      glTFMaterial.getMetallicRoughnessTextureInfo()
+    );
     const albedoAlphaTexture = await toTexture(
       glTFMaterial.getBaseColorTexture()
+    );
+    const albedoAlphaUVTransform = getUVTransform(
+      glTFMaterial.getBaseColorTextureInfo()
     );
 
     const glTFClearcoat = glTFMaterial.getExtension(
@@ -169,14 +193,18 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
     physicalMaterial = new PhysicalMaterial({
       albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
       albedoTexture: albedoAlphaTexture,
+      albedoUVTransform: albedoAlphaUVTransform,
       alpha: glTFMaterial.getAlpha(),
       alphaTexture: albedoAlphaTexture,
+      alphaUVTransform: albedoAlphaUVTransform,
       alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
       alphaCutoff: glTFMaterial.getAlphaCutoff(),
       metallicFactor: glTFMaterial.getMetallicFactor(),
       metallicTexture: metallicRoughnessTexture,
+      metallicUVTransform: metallicRoughnessUVTransform,
       specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
       specularRoughnessTexture: metallicRoughnessTexture,
+      specularRoughnessUVTransform: metallicRoughnessUVTransform,
       emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
       emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
       normalScale: toVec2([
@@ -184,8 +212,12 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
         glTFMaterial.getNormalScale()
       ]),
       normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
+      normalUVTransform: getUVTransform(glTFMaterial.getNormalTextureInfo()),
       occlusionFactor: glTFMaterial.getOcclusionStrength(),
       occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture()),
+      occlusionUVTransform: getUVTransform(
+        glTFMaterial.getOcclusionTextureInfo()
+      ),
       clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
       clearcoatRoughnessFactor:
         glTFClearcoat?.getClearcoatRoughnessFactor() || 0,

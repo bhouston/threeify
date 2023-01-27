@@ -1,5 +1,6 @@
 import { Color3 } from '../math/Color3';
 import { color3MultiplyByScalar } from '../math/Color3.Functions';
+import { Mat3 } from '../math/Mat3';
 import { Vec2 } from '../math/Vec2';
 import { Vec3 } from '../math/Vec3';
 import { SolidTextures } from '../textures/loaders/SolidTextures';
@@ -20,11 +21,13 @@ export interface IPhysicalMaterialProps {
 
   alpha?: number;
   alphaTexture?: Texture;
+  alphaUVTransform?: Mat3;
   alphaMode?: AlphaMode;
   alphaCutoff?: number;
 
   albedoFactor?: Color3;
   albedoTexture?: Texture;
+  albedoUVTransform?: Mat3;
 
   specularFactor?: number;
   specularFactorTexture?: Texture;
@@ -34,15 +37,19 @@ export interface IPhysicalMaterialProps {
 
   specularRoughnessFactor?: number;
   specularRoughnessTexture?: Texture;
+  specularRoughnessUVTransform?: Mat3;
 
   metallicFactor?: number;
   metallicTexture?: Texture;
+  metallicUVTransform?: Mat3;
 
   normalScale?: Vec2;
   normalTexture?: Texture;
+  normalUVTransform?: Mat3;
 
   occlusionFactor?: number;
   occlusionTexture?: Texture;
+  occlusionUVTransform?: Mat3;
 
   emissiveFactor?: Color3;
   emissiveTexture?: Texture;
@@ -87,11 +94,13 @@ export interface IPhysicalMaterialProps {
 export class PhysicalMaterial extends Material {
   public alpha = 1;
   public alphaTexture?: Texture;
+  public alphaUVTransform = new Mat3();
   public alphaMode = AlphaMode.Opaque;
   public alphaCutoff = 0.5;
 
   public albedoFactor = new Color3(1, 1, 1);
   public albedoTexture?: Texture;
+  public albedoUVTransform = new Mat3();
 
   public specularFactor = 0.5;
   public specularFactorTexture?: Texture;
@@ -101,15 +110,19 @@ export class PhysicalMaterial extends Material {
 
   public specularRoughnessFactor = 0.5;
   public specularRoughnessTexture?: Texture;
+  public specularRoughnessUVTransform = new Mat3();
 
   public metallicFactor = 1;
   public metallicTexture?: Texture;
+  public metallicUVTransform = new Mat3();
 
   public normalScale = new Vec2(1, 1);
   public normalTexture?: Texture;
+  public normalUVTransform = new Mat3();
 
   public occlusionFactor = 1;
   public occlusionTexture?: Texture;
+  public occlusionUVTransform = new Mat3();
 
   public emissiveFactor = new Color3(0, 0, 0);
   public emissiveTexture?: Texture;
@@ -159,12 +172,15 @@ export class PhysicalMaterial extends Material {
 
     if (props.alpha !== undefined) this.alpha = props.alpha;
     this.alphaTexture = props.alphaTexture || SolidTextures.White;
-
+    this.alphaUVTransform.copy(props.alphaUVTransform || this.alphaUVTransform);
     if (props.alphaMode !== undefined) this.alphaMode = props.alphaMode;
     if (props.alphaCutoff !== undefined) this.alphaCutoff = props.alphaCutoff;
 
     this.albedoFactor.copy(props.albedoFactor || this.albedoFactor);
     this.albedoTexture = props.albedoTexture;
+    this.albedoUVTransform.copy(
+      props.albedoUVTransform || this.albedoUVTransform
+    );
 
     if (props.specularFactor !== undefined)
       this.specularFactor = props.specularFactor;
@@ -176,17 +192,29 @@ export class PhysicalMaterial extends Material {
     if (props.specularRoughnessFactor !== undefined)
       this.specularRoughnessFactor = props.specularRoughnessFactor;
     this.specularRoughnessTexture = props.specularRoughnessTexture;
+    this.specularRoughnessUVTransform.copy(
+      props.specularRoughnessUVTransform || this.specularRoughnessUVTransform
+    );
 
     if (props.metallicFactor !== undefined)
       this.metallicFactor = props.metallicFactor;
     this.metallicTexture = props.metallicTexture;
+    this.metallicUVTransform.copy(
+      props.metallicUVTransform || this.metallicUVTransform
+    );
 
     this.normalScale.copy(props.normalScale || this.normalScale);
     this.normalTexture = props.normalTexture;
+    this.normalUVTransform.copy(
+      props.normalUVTransform || this.normalUVTransform
+    );
 
     if (props.occlusionFactor !== undefined)
       this.occlusionFactor = props.occlusionFactor;
     this.occlusionTexture = props.occlusionTexture;
+    this.occlusionUVTransform.copy(
+      props.occlusionUVTransform || this.occlusionUVTransform
+    );
 
     this.emissiveFactor.copy(props.emissiveFactor || this.emissiveFactor);
     this.emissiveTexture = props.emissiveTexture;
@@ -246,11 +274,13 @@ export class PhysicalMaterial extends Material {
     return {
       alpha: this.alpha,
       alphaTexture: this.alphaTexture || SolidTextures.White,
+      alphaUVTransform: this.alphaUVTransform,
       alphaMode: this.alphaMode,
       alphaCutoff: this.alphaCutoff,
 
       albedoFactor: this.albedoFactor,
       albedoTexture: this.albedoTexture || SolidTextures.White,
+      albedoUVTransform: this.albedoUVTransform,
 
       specularFactor: this.specularFactor,
       specularFactorTexture: this.specularFactorTexture || SolidTextures.White,
@@ -261,15 +291,19 @@ export class PhysicalMaterial extends Material {
       specularRoughnessFactor: this.specularRoughnessFactor,
       specularRoughnessTexture:
         this.specularRoughnessTexture || SolidTextures.White,
+      specularRoughnessUVTransform: this.specularRoughnessUVTransform,
 
       metallicFactor: this.metallicFactor,
       metallicTexture: this.metallicTexture || SolidTextures.White,
+      metallicUVTransform: this.metallicUVTransform,
 
       normalScale: this.normalScale,
       normalTexture: this.normalTexture || SolidTextures.FlatNormal,
+      normalUVTransform: this.normalUVTransform,
 
       occlusionFactor: this.occlusionFactor,
       occlusionTexture: this.occlusionTexture || SolidTextures.White,
+      occlusionUVTransform: this.occlusionUVTransform,
 
       emissiveFactor: color3MultiplyByScalar(
         this.emissiveFactor,
