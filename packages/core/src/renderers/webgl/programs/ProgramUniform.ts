@@ -35,6 +35,8 @@ export class ProgramUniform {
   public readonly structName: string | undefined;
   public readonly structIndex: number = -1;
 
+  public readonly identifier: string;
+
   public readonly arrayLength: number;
   public readonly uniformType: UniformType;
   public readonly bytesPerElement: number;
@@ -99,6 +101,21 @@ export class ProgramUniform {
         this.glLocation = glLocation;
       }
     }
+
+    let identifier = '';
+    if (this.structName !== undefined) {
+      identifier = this.structName;
+      if (this.structIndex >= 0) {
+        identifier += '[' + this.structIndex + ']';
+      }
+      identifier += '.';
+    }
+    identifier += this.variableName;
+    if (this.variableIndex >= 0 && this.arrayLength == 1) {
+      identifier += '[' + this.variableIndex + ']';
+    }
+
+    this.identifier = identifier;
   }
 
   setIntoBuffer(value: UniformValue, buffer: Buffer): this {
@@ -333,9 +350,9 @@ export class ProgramUniform {
       // case UniformType.FloatMat2x4:
       // case UniformType.FloatMat3x2:
       case UniformType.FloatMat3:
-        if (firstElement instanceof Mat4) {
+        if (firstElement instanceof Mat3) {
           const array = mat3ArrayToFloat32Array(value as Mat3[]);
-          gl.uniformMatrix4fv(this.glLocation, false, array);
+          gl.uniformMatrix3fv(this.glLocation, false, array);
           this.valueHashCode = -1;
           return this;
         }

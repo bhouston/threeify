@@ -1,5 +1,7 @@
 precision highp float;
 
+#define NUM_UV_CHANNELS 1
+
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;
@@ -19,7 +21,10 @@ out vec4 outputColor;
 #pragma include <math/mat4>
 
 void main() {
-  PhysicalMaterial material = readPhysicalMaterialFromUniforms();
+  vec2 uvs[NUM_UV_CHANNELS];
+  uvs[0] = v_uv0;
+
+  PhysicalMaterial material = readPhysicalMaterialFromUniforms( uvs );
 
   vec3 dielectricSpecularF0 =
     min(pow2((ior - 1.0) / (ior + 1.0)), 1.0) *

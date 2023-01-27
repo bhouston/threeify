@@ -175,7 +175,6 @@ function meshToSceneCache(
     shaderMaterial.name = material.shaderName;
     const program = makeProgramFromShaderMaterial(context, shaderMaterial);
     shaderNameToProgram.set(material.shaderName, program);
-    console.log('program uniforms', program.uniforms);
   }
 
   // make material uniforms
@@ -183,7 +182,6 @@ function meshToSceneCache(
     const materialParameters = flattenMaterialParameters(
       material.getParameters()
     );
-    console.log('material Properties flattened', materialParameters);
     const materialUniforms: UniformValueMap = {};
     const materialTextureBindings = new TextureBindings();
     for (const uniformName of Object.keys(materialParameters)) {
@@ -210,7 +208,6 @@ function meshToSceneCache(
         materialUniforms[uniformName] = uniformValue;
       }
     }
-    console.log('material uniform values', materialUniforms);
 
     materialIdToUniforms.set(material.id, materialUniforms);
     materialIdToTextureBindings.set(material.id, materialTextureBindings);
@@ -393,9 +390,9 @@ function filterUniforms(
 ) {
   const filteredUniforms: UniformValueMap = {};
   for (const programUniform of programUniforms) {
-    const uniformValue = uniforms[programUniform.variableName];
+    const uniformValue = uniforms[programUniform.identifier];
     if (uniformValue !== undefined) {
-      filteredUniforms[programUniform.variableName] = uniformValue;
+      filteredUniforms[programUniform.identifier] = uniformValue;
     }
   }
   return filteredUniforms;

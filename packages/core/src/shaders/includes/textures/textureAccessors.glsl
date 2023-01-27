@@ -18,7 +18,7 @@ struct TextureAccessor {
 
 
 vec4 sampleTexture( const TextureAccessor textureAccessor, const vec2 uvs[NUM_UV_CHANNELS] ) {
-    return texture( textureAccessor.texture, uvs[textureAccessor.uvIndex] );
+    return texture( textureAccessor.texture,  mat3TransformUV( textureAccessor.uvTransform, uvs[textureAccessor.uvIndex] ) );
 }
 
 struct ComponentTextureAccessor {

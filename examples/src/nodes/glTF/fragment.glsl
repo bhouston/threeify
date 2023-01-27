@@ -96,7 +96,7 @@ void main( ) {
     outgoingRadiance += material.emissive;
   }
 
-  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
+  outputColor.rgb =  tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
   outputColor.a = material.alpha;
 
 }
