@@ -125,7 +125,7 @@ async function init(): Promise<void> {
       orbitNode.dirty();
 
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
-      updateDirtyNodes(sceneTreeCache, renderCache);
+      updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       renderScene(canvasFramebuffer, renderCache);
     });
   }

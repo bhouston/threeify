@@ -42,7 +42,11 @@ void main( ) {
   //material.emissive = vec3( 0. );
   //material.specularRoughness = 0.5;
 
-  for( int i = 0; i < numPunctualLights; i++ ) {
+  // note: this for loop pattern is faster than using numPunctualLights as a loop condition
+  for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++ ) {
+    if( i >= numPunctualLights ) {
+      break;
+    }
     PunctualLight punctualLight = readPunctualLightFromUniforms( i, worldToView );
 
     DirectLight directLight = punctualLightToDirectLight( position, punctualLight );

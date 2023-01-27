@@ -17,14 +17,14 @@ export class OrthographicCamera extends CameraNode {
     if (props.center !== undefined) this.center.copy(props.center);
   }
 
-  getProjection(viewAspectRatio = 1, result = new Mat4()): Mat4 {
+  getProjection(result = new Mat4()): Mat4 {
     return mat4OrthographicSimple(
       this.height,
       this.center,
       this.near,
       this.far,
       this.zoom,
-      viewAspectRatio * this.pixelAspectRatio,
+      this.pixelAspectRatio * this.viewAspectRatio,
       result
     );
   }
