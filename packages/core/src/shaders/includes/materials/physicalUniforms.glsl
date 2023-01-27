@@ -56,7 +56,7 @@ vec2 transformUV( const vec2 uv, const mat3 uvTransform ) {
     return ( uvTransform * vec3( uv, 1.0 ) ).xy;
 }
 
-PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[2] ) {
+PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[3] ) {
 
     vec2 uv = uvs[0];
 

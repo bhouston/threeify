@@ -35,6 +35,7 @@ const semanticToThreeifyName: { [key: string]: string } = {
   TANGENT: 'tangent',
   TEXCOORD_0: 'uv0',
   TEXCOORD_1: 'uv1',
+  TEXCOORD_2: 'uv2',
   COLOR_0: 'color0',
   JOINTS_0: 'joints0',
   WEIGHTS_0: 'weights0'
@@ -106,7 +107,7 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
 
   const glTFMesh: Mesh | null = glTFNode.getMesh();
   if (glTFMesh !== null) {
-    sceneNode.children.push(await translateMesh(glTFMesh));
+    sceneNode.children.push(...(await translateMesh(glTFMesh)));
   }
 
   for (const glTFChildNode of glTFNode.listChildren()) {
@@ -137,126 +138,126 @@ function getUVIndex(textureInfo: TextureInfo | null): number {
   return uvIndex;
 }
 
-async function translateMesh(glTFMesh: Mesh): Promise<MeshNode> {
-  if (glTFMesh.listPrimitives().length > 1) {
-    console.log('mesh.listPrimitives()', glTFMesh.listPrimitives());
-    //throw new Error('Mesh has more than one primitive');
-  }
+async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
+  const meshNodes: MeshNode[] = [];
 
-  const primitive = glTFMesh.listPrimitives()[0];
+  for (const primitive of glTFMesh.listPrimitives()) {
+    const geometry = new Geometry();
+    let physicalMaterial = new PhysicalMaterial({});
 
-  const geometry = new Geometry();
-  let physicalMaterial = new PhysicalMaterial({});
+    geometry.primitive = primitive.getMode();
 
-  geometry.primitive = primitive.getMode();
+    const indices = primitive.getIndices();
+    if (indices !== null) {
+      geometry.indices = new Attribute(
+        new AttributeData(indices.getArray() || new Float32Array()),
+        indices.getElementSize(),
+        indices.getComponentType(),
+        -1,
+        0,
+        indices.getNormalized()
+      );
+    }
+    primitive.listSemantics().forEach((semantic, index) => {
+      const attribute = primitive.listAttributes()[index];
 
-  const indices = primitive.getIndices();
-  if (indices !== null) {
-    geometry.indices = new Attribute(
-      new AttributeData(indices.getArray() || new Float32Array()),
-      indices.getElementSize(),
-      indices.getComponentType(),
-      -1,
-      0,
-      indices.getNormalized()
-    );
-  }
-  primitive.listSemantics().forEach((semantic, index) => {
-    const attribute = primitive.listAttributes()[index];
+      const threekitName = semanticToThreeifyName[semantic];
+      if (threekitName === undefined)
+        throw new Error(`Unknown semantic ${semantic}`);
 
-    const threekitName = semanticToThreeifyName[semantic];
-    if (threekitName === undefined)
-      throw new Error(`Unknown semantic ${semantic}`);
-
-    geometry.attributes[semanticToThreeifyName[semantic]] = new Attribute(
-      new AttributeData(attribute.getArray() || new Float32Array()),
-      attribute.getElementSize(),
-      attribute.getComponentType(),
-      -1,
-      0,
-      attribute.getNormalized()
-    );
-  });
-
-  const glTFMaterial = primitive.getMaterial();
-
-  if (glTFMaterial !== null) {
-    // convert to simultaneously resolving promises
-
-    const metallicRoughnessTexture = await toTexture(
-      glTFMaterial.getMetallicRoughnessTexture()
-    );
-    const metallicRoughnessUVTransform = getUVTransform(
-      glTFMaterial.getMetallicRoughnessTextureInfo()
-    );
-    const metallicRoughnessUVIndex = getUVIndex(
-      glTFMaterial.getMetallicRoughnessTextureInfo()
-    );
-    const albedoAlphaTexture = await toTexture(
-      glTFMaterial.getBaseColorTexture()
-    );
-    const albedoAlphaUVTransform = getUVTransform(
-      glTFMaterial.getBaseColorTextureInfo()
-    );
-    const albedoAlphaUVIndex = getUVIndex(
-      glTFMaterial.getBaseColorTextureInfo()
-    );
-
-    const glTFClearcoat = glTFMaterial.getExtension(
-      'KHR_materials_clearcoat'
-    ) as Clearcoat;
-
-    physicalMaterial = new PhysicalMaterial({
-      alpha: glTFMaterial.getAlpha(),
-      alphaTexture: albedoAlphaTexture,
-      alphaUVTransform: albedoAlphaUVTransform,
-      alphaUVIndex: albedoAlphaUVIndex,
-      alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
-      alphaCutoff: glTFMaterial.getAlphaCutoff(),
-      albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
-      albedoTexture: albedoAlphaTexture,
-      albedoUVTransform: albedoAlphaUVTransform,
-      albedoUVIndex: albedoAlphaUVIndex,
-      metallicFactor: glTFMaterial.getMetallicFactor(),
-      metallicTexture: metallicRoughnessTexture,
-      metallicUVTransform: metallicRoughnessUVTransform,
-      metallicUVIndex: metallicRoughnessUVIndex,
-      specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
-      specularRoughnessTexture: metallicRoughnessTexture,
-      specularRoughnessUVTransform: metallicRoughnessUVTransform,
-      specularRoughnessUVIndex: metallicRoughnessUVIndex,
-      emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
-      emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
-      normalScale: toVec2([
-        glTFMaterial.getNormalScale(),
-        glTFMaterial.getNormalScale()
-      ]),
-      normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
-      normalUVTransform: getUVTransform(glTFMaterial.getNormalTextureInfo()),
-      normalUVIndex: getUVIndex(glTFMaterial.getNormalTextureInfo()),
-      occlusionFactor: glTFMaterial.getOcclusionStrength(),
-      occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture()),
-      occlusionUVTransform: getUVTransform(
-        glTFMaterial.getOcclusionTextureInfo()
-      ),
-      occlusionUVIndex: getUVIndex(glTFMaterial.getOcclusionTextureInfo()),
-      clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
-      clearcoatRoughnessFactor:
-        glTFClearcoat?.getClearcoatRoughnessFactor() || 0,
-      clearcoatTexture:
-        glTFClearcoat?.getClearcoatTexture() !== null
-          ? await toTexture(glTFClearcoat?.getClearcoatTexture())
-          : undefined,
-      clearcoatRoughnessTexture:
-        glTFClearcoat?.getClearcoatRoughnessTexture() !== null
-          ? await toTexture(glTFClearcoat?.getClearcoatRoughnessTexture())
-          : undefined
+      geometry.attributes[semanticToThreeifyName[semantic]] = new Attribute(
+        new AttributeData(attribute.getArray() || new Float32Array()),
+        attribute.getElementSize(),
+        attribute.getComponentType(),
+        -1,
+        0,
+        attribute.getNormalized()
+      );
     });
-  }
 
-  return new MeshNode({
-    name: 'glTFMesh',
-    geometry,
-    material: physicalMaterial
-  });
+    const glTFMaterial = primitive.getMaterial();
+
+    if (glTFMaterial !== null) {
+      // convert to simultaneously resolving promises
+
+      const metallicRoughnessTexture = await toTexture(
+        glTFMaterial.getMetallicRoughnessTexture()
+      );
+      const metallicRoughnessUVTransform = getUVTransform(
+        glTFMaterial.getMetallicRoughnessTextureInfo()
+      );
+      const metallicRoughnessUVIndex = getUVIndex(
+        glTFMaterial.getMetallicRoughnessTextureInfo()
+      );
+      const albedoAlphaTexture = await toTexture(
+        glTFMaterial.getBaseColorTexture()
+      );
+      const albedoAlphaUVTransform = getUVTransform(
+        glTFMaterial.getBaseColorTextureInfo()
+      );
+      const albedoAlphaUVIndex = getUVIndex(
+        glTFMaterial.getBaseColorTextureInfo()
+      );
+
+      const glTFClearcoat = glTFMaterial.getExtension(
+        'KHR_materials_clearcoat'
+      ) as Clearcoat;
+
+      physicalMaterial = new PhysicalMaterial({
+        alpha: glTFMaterial.getAlpha(),
+        alphaTexture: albedoAlphaTexture,
+        alphaUVTransform: albedoAlphaUVTransform,
+        alphaUVIndex: albedoAlphaUVIndex,
+        alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
+        alphaCutoff: glTFMaterial.getAlphaCutoff(),
+        albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
+        albedoTexture: albedoAlphaTexture,
+        albedoUVTransform: albedoAlphaUVTransform,
+        albedoUVIndex: albedoAlphaUVIndex,
+        metallicFactor: glTFMaterial.getMetallicFactor(),
+        metallicTexture: metallicRoughnessTexture,
+        metallicUVTransform: metallicRoughnessUVTransform,
+        metallicUVIndex: metallicRoughnessUVIndex,
+        specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
+        specularRoughnessTexture: metallicRoughnessTexture,
+        specularRoughnessUVTransform: metallicRoughnessUVTransform,
+        specularRoughnessUVIndex: metallicRoughnessUVIndex,
+        emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
+        emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
+        normalScale: toVec2([
+          glTFMaterial.getNormalScale(),
+          glTFMaterial.getNormalScale()
+        ]),
+        normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
+        normalUVTransform: getUVTransform(glTFMaterial.getNormalTextureInfo()),
+        normalUVIndex: getUVIndex(glTFMaterial.getNormalTextureInfo()),
+        occlusionFactor: glTFMaterial.getOcclusionStrength(),
+        occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture()),
+        occlusionUVTransform: getUVTransform(
+          glTFMaterial.getOcclusionTextureInfo()
+        ),
+        occlusionUVIndex: getUVIndex(glTFMaterial.getOcclusionTextureInfo()),
+        clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
+        clearcoatRoughnessFactor:
+          glTFClearcoat?.getClearcoatRoughnessFactor() || 0,
+        clearcoatTexture:
+          glTFClearcoat?.getClearcoatTexture() !== null
+            ? await toTexture(glTFClearcoat?.getClearcoatTexture())
+            : undefined,
+        clearcoatRoughnessTexture:
+          glTFClearcoat?.getClearcoatRoughnessTexture() !== null
+            ? await toTexture(glTFClearcoat?.getClearcoatRoughnessTexture())
+            : undefined
+      });
+    }
+
+    meshNodes.push(
+      new MeshNode({
+        name: 'glTFMesh',
+        geometry,
+        material: physicalMaterial
+      })
+    );
+  }
+  return meshNodes;
 }

@@ -4,6 +4,7 @@ in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;
 in vec2 v_uv1;
+in vec2 v_uv2;
 
 #define MAX_PUNCTUAL_LIGHTS (3)
 #pragma include <lighting/punctualUniforms>
@@ -23,9 +24,10 @@ out vec4 outputColor;
 #pragma include <materials/alpha_mode>
 
 void main( ) {
-  vec2 uvs[2];
+  vec2 uvs[3];
   uvs[0] = v_uv0;
   uvs[1] = v_uv1;
+  uvs[2] = v_uv2;
 
   PhysicalMaterial material = readPhysicalMaterialFromUniforms( uvs );
 
