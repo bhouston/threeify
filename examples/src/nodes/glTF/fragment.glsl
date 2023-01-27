@@ -35,7 +35,6 @@ void main( ) {
   normal = adjustNormal( tangentToView, material.normal );
   vec3 clearcoatNormal = adjustNormal( tangentToView, material.clearcoatNormal );
 
-
   vec3 outgoingRadiance;
 
   //material.albedo = vec3( 1. );
@@ -52,21 +51,20 @@ void main( ) {
     float dotNL = saturate( dot( directLight.direction, normal ) );
     float dotNV = saturate( dot( viewDirection, normal ) );
 
-  vec3 halfDirection = normalize( directLight.direction + viewDirection );
+    vec3 halfDirection = normalize( directLight.direction + viewDirection );
     float VdotH = saturate( dot( viewDirection, halfDirection ) );
-
 
     vec3 specularF90 = mix( vec3( material.specularFactor ), vec3( 1.0 ), material.metallic );
     vec3 specularF0 = mix( material.specularColor * 0.04, material.albedo, material.metallic );
 
-vec3 clearcoatF = F_Schlick_2( vec3( 0.08 ), vec3( 1.0 ), VdotH ) * material.clearcoatFactor;
+    vec3 clearcoatF = F_Schlick_2( vec3( 0.08 ), vec3( 1.0 ), VdotH ) * material.clearcoatFactor;
 
-// clearcoat
-  outgoingRadiance += directLight.radiance *
+    // clearcoat
+    outgoingRadiance += directLight.radiance *
       clearCoatDotNL *
-      BRDF_Specular_GGX( clearcoatNormal, viewDirection, directLight.direction, vec3(0.08), vec3( 1.0 ), material.clearcoatRoughness ) * material.clearcoatFactor;
+      BRDF_Specular_GGX( clearcoatNormal, viewDirection, directLight.direction, vec3( 0.08 ), vec3( 1.0 ), material.clearcoatRoughness ) * material.clearcoatFactor;
 
-  float reduction = 1.0 - length( clearcoatF );
+    float reduction = 1.0 - length( clearcoatF );
     // specular
     outgoingRadiance += reduction * directLight.radiance *
       dotNL *
