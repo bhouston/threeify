@@ -1,10 +1,9 @@
 import { Color3 } from '../math/Color3';
 import { color3MultiplyByScalar } from '../math/Color3.Functions';
-import { Mat3 } from '../math/Mat3';
 import { Vec2 } from '../math/Vec2';
 import { Vec3 } from '../math/Vec3';
 import { SolidTextures } from '../textures/loaders/SolidTextures';
-import { Texture } from '../textures/Texture';
+import { TextureAccessor } from '../textures/TextureAccessor';
 import { AlphaMode } from './AlphaMode';
 import { Material } from './Material';
 import { MaterialParameters } from './MaterialParameters';
@@ -20,78 +19,66 @@ export interface IPhysicalMaterialProps {
   name?: string;
 
   alpha?: number;
-  alphaTexture?: Texture;
-  alphaUVTransform?: Mat3;
-  alphaUVIndex?: number;
+  alphaTextureAccessor?: TextureAccessor;
   alphaMode?: AlphaMode;
   alphaCutoff?: number;
 
   albedoFactor?: Color3;
-  albedoTexture?: Texture;
-  albedoUVTransform?: Mat3;
-  albedoUVIndex?: number;
+  albedoTextureAccessor?: TextureAccessor;
 
   specularFactor?: number;
-  specularFactorTexture?: Texture;
+  specularFactorTextureAccessor?: TextureAccessor;
 
   specularColor?: Color3;
-  specularColorTexture?: Texture;
+  specularColorTextureAccessor?: TextureAccessor;
 
   specularRoughnessFactor?: number;
-  specularRoughnessTexture?: Texture;
-  specularRoughnessUVTransform?: Mat3;
-  specularRoughnessUVIndex?: number;
+  specularRoughnessTextureAccessor?: TextureAccessor;
 
   metallicFactor?: number;
-  metallicTexture?: Texture;
-  metallicUVTransform?: Mat3;
-  metallicUVIndex?: number;
+  metallicTextureAccessor?: TextureAccessor;
 
   normalScale?: Vec2;
-  normalTexture?: Texture;
-  normalUVTransform?: Mat3;
-  normalUVIndex?: number;
+  normalTextureAccessor?: TextureAccessor;
 
   occlusionFactor?: number;
-  occlusionTexture?: Texture;
-  occlusionUVTransform?: Mat3;
-  occlusionUVIndex?: number;
+  occlusionTextureAccessor?: TextureAccessor;
 
   emissiveFactor?: Color3;
-  emissiveTexture?: Texture;
+  emissiveTextureAccessor?: TextureAccessor;
   emissiveIntensity?: number;
 
   ior?: number;
 
   anisotropy?: number;
-  anisotropyTexture?: Texture;
+  anisotropyTextureAccessor?: TextureAccessor;
   anisotropyDirection?: Vec3;
-  anisotropyDirectionTexture?: Texture;
+  anisotropyDirectionTextureAccessor?: TextureAccessor;
 
   clearcoatFactor?: number;
-  clearcoatTexture?: Texture;
+  clearcoatTextureAccessor?: TextureAccessor;
   clearcoatRoughnessFactor?: number;
-  clearcoatRoughnessTexture?: Texture;
+  clearcoatRoughnessTextureAccessor?: TextureAccessor;
   clearcoatNormalScale?: Vec2;
-  clearcoatNormalTexture?: Texture;
+  clearcoatNormalTextureAccessor?: TextureAccessor;
 
   clearcoatTint?: Color3;
-  clearcoatTintTexture?: Texture;
+  clearcoatTintTextureAccessor?: TextureAccessor;
 
   sheenColorFactor?: Color3;
-  sheenColorTexture?: Texture;
+  sheenColorTextureAccessor?: TextureAccessor;
   sheenRoughnessFactor?: number;
-  sheenRoughnessTexture?: Texture;
+  sheenRoughnessTextureAccessor?: TextureAccessor;
 
   iridescenceFactor?: number;
-  iridescenceTexture?: Texture;
+  iridescenceTextureAccessor?: TextureAccessor;
   iridescenceIor?: number;
   iridescenceThicknessMinimum?: number;
   iridescenceThicknessMaximum?: number;
-  iridescenceThicknessTexture?: Texture;
+  iridescenceThicknessTextureAccessor?: TextureAccessor;
 
   transmissionFactor?: number;
-  transmissionTexture?: Texture;
+  transmissionTextureAccessor?: TextureAccessor;
 
   attenuationDistance?: number;
   attenuationColor?: Color3;
@@ -99,78 +86,66 @@ export interface IPhysicalMaterialProps {
 
 export class PhysicalMaterial extends Material {
   public alpha = 1;
-  public alphaTexture?: Texture;
-  public alphaUVTransform = new Mat3();
-  public alphaUVIndex = 0;
+  public alphaTextureAccessor?: TextureAccessor;
   public alphaMode = AlphaMode.Opaque;
   public alphaCutoff = 0.5;
 
   public albedoFactor = new Color3(1, 1, 1);
-  public albedoTexture?: Texture;
-  public albedoUVTransform = new Mat3();
-  public albedoUVIndex = 0;
+  public albedoTextureAccessor?: TextureAccessor;
 
   public specularFactor = 0.5;
-  public specularFactorTexture?: Texture;
+  public specularFactorTextureAccessor?: TextureAccessor;
 
   public specularColor = new Color3(1, 1, 1);
-  public specularColorTexture?: Texture;
+  public specularColorTextureAccessor?: TextureAccessor;
 
   public specularRoughnessFactor = 0.5;
-  public specularRoughnessTexture?: Texture;
-  public specularRoughnessUVTransform = new Mat3();
-  public specularRoughnessUVIndex = 0;
+  public specularRoughnessTextureAccessor?: TextureAccessor;
 
   public metallicFactor = 1;
-  public metallicTexture?: Texture;
-  public metallicUVTransform = new Mat3();
-  public metallicUVIndex = 0;
+  public metallicTextureAccessor?: TextureAccessor;
 
   public normalScale = new Vec2(1, 1);
-  public normalTexture?: Texture;
-  public normalUVTransform = new Mat3();
-  public normalUVIndex = 0;
+  public normalTextureAccessor?: TextureAccessor;
 
   public occlusionFactor = 1;
-  public occlusionTexture?: Texture;
-  public occlusionUVTransform = new Mat3();
-  public occlusionUVIndex = 0;
+  public occlusionTextureAccessor?: TextureAccessor;
 
   public emissiveFactor = new Color3(0, 0, 0);
-  public emissiveTexture?: Texture;
+  public emissiveTextureAccessor?: TextureAccessor;
   public emissiveIntensity = 1;
 
   public ior = 1.5;
 
   public anisotropy = 0;
-  public anisotropyTexture?: Texture;
+  public anisotropyTextureAccessor?: TextureAccessor;
   public anisotropyDirection = new Vec3(0, 0, 1);
-  public anisotropyDirectionTexture?: Texture;
+  public anisotropyDirectionTextureAccessor?: TextureAccessor;
 
   public clearcoatFactor = 0;
-  public clearcoatTexture?: Texture;
+  public clearcoatTextureAccessor?: TextureAccessor;
   public clearcoatRoughnessFactor = 0;
-  public clearcoatRoughnessTexture?: Texture;
+  public clearcoatRoughnessTextureAccessor?: TextureAccessor;
   public clearcoatNormalScale = new Vec2(1, 1);
-  public clearcoatNormalTexture?: Texture;
+  public clearcoatNormalTextureAccessor?: TextureAccessor;
 
   public clearcoatTint = new Color3(1, 1, 1);
-  public clearcoatTintTexture?: Texture;
+  public clearcoatTintTextureAccessor?: TextureAccessor;
 
   public sheenColorFactor = new Color3(0, 0, 0);
-  public sheenColorTexture?: Texture;
+  public sheenColorTextureAccessor?: TextureAccessor;
   public sheenRoughnessFactor = 1;
-  public sheenRoughnessTexture?: Texture;
+  public sheenRoughnessTextureAccessor?: TextureAccessor;
 
   public iridescenceFactor = 0;
-  public iridescenceTexture?: Texture;
+  public iridescenceTextureAccessor?: TextureAccessor;
   public iridescenceIor = 1.5;
   public iridescenceThicknessMinimum = 0;
   public iridescenceThicknessMaximum = 0;
-  public iridescenceThicknessTexture?: Texture;
+  public iridescenceThicknessTextureAccessor?: TextureAccessor;
 
   public transmissionFactor = 0;
-  public transmissionTexture?: Texture;
+  public transmissionTextureAccessor?: TextureAccessor;
 
   public attenuationDistance = Number.POSITIVE_INFINITY;
   public attenuationColor = new Color3(1, 1, 1);
@@ -183,121 +158,87 @@ export class PhysicalMaterial extends Material {
     });
 
     if (props.alpha !== undefined) this.alpha = props.alpha;
-    this.alphaTexture = props.alphaTexture || SolidTextures.White;
-    this.alphaUVTransform.copy(props.alphaUVTransform || this.alphaUVTransform);
-    this.alphaUVIndex =
-      props.alphaUVIndex !== undefined ? props.alphaUVIndex : this.alphaUVIndex;
+    this.alphaTextureAccessor = props.alphaTextureAccessor;
     if (props.alphaMode !== undefined) this.alphaMode = props.alphaMode;
     if (props.alphaCutoff !== undefined) this.alphaCutoff = props.alphaCutoff;
 
     this.albedoFactor.copy(props.albedoFactor || this.albedoFactor);
-    this.albedoTexture = props.albedoTexture;
-    this.albedoUVTransform.copy(
-      props.albedoUVTransform || this.albedoUVTransform
-    );
-    this.albedoUVIndex =
-      props.albedoUVIndex !== undefined
-        ? props.albedoUVIndex
-        : this.albedoUVIndex;
+    this.albedoTextureAccessor = props.albedoTextureAccessor;
 
     if (props.specularFactor !== undefined)
       this.specularFactor = props.specularFactor;
-    this.specularFactorTexture = props.specularFactorTexture;
+    this.specularFactorTextureAccessor = props.specularFactorTextureAccessor;
 
     this.specularColor.copy(props.specularColor || this.specularColor);
-    this.specularColorTexture = props.specularColorTexture;
+    this.specularColorTextureAccessor = props.specularColorTextureAccessor;
 
     if (props.specularRoughnessFactor !== undefined)
       this.specularRoughnessFactor = props.specularRoughnessFactor;
-    this.specularRoughnessTexture = props.specularRoughnessTexture;
-    this.specularRoughnessUVTransform.copy(
-      props.specularRoughnessUVTransform || this.specularRoughnessUVTransform
-    );
-    this.specularRoughnessUVIndex =
-      props.specularRoughnessUVIndex !== undefined
-        ? props.specularRoughnessUVIndex
-        : this.specularRoughnessUVIndex;
+    this.specularRoughnessTextureAccessor =
+      props.specularRoughnessTextureAccessor;
 
     if (props.metallicFactor !== undefined)
       this.metallicFactor = props.metallicFactor;
-    this.metallicTexture = props.metallicTexture;
-    this.metallicUVTransform.copy(
-      props.metallicUVTransform || this.metallicUVTransform
-    );
-    this.metallicUVIndex =
-      props.metallicUVIndex !== undefined
-        ? props.metallicUVIndex
-        : this.metallicUVIndex;
+    this.metallicTextureAccessor = props.metallicTextureAccessor;
 
     this.normalScale.copy(props.normalScale || this.normalScale);
-    this.normalTexture = props.normalTexture;
-    this.normalUVTransform.copy(
-      props.normalUVTransform || this.normalUVTransform
-    );
-    this.normalUVIndex =
-      props.normalUVIndex !== undefined
-        ? props.normalUVIndex
-        : this.normalUVIndex;
+    this.normalTextureAccessor = props.normalTextureAccessor;
 
     if (props.occlusionFactor !== undefined)
       this.occlusionFactor = props.occlusionFactor;
-    this.occlusionTexture = props.occlusionTexture;
-    this.occlusionUVTransform.copy(
-      props.occlusionUVTransform || this.occlusionUVTransform
-    );
-    this.occlusionUVIndex =
-      props.occlusionUVIndex !== undefined
-        ? props.occlusionUVIndex
-        : this.occlusionUVIndex;
+    this.occlusionTextureAccessor = props.occlusionTextureAccessor;
 
     this.emissiveFactor.copy(props.emissiveFactor || this.emissiveFactor);
-    this.emissiveTexture = props.emissiveTexture;
+    this.emissiveTextureAccessor = props.emissiveTextureAccessor;
     if (props.emissiveIntensity !== undefined)
       this.emissiveIntensity = props.emissiveIntensity;
 
     if (props.ior !== undefined) this.ior = props.ior;
 
     if (props.anisotropy !== undefined) this.anisotropy = props.anisotropy;
-    this.anisotropyTexture = props.anisotropyTexture;
+    this.anisotropyTextureAccessor = props.anisotropyTextureAccessor;
     this.anisotropyDirection.copy(
       props.anisotropyDirection || this.anisotropyDirection
     );
-    this.anisotropyDirectionTexture = props.anisotropyDirectionTexture;
+    this.anisotropyDirectionTextureAccessor =
+      props.anisotropyDirectionTextureAccessor;
 
     if (props.clearcoatFactor !== undefined)
       this.clearcoatFactor = props.clearcoatFactor;
-    this.clearcoatTexture = props.clearcoatTexture;
+    this.clearcoatTextureAccessor = props.clearcoatTextureAccessor;
     if (props.clearcoatRoughnessFactor !== undefined)
       this.clearcoatRoughnessFactor = props.clearcoatRoughnessFactor;
-    this.clearcoatRoughnessTexture = props.clearcoatRoughnessTexture;
+    this.clearcoatRoughnessTextureAccessor =
+      props.clearcoatRoughnessTextureAccessor;
     this.clearcoatNormalScale.copy(
       props.clearcoatNormalScale || this.clearcoatNormalScale
     );
-    this.clearcoatNormalTexture = props.clearcoatNormalTexture;
+    this.clearcoatNormalTextureAccessor = props.clearcoatNormalTextureAccessor;
 
     this.clearcoatTint.copy(props.clearcoatTint || this.clearcoatTint);
-    this.clearcoatTintTexture = props.clearcoatTintTexture;
+    this.clearcoatTintTextureAccessor = props.clearcoatTintTextureAccessor;
 
     this.sheenColorFactor.copy(props.sheenColorFactor || this.sheenColorFactor);
-    this.sheenColorTexture = props.sheenColorTexture;
+    this.sheenColorTextureAccessor = props.sheenColorTextureAccessor;
     this.sheenRoughnessFactor =
       props.sheenRoughnessFactor || this.sheenRoughnessFactor;
-    this.sheenRoughnessTexture = props.sheenRoughnessTexture;
+    this.sheenRoughnessTextureAccessor = props.sheenRoughnessTextureAccessor;
 
     if (props.iridescenceFactor !== undefined)
       this.iridescenceFactor = props.iridescenceFactor;
-    this.iridescenceTexture = props.iridescenceTexture;
+    this.iridescenceTextureAccessor = props.iridescenceTextureAccessor;
     if (props.iridescenceIor !== undefined)
       this.iridescenceIor = props.iridescenceIor;
     if (props.iridescenceThicknessMinimum !== undefined)
       this.iridescenceThicknessMinimum = props.iridescenceThicknessMinimum;
     if (props.iridescenceThicknessMaximum !== undefined)
       this.iridescenceThicknessMaximum = props.iridescenceThicknessMaximum;
-    this.iridescenceThicknessTexture = props.iridescenceThicknessTexture;
+    this.iridescenceThicknessTextureAccessor =
+      props.iridescenceThicknessTextureAccessor;
 
     if (props.transmissionFactor !== undefined)
       this.transmissionFactor = props.transmissionFactor;
-    this.transmissionTexture = props.transmissionTexture;
+    this.transmissionTextureAccessor = props.transmissionTextureAccessor;
 
     if (props.attenuationDistance !== undefined)
       this.attenuationDistance = props.attenuationDistance;
@@ -307,86 +248,107 @@ export class PhysicalMaterial extends Material {
   getParameters(): MaterialParameters {
     return {
       alpha: this.alpha,
-      alphaTexture: this.alphaTexture || SolidTextures.White,
-      alphaUVTransform: this.alphaUVTransform,
-      alphaUVIndex: this.alphaUVIndex,
+      alphaTextureAccessor:
+        this.alphaTextureAccessor || new TextureAccessor(SolidTextures.White),
       alphaMode: this.alphaMode,
       alphaCutoff: this.alphaCutoff,
 
       albedoFactor: this.albedoFactor,
-      albedoTexture: this.albedoTexture || SolidTextures.White,
-      albedoUVTransform: this.albedoUVTransform,
-      albedoUVIndex: this.albedoUVIndex,
+      albedoTextureAccessor:
+        this.albedoTextureAccessor || new TextureAccessor(SolidTextures.White),
 
       specularFactor: this.specularFactor,
-      specularFactorTexture: this.specularFactorTexture || SolidTextures.White,
+      specularFactorTextureAccessor:
+        this.specularFactorTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       specularColor: this.specularColor,
-      specularColorTexture: this.specularColorTexture || SolidTextures.White,
+      specularColorTextureAccessor:
+        this.specularColorTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       specularRoughnessFactor: this.specularRoughnessFactor,
-      specularRoughnessTexture:
-        this.specularRoughnessTexture || SolidTextures.White,
-      specularRoughnessUVTransform: this.specularRoughnessUVTransform,
-      specularRoughnessUVIndex: this.specularRoughnessUVIndex,
+      specularRoughnessTextureAccessor:
+        this.specularRoughnessTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       metallicFactor: this.metallicFactor,
-      metallicTexture: this.metallicTexture || SolidTextures.White,
-      metallicUVTransform: this.metallicUVTransform,
-      metallicUVIndex: this.metallicUVIndex,
+      metallicTextureAccessor:
+        this.metallicTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       normalScale: this.normalScale,
-      normalTexture: this.normalTexture || SolidTextures.FlatNormal,
-      normalUVTransform: this.normalUVTransform,
-      normalUVIndex: this.normalUVIndex,
+      normalTextureAccessor:
+        this.normalTextureAccessor ||
+        new TextureAccessor(SolidTextures.FlatNormal),
 
       occlusionFactor: this.occlusionFactor,
-      occlusionTexture: this.occlusionTexture || SolidTextures.White,
-      occlusionUVTransform: this.occlusionUVTransform,
-      occlusionUVIndex: this.occlusionUVIndex,
+      occlusionTextureAccessor:
+        this.occlusionTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       emissiveFactor: color3MultiplyByScalar(
         this.emissiveFactor,
         this.emissiveIntensity
       ),
-      emissiveTexture: this.emissiveTexture || SolidTextures.White,
+      emissiveTextureAccessor:
+        this.emissiveTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       ior: this.ior,
 
       anisotropy: this.anisotropy,
-      anisotropyTexture: this.anisotropyTexture || SolidTextures.White,
+      anisotropyTextureAccessor:
+        this.anisotropyTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
       anisotropyDirection: this.anisotropyDirection,
-      anisotropyDirectionTexture:
-        this.anisotropyDirectionTexture || SolidTextures.NeutralDirection,
+      anisotropyDirectionTextureAccessor:
+        this.anisotropyDirectionTextureAccessor ||
+        new TextureAccessor(SolidTextures.NeutralDirection),
 
       clearcoatFactor: this.clearcoatFactor,
-      clearcoatTexture: this.clearcoatTexture || SolidTextures.White,
+      clearcoatTextureAccessor:
+        this.clearcoatTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
       clearcoatRoughnessFactor: this.clearcoatRoughnessFactor,
-      clearcoatRoughnessTexture:
-        this.clearcoatRoughnessTexture || SolidTextures.White,
+      clearcoatRoughnessTextureAccessor:
+        this.clearcoatRoughnessTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
       clearcoatNormalScale: this.clearcoatNormalScale,
-      clearcoatNormalTexture:
-        this.clearcoatNormalTexture || SolidTextures.FlatNormal,
+      clearcoatNormalTextureAccessor:
+        this.clearcoatNormalTextureAccessor ||
+        new TextureAccessor(SolidTextures.FlatNormal),
 
       clearcoatTint: this.clearcoatTint,
-      clearcoatTintTexture: this.clearcoatTintTexture || SolidTextures.White,
+      clearcoatTintTextureAccessor:
+        this.clearcoatTintTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       sheenColorFactor: this.sheenColorFactor,
-      sheenColorTexture: this.sheenColorTexture || SolidTextures.White,
+      sheenColorTextureAccessor:
+        this.sheenColorTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
       sheenRoughnessFactor: this.sheenRoughnessFactor,
-      sheenRoughnessTexture: this.sheenRoughnessTexture || SolidTextures.White,
+      sheenRoughnessTexture:
+        this.sheenRoughnessTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       iridescenceFactor: this.iridescenceFactor,
-      iridescenceTexture: this.iridescenceTexture || SolidTextures.White,
+      iridescenceTextureAccessor:
+        this.iridescenceTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       iridescenceIor: this.iridescenceIor,
       iridescenceThicknessMinimum: this.iridescenceThicknessMinimum,
       iridescenceThicknessMaximum: this.iridescenceThicknessMaximum,
-      iridescenceThicknessTexture:
-        this.iridescenceThicknessTexture || SolidTextures.White,
+      iridescenceThicknessTextureAccessor:
+        this.iridescenceThicknessTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       transmissionFactor: this.transmissionFactor,
-      transmissionTexture: this.transmissionTexture || SolidTextures.White,
+      transmissionTextureAccessor:
+        this.transmissionTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       attenuationDistance: this.attenuationDistance,
       attenuationColor: this.attenuationColor

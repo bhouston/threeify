@@ -6,6 +6,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureAccessor,
   Vec3
 } from '@threeify/core';
 import {
@@ -41,7 +42,7 @@ async function init(): Promise<void> {
     geometry,
     material: new PhysicalMaterial({
       albedoFactor: new Color3(1, 1, 1),
-      albedoTexture: texture,
+      albedoTextureAccessor: new TextureAccessor(texture),
       specularRoughnessFactor: 0,
       metallicFactor: 1
     })

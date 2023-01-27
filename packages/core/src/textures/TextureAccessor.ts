@@ -1,18 +1,22 @@
-import { composeMat3 } from '../math/Mat3.Functions.js';
+import {
+  IMaterialParameterProvider,
+  MaterialParameters
+} from '../materials/MaterialParameters.js';
 import { Mat3 } from '../math/Mat3.js';
-import { Vec2 } from '../math/Vec2.js';
 import { Texture } from './Texture.js';
 
-export class TextureAccessor {
+export class TextureAccessor implements IMaterialParameterProvider {
   constructor(
-    public texture: Texture | undefined = undefined,
-    public uvIndex = 0,
-    public uvTranslation: Vec2 = new Vec2(),
-    public uvRotation = 0,
-    public uvScale: Vec2 = new Vec2(1, 1)
+    public texture: Texture,
+    public uvTransform = new Mat3(),
+    public uvIndex = 0
   ) {}
 
-  get uvTransform(): Mat3 {
-    return composeMat3(this.uvTranslation, this.uvRotation, this.uvScale);
+  public getParameters(): MaterialParameters {
+    return {
+      texture: this.texture,
+      uvTransform: this.uvTransform,
+      uvIndex: this.uvIndex
+    };
   }
 }

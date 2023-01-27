@@ -171,7 +171,8 @@ export class Program implements IResource {
       }
 
       const uniform = new ProgramUniform(this, i, uniformBlock, blockOffset);
-      this.#uniforms[uniform.variableName] = uniform;
+
+      this.#uniforms[uniform.identifier] = uniform;
 
       if (numTextureUnits(uniform.uniformType) > 0) {
         uniform.textureUnit = textureUnitCount;

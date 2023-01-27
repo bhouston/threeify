@@ -9,7 +9,12 @@ export type MaterialPropertyValue =
   | Color4
   | Mat3
   | Mat4
-  | Texture;
+  | Texture
+  | IMaterialParameterProvider;
+
+export interface IMaterialParameterProvider {
+  getParameters(): MaterialParameters;
+}
 
 export type MaterialParameters = {
   [parameterName: string]: MaterialPropertyValue;

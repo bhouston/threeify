@@ -22,6 +22,7 @@ import {
   PhysicalMaterial,
   Quat,
   Texture,
+  TextureAccessor,
   Vec2,
   Vec3
 } from '@threeify/core';
@@ -138,6 +139,17 @@ function getUVIndex(textureInfo: TextureInfo | null): number {
   return uvIndex;
 }
 
+async function getTextureAccessor(
+  glTFTexture: GLTFTexture | null,
+  textureInfo: TextureInfo | null
+): Promise<TextureAccessor | undefined> {
+  const texture = await toTexture(glTFTexture);
+  if (texture === undefined) return undefined;
+  const uvTransform = getUVTransform(textureInfo);
+  const uvIndex = getUVIndex(textureInfo);
+  return new TextureAccessor(texture, uvTransform, uvIndex);
+}
+
 async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
   const meshNodes: MeshNode[] = [];
 
@@ -180,74 +192,73 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
     if (glTFMaterial !== null) {
       // convert to simultaneously resolving promises
 
-      const metallicRoughnessTexture = await toTexture(
-        glTFMaterial.getMetallicRoughnessTexture()
-      );
-      const metallicRoughnessUVTransform = getUVTransform(
+      const metallicRoughnessTextureAccessor = await getTextureAccessor(
+        glTFMaterial.getMetallicRoughnessTexture(),
         glTFMaterial.getMetallicRoughnessTextureInfo()
       );
-      const metallicRoughnessUVIndex = getUVIndex(
-        glTFMaterial.getMetallicRoughnessTextureInfo()
-      );
-      const albedoAlphaTexture = await toTexture(
-        glTFMaterial.getBaseColorTexture()
-      );
-      const albedoAlphaUVTransform = getUVTransform(
+      const albedoAlphaTextureAccessor = await getTextureAccessor(
+        glTFMaterial.getBaseColorTexture(),
         glTFMaterial.getBaseColorTextureInfo()
       );
-      const albedoAlphaUVIndex = getUVIndex(
-        glTFMaterial.getBaseColorTextureInfo()
+      const emissiveTextureAccessor = await getTextureAccessor(
+        glTFMaterial.getEmissiveTexture(),
+        glTFMaterial.getEmissiveTextureInfo()
+      );
+      const normalTextureAccessor = await getTextureAccessor(
+        glTFMaterial.getNormalTexture(),
+        glTFMaterial.getNormalTextureInfo()
+      );
+
+      const occlusionTextureAccessor = await getTextureAccessor(
+        glTFMaterial.getOcclusionTexture(),
+        glTFMaterial.getOcclusionTextureInfo()
       );
 
       const glTFClearcoat = glTFMaterial.getExtension(
         'KHR_materials_clearcoat'
       ) as Clearcoat;
 
+      const clearcoatTextureAccessor = await getTextureAccessor(
+        glTFClearcoat?.getClearcoatTexture() || null,
+        glTFClearcoat?.getClearcoatTextureInfo() || null
+      );
+      const clearcoatRoughnessTextureAccessor = await getTextureAccessor(
+        glTFClearcoat?.getClearcoatRoughnessTexture() || null,
+        glTFClearcoat?.getClearcoatRoughnessTextureInfo() || null
+      );
+      const clearcoatNormalTextureAccessor = await getTextureAccessor(
+        glTFClearcoat?.getClearcoatNormalTexture() || null,
+        glTFClearcoat?.getClearcoatNormalTextureInfo() || null
+      );
+
+      console.log('loaded textures?');
+
       physicalMaterial = new PhysicalMaterial({
         alpha: glTFMaterial.getAlpha(),
-        alphaTexture: albedoAlphaTexture,
-        alphaUVTransform: albedoAlphaUVTransform,
-        alphaUVIndex: albedoAlphaUVIndex,
+        alphaTextureAccessor: albedoAlphaTextureAccessor,
         alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
         alphaCutoff: glTFMaterial.getAlphaCutoff(),
         albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
-        albedoTexture: albedoAlphaTexture,
-        albedoUVTransform: albedoAlphaUVTransform,
-        albedoUVIndex: albedoAlphaUVIndex,
+        albedoTextureAccessor: albedoAlphaTextureAccessor,
         metallicFactor: glTFMaterial.getMetallicFactor(),
-        metallicTexture: metallicRoughnessTexture,
-        metallicUVTransform: metallicRoughnessUVTransform,
-        metallicUVIndex: metallicRoughnessUVIndex,
+        metallicTextureAccessor: metallicRoughnessTextureAccessor,
         specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
-        specularRoughnessTexture: metallicRoughnessTexture,
-        specularRoughnessUVTransform: metallicRoughnessUVTransform,
-        specularRoughnessUVIndex: metallicRoughnessUVIndex,
+        specularRoughnessTextureAccessor: metallicRoughnessTextureAccessor,
         emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
-        emissiveTexture: await toTexture(glTFMaterial.getEmissiveTexture()),
+        emissiveTextureAccessor: emissiveTextureAccessor,
         normalScale: toVec2([
           glTFMaterial.getNormalScale(),
           glTFMaterial.getNormalScale()
         ]),
-        normalTexture: await toTexture(glTFMaterial.getNormalTexture()),
-        normalUVTransform: getUVTransform(glTFMaterial.getNormalTextureInfo()),
-        normalUVIndex: getUVIndex(glTFMaterial.getNormalTextureInfo()),
+        normalTextureAccessor: normalTextureAccessor,
         occlusionFactor: glTFMaterial.getOcclusionStrength(),
-        occlusionTexture: await toTexture(glTFMaterial.getOcclusionTexture()),
-        occlusionUVTransform: getUVTransform(
-          glTFMaterial.getOcclusionTextureInfo()
-        ),
-        occlusionUVIndex: getUVIndex(glTFMaterial.getOcclusionTextureInfo()),
+        occlusionTextureAccessor: occlusionTextureAccessor,
         clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
         clearcoatRoughnessFactor:
           glTFClearcoat?.getClearcoatRoughnessFactor() || 0,
-        clearcoatTexture:
-          glTFClearcoat?.getClearcoatTexture() !== null
-            ? await toTexture(glTFClearcoat?.getClearcoatTexture())
-            : undefined,
-        clearcoatRoughnessTexture:
-          glTFClearcoat?.getClearcoatRoughnessTexture() !== null
-            ? await toTexture(glTFClearcoat?.getClearcoatRoughnessTexture())
-            : undefined
+        clearcoatTextureAccessor: clearcoatTextureAccessor,
+        clearcoatRoughnessTextureAccessor: clearcoatRoughnessTextureAccessor,
+        clearcoatNormalTextureAccessor: clearcoatNormalTextureAccessor
       });
     }
 

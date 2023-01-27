@@ -1,5 +1,7 @@
 precision highp float;
 
+#define NUM_UV_CHANNELS 1
+
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
 in vec2 v_uv0;

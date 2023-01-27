@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math/math>
+
 // In the future, I could likely pack these ints a bit, but for now this seems okay:
 //  int uvIndex : 2 ( up to 4 uv channels )
 //  int uvTransformIndex : 4 ( up to 16 uv transforms )
@@ -8,17 +10,25 @@
 // Total : 12 bits.( one single int is sufficient, instead of 4 )
 
 struct TextureAccessor {
+    sampler2D texture;
+    mat3 uvTransform;
     int uvIndex; // 0, 1, 2
-    int uvTransformIndex;
-    int textureIndex;
-        // int textureEncoding; - let's try to avoid implementing this for now.
-    int textureComponent; // not always used.
+    // int textureEncoding; - let's try to avoid implementing this for now.
 };
 
-vec4 sampleTexture( const TextureAccessor textureAccessor, const vec2 uvs[], const mat3 uvTransforms[], const sampler textures[] ) {
-    return texture( textures[textureAccessor.textureIndex], uvTransforms[textureAccessor.uvTransformIndex] * uvs[textureAccessor.uvIndex] );
+
+vec4 sampleTexture( const TextureAccessor textureAccessor, const vec2 uvs[NUM_UV_CHANNELS] ) {
+    return texture( textureAccessor.texture,  mat3TransformUV( textureAccessor.uvTransform, uvs[textureAccessor.uvIndex] ) );
 }
 
-float sampleTextureComponent( const TextureAccessor textureAccessor, const vec2 uvs[], const mat3 uvTransforms[], const sampler textures[] ) {
-    return sampleTexture( textureAccessor, uvs, uvTransforms, textures )[textureAccessor.textureComponent];
+struct ComponentTextureAccessor {
+    sampler2D texture;
+    mat3 uvTransform;
+    int uvIndex; // 0, 1, 2
+    int textureComponent;
+    // int textureEncoding; - let's try to avoid implementing this for now.
+};
+
+float sampleTextureComponent( const ComponentTextureAccessor textureAccessor, const vec2 uvs[NUM_UV_CHANNELS] ) {
+    return texture( textureAccessor.texture, mat3TransformUV( textureAccessor.uvTransform, uvs[textureAccessor.uvIndex] ) )[textureAccessor.textureComponent];
 }

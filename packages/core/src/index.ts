@@ -60,6 +60,7 @@ export * from './materials/PhysicalMaterial.js';
 export * from './materials/ShaderMaterial.js';
 export * from './materials/PhysicalMaterial.js';
 export * from './materials/AlphaMode.js';
+export * from './materials/MaterialParameters.js';
 
 export * from './math/Box2.js';
 export * from './math/Box2.Functions.js';
