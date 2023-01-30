@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
+import { Box3, box3Empty } from '@threeify/vector-math';
+
 import { generateUUID } from '../core/generateUuid.js';
-import { box3Empty } from '../math/Box3.Functions.js';
-import { Box3 } from '../math/Box3.js';
 import { PrimitiveType } from '../renderers/webgl/buffers/PrimitiveType.js';
 import { Attribute } from './Attribute.js';
 import { positionAttributeToBoundingBox } from './Geometry.Functions.js';

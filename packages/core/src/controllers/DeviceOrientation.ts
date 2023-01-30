@@ -1,13 +1,15 @@
-import { IDisposable } from '../core/types.js';
-import { Euler3, EulerOrder3 } from '../math/Euler3.js';
-import { degToRad } from '../math/Functions.js';
 import {
   angleAxisToQuat,
+  degToRad,
+  Euler3,
   euler3ToQuat,
-  quatMultiply
-} from '../math/Quat.Functions.js';
-import { Quat } from '../math/Quat.js';
-import { Vec3 } from '../math/Vec3.js';
+  EulerOrder3,
+  Quat,
+  quatMultiply,
+  Vec3
+} from '@threeify/vector-math';
+
+import { IDisposable } from '../core/types.js';
 
 const zAxis = new Vec3(0, 0, 1);
 // - PI/2 around the x-axis

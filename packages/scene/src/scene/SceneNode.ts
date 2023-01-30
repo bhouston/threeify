@@ -1,12 +1,5 @@
-import {
-  Box3,
-  generateUUID,
-  IIdentifiable,
-  IVersionable,
-  Mat4,
-  Quat,
-  Vec3
-} from '@threeify/core';
+import { generateUUID, IIdentifiable, IVersionable } from '@threeify/core';
+import { Box3, Mat4, Quat, Vec3 } from '@threeify/vector-math';
 
 export interface ISceneNodeProps {
   id?: string;

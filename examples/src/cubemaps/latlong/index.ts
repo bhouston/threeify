@@ -4,16 +4,18 @@ import {
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromEquirectangularTexture,
-  Mat4,
-  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
+  Texture
+} from '@threeify/core';
+import {
+  Mat4,
+  mat4PerspectiveFov,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

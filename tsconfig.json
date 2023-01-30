@@ -22,6 +22,7 @@
   ],
   "references": [
     { "path": "./packages/shader-transpiler" },
+    { "path": "./packages/vector-math" },
     { "path": "./packages/core" },
     { "path": "./packages/scene" },
     { "path": "./packages/layer-compositor" },

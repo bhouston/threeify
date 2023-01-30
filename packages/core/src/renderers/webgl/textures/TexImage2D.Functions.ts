@@ -1,6 +1,7 @@
+import { Vec2 } from '@threeify/vector-math';
+
 import { passGeometry } from '../../../geometry/primitives/passGeometry.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import { Vec2 } from '../../../math/Vec2.js';
 import {
   cubeFaceTargets,
   CubeMapTexture

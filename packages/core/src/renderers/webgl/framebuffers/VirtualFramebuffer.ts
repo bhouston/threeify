@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
+import { Box2, Vec2 } from '@threeify/vector-math';
+
 import { IDisposable } from '../../../core/types.js';
-import { Box2 } from '../../../math/Box2.js';
-import { Vec2 } from '../../../math/Vec2.js';
 import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';

@@ -1,23 +1,25 @@
 import {
+  fetchOBJ,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  transformGeometry
+} from '@threeify/core';
+import {
   Color3,
   color3MultiplyByScalar,
   Euler3,
   euler3ToMat4,
   EulerOrder3,
-  fetchOBJ,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
   Mat4,
   mat4Multiply,
   mat4PerspectiveFov,
-  renderBufferGeometry,
-  RenderingContext,
   scale3ToMat4,
-  ShaderMaterial,
-  transformGeometry,
   translation3ToMat4,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

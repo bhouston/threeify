@@ -1,26 +1,42 @@
-import { hashFloat3 } from '../core/hash';
+import { hashFloat4 } from './utils/hash.js';
 
-export class Vec3 {
-  static readonly NUM_COMPONENTS = 3;
+export enum EulerOrder3 {
+  XYZ,
+  XZY,
+  YXZ,
+  YZX,
+  ZYX,
+  ZXY,
+  Default = XYZ
+}
 
-  constructor(public x = 0, public y = 0, public z = 0) {}
+export type Euler3JSON = number[];
+
+export class Euler3 {
+  constructor(
+    public x = 0,
+    public y = 0,
+    public z = 0,
+    public order: EulerOrder3 = EulerOrder3.XYZ
+  ) {}
 
   getHashCode(): number {
-    return hashFloat3(this.x, this.y, this.z);
+    return hashFloat4(this.x, this.y, this.z, this.order as number);
   }
 
-  clone(result = new Vec3()): Vec3 {
-    return result.set(this.x, this.y, this.z);
+  clone(result = new Euler3()): Euler3 {
+    return result.set(this.x, this.y, this.z, this.order);
   }
 
-  copy(v: Vec3): this {
-    return this.set(v.x, v.y, v.z);
+  copy(v: Euler3): this {
+    return this.set(v.x, v.y, v.z, v.order);
   }
 
-  set(x: number, y: number, z: number): this {
+  set(x: number, y: number, z: number, order: EulerOrder3): this {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.order = order;
     return this;
   }
 

@@ -1,18 +1,19 @@
-import { makeVec3View } from '../math/arrays/PrimitiveView.js';
-import { box3Empty, box3ExpandByPoint3 } from '../math/Box3.Functions.js';
-import { Box3 } from '../math/Box3.js';
-import { Mat4 } from '../math/Mat4.js';
 import {
+  Box3,
+  box3Empty,
+  box3ExpandByPoint3,
+  makeVec3View,
+  Mat4,
   mat4TransformNormal3,
-  mat4TransformVec3
-} from '../math/Vec3.Functions.js';
-import {
+  mat4TransformVec3,
+  PrimitiveView,
+  Vec3,
   vec3Add,
   vec3Cross,
   vec3Normalize,
   vec3Subtract
-} from '../math/Vec3.Functions.js';
-import { Vec3 } from '../math/Vec3.js';
+} from '@threeify/vector-math';
+
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';
 import { Geometry } from './Geometry.js';
@@ -97,8 +98,8 @@ export function computeVertexNormals(geometry: Geometry): void {
 
   // reset existing normals to zero
 
-  const positions = makeVec3View(positionAttribute);
-  const normals = makeVec3View(normalAttribute);
+  const positions = makeVec3ViewFromAttribute(positionAttribute);
+  const normals = makeVec3ViewFromAttribute(normalAttribute);
 
   normals.clear();
 
@@ -170,7 +171,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
   if (positionAttribute === undefined) {
     throw new Error('missing position attribute');
   }
-  const positions = makeVec3View(positionAttribute);
+  const positions = makeVec3ViewFromAttribute(positionAttribute);
 
   const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
@@ -181,7 +182,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
 
   const normalAttribute = geometry.attributes.normal;
   if (normalAttribute !== undefined) {
-    const normals = makeVec3View(normalAttribute);
+    const normals = makeVec3ViewFromAttribute(normalAttribute);
     for (let i = 0; i < normals.count; i++) {
       normals.get(i, v);
       mat4TransformNormal3(m, v, v);
@@ -197,7 +198,7 @@ export function positionAttributeToBoundingBox(
   if (positionAttribute === undefined) {
     throw new Error('missing position attribute');
   }
-  const positions = makeVec3View(positionAttribute);
+  const positions = makeVec3ViewFromAttribute(positionAttribute);
 
   box3Empty(result);
   const v = new Vec3();
@@ -209,4 +210,12 @@ export function positionAttributeToBoundingBox(
 
 export function geometryToBoundingBox(geometry: Geometry): Box3 {
   return positionAttributeToBoundingBox(geometry.attributes.position);
+}
+
+function makeVec3ViewFromAttribute(attribute: Attribute): PrimitiveView<Vec3> {
+  return makeVec3View(
+    attribute.attributeData.arrayBuffer,
+    attribute.bytesPerVertex / 4,
+    attribute.byteOffset / 4
+  );
 }

@@ -1,4 +1,3 @@
-import { Attribute } from '../../geometry/Attribute.js';
 import { mat3FromArray, mat3ToArray } from '../Mat3.Functions.js';
 import { Mat3 } from '../Mat3.js';
 import { mat4FromArray, mat4ToArray } from '../Mat4.Functions.js';
@@ -10,7 +9,7 @@ import { Vec2 } from '../Vec2.js';
 import { vec3FromArray, vec3ToArray } from '../Vec3.Functions.js';
 import { Vec3 } from '../Vec3.js';
 
-type DataArray = Attribute | ArrayBuffer | Float32Array;
+type DataArray = ArrayBuffer | Float32Array;
 
 export class PrimitiveView<PrimitiveType> {
   readonly floatArray: Float32Array;
@@ -32,21 +31,7 @@ export class PrimitiveView<PrimitiveType> {
       p: PrimitiveType
     ) => void
   ) {
-    if (dataArray instanceof Attribute) {
-      if (this.floatStride >= 0) {
-        throw new Error(
-          'can not specify explicit byteStride when using Attribute argument'
-        );
-      }
-      if (this.floatOffset >= 0) {
-        throw new Error(
-          'can not specify explicit byteOffset when using Attribute argument'
-        );
-      }
-      this.floatOffset = dataArray.byteOffset / 4;
-      this.floatStride = dataArray.vertexStride / 4;
-      this.floatArray = new Float32Array(dataArray.attributeData.arrayBuffer);
-    } else if (dataArray instanceof Float32Array) {
+    if (dataArray instanceof Float32Array) {
       this.floatArray = dataArray;
     } else if (dataArray instanceof ArrayBuffer) {
       this.floatArray = new Float32Array(dataArray);

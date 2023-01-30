@@ -6,14 +6,13 @@
 //
 
 import {
-  floatsToNormalizedBytes,
-  normalizedByteToFloats
-} from '../../math/arrays/Conversions.js';
-import {
   color4ArrayToFloat32Array,
-  float32ArrayToColor4Array
-} from '../../math/arrays/Linearizers.js';
-import { linearToRgbd16 } from '../../math/Color4.Functions.js';
+  float32ArrayToColor4Array,
+  floatsToNormalizedBytes,
+  linearToRgbd16,
+  normalizedByteToFloats
+} from '@threeify/vector-math';
+
 import { DataType } from '../../renderers/webgl/textures/DataType.js';
 import { ArrayBufferImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';

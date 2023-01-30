@@ -1,4 +1,5 @@
-import { Color3 } from '@threeify/core';
+import { Color3 } from '@threeify/vector-math';
+
 import { ISceneNodeProps, SceneNode } from '../SceneNode';
 
 export interface ILight extends ISceneNodeProps {

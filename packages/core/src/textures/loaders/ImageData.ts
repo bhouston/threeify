@@ -1,5 +1,6 @@
+import { Color4 } from '@threeify/vector-math';
+
 import { ArrayBufferImage, DataType, PixelEncoding } from '../..';
-import { Color4 } from '../../math/Color4';
 
 export function createSolidColorImageData(
   color: Color4,

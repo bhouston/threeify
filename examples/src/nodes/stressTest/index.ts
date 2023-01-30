@@ -1,15 +1,11 @@
 import {
-  Color3,
-  Euler3,
-  euler3ToQuat,
   fetchImage,
   icosahedronGeometry,
   PhysicalMaterial,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  TextureAccessor,
-  Vec3
+  TextureAccessor
 } from '@threeify/core';
 import {
   MeshNode,
@@ -21,6 +17,7 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
+import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/vector-math';
 
 import { Stats } from '../../Stats';
 import fragmentSource from './fragment.glsl';

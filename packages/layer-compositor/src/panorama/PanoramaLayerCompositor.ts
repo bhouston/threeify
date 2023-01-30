@@ -1,26 +1,28 @@
 import {
-  angleAxisToMat4,
   BufferGeometry,
   ClearState,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  octahedronGeometry,
+  Program,
+  renderBufferGeometry,
+  ShaderMaterial,
+  TextureWrap,
+  transformGeometry,
+  UniformValueMap
+} from '@threeify/core';
+import {
+  angleAxisToMat4,
   Color3,
   Euler3,
   euler3ToMat4,
   EulerOrder3,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
   mat4Inverse,
   mat4Multiply,
   mat4PerspectiveFov,
-  octahedronGeometry,
-  Program,
-  renderBufferGeometry,
   scale3ToMat4,
-  ShaderMaterial,
-  TextureWrap,
-  transformGeometry,
-  UniformValueMap,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import { copySourceBlendState } from '../Layer';
 import {

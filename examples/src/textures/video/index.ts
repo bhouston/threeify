@@ -1,25 +1,27 @@
 import {
   BufferBit,
   ClearState,
-  Color3,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
   makeTextureFromVideoElement,
-  makeVec2View,
-  Mat4,
-  mat4OrthographicSimple,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   TexImage2D,
-  Texture,
+  Texture
+} from '@threeify/core';
+import {
+  Color3,
+  makeVec2View,
+  Mat4,
+  mat4OrthographicSimple,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

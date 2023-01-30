@@ -6,7 +6,7 @@
 // where elements 3, 7, 11 would be translation in 3D, as they would multiplied
 // by the last virtual element of the 3D vector.
 
-import { hashFloatArray } from '../core/hash';
+import { hashFloatArray } from './utils/hash';
 
 export type Mat4JSON = number[];
 

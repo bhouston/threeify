@@ -2,24 +2,26 @@ import {
   Blending,
   blendModeToBlendState,
   ClearState,
-  Color3,
   fetchImage,
   fetchImageElement,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Mat4,
-  mat4Multiply,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
-  scale3ToMat4,
   ShaderMaterial,
-  Texture,
+  Texture
+} from '@threeify/core';
+import {
+  Color3,
+  Mat4,
+  mat4Multiply,
+  scale3ToMat4,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

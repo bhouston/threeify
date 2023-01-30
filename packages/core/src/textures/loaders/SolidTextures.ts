@@ -1,4 +1,5 @@
-import { Color4 } from '../../math/Color4';
+import { Color4 } from '@threeify/vector-math';
+
 import { Texture } from '../Texture';
 import { createSolidColorImageData } from './ImageData';
 

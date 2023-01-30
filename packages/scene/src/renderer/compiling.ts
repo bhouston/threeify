@@ -1,11 +1,8 @@
 import {
   AlphaMode,
-  color3MultiplyByScalar,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  mat4TransformNormal3,
-  mat4TransformVec3,
   MaterialParameters,
   ProgramUniform,
   ProgramVertexArray,
@@ -15,9 +12,14 @@ import {
   TextureBindings,
   UniformBufferMap,
   UniformValueMap,
-  Vec3,
   VirtualFramebuffer
 } from '@threeify/core';
+import {
+  color3MultiplyByScalar,
+  mat4TransformNormal3,
+  mat4TransformVec3,
+  Vec3
+} from '@threeify/vector-math';
 
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';

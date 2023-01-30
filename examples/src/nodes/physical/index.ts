@@ -1,14 +1,11 @@
 import {
-  Color3,
   fetchImage,
   icosahedronGeometry,
   PhysicalMaterial,
   RenderingContext,
   ShaderMaterial,
   Texture,
-  TextureAccessor,
-  Vec2,
-  Vec3
+  TextureAccessor
 } from '@threeify/core';
 import {
   MeshNode,
@@ -20,6 +17,7 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
+import { Color3, Vec2, Vec3 } from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

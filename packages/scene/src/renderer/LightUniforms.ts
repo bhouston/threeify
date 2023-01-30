@@ -1,4 +1,4 @@
-import { Color3, Vec3 } from '@threeify/core';
+import { Color3, Vec3 } from '@threeify/vector-math';
 
 export class LightUniforms {
   public numPunctualLights = 0;

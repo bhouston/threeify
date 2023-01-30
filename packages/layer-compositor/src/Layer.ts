@@ -1,15 +1,13 @@
+import { BlendFunc, BlendState, TexImage2D } from '@threeify/core';
 import {
-  BlendFunc,
-  BlendState,
   Mat3,
   Mat4,
   mat4Multiply,
   scale3ToMat4,
-  TexImage2D,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import { LayerCompositor } from './LayerCompositor';
 import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';

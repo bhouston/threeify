@@ -1,20 +1,18 @@
 import {
-  Color3,
   CullingSide,
   CullingState,
   DepthTestFunc,
   DepthTestState,
   Geometry,
-  hslToColor3,
   makeBufferGeometryFromGeometry,
   makeFloat32Attribute,
   makeProgramFromShaderMaterial,
   makeUint32Attribute,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial,
-  Vec3
+  ShaderMaterial
 } from '@threeify/core';
+import { Color3, hslToColor3, Vec3 } from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

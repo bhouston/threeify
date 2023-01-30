@@ -1,23 +1,25 @@
 import {
-  Color3,
-  Euler3,
-  euler3ToMat4,
-  EulerOrder3,
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Mat4,
-  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
+  Texture
+} from '@threeify/core';
+import {
+  Color3,
+  Euler3,
+  euler3ToMat4,
+  EulerOrder3,
+  Mat4,
+  mat4PerspectiveFov,
   translation3ToMat4,
   Vec3,
   vec3Normalize
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

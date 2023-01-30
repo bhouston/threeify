@@ -21,6 +21,7 @@
   "include": ["./src/**/*.ts"],
   "exclude": ["./**/*.test.ts"],
   "references": [
+    { "path": "../packages/vector-math" },
     { "path": "../packages/core" },
     { "path": "../packages/scene" }
   ]

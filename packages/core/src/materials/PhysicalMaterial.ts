@@ -1,7 +1,10 @@
-import { Color3 } from '../math/Color3';
-import { color3MultiplyByScalar } from '../math/Color3.Functions';
-import { Vec2 } from '../math/Vec2';
-import { Vec3 } from '../math/Vec3';
+import {
+  Color3,
+  color3MultiplyByScalar,
+  Vec2,
+  Vec3
+} from '@threeify/vector-math';
+
 import { SolidTextures } from '../textures/loaders/SolidTextures';
 import { TextureAccessor } from '../textures/TextureAccessor';
 import { AlphaMode } from './AlphaMode';

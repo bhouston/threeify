@@ -1,3 +1,4 @@
+import { positionAttributeToBoundingBox, primitiveCount } from '@threeify/core';
 import {
   Box3,
   box3Empty,
@@ -5,10 +6,8 @@ import {
   mat4Compose,
   mat4Inverse,
   mat4Multiply,
-  mat4TransformBox3,
-  positionAttributeToBoundingBox,
-  primitiveCount
-} from '@threeify/core';
+  mat4TransformBox3
+} from '@threeify/vector-math';
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';

@@ -2,25 +2,27 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromTexture,
+  renderBufferGeometry,
+  RenderingContext,
+  ShaderMaterial,
+  Texture,
+  TextureBindings
+} from '@threeify/core';
+import {
   Color3,
   color3ToHexString,
   Euler3,
   euler3ToMat4,
   hslToColor3,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   Mat4,
   mat4OrthographicSimple,
-  renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture,
-  TextureBindings,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
