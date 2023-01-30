@@ -1,4 +1,4 @@
-import { Mat4, mat4OrthographicSimple, Vec2 } from '@threeify/core';
+import { Mat4, mat4OrthographicSimple, Vec2 } from '@threeify/vector-math';
 
 import { CameraNode, ICameraProps } from './CameraNode';
 

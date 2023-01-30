@@ -1,9 +1,7 @@
 import {
   Attachment,
   BufferGeometry,
-  ceilPow2,
   ClearState,
-  Color3,
   DataType,
   fetchImage,
   Framebuffer,
@@ -14,14 +12,11 @@ import {
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  mat4Orthographic,
-  mat4OrthographicSimple,
   PixelFormat,
   planeGeometry,
   Program,
   renderBufferGeometry,
   RenderingContext,
-  scale3ToMat4,
   ShaderMaterial,
   TexImage2D,
   TexParameters,
@@ -30,15 +25,22 @@ import {
   TextureTarget,
   TextureWrap,
   transformGeometry,
+  UniformValueMap
+} from '@threeify/core';
+import {
+  ceilPow2,
+  Color3,
+  mat4Orthographic,
+  mat4OrthographicSimple,
+  scale3ToMat4,
   translation3ToMat4,
-  UniformValueMap,
   Vec2,
   vec2Add,
   vec2Equals,
   vec2MultiplyByScalar,
   vec2Subtract,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import { copySourceBlendState, Layer } from './Layer';

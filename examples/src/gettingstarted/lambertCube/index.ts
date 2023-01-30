@@ -1,20 +1,22 @@
 import {
   boxGeometry,
-  Euler3,
-  euler3ToMat4,
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Mat4,
-  mat4Perspective,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
+  Texture
+} from '@threeify/core';
+import {
+  Euler3,
+  euler3ToMat4,
+  Mat4,
+  mat4Perspective,
   translation3ToMat4,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

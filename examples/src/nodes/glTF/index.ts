@@ -1,13 +1,4 @@
-import {
-  box3Center,
-  box3MaxSize,
-  Color3,
-  Orbit,
-  RenderingContext,
-  ShaderMaterial,
-  Vec3,
-  vec3Negate
-} from '@threeify/core';
+import { Orbit, RenderingContext, ShaderMaterial } from '@threeify/core';
 import {
   glTFToSceneNode,
   PerspectiveCamera,
@@ -20,6 +11,13 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
+import {
+  box3Center,
+  box3MaxSize,
+  Color3,
+  Vec3,
+  vec3Negate
+} from '@threeify/vector-math';
 
 import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
 import fragmentSource from './fragment.glsl';

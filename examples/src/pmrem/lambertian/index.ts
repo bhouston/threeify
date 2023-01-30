@@ -2,8 +2,6 @@ import {
   Attachment,
   cubeFaceTargets,
   CubeMapTexture,
-  Euler3,
-  euler3ToMat4,
   fetchImage,
   Framebuffer,
   icosahedronGeometry,
@@ -11,19 +9,23 @@ import {
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
   makeTexImage2DFromEquirectangularTexture,
-  Mat4,
-  mat4PerspectiveFov,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
   TextureFilter,
-  TextureWrap,
+  TextureWrap
+} from '@threeify/core';
+import {
+  Euler3,
+  euler3ToMat4,
+  Mat4,
+  mat4PerspectiveFov,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import { samplerMaterial } from './sampler/SamplerMaterial.js';

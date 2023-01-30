@@ -15,18 +15,20 @@ import {
   AlphaMode,
   Attribute,
   AttributeData,
-  Color3,
-  composeMat3,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  Mat3,
   PhysicalMaterial,
-  Quat,
   Texture,
-  TextureAccessor,
+  TextureAccessor
+} from '@threeify/core';
+import {
+  Color3,
+  composeMat3,
+  Mat3,
+  Quat,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';

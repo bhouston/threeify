@@ -1,4 +1,5 @@
-import { Vec3 } from '@threeify/core';
+import { Vec3 } from '@threeify/vector-math';
+
 import { ILight, Light } from './Light';
 
 export interface ISpotLight extends ILight {

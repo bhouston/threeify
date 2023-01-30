@@ -3,25 +3,27 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
-  Color3,
-  Euler3,
-  euler3ToMat4,
   fetchImage,
   Framebuffer,
   makeBufferGeometryFromGeometry,
   makeDepthAttachment,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Mat4,
-  mat4OrthographicSimple,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
+  Texture
+} from '@threeify/core';
+import {
+  Color3,
+  Euler3,
+  euler3ToMat4,
+  Mat4,
+  mat4OrthographicSimple,
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

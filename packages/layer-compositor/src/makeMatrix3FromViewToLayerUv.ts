@@ -8,7 +8,7 @@ import {
   translation2ToMat3,
   Vec2,
   vec2Negate
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 // Returns a matrix that transforms from image coordinates ( (0,0) in top left ) to UV coordinates for that layer.
 export function viewToMat3LayerUv(

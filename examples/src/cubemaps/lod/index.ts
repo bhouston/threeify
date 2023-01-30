@@ -1,22 +1,24 @@
 import {
   convertToInterleavedGeometry,
   CubeMapTexture,
-  Euler3,
-  euler3ToMat4,
   fetchCubeImages,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromCubeTexture,
-  Mat4,
-  mat4PerspectiveFov,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  TextureBindings,
+  TextureBindings
+} from '@threeify/core';
+import {
+  Euler3,
+  euler3ToMat4,
+  Mat4,
+  mat4PerspectiveFov,
   translation3ToMat4,
   Vec3
-} from '@threeify/core';
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

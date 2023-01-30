@@ -1,4 +1,4 @@
-import { Mat4, Vec3 } from '@threeify/core';
+import { Mat4, Vec3 } from '@threeify/vector-math';
 
 export class CameraUniforms {
   public worldToView = new Mat4();

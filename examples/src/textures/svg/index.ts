@@ -9,9 +9,9 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
-  Vec2
+  Texture
 } from '@threeify/core';
+import { Vec2 } from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

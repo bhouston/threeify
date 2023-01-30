@@ -3,12 +3,8 @@ import {
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  Mat4,
-  mat4Inverse,
-  mat4PerspectiveFov,
   Orbit,
   passGeometry,
-  quatToMat4,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -17,6 +13,12 @@ import {
   TextureFilter,
   TextureWrap
 } from '@threeify/core';
+import {
+  Mat4,
+  mat4Inverse,
+  mat4PerspectiveFov,
+  quatToMat4
+} from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
