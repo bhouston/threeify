@@ -1,4 +1,5 @@
-import { Vec2 } from '../../../math/Vec2.js';
+import { Vec2 } from '@threeify/vector-math';
+
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType, sizeOfDataType } from '../textures/DataType.js';

@@ -43,7 +43,8 @@
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
-    "@threeify/core": "^2.1.0",
+    "@threeify/core": "*",
+    "@threeify/vector-math": "*",
     "draco3dgltf": "^1.5.5"
   }
 }

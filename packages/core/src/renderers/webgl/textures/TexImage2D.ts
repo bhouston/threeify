@@ -6,9 +6,9 @@
 // * @bhouston
 //
 
+import { isPow2, Vec2 } from '@threeify/vector-math';
+
 import { generateUUID } from '../../../core/generateUuid.js';
-import { isPow2 } from '../../../math/Functions.js';
-import { Vec2 } from '../../../math/Vec2.js';
 import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';

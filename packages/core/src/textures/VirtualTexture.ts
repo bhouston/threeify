@@ -1,6 +1,7 @@
+import { Vec2 } from '@threeify/vector-math';
+
 import { generateUUID } from '../core/generateUuid.js';
 import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
-import { Vec2 } from '../math/Vec2.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';

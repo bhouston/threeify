@@ -5,7 +5,8 @@
 // * @bhouston
 //
 
-import { Vec2 } from '../../math/Vec2.js';
+import { Vec2 } from '@threeify/vector-math';
+
 import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
 import { Geometry } from '../Geometry.js';
 

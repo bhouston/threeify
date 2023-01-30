@@ -1,4 +1,4 @@
-import { hashFloat4 } from '../core/hash';
+import { hashFloat4 } from './utils/hash';
 
 export class Color4 {
   static readonly NUM_COMPONENTS = 4;

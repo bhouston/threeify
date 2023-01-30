@@ -5,12 +5,9 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from '../core/hash.js';
-import { ICloneable, IEquatable, IHashable } from '../core/types.js';
+import { hashFloat3 } from './utils/hash.js';
 
-export class Spherical
-  implements ICloneable<Spherical>, IEquatable<Spherical>, IHashable
-{
+export class Spherical {
   constructor(public radius = 1, public phi = 0, public theta = 0) {}
 
   getHashCode(): number {

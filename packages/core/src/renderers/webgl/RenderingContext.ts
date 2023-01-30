@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { box2Equals } from '../../math/Box2.Functions.js';
-import { Box2 } from '../../math/Box2.js';
+import { Box2, box2Equals } from '@threeify/vector-math';
+
 import { BlendState } from './BlendState.js';
 import { ClearState } from './ClearState.js';
 import { CullingState } from './CullingState.js';

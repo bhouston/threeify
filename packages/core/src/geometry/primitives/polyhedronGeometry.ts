@@ -5,15 +5,16 @@
 // * @bhouston
 //
 
-import { makeVec3View } from '../../math/arrays/PrimitiveView.js';
-import { Vec2 } from '../../math/Vec2.js';
 import {
+  makeVec3View,
+  Vec2,
+  Vec3,
   vec3Add,
   vec3Lerp,
   vec3MultiplyByScalar,
   vec3Normalize
-} from '../../math/Vec3.Functions.js';
-import { Vec3 } from '../../math/Vec3.js';
+} from '@threeify/vector-math';
+
 import { makeFloat32Attribute } from '../Attribute.js';
 import { computeVertexNormals } from '../Geometry.Functions.js';
 import { Geometry } from '../Geometry.js';

@@ -1,25 +1,26 @@
-import { hashFloat2 } from '../core/hash';
+import { hashFloat3 } from './utils/hash';
 
-export class Vec2 {
-  static readonly NUM_COMPONENTS = 2;
+export class Vec3 {
+  static readonly NUM_COMPONENTS = 3;
 
-  constructor(public x = 0, public y = 0) {}
+  constructor(public x = 0, public y = 0, public z = 0) {}
 
   getHashCode(): number {
-    return hashFloat2(this.x, this.y);
+    return hashFloat3(this.x, this.y, this.z);
   }
 
-  clone(result = new Vec2()): Vec2 {
-    return result.set(this.x, this.y);
+  clone(result = new Vec3()): Vec3 {
+    return result.set(this.x, this.y, this.z);
   }
 
-  copy(v: Vec2): this {
-    return this.set(v.x, v.y);
+  copy(v: Vec3): this {
+    return this.set(v.x, v.y, v.z);
   }
 
-  set(x: number, y: number): this {
+  set(x: number, y: number, z: number): this {
     this.x = x;
     this.y = y;
+    this.z = z;
     return this;
   }
 
@@ -30,6 +31,9 @@ export class Vec2 {
         break;
       case 1:
         this.y = value;
+        break;
+      case 2:
+        this.z = value;
         break;
       default:
         throw new Error(`index is out of range: ${index}`);
@@ -43,6 +47,8 @@ export class Vec2 {
         return this.x;
       case 1:
         return this.y;
+      case 2:
+        return this.z;
       default:
         throw new Error(`index is out of range: ${index}`);
     }

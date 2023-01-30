@@ -1,19 +1,20 @@
 import {
+  Color3,
   color3ArrayToFloat32Array,
+  Color4,
   color4ArrayToFloat32Array,
+  Mat3,
   mat3ArrayToFloat32Array,
+  Mat4,
   mat4ArrayToFloat32Array,
+  Vec2,
   vec2ArrayToFloat32Array,
+  Vec3,
   vec3ArrayToFloat32Array,
+  Vec4,
   vec4ArrayToFloat32Array
-} from '../../../math/arrays/Linearizers.js';
-import { Color3 } from '../../../math/Color3.js';
-import { Color4 } from '../../../math/Color4.js';
-import { Mat3 } from '../../../math/Mat3.js';
-import { Mat4 } from '../../../math/Mat4.js';
-import { Vec2 } from '../../../math/Vec2.js';
-import { Vec3 } from '../../../math/Vec3.js';
-import { Vec4 } from '../../../math/Vec4.js';
+} from '@threeify/vector-math';
+
 import { Buffer } from '../buffers/Buffer.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { Program } from './Program.js';

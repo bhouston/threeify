@@ -1,18 +1,18 @@
-import { makeVec3View } from '../math/arrays/PrimitiveView.js';
-import { box3Empty, box3ExpandByPoint3 } from '../math/Box3.Functions.js';
-import { Box3 } from '../math/Box3.js';
-import { Mat4 } from '../math/Mat4.js';
 import {
+  Box3,
+  box3Empty,
+  box3ExpandByPoint3,
+  makeVec3View,
+  Mat4,
   mat4TransformNormal3,
-  mat4TransformVec3
-} from '../math/Vec3.Functions.js';
-import {
+  mat4TransformVec3,
+  Vec3,
   vec3Add,
   vec3Cross,
   vec3Normalize,
   vec3Subtract
-} from '../math/Vec3.Functions.js';
-import { Vec3 } from '../math/Vec3.js';
+} from '@threeify/vector-math';
+
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';
 import { Geometry } from './Geometry.js';

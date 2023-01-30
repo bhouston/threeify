@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
+import { Color3, color3Equals } from '@threeify/vector-math';
+
 import { ICloneable, IEquatable } from '../../core/types.js';
-import { color3Equals } from '../../math/Color3.Functions.js';
-import { Color3 } from '../../math/Color3.js';
 
 export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>

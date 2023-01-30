@@ -5,11 +5,8 @@
 // * @bhouston
 //
 
-import { vec3Add } from '../index.js';
-import { mat4LookAt } from '../math/Mat4.Functions.js';
-import { Mat4 } from '../math/Mat4.js';
-import { Vec2 } from '../math/Vec2.js';
-import { Vec3 } from '../math/Vec3.js';
+import { Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/vector-math';
+
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';

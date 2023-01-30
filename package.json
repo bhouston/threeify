@@ -53,6 +53,7 @@
   },
   "workspaces": [
     "packages/shader-transpiler",
+    "packages/vector-math",
     "packages/core",
     "packages/scene",
     "packages/layer-compositor",

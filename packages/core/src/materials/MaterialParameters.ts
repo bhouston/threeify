@@ -1,4 +1,14 @@
-import { Color3, Color4, Mat3, Mat4, Texture, Vec2, Vec3, Vec4 } from '..';
+import {
+  Color3,
+  Color4,
+  Mat3,
+  Mat4,
+  Vec2,
+  Vec3,
+  Vec4
+} from '@threeify/vector-math';
+
+import { Texture } from '..';
 
 export type MaterialPropertyValue =
   | number

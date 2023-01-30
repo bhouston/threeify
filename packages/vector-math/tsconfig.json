@@ -16,9 +16,10 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": false
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["**/*.test.ts"],
-  "references": [{ "path": "../vector-math" }, { "path": "../core" }]
+  "include": ["src/**/*.ts" ],
+  "exclude": [
+    "**/*.test.ts"
+  ]
 }

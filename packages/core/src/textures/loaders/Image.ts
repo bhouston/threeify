@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vec2 } from '../../math/Vec2.js';
+import { Vec2 } from '@threeify/vector-math';
 
 export function fetchImageElement(
   url: string,
