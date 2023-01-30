@@ -1,6 +1,6 @@
 {
   "name": "@threeify/vector-math",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "type": "module",
   "description": "Computer graphics oriented, High performance, tree-shakeable, TypeScript 3D vector math library.",
   "module": "dist/index.js",
@@ -17,7 +17,7 @@
     "math",
     "library"
   ],
-  "homepage": "http://threeify.org",
+  "homepage": "http://bhouston.github.com/threeify",
   "author": "threeify authors",
   "bugs": {
     "url": "https://github.com/bhouston/threeify/issues"

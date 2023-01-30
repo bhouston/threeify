@@ -1,6 +1,6 @@
 {
   "name": "@threeify/shader-transpiler",
-  "version": "2.0.7",
+  "version": "3.0.0",
   "description": "A glsl to JS module transpiler.",
   "keywords": [
     "glsl",
@@ -14,7 +14,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threeify/threeify"
+    "url": "https://github.com/bhouston/threeify"
   },
   "bin": {
     "tst": "/dist/index.js"

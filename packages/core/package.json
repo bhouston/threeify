@@ -1,6 +1,6 @@
 {
   "name": "@threeify/core",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
   "module": "dist/index.js",
@@ -15,15 +15,15 @@
     "webgpu",
     "3D"
   ],
-  "homepage": "http://threeify.org",
+  "homepage": "http://bhouston.github.com/threeify",
   "author": "threeify authors",
   "bugs": {
-    "url": "https://github.com/threeify/threeify/issues"
+    "url": "https://github.com/bhouston/threeify/issues"
   },
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threeify/threeify"
+    "url": "https://github.com/bhouston/threeify"
   },
   "devDependencies": {
     "@threeify/shader-transpiler": "*",
