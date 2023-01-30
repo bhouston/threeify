@@ -41,7 +41,7 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.SciFiHelmet, GLTFFormat.glTF)
+    getGLTFUrl(GLTFModel.GlamVelvetSofa, GLTFFormat.glTF)
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
@@ -61,7 +61,7 @@ async function init(): Promise<void> {
   const pointLight1 = new PointLight({
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
-    color: new Color3(0.7, 0.8, 0.9),
+    color: new Color3(1, 1, 1),
     intensity: 25,
     range: 1000
   });

@@ -27,7 +27,7 @@ vec3 BRDF_Sheen_Charlie(
   float NdotH = saturate(dot(normal, halfDirection));
 
   float sheenDistribution = D_Charlie(safeSheenRoughness, NdotH);
-  float sheenVisibility = V_Neubelt(NdotV, NdotL);
+  float sheenVisibility = V_Neubelt(NdotL, NdotV);
 
   return sheenColor * saturate( sheenDistribution * sheenVisibility );
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <brdfs/specular/f_schlick>
+#include <brdfs/specular/fresnel>
 #include <brdfs/specular/v_ggx_smithcorrelated>
 #include <brdfs/specular/d_ggx>
 

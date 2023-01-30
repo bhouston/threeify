@@ -35,5 +35,8 @@ float degToRad(const float deg) {
 float radToDeg(const float rad) {
   return rad * 180.0 / PI;
 }
+float max3( const vec3 v ) {
+  return max( max( v.x, v.y ), v.z );
+}
 
 const float NAN = sqrt(0.0);

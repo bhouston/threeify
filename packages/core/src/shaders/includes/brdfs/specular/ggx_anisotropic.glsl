@@ -1,6 +1,6 @@
 #pragma once
 #pragma include <math/math>
-#pragma include "f_schlick"
+#pragma include "fresnel"
 #pragma include "v_ggx_smithcorrelated_anisotropic"
 #pragma include "d_ggx_anisotropic"
 

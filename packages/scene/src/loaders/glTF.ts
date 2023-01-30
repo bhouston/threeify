@@ -9,6 +9,7 @@ import {
   Clearcoat,
   KHRONOS_EXTENSIONS,
   Sheen,
+  Specular,
   Transform as TextureTransform
 } from '@gltf-transform/extensions';
 import {
@@ -217,6 +218,15 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         glTFMaterial.getOcclusionTextureInfo()
       );
 
+      const glTFSpecular = glTFMaterial.getExtension(
+        'KHR_materials_specular'
+      ) as Specular;
+
+      const specularFactorTextureAccessor = await getTextureAccessor(
+        glTFSpecular?.getSpecularTexture() || null,
+        glTFSpecular?.getSpecularTextureInfo() || null
+      );
+
       const glTFClearcoat = glTFMaterial.getExtension(
         'KHR_materials_clearcoat'
       ) as Clearcoat;
@@ -263,6 +273,9 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
 
         specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
         specularRoughnessTextureAccessor: metallicRoughnessTextureAccessor,
+
+        specularFactor: glTFSpecular.getSpecularFactor(),
+        specularFactorTextureAccessor: specularFactorTextureAccessor,
 
         emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
         emissiveTextureAccessor: emissiveTextureAccessor,
