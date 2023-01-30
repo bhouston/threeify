@@ -1,8 +1,8 @@
 {
   "name": "@threeify/layer-compositor",
+  "description": "Typescript 3D Library loosely based on three.js",
   "version": "3.0.0",
   "type": "module",
-  "description": "Typescript 3D Library loosely based on three.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -25,6 +25,11 @@
     "type": "git",
     "url": "https://github.com/bhouston/threeify"
   },
+  "scripts": {
+    "build": "tsc --build",
+    "watch": "tsc --build  --watch --preserveWatchOutput",
+    "test": "jest ./src"
+  },
   "devDependencies": {
     "@threeify/shader-transpiler": "*",
     "@types/jest": "^29.1.1",
@@ -33,11 +38,6 @@
     "ts-jest": "^29.0.3",
     "ts-jest-resolver": "^2.0.0",
     "typescript": "^4.8.4"
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "watch": "tsc --build  --watch --preserveWatchOutput",
-    "test": "jest ./src"
   },
   "dependencies": {
     "@threeify/core": "*",
