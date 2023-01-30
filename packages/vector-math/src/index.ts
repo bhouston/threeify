@@ -1,3 +1,5 @@
+export * from './utils/hash.js';
+
 export * from './arrays/Conversions.js';
 export * from './arrays/Linearizers.js';
 export * from './arrays/PrimitiveView.js';

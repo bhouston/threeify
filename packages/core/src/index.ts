@@ -16,7 +16,6 @@ export * from './renderers/webgl/buffers/PrimitiveType.js';
 export * from './core/assert.js';
 export * from './core/coords.js';
 export * from './core/generateUuid.js';
-export * from '../../vector-math/src/utils/hash.js';
 export * from './core/types.js';
 
 export * from './renderers/webgl/extensions/Extensions.js';
