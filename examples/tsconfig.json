@@ -16,9 +16,11 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["dom", "es2020"]
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.json"],
   "exclude": ["./**/*.test.ts"],
   "references": [
     { "path": "../packages/vector-math" },

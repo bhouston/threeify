@@ -74,7 +74,6 @@
     "unicorn/prefer-default-parameters": "error",
     "unicorn/prefer-export-from": "error",
     "unicorn/prefer-includes": "error",
-    "unicorn/prefer-json-parse-buffer": "error",
     "unicorn/prefer-logical-operator-over-ternary": "error",
     "unicorn/prefer-modern-math-apis": "error",
     "unicorn/prefer-negative-index": "error",

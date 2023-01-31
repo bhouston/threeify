@@ -19,10 +19,12 @@
         height: 100%;
       }
     </style>
+    <script type="module" src="./dist/viewer/index.js"> </script>
+    <link rel="stylesheet" href="./main.css">
   </head>
   <body>
     <div id="container"></div>
-    <canvas class="framebuffer" id="framebuffer" ></canvas>
+    <canvas class="framebuffer" id="framebuffer" className="framebuffer"></canvas>
     
     <script>
       const urlParams = new URLSearchParams(window.location.search);

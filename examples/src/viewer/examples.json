@@ -1,0 +1,487 @@
+[
+  {
+    "slug": "../brdfs/clearcoat",
+    "theme": "dark",
+    "name": "Clear Coat Specular BRDF",
+    "description": "A test of a clear coat GGX specular lobe BRDF with separate a distinct normal map layered on top of a standard GGX specular BRDF.",
+    "keywords": [
+      "brdf",
+      "specular",
+      "clearcoat",
+      "reflection"
+    ]
+  },
+  {
+    "slug": "../brdfs/lambert",
+    "theme": "dark",
+    "name": "Lambertian Diffuse BRDF",
+    "description": "A test of the Lambertian diffuse BRDF in isolation.",
+    "keywords": [
+      "brdf",
+      "lambert",
+      "lambertian",
+      "diffuse"
+    ]
+  },
+  {
+    "slug": "../brdfs/sheen",
+    "theme": "dark",
+    "name": "Sheen BRDF",
+    "description": "A test of a Charlie-based Sheen BRDF.  Sheen is useful rendering realistic cloth.",
+    "keywords": [
+      "brdf",
+      "sheen",
+      "fabric",
+      "cloth"
+    ]
+  },
+  {
+    "slug": "../brdfs/specular",
+    "theme": "dark",
+    "name": "GGX Specular BRDF",
+    "description": "A test of the GGX specular BRDF layered on top of the Lambertian diffuse BRDF.",
+    "keywords": [
+      "brdf",
+      "specular",
+      "ggx",
+      "reflection"
+    ]
+  },
+  {
+    "slug": "../brdfs/specularAnisotropic",
+    "theme": "dark",
+    "name": "GGX Specular Anisotropic BRDF",
+    "description": "A test of the GGX specular BRDF modified via a bend normal to simulate anisotropy layered on top of the Lambertian diffuse BRDF.  Anisotropy is specified via a flow map.",
+    "keywords": [
+      "brdf",
+      "specular",
+      "ggx",
+      "reflection",
+      "anisotropic"
+    ]
+  },
+  {
+    "slug": "../cubemaps/basic",
+    "name": "Cube Map Texture",
+    "description": "A bare-bones test of loading and rendering with a cubemap texture directly.",
+    "keywords": [
+      "basics",
+      "geometry",
+      "cubemap",
+      "direct",
+      "reflection"
+    ]
+  },
+  {
+    "slug": "../cubemaps/hdr",
+    "name": "High Dynamic Range Texture",
+    "description": "Loading Radiance HDR (encoded as RGBE) and then storing it in RGBD format.  The RGBD data is decoded to linear for rendering and then sRGB corrected when written to the output.",
+    "keywords": [
+      "basics",
+      "hrd",
+      "sRGB",
+      "RGBE",
+      "RGBD"
+    ]
+  },
+  {
+    "slug": "../cubemaps/latlong",
+    "name": "Cube Map from Equirectangular Map",
+    "description": "This loads a latlong map (AKA lat-long map) and renders it to the faces of a cube map.",
+    "keywords": [
+      "render-to-texture",
+      "cubemap",
+      "latlong"
+    ]
+  },
+  {
+    "slug": "../cubemaps/lod",
+    "name": "Cube Map LOD Roughness",
+    "description": "A test of explicitly setting the cube map LOD to simulate reflections with varying surface roughness.  Requires the ext_shader_texture_lod extension.",
+    "keywords": [
+      "basics",
+      "geometry",
+      "reflections",
+      "cubemap"
+    ]
+  },
+  {
+    "slug": "../cubemaps/mipmaps",
+    "name": "Cube Map Manual Mipmap Textures",
+    "description": "Load manually generated mipmaps into the cubemap.",
+    "keywords": [
+      "texture",
+      "cubemap",
+      "mipmaps"
+    ]
+  },
+  {
+    "slug": "../cubemaps/render",
+    "name": "Render to Cube Map Textures",
+    "description": "Rendering to the faces of a cube map on each frame.",
+    "keywords": [
+      "render-to-texture",
+      "cubemap"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/animatedUniforms",
+    "name": "Animated Uniforms",
+    "description": "A simple test of animated uniforms.",
+    "keywords": [
+      "basics",
+      "uniforms",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/interleavedBuffers",
+    "name": "Interleaved Geometry",
+    "description": "A test of interleaving and rendering arbitrary geometry.  Interleaved geometry can be more efficient for GPUs to render because all data for one vertex is collocated.",
+    "keywords": [
+      "basics",
+      "geometry",
+      "interleaved",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/lambertCube",
+    "name": "Cube Diffuse",
+    "description": "A bare-bones test of lighting a cube geometry directly.",
+    "keywords": [
+      "basics",
+      "geometry",
+      "cube",
+      "direct",
+      "diffuse"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/orthographic",
+    "name": "Orthographic Camera",
+    "description": "A test of using an orthographic camera to render.",
+    "keywords": [
+      "basics",
+      "camera",
+      "orthographic"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/structUniforms",
+    "name": "Animated Uniforms",
+    "description": "A simple test of animated uniforms.",
+    "keywords": [
+      "basics",
+      "uniforms",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/triangle",
+    "name": "Drawing A Triangle3",
+    "description": "A bare-bones test of drawing geometry directly.",
+    "keywords": [
+      "basics",
+      "geometry",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../gettingstarted/uniformBlocks",
+    "name": "Animated Uniforms",
+    "description": "A simple test of animated uniforms.",
+    "keywords": [
+      "basics",
+      "uniforms",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../interaction/deviceOrientation",
+    "name": "Device Orientation",
+    "description": "Click once on the screen to active.  The cube moves based on your devices orientation.",
+    "keywords": [
+      "interaction",
+      "deviceorientation",
+      "orientation"
+    ]
+  },
+  {
+    "slug": "../lights/directional",
+    "theme": "dark",
+    "name": "Directional Light",
+    "description": "A directional light is represented by a direction and an irradiance",
+    "keywords": [
+      "light",
+      "directional",
+      "punctual"
+    ]
+  },
+  {
+    "slug": "../lights/multi",
+    "theme": "dark",
+    "name": "Multiple Punctual Lights",
+    "description": "Multiple punctual lights are used: spot, point and directional.",
+    "keywords": [
+      "light",
+      "directional",
+      "spot",
+      "point",
+      "punctual"
+    ]
+  },
+  {
+    "slug": "../lights/point",
+    "theme": "dark",
+    "name": "Point Light",
+    "description": "A point light has an intensity-color, a position and range.",
+    "keywords": [
+      "light",
+      "point",
+      "punctual"
+    ]
+  },
+  {
+    "slug": "../lights/spot",
+    "theme": "dark",
+    "name": "Spot Light",
+    "description": "Similar to a point light but has a direction and an inner and outer cone angle for the falloff.  (TODO: Add units.)",
+    "keywords": [
+      "light",
+      "spot",
+      "punctual"
+    ]
+  },
+  {
+    "slug": "../materials/blending",
+    "name": "Blend States & Premultiplied Alpha",
+    "description": "Columns are blend states, rows are premultipled alpha.",
+    "keywords": [
+      "material",
+      "premultiplied-alpha",
+      "blending"
+    ]
+  },
+  {
+    "slug": "../materials/outputs",
+    "theme": "light",
+    "name": "Material Output Channels",
+    "description": "Demonstrates the ability to select the output channel of the material shader.  Cycles between beauty, albedo, roughness, metalness, occlusion, emissive, normal, depth, ambient, diffuse and specular.",
+    "keywords": [
+      "pass",
+      "normal",
+      "voa",
+      "albedo",
+      "depth"
+    ]
+  },
+  {
+    "slug": "../microgeometry/bump",
+    "theme": "dark",
+    "name": "Height Map Microgeometry",
+    "description": "A height map is used to simulate microgeometry that is not represented in the mesh.  When the height map only affects lighting, but not geometry, it is called bump mapping.  This is a box sphere where the height map adds the brick shapes.",
+    "keywords": [
+      "microgeometry",
+      "bump",
+      "map",
+      "perturbation",
+      "mapping"
+    ]
+  },
+  {
+    "slug": "../microgeometry/displacement",
+    "theme": "dark",
+    "name": "Height Map-based Displacement",
+    "description": "A height map is used to displace the positions of the mesh in the normal direction in an animated fashion.  A normal map is also blended in and out in time to simulation a morphing effect.",
+    "keywords": [
+      "microgeometry",
+      "displacement",
+      "map",
+      "perturbation",
+      "mapping"
+    ]
+  },
+  {
+    "slug": "../microgeometry/normals",
+    "theme": "dark",
+    "name": "Normal Map Microgeometry",
+    "description": "A normal map is used to simulate microgeometry that is not represented in the mesh.  This is a smooth sphere where the normal map adds the golf ball dimples.",
+    "keywords": [
+      "microgeometry",
+      "normal",
+      "map",
+      "perturbation",
+      "mapping"
+    ]
+  },
+  {
+    "slug": "../microgeometry/normals2",
+    "theme": "dark",
+    "name": "Normal Map Microgeometry Reference",
+    "description": "",
+    "keywords": [
+      "microgeometry",
+      "normal",
+      "map",
+      "perturbation",
+      "mapping",
+      "reference"
+    ]
+  },
+  {
+    "slug": "../nodes/basic",
+    "theme": "dark",
+    "name": "Basic Node Scene",
+    "description": "A basic test of the node scene graph rendering system.",
+    "keywords": [
+      "nodes"
+    ]
+  },
+  {
+    "slug": "../nodes/glTF",
+    "theme": "dark",
+    "name": "Basic Node Scene",
+    "description": "A basic test of the node scene graph rendering system.",
+    "keywords": [
+      "nodes"
+    ]
+  },
+  {
+    "slug": "../nodes/physical",
+    "theme": "dark",
+    "name": "Basic Node Scene",
+    "description": "A basic test of the node scene graph rendering system.",
+    "keywords": [
+      "nodes"
+    ]
+  },
+  {
+    "slug": "../nodes/stressTest",
+    "theme": "dark",
+    "name": "Basic Node Scene",
+    "description": "A basic test of the node scene graph rendering system.",
+    "keywords": [
+      "nodes"
+    ]
+  },
+  {
+    "slug": "../nodes/stressTestBuffers",
+    "theme": "dark",
+    "name": "Basic Node Scene",
+    "description": "A basic test of the node scene graph rendering system.",
+    "keywords": [
+      "nodes"
+    ]
+  },
+  {
+    "slug": "../passes/latlong",
+    "name": "Lambertian PMREM Generation",
+    "description": "This takes as input an latlong image (AKA lat-long image), converts it to a cubemap and then  as a background without converting it to a cubemap.",
+    "keywords": [
+      "cubemap",
+      "pass",
+      "background",
+      "spherical",
+      "latlong",
+      "lat-long"
+    ]
+  },
+  {
+    "slug": "../pmrem/lambertian",
+    "name": "Equirectangular Background Pass",
+    "description": "Uses a latlong image (AKA lat-long image) as a background without converting it to a cubemap.",
+    "keywords": [
+      "cubemap",
+      "pass",
+      "background",
+      "spherical",
+      "latlong",
+      "lat-long"
+    ]
+  },
+  {
+    "slug": "../textures/array",
+    "name": "Texture Arrays",
+    "description": "A simple test of texture arrays.",
+    "keywords": [
+      "basics",
+      "textures",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../textures/basic",
+    "name": "Textures",
+    "description": "A simple test of rendering a texture.",
+    "keywords": [
+      "basics",
+      "textures",
+      "direct"
+    ]
+  },
+  {
+    "slug": "../textures/canvas",
+    "name": "Canvas Texture",
+    "description": "Redrawing a canvas into a texture every frame.",
+    "keywords": [
+      "basics",
+      "canvas",
+      "texture",
+      "framebuffer"
+    ]
+  },
+  {
+    "slug": "../textures/depth",
+    "name": "Depth Texture",
+    "description": "A simple test of rendering to a depth texture framebuffer attachment and then accessing that texture (as an albedo map on geometry which is then rendered to screen.)",
+    "keywords": [
+      "basics",
+      "render-to-texture",
+      "depth-texture",
+      "framebuffer"
+    ]
+  },
+  {
+    "slug": "../textures/render",
+    "name": "Render to Texture",
+    "description": "A simple test of rendering to a texture, and then using that texture as an albedo map on another geometry and writing that to screen.",
+    "keywords": [
+      "basics",
+      "render-to-texture",
+      "framebuffer"
+    ]
+  },
+  {
+    "slug": "../textures/svg",
+    "name": "SVG Textures",
+    "description": "A simple test of rendering an svg file as texture.",
+    "keywords": [
+      "basics",
+      "textures",
+      "direct",
+      "svg"
+    ]
+  },
+  {
+    "slug": "../textures/video",
+    "name": "Getting Started - Video Texture",
+    "description": "Rendering a playing video into a texture.",
+    "keywords": [
+      "basics",
+      "video",
+      "texture",
+      "framebuffer"
+    ]
+  },
+  {
+    "slug": "../units/glsl",
+    "name": "GLSL Unit Test Runner",
+    "description": "Runs all the glsl unit tests.",
+    "keywords": [
+      "unit",
+      "test",
+      "glsl"
+    ]
+  }
+]
