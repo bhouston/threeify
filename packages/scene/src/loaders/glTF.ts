@@ -7,6 +7,7 @@ import {
 } from '@gltf-transform/core';
 import {
   Clearcoat,
+  IOR,
   KHRONOS_EXTENSIONS,
   Sheen,
   Specular,
@@ -227,6 +228,13 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         glTFSpecular?.getSpecularTextureInfo() || null
       );
 
+      const specularColorTextureAccessor = await getTextureAccessor(
+        glTFSpecular?.getSpecularColorTexture() || null,
+        glTFSpecular?.getSpecularColorTextureInfo() || null
+      );
+
+      const glTFIor = glTFMaterial.getExtension('KHR_materials_ior') as IOR;
+
       const glTFClearcoat = glTFMaterial.getExtension(
         'KHR_materials_clearcoat'
       ) as Clearcoat;
@@ -271,11 +279,18 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         metallicFactor: glTFMaterial.getMetallicFactor(),
         metallicTextureAccessor: metallicRoughnessTextureAccessor,
 
+        ior: glTFIor?.getIOR(),
+
         specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
         specularRoughnessTextureAccessor: metallicRoughnessTextureAccessor,
 
-        specularFactor: glTFSpecular.getSpecularFactor(),
+        specularFactor: glTFSpecular?.getSpecularFactor(),
         specularFactorTextureAccessor: specularFactorTextureAccessor,
+
+        specularColor: toColor3(
+          glTFSpecular?.getSpecularColorFactor() || [0, 0, 0]
+        ),
+        specularColorTextureAccessor: specularColorTextureAccessor,
 
         emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
         emissiveTextureAccessor: emissiveTextureAccessor,

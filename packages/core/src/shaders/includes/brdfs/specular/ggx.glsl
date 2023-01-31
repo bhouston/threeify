@@ -30,3 +30,21 @@ vec3 BRDF_Specular_GGX(
   return F * (V * D) * PI;
 
 } // validated
+
+// GGX Distribution, Schlick Fresnel, GGX-Smith Visibility
+float BRDF_Specular_GGX_NoFrenel( const vec3 normal, const vec3 viewDirection, const vec3 lightDirection, const float specularRoughness ) {
+  float alphaRoughness = pow2( specularRoughness ); // UE4's roughness
+
+  vec3 halfDirection = normalize( lightDirection + viewDirection );
+
+  float NdotL = saturate( dot( normal, lightDirection ) );
+  float NdotV = saturate( dot( normal, viewDirection ) );
+  float NdotH = saturate( dot( normal, halfDirection ) );
+
+  float V = V_GGX_SmithCorrelated( alphaRoughness, NdotL, NdotV );
+  float D = D_GGX( alphaRoughness, NdotH );
+
+  return ( V * D ) * PI;
+
+} // validated
+

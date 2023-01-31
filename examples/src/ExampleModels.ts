@@ -30,6 +30,7 @@ export enum GLTFModel {
   GearboxAssy,
   Lantern,
   Avocado,
+  ToyCar,
 
   // test models
   AlphaBlendModeTest,

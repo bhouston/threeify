@@ -1,4 +1,9 @@
-import { Orbit, RenderingContext, ShaderMaterial } from '@threeify/core';
+import {
+  ClearState,
+  Orbit,
+  RenderingContext,
+  ShaderMaterial
+} from '@threeify/core';
 import {
   glTFToSceneNode,
   PerspectiveCamera,
@@ -50,7 +55,7 @@ async function init(): Promise<void> {
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
   glTFModel.dirty();
   const maxSize = box3MaxSize(glTFBoundingBox);
-
+  const lightIntensity = 25;
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
@@ -61,8 +66,8 @@ async function init(): Promise<void> {
   const pointLight1 = new PointLight({
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
-    color: new Color3(1, 1, 1),
-    intensity: 25,
+    color: new Color3(0.6, 0.8, 1),
+    intensity: lightIntensity,
     range: 1000
   });
   root.children.push(pointLight1);
@@ -70,7 +75,7 @@ async function init(): Promise<void> {
     name: 'PointLight2',
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
-    intensity: 50,
+    intensity: lightIntensity,
     range: 1000
   });
   root.children.push(pointLight2);
@@ -78,7 +83,7 @@ async function init(): Promise<void> {
     name: 'PointLight3',
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
-    intensity: 25,
+    intensity: lightIntensity,
     range: 1000
   });
   root.children.push(pointLight3);
@@ -108,6 +113,7 @@ async function init(): Promise<void> {
   );
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
+  canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
   function animate(): void {
     requestAnimationFrame(animate);

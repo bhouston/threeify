@@ -87,9 +87,12 @@ void main( ) {
     vec3 diffuse_brdf = irradiance * mix( BRDF_Diffuse_Lambert( material.albedo ) * material.occlusion, vec3( 0. ), material.metallic );
 
     // TODO: optmize Fresnel out of this BRDF.
-    vec3 specular_brdf = irradiance * BRDF_Specular_GGX( normal, viewDirection, directLight.direction, vec3( 1. ), vec3( 1. ), material.specularRoughness ) * specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
+    vec3 specular_brdf = irradiance * BRDF_Specular_GGX_NoFrenel( normal, viewDirection, directLight.direction, material.specularRoughness ) *
+      specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
 
-    vec3 dielectric_brdf = fresnelMix( specularF0, specularF90, VdotH, material.specularFactor, diffuse_brdf, specular_brdf ) + emissive_brdf;
+    vec3 dielectric_brdf = fresnelMix( specularF0, specularF90, VdotH, material.specularFactor, diffuse_brdf, specular_brdf );
+    
+    dielectric_brdf += emissive_brdf;
 
     // sheen
     vec3 sheen_brdf = irradiance * BRDF_Sheen_Charlie( normal, viewDirection, directLight.direction, material.sheenColor, material.sheenRoughness );
@@ -101,7 +104,7 @@ void main( ) {
 
     // clearcoat
     vec3 clearcoat_brdf = clearcoatIrradiance *
-      BRDF_Specular_GGX( clearcoatNormal, viewDirection, directLight.direction, vec3( 1. ), vec3( 1. ), material.clearcoatRoughness );
+      BRDF_Specular_GGX_NoFrenel( clearcoatNormal, viewDirection, directLight.direction, material.clearcoatRoughness );
 
     vec3 coated_brdf = fresnelMix( vec3( 0.04 ), vec3( 1.0 ), VdotH, material.clearcoatFactor, fabric_brdf, clearcoat_brdf );
 
