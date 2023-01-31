@@ -23,8 +23,6 @@ import { RenderingContext } from '../RenderingContext.js';
 import { bindTextures, TextureBindings } from '../textures/TextureBindings.js';
 import { BufferBit } from './BufferBit.js';
 
-const GL = WebGL2RenderingContext;
-
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
   public cullingState: CullingState | undefined = undefined;

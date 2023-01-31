@@ -44,11 +44,7 @@
     "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./packages/layer-compositor\" && tst --projectDir \"./examples\"",
     "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch & tst --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
     "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
-    "lint": "eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\"",
-    "lint:fix": "npm run lint -- --fix",
-    "prettier": "prettier \"examples/src/**/*.{ts,json}\" \"packages/**/src/**/*.{ts,json}\" --check",
-    "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix",
+    "format": "prettier \"examples/src/**/*.{ts,json}\" \"packages/**/src/**/*.{ts,json}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest"
   },

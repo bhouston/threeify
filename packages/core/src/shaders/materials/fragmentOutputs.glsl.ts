@@ -1,4 +1,4 @@
-import { OutputChannels } from '../../../materials/OutputChannels.js';
+import { OutputChannels } from '../../materials/OutputChannels.js';
 
 function createEnumDefines(): string {
   const output = [];
