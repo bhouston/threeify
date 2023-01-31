@@ -91,7 +91,12 @@ export function float32ArrayToColor4Array(array: Float32Array): Color4[] {
   const stride = Color4.NUM_COMPONENTS;
   const result = new Array<Color4>(array.length / stride);
   for (let i = 0, offset = 0; i < array.length; i++, offset += stride) {
-    result[i] = new Color4(array[offset], array[offset + 1], array[offset + 2]);
+    result[i] = new Color4(
+      array[offset],
+      array[offset + 1],
+      array[offset + 2],
+      array[offset + 3]
+    );
   }
   return result;
 }

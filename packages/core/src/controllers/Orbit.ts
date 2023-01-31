@@ -27,7 +27,7 @@ export class Orbit implements IDisposable {
   public zoom = 1;
   public zoomMomentum = 0;
   public zoomMin = 0.5;
-  public zoomMax = 3;
+  public zoomMax = 5;
 
   public damping = 0.1;
 

@@ -83,7 +83,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     
     // 
     material.sheenColor = sheenColorFactor * sRGBToLinear( sampleTexture( sheenColorTextureAccessor, uvs ).rgb );
-    material.sheenRoughness = sheenRoughnessFactor * sampleTexture( sheenRoughnessTextureAccessor, uvs ).ra;
+    material.sheenRoughness = sheenRoughnessFactor * sampleTexture( sheenRoughnessTextureAccessor, uvs ).a;
     
     //
 	material.iridescence = iridescenceFactor; // * sampleTexture( iridescenceFactorTextureAccessor, uvs ).r;

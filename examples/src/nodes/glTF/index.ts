@@ -35,13 +35,18 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const orbitController = new Orbit(canvasHtmlElement);
-  orbitController.zoom = 0.8;
+  orbitController.zoom = 1.2;
 
   const sceneTreeCache = new SceneTreeCache();
 
+  const sheenChairMode = true;
+
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.SheenChair, GLTFFormat.glTF)
+    getGLTFUrl(
+      sheenChairMode ? GLTFModel.SheenChair : GLTFModel.SciFiHelmet,
+      GLTFFormat.glTF
+    )
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
@@ -62,7 +67,7 @@ async function init(): Promise<void> {
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.6, 0.8, 1),
-    intensity: lightIntensity,
+    intensity: lightIntensity * 1.5,
     range: 1000
   });
   root.children.push(pointLight1);
@@ -70,7 +75,7 @@ async function init(): Promise<void> {
     name: 'PointLight2',
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
-    intensity: lightIntensity,
+    intensity: lightIntensity * 1.5,
     range: 1000
   });
   root.children.push(pointLight2);
@@ -78,10 +83,12 @@ async function init(): Promise<void> {
     name: 'PointLight3',
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
-    intensity: lightIntensity,
+    intensity: lightIntensity * 2.5,
     range: 1000
   });
+  //if (sheenChairMode) {
   root.children.push(pointLight3);
+  //}
   const camera = new PerspectiveCamera({
     name: 'Camera',
     verticalFov: 25,
@@ -108,7 +115,7 @@ async function init(): Promise<void> {
   );
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
-  // canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
+  //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
   function animate(): void {
     requestAnimationFrame(animate);
