@@ -39,17 +39,21 @@ async function init(): Promise<void> {
 
   const sceneTreeCache = new SceneTreeCache();
 
-  const sheenChairMode = true;
+  const sheenChairMode = false;
 
   const root = new SceneNode({ name: 'root' });
+  console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getGLTFUrl(
       sheenChairMode ? GLTFModel.SheenChair : GLTFModel.SciFiHelmet,
       GLTFFormat.glTF
     )
   );
+  console.timeEnd('glTFToSceneNode');
 
+  console.time('updateNodeTree');
   updateNodeTree(glTFModel, sceneTreeCache);
+  console.timeEnd('updateNodeTree');
 
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
@@ -104,6 +108,7 @@ async function init(): Promise<void> {
 
   console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
+  console.time('updateRenderCache');
   const renderCache = updateRenderCache(
     context,
     root,
@@ -113,6 +118,7 @@ async function init(): Promise<void> {
     },
     sceneTreeCache
   );
+  console.timeEnd('updateRenderCache');
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));

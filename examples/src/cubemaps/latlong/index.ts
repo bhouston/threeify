@@ -7,7 +7,8 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  TextureBindings
 } from '@threeify/core';
 import {
   Mat4,
@@ -40,6 +41,7 @@ async function init(): Promise<void> {
     new Vec2(1024, 1024)
   );
 
+  const textureBindings = new TextureBindings();
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
@@ -51,7 +53,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap,
+    cubeMap: textureBindings.bind(cubeMap),
     mipCount: cubeMap.mipCount,
     perceptualRoughness: 0
   };
@@ -71,7 +73,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
   }
 

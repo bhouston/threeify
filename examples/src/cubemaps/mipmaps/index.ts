@@ -7,7 +7,8 @@ import {
   makeTexImage2DFromCubeTexture,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial
+  ShaderMaterial,
+  TextureBindings
 } from '@threeify/core';
 import {
   Euler3,
@@ -43,6 +44,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const textureBindings = new TextureBindings();
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
@@ -54,7 +56,9 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
+    cubeMap: textureBindings.bind(
+      makeTexImage2DFromCubeTexture(context, cubeTexture)
+    ),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount
   };
@@ -74,7 +78,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
   }
 

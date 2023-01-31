@@ -113,7 +113,7 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
 
   const glTFMesh: Mesh | null = glTFNode.getMesh();
   if (glTFMesh !== null) {
-    sceneNode.children.push(...(await translateMesh(glTFMesh)));
+    sceneNode.children.push(...(await translateMeshes(glTFMesh)));
   }
 
   for (const glTFChildNode of glTFNode.listChildren()) {
@@ -155,7 +155,7 @@ async function getTextureAccessor(
   return new TextureAccessor(texture, uvTransform, uvIndex);
 }
 
-async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
+async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
   const meshNodes: MeshNode[] = [];
 
   for (const primitive of glTFMesh.listPrimitives()) {
@@ -175,6 +175,7 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         indices.getNormalized()
       );
     }
+
     primitive.listSemantics().forEach((semantic, index) => {
       const attribute = primitive.listAttributes()[index];
 
@@ -197,41 +198,9 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
     if (glTFMaterial !== null) {
       // convert to simultaneously resolving promises
 
-      const metallicRoughnessTextureAccessor = await getTextureAccessor(
-        glTFMaterial.getMetallicRoughnessTexture(),
-        glTFMaterial.getMetallicRoughnessTextureInfo()
-      );
-      const albedoAlphaTextureAccessor = await getTextureAccessor(
-        glTFMaterial.getBaseColorTexture(),
-        glTFMaterial.getBaseColorTextureInfo()
-      );
-      const emissiveTextureAccessor = await getTextureAccessor(
-        glTFMaterial.getEmissiveTexture(),
-        glTFMaterial.getEmissiveTextureInfo()
-      );
-      const normalTextureAccessor = await getTextureAccessor(
-        glTFMaterial.getNormalTexture(),
-        glTFMaterial.getNormalTextureInfo()
-      );
-
-      const occlusionTextureAccessor = await getTextureAccessor(
-        glTFMaterial.getOcclusionTexture(),
-        glTFMaterial.getOcclusionTextureInfo()
-      );
-
       const glTFSpecular = glTFMaterial.getExtension(
         'KHR_materials_specular'
       ) as Specular;
-
-      const specularFactorTextureAccessor = await getTextureAccessor(
-        glTFSpecular?.getSpecularTexture() || null,
-        glTFSpecular?.getSpecularTextureInfo() || null
-      );
-
-      const specularColorTextureAccessor = await getTextureAccessor(
-        glTFSpecular?.getSpecularColorTexture() || null,
-        glTFSpecular?.getSpecularColorTextureInfo() || null
-      );
 
       const glTFIor = glTFMaterial.getExtension('KHR_materials_ior') as IOR;
 
@@ -239,33 +208,91 @@ async function translateMesh(glTFMesh: Mesh): Promise<MeshNode[]> {
         'KHR_materials_clearcoat'
       ) as Clearcoat;
 
-      const clearcoatTextureAccessor = await getTextureAccessor(
-        glTFClearcoat?.getClearcoatTexture() || null,
-        glTFClearcoat?.getClearcoatTextureInfo() || null
-      );
-      const clearcoatRoughnessTextureAccessor = await getTextureAccessor(
-        glTFClearcoat?.getClearcoatRoughnessTexture() || null,
-        glTFClearcoat?.getClearcoatRoughnessTextureInfo() || null
-      );
-      const clearcoatNormalTextureAccessor = await getTextureAccessor(
-        glTFClearcoat?.getClearcoatNormalTexture() || null,
-        glTFClearcoat?.getClearcoatNormalTextureInfo() || null
-      );
-
       const glTFSheen = glTFMaterial.getExtension(
         'KHR_materials_sheen'
       ) as Sheen;
 
-      const sheenColorTextureAccessor = await getTextureAccessor(
+      const metallicRoughnessTextureAccessorPromise = getTextureAccessor(
+        glTFMaterial.getMetallicRoughnessTexture(),
+        glTFMaterial.getMetallicRoughnessTextureInfo()
+      );
+      const albedoAlphaTextureAccessorPromise = getTextureAccessor(
+        glTFMaterial.getBaseColorTexture(),
+        glTFMaterial.getBaseColorTextureInfo()
+      );
+      const emissiveTextureAccessorPromise = getTextureAccessor(
+        glTFMaterial.getEmissiveTexture(),
+        glTFMaterial.getEmissiveTextureInfo()
+      );
+      const normalTextureAccessorPromise = getTextureAccessor(
+        glTFMaterial.getNormalTexture(),
+        glTFMaterial.getNormalTextureInfo()
+      );
+
+      const occlusionTextureAccessorPromise = getTextureAccessor(
+        glTFMaterial.getOcclusionTexture(),
+        glTFMaterial.getOcclusionTextureInfo()
+      );
+
+      const specularFactorTextureAccessorPromise = getTextureAccessor(
+        glTFSpecular?.getSpecularTexture() || null,
+        glTFSpecular?.getSpecularTextureInfo() || null
+      );
+
+      const specularColorTextureAccessorPromise = getTextureAccessor(
+        glTFSpecular?.getSpecularColorTexture() || null,
+        glTFSpecular?.getSpecularColorTextureInfo() || null
+      );
+
+      const clearcoatTextureAccessorPromise = getTextureAccessor(
+        glTFClearcoat?.getClearcoatTexture() || null,
+        glTFClearcoat?.getClearcoatTextureInfo() || null
+      );
+      const clearcoatRoughnessTextureAccessorPromise = getTextureAccessor(
+        glTFClearcoat?.getClearcoatRoughnessTexture() || null,
+        glTFClearcoat?.getClearcoatRoughnessTextureInfo() || null
+      );
+      const clearcoatNormalTextureAccessorPromise = getTextureAccessor(
+        glTFClearcoat?.getClearcoatNormalTexture() || null,
+        glTFClearcoat?.getClearcoatNormalTextureInfo() || null
+      );
+
+      const sheenColorTextureAccessorPromise = getTextureAccessor(
         glTFSheen?.getSheenColorTexture() || null,
         glTFSheen?.getSheenColorTextureInfo() || null
       );
-      const sheenRoughnessTextureAccessor = await getTextureAccessor(
+      const sheenRoughnessTextureAccessorPromise = getTextureAccessor(
         glTFSheen?.getSheenRoughnessTexture() || null,
         glTFSheen?.getSheenRoughnessTextureInfo() || null
       );
 
-      console.log('loaded textures?');
+      const data = await Promise.all([
+        metallicRoughnessTextureAccessorPromise,
+        albedoAlphaTextureAccessorPromise,
+        emissiveTextureAccessorPromise,
+        normalTextureAccessorPromise,
+        occlusionTextureAccessorPromise,
+        specularFactorTextureAccessorPromise,
+        specularColorTextureAccessorPromise,
+        clearcoatTextureAccessorPromise,
+        clearcoatRoughnessTextureAccessorPromise,
+        clearcoatNormalTextureAccessorPromise,
+        sheenColorTextureAccessorPromise,
+        sheenRoughnessTextureAccessorPromise
+      ]);
+
+      const metallicRoughnessTextureAccessor = data[0];
+      const albedoAlphaTextureAccessor = data[1];
+      const emissiveTextureAccessor = data[2];
+      const normalTextureAccessor = data[3];
+      const occlusionTextureAccessor = data[4];
+      const specularFactorTextureAccessor = data[5];
+      const specularColorTextureAccessor = data[6];
+      const clearcoatTextureAccessor = data[7];
+      const clearcoatRoughnessTextureAccessor = data[8];
+      const clearcoatNormalTextureAccessor = data[9];
+      const sheenColorTextureAccessor = data[10];
+      const sheenRoughnessTextureAccessor = data[11];
 
       physicalMaterial = new PhysicalMaterial({
         alpha: glTFMaterial.getAlpha(),
