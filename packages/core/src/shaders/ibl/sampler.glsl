@@ -2,7 +2,7 @@
 #pragma include <math/sampling/hammersley.glsl>
 #pragma include <brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
 #pragma include <brdfs/sheen/d_charlie>
-#pragma include <normals/tangentSpace.glsl>
+#pragma include <microgeometry/tangentSpace.glsl>
 
 #define NUM_SAMPLES (1024)
 #define LOD_BIAS (1)

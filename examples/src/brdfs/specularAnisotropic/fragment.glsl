@@ -17,7 +17,7 @@ out vec4 outputColor;
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx_anisotropic>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 #pragma include <math/mat2>
 #pragma include <math/mat3>
 #pragma include <math/vectorMath>

@@ -21,8 +21,8 @@ out vec4 outputColor;
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/normalPacking>
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/normalPacking>
+#pragma include <microgeometry/tangentSpace>
 #pragma include <materials/outputChannels>
 
 void main() {

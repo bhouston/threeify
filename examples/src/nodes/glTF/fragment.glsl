@@ -16,7 +16,7 @@ uniform mat4 worldToView;
 
 out vec4 outputColor;
 
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 #pragma include <brdfs/diffuse/lambert>
 
 #pragma include <brdfs/specular/ggx>
@@ -24,7 +24,7 @@ out vec4 outputColor;
 #pragma include <brdfs/sheen/charlie>
 #pragma include <math/mat4>
 #pragma include <operations/occlusion>
-#pragma include <operations/tonemapping>
+#pragma include <color/tonemapping/acesfilmic>
 #pragma include <materials/alpha_mode>
 
 void main( ) {

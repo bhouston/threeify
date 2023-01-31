@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <normals/normalPacking>
+#pragma include <microgeometry/normalPacking>
 #pragma include <math/unitIntervalPacking>
 
 #define OUTPUT_CHANNEL_BEAUTY (0)

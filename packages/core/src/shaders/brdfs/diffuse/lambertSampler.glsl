@@ -1,6 +1,6 @@
 #pragma include <math/math>
 #pragma include <math/sampling/hammersley>
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 
 vec3 BRDF_Diffuse_Lambert_SampleDirection(vec2 sampleUv) {
   float phi = PI2 * sampleUv.x;

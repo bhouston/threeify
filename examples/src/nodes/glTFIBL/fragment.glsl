@@ -16,7 +16,7 @@ uniform mat4 worldToView;
 
 out vec4 outputColor;
 
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 #pragma include <brdfs/diffuse/lambert>
 
 #pragma include <brdfs/specular/ggx>
@@ -24,7 +24,7 @@ out vec4 outputColor;
 #pragma include <brdfs/sheen/charlie>
 #pragma include <math/mat4>
 #pragma include <operations/occlusion>
-#pragma include <operations/tonemapping>
+#pragma include <color/tonemapping/acesfilmic>
 #pragma include <materials/alpha_mode>
 
 void main( ) {
@@ -61,6 +61,8 @@ void main( ) {
   // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_specular/README.md
   specularF0 = mix( specularF0, material.albedo, material.metallic );
   specularF90 = mix( specularF90, vec3( 1. ), material.metallic );
+
+  
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
   for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++ ) {

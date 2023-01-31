@@ -55,9 +55,9 @@ uniform float iridescenceIor;
 //uniform float iridescenceThicknessMaximum;
 //uniform TextureAccessor iridescenceThicknessTextureAccessor;
 
-#pragma include <normals/normalPacking>
+#pragma include <microgeometry/normalPacking>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/normalMapping>
+#pragma include <microgeometry/normalMapping>
 
 PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNELS] ) {
 

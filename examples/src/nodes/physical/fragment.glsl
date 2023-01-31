@@ -14,7 +14,7 @@ uniform mat4 worldToView;
 
 out vec4 outputColor;
 
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
