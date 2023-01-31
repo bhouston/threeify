@@ -23,5 +23,11 @@
   "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
   "[glsl]": {
     "editor.defaultFormatter": "raczzalan.webgl-glsl-editor"
+  },
+  "files.exclude": {
+    "**/node_modules/": true,
+    "**/dist/": true,
+    "**/tsconfig.tsbuildinfo": true,
+    "**/package-lock.json": true,
   }
 }
