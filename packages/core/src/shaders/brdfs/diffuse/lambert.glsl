@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math>
+#pragma include <math/math>
 
 // three.js
 vec3 BRDF_Diffuse_Lambert(const vec3 albedo) {

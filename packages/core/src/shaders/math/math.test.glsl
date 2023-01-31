@@ -1,5 +1,5 @@
 #pragma include <tests/fragment>
-#pragma include <math>
+#pragma include <math/math>
 
 void tests(inout TestSuite suite) {
   float zero;

@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math>
+#pragma include <math/math>
 
 vec3 rgbeToLinear(vec4 value) {
   return vec3(value.rgb * exp2(value.a * 255.0 - 128.0));

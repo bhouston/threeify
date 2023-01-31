@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math>
+#pragma include <math/math>
 
 vec3 sRGBToLinear(vec3 value) {
   return vec3(

@@ -1,7 +1,7 @@
 #pragma include <tests/fragment>
 #pragma include "mat2"
 #pragma include "mat3"
-#pragma include <math>
+#pragma include <math/math>
 
 void testMatEquals(inout TestSuite suite, int id, mat3 m, mat3 target) {
   for (int i = 0; i < 3; i++) {
