@@ -74,12 +74,18 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.normal = vec3( normalScale, 1.0 ) * rgbToNormal( sampleTexture( normalTextureAccessor, uvs ).rgb );
     material.occlusion = ( sampleTexture( occlusionTextureAccessor, uvs ).r - 1.0 ) * occlusionFactor + 1.0;
     material.ior = ior;
+
+    // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_clearcoat/README.md
     material.clearcoatFactor = clearcoatFactor * sampleTexture( clearcoatFactorTextureAccessor, uvs ).r;
-    material.clearcoatRoughness = clearcoatRoughnessFactor * sampleTexture( clearcoatRoughnessTextureAccessor, uvs ).r;
+    material.clearcoatRoughness = clearcoatRoughnessFactor * sampleTexture( clearcoatRoughnessTextureAccessor, uvs ).g;
     material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( sampleTexture( clearcoatNormalTextureAccessor, uvs ).rgb );
     material.clearcoatTint = clearcoatTint * sRGBToLinear( sampleTexture( clearcoatTintTextureAccessor, uvs ).rgb );
+    
+    // 
     material.sheenColor = sheenColorFactor * sRGBToLinear( sampleTexture( sheenColorTextureAccessor, uvs ).rgb );
-    material.sheenRoughness = sheenRoughnessFactor * sampleTexture( sheenRoughnessTextureAccessor, uvs ).r;
+    material.sheenRoughness = sheenRoughnessFactor * sampleTexture( sheenRoughnessTextureAccessor, uvs ).ra;
+    
+    //
 	material.iridescence = iridescenceFactor; // * sampleTexture( iridescenceFactorTextureAccessor, uvs ).r;
     material.iridescenceIor = iridescenceIor;
    //material.iridescenceThickness = ( iridescenceThicknessMaximum - iridescenceThicknessMinimum ) * sampleTexture( iridescenceThicknessTextureAccessor, uvs ).g + iridescenceThicknessMinimum;
