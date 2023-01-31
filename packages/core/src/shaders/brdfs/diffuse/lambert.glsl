@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <math>
 
 // three.js
 vec3 BRDF_Diffuse_Lambert(const vec3 albedo) {
@@ -15,4 +15,3 @@ vec3 BRDF_lambertian_2(vec3 f0, vec3 f90, vec3 diffuseColor, float VdotH)
     return (1. - F_Schlick(f0, f90, VdotH)) * (diffuseColor / M_PI);
 }
 */
-

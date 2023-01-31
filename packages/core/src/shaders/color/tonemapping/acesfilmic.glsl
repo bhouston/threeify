@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <math>
 
 // source: https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
 vec3 tonemappingACESFilmic(vec3 color) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma include <math/math>
+#pragma include <math>
 #pragma include <math/spherical>
 
 /**

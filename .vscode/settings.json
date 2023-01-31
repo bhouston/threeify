@@ -25,9 +25,5 @@
     "editor.defaultFormatter": "raczzalan.webgl-glsl-editor"
   },
   "files.exclude": {
-    "**/node_modules/": true,
-    "**/dist/": true,
-    "**/tsconfig.tsbuildinfo": true,
-    "**/package-lock.json": true,
-  }
+   }
 }

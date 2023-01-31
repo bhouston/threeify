@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <math>
 
 // Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs
 // https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Shaders/Private/BRDF.ush#L270-L286

@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma include <math/math>
+#pragma include <math>
 
 // The following equation(s) model the distribution of microfacet normals across the area being drawn (aka D())
 // Implementation from "Average Irregularity Representation of a Roughened Surface for Ray Reflection" by T. S. Trowbridge, and K. P. Reitz

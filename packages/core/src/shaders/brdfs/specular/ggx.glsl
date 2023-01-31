@@ -1,5 +1,5 @@
 #pragma once
-#pragma include <math/math>
+#pragma include <math>
 #pragma include "fresnel"
 #pragma include "v_ggx_smithcorrelated"
 #pragma include "d_ggx"

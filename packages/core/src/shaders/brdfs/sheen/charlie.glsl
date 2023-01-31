@@ -6,7 +6,7 @@
 // See  https://github.com/sebavan/glTF/tree/KHR_materials_sheen/extensions/2.0/Khronos/KHR_materials_sheen
 
 #pragma once
-#pragma include <math/math>
+#pragma include <math>
 #pragma include "d_charlie"
 #pragma include "v_neubelt"
 

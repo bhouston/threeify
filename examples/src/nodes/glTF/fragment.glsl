@@ -22,8 +22,9 @@ out vec4 outputColor;
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/specular/fresnel>
 #pragma include <brdfs/sheen/charlie>
+#pragma include <brdfs/sheen/sheenMix>
 #pragma include <math/mat4>
-#pragma include <operations/occlusion>
+#pragma include <ao/ao>
 #pragma include <color/tonemapping/acesfilmic>
 #pragma include <materials/alpha_mode>
 
@@ -86,26 +87,19 @@ void main( ) {
 
     vec3 diffuse_brdf = irradiance * mix( BRDF_Diffuse_Lambert( material.albedo ) * material.occlusion, vec3( 0. ), material.metallic );
 
-    // TODO: optmize Fresnel out of this BRDF.
     vec3 specular_brdf = irradiance * BRDF_Specular_GGX_NoFrenel( normal, viewDirection, directLight.direction, material.specularRoughness ) *
       specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
-
     vec3 dielectric_brdf = fresnelMix( specularF0, specularF90, VdotH, material.specularFactor, diffuse_brdf, specular_brdf );
     
     dielectric_brdf += emissive_brdf;
 
     // sheen
     vec3 sheen_brdf = irradiance * BRDF_Sheen_Charlie( normal, viewDirection, directLight.direction, material.sheenColor, material.sheenRoughness );
-
-    // Sheen energy compensation approximation calculation can be found at the end of https://drive.google.com/file/d/1T0D1VSyR4AllqIJTQAraEIzjlb5h4FKH/view?usp=sharing
-    float sheenEnergyComp = 1.0 - 0.157 * max3( material.sheenColor );
-
-    vec3 fabric_brdf = dielectric_brdf * sheenEnergyComp + sheen_brdf;
+    vec3 fabric_brdf = sheenMix( material.sheenColor, dielectric_brdf, sheen_brdf );
 
     // clearcoat
     vec3 clearcoat_brdf = clearcoatIrradiance *
       BRDF_Specular_GGX_NoFrenel( clearcoatNormal, viewDirection, directLight.direction, material.clearcoatRoughness );
-
     vec3 coated_brdf = fresnelMix( vec3( 0.04 ), vec3( 1.0 ), VdotH, material.clearcoatFactor, fabric_brdf, clearcoat_brdf );
 
     // emissive

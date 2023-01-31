@@ -1,5 +1,5 @@
 #pragma include <tests/fragment>
-#pragma include "math"
+#pragma include <math>
 
 struct SimpleStruct {
   float a;

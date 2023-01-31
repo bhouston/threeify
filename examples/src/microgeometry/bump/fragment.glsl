@@ -19,7 +19,7 @@ out vec4 outputColor;
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/bumpMapping>
+#pragma include <microgeometry/bumpMapping>
 #pragma include <microgeometry/tangentSpace>
 
 void main() {

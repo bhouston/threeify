@@ -1,7 +1,7 @@
 // Source:
 // https://github.com/KhronosGroup/glTF-Sample-Viewer/blob/master/src/shaders/punctual.glsl
 #pragma once
-#pragma include <math/math>
+#pragma include <math>
 #pragma include "lighting"
 
 // lights

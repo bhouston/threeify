@@ -1,4 +1,4 @@
-#pragma include <math/math>
+#pragma include <math>
 #pragma include <math/sampling/hammersley.glsl>
 #pragma include <brdfs/specular/d_ggx> // NOTE: takes alpha, original versions here took roughness
 #pragma include <brdfs/sheen/d_charlie>

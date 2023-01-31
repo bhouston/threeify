@@ -23,7 +23,7 @@ out vec4 outputColor;
 #pragma include <brdfs/specular/fresnel>
 #pragma include <brdfs/sheen/charlie>
 #pragma include <math/mat4>
-#pragma include <operations/occlusion>
+#pragma include <ao/ao>
 #pragma include <color/tonemapping/acesfilmic>
 #pragma include <materials/alpha_mode>
 
