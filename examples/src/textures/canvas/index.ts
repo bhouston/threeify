@@ -8,8 +8,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
-  TextureBindings
+  Texture
 } from '@threeify/core';
 import {
   Color3,
@@ -74,8 +73,6 @@ async function init(): Promise<void> {
   const texture = new Texture(canvas);
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
 
-  const textureBindings = new TextureBindings();
-
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
@@ -88,7 +85,7 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     ),
     viewLightPosition: new Vec3(0, 0, 0),
-    map: textureBindings.bind(uvTestTexture)
+    map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -104,15 +101,14 @@ async function init(): Promise<void> {
     );
     updateCanvas(ctx, frameNumber);
     uvTestTexture.loadImages([canvas]);
-    uniforms.map = textureBindings.bind(uvTestTexture);
+    uniforms.map = uvTestTexture;
 
     canvasFramebuffer.clear(BufferBit.All, whiteClearState);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      textureBindings
+      bufferGeometry
     });
 
     requestAnimationFrame(animate);

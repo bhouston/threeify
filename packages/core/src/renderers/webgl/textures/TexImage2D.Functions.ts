@@ -124,8 +124,7 @@ export function makeTexImage2DFromEquirectangularTexture(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry,
-      textureBindings: cubeFaceTextureBindings
+      bufferGeometry: cubeFaceBufferGeometry
     });
   });
 

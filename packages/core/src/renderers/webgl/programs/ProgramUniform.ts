@@ -17,6 +17,8 @@ import {
 
 import { Buffer } from '../buffers/Buffer.js';
 import { RenderingContext } from '../RenderingContext.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { TextureBindings } from '../textures/TextureBindings.js';
 import { Program } from './Program.js';
 import { ProgramUniformBlock } from './ProgramUniformBlock.js';
 import { UniformType, uniformTypeInfo } from './UniformType.js';
@@ -140,12 +142,18 @@ export class ProgramUniform {
     return this;
   }
 
-  setIntoLocation(value: UniformValue): this {
+  setIntoLocation(
+    value: UniformValue,
+    textureBindings?: TextureBindings
+  ): this {
     if (this.glLocation === undefined) {
       throw new Error('Can not set uniform value for a uniform block - yet');
     }
     if (value instanceof Array && value.length > 0) {
-      return this.setArrayIntoLocation(value as UniformPrimitiveValue[]);
+      return this.setArrayIntoLocation(
+        value as UniformPrimitiveValue[],
+        textureBindings
+      );
     }
     this.program.context.program = this.program;
 
@@ -254,23 +262,29 @@ export class ProgramUniform {
         // case UniformType.IntSampler2D:
         // case UniformType.UnsignedIntSampler2D:
         // case UniformType.Sampler2DShadow:
-        if (typeof value === 'number') {
-          gl.uniform1i(this.glLocation, value);
+        if (value instanceof TexImage2D) {
+          if (textureBindings === undefined)
+            throw new Error('textureBindings is undefined');
+          const bindIndex = textureBindings.bind(value);
+          gl.uniform1i(this.glLocation, bindIndex);
           return this;
         } else {
           throw new TypeError(
-            'expected number, did you forget to use a TextureBinding?'
+            'expected TexImage2D, are you using obsolete texture bindings?'
           );
         }
         break;
       case UniformType.SamplerCube:
         // case UniformType.SamplerCubeShadow:
-        if (typeof value === 'number') {
-          gl.uniform1i(this.glLocation, value);
+        if (value instanceof TexImage2D) {
+          if (textureBindings === undefined)
+            throw new Error('textureBindings is undefined');
+          const bindIndex = textureBindings.bind(value);
+          gl.uniform1i(this.glLocation, bindIndex);
           return this;
         } else {
           throw new TypeError(
-            'expected number, did you forget to use a TextureBinding?'
+            'expected TexImage2D, are you using obsolete texture bindings?'
           );
         }
         break;
@@ -282,7 +296,10 @@ export class ProgramUniform {
     );
   }
 
-  setArrayIntoLocation(value: UniformPrimitiveValue[]): this {
+  setArrayIntoLocation(
+    value: UniformPrimitiveValue[],
+    textureBindings?: TextureBindings
+  ): this {
     if (this.glLocation === undefined) {
       throw new Error('Can not set uniform value for a uniform block - yet');
     }
@@ -382,12 +399,17 @@ export class ProgramUniform {
         // case UniformType.IntSampler2D:
         // case UniformType.UnsignedIntSampler2D:
         // case UniformType.Sampler2DShadow:
-        if (typeof firstElement === 'number') {
-          gl.uniform1iv(this.glLocation, value as number[]);
+        if (firstElement instanceof TexImage2D) {
+          if (textureBindings === undefined)
+            throw new Error('textureBindings is undefined');
+          const bindIndices = textureBindings.bindAll(
+            value as unknown as TexImage2D[]
+          );
+          gl.uniform1iv(this.glLocation, bindIndices);
           return this;
         } else {
           throw new TypeError(
-            'expected number, did you forget to use a TextureBinding?'
+            'expected TexImage2D, are you using obsolete texture bindings?'
           );
         }
         break;

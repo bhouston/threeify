@@ -11,7 +11,6 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  TextureBindings,
   TextureFilter
 } from '@threeify/core';
 import {
@@ -71,7 +70,6 @@ async function init(): Promise<void> {
 
   const framebuffer = new Framebuffer(context);
 
-  const textureBindings = new TextureBindings();
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
@@ -83,7 +81,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap: textureBindings.bind(cubeMap)
+    cubeMap: cubeMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -113,8 +111,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      textureBindings
+      bufferGeometry
     });
   }
 

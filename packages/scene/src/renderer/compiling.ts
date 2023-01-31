@@ -23,6 +23,7 @@ import {
 
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
+import { DomeLight } from '../scene/lights/DomeLight';
 import { Light } from '../scene/lights/Light';
 import { LightType } from '../scene/lights/LightType';
 import { PointLight } from '../scene/lights/PointLight';
@@ -31,7 +32,7 @@ import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
 import { breadthFirstVisitor } from '../scene/Visitors';
 import { CameraUniforms } from './CameraUniforms';
-import { LightUniforms } from './LightUniforms';
+import { LightParameters } from './LightParameters';
 import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
 import { RenderCache } from './RenderCache';
@@ -71,7 +72,7 @@ export function updateRenderCache(
     nodeIdToUniforms,
     nodeIdToRenderVersion: nodeIdToVersion,
     cameraUniforms,
-    lightUniforms,
+    lightParameters: lightUniforms,
     breathFirstNodes
   } = renderCache;
 
@@ -152,7 +153,6 @@ function meshToSceneCache(
     geometryIdToBufferGeometry,
     shaderNameToProgram,
     materialIdToUniforms,
-    materialIdToTextureBindings,
     textureIdToTexImage2D,
     materialIdToMaterial
   } = renderCache;
@@ -197,8 +197,7 @@ function meshToSceneCache(
           texImage2D = makeTexImage2DFromTexture(context, texture);
           textureIdToTexImage2D.set(textureId, texImage2D);
         }
-        materialUniforms[uniformName] =
-          materialTextureBindings.bind(texImage2D);
+        materialUniforms[uniformName] = texImage2D;
       } else if (
         typeof uniformValue === 'object' &&
         'getParameters' in uniformValue
@@ -212,22 +211,30 @@ function meshToSceneCache(
     }
 
     materialIdToUniforms.set(material.id, materialUniforms);
-    materialIdToTextureBindings.set(material.id, materialTextureBindings);
   }
 }
 
-function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
+function updateLightUniforms(light: Light, lightUniforms: LightParameters) {
   const lightWorldPosition = mat4TransformVec3(
     light.localToWorldMatrix,
     new Vec3(0, 0, 0)
   );
-  const lightColor = color3MultiplyByScalar(light.color, light.intensity);
+  const lightIntensity = color3MultiplyByScalar(light.color, light.intensity);
 
   let lightType = LightType.Directional;
   let lightWorldDirection = new Vec3();
   let lightRange = -1;
   let lightInnerCos = -1;
   let lightOuterCos = -1;
+
+  if (light instanceof DomeLight) {
+    lightUniforms.domeCubeMap = light.cubeMap;
+    lightUniforms.domeIntensity = color3MultiplyByScalar(
+      light.color,
+      light.intensity
+    );
+    return;
+  }
 
   if (light instanceof SpotLight) {
     lightType = LightType.Spot;
@@ -254,7 +261,7 @@ function updateLightUniforms(light: Light, lightUniforms: LightUniforms) {
 
   lightUniforms.numPunctualLights++;
   lightUniforms.punctualLightType.push(lightType);
-  lightUniforms.punctualLightColor.push(lightColor);
+  lightUniforms.punctualLightIntensity.push(lightIntensity);
   lightUniforms.punctualLightWorldPosition.push(lightWorldPosition);
 
   lightUniforms.punctualLightWorldDirection.push(lightWorldDirection);
@@ -272,7 +279,6 @@ function createMeshBatches(renderCache: RenderCache) {
     nodeIdToUniforms,
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
-    materialIdToTextureBindings,
     opaqueMeshBatches,
     blendMeshBatches,
     maskMeshBatches
@@ -347,10 +353,6 @@ function createMeshBatches(renderCache: RenderCache) {
         );
       }
 
-      const textureBindings = materialIdToTextureBindings.get(material.id);
-      if (textureBindings === undefined)
-        throw new Error('Texture Bindings not found');
-
       /*const materialUniformBlock = program.uniformBlocks['Material'];
       const lightingUniformBlock = program.uniformBlocks['Lighting'];
       const cameraUniformBlock = program.uniformBlocks['Camera'];*/
@@ -361,8 +363,7 @@ function createMeshBatches(renderCache: RenderCache) {
         bufferGeometry,
         programVertexArray,
         uniformValueMaps,
-        uniformBufferMap,
-        textureBindings
+        uniformBufferMap
       );
       switch (material.alphaMode) {
         case AlphaMode.Opaque: {
@@ -403,15 +404,17 @@ function filterUniforms(
 function createLightingUniformBuffers(renderCache: RenderCache) {
   const {
     shaderNameToProgram,
-    lightUniforms,
+    lightParameters: lightUniforms,
     shaderNameToLightingUniformBuffers
   } = renderCache;
   // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const shaderName of shaderNameToProgram.keys()) {
     // console.log('shaderName', shaderName);
+
     const program = shaderNameToProgram.get(shaderName);
     if (program === undefined) throw new Error('Program not found');
+
     const lightingUniformBlock = program.uniformBlocks['Lighting'];
     //console.log('lightingUniformBlock', lightingUniformBlock);
     if (lightingUniformBlock !== undefined) {

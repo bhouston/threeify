@@ -31,7 +31,7 @@ export function renderMeshes(
 ) {
   const {
     cameraUniforms,
-    lightUniforms,
+    lightParameters: lightUniforms,
     shaderNameToLightingUniformBuffers,
     shaderNameToCameraUniformBuffers
   } = renderCache;
@@ -42,8 +42,7 @@ export function renderMeshes(
       uniformsArray,
       bufferGeometry,
       programVertexArray,
-      uniformBuffers,
-      textureBindings
+      uniformBuffers
     } = meshBatch;
 
     const uniforms = [...uniformsArray] as UniformValueMap[];
@@ -67,8 +66,7 @@ export function renderMeshes(
       uniforms,
       uniformBuffers,
       bufferGeometry,
-      programVertexArray,
-      textureBindings
+      programVertexArray
     });
   }
 }

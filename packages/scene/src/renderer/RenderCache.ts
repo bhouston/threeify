@@ -5,14 +5,13 @@ import {
   Program,
   ProgramVertexArray,
   TexImage2D,
-  TextureBindings,
   UniformValueMap
 } from '@threeify/core';
 
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { SceneNode } from '../scene/SceneNode';
 import { CameraUniforms } from './CameraUniforms';
-import { LightUniforms } from './LightUniforms';
+import { LightParameters } from './LightParameters';
 import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
 
@@ -25,8 +24,10 @@ export class RenderCache {
   public shaderNameToCameraUniformBuffers: Map<string, Buffer> = new Map();
 
   // lightCache
-  public lightUniforms = new LightUniforms();
+  public lightParameters = new LightParameters();
+
   public shaderNameToLightingUniformBuffers: Map<string, Buffer> = new Map();
+  public shaderNameToLightingUniforms: Map<string, UniformValueMap> = new Map();
 
   // nodeCache
   public nodeIdToRenderVersion: Map<string, number> = new Map();
@@ -43,7 +44,6 @@ export class RenderCache {
   // materialCache
   public materialIdToMaterial: Map<string, Material> = new Map();
   public materialIdToUniforms: Map<string, UniformValueMap> = new Map();
-  public materialIdToTextureBindings: Map<string, TextureBindings> = new Map();
   public materialIdToMaterialUniformBuffers: Map<string, Buffer> = new Map();
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
 

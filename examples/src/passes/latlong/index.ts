@@ -71,8 +71,6 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    const now = Date.now();
-
     passUniforms.viewToWorld = mat4Inverse(quatToMat4(orbit.rotation));
     passUniforms.screenToView = mat4Inverse(
       mat4PerspectiveFov(
