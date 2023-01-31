@@ -4,10 +4,13 @@
   "editor.formatOnPaste": true,
   "cSpell.words": [
     "clearcoat",
+    "Equirectangular",
     "GLTF",
     "interruptible",
     "Khronos",
+    "lambertian",
     "lerp",
+    "Mipmaps",
     "Nullary",
     "reserialization",
     "reserialized",

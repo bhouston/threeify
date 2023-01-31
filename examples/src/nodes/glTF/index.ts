@@ -1,9 +1,4 @@
-import {
-  ClearState,
-  Orbit,
-  RenderingContext,
-  ShaderMaterial
-} from '@threeify/core';
+import { Orbit, RenderingContext, ShaderMaterial } from '@threeify/core';
 import {
   glTFToSceneNode,
   PerspectiveCamera,
@@ -46,7 +41,7 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(GLTFModel.GlamVelvetSofa, GLTFFormat.glTF)
+    getGLTFUrl(GLTFModel.SheenChair, GLTFFormat.glTF)
   );
 
   updateNodeTree(glTFModel, sceneTreeCache);
@@ -55,7 +50,7 @@ async function init(): Promise<void> {
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
   glTFModel.dirty();
   const maxSize = box3MaxSize(glTFBoundingBox);
-  const lightIntensity = 25;
+  const lightIntensity = 50;
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
@@ -113,7 +108,7 @@ async function init(): Promise<void> {
   );
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
-  canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
+  // canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
   function animate(): void {
     requestAnimationFrame(animate);

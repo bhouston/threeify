@@ -14,6 +14,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureBindings,
   TextureFilter,
   TextureWrap
 } from '@threeify/core';
@@ -65,13 +66,14 @@ async function init(): Promise<void> {
     new Vec2(1024, 1024)
   );
 
+  const samplerTextureBindings = new TextureBindings();
   const samplerGeometry = passGeometry();
   const samplerProgram = makeProgramFromShaderMaterial(
     context,
     samplerMaterial
   );
   const samplerUniforms = {
-    envCubeMap,
+    envCubeMap: samplerTextureBindings.bind(envCubeMap),
     faceIndex: 0
   };
 
@@ -94,22 +96,24 @@ async function init(): Promise<void> {
       framebuffer,
       program: samplerProgram,
       uniforms: samplerUniforms,
-      bufferGeometry: samplerBufferGeometry
+      bufferGeometry: samplerBufferGeometry,
+      textureBindings: samplerTextureBindings
     });
   });
 
   const program = makeProgramFromShaderMaterial(context, material);
+  const textureBindings = new TextureBindings();
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
     viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
-      4,
+      10,
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap: lambertianCubeMap
+    cubeMap: textureBindings.bind(lambertianCubeMap)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -125,7 +129,8 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      textureBindings
     });
   }
 

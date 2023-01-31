@@ -94,12 +94,20 @@ export function uniformValueToArrayBuffer(
       // case UniformType.Sampler2DShadow:
       if (value instanceof TexImage2D) {
         return new Int32Array([textureUnit as number]);
+      } else {
+        throw new TypeError(
+          'expected number, did you forget to use a TextureBinding?'
+        );
       }
       break;
     case UniformType.SamplerCube:
       // case UniformType.SamplerCubeShadow:
       if (value instanceof TexImage2D) {
         return new Int32Array([textureUnit as number]);
+      } else {
+        throw new TypeError(
+          'expected number, did you forget to use a TextureBinding?'
+        );
       }
       break;
   }

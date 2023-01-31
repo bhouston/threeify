@@ -257,6 +257,10 @@ export class ProgramUniform {
         if (typeof value === 'number') {
           gl.uniform1i(this.glLocation, value);
           return this;
+        } else {
+          throw new TypeError(
+            'expected number, did you forget to use a TextureBinding?'
+          );
         }
         break;
       case UniformType.SamplerCube:
@@ -264,6 +268,10 @@ export class ProgramUniform {
         if (typeof value === 'number') {
           gl.uniform1i(this.glLocation, value);
           return this;
+        } else {
+          throw new TypeError(
+            'expected number, did you forget to use a TextureBinding?'
+          );
         }
         break;
     }
@@ -377,6 +385,10 @@ export class ProgramUniform {
         if (typeof firstElement === 'number') {
           gl.uniform1iv(this.glLocation, value as number[]);
           return this;
+        } else {
+          throw new TypeError(
+            'expected number, did you forget to use a TextureBinding?'
+          );
         }
         break;
     }

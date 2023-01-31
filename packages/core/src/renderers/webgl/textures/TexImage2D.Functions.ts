@@ -18,6 +18,7 @@ import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { PixelFormat } from './PixelFormat.js';
 import { TexImage2D } from './TexImage2D.js';
 import { TexParameters } from './TexParameters.js';
+import { TextureBindings } from './TextureBindings.js';
 import { TextureFilter } from './TextureFilter.js';
 import { TextureTarget } from './TextureTarget.js';
 import { TextureWrap } from './TextureWrap.js';
@@ -110,9 +111,9 @@ export function makeTexImage2DFromEquirectangularTexture(
   const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
-
+  const cubeFaceTextureBindings = new TextureBindings();
   const cubeFaceUniforms = {
-    map: latLongMap,
+    map: cubeFaceTextureBindings.bind(latLongMap),
     faceIndex: 0
   };
 
@@ -123,7 +124,8 @@ export function makeTexImage2DFromEquirectangularTexture(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry
+      bufferGeometry: cubeFaceBufferGeometry,
+      textureBindings: cubeFaceTextureBindings
     });
   });
 

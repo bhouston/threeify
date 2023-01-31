@@ -58,7 +58,6 @@ void main() {
       dot(directLight.direction, clearcoatNormal)
     );
 
-
     // this lack energy conservation.
     outgoingRadiance +=
       directLight.radiance *
@@ -68,7 +67,6 @@ void main() {
         viewDirection,
         directLight.direction,
         material.sheenColor,
-        0.5,
         material.sheenRoughness
       );
     outgoingRadiance +=
