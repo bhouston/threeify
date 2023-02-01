@@ -49,7 +49,7 @@ async function init(): Promise<void> {
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
+      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.ClearCoatTest,
       GLTFFormat.glTF
     )
   );

@@ -34,18 +34,14 @@ uniform TextureAccessor occlusionTextureAccessor;
 uniform float ior;
 
 uniform float clearcoatFactor;
-uniform TextureAccessor clearcoatFactorTextureAccessor;
 uniform float clearcoatRoughnessFactor;
-uniform TextureAccessor clearcoatRoughnessTextureAccessor;
+uniform TextureAccessor clearcoatFactorRoughnessTextureAccessor;
 uniform vec2 clearcoatNormalScale;
 uniform TextureAccessor clearcoatNormalTextureAccessor;
-uniform vec3 clearcoatTint;
-uniform TextureAccessor clearcoatTintTextureAccessor;
 
 uniform vec3 sheenColorFactor;
-uniform TextureAccessor sheenColorTextureAccessor;
 uniform float sheenRoughnessFactor;
-uniform TextureAccessor sheenRoughnessTextureAccessor;
+uniform TextureAccessor sheenColorRoughnessTextureAccessor;
 
 uniform float iridescenceFactor;
 //uniform TextureAccessor iridescenceFactorTextureAccessor;
@@ -76,14 +72,15 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.ior = ior;
 
     // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_clearcoat/README.md
-    material.clearcoatFactor = clearcoatFactor * sampleTexture( clearcoatFactorTextureAccessor, uvs ).r;
-    material.clearcoatRoughness = clearcoatRoughnessFactor * sampleTexture( clearcoatRoughnessTextureAccessor, uvs ).g;
+    vec4 clearcoatFactorRoughness = sampleTexture( clearcoatFactorRoughnessTextureAccessor, uvs );
+    material.clearcoatFactor = clearcoatFactor * clearcoatFactorRoughness.r;
+    material.clearcoatRoughness = clearcoatRoughnessFactor * clearcoatFactorRoughness.g;
     material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( sampleTexture( clearcoatNormalTextureAccessor, uvs ).rgb );
-    material.clearcoatTint = clearcoatTint * sRGBToLinear( sampleTexture( clearcoatTintTextureAccessor, uvs ).rgb );
     
     // 
-    material.sheenColor = sheenColorFactor * sRGBToLinear( sampleTexture( sheenColorTextureAccessor, uvs ).rgb );
-    material.sheenRoughness = sheenRoughnessFactor * sampleTexture( sheenRoughnessTextureAccessor, uvs ).a;
+    vec4 sheenColorRoughness = sampleTexture( sheenColorRoughnessTextureAccessor, uvs );
+    material.sheenColor = sheenColorFactor * sRGBToLinear( sheenColorRoughness.rgb );
+    material.sheenRoughness = sheenRoughnessFactor * sheenColorRoughness.a;
     
     //
 	material.iridescence = iridescenceFactor; // * sampleTexture( iridescenceFactorTextureAccessor, uvs ).r;
