@@ -15,6 +15,7 @@ import {
   vec4ArrayToFloat32Array
 } from '@threeify/vector-math';
 
+import { logOnce } from '../../../warnOnce.js';
 import { Buffer } from '../buffers/Buffer.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
@@ -146,6 +147,7 @@ export class ProgramUniform {
     value: UniformValue,
     textureBindings?: TextureBindings
   ): this {
+    logOnce(`setIntoLocation ${this.fullName} = ${value}`);
     if (this.glLocation === undefined) {
       throw new Error('Can not set uniform value for a uniform block - yet');
     }

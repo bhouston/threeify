@@ -54,13 +54,13 @@ async function init(): Promise<void> {
 
   const sceneTreeCache = new SceneTreeCache();
 
-  const sheenChairMode = false;
+  const sheenChairMode = true;
 
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
+      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.DamagedHelmet,
       GLTFFormat.glTF
     )
   );

@@ -228,14 +228,17 @@ function updateLightUniforms(
   let lightOuterCos = -1;
 
   if (light instanceof DomeLight) {
-    lightUniforms.domeCubeMap =
+    lightUniforms.iblMapTexture =
       light.cubeMap !== undefined
         ? makeTexImage2DFromTexture(context, light.cubeMap)
         : undefined;
-    lightUniforms.domeIntensity = color3MultiplyByScalar(
+    lightUniforms.iblMapIntensity = color3MultiplyByScalar(
       light.color,
       light.intensity
     );
+    if (lightUniforms.iblMapTexture !== undefined) {
+      lightUniforms.iblMapMaxLod = lightUniforms.iblMapTexture.mipCount;
+    }
     return;
   }
 
