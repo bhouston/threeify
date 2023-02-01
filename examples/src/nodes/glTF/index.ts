@@ -43,7 +43,7 @@ async function init(): Promise<void> {
 
   const sceneTreeCache = new SceneTreeCache();
 
-  const sheenChairMode = false;
+  const sheenChairMode = true;
 
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');
