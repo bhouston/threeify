@@ -55,14 +55,6 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
   );
 
   for (let i = 0; i < color4Array.length; i++) {
-    if (i === 0) {
-      console.log('original rgbe color', JSON.stringify(color4Array[i]));
-      console.log('linear color', JSON.stringify(rgbeToLinear(color4Array[i])));
-      console.log(
-        'rgbd color',
-        JSON.stringify(linearToRgbd16(rgbeToLinear(color4Array[i])))
-      );
-    }
     linearToRgbd16(
       rgbeToLinear(color4Array[i], color4Array[i]),
       color4Array[i]

@@ -55,9 +55,10 @@ async function toTexture(
   if (imageData === null || imageData === undefined) {
     return undefined;
   }
+  const mimeType = texture?.getMimeType() || 'image/png';
   const imageBitmap = await createImageBitmapFromArrayBuffer(
     imageData,
-    texture?.getMimeType() || 'image/png'
+    mimeType
   );
   return new Texture(imageBitmap);
 }
@@ -91,6 +92,18 @@ function toAlphaMode(alphaMode: string): AlphaMode {
 export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   const io = new WebIO();
   io.registerExtensions(KHRONOS_EXTENSIONS);
+  /*io.registerExtensions([
+    MeshoptCompression,
+    MeshQuantization
+  ]);
+
+  await MeshoptDecoder.ready;
+  await MeshoptEncoder.ready;
+
+  io.registerDependencies({
+    'meshopt.decoder': MeshoptDecoder,
+    'meshopt.encoder': MeshoptEncoder
+  });*/
 
   /*const dracoDecoder = await import('/assets/gltf-draco/draco_decoder.js');
 

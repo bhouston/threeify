@@ -25,7 +25,7 @@ import { TextureWrap } from './TextureWrap.js';
 
 export function makeTexImage2DFromTexture(
   context: RenderingContext,
-  texture: Texture,
+  texture: Texture | CubeMapTexture,
   internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
   const params = new TexParameters();
@@ -33,40 +33,22 @@ export function makeTexImage2DFromTexture(
   params.generateMipmaps = texture.generateMipmaps;
   params.magFilter = texture.magFilter;
   params.minFilter = texture.minFilter;
-  params.wrapS = texture.wrapS;
-  params.wrapT = texture.wrapT;
+  if (texture instanceof CubeMapTexture) {
+    params.wrapS = TextureWrap.ClampToEdge;
+    params.wrapT = TextureWrap.ClampToEdge;
+  } else {
+    params.wrapS = texture.wrapS;
+    params.wrapT = texture.wrapT;
+  }
   const texImage2D = new TexImage2D(
     context,
-    [texture.image],
+    texture instanceof CubeMapTexture ? texture.images : [texture.image],
     texture.pixelFormat,
     texture.dataType,
     internalFormat,
-    TextureTarget.Texture2D,
-    params
-  );
-  texImage2D.version = texture.version;
-  return texImage2D;
-}
-
-export function makeTexImage2DFromCubeTexture(
-  context: RenderingContext,
-  texture: CubeMapTexture,
-  internalFormat: PixelFormat = PixelFormat.RGBA
-): TexImage2D {
-  const params = new TexParameters();
-  params.anisotropyLevels = texture.anisotropicLevels;
-  params.generateMipmaps = texture.generateMipmaps;
-  params.magFilter = texture.magFilter;
-  params.minFilter = texture.minFilter;
-  params.wrapS = TextureWrap.ClampToEdge;
-  params.wrapT = TextureWrap.ClampToEdge;
-  const texImage2D = new TexImage2D(
-    context,
-    texture.images,
-    texture.pixelFormat,
-    texture.dataType,
-    internalFormat,
-    TextureTarget.TextureCubeMap,
+    texture instanceof CubeMapTexture
+      ? TextureTarget.TextureCubeMap
+      : TextureTarget.Texture2D,
     params
   );
   texImage2D.version = texture.version;
@@ -108,7 +90,7 @@ export function makeTexImage2DFromEquirectangularTexture(
     context,
     cubeFaceGeometry
   );
-  const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
+  const cubeMap = makeTexImage2DFromTexture(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
   const cubeFaceTextureBindings = new TextureBindings();

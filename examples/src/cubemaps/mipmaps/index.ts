@@ -4,7 +4,7 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromCubeTexture,
+  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap: makeTexImage2DFromCubeTexture(context, cubeTexture),
+    cubeMap: makeTexImage2DFromTexture(context, cubeTexture),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount
   };

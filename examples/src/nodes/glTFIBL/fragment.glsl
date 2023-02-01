@@ -62,7 +62,8 @@ void main( ) {
   specularF0 = mix( specularF0, material.albedo, material.metallic );
   specularF90 = mix( specularF90, vec3( 1. ), material.metallic );
 
-  
+  vec3 indirect = texture( domeCubeMap, normal ).rgb * domeIntensity;
+  outgoingRadiance += indirect;
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
   for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++ ) {

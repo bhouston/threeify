@@ -1,8 +1,8 @@
-import { CubeMapTexture } from '@threeify/core';
+import { TexImage2D } from '@threeify/core';
 import { Color3, Vec3 } from '@threeify/vector-math';
 
 export class LightParameters {
-  public domeCubeMap?: CubeMapTexture;
+  public domeCubeMap?: TexImage2D;
   public domeIntensity = new Color3(1, 1, 1);
 
   public numPunctualLights = 0;

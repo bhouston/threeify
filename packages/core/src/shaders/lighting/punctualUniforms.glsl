@@ -2,7 +2,7 @@
 
 #pragma include <lighting/punctual>
 
-uniform sampler2D domeCubeMap;
+uniform samplerCube domeCubeMap;
 uniform vec3 domeIntensity;
 
 uniform int numPunctualLights;

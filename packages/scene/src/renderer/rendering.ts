@@ -2,6 +2,7 @@ import {
   Blending,
   blendModeToBlendState,
   BlendState,
+  logOnce,
   renderBufferGeometry,
   UniformValueMap,
   VirtualFramebuffer
@@ -31,7 +32,7 @@ export function renderMeshes(
 ) {
   const {
     cameraUniforms,
-    lightParameters: lightUniforms,
+    lightParameters,
     shaderNameToLightingUniformBuffers,
     shaderNameToCameraUniformBuffers
   } = renderCache;
@@ -51,7 +52,8 @@ export function renderMeshes(
     if (uniformBuffers !== undefined && lightingBuffer !== undefined) {
       uniformBuffers['Lighting'] = lightingBuffer;
     } else {
-      uniforms.push(lightUniforms as unknown as UniformValueMap);
+      logOnce('lightParameters ' + Object.keys(lightParameters).join(', '));
+      uniforms.push(lightParameters as unknown as UniformValueMap);
     }
     const cameraBuffer = shaderNameToCameraUniformBuffers.get(program.name);
     if (uniformBuffers !== undefined && cameraBuffer !== undefined) {

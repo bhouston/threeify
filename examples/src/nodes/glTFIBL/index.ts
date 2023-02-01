@@ -1,4 +1,10 @@
-import { Orbit, RenderingContext, ShaderMaterial } from '@threeify/core';
+import {
+  CubeMapTexture,
+  fetchCubeHDRs,
+  Orbit,
+  RenderingContext,
+  ShaderMaterial
+} from '@threeify/core';
 import {
   DomeLight,
   glTFToSceneNode,
@@ -20,7 +26,11 @@ import {
   vec3Negate
 } from '@threeify/vector-math';
 
-import { getKhronosGlTFUrl, GLTFFormat, KhronosModel } from '../../khronosModels';
+import {
+  getKhronosGlTFUrl,
+  GLTFFormat,
+  KhronosModel
+} from '../../khronosModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -28,6 +38,10 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const cubeTexture = new CubeMapTexture(
+    await fetchCubeHDRs('/assets/textures/cube/pisa/*.hdr')
+  );
+
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
@@ -104,11 +118,12 @@ async function init(): Promise<void> {
   root.children.push(camera);
   const domeLight = new DomeLight({
     name: 'DomeLight',
+    cubeMap: cubeTexture,
     translation: orbitNode.translation,
     color: new Color3(1, 1, 1),
     intensity: 1
   });
-  // root.children.push(domeLight);
+  root.children.push(domeLight);
 
   updateNodeTree(root, sceneTreeCache);
 

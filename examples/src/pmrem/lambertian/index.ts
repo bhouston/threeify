@@ -7,8 +7,8 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromCubeTexture,
   makeTexImage2DFromEquirectangularTexture,
+  makeTexImage2DFromTexture,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -79,7 +79,7 @@ async function init(): Promise<void> {
     context,
     samplerGeometry
   );
-  const lambertianCubeMap = makeTexImage2DFromCubeTexture(
+  const lambertianCubeMap = makeTexImage2DFromTexture(
     context,
     lambertianCubeTexture
   );

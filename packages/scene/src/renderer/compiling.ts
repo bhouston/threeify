@@ -9,7 +9,6 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
-  TextureBindings,
   UniformBufferMap,
   UniformValueMap,
   VirtualFramebuffer
@@ -94,7 +93,7 @@ export function updateRenderCache(
     }
 
     if (node instanceof Light) {
-      updateLightUniforms(node as Light, lightUniforms);
+      updateLightUniforms(node as Light, lightUniforms, context);
     }
 
     if (node instanceof MeshNode) {
@@ -185,7 +184,6 @@ function meshToSceneCache(
       material.getParameters()
     );
     const materialUniforms: UniformValueMap = {};
-    const materialTextureBindings = new TextureBindings();
     for (const uniformName of Object.keys(materialParameters)) {
       const uniformValue = materialParameters[uniformName];
       // convert from Parameters to Uniforms
@@ -214,7 +212,11 @@ function meshToSceneCache(
   }
 }
 
-function updateLightUniforms(light: Light, lightUniforms: LightParameters) {
+function updateLightUniforms(
+  light: Light,
+  lightUniforms: LightParameters,
+  context: RenderingContext
+) {
   const lightWorldPosition = mat4TransformVec3(
     light.localToWorldMatrix,
     new Vec3(0, 0, 0)
@@ -228,7 +230,10 @@ function updateLightUniforms(light: Light, lightUniforms: LightParameters) {
   let lightOuterCos = -1;
 
   if (light instanceof DomeLight) {
-    lightUniforms.domeCubeMap = light.cubeMap;
+    lightUniforms.domeCubeMap =
+      light.cubeMap !== undefined
+        ? makeTexImage2DFromTexture(context, light.cubeMap)
+        : undefined;
     lightUniforms.domeIntensity = color3MultiplyByScalar(
       light.color,
       light.intensity
@@ -416,7 +421,7 @@ function createLightingUniformBuffers(renderCache: RenderCache) {
     if (program === undefined) throw new Error('Program not found');
 
     const lightingUniformBlock = program.uniformBlocks['Lighting'];
-    //console.log('lightingUniformBlock', lightingUniformBlock);
+    console.log('lightingUniformBlock', lightingUniformBlock);
     if (lightingUniformBlock !== undefined) {
       const lightingUniformBuffer =
         lightingUniformBlock.allocateUniformBuffer();
@@ -443,14 +448,12 @@ function createCameraUniformBuffers(renderCache: RenderCache) {
     const program = shaderNameToProgram.get(shaderName);
     if (program === undefined) throw new Error('Program not found');
     const cameraUniformBlock = program.uniformBlocks['Camera'];
-    //console.log('lightingUniformBlock', lightingUniformBlock);
     if (cameraUniformBlock !== undefined) {
       const cameraUniformBuffer = cameraUniformBlock.allocateUniformBuffer();
       cameraUniformBlock.setUniformsIntoBuffer(
         cameraUniforms as unknown as UniformValueMap,
         cameraUniformBuffer
       );
-      //console.log('created lighting uniform buffer', lightUniforms);
       shaderNameToCameraUniformBuffers.set(shaderName, cameraUniformBuffer);
     }
   }
@@ -481,7 +484,6 @@ function createMaterialUniformBuffers(renderCache: RenderCache) {
         materialUniforms as unknown as UniformValueMap,
         materialUniformBuffer
       );
-      //console.log('created lighting uniform buffer', lightUniforms);
       materialIdToMaterialUniformBuffers.set(materialId, materialUniformBuffer);
     }
   }
