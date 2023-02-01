@@ -14,7 +14,7 @@ out vec3 v_viewSurfaceNormal;
 out vec2 v_uv0;
 
 #pragma include <math/mat4>
-#pragma include <vertex/displacement>
+#pragma include <microgeometry/displacement>
 
 void main() {
   mat4 localToView = worldToView * localToWorld;

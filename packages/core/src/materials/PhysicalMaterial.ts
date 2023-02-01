@@ -96,10 +96,10 @@ export class PhysicalMaterial extends Material {
   public albedoFactor = new Color3(1, 1, 1);
   public albedoTextureAccessor?: TextureAccessor;
 
-  public specularFactor = 0.5;
+  public specularFactor = 1; // default validated from KHR_materials_specular
   public specularFactorTextureAccessor?: TextureAccessor;
 
-  public specularColor = new Color3(1, 1, 1);
+  public specularColor = new Color3(1, 1, 1); // default validated from KHR_materials_specular
   public specularColorTextureAccessor?: TextureAccessor;
 
   public specularRoughnessFactor = 0.5;
@@ -118,7 +118,7 @@ export class PhysicalMaterial extends Material {
   public emissiveTextureAccessor?: TextureAccessor;
   public emissiveIntensity = 1;
 
-  public ior = 1.5;
+  public ior = 1.5; // default validated from KHR_materials_ior
 
   public anisotropy = 0;
   public anisotropyTextureAccessor?: TextureAccessor;

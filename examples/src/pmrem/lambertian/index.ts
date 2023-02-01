@@ -7,8 +7,8 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromCubeTexture,
   makeTexImage2DFromEquirectangularTexture,
+  makeTexImage2DFromTexture,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -71,7 +71,7 @@ async function init(): Promise<void> {
     samplerMaterial
   );
   const samplerUniforms = {
-    envCubeMap,
+    envCubeMap: envCubeMap,
     faceIndex: 0
   };
 
@@ -79,7 +79,7 @@ async function init(): Promise<void> {
     context,
     samplerGeometry
   );
-  const lambertianCubeMap = makeTexImage2DFromCubeTexture(
+  const lambertianCubeMap = makeTexImage2DFromTexture(
     context,
     lambertianCubeTexture
   );
@@ -99,13 +99,14 @@ async function init(): Promise<void> {
   });
 
   const program = makeProgramFromShaderMaterial(context, material);
+
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
     viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
-      4,
+      10,
       1,
       canvasFramebuffer.aspectRatio
     ),

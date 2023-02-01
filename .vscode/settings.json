@@ -4,10 +4,14 @@
   "editor.formatOnPaste": true,
   "cSpell.words": [
     "clearcoat",
+    "Equirectangular",
+    "glsl",
     "GLTF",
     "interruptible",
     "Khronos",
+    "lambertian",
     "lerp",
+    "Mipmaps",
     "Nullary",
     "reserialization",
     "reserialized",
@@ -19,5 +23,7 @@
   "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
   "[glsl]": {
     "editor.defaultFormatter": "raczzalan.webgl-glsl-editor"
-  }
+  },
+  "files.exclude": {
+   }
 }

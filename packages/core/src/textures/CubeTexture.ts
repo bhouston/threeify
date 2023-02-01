@@ -33,6 +33,7 @@ export class CubeMapTexture extends VirtualTexture {
       generateMipmaps,
       anisotropicLevels
     );
+
     if (this.images.length % 6 !== 0 || this.images.length === 0) {
       throw new Error(
         `images.length (${this.images.length}) must be a positive multiple of 6`

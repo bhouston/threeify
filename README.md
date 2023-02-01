@@ -134,8 +134,8 @@ threeify supports the theia-ide so you can start coding immediately. theia-ide i
 
 ## Contributors
 
-This project exists thanks to all <a href="https://github.com/threeify/threeify/graphs/contributors">the people who contribute.</a>
+This project exists thanks to all <a href="https://github.com/bhouston/threeify/graphs/contributors">the people who contribute.</a>
 
 ## License
 
-[ISC](https://github.com/threeify/threeify/blob/master/LICENSE.md)
+[ISC](https://github.com/bhouston/threeify/blob/master/LICENSE.md)

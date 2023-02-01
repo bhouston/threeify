@@ -51,7 +51,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap,
+    cubeMap: cubeMap,
     mipCount: cubeMap.mipCount,
     perceptualRoughness: 0
   };

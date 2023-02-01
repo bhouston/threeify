@@ -1,5 +1,6 @@
 import { Euler3, EulerOrder3 } from './Euler3';
 import {
+  degToRad,
   delta,
   EPSILON,
   equalsTolerance,
@@ -671,14 +672,14 @@ export function mat4Perspective(
 }
 
 export function mat4PerspectiveFov(
-  verticalFov: number,
+  verticalFovDegrees: number,
   near: number,
   far: number,
   zoom: number,
   aspectRatio: number,
   result = new Mat4()
 ): Mat4 {
-  const height = (2 * near * Math.tan((verticalFov * Math.PI) / 180)) / zoom;
+  const height = (2 * near * Math.tan(degToRad(verticalFovDegrees))) / zoom;
   const width = height * aspectRatio;
 
   // NOTE: OpenGL screen coordinates are -bottomt to +top, -left to +right.

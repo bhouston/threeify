@@ -9,7 +9,7 @@ uniform int numPunctualLights;
 uniform int punctualLightType[MAX_PUNCTUAL_LIGHTS];
 uniform vec3 punctualLightWorldPosition[MAX_PUNCTUAL_LIGHTS];
 uniform vec3 punctualLightWorldDirection[MAX_PUNCTUAL_LIGHTS];
-uniform vec3 punctualLightColor[MAX_PUNCTUAL_LIGHTS];
+uniform vec3 punctualLightIntensity[MAX_PUNCTUAL_LIGHTS];
 uniform float punctualLightRange[MAX_PUNCTUAL_LIGHTS];
 uniform float punctualLightInnerCos[MAX_PUNCTUAL_LIGHTS];
 uniform float punctualLightOuterCos[MAX_PUNCTUAL_LIGHTS];
@@ -48,7 +48,7 @@ void main() {
       worldToView,
       punctualLightWorldDirection[i]
     );
-    punctualLight.intensity = punctualLightColor[i];
+    punctualLight.intensity = punctualLightIntensity[i];
     punctualLight.range = punctualLightRange[i];
     punctualLight.innerConeCos = punctualLightInnerCos[i];
     punctualLight.outerConeCos = punctualLightOuterCos[i];

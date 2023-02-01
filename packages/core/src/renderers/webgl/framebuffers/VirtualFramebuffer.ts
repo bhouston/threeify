@@ -23,8 +23,6 @@ import { RenderingContext } from '../RenderingContext.js';
 import { bindTextures, TextureBindings } from '../textures/TextureBindings.js';
 import { BufferBit } from './BufferBit.js';
 
-const GL = WebGL2RenderingContext;
-
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;
   public cullingState: CullingState | undefined = undefined;
@@ -68,7 +66,6 @@ export function renderBufferGeometry(props: {
   bufferGeometry: BufferGeometry;
   uniforms?: UniformValueMap | UniformValueMap[];
   uniformBuffers?: UniformBufferMap;
-  textureBindings?: TextureBindings;
   programVertexArray?: ProgramVertexArray;
   depthTestState?: DepthTestState;
   blendState?: BlendState;
@@ -85,10 +82,11 @@ export function renderBufferGeometry(props: {
     uniforms: uniformValueMaps,
     uniformBuffers: uniformBufferMap,
     bufferGeometry,
-    programVertexArray,
-    textureBindings
+    programVertexArray
   } = props;
   const { context, size } = framebuffer;
+
+  const textureBindings = new TextureBindings();
 
   context.framebuffer = framebuffer;
   context.program = program;
@@ -101,11 +99,16 @@ export function renderBufferGeometry(props: {
   context.cullingState =
     cullingState ?? framebuffer.cullingState ?? context.cullingState;
 
+  setProgramUniforms(
+    context.program,
+    uniformValueMaps,
+    uniformBufferMap,
+    textureBindings
+  );
+
   if (textureBindings !== undefined) {
     bindTextures(context, textureBindings);
   }
-
-  setProgramUniforms(context.program, uniformValueMaps, uniformBufferMap);
 
   if (programVertexArray !== undefined) {
     context.program.setAttributeBuffers(programVertexArray);
@@ -131,7 +134,8 @@ export function renderBufferGeometry(props: {
 function setProgramUniforms(
   program: Program,
   uniformValueMaps?: UniformValueMap | UniformValueMap[],
-  uniformBufferMap?: UniformBufferMap
+  uniformBufferMap?: UniformBufferMap,
+  textureBindings?: TextureBindings
 ) {
   for (const uniformValueMap of uniformValueMaps instanceof Array
     ? uniformValueMaps
@@ -139,7 +143,7 @@ function setProgramUniforms(
     for (const uniformName in uniformValueMap) {
       const uniform = program.uniforms[uniformName];
       if (uniform !== undefined && uniform.block === undefined) {
-        uniform.setIntoLocation(uniformValueMap[uniformName]);
+        uniform.setIntoLocation(uniformValueMap[uniformName], textureBindings);
       } else {
         warnOnce(`Uniform ${uniformName} not found in program ${program.name}`);
       }

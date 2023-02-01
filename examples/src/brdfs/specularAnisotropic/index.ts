@@ -7,8 +7,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture,
-  TextureBindings
+  Texture
 } from '@threeify/core';
 import {
   Color3,
@@ -41,8 +40,6 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const textureBindings = new TextureBindings();
-
   const anisotropicFlow1Map = makeTexImage2DFromTexture(
     context,
     anisotropicFlow1Texture
@@ -71,7 +68,7 @@ async function init(): Promise<void> {
 
     // materials
     specularAnisotropicStrength: 0.5,
-    specularAnisotropicFlowMap: textureBindings.bind(anisotropicFlow1Map)
+    specularAnisotropicFlowMap: anisotropicFlow1Map
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
@@ -84,16 +81,15 @@ async function init(): Promise<void> {
     );
     uniforms.specularAnisotropicFlowMap =
       Math.floor(now / 5000) % 2 === 0
-        ? textureBindings.bind(anisotropicFlow1Map)
-        : textureBindings.bind(anisotropicFlow2Map);
+        ? anisotropicFlow1Map
+        : anisotropicFlow2Map;
 
     canvasFramebuffer.clear();
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      textureBindings
+      bufferGeometry
     });
 
     requestAnimationFrame(animate);

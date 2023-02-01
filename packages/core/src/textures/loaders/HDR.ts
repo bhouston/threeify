@@ -10,7 +10,8 @@ import {
   float32ArrayToColor4Array,
   floatsToNormalizedBytes,
   linearToRgbd16,
-  normalizedByteToFloats
+  normalizedByteToFloats,
+  rgbeToLinear
 } from '@threeify/vector-math';
 
 import { DataType } from '../../renderers/webgl/textures/DataType.js';
@@ -18,7 +19,7 @@ import { ArrayBufferImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';
 
 class ReadBuffer {
-  constructor(public data: Buffer, public position: number) {}
+  constructor(public data: Uint8Array, public position: number) {}
 }
 export async function fetchCubeHDRs(
   urlPattern: string
@@ -42,10 +43,7 @@ export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
 }
 
 export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
-  const readBuffer = new ReadBuffer(
-    Buffer.from(new Uint8Array(arrayBuffer), 0),
-    0
-  );
+  const readBuffer = new ReadBuffer(new Uint8Array(arrayBuffer), 0);
   const header = readHeader(readBuffer);
   const pixelData = readRLEPixelData(
     readBuffer.data.subarray(readBuffer.position),
@@ -55,8 +53,12 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
   const color4Array = float32ArrayToColor4Array(
     normalizedByteToFloats(pixelData)
   );
+
   for (let i = 0; i < color4Array.length; i++) {
-    linearToRgbd16(color4Array[i], color4Array[i]);
+    linearToRgbd16(
+      rgbeToLinear(color4Array[i], color4Array[i]),
+      color4Array[i]
+    );
   }
   return new ArrayBufferImage(
     floatsToNormalizedBytes(color4ArrayToFloat32Array(color4Array)),

@@ -14,7 +14,7 @@ uniform mat4 worldToView;
 
 out vec4 outputColor;
 
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
@@ -58,7 +58,6 @@ void main() {
       dot(directLight.direction, clearcoatNormal)
     );
 
-
     // this lack energy conservation.
     outgoingRadiance +=
       directLight.radiance *
@@ -68,7 +67,6 @@ void main() {
         viewDirection,
         directLight.direction,
         material.sheenColor,
-        0.5,
         material.sheenRoughness
       );
     outgoingRadiance +=

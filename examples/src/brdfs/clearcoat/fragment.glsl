@@ -27,8 +27,8 @@ out vec4 outputColor;
 #pragma include <brdfs/diffuse/lambert>
 #pragma include <brdfs/specular/ggx>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/bumpMapping>
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/bumpMapping>
+#pragma include <microgeometry/tangentSpace>
 
 void main() {
   vec3 albedo = sRGBToLinear(texture(albedoMap, v_uv0).rgb) * albedoColor;

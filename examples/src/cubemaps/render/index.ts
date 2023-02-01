@@ -6,7 +6,7 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromCubeTexture,
+  makeTexImage2DFromTexture,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -66,7 +66,7 @@ async function init(): Promise<void> {
     context,
     patternGeometry
   );
-  const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
+  const cubeMap = makeTexImage2DFromTexture(context, cubeTexture);
 
   const framebuffer = new Framebuffer(context);
 
@@ -81,7 +81,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap
+    cubeMap: cubeMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 

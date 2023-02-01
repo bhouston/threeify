@@ -1,8 +1,8 @@
 {
   "name": "@threeify/scene",
-  "version": "2.1.0",
-  "type": "module",
   "description": "Typescript 3D Library loosely based on three.js",
+  "version": "3.0.0",
+  "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
@@ -15,15 +15,20 @@
     "webgpu",
     "3D"
   ],
-  "homepage": "http://threeify.org",
+  "homepage": "http://bhouston.github.com/threeify",
   "author": "threeify authors",
   "bugs": {
-    "url": "https://github.com/threeify/threeify/issues"
+    "url": "https://github.com/bhouston/threeify/issues"
   },
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threeify/threeify"
+    "url": "https://github.com/bhouston/threeify"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "watch": "tsc --build  --watch --preserveWatchOutput",
+    "test": "jest ./src"
   },
   "devDependencies": {
     "@threeify/shader-transpiler": "*",
@@ -35,16 +40,12 @@
     "ts-jest-resolver": "^2.0.0",
     "typescript": "^4.8.4"
   },
-  "scripts": {
-    "build": "tsc --build",
-    "watch": "tsc --build  --watch --preserveWatchOutput",
-    "test": "jest ./src"
-  },
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
     "@threeify/core": "*",
     "@threeify/vector-math": "*",
-    "draco3dgltf": "^1.5.5"
+    "draco3dgltf": "^1.5.5",
+    "meshoptimizer": "^0.18.1"
   }
 }

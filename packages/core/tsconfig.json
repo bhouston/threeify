@@ -18,9 +18,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false
   },
-  "include": ["src/**/*.ts" ],
-  "exclude": [
-    "**/*.test.ts"
-  ],
-  "references": [{ "path": "../vector-math" } ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.test.ts"],
+  "references": [{ "path": "../vector-math" }]
 }

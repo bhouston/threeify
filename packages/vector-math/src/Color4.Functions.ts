@@ -88,7 +88,7 @@ export function color4Parse(text: string, result = new Color4()): Color4 {
   return color4FromArray(parseSafeFloats(text), 0, result);
 }
 
-export function xwrgbeToLinear(source: Color4, result = new Color4()): Color4 {
+export function rgbeToLinear(source: Color4, result = new Color4()): Color4 {
   const s = 2 ** (source.a * 255 - 128);
   return result.set(source.r * s, source.g * s, source.b * s, 1);
 }

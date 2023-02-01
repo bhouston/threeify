@@ -64,7 +64,7 @@ async function init(): Promise<void> {
       new Vec3(0, 0, -1),
       vec3Normalize(new Vec3(0, -1, -1))
     ],
-    punctualLightColor: [
+    punctualLightIntensity: [
       new Color3(60, 4, 4),
       new Color3(4, 30, 4),
       new Color3(0.1, 0.1, 1)

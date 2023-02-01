@@ -5,11 +5,10 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromCubeTexture,
+  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial,
-  TextureBindings
+  ShaderMaterial
 } from '@threeify/core';
 import {
   Euler3,
@@ -38,10 +37,8 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const textureBindings = new TextureBindings();
-
   const program = makeProgramFromShaderMaterial(context, material);
-  const cubeMap = makeTexImage2DFromCubeTexture(context, cubeTexture);
+  const cubeMap = makeTexImage2DFromTexture(context, cubeTexture);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
@@ -54,7 +51,7 @@ async function init(): Promise<void> {
     ),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount,
-    cubeMap: textureBindings.bind(cubeMap)
+    cubeMap: cubeMap
   };
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -70,8 +67,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry,
-      textureBindings
+      bufferGeometry
     });
 
     requestAnimationFrame(animate);

@@ -19,15 +19,15 @@
         height: 100%;
       }
     </style>
-  </head>
+   </head>
   <body>
     <div id="container"></div>
-    <canvas class="framebuffer" id="framebuffer" ></canvas>
+    <canvas class="framebuffer" id="framebuffer" className="framebuffer"></canvas>
     
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       let scriptUrl = urlParams.get("scriptUrl");
-      const name = urlParams.get("name") || "nodes/glTF";
+      const name = urlParams.get("name") || "nodes/glTFIBL";
       if (name !== null) {
         scriptUrl = `./dist/${name}/index.js`;
       }

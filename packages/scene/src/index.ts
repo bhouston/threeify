@@ -10,6 +10,7 @@ export * from './scene/lights/SpotLight.js';
 export * from './scene/lights/PointLight.js';
 export * from './scene/lights/Light.js';
 export * from './scene/lights/LightType.js';
+export * from './scene/lights/DomeLight.js';
 
 export * from './scene/cameras/CameraNode.js';
 export * from './scene/cameras/PerspectiveCamera.js';

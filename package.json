@@ -9,19 +9,20 @@
     "webgpu",
     "3D"
   ],
-  "homepage": "http://threeify.org",
+  "homepage": "http://bhouston.github.com/threeify",
   "author": "threeify authors",
   "bugs": {
-    "url": "https://github.com/threeify/threeify/issues"
+    "url": "https://github.com/bhouston/threeify/issues"
   },
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threeify/threeify"
+    "url": "https://github.com/bhouston/threeify"
   },
   "devDependencies": {
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
+    "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@web/dev-server": "^0.1.35",
     "eslint-config-prettier": "^8.5.0",
@@ -40,14 +41,11 @@
     "typescript": "4.8.4"
   },
   "scripts": {
+    "clean": "find . -name 'dist' -type d -prune -exec rm -rf {} + && find . -name 'tsconfig.tsbuildinfo' -type f -delete",
     "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./packages/layer-compositor\" && tst --projectDir \"./examples\"",
     "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch & tst --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
     "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
-    "lint": "eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\"",
-    "lint:fix": "npm run lint -- --fix",
-    "prettier": "prettier \"examples/src/**/*.{ts,json}\" \"packages/**/src/**/*.{ts,json}\" --check",
-    "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix",
+    "format": "prettier \"examples/src/**/*.{ts,json}\" \"packages/**/src/**/*.{ts,json}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest"
   },
@@ -62,6 +60,6 @@
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
-    "@threeify/shader-transpiler": "^2.0.7"
+    "@threeify/shader-transpiler": "*"
   }
 }

@@ -19,7 +19,7 @@ out vec4 outputColor;
 #pragma include <brdfs/specular/ggx>
 #pragma include <brdfs/sheen/charlie>
 #pragma include <color/spaces/srgb>
-#pragma include <normals/tangentSpace>
+#pragma include <microgeometry/tangentSpace>
 
 void main() {
   vec3 albedo = vec3(0.0, 0.0, 1.0);
