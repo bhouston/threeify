@@ -116,8 +116,6 @@ function updateCameraUniforms(
 ) {
   cameraUniforms.viewToScreen.copy(camera.getProjection()); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
-  cameraUniforms.cameraNear = camera.near;
-  cameraUniforms.cameraFar = camera.far;
 }
 
 function flattenMaterialParameters(
@@ -358,10 +356,6 @@ function createMeshBatches(renderCache: RenderCache) {
         );
       }
 
-      /*const materialUniformBlock = program.uniformBlocks['Material'];
-      const lightingUniformBlock = program.uniformBlocks['Lighting'];
-      const cameraUniformBlock = program.uniformBlocks['Camera'];*/
-
       // create mesh batch
       const meshBatch = new MeshBatch(
         program,
@@ -412,16 +406,12 @@ function createLightingUniformBuffers(renderCache: RenderCache) {
     lightParameters: lightUniforms,
     shaderNameToLightingUniformBuffers
   } = renderCache;
-  // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const shaderName of shaderNameToProgram.keys()) {
-    // console.log('shaderName', shaderName);
-
     const program = shaderNameToProgram.get(shaderName);
     if (program === undefined) throw new Error('Program not found');
 
     const lightingUniformBlock = program.uniformBlocks['Lighting'];
-    console.log('lightingUniformBlock', lightingUniformBlock);
     if (lightingUniformBlock !== undefined) {
       const lightingUniformBuffer =
         lightingUniformBlock.allocateUniformBuffer();
@@ -429,7 +419,6 @@ function createLightingUniformBuffers(renderCache: RenderCache) {
         lightUniforms as unknown as UniformValueMap,
         lightingUniformBuffer
       );
-      //console.log('created lighting uniform buffer', lightUniforms);
       shaderNameToLightingUniformBuffers.set(shaderName, lightingUniformBuffer);
     }
   }
@@ -441,10 +430,8 @@ function createCameraUniformBuffers(renderCache: RenderCache) {
     cameraUniforms,
     shaderNameToCameraUniformBuffers
   } = renderCache;
-  // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const shaderName of shaderNameToProgram.keys()) {
-    // console.log('shaderName', shaderName);
     const program = shaderNameToProgram.get(shaderName);
     if (program === undefined) throw new Error('Program not found');
     const cameraUniformBlock = program.uniformBlocks['Camera'];
@@ -466,7 +453,6 @@ function createMaterialUniformBuffers(renderCache: RenderCache) {
     materialIdToMaterial,
     materialIdToMaterialUniformBuffers
   } = renderCache;
-  // console.log('shaderNameToProgram', shaderNameToProgram);
 
   for (const materialId of materialIdToUniforms.keys()) {
     const materialUniforms = materialIdToUniforms.get(materialId);
@@ -476,7 +462,6 @@ function createMaterialUniformBuffers(renderCache: RenderCache) {
     if (program === undefined) throw new Error('Program not found');
 
     const materialUniformBlock = program.uniformBlocks['Material'];
-    //console.log('lightingUniformBlock', lightingUniformBlock);
     if (materialUniformBlock !== undefined) {
       const materialUniformBuffer =
         materialUniformBlock.allocateUniformBuffer();

@@ -15,7 +15,6 @@ import {
   vec4ArrayToFloat32Array
 } from '@threeify/vector-math';
 
-import { logOnce } from '../../../warnOnce.js';
 import { Buffer } from '../buffers/Buffer.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
@@ -151,7 +150,7 @@ export class ProgramUniform {
       throw new Error('Can not set uniform value for a uniform block - yet');
     }
     if ((value as any) === undefined) return this;
-    logOnce(this.fullName + ' ' + value);
+
     if (value instanceof Array && value.length > 0) {
       return this.setArrayIntoLocation(
         value as UniformPrimitiveValue[],
@@ -269,7 +268,6 @@ export class ProgramUniform {
           if (textureBindings === undefined)
             throw new Error('textureBindings is undefined');
           const bindIndex = textureBindings.bind(value);
-          logOnce(this.fullName + ' ' + bindIndex);
           gl.uniform1i(this.glLocation, bindIndex);
           return this;
         } else {
@@ -284,7 +282,6 @@ export class ProgramUniform {
           if (textureBindings === undefined)
             throw new Error('textureBindings is undefined');
           const bindIndex = textureBindings.bind(value);
-          logOnce(this.fullName + ' ' + bindIndex);
           gl.uniform1i(this.glLocation, bindIndex);
           return this;
         } else {

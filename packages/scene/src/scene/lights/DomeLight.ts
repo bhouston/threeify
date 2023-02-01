@@ -11,6 +11,6 @@ export class DomeLight extends Light {
 
   constructor(props: IDomeLight) {
     super(props);
-    props.cubeMap = this.cubeMap;
+    this.cubeMap = props.cubeMap;
   }
 }
