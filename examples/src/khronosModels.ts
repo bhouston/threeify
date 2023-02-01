@@ -1,4 +1,4 @@
-export enum GLTFModel {
+export enum KhronosModel {
   ABeautifulGame,
   BarramundiFish,
   BrainStem,
@@ -84,8 +84,11 @@ const glTFFormatToExtension = {
   [GLTFFormat.glTFEmbedded]: 'gltf'
 };
 
-export function getGLTFUrl(model: GLTFModel, format: GLTFFormat): string {
-  const modelName = GLTFModel[model];
+export function getKhronosGlTFUrl(
+  model: KhronosModel,
+  format: GLTFFormat
+): string {
+  const modelName = KhronosModel[model];
   const formatFolder = glTFFormatToFolder[format];
   const extension = glTFFormatToExtension[format];
   return `https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/${modelName}/${formatFolder}/${modelName}.${extension}`;

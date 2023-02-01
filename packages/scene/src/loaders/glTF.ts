@@ -92,6 +92,14 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
   const io = new WebIO();
   io.registerExtensions(KHRONOS_EXTENSIONS);
 
+  /*const dracoDecoder = await import('/assets/gltf-draco/draco_decoder.js');
+
+  const decoder = await dracoDecoder.createDecoderModule();
+
+  io.registerDependencies({
+    'draco3d.decoder': decoder
+  });*/
+
   const document = await io.read(url);
   const glTFRoot = document.getRoot();
   const glTFScene = glTFRoot.listScenes()[0];

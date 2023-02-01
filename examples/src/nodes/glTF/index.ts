@@ -19,7 +19,7 @@ import {
   vec3Negate
 } from '@threeify/vector-math';
 
-import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
+import { getThreejsGLTFUrl, ThreeJSModel } from '../../threejsModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -44,10 +44,12 @@ async function init(): Promise<void> {
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(
-      sheenChairMode ? GLTFModel.SheenChair : GLTFModel.SciFiHelmet,
+    getThreejsGLTFUrl(ThreeJSModel.LittlestTokyo)
+    /*
+    getKhronosGlTFUrl(
+      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
       GLTFFormat.glTF
-    )
+    )*/
   );
   console.timeEnd('glTFToSceneNode');
 

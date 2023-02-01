@@ -20,7 +20,7 @@ import {
   vec3Negate
 } from '@threeify/vector-math';
 
-import { getGLTFUrl, GLTFFormat, GLTFModel } from '../../ExampleModels';
+import { getKhronosGlTFUrl, GLTFFormat, KhronosModel } from '../../khronosModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -45,8 +45,8 @@ async function init(): Promise<void> {
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
-    getGLTFUrl(
-      sheenChairMode ? GLTFModel.SheenChair : GLTFModel.SciFiHelmet,
+    getKhronosGlTFUrl(
+      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
       GLTFFormat.glTF
     )
   );
