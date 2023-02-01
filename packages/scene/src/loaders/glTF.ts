@@ -372,11 +372,10 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
         albedoAlphaTextureAccessor: albedoAlphaTextureAccessor,
 
-        metallicFactor: glTFMaterial.getMetallicFactor(),
-        metallicTextureAccessor: metallicRoughnessTextureAccessor,
-
         specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
-        specularRoughnessTextureAccessor: metallicRoughnessTextureAccessor,
+        metallicFactor: glTFMaterial.getMetallicFactor(),
+        metallicSpecularRoughnessTextureAccessor:
+          metallicRoughnessTextureAccessor,
 
         emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
         emissiveTextureAccessor: emissiveTextureAccessor,

@@ -38,7 +38,7 @@ export interface IPhysicalMaterialProps {
   specularRoughnessTextureAccessor?: TextureAccessor;
 
   metallicFactor?: number;
-  metallicTextureAccessor?: TextureAccessor;
+  metallicSpecularRoughnessTextureAccessor?: TextureAccessor;
 
   normalScale?: Vec2;
   normalTextureAccessor?: TextureAccessor;
@@ -98,10 +98,8 @@ export class PhysicalMaterial extends Material {
   public specularColorTextureAccessor?: TextureAccessor;
 
   public specularRoughnessFactor = 0.5;
-  public specularRoughnessTextureAccessor?: TextureAccessor;
-
   public metallicFactor = 1;
-  public metallicTextureAccessor?: TextureAccessor;
+  public metallicSpecularRoughnessTextureAccessor?: TextureAccessor;
 
   public normalScale = new Vec2(1, 1);
   public normalTextureAccessor?: TextureAccessor;
@@ -165,12 +163,11 @@ export class PhysicalMaterial extends Material {
 
     if (props.specularRoughnessFactor !== undefined)
       this.specularRoughnessFactor = props.specularRoughnessFactor;
-    this.specularRoughnessTextureAccessor =
-      props.specularRoughnessTextureAccessor;
 
     if (props.metallicFactor !== undefined)
       this.metallicFactor = props.metallicFactor;
-    this.metallicTextureAccessor = props.metallicTextureAccessor;
+    this.metallicSpecularRoughnessTextureAccessor =
+      props.metallicSpecularRoughnessTextureAccessor;
 
     this.normalScale.copy(props.normalScale || this.normalScale);
     this.normalTextureAccessor = props.normalTextureAccessor;
@@ -253,13 +250,9 @@ export class PhysicalMaterial extends Material {
         new TextureAccessor(SolidTextures.White),
 
       specularRoughnessFactor: this.specularRoughnessFactor,
-      specularRoughnessTextureAccessor:
-        this.specularRoughnessTextureAccessor ||
-        new TextureAccessor(SolidTextures.White),
-
       metallicFactor: this.metallicFactor,
-      metallicTextureAccessor:
-        this.metallicTextureAccessor ||
+      metallicSpecularRoughnessTextureAccessor:
+        this.metallicSpecularRoughnessTextureAccessor ||
         new TextureAccessor(SolidTextures.White),
 
       normalScale: this.normalScale,

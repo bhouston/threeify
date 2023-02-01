@@ -17,10 +17,8 @@ uniform vec3 specularColor;
 uniform TextureAccessor specularColorTextureAccessor;
 
 uniform float specularRoughnessFactor;
-uniform TextureAccessor specularRoughnessTextureAccessor;
-
 uniform float metallicFactor;
-uniform TextureAccessor metallicTextureAccessor;
+uniform TextureAccessor metallicSpecularRoughnessTextureAccessor;
 
 uniform vec3 emissiveFactor;
 uniform TextureAccessor emissiveTextureAccessor;
@@ -62,16 +60,19 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.alpha = alpha * alebedoAlpha.a;
     material.albedo = albedoFactor * sRGBToLinear( alebedoAlpha.rgb );
 
-    material.specularFactor = specularFactor * sampleTexture( specularFactorTextureAccessor, uvs ).r;
-    material.specularColor = specularColor * sRGBToLinear( sampleTexture( specularColorTextureAccessor, uvs ).rgb );
-    material.specularRoughness = specularRoughnessFactor * sampleTexture( specularRoughnessTextureAccessor, uvs ).g;
-    
-    material.metallic = metallicFactor * sampleTexture( metallicTextureAccessor, uvs ).b;
+    vec4 metallicSpecularRoughness = sampleTexture( metallicSpecularRoughnessTextureAccessor, uvs );
+    material.specularRoughness = specularRoughnessFactor * metallicSpecularRoughness.g;
+    material.metallic = metallicFactor * metallicSpecularRoughness.b;
+
     material.emissive = emissiveFactor * sRGBToLinear( sampleTexture( emissiveTextureAccessor, uvs ).rgb );
     material.normal = vec3( normalScale, 1.0 ) * rgbToNormal( sampleTexture( normalTextureAccessor, uvs ).rgb );
     material.occlusion = ( sampleTexture( occlusionTextureAccessor, uvs ).r - 1.0 ) * occlusionFactor + 1.0;
+    
     material.ior = ior;
 
+    material.specularFactor = specularFactor * sampleTexture( specularFactorTextureAccessor, uvs ).r;
+    material.specularColor = specularColor * sRGBToLinear( sampleTexture( specularColorTextureAccessor, uvs ).rgb );
+    
     // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_clearcoat/README.md
     vec4 clearcoatFactorRoughness = sampleTexture( clearcoatFactorRoughnessTextureAccessor, uvs );
     material.clearcoatFactor = clearcoatFactor * clearcoatFactorRoughness.r;
