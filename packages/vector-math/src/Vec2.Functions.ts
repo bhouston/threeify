@@ -95,7 +95,7 @@ export function vec2Lerp(
   const s = 1 - t;
   return result.set(a.x * s + b.x * t, a.y * s + b.y * t);
 }
-export function vec2FromArray(
+export function arrayToVec2(
   array: Float32Array | number[],
   offset = 0,
   result: Vec2 = new Vec2()
@@ -114,8 +114,8 @@ export function vec2ToArray(
 export function vec2ToString(a: Vec2): string {
   return toSafeString([a.x, a.y]);
 }
-export function vec2Parse(text: string, result = new Vec2()): Vec2 {
-  return vec2FromArray(parseSafeFloats(text), 0, result);
+export function stringToVec2(text: string, result = new Vec2()): Vec2 {
+  return arrayToVec2(parseSafeFloats(text), 0, result);
 }
 
 export function vec2TransformPoint(

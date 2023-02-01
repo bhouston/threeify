@@ -57,7 +57,7 @@ export function color3Lerp(
   const s = 1 - t;
   return result.set(a.r * s + b.r * t, a.g * s + b.g * t, a.b * s + b.b * t);
 }
-export function color3FromArray(
+export function arrayToColor3(
   array: Float32Array | number[],
   offset = 0,
   result = new Color3()
@@ -77,7 +77,7 @@ export function color3ToString(a: Color3): string {
   return toSafeString([a.r, a.g, a.b]);
 }
 export function color3Parse(text: string, result = new Color3()): Color3 {
-  return color3FromArray(parseSafeFloats(text), 0, result);
+  return arrayToColor3(parseSafeFloats(text), 0, result);
 }
 
 /*

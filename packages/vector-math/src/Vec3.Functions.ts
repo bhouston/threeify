@@ -103,7 +103,7 @@ export function vec3Lerp(
   const s = 1 - t;
   return result.set(a.x * s + b.x * t, a.y * s + b.y * t, a.z * s + b.z * t);
 }
-export function vec3FromArray(
+export function arrayToVec3(
   array: Float32Array | number[],
   offset = 0,
   result = new Vec3()
@@ -122,8 +122,8 @@ export function vec3ToArray(
 export function vec3ToString(a: Vec3): string {
   return toSafeString([a.x, a.y, a.z]);
 }
-export function vec3Parse(text: string, result = new Vec3()): Vec3 {
-  return vec3FromArray(parseSafeFloats(text), 0, result);
+export function stringToVec3(text: string, result = new Vec3()): Vec3 {
+  return arrayToVec3(parseSafeFloats(text), 0, result);
 }
 
 export function crossFromCoplanarPoints(
@@ -158,7 +158,7 @@ export function sphericalCoordToVec3(
 
 // static/instance method to calculate barycentric coordinates
 // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-export function pointToBaryCoords(
+export function pointToBarycoords(
   a: Vec3,
   b: Vec3,
   c: Vec3,

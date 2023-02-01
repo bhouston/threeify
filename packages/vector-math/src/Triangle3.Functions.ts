@@ -1,7 +1,7 @@
 import { Triangle3 } from './Triangle3.js';
 import {
   crossFromCoplanarPoints,
-  pointToBaryCoords,
+  pointToBarycoords,
   vec3Delta,
   vec3Equals,
   vec3Length,
@@ -46,10 +46,10 @@ export function triangleNormal(t: Triangle3, result = new Vec3()): Vec3 {
   return vec3Normalize(crossFromCoplanarPoints(t.a, t.b, t.c, result));
 }
 
-export function trianglePointToBaryCoords(
+export function trianglePointToBarycoords(
   t: Triangle3,
   point: Vec3,
   result = new Vec3()
 ): Vec3 {
-  return pointToBaryCoords(point, t.a, t.b, t.c, result);
+  return pointToBarycoords(point, t.a, t.b, t.c, result);
 }

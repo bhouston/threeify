@@ -544,7 +544,7 @@ export function mat4Mix(
   return result;
 }
 
-export function mat4FromArray(
+export function arrayToMat4(
   array: Float32Array | number[],
   offset = 0,
   result: Mat4 = new Mat4()
@@ -570,7 +570,7 @@ export function mat4ToString(a: Mat4): string {
 }
 
 export function mat4Parse(text: string, result = new Mat4()): Mat4 {
-  return mat4FromArray(parseSafeFloats(text), 0, result);
+  return arrayToMat4(parseSafeFloats(text), 0, result);
 }
 
 export function mat3ToMat4(a: Mat3, result = new Mat4()): Mat4 {

@@ -59,7 +59,7 @@ export function color4Lerp(
     a.a * s + b.a * t
   );
 }
-export function color4FromArray(
+export function arrayToColor4(
   array: Float32Array | number[],
   offset = 0,
   result = new Color4()
@@ -85,7 +85,7 @@ export function color4ToString(a: Color4): string {
   return toSafeString([a.r, a.g, a.b, a.a]);
 }
 export function color4Parse(text: string, result = new Color4()): Color4 {
-  return color4FromArray(parseSafeFloats(text), 0, result);
+  return arrayToColor4(parseSafeFloats(text), 0, result);
 }
 
 export function rgbeToLinear(source: Color4, result = new Color4()): Color4 {

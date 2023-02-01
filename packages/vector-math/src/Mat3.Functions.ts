@@ -286,7 +286,7 @@ export function mat3Mix(
   }
   return result;
 }
-export function mat3FromArray(
+export function arrayToMat3(
   array: Float32Array | number[],
   offset = 0,
   result: Mat3 = new Mat3()
@@ -310,7 +310,7 @@ export function mat3ToString(a: Mat3): string {
   return toSafeString(a.elements);
 }
 export function mat3Parse(text: string, result = new Mat3()): Mat3 {
-  return mat3FromArray(parseSafeFloats(text), 0, result);
+  return arrayToMat3(parseSafeFloats(text), 0, result);
 }
 
 export function mat3TransformPoint3(

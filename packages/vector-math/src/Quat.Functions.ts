@@ -95,7 +95,7 @@ export function quatLerp(
     a.w * s + b.w * t
   );
 }
-export function quatFromArray(
+export function arrayToQuat(
   array: Float32Array | number[],
   offset = 0,
   result = new Quat()
@@ -120,8 +120,8 @@ export function quatToArray(
 export function quatToString(a: Quat): string {
   return toSafeString([a.x, a.y, a.z, a.w]);
 }
-export function quatParse(text: string, result = new Quat()): Quat {
-  return quatFromArray(parseSafeFloats(text), 0, result);
+export function stringToQuat(text: string, result = new Quat()): Quat {
+  return arrayToQuat(parseSafeFloats(text), 0, result);
 }
 export function quatConjugate(a: Quat, result = new Quat()): Quat {
   return result.set(-a.x, -a.y, -a.z, a.w);

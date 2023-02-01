@@ -97,7 +97,7 @@ export function vec4Lerp(
     a.w * s + b.w * t
   );
 }
-export function vec4FromArray(
+export function arrayToVec4(
   array: Float32Array | number[],
   offset = 0,
   result = new Vec4()
@@ -122,6 +122,6 @@ export function vec4ToArray(
 export function vec4ToString(a: Vec4): string {
   return toSafeString([a.x, a.y, a.z, a.w]);
 }
-export function vec4Parse(text: string, result = new Vec4()): Vec4 {
-  return vec4FromArray(parseSafeFloats(text), 0, result);
+export function stringToVec4(text: string, result = new Vec4()): Vec4 {
+  return arrayToVec4(parseSafeFloats(text), 0, result);
 }

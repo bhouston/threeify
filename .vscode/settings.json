@@ -3,6 +3,7 @@
   "editor.formatOnSave": false,
   "editor.formatOnPaste": true,
   "cSpell.words": [
+    "barycoord",
     "clearcoat",
     "Equirectangular",
     "glsl",

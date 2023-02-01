@@ -1,12 +1,12 @@
-import { mat3FromArray, mat3ToArray } from '../Mat3.Functions.js';
+import { arrayToMat3, mat3ToArray } from '../Mat3.Functions.js';
 import { Mat3 } from '../Mat3.js';
-import { mat4FromArray, mat4ToArray } from '../Mat4.Functions.js';
+import { arrayToMat4, mat4ToArray } from '../Mat4.Functions.js';
 import { Mat4 } from '../Mat4.js';
-import { quatFromArray, quatToArray } from '../Quat.Functions.js';
+import { arrayToQuat, quatToArray } from '../Quat.Functions.js';
 import { Quat } from '../Quat.js';
-import { vec2FromArray, vec2ToArray } from '../Vec2.Functions.js';
+import { arrayToVec2, vec2ToArray } from '../Vec2.Functions.js';
 import { Vec2 } from '../Vec2.js';
-import { vec3FromArray, vec3ToArray } from '../Vec3.Functions.js';
+import { arrayToVec3, vec3ToArray } from '../Vec3.Functions.js';
 import { Vec3 } from '../Vec3.js';
 
 type DataArray = ArrayBuffer | Float32Array;
@@ -87,7 +87,7 @@ export function makeVec2View(
     floatStride,
     floatOffset,
     vec2ToArray,
-    vec2FromArray
+    arrayToVec2
   );
 }
 export function makeVec3View(
@@ -101,7 +101,7 @@ export function makeVec3View(
     floatStride,
     floatOffset,
     vec3ToArray,
-    vec3FromArray
+    arrayToVec3
   );
 }
 export function makeQuatView(
@@ -115,7 +115,7 @@ export function makeQuatView(
     floatStride,
     floatOffset,
     quatToArray,
-    quatFromArray
+    arrayToQuat
   );
 }
 export function makeMat3View(
@@ -129,7 +129,7 @@ export function makeMat3View(
     floatStride,
     floatOffset,
     mat3ToArray,
-    mat3FromArray
+    arrayToMat3
   );
 }
 export function makeMat4View(
@@ -143,6 +143,6 @@ export function makeMat4View(
     floatStride,
     floatOffset,
     mat4ToArray,
-    mat4FromArray
+    arrayToMat4
   );
 }
