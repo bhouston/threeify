@@ -91,9 +91,9 @@ export class PhysicalMaterial extends Material {
   public albedoFactor = new Color3(1, 1, 1);
   public albedoAlphaTextureAccessor?: TextureAccessor;
 
+  // TODO: someday combine these two textures into one.
   public specularFactor = 1; // default validated from KHR_materials_specular
   public specularFactorTextureAccessor?: TextureAccessor;
-
   public specularColor = new Color3(1, 1, 1); // default validated from KHR_materials_specular
   public specularColorTextureAccessor?: TextureAccessor;
 

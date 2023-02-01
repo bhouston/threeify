@@ -6,15 +6,8 @@
 uniform int alphaMode;
 uniform float alphaCutoff;
 uniform float alpha;
-
 uniform vec3 albedoFactor;
 uniform TextureAccessor albedoAlphaTextureAccessor;
-
-uniform float specularFactor;
-uniform TextureAccessor specularFactorTextureAccessor;
-
-uniform vec3 specularColor;
-uniform TextureAccessor specularColorTextureAccessor;
 
 uniform float specularRoughnessFactor;
 uniform float metallicFactor;
@@ -30,6 +23,11 @@ uniform float occlusionFactor;
 uniform TextureAccessor occlusionTextureAccessor;
 
 uniform float ior;
+
+uniform float specularFactor;
+uniform TextureAccessor specularFactorTextureAccessor;
+uniform vec3 specularColor;
+uniform TextureAccessor specularColorTextureAccessor;
 
 uniform float clearcoatFactor;
 uniform float clearcoatRoughnessFactor;
