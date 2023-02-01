@@ -8,6 +8,7 @@ import {
 import {
   Clearcoat,
   IOR,
+  Iridescence,
   KHRONOS_EXTENSIONS,
   Sheen,
   Specular,
@@ -233,6 +234,10 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         'KHR_materials_sheen'
       ) as Sheen;
 
+      const glTFIridescence = glTFMaterial.getExtension(
+        'KHR_materials_iridescence'
+      ) as Iridescence;
+
       const metallicRoughnessTextureAccessorPromise = getTextureAccessor(
         glTFMaterial.getMetallicRoughnessTexture(),
         glTFMaterial.getMetallicRoughnessTextureInfo()
@@ -311,6 +316,28 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         glTFSheen?.getSheenColorTextureInfo() || null
       );
 
+      if (glTFIridescence !== null) {
+        if (
+          glTFIridescence?.getIridescenceTexture() !== null &&
+          glTFIridescence?.getIridescenceThicknessTexture() !== null
+        ) {
+          if (
+            glTFIridescence?.getIridescenceTexture() !==
+            glTFIridescence?.getIridescenceThicknessTexture()
+          ) {
+            throw new Error(
+              'Sheen Color and Roughness textures must be the same.'
+            );
+          }
+        }
+      }
+
+      const iridescenceFactorThicknessTextureAccessorPromise =
+        getTextureAccessor(
+          glTFIridescence?.getIridescenceTexture() || null,
+          glTFIridescence?.getIridescenceTextureInfo() || null
+        );
+
       const data = await Promise.all([
         metallicRoughnessTextureAccessorPromise,
         albedoAlphaTextureAccessorPromise,
@@ -321,7 +348,8 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         specularColorTextureAccessorPromise,
         clearcoatFactorRoughnessTextureAccessorPromise,
         clearcoatNormalTextureAccessorPromise,
-        sheenColorRoughnessTextureAccessorPromise
+        sheenColorRoughnessTextureAccessorPromise,
+        iridescenceFactorThicknessTextureAccessorPromise
       ]);
 
       const metallicRoughnessTextureAccessor = data[0];
@@ -334,6 +362,7 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
       const clearcoatFactorRoughnessTextureAccessor = data[7];
       const clearcoatNormalTextureAccessor = data[8];
       const sheenColorRoughnessTextureAccessor = data[9];
+      const iridescenceFactorThicknessTextureAccessor = data[10];
 
       physicalMaterial = new PhysicalMaterial({
         alpha: glTFMaterial.getAlpha(),
@@ -346,18 +375,8 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         metallicFactor: glTFMaterial.getMetallicFactor(),
         metallicTextureAccessor: metallicRoughnessTextureAccessor,
 
-        ior: glTFIor?.getIOR(),
-
         specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
         specularRoughnessTextureAccessor: metallicRoughnessTextureAccessor,
-
-        specularFactor: glTFSpecular?.getSpecularFactor(),
-        specularFactorTextureAccessor: specularFactorTextureAccessor,
-
-        specularColor: toColor3(
-          glTFSpecular?.getSpecularColorFactor() || [0, 0, 0]
-        ),
-        specularColorTextureAccessor: specularColorTextureAccessor,
 
         emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
         emissiveTextureAccessor: emissiveTextureAccessor,
@@ -371,18 +390,37 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         occlusionFactor: glTFMaterial.getOcclusionStrength(),
         occlusionTextureAccessor: occlusionTextureAccessor,
 
-        clearcoatFactor: glTFClearcoat?.getClearcoatFactor() || 0,
-        clearcoatRoughnessFactor:
-          glTFClearcoat?.getClearcoatRoughnessFactor() || 0,
+        ior: glTFIor?.getIOR(),
+
+        specularFactor: glTFSpecular?.getSpecularFactor(),
+        specularFactorTextureAccessor: specularFactorTextureAccessor,
+        specularColor:
+          glTFSpecular !== null
+            ? toColor3(glTFSpecular.getSpecularColorFactor())
+            : undefined,
+        specularColorTextureAccessor: specularColorTextureAccessor,
+
+        clearcoatFactor: glTFClearcoat?.getClearcoatFactor(),
+        clearcoatRoughnessFactor: glTFClearcoat?.getClearcoatRoughnessFactor(),
         clearcoatFactorRoughnessTextureAccessor:
           clearcoatFactorRoughnessTextureAccessor,
         clearcoatNormalTextureAccessor: clearcoatNormalTextureAccessor,
 
-        sheenColorFactor: toColor3(
-          glTFSheen?.getSheenColorFactor() || [0, 0, 0]
-        ),
-        sheenRoughnessFactor: glTFSheen?.getSheenRoughnessFactor() || 0,
-        sheenColorRoughnessTextureAccessor: sheenColorRoughnessTextureAccessor
+        sheenColorFactor:
+          glTFSheen !== null
+            ? toColor3(glTFSheen.getSheenColorFactor())
+            : undefined,
+        sheenRoughnessFactor: glTFSheen?.getSheenRoughnessFactor(),
+        sheenColorRoughnessTextureAccessor: sheenColorRoughnessTextureAccessor,
+
+        iridescenceFactor: glTFIridescence?.getIridescenceFactor(),
+        iridescenceIor: glTFIridescence?.getIridescenceIOR(),
+        iridescenceThicknessMinimum:
+          glTFIridescence?.getIridescenceThicknessMaximum(),
+        iridescenceThicknessMaximum:
+          glTFIridescence?.getIridescenceThicknessMaximum(),
+        iridescenceFactorThicknessTextureAccessor:
+          iridescenceFactorThicknessTextureAccessor
       });
     }
 

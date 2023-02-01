@@ -71,11 +71,10 @@ export interface IPhysicalMaterialProps {
   sheenColorRoughnessTextureAccessor?: TextureAccessor;
 
   iridescenceFactor?: number;
-  iridescenceTextureAccessor?: TextureAccessor;
   iridescenceIor?: number;
   iridescenceThicknessMinimum?: number;
   iridescenceThicknessMaximum?: number;
-  iridescenceThicknessTextureAccessor?: TextureAccessor;
+  iridescenceFactorThicknessTextureAccessor?: TextureAccessor;
 
   transmissionFactor?: number;
   transmissionTextureAccessor?: TextureAccessor;
@@ -132,11 +131,10 @@ export class PhysicalMaterial extends Material {
   public sheenColorRoughnessTextureAccessor?: TextureAccessor;
 
   public iridescenceFactor = 0;
-  public iridescenceTextureAccessor?: TextureAccessor;
   public iridescenceIor = 1.5;
   public iridescenceThicknessMinimum = 0;
   public iridescenceThicknessMaximum = 0;
-  public iridescenceThicknessTextureAccessor?: TextureAccessor;
+  public iridescenceFactorThicknessTextureAccessor?: TextureAccessor;
 
   public transmissionFactor = 0;
   public transmissionTextureAccessor?: TextureAccessor;
@@ -215,15 +213,14 @@ export class PhysicalMaterial extends Material {
 
     if (props.iridescenceFactor !== undefined)
       this.iridescenceFactor = props.iridescenceFactor;
-    this.iridescenceTextureAccessor = props.iridescenceTextureAccessor;
     if (props.iridescenceIor !== undefined)
       this.iridescenceIor = props.iridescenceIor;
     if (props.iridescenceThicknessMinimum !== undefined)
       this.iridescenceThicknessMinimum = props.iridescenceThicknessMinimum;
     if (props.iridescenceThicknessMaximum !== undefined)
       this.iridescenceThicknessMaximum = props.iridescenceThicknessMaximum;
-    this.iridescenceThicknessTextureAccessor =
-      props.iridescenceThicknessTextureAccessor;
+    this.iridescenceFactorThicknessTextureAccessor =
+      props.iridescenceFactorThicknessTextureAccessor;
 
     if (props.transmissionFactor !== undefined)
       this.transmissionFactor = props.transmissionFactor;
@@ -311,15 +308,11 @@ export class PhysicalMaterial extends Material {
         new TextureAccessor(SolidTextures.White),
 
       iridescenceFactor: this.iridescenceFactor,
-      iridescenceTextureAccessor:
-        this.iridescenceTextureAccessor ||
-        new TextureAccessor(SolidTextures.White),
-
       iridescenceIor: this.iridescenceIor,
       iridescenceThicknessMinimum: this.iridescenceThicknessMinimum,
       iridescenceThicknessMaximum: this.iridescenceThicknessMaximum,
-      iridescenceThicknessTextureAccessor:
-        this.iridescenceThicknessTextureAccessor ||
+      iridescenceFactorThicknessTextureAccessor:
+        this.iridescenceFactorThicknessTextureAccessor ||
         new TextureAccessor(SolidTextures.White),
 
       transmissionFactor: this.transmissionFactor,

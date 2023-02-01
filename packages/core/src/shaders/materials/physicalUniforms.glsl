@@ -44,11 +44,10 @@ uniform float sheenRoughnessFactor;
 uniform TextureAccessor sheenColorRoughnessTextureAccessor;
 
 uniform float iridescenceFactor;
-//uniform TextureAccessor iridescenceFactorTextureAccessor;
 uniform float iridescenceIor;
-//uniform float iridescenceThicknessMinimum;
-//uniform float iridescenceThicknessMaximum;
-//uniform TextureAccessor iridescenceThicknessTextureAccessor;
+uniform float iridescenceThicknessMinimum;
+uniform float iridescenceThicknessMaximum;
+uniform TextureAccessor iridescenceFactorThicknessTextureAccessor;
 
 #pragma include <microgeometry/normalPacking>
 #pragma include <color/spaces/srgb>
@@ -62,9 +61,11 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     vec4 alebedoAlpha = sampleTexture( albedoAlphaTextureAccessor, uvs );
     material.alpha = alpha * alebedoAlpha.a;
     material.albedo = albedoFactor * sRGBToLinear( alebedoAlpha.rgb );
+
     material.specularFactor = specularFactor * sampleTexture( specularFactorTextureAccessor, uvs ).r;
     material.specularColor = specularColor * sRGBToLinear( sampleTexture( specularColorTextureAccessor, uvs ).rgb );
     material.specularRoughness = specularRoughnessFactor * sampleTexture( specularRoughnessTextureAccessor, uvs ).g;
+    
     material.metallic = metallicFactor * sampleTexture( metallicTextureAccessor, uvs ).b;
     material.emissive = emissiveFactor * sRGBToLinear( sampleTexture( emissiveTextureAccessor, uvs ).rgb );
     material.normal = vec3( normalScale, 1.0 ) * rgbToNormal( sampleTexture( normalTextureAccessor, uvs ).rgb );
@@ -76,16 +77,15 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.clearcoatFactor = clearcoatFactor * clearcoatFactorRoughness.r;
     material.clearcoatRoughness = clearcoatRoughnessFactor * clearcoatFactorRoughness.g;
     material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( sampleTexture( clearcoatNormalTextureAccessor, uvs ).rgb );
-    
-    // 
+     
     vec4 sheenColorRoughness = sampleTexture( sheenColorRoughnessTextureAccessor, uvs );
     material.sheenColor = sheenColorFactor * sRGBToLinear( sheenColorRoughness.rgb );
     material.sheenRoughness = sheenRoughnessFactor * sheenColorRoughness.a;
     
-    //
-	material.iridescence = iridescenceFactor; // * sampleTexture( iridescenceFactorTextureAccessor, uvs ).r;
+    vec4 iridescenceFactorThickness = sampleTexture( iridescenceFactorThicknessTextureAccessor, uvs );
+	material.iridescence = iridescenceFactor * iridescenceFactorThickness.r;
     material.iridescenceIor = iridescenceIor;
-   //material.iridescenceThickness = ( iridescenceThicknessMaximum - iridescenceThicknessMinimum ) * sampleTexture( iridescenceThicknessTextureAccessor, uvs ).g + iridescenceThicknessMinimum;
+    material.iridescenceThickness = mix( iridescenceThicknessMinimum, iridescenceThicknessMaximum, iridescenceFactorThickness.g );
 
     return material;
 }
