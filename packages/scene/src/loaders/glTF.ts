@@ -317,12 +317,11 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
 
       physicalMaterial = new PhysicalMaterial({
         alpha: glTFMaterial.getAlpha(),
-        alphaTextureAccessor: albedoAlphaTextureAccessor,
         alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
         alphaCutoff: glTFMaterial.getAlphaCutoff(),
 
         albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
-        albedoTextureAccessor: albedoAlphaTextureAccessor,
+        albedoAlphaTextureAccessor: albedoAlphaTextureAccessor,
 
         metallicFactor: glTFMaterial.getMetallicFactor(),
         metallicTextureAccessor: metallicRoughnessTextureAccessor,

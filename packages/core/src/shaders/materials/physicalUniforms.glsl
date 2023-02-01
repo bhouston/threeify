@@ -6,10 +6,9 @@
 uniform int alphaMode;
 uniform float alphaCutoff;
 uniform float alpha;
-uniform TextureAccessor alphaTextureAccessor;
 
 uniform vec3 albedoFactor;
-uniform TextureAccessor albedoTextureAccessor;
+uniform TextureAccessor albedoAlphaTextureAccessor;
 
 uniform float specularFactor;
 uniform TextureAccessor specularFactorTextureAccessor;
@@ -64,8 +63,9 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     PhysicalMaterial material;
     material.alphaMode = alphaMode;
     material.alphaCutoff = alphaCutoff;
-    material.alpha = alpha * sampleTexture( alphaTextureAccessor, uvs ).a;
-    material.albedo = albedoFactor * sRGBToLinear( sampleTexture( albedoTextureAccessor, uvs ).rgb );
+    vec4 alebedoAlpha = sampleTexture( albedoAlphaTextureAccessor, uvs );
+    material.alpha = alpha * alebedoAlpha.a;
+    material.albedo = albedoFactor * sRGBToLinear( alebedoAlpha.rgb );
     material.specularFactor = specularFactor * sampleTexture( specularFactorTextureAccessor, uvs ).r;
     material.specularColor = specularColor * sRGBToLinear( sampleTexture( specularColorTextureAccessor, uvs ).rgb );
     material.specularRoughness = specularRoughnessFactor * sampleTexture( specularRoughnessTextureAccessor, uvs ).g;

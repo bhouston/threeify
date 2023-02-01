@@ -41,7 +41,7 @@ async function init(): Promise<void> {
     geometry,
     material: new PhysicalMaterial({
       albedoFactor: new Color3(1, 1, 1),
-      albedoTextureAccessor: new TextureAccessor(texture),
+      albedoAlphaTextureAccessor: new TextureAccessor(texture),
       specularRoughnessFactor: 0,
       metallicFactor: 1
     })

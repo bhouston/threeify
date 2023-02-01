@@ -22,12 +22,11 @@ export interface IPhysicalMaterialProps {
   name?: string;
 
   alpha?: number;
-  alphaTextureAccessor?: TextureAccessor;
   alphaMode?: AlphaMode;
   alphaCutoff?: number;
 
   albedoFactor?: Color3;
-  albedoTextureAccessor?: TextureAccessor;
+  albedoAlphaTextureAccessor?: TextureAccessor;
 
   specularFactor?: number;
   specularFactorTextureAccessor?: TextureAccessor;
@@ -89,12 +88,11 @@ export interface IPhysicalMaterialProps {
 
 export class PhysicalMaterial extends Material {
   public alpha = 1;
-  public alphaTextureAccessor?: TextureAccessor;
   public alphaMode = AlphaMode.Opaque;
   public alphaCutoff = 0.5;
 
   public albedoFactor = new Color3(1, 1, 1);
-  public albedoTextureAccessor?: TextureAccessor;
+  public albedoAlphaTextureAccessor?: TextureAccessor;
 
   public specularFactor = 1; // default validated from KHR_materials_specular
   public specularFactorTextureAccessor?: TextureAccessor;
@@ -161,12 +159,11 @@ export class PhysicalMaterial extends Material {
     });
 
     if (props.alpha !== undefined) this.alpha = props.alpha;
-    this.alphaTextureAccessor = props.alphaTextureAccessor;
     if (props.alphaMode !== undefined) this.alphaMode = props.alphaMode;
     if (props.alphaCutoff !== undefined) this.alphaCutoff = props.alphaCutoff;
 
     this.albedoFactor.copy(props.albedoFactor || this.albedoFactor);
-    this.albedoTextureAccessor = props.albedoTextureAccessor;
+    this.albedoAlphaTextureAccessor = props.albedoAlphaTextureAccessor;
 
     if (props.specularFactor !== undefined)
       this.specularFactor = props.specularFactor;
@@ -251,14 +248,13 @@ export class PhysicalMaterial extends Material {
   getParameters(): MaterialParameters {
     return {
       alpha: this.alpha,
-      alphaTextureAccessor:
-        this.alphaTextureAccessor || new TextureAccessor(SolidTextures.White),
       alphaMode: this.alphaMode,
       alphaCutoff: this.alphaCutoff,
 
       albedoFactor: this.albedoFactor,
-      albedoTextureAccessor:
-        this.albedoTextureAccessor || new TextureAccessor(SolidTextures.White),
+      albedoAlphaTextureAccessor:
+        this.albedoAlphaTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
 
       specularFactor: this.specularFactor,
       specularFactorTextureAccessor:
