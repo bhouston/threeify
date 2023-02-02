@@ -1,10 +1,9 @@
 precision highp float;
 
-in vec3 v_viewPosition;
-in vec3 v_viewNormal;
-in vec3 v_localNormal;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
+in vec2 v_uv;
 
-uniform sampler2D latLongMap;
 uniform samplerCube cubeMap;
 uniform float perceptualRoughness;
 uniform int mipCount;
@@ -12,15 +11,13 @@ uniform int mipCount;
 out vec4 outputColor;
 
 void main() {
-  vec3 reflectDir = v_localNormal; //reflect( normalize( v_viewPosition ),normalize(v_viewNormal) );
+  vec3 reflectDir = reflect( normalize( v_viewSurfacePosition ),normalize(v_viewSurfaceNormal) );
   float lod = clamp(
     perceptualRoughness * float(mipCount),
     0.0,
     float(mipCount)
   );
-  outputColor.xy = texture(latLongMap, reflectDir.xy).xy;
-  outputColor.xyz = texture( cubeMap, reflectDir).xyz;
-
+  outputColor.xyz = texture(cubeMap, reflectDir).xyz;
   outputColor.a = 1.;
 
 }

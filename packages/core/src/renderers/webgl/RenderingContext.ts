@@ -92,15 +92,17 @@ export class RenderingContext {
   }
 
   set program(program: Program | undefined) {
-    if (this.#program !== program) {
-      if (program !== undefined) {
-        program.validate();
-        this.gl.useProgram(program.glProgram);
-      } else {
-        this.gl.useProgram(null);
-      }
-      this.#program = program;
+    // setting the viewport even if it is already set is required in a number of cases, such as render to texture
+    // the following line will cause a bug if commented out.  --Ben 2023-02-01
+    //if (this.#program !== program) {
+    if (program !== undefined) {
+      program.validate();
+      this.gl.useProgram(program.glProgram);
+    } else {
+      this.gl.useProgram(null);
     }
+    this.#program = program;
+    //}
   }
 
   get program(): Program | undefined {
@@ -108,14 +110,16 @@ export class RenderingContext {
   }
 
   set framebuffer(framebuffer: VirtualFramebuffer) {
-    if (this.#framebuffer !== framebuffer) {
-      if (framebuffer instanceof CanvasFramebuffer) {
-        this.gl.bindFramebuffer(GL.FRAMEBUFFER, null);
-      } else if (framebuffer instanceof Framebuffer) {
-        this.gl.bindFramebuffer(GL.FRAMEBUFFER, framebuffer.glFramebuffer);
-      }
-      this.#framebuffer = framebuffer;
+    // setting the viewport even if it is already set is required in a number of cases, such as render to texture
+    // the following line will cause a bug if commented out.  --Ben 2023-02-01
+    // if (this.#framebuffer !== framebuffer) {
+    if (framebuffer instanceof CanvasFramebuffer) {
+      this.gl.bindFramebuffer(GL.FRAMEBUFFER, null);
+    } else if (framebuffer instanceof Framebuffer) {
+      this.gl.bindFramebuffer(GL.FRAMEBUFFER, framebuffer.glFramebuffer);
     }
+    this.#framebuffer = framebuffer;
+    //}
   }
 
   get framebuffer(): VirtualFramebuffer {
