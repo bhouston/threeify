@@ -60,7 +60,7 @@ async function init(): Promise<void> {
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenCloth : KhronosModel.FlightHelmet,
+      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.DamagedHelmet,
       GLTFFormat.glTF
     )
   );
@@ -121,7 +121,7 @@ async function init(): Promise<void> {
     cubeMap: cubeTexture,
     translation: orbitNode.translation,
     color: new Color3(1, 1, 1),
-    intensity: 1
+    intensity: 0.5
   });
   root.children.push(domeLight);
 
