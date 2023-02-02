@@ -43,14 +43,14 @@ async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   console.time('fetchHDR');
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
   console.timeEnd('fetchHDR');
-  const lightIntensity = 0.5;
-  const domeLightIntensity = 0.5;
+  const lightIntensity = 0;
+  const domeLightIntensity = 1;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(

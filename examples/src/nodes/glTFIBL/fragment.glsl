@@ -77,8 +77,8 @@ void main( ) {
     float clearCoatDotVN = saturate( dot( viewDirection, viewClearcoatNormal ) );
   
     vec3 iblIrradiance = sampleIBLIrradiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewNormal, worldToView );
-    vec3 iblRadiance = sampleIBLRradiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewNormal, viewDirection, worldToView, material.specularRoughness );
-    vec3 iblClearcoatRadiance = sampleIBLRradiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewClearcoatNormal, viewDirection, worldToView, material.clearcoatRoughness );
+    vec3 iblRadiance = sampleIBLRadiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewNormal, viewDirection, worldToView, material.specularRoughness );
+    vec3 iblClearcoatRadiance = sampleIBLRadiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewClearcoatNormal, viewDirection, worldToView, material.clearcoatRoughness );
 
     // lambert diffuse
     vec3 diffuse_brdf = albedo * iblIrradiance * material.occlusion;
@@ -149,7 +149,8 @@ void main( ) {
   vec3 emissive_brdf = material.emissive;
   outgoingRadiance += emissive_brdf;
 
-  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
+//  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
+  outputColor.rgb = linearTosRGB( tonemappingACESFilmic( outgoingRadiance ) );
   outputColor.a = material.alpha;
 
 }

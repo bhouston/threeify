@@ -12,7 +12,7 @@ out vec4 outputColor;
 
 void main() {
   vec3 direction = cubeFaceUVToDirection(faceIndex, v_uv0);
-  vec2 equirectangularUv = directionToLatLongUV(direction);
+  vec2 equirectangularUv = directionToLatLongUV_2(direction);
 
   outputColor = texture(map, equirectangularUv);
 
