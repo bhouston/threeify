@@ -41,11 +41,13 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  console.time('fetchHDR');
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.moonless_golf_1k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k))
   );
-  const lightIntensity = 0;
-  const domeLightIntensity = 1;
+  console.timeEnd('fetchHDR');
+  const lightIntensity = 0.5;
+  const domeLightIntensity = 0.5;
 
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
@@ -58,11 +60,14 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  console.time('makeTexImage2DFromEquirectangularTexture');
   const cubeMap = makeTexImage2DFromEquirectangularTexture(
     context,
     latLongTexture,
     new Vec2(1024, 1024)
   );
+  console.timeEnd('makeTexImage2DFromEquirectangularTexture');
+
   const orbitController = new Orbit(canvasHtmlElement);
   orbitController.zoom = 1.2;
 
