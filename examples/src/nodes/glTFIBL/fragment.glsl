@@ -64,6 +64,7 @@ void main( ) {
   // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_specular/README.md
   specularF0 = mix( specularF0, material.albedo, material.metallic );
   specularF90 = mix( specularF90, vec3( 1. ), material.metallic );
+  vec3 albedo = mix( material.albedo, vec3( 0. ), material.metallic );
 
   vec3 clearcoatF0 = vec3(0.04);
   vec3 clearcoatF90 = vec3(1.);
@@ -80,14 +81,14 @@ void main( ) {
     vec3 iblClearcoatRadiance = sampleIBLRradiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewClearcoatNormal, viewDirection, worldToView, material.clearcoatRoughness );
 
     // lambert diffuse
-    vec3 diffuse_brdf = material.albedo * iblIrradiance;
+    vec3 diffuse_brdf = albedo * iblIrradiance * material.occlusion;
 
     // specular layer
     vec3 singleScattering = vec3( 0. ), multiScattering = vec3( 0. );
     BRDF_Specular_GGX_Multiscatter_IBL( viewNormal, viewDirection, specularF0, specularF90, material.specularRoughness, singleScattering, multiScattering );
     float specOcclusion = specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
     vec3 specular_brdf = iblRadiance * singleScattering + multiScattering * iblIrradiance;
-    vec3 dielectric_brdf = diffuse_brdf * material.occlusion * ( 1. - max3( singleScattering + multiScattering ) ) + specular_brdf * specOcclusion;
+    vec3 dielectric_brdf = diffuse_brdf * ( 1. - max3( singleScattering + multiScattering ) ) + specular_brdf * specOcclusion;
 
     // sheen
     vec3 sheen_brdf = iblIrradiance * BRDF_Sheen_Charlie_IBL( viewNormal, viewDirection, material.sheenColor, material.sheenRoughness ) * material.occlusion;
@@ -125,7 +126,7 @@ void main( ) {
 
     vec3 clearcoatIrradiance = directLight.radiance * clearCoatDotNL;
 
-    vec3 diffuse_brdf = irradiance * mix( BRDF_Diffuse_Lambert( material.albedo ) * material.occlusion, vec3( 0. ), material.metallic );
+    vec3 diffuse_brdf = irradiance * BRDF_Diffuse_Lambert( albedo ) * material.occlusion;
 
     vec3 specular_brdf = irradiance * BRDF_Specular_GGX_NoFrenel( viewNormal, viewDirection, directLight.direction, material.specularRoughness ) *
       specularOcclusion( dotNV, material.occlusion, material.specularRoughness );

@@ -8,7 +8,6 @@ import {
 } from '../../../textures/CubeTexture.js';
 import { Texture } from '../../../textures/Texture.js';
 import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry.js';
-import { DepthTestState } from '../DepthTestState.js';
 import { Attachment } from '../framebuffers/Attachment.js';
 import { Framebuffer } from '../framebuffers/Framebuffer.js';
 import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer.js';
@@ -99,7 +98,6 @@ export function makeTexImage2DFromEquirectangularTexture(
     faceIndex: 0
   };
 
-  const depthTestState = new DepthTestState(false);
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
@@ -107,8 +105,7 @@ export function makeTexImage2DFromEquirectangularTexture(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry,
-      depthTestState
+      bufferGeometry: cubeFaceBufferGeometry
     });
   });
 
