@@ -47,7 +47,7 @@ export class RenderingContext {
     if (attributes === undefined) {
       attributes = {};
       attributes.alpha = true;
-      attributes.antialias = true;
+      attributes.antialias = false;
       attributes.depth = true;
       attributes.premultipliedAlpha = true;
       attributes.stencil = true;
@@ -177,12 +177,15 @@ export class RenderingContext {
   }
 
   set depthTestState(dts: DepthTestState) {
-    if (!this.initialMode && dts.equals(this.#depthTestState)) return;
+    //if (!this.initialMode && dts.equals(this.#depthTestState)) return;
 
     if (dts.enabled) {
       this.gl.enable(GL.DEPTH_TEST);
     } else {
       this.gl.disable(GL.DEPTH_TEST);
+    }
+    if (dts.write) {
+      this.gl.depthMask(dts.write);
     }
     this.gl.depthFunc(dts.func);
     this.#depthTestState.copy(dts);
@@ -193,7 +196,7 @@ export class RenderingContext {
   }
 
   set clearState(cs: ClearState) {
-    if (!this.initialMode && cs.equals(this.#clearState)) return;
+    // if (!this.initialMode && cs.equals(this.#clearState)) return;
 
     this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
     this.gl.clearDepth(cs.depth);
@@ -206,7 +209,7 @@ export class RenderingContext {
   }
 
   set maskState(ms: MaskState) {
-    if (!this.initialMode && ms.equals(this.#maskState)) return;
+    //  if (!this.initialMode && ms.equals(this.#maskState)) return;
 
     this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
     this.gl.depthMask(ms.depth);
@@ -219,7 +222,7 @@ export class RenderingContext {
   }
 
   set cullingState(cs: CullingState) {
-    if (!this.initialMode && cs.equals(this.#cullingState)) return;
+    // if (!this.initialMode && cs.equals(this.#cullingState)) return;
 
     if (cs.enabled) {
       this.gl.enable(GL.CULL_FACE);

@@ -48,18 +48,27 @@ export class DepthTestState
   implements ICloneable<DepthTestState>, IEquatable<DepthTestState>
 {
   // TODO: Should be intialized to default WebGL states
-  constructor(public enabled = true, public func = DepthTestFunc.Less) {}
+  constructor(
+    public enabled = true,
+    public func = DepthTestFunc.Less,
+    public write = true
+  ) {}
 
   clone(): DepthTestState {
-    return new DepthTestState(this.enabled, this.func);
+    return new DepthTestState(this.enabled, this.func, this.write);
   }
 
   copy(dts: DepthTestState): void {
     this.enabled = dts.enabled;
     this.func = dts.func;
+    this.write = dts.write;
   }
 
   equals(dts: DepthTestState): boolean {
-    return this.enabled === dts.enabled && this.func === dts.func;
+    return (
+      this.enabled === dts.enabled &&
+      this.func === dts.func &&
+      this.write === dts.write
+    );
   }
 }

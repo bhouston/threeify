@@ -1,7 +1,12 @@
 import {
+  Blending,
+  blendModeToBlendState,
   fetchHDR,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
   makeTexImage2DFromEquirectangularTexture,
   Orbit,
+  passGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture
@@ -23,6 +28,10 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
+  Mat4,
+  mat4Inverse,
+  mat4PerspectiveFov,
+  quatToMat4,
   Vec2,
   Vec3,
   vec3Negate
@@ -34,12 +43,19 @@ import {
   KhronosModel
 } from '../../khronosModels';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../threejsHDRIs';
+import backgroundFragmentSource from './background/fragment.glsl';
+import backgroundVertexSource from './background/vertex.glsl';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
-
 //const stats = new Stats();
 
 async function init(): Promise<void> {
+  const backgroundGeometry = passGeometry();
+  const backgroundMaterial = new ShaderMaterial(
+    backgroundVertexSource,
+    backgroundFragmentSource
+  );
+
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   console.time('fetchHDR');
   const latLongTexture = new Texture(
@@ -153,6 +169,24 @@ async function init(): Promise<void> {
   );
   console.timeEnd('updateRenderCache');
 
+  const backgroundProgram = makeProgramFromShaderMaterial(
+    context,
+    backgroundMaterial
+  );
+  const backgroundUniforms = {
+    viewToWorld: new Mat4(),
+    screenToView: mat4Inverse(
+      mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+    ),
+    cubeMap: cubeMap
+  };
+  const backgroundBufferGeometry = makeBufferGeometryFromGeometry(
+    context,
+    backgroundGeometry
+  );
+
+  canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
+
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
@@ -161,6 +195,13 @@ async function init(): Promise<void> {
 
     // stats.time(() => {
     canvasFramebuffer.clear();
+
+    backgroundUniforms.viewToWorld = mat4Inverse(
+      quatToMat4(orbitController.rotation)
+    );
+    backgroundUniforms.screenToView = mat4Inverse(
+      mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+    );
 
     orbitController.update();
     orbitNode.rotation = orbitController.rotation;
@@ -172,6 +213,14 @@ async function init(): Promise<void> {
     updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
     renderScene(canvasFramebuffer, renderCache);
     //});
+
+    /* renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program: backgroundProgram,
+      uniforms: backgroundUniforms,
+      bufferGeometry: backgroundBufferGeometry
+      //  depthTestState: backgroundDepthTestState
+    });*/
   }
 
   animate();
