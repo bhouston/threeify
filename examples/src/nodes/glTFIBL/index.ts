@@ -54,13 +54,13 @@ async function init(): Promise<void> {
 
   const sceneTreeCache = new SceneTreeCache();
 
-  const sheenChairMode = true;
+  const sheenChairMode = false;
 
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenCloth : KhronosModel.DamagedHelmet,
+      sheenChairMode ? KhronosModel.SheenCloth : KhronosModel.FlightHelmet,
       GLTFFormat.glTF
     )
   );
@@ -74,7 +74,7 @@ async function init(): Promise<void> {
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
   glTFModel.dirty();
   const maxSize = box3MaxSize(glTFBoundingBox);
-  const lightIntensity = 50;
+  const lightIntensity = 0;
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
