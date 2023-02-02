@@ -1,5 +1,6 @@
 import {
   AlphaMode,
+  CubeMapTexture,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
@@ -230,7 +231,9 @@ function updateLightUniforms(
   if (light instanceof DomeLight) {
     lightUniforms.iblMapTexture =
       light.cubeMap !== undefined
-        ? makeTexImage2DFromTexture(context, light.cubeMap)
+        ? light.cubeMap instanceof CubeMapTexture
+          ? makeTexImage2DFromTexture(context, light.cubeMap)
+          : light.cubeMap
         : undefined;
     lightUniforms.iblMapIntensity = color3MultiplyByScalar(
       light.color,

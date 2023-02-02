@@ -1,13 +1,13 @@
-import { CubeMapTexture } from '@threeify/core';
+import { CubeMapTexture, TexImage2D } from '@threeify/core';
 
 import { ILight, Light } from './Light';
 
 export interface IDomeLight extends ILight {
-  cubeMap?: CubeMapTexture;
+  cubeMap?: CubeMapTexture | TexImage2D;
 }
 
 export class DomeLight extends Light {
-  public cubeMap?: CubeMapTexture;
+  public cubeMap?: CubeMapTexture | TexImage2D;
 
   constructor(props: IDomeLight) {
     super(props);
