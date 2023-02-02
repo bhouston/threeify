@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Box2, box2Equals } from '@threeify/vector-math';
+import { Box2 } from '@threeify/vector-math';
 
 import { BlendState } from './BlendState.js';
 import { ClearState } from './ClearState.js';
@@ -137,7 +137,9 @@ export class RenderingContext {
   }
 
   set viewport(v: Box2) {
-    if (!this.initialMode && box2Equals(this.#viewport, v)) return;
+    // setting the viewport even if it is already set is required in a number of cases, such as render to texture
+    // the following line will cause a bug if commented out.  --Ben 2023-02-01
+    // if (!this.initialMode && box2Equals(this.#viewport, v)) return;
 
     this.gl.viewport(v.x, v.y, v.width, v.height);
     this.#viewport.copy(v);

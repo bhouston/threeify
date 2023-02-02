@@ -8,6 +8,7 @@ import {
 } from '../../../textures/CubeTexture.js';
 import { Texture } from '../../../textures/Texture.js';
 import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry.js';
+import { DepthTestState } from '../DepthTestState.js';
 import { Attachment } from '../framebuffers/Attachment.js';
 import { Framebuffer } from '../framebuffers/Framebuffer.js';
 import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer.js';
@@ -18,7 +19,6 @@ import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { PixelFormat } from './PixelFormat.js';
 import { TexImage2D } from './TexImage2D.js';
 import { TexParameters } from './TexParameters.js';
-import { TextureBindings } from './TextureBindings.js';
 import { TextureFilter } from './TextureFilter.js';
 import { TextureTarget } from './TextureTarget.js';
 import { TextureWrap } from './TextureWrap.js';
@@ -78,6 +78,7 @@ export function makeTexImage2DFromEquirectangularTexture(
 
   const latLongMap = makeTexImage2DFromTexture(context, latLongTexture);
   const cubeFaceGeometry = passGeometry();
+
   const cubeFaceMaterial = new ShaderMaterial(
     cubeFaceVertexSource,
     cubeFaceFragmentSource
@@ -93,12 +94,12 @@ export function makeTexImage2DFromEquirectangularTexture(
   const cubeMap = makeTexImage2DFromTexture(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
-  const cubeFaceTextureBindings = new TextureBindings();
   const cubeFaceUniforms = {
-    map: cubeFaceTextureBindings.bind(latLongMap),
+    map: latLongMap,
     faceIndex: 0
   };
 
+  const depthTestState = new DepthTestState(false);
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
@@ -106,7 +107,8 @@ export function makeTexImage2DFromEquirectangularTexture(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry
+      bufferGeometry: cubeFaceBufferGeometry,
+      depthTestState
     });
   });
 

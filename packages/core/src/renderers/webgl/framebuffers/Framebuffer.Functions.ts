@@ -11,6 +11,7 @@ import { TexImage2D } from '../textures/TexImage2D.js';
 import { TexParameters } from '../textures/TexParameters.js';
 import { TextureFilter } from '../textures/TextureFilter.js';
 import { TextureTarget } from '../textures/TextureTarget.js';
+import { TextureWrap } from '../textures/TextureWrap.js';
 import { Attachment } from './Attachment.js';
 import { Framebuffer } from './Framebuffer.js';
 
@@ -88,6 +89,8 @@ export function makeDepthAttachment(
   texParams.generateMipmaps = false;
   texParams.magFilter = TextureFilter.Nearest;
   texParams.minFilter = TextureFilter.Nearest;
+  texParams.wrapS = TextureWrap.ClampToEdge;
+  texParams.wrapT = TextureWrap.ClampToEdge;
   // TODO: figure out which are supported and choose one of those.
   // context.glx.WEBGL_depth_texture.UNSIGNED_INT_24_8_WEBGL as DataType,
   const dataType = DataType.UnsignedInt;
@@ -95,7 +98,7 @@ export function makeDepthAttachment(
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.DepthComponent24,
+    PixelFormat.DepthComponent24, // In WebGL2 DEPTH_COMPONENT is not a valid internal format. Use DEPTH_COMPONENT16, DEPTH_COMPONENT24 or DEPTH_COMPONENT32F
     dataType,
     PixelFormat.DepthComponent,
     TextureTarget.Texture2D,

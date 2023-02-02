@@ -1,15 +1,21 @@
 import {
+  Blending,
+  blendModeToBlendState,
+  DepthTestState,
   fetchImage,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromEquirectangularTexture,
+  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture
 } from '@threeify/core';
 import {
+  Euler3,
+  euler3ToMat4,
   Mat4,
   mat4PerspectiveFov,
   translation3ToMat4,
@@ -40,6 +46,8 @@ async function init(): Promise<void> {
     new Vec2(1024, 1024)
   );
 
+  const latLongMap = makeTexImage2DFromTexture(context, debugTexture);
+
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
@@ -52,19 +60,22 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     ),
     cubeMap: cubeMap,
+    latLongMap: latLongMap,
     mipCount: cubeMap.mipCount,
     perceptualRoughness: 0
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const depthTestState = new DepthTestState(false);
+  const blendState = blendModeToBlendState(Blending.Over, true);
 
   function animate(): void {
     requestAnimationFrame(animate);
     const now = Date.now();
 
-    /* uniforms.localToWorld = euler3ToMat4(
+    uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
-      uniforms.localToWorld,
-    ); */
+      uniforms.localToWorld
+    );
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
 
     renderBufferGeometry({

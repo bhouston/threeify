@@ -60,7 +60,7 @@ async function init(): Promise<void> {
   console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.DamagedHelmet,
+      sheenChairMode ? KhronosModel.SheenCloth : KhronosModel.DamagedHelmet,
       GLTFFormat.glTF
     )
   );

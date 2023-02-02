@@ -4,6 +4,7 @@ in vec3 v_viewPosition;
 in vec3 v_viewNormal;
 in vec3 v_localNormal;
 
+uniform sampler2D latLongMap;
 uniform samplerCube cubeMap;
 uniform float perceptualRoughness;
 uniform int mipCount;
@@ -17,6 +18,9 @@ void main() {
     0.0,
     float(mipCount)
   );
-  outputColor = texture(cubeMap, reflectDir, lod);
+  outputColor.xy = texture(latLongMap, reflectDir.xy).xy;
+  outputColor.xyz = texture( cubeMap, reflectDir).xyz;
+
+  outputColor.a = 1.;
 
 }

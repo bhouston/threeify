@@ -6,16 +6,17 @@ uniform mat4 localToWorld;
 uniform mat4 worldToView;
 uniform mat4 viewToScreen;
 
-out vec3 v_viewPosition;
-out vec3 v_viewNormal;
+out vec3 v_viewSurfacePosition;
+out vec3 v_viewSurfaceNormal;
 out vec2 v_uv;
 
-void main() {
-  v_viewNormal = normalize(
-    (worldToView * localToWorld * vec4(normal, 0.0)).xyz
-  );
-  v_viewPosition = (worldToView * localToWorld * vec4(position, 1.0)).xyz;
+#pragma include <math/mat4>
+
+void main( ) {
+  mat4 localToView = worldToView * localToWorld;
+  v_viewSurfaceNormal = mat4TransformDirection( localToView, normalize( normal ) );
+  v_viewSurfacePosition = mat4TransformPosition( localToView, position );
   v_uv = uv0;
-  gl_Position = viewToScreen * vec4(v_viewPosition, 1.0);
+  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
 
 }

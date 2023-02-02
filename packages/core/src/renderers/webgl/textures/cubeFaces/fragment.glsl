@@ -1,6 +1,5 @@
 precision highp float;
 
-in vec3 v_position;
 in vec2 v_uv0;
 
 uniform sampler2D map;
@@ -16,6 +15,5 @@ void main() {
   vec2 equirectangularUv = directionToLatLongUV(direction);
 
   outputColor = texture(map, equirectangularUv);
-  outputColor.r = 1.0;
 
 }
