@@ -7,8 +7,18 @@ export class KHR_parallel_shader_compile {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   COMPLETION_STATUS_KHR = 0x91b1;
 }
+
+// TODO: This is definitely not the way to do this, but I do not know the right way. -Ben 2023-02-02
+export class EXT_disjoint_timer_query_webgl2 {
+  QUERY_COUNTER_BITS_EXT = 0x8864;
+  TIME_ELAPSED_EXT = 0x88bf;
+  TIMESTAMP_EXT = 0x8e28;
+  GPU_DISJOINT_EXT = 0x8fbb;
+}
+
 /* eslint-disable @typescript-eslint/naming-convention */
 export class OptionalExtensions {
+  EXT_disjoint_timer_query_webgl2: EXT_disjoint_timer_query_webgl2 | null;
   EXT_texture_filter_anisotropic: EXT_texture_filter_anisotropic | null;
   KHR_parallel_shader_compile: KHR_parallel_shader_compile | null;
   // OES_texture_float_linear: OES_texture_float_linear | null;
@@ -20,6 +30,10 @@ export class OptionalExtensions {
   // WEBGL_compressed_texture_s3tc_srgb: WEBGL_compressed_texture_s3tc_srgb | null;
 
   constructor(gl: WebGL2RenderingContext) {
+    this.EXT_disjoint_timer_query_webgl2 =
+      gl.getExtension('EXT_disjoint_timer_query_webgl2') !== null
+        ? new EXT_disjoint_timer_query_webgl2()
+        : null;
     this.EXT_texture_filter_anisotropic = gl.getExtension(
       'EXT_texture_filter_anisotropic'
     );

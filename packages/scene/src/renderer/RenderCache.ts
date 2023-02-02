@@ -1,13 +1,13 @@
 import {
   Buffer,
   BufferGeometry,
-  Material,
   Program,
   ProgramVertexArray,
   TexImage2D,
   UniformValueMap
 } from '@threeify/core';
 
+import { Material } from '../materials/Material';
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { SceneNode } from '../scene/SceneNode';
 import { CameraUniforms } from './CameraUniforms';

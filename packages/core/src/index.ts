@@ -28,8 +28,8 @@ export * from './renderers/webgl/framebuffers/Framebuffer.js';
 export * from './renderers/webgl/framebuffers/Framebuffer.Functions.js';
 export * from './renderers/webgl/framebuffers/VirtualFramebuffer.js';
 
-export * from './renderers/webgl/programs/ProgramUniformBlock';
-export * from './renderers/webgl/programs/UniformValueMap';
+export * from './renderers/webgl/programs/ProgramUniformBlock.js';
+export * from './renderers/webgl/programs/UniformValueMap.js';
 
 export * from './geometry/Attribute.js';
 export * from './geometry/AttributeData.js';
@@ -49,13 +49,9 @@ export * from './textures/loaders/Image.js';
 export * from './loaders/OBJ.js';
 
 export * from './materials/Blending.js';
-export * from './materials/Material.js';
 export * from './materials/OutputChannels.js';
-export * from './materials/PhysicalMaterial.js';
 export * from './materials/ShaderMaterial.js';
-export * from './materials/PhysicalMaterial.js';
 export * from './materials/AlphaMode.js';
-export * from './materials/MaterialParameters.js';
 
 export * from './renderers/webgl/programs/Program.js';
 export * from './renderers/webgl/programs/ProgramAttribute.js';
@@ -77,6 +73,7 @@ export * from './renderers/webgl/textures/TextureBindings.js';
 
 export * from './renderers/webgl/shaders/Shader.js';
 export * from './renderers/webgl/shaders/ShaderType.js';
+export * from './renderers/webgl/shaders/ShaderDefines.js';
 
 export * from './renderers/webgl/textures/DataType.js';
 export * from './renderers/webgl/textures/PixelFormat.js';
@@ -92,7 +89,6 @@ export * from './textures/ArrayBufferImage.js';
 export * from './textures/CubeTexture.js';
 export * from './textures/PixelEncoding.js';
 export * from './textures/Texture.js';
-export * from './textures/TextureAccessor.js';
 export * from './textures/VirtualTexture.js';
 export * from './textures/loaders/ImageData.js';
 export * from './textures/loaders/SolidTextures.js';

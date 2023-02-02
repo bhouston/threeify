@@ -3,19 +3,19 @@ import {
   DepthTestState,
   fetchImage,
   icosahedronGeometry,
-  PhysicalMaterial,
   RenderingContext,
   ShaderMaterial,
-  Texture,
-  TextureAccessor
+  Texture
 } from '@threeify/core';
 import {
   MeshNode,
   PerspectiveCamera,
+  PhysicalMaterial,
   PointLight,
   renderScene,
   SceneNode,
   SceneTreeCache,
+  TextureAccessor,
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';

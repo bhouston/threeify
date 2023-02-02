@@ -1,3 +1,4 @@
+import { AlphaMode, SolidTextures } from '@threeify/core';
 import {
   Color3,
   color3MultiplyByScalar,
@@ -5,11 +6,9 @@ import {
   Vec3
 } from '@threeify/vector-math';
 
-import { SolidTextures } from '../textures/loaders/SolidTextures';
-import { TextureAccessor } from '../textures/TextureAccessor';
-import { AlphaMode } from './AlphaMode';
-import { Material } from './Material';
-import { MaterialParameters } from './MaterialParameters';
+import { Material } from './Material.js';
+import { MaterialParameters } from './MaterialParameters.js';
+import { TextureAccessor } from './TextureAccessor.js';
 
 // Based on the Khronos PBR material.
 // TODO: Add support for alpha blending

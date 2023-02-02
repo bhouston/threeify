@@ -1,7 +1,11 @@
-import { generateUUID } from '../core/generateUuid';
-import { IIdentifiable, IVersionable } from '../core/types';
-import { ShaderDefines } from '../renderers/webgl/shaders/ShaderDefines';
-import { AlphaMode } from './AlphaMode';
+import {
+  AlphaMode,
+  generateUUID,
+  IIdentifiable,
+  IVersionable,
+  ShaderDefines
+} from '@threeify/core';
+
 import {
   IMaterialParameterProvider,
   MaterialParameters

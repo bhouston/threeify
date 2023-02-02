@@ -20,9 +20,7 @@ import {
   AttributeData,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  PhysicalMaterial,
-  Texture,
-  TextureAccessor
+  Texture
 } from '@threeify/core';
 import {
   Color3,
@@ -33,6 +31,8 @@ import {
   Vec3
 } from '@threeify/vector-math';
 
+import { PhysicalMaterial } from '../materials/PhysicalMaterial';
+import { TextureAccessor } from '../materials/TextureAccessor';
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
 

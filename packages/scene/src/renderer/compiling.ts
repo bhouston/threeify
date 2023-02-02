@@ -4,7 +4,6 @@ import {
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
-  MaterialParameters,
   ProgramUniform,
   ProgramVertexArray,
   RenderingContext,
@@ -21,6 +20,7 @@ import {
   Vec3
 } from '@threeify/vector-math';
 
+import { MaterialParameters } from '../materials/MaterialParameters';
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { DomeLight } from '../scene/lights/DomeLight';
