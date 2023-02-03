@@ -44,6 +44,7 @@ export class Stats {
   }
 
   addPanel(panel: Panel) {
+    if (panel.error) return panel;
     this.container.appendChild(panel.dom);
     this.showPanel(this.currentPanel);
     return panel;
@@ -114,6 +115,7 @@ export class Panel {
   private max = 0;
   private smoothedValue = 0;
   private canvas: HTMLCanvasElement;
+  public error = false;
 
   constructor(public name: string, public fg: string, public bg: string) {
     this.canvas = document.createElement('canvas');
@@ -189,7 +191,7 @@ export class Panel {
 }
 
 export class GPUTimerPanel extends Panel {
-  private EXT_disjoint_timer_query_webgl2: EXT_disjoint_timer_query_webgl2;
+  private ext: EXT_disjoint_timer_query_webgl2 | null;
   private currentQuery?: WebGLQuery;
   private queryQueue: WebGLQuery[] = [];
 
@@ -197,27 +199,27 @@ export class GPUTimerPanel extends Panel {
     super(' % ' + name, '#fff', '#000');
 
     const extension = context.glxo.EXT_disjoint_timer_query_webgl2;
-    if (extension === null)
-      throw new Error('GPUTimerPanel requires EXT_disjoint_timer_query_webgl2');
-    this.EXT_disjoint_timer_query_webgl2 = extension;
+    if (extension === null) {
+      console.warn('GPUTimerPanel requires EXT_disjoint_timer_query_webgl2');
+      this.error = true;
+    }
+    this.ext = extension;
   }
 
   private checkForQueryResult() {
     if (this.queryQueue.length === 0) return;
     const { gl } = this.context;
-    while (this.queryQueue.length > 0) {
-      const query = this.queryQueue[0];
+    const { ext, queryQueue } = this;
+    if (ext === null) return;
+    while (queryQueue.length > 0) {
+      const query = queryQueue[0];
       if (gl.getQueryParameter(query, gl.QUERY_RESULT_AVAILABLE)) {
-        if (
-          !gl.getParameter(
-            this.EXT_disjoint_timer_query_webgl2.GPU_DISJOINT_EXT
-          )
-        ) {
+        if (!gl.getParameter(ext.GPU_DISJOINT_EXT)) {
           // pop off first query from query queue
           const nanoSeconds = gl.getQueryParameter(query, gl.QUERY_RESULT);
           const framePercentage = (100 * (nanoSeconds / 1000000)) / (1000 / 60);
           super.update(framePercentage, 100);
-          this.queryQueue.shift();
+          queryQueue.shift();
           gl.deleteQuery(query);
           continue;
         }
@@ -227,22 +229,23 @@ export class GPUTimerPanel extends Panel {
   }
 
   begin() {
+    const { ext } = this;
+    if (ext === null) return;
     this.checkForQueryResult();
     const { gl } = this.context;
     const newQuery = gl.createQuery();
     if (newQuery === null) throw new Error('Failed to create query');
-    gl.beginQuery(
-      this.EXT_disjoint_timer_query_webgl2.TIME_ELAPSED_EXT,
-      newQuery
-    );
+    gl.beginQuery(ext.TIME_ELAPSED_EXT, newQuery);
     this.currentQuery = newQuery;
   }
 
   end() {
+    const { ext, queryQueue } = this;
+    if (ext === null) return;
     if (this.currentQuery === undefined) throw new Error('No current query');
     const { gl } = this.context;
-    gl.endQuery(this.EXT_disjoint_timer_query_webgl2.TIME_ELAPSED_EXT);
-    this.queryQueue.push(this.currentQuery);
+    gl.endQuery(ext.TIME_ELAPSED_EXT);
+    queryQueue.push(this.currentQuery);
     this.currentQuery = undefined;
   }
 
