@@ -21,7 +21,7 @@ import {
 } from '@threeify/scene';
 import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/vector-math';
 
-import { Stats } from '../../Stats';
+import { Stats } from '../../utilities/Stats';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

@@ -41,13 +41,14 @@ import {
   getKhronosGlTFUrl,
   GLTFFormat,
   KhronosModel
-} from '../../khronosModels';
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../threejsHDRIs';
+} from '../../utilities/khronosModels';
+import { GPUTimerPanel, Stats } from '../../utilities/Stats';
+import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import backgroundFragmentSource from './background/fragment.glsl';
 import backgroundVertexSource from './background/vertex.glsl';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
-//const stats = new Stats();
+const stats = new Stats();
 
 async function init(): Promise<void> {
   const backgroundGeometry = passGeometry();
@@ -62,11 +63,11 @@ async function init(): Promise<void> {
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
   console.timeEnd('fetchHDR');
-  const lightIntensity = 0;
-  const domeLightIntensity = 1;
+  const lightIntensity = 3;
+  const domeLightIntensity = 2.5;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -75,6 +76,9 @@ async function init(): Promise<void> {
   const context = new RenderingContext(canvasHtmlElement);
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+
+  const gpuRender = new GPUTimerPanel(context);
+  stats.addPanel(gpuRender);
 
   console.time('makeTexImage2DFromEquirectangularTexture');
   const cubeMap = makeTexImage2DFromEquirectangularTexture(
@@ -193,34 +197,37 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    // stats.time(() => {
-    canvasFramebuffer.clear();
+    stats.time(() => {
+      canvasFramebuffer.clear();
 
-    backgroundUniforms.viewToWorld = mat4Inverse(
-      quatToMat4(orbitController.rotation)
-    );
-    backgroundUniforms.screenToView = mat4Inverse(
-      mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
-    );
+      backgroundUniforms.viewToWorld = mat4Inverse(
+        quatToMat4(orbitController.rotation)
+      );
+      backgroundUniforms.screenToView = mat4Inverse(
+        mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+      );
 
-    orbitController.update();
-    orbitNode.rotation = orbitController.rotation;
-    camera.zoom = orbitController.zoom;
-    camera.dirty();
-    orbitNode.dirty();
+      orbitController.update();
+      orbitNode.rotation = orbitController.rotation;
+      camera.zoom = orbitController.zoom;
+      camera.dirty();
+      orbitNode.dirty();
 
-    updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
-    updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
-    renderScene(canvasFramebuffer, renderCache);
-    //});
+      updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
+      updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+      gpuRender.time(() => {
+        renderScene(canvasFramebuffer, renderCache);
+      });
+      //});
 
-    /* renderBufferGeometry({
+      /* renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program: backgroundProgram,
       uniforms: backgroundUniforms,
       bufferGeometry: backgroundBufferGeometry
       //  depthTestState: backgroundDepthTestState
     });*/
+    });
   }
 
   animate();
