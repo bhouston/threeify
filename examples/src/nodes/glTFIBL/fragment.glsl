@@ -33,6 +33,7 @@ out vec4 outputColor;
 #pragma include <ao/ao>
 #pragma include <color/tonemapping/acesfilmic>
 #pragma include <materials/alpha_mode>
+#pragma include <brdfs/transmission/transmission>
 
 void main() {
   vec2 uvs[NUM_UV_CHANNELS];
