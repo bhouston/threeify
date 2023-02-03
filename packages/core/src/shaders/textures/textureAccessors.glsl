@@ -1,5 +1,6 @@
 #pragma once
 #pragma include <math/math>
+#pragma include <math/mat3>
 
 // In the future, I could likely pack these ints a bit, but for now this seems okay:
 //  int uvIndex : 2 ( up to 4 uv channels )

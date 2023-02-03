@@ -33,8 +33,8 @@ struct PhysicalMaterial {
 
     float transmission;
     float thickness;
-    float attentionDistance;
-    vec3 attentionColor;
+    float attenuationDistance;
+    vec3 attenuationColor;
 
     float iridescence;
     float iridescenceIor;
