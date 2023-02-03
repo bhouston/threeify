@@ -220,7 +220,7 @@ async function init(): Promise<void> {
       });
       //});
 
-      /* renderBufferGeometry({
+      /*renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program: backgroundProgram,
       uniforms: backgroundUniforms,
