@@ -14,7 +14,9 @@ in vec2 v_uv2;
 #pragma include <lighting/punctualUniforms>
 #pragma include <materials/physicalUniforms>
 
+uniform mat4 localToWorld;
 uniform mat4 worldToView;
+uniform mat4 viewToScreen;
 
 uniform sampler2D backgroundTexture;
 
@@ -47,14 +49,18 @@ void main() {
     material.alphaMode == ALPHAMODE_MASK &&
     material.alpha < material.alphaCutoff
   ) {
-    discard;
+    // TODO: fix blending mode for alpha mask objects!!!!
+    outputColor.rgb = vec3( 0. );
+    outputColor. a = 0.;
+    return;
   }
-  vec3 position = v_viewSurfacePosition;
+  vec3 viewPosition = v_viewSurfacePosition;
+  vec3 worldPosition = v_worldSurfacePosition;
   vec3 viewNormal = normalize(v_viewSurfaceNormal);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV(
-    position,
+    viewPosition,
     viewNormal,
     v_uv0
   );
@@ -72,7 +78,6 @@ void main() {
   //material.emissive = vec3( 0. );
   //material.specularRoughness = 0.5;
 
-  vec4 background = texture(backgroundTexture, gl_FragCoord.xy);
 
   // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_ior/README.md
   vec3 specularF0 =
@@ -88,6 +93,22 @@ void main() {
   vec3 clearcoatF0 = vec3(0.04);
   vec3 clearcoatF90 = vec3(1.0);
 
+  if( material.transmission != 0. ) {
+
+    vec3 worldViewDirection = mat4UntransformDirection( worldToView, viewViewDirection );
+    vec3 worldNormal = mat4UntransformDirection( worldToView, viewNormal );
+
+    vec4 transmission_btdf = BTDF_TransmissionAttenuation(
+      worldNormal, worldViewDirection, worldPosition,
+      localToWorld, worldToView, viewToScreen,
+      material.albedo, specularF0, specularF90, material.ior, material.specularRoughness, 
+      material.thickness, material.attenuationColor, material.attenuationDistance,
+      backgroundTexture );
+
+    // TODO: Just adding it here is completely wrong, also I am skipping the alpha component.
+    outgoingRadiance += transmission_btdf.xyz;
+
+  }
   if (iblMapIntensity != vec3(0.0)) {
     //vec3 lightDirection = viewNormal;
     // vec3 reflectDirection = reflect( -viewDirection, viewNormal );
@@ -212,7 +233,7 @@ void main() {
     //   continue;
     // }
     DirectLight directLight = punctualLightToDirectLight(
-      position,
+      viewPosition,
       punctualLight
     );
 

@@ -67,7 +67,7 @@ async function init(): Promise<void> {
   const domeLightIntensity = 3;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.ToyCar, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionRoughnessTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(

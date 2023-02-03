@@ -60,7 +60,9 @@ export enum KhronosModel {
   SpecularTest,
   MetalRoughSpheresNoTexture,
   MetalRoughSpheres,
-  BoxTexturedNonPowerOfTwo
+  BoxTexturedNonPowerOfTwo,
+  TransmissionTest,
+  TransmissionRoughnessTest
 }
 
 export enum GLTFFormat {
