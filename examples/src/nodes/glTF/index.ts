@@ -23,7 +23,7 @@ import {
   getKhronosGlTFUrl,
   GLTFFormat,
   KhronosModel
-} from '../../khronosModels';
+} from '../../utilities/khronosModels';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -43,7 +43,7 @@ async function init(): Promise<void> {
 
   const sceneTreeCache = new SceneTreeCache();
 
-  const sheenChairMode = true;
+  const sheenChairMode = false;
 
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');

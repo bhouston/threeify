@@ -1,137 +1,49 @@
-// Source:
-//   https://github.com/KhronosGroup/glTF-Sample-Viewer/blob/master/src/shaders/ibl.glsl
+#pragma once
 
-vec3 getIBLRadianceGGX(
-  vec3 n,
-  vec3 v,
-  float perceptualRoughness,
-  vec3 specularColor
-) {
-  float NdotV = clampedDot(n, v);
-  float lod = clamp(
-    perceptualRoughness * float(u_MipCount),
-    0.0,
-    float(u_MipCount)
-  );
-  vec3 reflection = normalize(reflect(-v, n));
+#pragma include <math/math>
+#pragma include <math/mat4>
+#pragma include <color/encodings/rgbe>
 
-  vec2 brdfSamplePoint = clamp(
-    vec2(NdotV, perceptualRoughness),
-    vec2(0.0, 0.0),
-    vec2(1.0, 1.0)
-  );
-  vec2 brdf = texture(u_GGXLUT, brdfSamplePoint).rg;
-  vec4 specularSample = textureLod(u_GGXEnvSampler, reflection, lod);
+/*struct IBLMap {
+    samplerCube texture;
+    vec3 intensity;
+    int maxLod;
+};*/
 
-  vec3 specularLight = specularSample.rgb;
-
-  #ifndef USE_HDR
-  specularLight = sRGBToLinear(specularLight);
-  #endif
-
-  return specularLight * (specularColor * brdf.x + brdf.y);
+float convertGlossyExponentToSpecularRoughness( const in float glossyExponent ) {
+    return sqrt( 2.0 / ( glossyExponent + 2.0 ) );
+}
+float convertSpecularRoughnessToGlossyExponent( const in float specularRoughness ) {
+    return 2.0 / ( specularRoughness * specularRoughness ) - 2.0;
 }
 
-vec3 getIBLRadianceTransmission(
-  vec3 n,
-  vec3 v,
-  float perceptualRoughness,
-  float ior,
-  vec3 baseColor
-) {
-  // Sample GGX LUT.
-  float NdotV = clampedDot(n, v);
-  vec2 brdfSamplePoint = clamp(
-    vec2(NdotV, perceptualRoughness),
-    vec2(0.0, 0.0),
-    vec2(1.0, 1.0)
-  );
-  vec2 brdf = texture(u_GGXLUT, brdfSamplePoint).rg;
+float getMipLevelForSpecularRoughness( const in float specularRoughness, const in int iblMapMaxLod ) {
+    float glossyExponent = convertSpecularRoughnessToGlossyExponent( specularRoughness);
+    // From McGuire paper on phong cubemap IBL.
+    // https://casual-effects.com/research/McGuire2013CubeMap/index.html
+    float MIPlevel = log2( pow( 2., float(iblMapMaxLod) ) * sqrt( 3. ) ) - 0.5 * log2( glossyExponent + 1. );
 
-  // Sample GGX environment map.
-  float lod = clamp(
-    perceptualRoughness * float(u_MipCount),
-    0.0,
-    float(u_MipCount)
-  );
-
-  // Approximate double refraction by assuming a solid sphere beneath the point.
-  vec3 r = refract(-v, n, 1.0 / ior);
-  vec3 m = 2.0 * dot(-n, r) * r + n;
-  vec3 rr = -refract(-r, m, ior);
-
-  vec4 specularSample = textureLod(u_GGXEnvSampler, rr, lod);
-  vec3 specularLight = specularSample.rgb;
-
-  #ifndef USE_HDR
-  specularLight = sRGBToLinear(specularLight);
-  #endif
-
-  return specularLight * (brdf.x + brdf.y);
+    return MIPlevel;
 }
 
-vec3 getIBLRadianceLambertian(vec3 n, vec3 diffuseColor) {
-  vec3 diffuseLight = texture(u_LambertianEnvSampler, n).rgb;
-
-  #ifndef USE_HDR
-  diffuseLight = sRGBToLinear(diffuseLight);
-  #endif
-
-  return diffuseLight * diffuseColor;
+vec3 sampleIBLIrradiance( const in samplerCube iblMapTexture, const in vec3 iblMapIntensity, const in int iblMapMaxLod, const in vec3 viewNormal, const in mat4 worldToView ) {
+    // convert to world
+    vec3 worldNormal = mat4UntransformDirection( worldToView, viewNormal );
+    vec3 iblColor = rgbeToLinear( textureLod( iblMapTexture, worldNormal, float(iblMapMaxLod) ) );
+    return iblColor * iblMapIntensity;
 }
 
-vec3 getIBLRadianceCharlie(
-  vec3 n,
-  vec3 v,
-  float sheenRoughness,
-  vec3 sheenColor,
-  float sheenIntensity
-) {
-  float NdotV = clampedDot(n, v);
-  float lod = clamp(sheenRoughness * float(u_MipCount), 0.0, float(u_MipCount));
-  vec3 reflection = normalize(reflect(-v, n));
+vec3 sampleIBLRadiance( const in samplerCube iblMapTexture, const in vec3 iblMapIntensity, const in int iblMapMaxLod, const in vec3 viewNormal, const in vec3 viewDirection, const in mat4 worldToView, const in float specularRoughness ) {
+    
+    vec3 reflectDirection = reflect( viewDirection, viewNormal );
+    // Mixing the reflection with the normal is more accurate and keeps rough objects from gathering light from behind their tangent plane.
+    reflectDirection = normalize( mix( reflectDirection, viewNormal, pow2( specularRoughness ) ) );
 
-  vec2 brdfSamplePoint = clamp(
-    vec2(NdotV, sheenRoughness),
-    vec2(0.0, 0.0),
-    vec2(1.0, 1.0)
-  );
-  float brdf = texture(u_CharlieLUT, brdfSamplePoint).b;
-  vec4 sheenSample = textureLod(u_CharlieEnvSampler, reflection, lod);
+    // convert to world
+    vec3 worldReflectDirection = mat4UntransformDirection( worldToView, reflectDirection );
 
-  vec3 sheenLight = sheenSample.rgb;
-
-  #ifndef USE_HDR
-  sheenLight = sRGBToLinear(sheenLight);
-  #endif
-
-  return sheenIntensity * sheenLight * sheenColor * brdf;
-}
-
-vec3 getIBLRadianceSubsurface(
-  vec3 n,
-  vec3 v,
-  float scale,
-  float distortion,
-  float power,
-  vec3 color,
-  float thickness
-) {
-  vec3 diffuseLight = texture(u_LambertianEnvSampler, n).rgb;
-
-  #ifndef USE_HDR
-  diffuseLight = sRGBToLinear(diffuseLight);
-  #endif
-
-  return diffuseLight *
-  getPunctualRadianceSubsurface(
-    n,
-    v,
-    -v,
-    scale,
-    distortion,
-    power,
-    color,
-    thickness
-  );
+    // TODO: get the correct level from McGuire paper on phone cubemap IBL.
+    float mipLevel = getMipLevelForSpecularRoughness( specularRoughness, iblMapMaxLod );
+    vec3 iblColor = rgbeToLinear( textureLod( iblMapTexture, worldReflectDirection, mipLevel ) );
+    return iblColor * iblMapIntensity;
 }

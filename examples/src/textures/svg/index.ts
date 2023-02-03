@@ -1,6 +1,7 @@
 import {
   Blending,
   blendModeToBlendState,
+  DepthTestState,
   fetchImageElement,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
@@ -46,6 +47,7 @@ async function init(): Promise<void> {
   const geometry = planeGeometry(1, 1, 1, 1);
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
+  context.depthTestState = new DepthTestState(false);
   renderBufferGeometry({
     framebuffer: canvasFramebuffer,
     program,

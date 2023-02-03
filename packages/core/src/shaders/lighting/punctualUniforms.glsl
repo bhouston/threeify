@@ -1,9 +1,11 @@
 #pragma once
 
 #pragma include <lighting/punctual>
+#pragma include <ibl/ibl>
 
-uniform samplerCube domeCubeMap;
-uniform vec3 domeIntensity;
+uniform samplerCube iblMapTexture;
+uniform vec3 iblMapIntensity;
+uniform int iblMapMaxLod;
 
 uniform int numPunctualLights;
 uniform int punctualLightType[MAX_PUNCTUAL_LIGHTS];

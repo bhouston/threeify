@@ -1,4 +1,5 @@
 export * from './utils/hash.js';
+export * from './utils/fp16';
 
 export * from './arrays/Conversions.js';
 export * from './arrays/Linearizers.js';

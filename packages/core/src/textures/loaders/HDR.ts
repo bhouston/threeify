@@ -6,12 +6,9 @@
 //
 
 import {
-  color4ArrayToFloat32Array,
-  float32ArrayToColor4Array,
-  floatsToNormalizedBytes,
-  linearToRgbd16,
-  normalizedByteToFloats,
-  rgbeToLinear
+  float32RGBEToFloat32Linear,
+  float32sToFloat16s,
+  normalizedByteToFloat32s
 } from '@threeify/vector-math';
 
 import { DataType } from '../../renderers/webgl/textures/DataType.js';
@@ -32,6 +29,24 @@ export async function fetchCubeHDRs(
   return Promise.all(fetchPromises);
 }
 
+// TODO: This doesn't work!
+export function rgbeToFloat16(
+  arrayBufferImage: ArrayBufferImage
+): ArrayBufferImage {
+  const float32Array = normalizedByteToFloat32s(
+    arrayBufferImage.data as Uint8Array
+  );
+  float32RGBEToFloat32Linear(float32Array, float32Array);
+  const result = new ArrayBufferImage(
+    float32sToFloat16s(float32Array),
+    arrayBufferImage.width,
+    arrayBufferImage.height,
+    DataType.Float16,
+    PixelEncoding.Linear
+  );
+  console.log('hdr image', result);
+  return result;
+}
 export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
   const response = await fetch(url);
   if (!response.ok) {
@@ -50,18 +65,9 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
     header.width,
     header.height
   );
-  const color4Array = float32ArrayToColor4Array(
-    normalizedByteToFloats(pixelData)
-  );
 
-  for (let i = 0; i < color4Array.length; i++) {
-    linearToRgbd16(
-      rgbeToLinear(color4Array[i], color4Array[i]),
-      color4Array[i]
-    );
-  }
   return new ArrayBufferImage(
-    floatsToNormalizedBytes(color4ArrayToFloat32Array(color4Array)),
+    pixelData,
     header.width,
     header.height,
     DataType.UnsignedByte,

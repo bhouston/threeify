@@ -1,4 +1,4 @@
-import { CubeMapTexture } from '@threeify/core';
+import { CubeMapTexture, TexImage2D } from '@threeify/core';
 import { Color3, color3MultiplyByScalar, Vec3 } from '@threeify/vector-math';
 
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
@@ -11,7 +11,7 @@ import { SceneNode } from '../scene/SceneNode';
 import { depthFirstVisitor } from '../scene/Visitors';
 
 export class PunctualLightUniforms {
-  domeCubeMap?: CubeMapTexture;
+  domeCubeMap?: CubeMapTexture | TexImage2D;
   domeIntensity = new Color3(1, 1, 1);
 
   numLights = 0;

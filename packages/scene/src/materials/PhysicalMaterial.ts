@@ -1,3 +1,4 @@
+import { AlphaMode, SolidTextures } from '@threeify/core';
 import {
   Color3,
   color3MultiplyByScalar,
@@ -5,11 +6,9 @@ import {
   Vec3
 } from '@threeify/vector-math';
 
-import { SolidTextures } from '../textures/loaders/SolidTextures';
-import { TextureAccessor } from '../textures/TextureAccessor';
-import { AlphaMode } from './AlphaMode';
-import { Material } from './Material';
-import { MaterialParameters } from './MaterialParameters';
+import { Material } from './Material.js';
+import { MaterialParameters } from './MaterialParameters.js';
+import { TextureAccessor } from './TextureAccessor.js';
 
 // Based on the Khronos PBR material.
 // TODO: Add support for alpha blending
@@ -91,9 +90,9 @@ export class PhysicalMaterial extends Material {
   public albedoFactor = new Color3(1, 1, 1);
   public albedoAlphaTextureAccessor?: TextureAccessor;
 
+  // TODO: someday combine these two textures into one.
   public specularFactor = 1; // default validated from KHR_materials_specular
   public specularFactorTextureAccessor?: TextureAccessor;
-
   public specularColor = new Color3(1, 1, 1); // default validated from KHR_materials_specular
   public specularColorTextureAccessor?: TextureAccessor;
 

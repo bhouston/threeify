@@ -9,6 +9,7 @@ import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
+import { ArrayBufferImage } from './ArrayBufferImage.js';
 import {
   getTextureSourceSize,
   TextureSource,
@@ -23,7 +24,9 @@ export class Texture extends VirtualTexture {
     magFilter = TextureFilter.Linear,
     minFilter = TextureFilter.LinearMipmapLinear,
     pixelFormat = PixelFormat.RGBA,
-    dataType = DataType.UnsignedByte,
+    dataType = image instanceof ArrayBufferImage
+      ? image.dataType
+      : DataType.UnsignedByte,
     generateMipmaps = true,
     anisotropicLevels = 1
   ) {

@@ -1,5 +1,6 @@
-import { Geometry, Material } from '@threeify/core';
+import { Geometry } from '@threeify/core';
 
+import { Material } from '../materials/Material';
 import { ISceneNodeProps, SceneNode } from './SceneNode';
 
 export interface IMeshProps extends ISceneNodeProps {

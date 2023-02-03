@@ -1,8 +1,12 @@
 import {
   Attachment,
+  Blending,
+  blendModeToBlendState,
   boxGeometry,
   BufferBit,
   ClearState,
+  DepthTestFunc,
+  DepthTestState,
   fetchImage,
   Framebuffer,
   makeBufferGeometryFromGeometry,
@@ -46,16 +50,16 @@ async function init(): Promise<void> {
   const uvTestTexture = makeTexImage2DFromTexture(context, texture);
   const uniforms = {
     localToWorld: new Mat4(),
-    worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
     viewToScreen: mat4OrthographicSimple(
       1.5,
       new Vec2(),
       0.1,
-      2,
+      5,
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vec3(0, 0, 0),
+    viewLightPosition: new Vec3(0, 0, -2),
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
@@ -67,20 +71,25 @@ async function init(): Promise<void> {
   const framebuffer = new Framebuffer(context);
   framebuffer.attach(Attachment.Depth, depthAttachment);
 
+  const depthTestState = new DepthTestState(true, DepthTestFunc.LessOrEqual);
+  const blendState = blendModeToBlendState(Blending.Over, true);
+
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
       uniforms.localToWorld
     );
-    uniforms.map = uvTestTexture;
 
+    uniforms.map = uvTestTexture;
     framebuffer.clear(BufferBit.All, whiteClearState);
     renderBufferGeometry({
       framebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      depthTestState,
+      blendState
     });
 
     uniforms.map = depthAttachment;
@@ -89,7 +98,9 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      depthTestState,
+      blendState
     });
 
     requestAnimationFrame(animate);

@@ -162,7 +162,7 @@ export class TexImage2D implements IResource {
         0,
         this.pixelFormat,
         this.dataType,
-        new Uint8Array(image.data)
+        image.data as Uint8Array
       );
       if (level === 0) {
         this.size.set(image.width, image.height);

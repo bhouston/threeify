@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Box2, box2Equals } from '@threeify/vector-math';
+import { Box2 } from '@threeify/vector-math';
 
 import { BlendState } from './BlendState.js';
 import { ClearState } from './ClearState.js';
@@ -92,15 +92,17 @@ export class RenderingContext {
   }
 
   set program(program: Program | undefined) {
-    if (this.#program !== program) {
-      if (program !== undefined) {
-        program.validate();
-        this.gl.useProgram(program.glProgram);
-      } else {
-        this.gl.useProgram(null);
-      }
-      this.#program = program;
+    // setting the viewport even if it is already set is required in a number of cases, such as render to texture
+    // the following line will cause a bug if commented out.  --Ben 2023-02-01
+    //if (this.#program !== program) {
+    if (program !== undefined) {
+      program.validate();
+      this.gl.useProgram(program.glProgram);
+    } else {
+      this.gl.useProgram(null);
     }
+    this.#program = program;
+    //}
   }
 
   get program(): Program | undefined {
@@ -108,14 +110,16 @@ export class RenderingContext {
   }
 
   set framebuffer(framebuffer: VirtualFramebuffer) {
-    if (this.#framebuffer !== framebuffer) {
-      if (framebuffer instanceof CanvasFramebuffer) {
-        this.gl.bindFramebuffer(GL.FRAMEBUFFER, null);
-      } else if (framebuffer instanceof Framebuffer) {
-        this.gl.bindFramebuffer(GL.FRAMEBUFFER, framebuffer.glFramebuffer);
-      }
-      this.#framebuffer = framebuffer;
+    // setting the viewport even if it is already set is required in a number of cases, such as render to texture
+    // the following line will cause a bug if commented out.  --Ben 2023-02-01
+    // if (this.#framebuffer !== framebuffer) {
+    if (framebuffer instanceof CanvasFramebuffer) {
+      this.gl.bindFramebuffer(GL.FRAMEBUFFER, null);
+    } else if (framebuffer instanceof Framebuffer) {
+      this.gl.bindFramebuffer(GL.FRAMEBUFFER, framebuffer.glFramebuffer);
     }
+    this.#framebuffer = framebuffer;
+    //}
   }
 
   get framebuffer(): VirtualFramebuffer {
@@ -137,7 +141,9 @@ export class RenderingContext {
   }
 
   set viewport(v: Box2) {
-    if (!this.initialMode && box2Equals(this.#viewport, v)) return;
+    // setting the viewport even if it is already set is required in a number of cases, such as render to texture
+    // the following line will cause a bug if commented out.  --Ben 2023-02-01
+    // if (!this.initialMode && box2Equals(this.#viewport, v)) return;
 
     this.gl.viewport(v.x, v.y, v.width, v.height);
     this.#viewport.copy(v);
@@ -171,12 +177,15 @@ export class RenderingContext {
   }
 
   set depthTestState(dts: DepthTestState) {
-    if (!this.initialMode && dts.equals(this.#depthTestState)) return;
+    //if (!this.initialMode && dts.equals(this.#depthTestState)) return;
 
     if (dts.enabled) {
       this.gl.enable(GL.DEPTH_TEST);
     } else {
       this.gl.disable(GL.DEPTH_TEST);
+    }
+    if (dts.write) {
+      this.gl.depthMask(dts.write);
     }
     this.gl.depthFunc(dts.func);
     this.#depthTestState.copy(dts);
@@ -187,7 +196,7 @@ export class RenderingContext {
   }
 
   set clearState(cs: ClearState) {
-    if (!this.initialMode && cs.equals(this.#clearState)) return;
+    // if (!this.initialMode && cs.equals(this.#clearState)) return;
 
     this.gl.clearColor(cs.color.r, cs.color.g, cs.color.b, cs.alpha);
     this.gl.clearDepth(cs.depth);
@@ -200,7 +209,7 @@ export class RenderingContext {
   }
 
   set maskState(ms: MaskState) {
-    if (!this.initialMode && ms.equals(this.#maskState)) return;
+    //  if (!this.initialMode && ms.equals(this.#maskState)) return;
 
     this.gl.colorMask(ms.red, ms.green, ms.blue, ms.alpha);
     this.gl.depthMask(ms.depth);
@@ -213,7 +222,7 @@ export class RenderingContext {
   }
 
   set cullingState(cs: CullingState) {
-    if (!this.initialMode && cs.equals(this.#cullingState)) return;
+    // if (!this.initialMode && cs.equals(this.#cullingState)) return;
 
     if (cs.enabled) {
       this.gl.enable(GL.CULL_FACE);

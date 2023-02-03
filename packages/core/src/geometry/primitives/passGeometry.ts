@@ -21,7 +21,7 @@ export function passGeometry(
   max = new Vec2(1, 1)
 ): Geometry {
   const geometry = new Geometry();
-  geometry.indices = makeUint32Attribute([0, 1, 2, 0, 2, 3]);
+  geometry.indices = makeUint32Attribute([0, 2, 1, 0, 3, 2]);
 
   // in clip space: starts at bottom left, goes CW to top left, top right, bottom right.
   geometry.attributes.position = makeFloat32Attribute(

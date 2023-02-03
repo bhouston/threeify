@@ -1,8 +1,11 @@
 import {
   Attachment,
+  Blending,
+  blendModeToBlendState,
   boxGeometry,
   BufferBit,
   ClearState,
+  DepthTestState,
   fetchImage,
   Framebuffer,
   makeBufferGeometryFromGeometry,
@@ -65,11 +68,14 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vec3(0, 0, 0),
+    viewLightPosition: new Vec3(0, 0, -2),
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(new Color3(0, 0, 0), 0);
+
+  const depthTestState = new DepthTestState(false);
+  const blendState = blendModeToBlendState(Blending.Over, true);
 
   function animate(): void {
     const now = Date.now();
@@ -84,7 +90,9 @@ async function init(): Promise<void> {
       framebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      depthTestState,
+      blendState
     });
 
     uniforms.map = colorAttachment;
@@ -93,7 +101,9 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      depthTestState,
+      blendState
     });
 
     requestAnimationFrame(animate);

@@ -1,3 +1,4 @@
+import { Texture } from '@threeify/core';
 import {
   Color3,
   Color4,
@@ -7,8 +8,6 @@ import {
   Vec3,
   Vec4
 } from '@threeify/vector-math';
-
-import { Texture } from '..';
 
 export type MaterialPropertyValue =
   | number

@@ -6,15 +6,8 @@
 uniform int alphaMode;
 uniform float alphaCutoff;
 uniform float alpha;
-
 uniform vec3 albedoFactor;
 uniform TextureAccessor albedoAlphaTextureAccessor;
-
-uniform float specularFactor;
-uniform TextureAccessor specularFactorTextureAccessor;
-
-uniform vec3 specularColor;
-uniform TextureAccessor specularColorTextureAccessor;
 
 uniform float specularRoughnessFactor;
 uniform float metallicFactor;
@@ -30,6 +23,11 @@ uniform float occlusionFactor;
 uniform TextureAccessor occlusionTextureAccessor;
 
 uniform float ior;
+
+uniform float specularFactor;
+uniform TextureAccessor specularFactorTextureAccessor;
+uniform vec3 specularColor;
+uniform TextureAccessor specularColorTextureAccessor;
 
 uniform float clearcoatFactor;
 uniform float clearcoatRoughnessFactor;
@@ -78,7 +76,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.clearcoatFactor = clearcoatFactor * clearcoatFactorRoughness.r;
     material.clearcoatRoughness = clearcoatRoughnessFactor * clearcoatFactorRoughness.g;
     material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( sampleTexture( clearcoatNormalTextureAccessor, uvs ).rgb );
-     
+
     vec4 sheenColorRoughness = sampleTexture( sheenColorRoughnessTextureAccessor, uvs );
     material.sheenColor = sheenColorFactor * sRGBToLinear( sheenColorRoughness.rgb );
     material.sheenRoughness = sheenRoughnessFactor * sheenColorRoughness.a;

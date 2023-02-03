@@ -54,6 +54,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const patternGeometry = passGeometry();
+  console.log('patternGeometry', patternGeometry);
   const patternProgram = makeProgramFromShaderMaterial(
     context,
     patternMaterial
@@ -77,7 +78,7 @@ async function init(): Promise<void> {
     viewToScreen: mat4PerspectiveFov(
       25,
       0.1,
-      4,
+      10,
       1,
       canvasFramebuffer.aspectRatio
     ),
@@ -107,6 +108,7 @@ async function init(): Promise<void> {
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
       uniforms.localToWorld
     );
+
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,

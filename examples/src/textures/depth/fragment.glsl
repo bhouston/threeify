@@ -1,7 +1,7 @@
 precision highp float;
 
-in vec3 v_viewPosition;
-in vec3 v_viewNormal;
+in vec3 v_viewSurfacePosition;
+in vec3 v_viewSurfaceNormal;
 in vec2 v_uv;
 
 uniform sampler2D map;
@@ -9,11 +9,15 @@ uniform vec3 viewLightPosition;
 
 out vec4 outputColor;
 
-void main() {
-  vec3 albedo = texture(map, v_uv).xxx;
-  vec3 directionToLight = normalize(viewLightPosition - v_viewPosition);
-  float lambertianIntensity = dot(directionToLight, v_viewNormal);
+#pragma include <math/math>
 
-  outputColor = vec4(albedo * lambertianIntensity, 1.0);
+void main() {
+
+  vec3 albedo = texture( map, v_uv ).xxx;
+  vec3 directionToLight = normalize( viewLightPosition - v_viewSurfacePosition );
+  float lambertianIntensity = saturate( dot( directionToLight, v_viewSurfaceNormal ) );
+
+  outputColor.rgb = albedo * saturate( lambertianIntensity + 0.25 );
+  outputColor.a = 1.0;
 
 }

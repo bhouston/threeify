@@ -1,9 +1,15 @@
 import {
-  CubeMapTexture,
-  fetchCubeHDRs,
+  Blending,
+  blendModeToBlendState,
+  fetchHDR,
+  makeBufferGeometryFromGeometry,
+  makeProgramFromShaderMaterial,
+  makeTexImage2DFromEquirectangularTexture,
   Orbit,
+  passGeometry,
   RenderingContext,
-  ShaderMaterial
+  ShaderMaterial,
+  Texture
 } from '@threeify/core';
 import {
   DomeLight,
@@ -22,6 +28,11 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
+  Mat4,
+  mat4Inverse,
+  mat4PerspectiveFov,
+  quatToMat4,
+  Vec2,
   Vec3,
   vec3Negate
 } from '@threeify/vector-math';
@@ -30,16 +41,33 @@ import {
   getKhronosGlTFUrl,
   GLTFFormat,
   KhronosModel
-} from '../../khronosModels';
+} from '../../utilities/khronosModels';
+import { GPUTimerPanel, Stats } from '../../utilities/Stats';
+import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import backgroundFragmentSource from './background/fragment.glsl';
+import backgroundVertexSource from './background/vertex.glsl';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
-
-//const stats = new Stats();
+const stats = new Stats();
 
 async function init(): Promise<void> {
+  const backgroundGeometry = passGeometry();
+  const backgroundMaterial = new ShaderMaterial(
+    backgroundVertexSource,
+    backgroundFragmentSource
+  );
+
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
-  const cubeTexture = new CubeMapTexture(
-    await fetchCubeHDRs('/assets/textures/cube/pisa/*.hdr')
+  console.time('fetchHDR');
+  const latLongTexture = new Texture(
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+  );
+  console.timeEnd('fetchHDR');
+  const lightIntensity = 0;
+  const domeLightIntensity = 3;
+
+  const glTFModel = await glTFToSceneNode(
+    getKhronosGlTFUrl(KhronosModel.ToyCar, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -49,21 +77,25 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const gpuRender = new GPUTimerPanel(context);
+  stats.addPanel(gpuRender);
+
+  console.time('makeTexImage2DFromEquirectangularTexture');
+  const cubeMap = makeTexImage2DFromEquirectangularTexture(
+    context,
+    latLongTexture,
+    new Vec2(1024, 1024)
+  );
+  console.timeEnd('makeTexImage2DFromEquirectangularTexture');
+
   const orbitController = new Orbit(canvasHtmlElement);
   orbitController.zoom = 1.2;
 
   const sceneTreeCache = new SceneTreeCache();
 
-  const sheenChairMode = false;
-
   const root = new SceneNode({ name: 'root' });
   console.time('glTFToSceneNode');
-  const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
-      GLTFFormat.glTF
-    )
-  );
+
   console.timeEnd('glTFToSceneNode');
 
   console.time('updateNodeTree');
@@ -74,7 +106,7 @@ async function init(): Promise<void> {
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
   glTFModel.dirty();
   const maxSize = box3MaxSize(glTFBoundingBox);
-  const lightIntensity = 50;
+
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
@@ -86,7 +118,7 @@ async function init(): Promise<void> {
     name: 'PointLight1',
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.6, 0.8, 1),
-    intensity: lightIntensity * 1.5,
+    intensity: lightIntensity * 50,
     range: 1000
   });
   root.children.push(pointLight1);
@@ -94,20 +126,18 @@ async function init(): Promise<void> {
     name: 'PointLight2',
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
-    intensity: lightIntensity * 1.5,
+    intensity: lightIntensity * 50,
     range: 1000
   });
-  root.children.push(pointLight2);
+  //root.children.push(pointLight2);
   const pointLight3 = new PointLight({
     name: 'PointLight3',
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
-    intensity: lightIntensity * 2.5,
+    intensity: lightIntensity * 50,
     range: 1000
   });
-  //if (sheenChairMode) {
-  root.children.push(pointLight3);
-  //}
+  //root.children.push(pointLight3);
   const camera = new PerspectiveCamera({
     name: 'Camera',
     verticalFov: 25,
@@ -118,10 +148,10 @@ async function init(): Promise<void> {
   root.children.push(camera);
   const domeLight = new DomeLight({
     name: 'DomeLight',
-    cubeMap: cubeTexture,
+    cubeMap: cubeMap,
     translation: orbitNode.translation,
     color: new Color3(1, 1, 1),
-    intensity: 1
+    intensity: domeLightIntensity
   });
   root.children.push(domeLight);
 
@@ -143,25 +173,61 @@ async function init(): Promise<void> {
   );
   console.timeEnd('updateRenderCache');
 
+  const backgroundProgram = makeProgramFromShaderMaterial(
+    context,
+    backgroundMaterial
+  );
+  const backgroundUniforms = {
+    viewToWorld: new Mat4(),
+    screenToView: mat4Inverse(
+      mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+    ),
+    cubeMap: cubeMap
+  };
+  const backgroundBufferGeometry = makeBufferGeometryFromGeometry(
+    context,
+    backgroundGeometry
+  );
+
+  canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
+
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
   function animate(): void {
     requestAnimationFrame(animate);
 
-    // stats.time(() => {
-    canvasFramebuffer.clear();
+    stats.time(() => {
+      canvasFramebuffer.clear();
 
-    orbitController.update();
-    orbitNode.rotation = orbitController.rotation;
-    camera.zoom = orbitController.zoom;
-    camera.dirty();
-    orbitNode.dirty();
+      backgroundUniforms.viewToWorld = mat4Inverse(
+        quatToMat4(orbitController.rotation)
+      );
+      backgroundUniforms.screenToView = mat4Inverse(
+        mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+      );
 
-    updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
-    updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
-    renderScene(canvasFramebuffer, renderCache);
-    //});
+      orbitController.update();
+      orbitNode.rotation = orbitController.rotation;
+      camera.zoom = orbitController.zoom;
+      camera.dirty();
+      orbitNode.dirty();
+
+      updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
+      updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+      gpuRender.time(() => {
+        renderScene(canvasFramebuffer, renderCache);
+      });
+      //});
+
+      /*renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program: backgroundProgram,
+      uniforms: backgroundUniforms,
+      bufferGeometry: backgroundBufferGeometry
+      //  depthTestState: backgroundDepthTestState
+    });*/
+    });
   }
 
   animate();

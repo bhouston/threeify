@@ -49,6 +49,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     const { gl } = this.context;
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
+
     gl.framebufferTexture2D(
       GL.FRAMEBUFFER,
       attachmentPoint,
@@ -58,6 +59,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     );
     this._attachments[attachmentPoint] = texImage2D;
     this.size.copy(texImage2D.size);
+
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);
   }
 

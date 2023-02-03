@@ -60,5 +60,6 @@ vec3 cubeFaceUVToDirection(int face, vec2 uv0) {
     result = vec3(-clipXY.x, clipXY.y, -1.0);
   }
 
+  //result.x *= -1.0;
   return normalize(result);
 }

@@ -1,6 +1,11 @@
+import {
+  EXT_disjoint_timer_query_webgl2,
+  RenderingContext
+} from '@threeify/core';
+
 // TypeScript conversion and refactor of THREE.js stats.module.js
 export class Stats {
-  private mode = 0;
+  private currentPanel = 0;
   private container: HTMLDivElement;
   private beginTime: number;
   private prevTime: number;
@@ -19,7 +24,7 @@ export class Stats {
       'click',
       (event: Event) => {
         event.preventDefault();
-        this.showPanel(++this.mode % this.container.children.length);
+        this.showPanel(++this.currentPanel % this.container.children.length);
       },
       false
     );
@@ -34,29 +39,31 @@ export class Stats {
     this.showPanel(0);
   }
 
-  public get dom(): HTMLDivElement {
+  get dom(): HTMLDivElement {
     return this.container;
   }
 
-  public addPanel(panel: Panel) {
+  addPanel(panel: Panel) {
+    if (panel.error) return panel;
     this.container.appendChild(panel.dom);
+    this.showPanel(this.currentPanel);
     return panel;
   }
 
-  public showPanel(id: number) {
+  showPanel(panelIndex: number) {
     for (let i = 0; i < this.container.children.length; i++) {
       (this.container.children[i] as HTMLDivElement).style.display =
-        i === id ? 'block' : 'none';
+        i === panelIndex ? 'block' : 'none';
     }
 
-    this.mode = id;
+    this.currentPanel = panelIndex;
   }
 
-  public begin() {
+  begin() {
     this.beginTime = (performance || Date).now();
   }
 
-  public end() {
+  end() {
     this.frames++;
 
     const time = (performance || Date).now();
@@ -73,21 +80,21 @@ export class Stats {
     return time;
   }
 
-  public time(body: () => void) {
+  time(body: () => void) {
     this.begin();
     body();
     this.end();
   }
 
-  public update() {
+  update() {
     this.beginTime = this.end();
   }
 
-  public get domElement(): HTMLDivElement {
+  get domElement(): HTMLDivElement {
     return this.container;
   }
 
-  public setMode(id: number) {
+  setMode(id: number) {
     this.showPanel(id);
   }
 }
@@ -106,7 +113,9 @@ const GRAPH_HEIGHT = 30 * PR;
 export class Panel {
   private min = Number.POSITIVE_INFINITY;
   private max = 0;
+  private smoothedValue = 0;
   private canvas: HTMLCanvasElement;
+  public error = false;
 
   constructor(public name: string, public fg: string, public bg: string) {
     this.canvas = document.createElement('canvas');
@@ -130,11 +139,11 @@ export class Panel {
     context.globalAlpha = 0.9;
   }
 
-  public get dom(): HTMLCanvasElement {
+  get dom(): HTMLCanvasElement {
     return this.canvas;
   }
 
-  public update(value: number, maxValue: number) {
+  update(value: number, maxValue: number) {
     this.min = Math.min(this.min, value);
     this.max = Math.max(this.max, value);
     const context = this.canvas.getContext('2d');
@@ -143,8 +152,9 @@ export class Panel {
     context.globalAlpha = 1;
     context.fillRect(0, 0, WIDTH, GRAPH_Y);
     context.fillStyle = this.fg;
+    this.smoothedValue = this.smoothedValue * 0.95 + value * 0.05;
     context.fillText(
-      round(value) +
+      round(this.smoothedValue) +
         ' ' +
         this.name +
         ' (' +
@@ -177,5 +187,71 @@ export class Panel {
       PR,
       round((1 - value / maxValue) * GRAPH_HEIGHT)
     );
+  }
+}
+
+export class GPUTimerPanel extends Panel {
+  private ext: EXT_disjoint_timer_query_webgl2 | null;
+  private currentQuery?: WebGLQuery;
+  private queryQueue: WebGLQuery[] = [];
+
+  constructor(public context: RenderingContext, name = 'GPU') {
+    super(' % ' + name, '#fff', '#000');
+
+    const extension = context.glxo.EXT_disjoint_timer_query_webgl2;
+    if (extension === null) {
+      console.warn('GPUTimerPanel requires EXT_disjoint_timer_query_webgl2');
+      this.error = true;
+    }
+    this.ext = extension;
+  }
+
+  private checkForQueryResult() {
+    if (this.queryQueue.length === 0) return;
+    const { gl } = this.context;
+    const { ext, queryQueue } = this;
+    if (ext === null) return;
+    while (queryQueue.length > 0) {
+      const query = queryQueue[0];
+      if (gl.getQueryParameter(query, gl.QUERY_RESULT_AVAILABLE)) {
+        if (!gl.getParameter(ext.GPU_DISJOINT_EXT)) {
+          // pop off first query from query queue
+          const nanoSeconds = gl.getQueryParameter(query, gl.QUERY_RESULT);
+          const framePercentage = (100 * (nanoSeconds / 1000000)) / (1000 / 60);
+          super.update(framePercentage, 100);
+          queryQueue.shift();
+          gl.deleteQuery(query);
+          continue;
+        }
+      }
+      return;
+    }
+  }
+
+  begin() {
+    const { ext } = this;
+    if (ext === null) return;
+    this.checkForQueryResult();
+    const { gl } = this.context;
+    const newQuery = gl.createQuery();
+    if (newQuery === null) throw new Error('Failed to create query');
+    gl.beginQuery(ext.TIME_ELAPSED_EXT, newQuery);
+    this.currentQuery = newQuery;
+  }
+
+  end() {
+    const { ext, queryQueue } = this;
+    if (ext === null) return;
+    if (this.currentQuery === undefined) throw new Error('No current query');
+    const { gl } = this.context;
+    gl.endQuery(ext.TIME_ELAPSED_EXT);
+    queryQueue.push(this.currentQuery);
+    this.currentQuery = undefined;
+  }
+
+  time(body: () => void) {
+    this.begin();
+    body();
+    this.end();
   }
 }

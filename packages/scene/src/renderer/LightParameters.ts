@@ -1,10 +1,16 @@
 import { TexImage2D } from '@threeify/core';
 import { Color3, Vec3 } from '@threeify/vector-math';
 
-export class LightParameters {
-  public domeCubeMap?: TexImage2D;
-  public domeIntensity = new Color3(1, 1, 1);
+/*export type IBLMap = {
+  texture?: TexImage2D;
+  intensity: Color3;
+  maxLod: number;
+};*/
 
+export class LightParameters {
+  public iblMapTexture?: TexImage2D = undefined;
+  public iblMapIntensity: Color3 = new Color3(1, 1, 1);
+  public iblMapMaxLod = 9;
   public numPunctualLights = 0;
   public punctualLightType: number[] = [];
   public punctualLightWorldPosition: Vec3[] = [];

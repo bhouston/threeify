@@ -22,4 +22,9 @@ export * from './renderer/rendering.js';
 export * from './renderer/RenderCache.js';
 export * from './renderer/SceneTreeCache.js';
 
+export * from './materials/Material.js';
+export * from './materials/PhysicalMaterial.js';
+export * from './materials/MaterialParameters.js';
+export * from './materials/TextureAccessor.js';
+
 export * from './loaders/glTF.js';

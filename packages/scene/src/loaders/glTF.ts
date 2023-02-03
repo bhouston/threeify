@@ -7,6 +7,7 @@ import {
 } from '@gltf-transform/core';
 import {
   Clearcoat,
+  EmissiveStrength,
   IOR,
   Iridescence,
   KHRONOS_EXTENSIONS,
@@ -20,12 +21,11 @@ import {
   AttributeData,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  PhysicalMaterial,
-  Texture,
-  TextureAccessor
+  Texture
 } from '@threeify/core';
 import {
   Color3,
+  color3MultiplyByScalar,
   composeMat3,
   Mat3,
   Quat,
@@ -33,6 +33,8 @@ import {
   Vec3
 } from '@threeify/vector-math';
 
+import { PhysicalMaterial } from '../materials/PhysicalMaterial';
+import { TextureAccessor } from '../materials/TextureAccessor';
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';
 
@@ -220,6 +222,10 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
     if (glTFMaterial !== null) {
       // convert to simultaneously resolving promises
 
+      const glTFEmissiveStrength = glTFMaterial.getExtension(
+        'KHR_materials_emissive_strength'
+      ) as EmissiveStrength;
+
       const glTFSpecular = glTFMaterial.getExtension(
         'KHR_materials_specular'
       ) as Specular;
@@ -377,7 +383,12 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         metallicSpecularRoughnessTextureAccessor:
           metallicRoughnessTextureAccessor,
 
-        emissiveFactor: toColor3(glTFMaterial.getEmissiveFactor()),
+        emissiveFactor: color3MultiplyByScalar(
+          toColor3(glTFMaterial.getEmissiveFactor()),
+          glTFEmissiveStrength !== null
+            ? glTFEmissiveStrength.getEmissiveStrength()
+            : 1
+        ),
         emissiveTextureAccessor: emissiveTextureAccessor,
 
         normalScale: toVec2([
