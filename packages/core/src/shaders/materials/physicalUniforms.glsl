@@ -76,7 +76,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms( const vec2 uvs[NUM_UV_CHANNEL
     material.clearcoatFactor = clearcoatFactor * clearcoatFactorRoughness.r;
     material.clearcoatRoughness = clearcoatRoughnessFactor * clearcoatFactorRoughness.g;
     material.clearcoatNormal = vec3( clearcoatNormalScale, 1.0 ) * rgbToNormal( sampleTexture( clearcoatNormalTextureAccessor, uvs ).rgb );
-     
+
     vec4 sheenColorRoughness = sampleTexture( sheenColorRoughnessTextureAccessor, uvs );
     material.sheenColor = sheenColorFactor * sRGBToLinear( sheenColorRoughness.rgb );
     material.sheenRoughness = sheenRoughnessFactor * sheenColorRoughness.a;
