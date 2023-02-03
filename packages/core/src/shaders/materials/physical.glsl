@@ -1,42 +1,42 @@
 #pragma once
 
 struct PhysicalMaterial {
-    int alphaMode;
-    float alphaCutoff;
-    
-    float alpha;
+  int alphaMode;
+  float alphaCutoff;
 
-    vec3 albedo;
-    float specularFactor;
-    vec3 specularColor;
-    float specularRoughness;
-    float metallic;
+  float alpha;
 
-    float occlusion;
+  vec3 albedo;
+  float specularFactor;
+  vec3 specularColor;
+  float specularRoughness;
+  float metallic;
 
-    vec3 normal;
+  float occlusion;
 
-    float ior;
+  vec3 normal;
 
-    vec3 emissive;
+  float ior;
 
-    float clearcoatFactor;
-    float clearcoatRoughness;
-    vec3 clearcoatTint;
-    vec3 clearcoatNormal;
+  vec3 emissive;
 
-    vec3 sheenColor;
-    float sheenRoughness;
+  float clearcoatFactor;
+  float clearcoatRoughness;
+  vec3 clearcoatTint;
+  vec3 clearcoatNormal;
 
-    float anisotropic;
-    vec2 anisotropicDirection;
+  vec3 sheenColor;
+  float sheenRoughness;
 
-    float transmission;
-    float thickness;
-    float attenuationDistance;
-    vec3 attenuationColor;
+  float anisotropic;
+  vec2 anisotropicDirection;
 
-    float iridescence;
-    float iridescenceIor;
-    float iridescenceThickness;
+  float transmission;
+  float thickness;
+  float attenuationDistance;
+  vec3 attenuationColor;
+
+  float iridescence;
+  float iridescenceIor;
+  float iridescenceThickness;
 };

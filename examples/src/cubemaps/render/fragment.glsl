@@ -9,9 +9,12 @@ uniform samplerCube cubeMap;
 out vec4 outputColor;
 
 void main() {
-  vec3 reflectDir = reflect( normalize( v_viewSurfacePosition ),normalize(v_viewSurfaceNormal) );
+  vec3 reflectDir = reflect(
+    normalize(v_viewSurfacePosition),
+    normalize(v_viewSurfaceNormal)
+  );
   outputColor = texture(cubeMap, reflectDir);
 
-  outputColor.a = 1.;
+  outputColor.a = 1.0;
 
 }

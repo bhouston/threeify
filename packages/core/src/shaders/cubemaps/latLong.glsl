@@ -23,10 +23,9 @@ vec3 latLongUvToDirection(vec2 latLongUv) {
 }
 
 // from three.js - 2023-02-02
-vec2 directionToLatLongUV_2( in vec3 dir ) {
-
-	// dir is assumed to be unit length
-  float u = atan( dir.z, dir.x ) * RECIPROCAL_PI2 + 0.5;
-  float v = asin( clamp( dir.y, -1.0, 1.0 ) ) * RECIPROCAL_PI + 0.5;
-  return vec2( u, v );
+vec2 directionToLatLongUV_2(vec3 dir) {
+  // dir is assumed to be unit length
+  float u = atan(dir.z, dir.x) * RECIPROCAL_PI2 + 0.5;
+  float v = asin(clamp(dir.y, -1.0, 1.0)) * RECIPROCAL_PI + 0.5;
+  return vec2(u, v);
 }

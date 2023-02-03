@@ -19,8 +19,11 @@ out vec2 v_uv2;
 #pragma include <math/mat4>
 
 void main() {
-  v_worldSurfaceNormal = mat4TransformDirection( localToWorld, normalize( normal ) );
-  v_worldSurfacePosition = mat4TransformPosition( localToWorld, position );
+  v_worldSurfaceNormal = mat4TransformDirection(
+    localToWorld,
+    normalize(normal)
+  );
+  v_worldSurfacePosition = mat4TransformPosition(localToWorld, position);
   mat4 localToView = worldToView * localToWorld;
   v_viewSurfaceNormal = mat4TransformDirection(localToView, normalize(normal));
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);

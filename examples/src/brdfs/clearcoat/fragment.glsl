@@ -39,7 +39,8 @@ void main() {
   float specularRoughness =
     texture(specularRoughnessMap, v_uv0).r * specularRoughnessFactor;
 
-  vec3 clearCoatF0 = specularIntensityToF0(clearCoatStrength * vec3(0.16)) * clearCoatTint;
+  vec3 clearCoatF0 =
+    specularIntensityToF0(clearCoatStrength * vec3(0.16)) * clearCoatTint;
   float clearCoatRoughness =
     texture(clearCoatRoughnessMap, v_uv0).r * clearCoatRoughnessFactor;
 

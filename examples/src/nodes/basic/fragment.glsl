@@ -68,7 +68,7 @@ void main() {
         viewDirection,
         directLight.direction,
         vec3(0.04),
-        vec3(1.),
+        vec3(1.0),
         roughness
       );
     outgoingRadiance +=

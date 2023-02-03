@@ -84,6 +84,10 @@ vec3 mat4UntransformDirection(const mat4 m, const vec3 dir) {
   return normalize((vec4(dir, 0.0) * m).xyz);
 }
 
-vec3 mat4ToScale3( const mat4 matrix ) {
-  return vec3( length( matrix[0].xyz ), length( matrix[1].xyz ), length( matrix[2].xyz ) );
+vec3 mat4ToScale3(const mat4 matrix) {
+  return vec3(
+    length(matrix[0].xyz),
+    length(matrix[1].xyz),
+    length(matrix[2].xyz)
+  );
 }

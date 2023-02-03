@@ -7,8 +7,7 @@ uniform mat4 viewToScreen;
 varying vec2 v_uv;
 
 void main() {
-
-  vec4 viewPos = localToView * vec4( position, 1. );
+  vec4 viewPos = localToView * vec4(position, 1.0);
 
   gl_Position = viewToScreen * viewPos;
 

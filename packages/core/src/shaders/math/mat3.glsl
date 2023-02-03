@@ -52,6 +52,6 @@ mat3 scale3ToMat3(const vec3 scale) {
   );
 }
 
-vec2 mat3TransformUV( const mat3 m, const vec2 uv ) {
-  return ( m * vec3( uv, 1.0 ) ).xy;
+vec2 mat3TransformUV(const mat3 m, const vec2 uv) {
+  return (m * vec3(uv, 1.0)).xy;
 }

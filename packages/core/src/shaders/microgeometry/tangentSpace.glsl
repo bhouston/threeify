@@ -8,7 +8,8 @@ vec2 decodeDirection(vec2 value) {
  * Get normal, tangent and bitangent vectors. based on the glTF reference viewer
  */
 mat3 tangentToViewFromPositionNormalUV(vec3 position, vec3 normal, vec2 uv0) {
-  vec3 tempTangent = dFdy(uv0.y) * dFdx(position) - dFdx(uv0.y) * dFdy(position);
+  vec3 tempTangent =
+    dFdy(uv0.y) * dFdx(position) - dFdx(uv0.y) * dFdy(position);
 
   normal = normalize(normal);
   vec3 tangent = normalize(tempTangent - normal * dot(normal, tempTangent));
