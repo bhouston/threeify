@@ -13,7 +13,8 @@ import {
   KHRONOS_EXTENSIONS,
   Sheen,
   Specular,
-  Transform as TextureTransform
+  Transform as TextureTransform,
+  Transmission
 } from '@gltf-transform/extensions';
 import {
   AlphaMode,
@@ -222,27 +223,25 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
     if (glTFMaterial !== null) {
       // convert to simultaneously resolving promises
 
-      const glTFEmissiveStrength = glTFMaterial.getExtension(
-        'KHR_materials_emissive_strength'
-      ) as EmissiveStrength;
-
+      const glTFIor = glTFMaterial.getExtension('KHR_materials_ior') as IOR;
       const glTFSpecular = glTFMaterial.getExtension(
         'KHR_materials_specular'
       ) as Specular;
-
-      const glTFIor = glTFMaterial.getExtension('KHR_materials_ior') as IOR;
-
+      const glTFEmissiveStrength = glTFMaterial.getExtension(
+        'KHR_materials_emissive_strength'
+      ) as EmissiveStrength;
       const glTFClearcoat = glTFMaterial.getExtension(
         'KHR_materials_clearcoat'
       ) as Clearcoat;
-
       const glTFSheen = glTFMaterial.getExtension(
         'KHR_materials_sheen'
       ) as Sheen;
-
       const glTFIridescence = glTFMaterial.getExtension(
         'KHR_materials_iridescence'
       ) as Iridescence;
+      const glTFTransmission = glTFMaterial.getExtension(
+        'KHR_materials_transmission'
+      ) as Transmission;
 
       const metallicRoughnessTextureAccessorPromise = getTextureAccessor(
         glTFMaterial.getMetallicRoughnessTexture(),
@@ -344,6 +343,11 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
           glTFIridescence?.getIridescenceTextureInfo() || null
         );
 
+      const transmissionTextureAccessorPromise = getTextureAccessor(
+        glTFTransmission?.getTransmissionTexture(),
+        glTFTransmission?.getTransmissionTextureInfo()
+      );
+
       const data = await Promise.all([
         metallicRoughnessTextureAccessorPromise,
         albedoAlphaTextureAccessorPromise,
@@ -355,7 +359,8 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         clearcoatFactorRoughnessTextureAccessorPromise,
         clearcoatNormalTextureAccessorPromise,
         sheenColorRoughnessTextureAccessorPromise,
-        iridescenceFactorThicknessTextureAccessorPromise
+        iridescenceFactorThicknessTextureAccessorPromise,
+        transmissionTextureAccessorPromise
       ]);
 
       const metallicRoughnessTextureAccessor = data[0];
@@ -369,6 +374,7 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
       const clearcoatNormalTextureAccessor = data[8];
       const sheenColorRoughnessTextureAccessor = data[9];
       const iridescenceFactorThicknessTextureAccessor = data[10];
+      const transmissionTextureAccessor = data[11];
 
       physicalMaterial = new PhysicalMaterial({
         alpha: glTFMaterial.getAlpha(),
@@ -430,7 +436,10 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         iridescenceThicknessMaximum:
           glTFIridescence?.getIridescenceThicknessMaximum(),
         iridescenceFactorThicknessTextureAccessor:
-          iridescenceFactorThicknessTextureAccessor
+          iridescenceFactorThicknessTextureAccessor,
+
+        transmissionFactor: glTFTransmission?.getTransmissionFactor(),
+        transmissionTextureAccessor: transmissionTextureAccessor
       });
     }
 
