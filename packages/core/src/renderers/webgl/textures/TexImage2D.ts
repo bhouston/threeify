@@ -9,7 +9,7 @@
 import { isPow2, Vec2 } from '@threeify/vector-math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
-import { ArrayBufferImage } from '../../../textures/ArrayBufferImage.js';
+import { ArrayImage } from '../../../textures/ArrayBufferImage.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
@@ -136,7 +136,7 @@ export class TexImage2D implements IResource {
     level = 0
   ): void {
     const { gl } = this.context;
-
+    console.log('image', image);
     if (image instanceof Vec2) {
       gl.texImage2D(
         target ?? this.target,
@@ -152,7 +152,7 @@ export class TexImage2D implements IResource {
       if (level === 0) {
         this.size.set(image.x, image.y);
       }
-    } else if (image instanceof ArrayBufferImage) {
+    } else if (image instanceof ArrayImage) {
       gl.texImage2D(
         target ?? this.target,
         level,
@@ -162,7 +162,7 @@ export class TexImage2D implements IResource {
         0,
         this.pixelFormat,
         this.dataType,
-        image.data as Uint8Array
+        image.data
       );
       if (level === 0) {
         this.size.set(image.width, image.height);

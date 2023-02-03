@@ -5,10 +5,16 @@ import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
-import { ArrayBufferImage } from './ArrayBufferImage.js';
+import {
+  Float16ArrayImage,
+  Float32ArrayImage,
+  Uint8ArrayImage
+} from './ArrayBufferImage.js';
 
 export type TextureSource =
-  | ArrayBufferImage
+  | Float32ArrayImage
+  | Uint8ArrayImage
+  | Float16ArrayImage
   | ImageData
   | HTMLImageElement
   | HTMLCanvasElement
