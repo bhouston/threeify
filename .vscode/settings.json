@@ -8,6 +8,7 @@
     "Equirectangular",
     "glsl",
     "GLTF",
+    "Halton",
     "interruptible",
     "Khronos",
     "lambertian",

@@ -693,6 +693,35 @@ export function mat4PerspectiveFov(
   return mat4Perspective(left, right, top, bottom, near, far, result);
 }
 
+export function mat4PerspectiveFovSubview(
+  verticalFovDegrees: number,
+  near: number,
+  far: number,
+  zoom: number,
+  aspectRatio: number,
+  relativeOffset: Vec2,
+  relativeView: Vec2,
+  result = new Mat4()
+): Mat4 {
+  let height = (2 * near * Math.tan(degToRad(verticalFovDegrees))) / zoom;
+  let width = height * aspectRatio;
+
+  // NOTE: OpenGL screen coordinates are -bottomt to +top, -left to +right.
+
+  let left = -width * 0.5;
+  let top = height * 0.5;
+
+  left += relativeOffset.x * relativeView.x;
+  top -= relativeOffset.y * relativeView.y;
+  width *= relativeView.x;
+  height *= relativeView.y;
+
+  const right = left + width;
+  const bottom = top - height;
+
+  return mat4Perspective(left, right, top, bottom, near, far, result);
+}
+
 export function mat4Trace(m: Mat4): number {
   const me = m.elements;
   return me[0] + me[5] + me[10] + me[15];

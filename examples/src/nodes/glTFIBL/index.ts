@@ -214,7 +214,7 @@ async function init(): Promise<void> {
     renderScene(canvasFramebuffer, renderCache);
     //});
 
-    /* renderBufferGeometry({
+    /*renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program: backgroundProgram,
       uniforms: backgroundUniforms,
