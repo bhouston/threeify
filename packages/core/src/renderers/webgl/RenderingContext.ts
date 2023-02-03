@@ -47,7 +47,7 @@ export class RenderingContext {
     if (attributes === undefined) {
       attributes = {};
       attributes.alpha = true;
-      attributes.antialias = false;
+      attributes.antialias = true;
       attributes.depth = true;
       attributes.premultipliedAlpha = true;
       attributes.stencil = true;
