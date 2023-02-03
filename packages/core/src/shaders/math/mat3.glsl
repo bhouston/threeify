@@ -44,10 +44,14 @@ mat3 mat3RotateZ(const float angle) {
 }
 
 // https://thebookofshaders.com/08/
-mat3 mat3Scale(const vec3 scale) {
+mat3 scale3ToMat3(const vec3 scale) {
   return mat3(
     vec3(scale.x, 0.0, 0.0),
     vec3(0.0, scale.y, 0.0),
     vec3(0.0, 0.0, scale.z)
   );
+}
+
+vec2 mat3TransformUV( const mat3 m, const vec2 uv ) {
+  return ( m * vec3( uv, 1.0 ) ).xy;
 }

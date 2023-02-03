@@ -69,17 +69,17 @@ export interface IPhysicalMaterialProps {
   sheenRoughnessFactor?: number;
   sheenColorRoughnessTextureAccessor?: TextureAccessor;
 
+  transmissionFactor?: number;
+  thicknessFactor?: number;
+  transmissionFactorThicknessTextureAccessor?: TextureAccessor;
+  attenuationDistance?: number;
+  attenuationColor?: Color3;
+
   iridescenceFactor?: number;
   iridescenceIor?: number;
   iridescenceThicknessMinimum?: number;
   iridescenceThicknessMaximum?: number;
   iridescenceFactorThicknessTextureAccessor?: TextureAccessor;
-
-  transmissionFactor?: number;
-  transmissionTextureAccessor?: TextureAccessor;
-
-  attenuationDistance?: number;
-  attenuationColor?: Color3;
 }
 
 export class PhysicalMaterial extends Material {
@@ -90,10 +90,11 @@ export class PhysicalMaterial extends Material {
   public albedoFactor = new Color3(1, 1, 1);
   public albedoAlphaTextureAccessor?: TextureAccessor;
 
-  // TODO: someday combine these two textures into one.
-  public specularFactor = 1; // default validated from KHR_materials_specular
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_specular/README.md
+  // TODO: These two textures should be combined into one, with factor as .a
+  public specularFactor = 1;
   public specularFactorTextureAccessor?: TextureAccessor;
-  public specularColor = new Color3(1, 1, 1); // default validated from KHR_materials_specular
+  public specularColor = new Color3(1, 1, 1);
   public specularColorTextureAccessor?: TextureAccessor;
 
   public specularRoughnessFactor = 0.5;
@@ -110,34 +111,41 @@ export class PhysicalMaterial extends Material {
   public emissiveTextureAccessor?: TextureAccessor;
   public emissiveIntensity = 1;
 
-  public ior = 1.5; // default validated from KHR_materials_ior
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_ior/README.md
+  public ior = 1.5;
 
   public anisotropy = 0;
   public anisotropyTextureAccessor?: TextureAccessor;
   public anisotropyDirection = new Vec3(0, 0, 1);
   public anisotropyDirectionTextureAccessor?: TextureAccessor;
 
+  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_clearcoat/README.md
   public clearcoatFactor = 0;
   public clearcoatRoughnessFactor = 0;
   public clearcoatFactorRoughnessTextureAccessor?: TextureAccessor;
   public clearcoatNormalScale = new Vec2(1, 1);
   public clearcoatNormalTextureAccessor?: TextureAccessor;
 
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_sheen/README.md
   public sheenColorFactor = new Color3(0, 0, 0);
   public sheenRoughnessFactor = 1;
   public sheenColorRoughnessTextureAccessor?: TextureAccessor;
 
+  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_transmission/README.md
+  public transmissionFactor = 0;
+  public transmissionFactorThicknessTextureAccessor?: TextureAccessor;
+
+  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_volume/README.md
+  public thicknessFactor = 0;
+  public attenuationDistance = Number.POSITIVE_INFINITY;
+  public attenuationColor = new Color3(1, 1, 1);
+
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_iridescence/README.md
   public iridescenceFactor = 0;
   public iridescenceIor = 1.5;
   public iridescenceThicknessMinimum = 0;
   public iridescenceThicknessMaximum = 0;
   public iridescenceFactorThicknessTextureAccessor?: TextureAccessor;
-
-  public transmissionFactor = 0;
-  public transmissionTextureAccessor?: TextureAccessor;
-
-  public attenuationDistance = Number.POSITIVE_INFINITY;
-  public attenuationColor = new Color3(1, 1, 1);
 
   constructor(props: IPhysicalMaterialProps) {
     super({
@@ -220,8 +228,11 @@ export class PhysicalMaterial extends Material {
 
     if (props.transmissionFactor !== undefined)
       this.transmissionFactor = props.transmissionFactor;
-    this.transmissionTextureAccessor = props.transmissionTextureAccessor;
+    this.transmissionFactorThicknessTextureAccessor =
+      props.transmissionFactorThicknessTextureAccessor;
 
+    if (props.thicknessFactor !== undefined)
+      this.thicknessFactor = props.thicknessFactor;
     if (props.attenuationDistance !== undefined)
       this.attenuationDistance = props.attenuationDistance;
     this.attenuationColor.copy(props.attenuationColor || this.attenuationColor);
@@ -299,21 +310,22 @@ export class PhysicalMaterial extends Material {
         this.sheenColorRoughnessTextureAccessor ||
         new TextureAccessor(SolidTextures.White),
 
+      transmissionFactor: this.transmissionFactor,
+      transmissionFactorThicknessTextureAccessor:
+        this.transmissionFactorThicknessTextureAccessor ||
+        new TextureAccessor(SolidTextures.White),
+
+      thicknessFactor: this.thicknessFactor,
+      attenuationDistance: this.attenuationDistance,
+      attenuationColor: this.attenuationColor,
+
       iridescenceFactor: this.iridescenceFactor,
       iridescenceIor: this.iridescenceIor,
       iridescenceThicknessMinimum: this.iridescenceThicknessMinimum,
       iridescenceThicknessMaximum: this.iridescenceThicknessMaximum,
       iridescenceFactorThicknessTextureAccessor:
         this.iridescenceFactorThicknessTextureAccessor ||
-        new TextureAccessor(SolidTextures.White),
-
-      transmissionFactor: this.transmissionFactor,
-      transmissionTextureAccessor:
-        this.transmissionTextureAccessor ||
-        new TextureAccessor(SolidTextures.White),
-
-      attenuationDistance: this.attenuationDistance,
-      attenuationColor: this.attenuationColor
+        new TextureAccessor(SolidTextures.White)
     };
   }
 }

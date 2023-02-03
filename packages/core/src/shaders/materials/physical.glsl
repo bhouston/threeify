@@ -32,12 +32,11 @@ struct PhysicalMaterial {
     vec2 anisotropicDirection;
 
     float transmission;
-    float transmissionRoughness;
+    float thickness;
+    float attentionDistance;
+    vec3 attentionColor;
 
     float iridescence;
     float iridescenceIor;
     float iridescenceThickness;
-
-    float attentionDistance;
-    vec3 attentionColor;
 };
