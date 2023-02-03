@@ -66,16 +66,16 @@ void main( ) {
   specularF90 = mix( specularF90, vec3( 1. ), material.metallic );
   vec3 albedo = mix( material.albedo, vec3( 0. ), material.metallic );
 
-  vec3 clearcoatF0 = vec3(0.04);
-  vec3 clearcoatF90 = vec3(1.);
+  vec3 clearcoatF0 = vec3( 0.04 );
+  vec3 clearcoatF90 = vec3( 1. );
 
   if( iblMapIntensity != vec3( 0. ) ) {
     //vec3 lightDirection = viewNormal;
    // vec3 reflectDirection = reflect( -viewDirection, viewNormal );
-  
-   float dotNV = saturate( dot( viewDirection, viewNormal ) );
+
+    float dotNV = saturate( dot( viewDirection, viewNormal ) );
     float clearCoatDotVN = saturate( dot( viewDirection, viewClearcoatNormal ) );
-  
+
     vec3 iblIrradiance = sampleIBLIrradiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewNormal, worldToView );
     vec3 iblRadiance = sampleIBLRadiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewNormal, viewDirection, worldToView, material.specularRoughness );
     vec3 iblClearcoatRadiance = sampleIBLRadiance( iblMapTexture, iblMapIntensity, iblMapMaxLod, viewClearcoatNormal, viewDirection, worldToView, material.clearcoatRoughness );
@@ -97,14 +97,14 @@ void main( ) {
       indirect_brdf = sheenMix( material.sheenColor, indirect_brdf, sheen_brdf );
     }
 
-    if( material.clearcoatFactor !=  0. ) {
-    vec3 clearcoatHalfDirection = normalize( viewClearcoatNormal + viewDirection );
-    float clearcoatVdotH = saturate( dot( viewDirection, clearcoatHalfDirection ) );
+    if( material.clearcoatFactor != 0. ) {
+      vec3 clearcoatHalfDirection = normalize( viewClearcoatNormal + viewDirection );
+      float clearcoatVdotH = saturate( dot( viewDirection, clearcoatHalfDirection ) );
 
     // clearcoat
-    vec3 clearcoat_brdf = iblClearcoatRadiance * BRDF_Specular_GGX_IBL( viewClearcoatNormal, viewDirection, clearcoatF0, clearcoatF90, material.clearcoatRoughness ) *
-      specularOcclusion( clearCoatDotVN, material.occlusion, material.clearcoatRoughness );
-    indirect_brdf = fresnelMix( clearcoatF0, clearcoatF90, clearcoatVdotH, material.clearcoatFactor, indirect_brdf, clearcoat_brdf );
+      vec3 clearcoat_brdf = iblClearcoatRadiance * BRDF_Specular_GGX_IBL( viewClearcoatNormal, viewDirection, clearcoatF0, clearcoatF90, material.clearcoatRoughness ) *
+        specularOcclusion( clearCoatDotVN, material.occlusion, material.clearcoatRoughness );
+      indirect_brdf = fresnelMix( clearcoatF0, clearcoatF90, clearcoatVdotH, material.clearcoatFactor, indirect_brdf, clearcoat_brdf );
     }
 
     outgoingRadiance += indirect_brdf;
@@ -112,13 +112,14 @@ void main( ) {
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
   for( int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++ ) {
-    if( i >= numPunctualLights) {
+    if( i >= numPunctualLights ) {
       break;
     }
     PunctualLight punctualLight = readPunctualLightFromUniforms( i, worldToView );
-    if( punctualLight.intensity == vec3( 0. ) ) {
-      continue;
-    }
+    // this line made the shader very slow on M1 Macs.  I don't know why.
+   // if( punctualLight.intensity == vec3( 0. ) ) {
+   //   continue;
+   // }
     DirectLight directLight = punctualLightToDirectLight( position, punctualLight );
 
     float clearCoatDotNL = saturate( dot( directLight.direction, viewClearcoatNormal ) );
@@ -139,7 +140,7 @@ void main( ) {
     vec3 specular_brdf = irradiance * BRDF_Specular_GGX_NoFrenel( viewNormal, viewDirection, directLight.direction, material.specularRoughness ) *
       specularOcclusion( dotNV, material.occlusion, material.specularRoughness );
     direct_brdf = fresnelMix( specularF0, specularF90, VdotH, material.specularFactor, diffuse_brdf, specular_brdf );
-    
+
     // sheen
     if( material.sheenColor != vec3( 0. ) ) {
       vec3 sheen_brdf = irradiance * BRDF_Sheen_Charlie( viewNormal, viewDirection, directLight.direction, material.sheenColor, material.sheenRoughness ) * material.occlusion;
@@ -147,12 +148,12 @@ void main( ) {
     }
 
     // clearcoat
-  if( material.clearcoatFactor != 0. ) {
-    vec3 clearcoat_brdf = clearcoatIrradiance *
-    BRDF_Specular_GGX_NoFrenel( viewClearcoatNormal, viewDirection, directLight.direction, material.clearcoatRoughness ) *
-    specularOcclusion( clearCoatDotVN, material.occlusion, material.clearcoatRoughness );
-    direct_brdf = fresnelMix( clearcoatF0, clearcoatF90, VdotH, material.clearcoatFactor, direct_brdf, clearcoat_brdf );
-  }
+    if( material.clearcoatFactor != 0. ) {
+      vec3 clearcoat_brdf = clearcoatIrradiance *
+        BRDF_Specular_GGX_NoFrenel( viewClearcoatNormal, viewDirection, directLight.direction, material.clearcoatRoughness ) *
+        specularOcclusion( clearCoatDotVN, material.occlusion, material.clearcoatRoughness );
+      direct_brdf = fresnelMix( clearcoatF0, clearcoatF90, VdotH, material.clearcoatFactor, direct_brdf, clearcoat_brdf );
+    }
 
     // emissive
     outgoingRadiance += direct_brdf;
