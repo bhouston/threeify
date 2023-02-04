@@ -21,6 +21,7 @@ import {
   SceneTreeCache,
   subTreeStats,
   updateDirtyNodes,
+  updateFramebuffers,
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
@@ -67,13 +68,13 @@ async function init(): Promise<void> {
   const domeLightIntensity = 3;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionRoughnessTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
-  const context = new RenderingContext(canvasHtmlElement);
+  const context = new RenderingContext(canvasHtmlElement, { antialias: false });
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -193,6 +194,8 @@ async function init(): Promise<void> {
 
   canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
+
+  updateFramebuffers(canvasFramebuffer, renderCache);
 
   function animate(): void {
     requestAnimationFrame(animate);

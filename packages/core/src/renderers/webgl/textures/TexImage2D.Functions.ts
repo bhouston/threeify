@@ -7,12 +7,20 @@ import {
   CubeMapTexture
 } from '../../../textures/CubeTexture.js';
 import { Texture } from '../../../textures/Texture.js';
-import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry.js';
+import {
+  BufferGeometry,
+  makeBufferGeometryFromGeometry
+} from '../buffers/BufferGeometry.js';
 import { Attachment } from '../framebuffers/Attachment.js';
 import { Framebuffer } from '../framebuffers/Framebuffer.js';
-import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer.js';
-import { makeProgramFromShaderMaterial } from '../programs/Program.js';
+import {
+  renderBufferGeometry,
+  VirtualFramebuffer
+} from '../framebuffers/VirtualFramebuffer.js';
+import { makeProgramFromShaderMaterial, Program } from '../programs/Program.js';
 import { RenderingContext } from '../RenderingContext.js';
+import copyFragmentSource from './copy/fragment.glsl';
+import copyVertexSource from './copy/vertex.glsl';
 import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { PixelFormat } from './PixelFormat.js';
@@ -21,7 +29,6 @@ import { TexParameters } from './TexParameters.js';
 import { TextureFilter } from './TextureFilter.js';
 import { TextureTarget } from './TextureTarget.js';
 import { TextureWrap } from './TextureWrap.js';
-
 export function makeTexImage2DFromTexture(
   context: RenderingContext,
   texture: Texture | CubeMapTexture,
@@ -124,4 +131,52 @@ export function makeTexImage2DFromEquirectangularTexture(
   cubeMap.version = latLongTexture.version;
 
   return cubeMap;
+}
+
+let copyPassProgram: Program | undefined;
+let copyPassBufferGeometry: BufferGeometry | undefined;
+
+export function copyPass(
+  source: TexImage2D,
+  target: TexImage2D | undefined
+): void {
+  const { context } = source;
+
+  let targetFramebuffer: VirtualFramebuffer;
+  if (target) {
+    const framebuffer = new Framebuffer(context);
+    framebuffer.attach(Attachment.Color0, target);
+    targetFramebuffer = framebuffer;
+  } else {
+    targetFramebuffer = source.context.canvasFramebuffer;
+  }
+
+  // TODO: cache geometry + bufferGeometry.
+  if (copyPassBufferGeometry === undefined) {
+    const geometry = passGeometry();
+    copyPassBufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  }
+
+  // TODO: cache material + program.
+  if (copyPassProgram === undefined) {
+    const material = new ShaderMaterial(copyVertexSource, copyFragmentSource);
+    copyPassProgram = makeProgramFromShaderMaterial(context, material);
+  }
+
+  const uniforms = {
+    map: source
+  };
+
+  renderBufferGeometry({
+    framebuffer: targetFramebuffer,
+    program: copyPassProgram,
+    uniforms,
+    bufferGeometry: copyPassBufferGeometry
+  });
+
+  if (target) {
+    targetFramebuffer.flush();
+    targetFramebuffer.finish();
+    targetFramebuffer.dispose();
+  }
 }

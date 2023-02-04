@@ -52,11 +52,14 @@ void main() {
     // TODO: fix blending mode for alpha mask objects!!!!
     outputColor.rgb = vec3( 0. );
     outputColor. a = 0.;
+    gl_FragDepth = 1.0;
     return;
   }
+  gl_FragDepth = gl_FragCoord.z;
+  
   vec3 viewPosition = v_viewSurfacePosition;
   vec3 worldPosition = v_worldSurfacePosition;
-  vec3 viewNormal = normalize(v_viewSurfaceNormal);
+  vec3 viewNormal = normalize(v_viewSurfaceNormal) * ( gl_FrontFacing ? 1. : -1. );
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV(

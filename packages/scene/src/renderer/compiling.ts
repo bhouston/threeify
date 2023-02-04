@@ -21,6 +21,7 @@ import {
 } from '@threeify/vector-math';
 
 import { MaterialParameters } from '../materials/MaterialParameters';
+import { PhysicalMaterial } from '../materials/PhysicalMaterial';
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { DomeLight } from '../scene/lights/DomeLight';
@@ -289,8 +290,7 @@ function createMeshBatches(renderCache: RenderCache) {
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
     opaqueMeshBatches,
-    blendMeshBatches,
-    maskMeshBatches
+    blendMeshBatches
   } = renderCache;
 
   for (const node of breathFirstNodes) {
@@ -304,7 +304,7 @@ function createMeshBatches(renderCache: RenderCache) {
         throw new Error('Buffer Geometry not found');
 
       // get shader program
-      const material = mesh.material;
+      const material = mesh.material as PhysicalMaterial;
       const program = shaderNameToProgram.get(material.shaderName);
       if (program === undefined) throw new Error('Program not found');
 
@@ -370,23 +370,13 @@ function createMeshBatches(renderCache: RenderCache) {
         uniformValueMaps,
         uniformBufferMap
       );
-      switch (material.alphaMode) {
-        case AlphaMode.Opaque: {
-          opaqueMeshBatches.push(meshBatch);
-
-          break;
-        }
-        case AlphaMode.Blend: {
-          blendMeshBatches.push(meshBatch);
-
-          break;
-        }
-        case AlphaMode.Mask: {
-          maskMeshBatches.push(meshBatch);
-
-          break;
-        }
-        // No default
+      if (
+        material.alphaMode !== AlphaMode.Opaque ||
+        material.transmissionFactor > 0
+      ) {
+        blendMeshBatches.push(meshBatch);
+      } else {
+        opaqueMeshBatches.push(meshBatch);
       }
     }
   }
