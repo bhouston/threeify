@@ -124,7 +124,6 @@ async function init(): Promise<void> {
   );
   console.timeEnd('updateRenderCache');
 
-  canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
   function animate(): void {

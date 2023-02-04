@@ -1,9 +1,5 @@
 import {
   Attachment,
-  Blending,
-  blendModeToBlendState,
-  BlendState,
-  BufferBit,
   CanvasFramebuffer,
   CullingSide,
   CullingState,
@@ -49,26 +45,27 @@ export function renderScene(
   const { opaqueMeshBatches, blendMeshBatches } = renderCache;
 
   const { opaqueFramebuffer, blendFramebuffer } = renderCache;
-  if (opaqueFramebuffer === undefined || blendFramebuffer === undefined)
-    throw new Error('Framebuffers not initialized');
+  //if (opaqueFramebuffer === undefined || blendFramebuffer === undefined)
+  //  throw new Error('Framebuffers not initialized');
 
   canvasFramebuffer.cullingState = new CullingState(false, CullingSide.Back);
 
+  /*
   opaqueFramebuffer?.clear(BufferBit.All);
   opaqueFramebuffer.cullingState = new CullingState(true, CullingSide.Back);
-  opaqueFramebuffer.blendState = BlendState.None;
+  opaqueFramebuffer.blendState = BlendState.None;*/
   renderMeshes(canvasFramebuffer, renderCache, opaqueMeshBatches);
 
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
+  /*const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
   if (opaqueTexImage2D === undefined) throw new Error('No color attachment 1');
   opaqueTexImage2D.generateMipmaps();
 
   blendFramebuffer.clear(BufferBit.All);
-  blendFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
+  blendFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);*/
   renderMeshes(canvasFramebuffer, renderCache, blendMeshBatches);
 
-  const blendTexImage2D = blendFramebuffer.getAttachment(Attachment.Color0);
-  if (blendTexImage2D === undefined) throw new Error('No color attachment 2');
+  //const blendTexImage2D = blendFramebuffer.getAttachment(Attachment.Color0);
+  //if (blendTexImage2D === undefined) throw new Error('No color attachment 2');
 
   //  copyPass(blendTexImage2D, opaqueTexImage2D);
   //copyPass(opaqueTexImage2D, undefined);

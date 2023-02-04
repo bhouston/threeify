@@ -21,7 +21,6 @@ import {
   SceneTreeCache,
   subTreeStats,
   updateDirtyNodes,
-  updateFramebuffers,
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
@@ -68,14 +67,16 @@ async function init(): Promise<void> {
   const domeLightIntensity = 3;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
-  const context = new RenderingContext(canvasHtmlElement, { antialias: false });
+  const context = new RenderingContext(canvasHtmlElement, { antialias: true });
   const { canvasFramebuffer } = context;
+  canvasFramebuffer.devicePixelRatio = 1;
+  canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const gpuRender = new GPUTimerPanel(context);
@@ -192,10 +193,9 @@ async function init(): Promise<void> {
 
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 
-  canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
-  updateFramebuffers(canvasFramebuffer, renderCache);
+  //updateFramebuffers(canvasFramebuffer, renderCache);
 
   function animate(): void {
     requestAnimationFrame(animate);
