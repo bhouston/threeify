@@ -21,6 +21,7 @@ import {
   SceneTreeCache,
   subTreeStats,
   updateDirtyNodes,
+  updateFramebuffers,
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
@@ -67,7 +68,7 @@ async function init(): Promise<void> {
   const domeLightIntensity = 3;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -195,7 +196,7 @@ async function init(): Promise<void> {
 
   //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
 
-  //updateFramebuffers(canvasFramebuffer, renderCache);
+  updateFramebuffers(canvasFramebuffer, renderCache);
 
   function animate(): void {
     requestAnimationFrame(animate);

@@ -35,11 +35,11 @@ vec4 getTransmissionSample(
   const float specularRoughness,
   const float ior
 ) {
-  return vec4(specularRoughness, specularRoughness, specularRoughness, 1.);
-  /*float backgroundLod =
+  //return vec4(specularRoughness, specularRoughness, specularRoughness, 1.);
+  float backgroundLod =
     log2(float(textureSize(backgroundTexture, 0))) *
     applyIorToRoughness(specularRoughness, ior);
-  return textureLod(backgroundTexture, fragCoord, backgroundLod);*/
+  return textureLod(backgroundTexture, fragCoord, backgroundLod);
 }
 
 vec3 getVolumeAttenuation(

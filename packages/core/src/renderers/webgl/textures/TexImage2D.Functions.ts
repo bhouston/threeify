@@ -143,7 +143,7 @@ export function copyPass(
   const { context } = source;
 
   let targetFramebuffer: VirtualFramebuffer;
-  if (target) {
+  if (target !== undefined) {
     const framebuffer = new Framebuffer(context);
     framebuffer.attach(Attachment.Color0, target);
     targetFramebuffer = framebuffer;

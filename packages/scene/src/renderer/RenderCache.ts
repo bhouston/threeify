@@ -55,5 +55,6 @@ export class RenderCache {
 
   // render targets
   public opaqueFramebuffer?: Framebuffer;
+  public backgroundFramebuffer?: Framebuffer;
   public blendFramebuffer?: Framebuffer;
 }
