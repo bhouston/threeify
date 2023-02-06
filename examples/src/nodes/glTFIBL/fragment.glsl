@@ -20,6 +20,8 @@ uniform mat4 viewToScreen;
 
 uniform sampler2D backgroundTexture;
 
+uniform int debugOutputIndex;
+
 out vec4 outputColor;
 
 #pragma include <microgeometry/tangentSpace>
@@ -44,6 +46,11 @@ void main() {
   uvs[2] = v_uv2;
 
   PhysicalMaterial material = readPhysicalMaterialFromUniforms(uvs);
+
+  if( debugOutputIndex > 0 ) {
+    outputColor = debugOutput( debugOutputIndex, material );
+    return;
+  }
 
   if (
     material.alphaMode == ALPHAMODE_MASK &&

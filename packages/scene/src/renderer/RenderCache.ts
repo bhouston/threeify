@@ -57,4 +57,6 @@ export class RenderCache {
   public opaqueFramebuffer?: Framebuffer;
   public backgroundFramebuffer?: Framebuffer;
   public blendFramebuffer?: Framebuffer;
+
+  public userUniforms: UniformValueMap = {};
 }

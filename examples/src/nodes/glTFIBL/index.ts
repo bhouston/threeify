@@ -2,11 +2,9 @@ import {
   Blending,
   blendModeToBlendState,
   fetchHDR,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
   makeTexImage2DFromEquirectangularTexture,
   Orbit,
-  passGeometry,
+  PhysicalMaterialOutputs,
   RenderingContext,
   ShaderMaterial,
   Texture
@@ -16,7 +14,7 @@ import {
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
-  renderScene,
+  renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   subTreeStats,
@@ -29,10 +27,6 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
-  Mat4,
-  mat4Inverse,
-  mat4PerspectiveFov,
-  quatToMat4,
   Vec2,
   Vec3,
   vec3Negate
@@ -45,38 +39,50 @@ import {
 } from '../../utilities/khronosModels';
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
-import backgroundFragmentSource from './background/fragment.glsl';
-import backgroundVertexSource from './background/vertex.glsl';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
-async function init(): Promise<void> {
-  const backgroundGeometry = passGeometry();
-  const backgroundMaterial = new ShaderMaterial(
-    backgroundVertexSource,
-    backgroundFragmentSource
-  );
+let debugOutputIndex = 0;
 
+document.addEventListener('keydown', (event) => {
+  switch (event.key) {
+    case 'ArrowUp':
+      debugOutputIndex = (debugOutputIndex + 1) % 26;
+      break;
+    case 'ArrowDown':
+      debugOutputIndex = (debugOutputIndex + 25) % 26;
+      break;
+    case 'Escape':
+      debugOutputIndex = 0;
+      break;
+  }
+  console.log(
+    'updated debugOutputIndex',
+    PhysicalMaterialOutputs[debugOutputIndex]
+  );
+});
+
+async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   console.time('fetchHDR');
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k))
   );
   console.timeEnd('fetchHDR');
   const lightIntensity = 0;
   const domeLightIntensity = 2;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
-  const context = new RenderingContext(canvasHtmlElement, { antialias: true });
+  const context = new RenderingContext(canvasHtmlElement, { antialias: false });
   const { canvasFramebuffer } = context;
-  //canvasFramebuffer.devicePixelRatio = 1;
+  canvasFramebuffer.devicePixelRatio = 1;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -92,7 +98,8 @@ async function init(): Promise<void> {
   console.timeEnd('makeTexImage2DFromEquirectangularTexture');
 
   const orbitController = new Orbit(canvasHtmlElement);
-  orbitController.zoom = 1.2;
+  orbitController.zoom = 1.5;
+  orbitController.zoomMax = 9;
 
   const sceneTreeCache = new SceneTreeCache();
 
@@ -176,22 +183,6 @@ async function init(): Promise<void> {
   );
   console.timeEnd('updateRenderCache');
 
-  const backgroundProgram = makeProgramFromShaderMaterial(
-    context,
-    backgroundMaterial
-  );
-  const backgroundUniforms = {
-    viewToWorld: new Mat4(),
-    screenToView: mat4Inverse(
-      mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
-    ),
-    cubeMap: cubeMap
-  };
-  const backgroundBufferGeometry = makeBufferGeometryFromGeometry(
-    context,
-    backgroundGeometry
-  );
-
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 
   //canvasFramebuffer.clearState = new ClearState(Color3.White
@@ -204,12 +195,7 @@ async function init(): Promise<void> {
     stats.time(() => {
       canvasFramebuffer.clear();
 
-      backgroundUniforms.viewToWorld = mat4Inverse(
-        quatToMat4(orbitController.rotation)
-      );
-      backgroundUniforms.screenToView = mat4Inverse(
-        mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
-      );
+      renderCache.userUniforms.debugOutputIndex = debugOutputIndex;
 
       orbitController.update();
       orbitNode.rotation = orbitController.rotation;
@@ -220,18 +206,9 @@ async function init(): Promise<void> {
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       gpuRender.time(() => {
-        renderScene(canvasFramebuffer, renderCache);
-        //renderScene_Tranmission(canvasFramebuffer, renderCache);
+        //renderScene(canvasFramebuffer, renderCache);
+        renderScene_Tranmission(canvasFramebuffer, renderCache);
       });
-      //});
-
-      /*renderBufferGeometry({
-      framebuffer: canvasFramebuffer,
-      program: backgroundProgram,
-      uniforms: backgroundUniforms,
-      bufferGeometry: backgroundBufferGeometry
-      //  depthTestState: backgroundDepthTestState
-    });*/
     });
   }
 

@@ -120,9 +120,6 @@ export function renderBufferGeometry(props: {
   // draw
   const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
-    console.log(
-      `drawElements ${bufferGeometry.primitive} ${bufferGeometry.count} ${bufferGeometry.indices.componentType} 0`
-    );
     gl.drawElements(
       bufferGeometry.primitive,
       bufferGeometry.count,

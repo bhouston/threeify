@@ -92,3 +92,5 @@ export * from './textures/Texture.js';
 export * from './textures/VirtualTexture.js';
 export * from './textures/loaders/ImageData.js';
 export * from './textures/loaders/SolidTextures.js';
+
+export * from './shaders/materials/PhysicalMaterialOutputs.js';

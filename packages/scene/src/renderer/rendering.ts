@@ -227,7 +227,8 @@ export function renderMeshes(
     cameraUniforms,
     lightParameters,
     shaderNameToLightingUniformBuffers,
-    shaderNameToCameraUniformBuffers
+    shaderNameToCameraUniformBuffers,
+    userUniforms
   } = renderCache;
 
   for (const meshBatch of meshBatches) {
@@ -256,6 +257,7 @@ export function renderMeshes(
     if (extraUniforms !== undefined) {
       uniforms.push(extraUniforms);
     }
+    uniforms.push(userUniforms);
 
     renderBufferGeometry({
       framebuffer,
