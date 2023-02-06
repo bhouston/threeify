@@ -68,7 +68,7 @@ async function init(): Promise<void> {
   const domeLightIntensity = 2;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -76,7 +76,7 @@ async function init(): Promise<void> {
   ) as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement, { antialias: true });
   const { canvasFramebuffer } = context;
-  canvasFramebuffer.devicePixelRatio = 1;
+  //canvasFramebuffer.devicePixelRatio = 1;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -221,6 +221,7 @@ async function init(): Promise<void> {
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       gpuRender.time(() => {
         renderScene(canvasFramebuffer, renderCache);
+        //renderScene_Tranmission(canvasFramebuffer, renderCache);
       });
       //});
 

@@ -370,10 +370,7 @@ function createMeshBatches(renderCache: RenderCache) {
         uniformValueMaps,
         uniformBufferMap
       );
-      if (
-        material.alphaMode !== AlphaMode.Opaque ||
-        material.transmissionFactor > 0
-      ) {
+      if (material.alphaMode === AlphaMode.Blend) {
         blendMeshBatches.push(meshBatch);
       } else {
         opaqueMeshBatches.push(meshBatch);

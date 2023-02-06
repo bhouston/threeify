@@ -3,7 +3,7 @@ import {
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
-  renderScene,
+  renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   subTreeStats,
@@ -140,7 +140,7 @@ async function init(): Promise<void> {
 
     updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
     updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
-    renderScene(canvasFramebuffer, renderCache);
+    renderScene_Tranmission(canvasFramebuffer, renderCache);
     //});
   }
 

@@ -49,13 +49,14 @@ void main() {
     material.alphaMode == ALPHAMODE_MASK &&
     material.alpha < material.alphaCutoff
   ) {
-    // TODO: fix blending mode for alpha mask objects!!!!
-    outputColor.rgb = vec3( 0. );
-    outputColor. a = 0.;
-    gl_FragDepth = 1.0;
-    return;
+    // required on Apple M1 platforms (and maybe others?) to avoid artifacts.
+    // discussed here: https://mastodon.gamedev.place/@BenHouston3D/109818279574922717
+    gl_FragDepth = 1.0; 
+    discard;
   }
-  gl_FragDepth = gl_FragCoord.z;
+  else {
+    gl_FragDepth = gl_FragCoord.z;
+  }
   
   vec3 viewPosition = v_viewSurfacePosition;
   vec3 worldPosition = v_worldSurfacePosition;

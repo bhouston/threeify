@@ -63,7 +63,51 @@ export function updateFramebuffers(
   renderCache.backgroundFramebuffer = backgroundFramebuffer;
   renderCache.blendFramebuffer = blendFramebuffer;
 }
+
 export function renderScene(
+  canvasFramebuffer: CanvasFramebuffer,
+  renderCache: RenderCache
+) {
+  const { opaqueMeshBatches, blendMeshBatches } = renderCache;
+  const { context } = canvasFramebuffer;
+
+  //canvasFramebuffer.cullingState = new CullingState(false, CullingSide.Back);
+
+  const overBlending = blendModeToBlendState(Blending.Over, true);
+  const noBlending = BlendState.None;
+
+  const noCulling = new CullingState(false);
+  const normalCulling = new CullingState(true, CullingSide.Back);
+  const reverseCulling = new CullingState(true, CullingSide.Front);
+
+  const noDepthTesting = new DepthTestState(false);
+  const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
+
+  canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  canvasFramebuffer.clear(BufferBit.All);
+
+  renderMeshes(
+    canvasFramebuffer,
+    renderCache,
+    opaqueMeshBatches,
+    undefined,
+    normalDepthTesting,
+    noBlending,
+    normalCulling
+  );
+
+  renderMeshes(
+    canvasFramebuffer,
+    renderCache,
+    blendMeshBatches,
+    {},
+    normalDepthTesting,
+    overBlending,
+    normalCulling
+  );
+}
+
+export function renderScene_Tranmission(
   canvasFramebuffer: CanvasFramebuffer,
   renderCache: RenderCache
 ) {

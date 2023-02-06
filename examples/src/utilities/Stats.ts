@@ -149,7 +149,7 @@ export class Panel {
     context.globalAlpha = 1;
     context.fillRect(0, 0, WIDTH, GRAPH_Y);
     context.fillStyle = this.fg;
-    this.smoothedValue = this.smoothedValue * 0.95 + value * 0.05;
+    this.smoothedValue = this.smoothedValue * 0.98 + value * 0.02;
     context.fillText(
       round(this.smoothedValue) +
         ' ' +
