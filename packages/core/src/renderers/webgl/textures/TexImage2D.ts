@@ -136,7 +136,6 @@ export class TexImage2D implements IResource {
     level = 0
   ): void {
     const { gl } = this.context;
-    console.log('image', image);
     if (image instanceof Vec2) {
       gl.texImage2D(
         target ?? this.target,

@@ -43,23 +43,24 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
+const maxDebugOutputs = 57;
 let debugOutputIndex = 0;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      debugOutputIndex = (debugOutputIndex + 1) % 26;
+      debugOutputIndex = (debugOutputIndex + 1) % maxDebugOutputs;
       break;
     case 'ArrowDown':
-      debugOutputIndex = (debugOutputIndex + 25) % 26;
+      debugOutputIndex =
+        (debugOutputIndex + maxDebugOutputs - 1) % maxDebugOutputs;
       break;
     case 'Escape':
       debugOutputIndex = 0;
       break;
   }
   console.log(
-    'updated debugOutputIndex',
-    PhysicalMaterialOutputs[debugOutputIndex]
+    `Debug Channel ${PhysicalMaterialOutputs[debugOutputIndex]} (${debugOutputIndex})`
   );
 });
 
@@ -71,7 +72,7 @@ async function init(): Promise<void> {
   );
   console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 2;
+  const domeLightIntensity = 1;
 
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
@@ -82,7 +83,7 @@ async function init(): Promise<void> {
   ) as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement, { antialias: false });
   const { canvasFramebuffer } = context;
-  canvasFramebuffer.devicePixelRatio = 1;
+  canvasFramebuffer.devicePixelRatio = 2;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
