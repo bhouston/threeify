@@ -15,10 +15,11 @@ import {
   makeColorAttachment,
   makeDepthAttachment,
   renderBufferGeometry,
+  TextureFilter,
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
-import { Color3 } from '@threeify/vector-math';
+import { ceilPow2, Color3, Vec2 } from '@threeify/vector-math';
 
 import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
@@ -44,10 +45,18 @@ export function updateFramebuffers(
   );
   blendFramebuffer.attach(Attachment.Depth, sharedDepthAttachment);
 
+  const pow2Size = new Vec2(ceilPow2(size.x), ceilPow2(size.y));
+  console.log('pow2Size', pow2Size);
   const backgroundFramebuffer = new Framebuffer(context);
   backgroundFramebuffer.attach(
     Attachment.Color0,
-    makeColorAttachment(context, size)
+    makeColorAttachment(
+      context,
+      pow2Size,
+      undefined,
+      TextureFilter.Linear,
+      TextureFilter.LinearMipmapLinear
+    )
   );
 
   renderCache.opaqueFramebuffer = opaqueFramebuffer;

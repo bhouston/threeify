@@ -110,6 +110,7 @@ void main() {
 
     // TODO: Just adding it here is completely wrong, also I am skipping the alpha component.
     outgoingRadiance += transmission_btdf.xyz;
+ 
 
   }
   if (iblMapIntensity != vec3(0.0)) {

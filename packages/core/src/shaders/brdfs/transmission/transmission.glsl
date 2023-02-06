@@ -94,6 +94,7 @@ vec4 BTDF_TransmissionAttenuation(
     specularRoughness,
     ior
   );
+ 
   vec3 attenuatedColor =
     transmittedLight.xyz *
     getVolumeAttenuation(

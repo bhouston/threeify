@@ -65,7 +65,7 @@ async function init(): Promise<void> {
   );
   console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 3;
+  const domeLightIntensity = 2;
 
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
@@ -132,7 +132,7 @@ async function init(): Promise<void> {
     intensity: lightIntensity * 50,
     range: 1000
   });
-  //root.children.push(pointLight2);
+  root.children.push(pointLight2);
   const pointLight3 = new PointLight({
     name: 'PointLight3',
     translation: new Vec3(0, 5, 0),
@@ -140,7 +140,7 @@ async function init(): Promise<void> {
     intensity: lightIntensity * 50,
     range: 1000
   });
-  //root.children.push(pointLight3);
+  root.children.push(pointLight3);
   const camera = new PerspectiveCamera({
     name: 'Camera',
     verticalFov: 25,
