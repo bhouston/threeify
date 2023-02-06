@@ -7,10 +7,13 @@ import {
   CubeMapTexture
 } from '../../../textures/CubeTexture.js';
 import { Texture } from '../../../textures/Texture.js';
+import { BlendState } from '../BlendState.js';
 import {
   BufferGeometry,
   makeBufferGeometryFromGeometry
 } from '../buffers/BufferGeometry.js';
+import { CullingState } from '../CullingState.js';
+import { DepthTestState } from '../DepthTestState.js';
 import { Attachment } from '../framebuffers/Attachment.js';
 import { Framebuffer } from '../framebuffers/Framebuffer.js';
 import {
@@ -136,10 +139,15 @@ export function makeTexImage2DFromEquirectangularTexture(
 let copyPassProgram: Program | undefined;
 let copyPassBufferGeometry: BufferGeometry | undefined;
 
-export function copyPass(
-  source: TexImage2D,
-  target: TexImage2D | undefined
-): void {
+export interface ICopyPassProps {
+  source: TexImage2D;
+  target?: TexImage2D;
+  depthTestState?: DepthTestState;
+  blendState?: BlendState;
+  cullingState?: CullingState;
+}
+export function copyPass(props: ICopyPassProps): void {
+  const { source, target, depthTestState, blendState, cullingState } = props;
   const { context } = source;
 
   let targetFramebuffer: VirtualFramebuffer;
@@ -148,7 +156,7 @@ export function copyPass(
     framebuffer.attach(Attachment.Color0, target);
     targetFramebuffer = framebuffer;
   } else {
-    targetFramebuffer = source.context.canvasFramebuffer;
+    targetFramebuffer = context.canvasFramebuffer;
   }
 
   // TODO: cache geometry + bufferGeometry.
@@ -171,7 +179,10 @@ export function copyPass(
     framebuffer: targetFramebuffer,
     program: copyPassProgram,
     uniforms,
-    bufferGeometry: copyPassBufferGeometry
+    bufferGeometry: copyPassBufferGeometry,
+    depthTestState: depthTestState,
+    blendState: blendState,
+    cullingState: cullingState
   });
 
   if (target) {

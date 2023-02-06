@@ -6,7 +6,7 @@ export class Vec2 {
   // using these functions instead of static properties to avoid
   // issues where people modify the constants.
   static get Zero() {
-    return new Vec2(0, 0, 0);
+    return new Vec2(0, 0);
   }
 
   constructor(public x = 0, public y = 0) {}

@@ -153,7 +153,7 @@ async function init(): Promise<void> {
     name: 'DomeLight',
     cubeMap: cubeMap,
     translation: orbitNode.translation,
-    color: Color3.White
+    color: Color3.White,
     intensity: domeLightIntensity
   });
   root.children.push(domeLight);

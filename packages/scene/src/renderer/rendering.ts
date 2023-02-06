@@ -75,21 +75,33 @@ export function renderScene(
 
   //canvasFramebuffer.cullingState = new CullingState(false, CullingSide.Back);
 
-  opaqueFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 1);
+  const overBlending = blendModeToBlendState(Blending.Over, true);
+  const noBlending = BlendState.None;
+
+  const noCulling = new CullingState(false);
+  const normalCulling = new CullingState(true, CullingSide.Back);
+  const reverseCulling = new CullingState(true, CullingSide.Front);
+
+  const noDepthTesting = new DepthTestState(false);
+  const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
+
+  opaqueFramebuffer.clearState = new ClearState(Color3.Black, 1);
   opaqueFramebuffer.clear(BufferBit.All);
-  opaqueFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less,
-    true
+
+  renderMeshes(
+    opaqueFramebuffer,
+    renderCache,
+    opaqueMeshBatches,
+    undefined,
+    normalDepthTesting,
+    noBlending,
+    normalCulling
   );
-  opaqueFramebuffer.cullingState = new CullingState(true, CullingSide.Back);
-  opaqueFramebuffer.blendState = BlendState.None;
-  renderMeshes(opaqueFramebuffer, renderCache, opaqueMeshBatches);
 
   const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
   if (opaqueTexImage2D === undefined) throw new Error('No color attachment 1');
 
-  backgroundFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
+  backgroundFramebuffer.clearState = new ClearState(Color3.Black, 0);
   backgroundFramebuffer.clear(BufferBit.All);
 
   const backgroundTexImage2D = backgroundFramebuffer.getAttachment(
@@ -98,40 +110,65 @@ export function renderScene(
   if (backgroundTexImage2D === undefined)
     throw new Error('No color attachment 1');
 
-  context.blendState = blendModeToBlendState(Blending.Over, true);
-  backgroundFramebuffer.depthTestState = new DepthTestState(false);
-  copyPass(opaqueTexImage2D, backgroundTexImage2D);
+  copyPass({
+    source: opaqueTexImage2D,
+    target: backgroundTexImage2D,
+    blendState: noBlending,
+    depthTestState: noDepthTesting
+  });
   backgroundTexImage2D.generateMipmaps();
 
-  blendFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
-  blendFramebuffer.cullingState = new CullingState(false);
-  blendFramebuffer.depthTestState = new DepthTestState(
-    true,
-    DepthTestFunc.Less,
-    true
-  );
+  blendFramebuffer.clearState = new ClearState(Color3.Black, 0);
   blendFramebuffer.clear(BufferBit.All);
-  blendFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
-  renderMeshes(blendFramebuffer, renderCache, blendMeshBatches, {
-    backgroundTexture: backgroundTexImage2D
-  });
+  renderMeshes(
+    blendFramebuffer,
+    renderCache,
+    blendMeshBatches,
+    {
+      backgroundTexture: backgroundTexImage2D
+    },
+    normalDepthTesting,
+    overBlending,
+    reverseCulling
+  );
+  renderMeshes(
+    blendFramebuffer,
+    renderCache,
+    blendMeshBatches,
+    {
+      backgroundTexture: backgroundTexImage2D
+    },
+    normalDepthTesting,
+    overBlending,
+    normalCulling
+  );
 
   const blendTexImage2D = blendFramebuffer.getAttachment(Attachment.Color0);
   if (blendTexImage2D === undefined) throw new Error('No color attachment 2');
 
-  opaqueFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
-  copyPass(blendTexImage2D, opaqueTexImage2D);
+  copyPass({
+    source: blendTexImage2D,
+    target: opaqueTexImage2D,
+    depthTestState: noDepthTesting,
+    blendState: overBlending
+  });
 
-  canvasFramebuffer.depthTestState = new DepthTestState(false);
-  canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
-  copyPass(opaqueTexImage2D, undefined);
+  copyPass({
+    source: opaqueTexImage2D,
+    target: undefined,
+    depthTestState: noDepthTesting,
+    blendState: overBlending
+  });
 }
 
 export function renderMeshes(
   framebuffer: VirtualFramebuffer,
   renderCache: RenderCache,
   meshBatches: MeshBatch[],
-  extraUniforms?: UniformValueMap
+  extraUniforms?: UniformValueMap,
+  depthTestState?: DepthTestState,
+  blendState?: BlendState,
+  cullingState?: CullingState
 ) {
   const {
     cameraUniforms,
@@ -173,7 +210,10 @@ export function renderMeshes(
       uniforms,
       uniformBuffers,
       bufferGeometry,
-      programVertexArray
+      programVertexArray,
+      depthTestState,
+      blendState,
+      cullingState
     });
   }
 }
