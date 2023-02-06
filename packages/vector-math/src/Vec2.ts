@@ -3,6 +3,12 @@ import { hashFloat2 } from './utils/hash';
 export class Vec2 {
   static readonly NUM_COMPONENTS = 2;
 
+  // using these functions instead of static properties to avoid
+  // issues where people modify the constants.
+  static get Zero() {
+    return new Vec2(0, 0, 0);
+  }
+
   constructor(public x = 0, public y = 0) {}
 
   getHashCode(): number {

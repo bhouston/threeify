@@ -146,14 +146,14 @@ async function init(): Promise<void> {
     verticalFov: 25,
     near: 0.1,
     far: 1000,
-    translation: new Vec3(0, 0, 0)
+    translation: Vec3.Zero
   });
   root.children.push(camera);
   const domeLight = new DomeLight({
     name: 'DomeLight',
     cubeMap: cubeMap,
     translation: orbitNode.translation,
-    color: new Color3(1, 1, 1),
+    color: Color3.White
     intensity: domeLightIntensity
   });
   root.children.push(domeLight);
@@ -194,7 +194,7 @@ async function init(): Promise<void> {
 
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 
-  //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
+  //canvasFramebuffer.clearState = new ClearState(Color3.White
 
   updateFramebuffers(canvasFramebuffer, renderCache);
 

@@ -72,7 +72,7 @@ async function init(): Promise<void> {
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const whiteClearState = new ClearState(new Color3(0, 0, 0), 0);
+  const whiteClearState = new ClearState(Color3.Black, 0);
 
   const depthTestState = new DepthTestState(false);
   const blendState = blendModeToBlendState(Blending.Over, true);

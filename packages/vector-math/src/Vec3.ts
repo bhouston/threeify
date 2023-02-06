@@ -3,6 +3,12 @@ import { hashFloat3 } from './utils/hash';
 export class Vec3 {
   static readonly NUM_COMPONENTS = 3;
 
+  // using these functions instead of static properties to avoid
+  // issues where people modify the constants.
+  static get Zero() {
+    return new Vec3(0, 0, 0);
+  }
+
   constructor(public x = 0, public y = 0, public z = 0) {}
 
   getHashCode(): number {

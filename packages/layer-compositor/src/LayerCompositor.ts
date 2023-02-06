@@ -127,7 +127,7 @@ export class LayerCompositor {
   #layerVersion = 0;
   #offlineLayerVersion = -1;
   firstRender = true;
-  clearState = new ClearState(new Color3(1, 1, 1), 0);
+  clearState = new ClearState(Color3.White, 0);
   offscreenSize = new Vec2(0, 0);
   offscreenWriteFramebuffer: Framebuffer | undefined;
   offscreenWriteColorAttachment: TexImage2D | undefined;
@@ -385,7 +385,7 @@ export class LayerCompositor {
       true
     );
 
-    canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
+    canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
     canvasFramebuffer.clear();
 
     const uniforms: UniformValueMap = {
@@ -439,16 +439,10 @@ export class LayerCompositor {
     }
 
     // clear to black and full alpha.
-    offscreenWriteFramebuffer.clearState = new ClearState(
-      new Color3(0, 0, 0),
-      0
-    );
+    offscreenWriteFramebuffer.clearState = new ClearState(Color3.Black, 0);
     offscreenWriteFramebuffer.clear();
 
-    offscreenReadFramebuffer.clearState = new ClearState(
-      new Color3(0, 0, 0),
-      0
-    );
+    offscreenReadFramebuffer.clearState = new ClearState(Color3.Black, 0);
     offscreenReadFramebuffer.clear();
 
     const imageToOffscreen = mat4Orthographic(

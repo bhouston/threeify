@@ -54,7 +54,7 @@ async function init(): Promise<void> {
 
     // lights
     directionalLightViewDirection: new Vec3(0, 0, -1),
-    directionalLightColor: color3MultiplyByScalar(new Color3(1, 1, 1), 5),
+    directionalLightColor: color3MultiplyByScalar(Color3.White, 5),
 
     // materials
     albedoMap: map

@@ -47,7 +47,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vec3(0, 0, 0),
+    viewLightPosition: Vec3.Zero,
     map: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);

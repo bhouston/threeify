@@ -64,7 +64,7 @@ async function init(): Promise<void> {
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
-  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(Color3.White, 1);
 
   const framebufferSize = new Vec2(1024, 1024);
   const depthAttachment = makeDepthAttachment(context, framebufferSize);

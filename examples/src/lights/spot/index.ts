@@ -49,9 +49,9 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    spotLightViewPosition: new Vec3(0, 0, 0),
+    spotLightViewPosition: Vec3.Zero,
     spotLightViewDirection: new Vec3(0, 0, -1),
-    spotLightColor: color3MultiplyByScalar(new Color3(1, 1, 1), 10),
+    spotLightColor: color3MultiplyByScalar(Color3.White, 10),
     spotLightRange: 15,
     spotLightInnerCos: 1,
     spotLightOuterCos: Math.cos(Math.PI * 0.5),

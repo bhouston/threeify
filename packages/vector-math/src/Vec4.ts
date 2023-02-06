@@ -3,6 +3,12 @@ import { hashFloat4 } from './utils/hash';
 export class Vec4 {
   static readonly NUM_COMPONENTS = 4;
 
+  // using these functions instead of static properties to avoid
+  // issues where people modify the constants.
+  static get Zero() {
+    return new Vec4(0, 0, 0);
+  }
+
   constructor(public x = 0, public y = 0, public z = 0, public w = 0) {}
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.w);

@@ -62,8 +62,8 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 0.7),
+    pointLightViewPosition: Vec3.Zero,
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 0.7),
     pointLightRange: 12,
 
     // materials

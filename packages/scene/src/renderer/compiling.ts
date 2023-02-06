@@ -219,7 +219,7 @@ function updateLightUniforms(
 ) {
   const lightWorldPosition = mat4TransformVec3(
     light.localToWorldMatrix,
-    new Vec3(0, 0, 0)
+    Vec3.Zero
   );
   const lightIntensity = color3MultiplyByScalar(light.color, light.intensity);
 

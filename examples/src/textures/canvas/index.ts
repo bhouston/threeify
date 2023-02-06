@@ -84,12 +84,12 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vec3(0, 0, 0),
+    viewLightPosition: Vec3.Zero,
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
-  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(Color3.White, 1);
 
   let frameNumber = 0;
   function animate(): void {

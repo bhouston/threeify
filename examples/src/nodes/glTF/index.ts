@@ -102,7 +102,7 @@ async function init(): Promise<void> {
     verticalFov: 25,
     near: 0.1,
     far: 1000,
-    translation: new Vec3(0, 0, 0)
+    translation: Vec3.Zero
   });
   root.children.push(camera);
 
@@ -124,7 +124,7 @@ async function init(): Promise<void> {
   );
   console.timeEnd('updateRenderCache');
 
-  //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
+  //canvasFramebuffer.clearState = new ClearState(Color3.White);
 
   function animate(): void {
     requestAnimationFrame(animate);

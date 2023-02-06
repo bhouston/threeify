@@ -54,11 +54,7 @@ async function init(): Promise<void> {
     // lights
     numPunctualLights: 3,
     punctualLightType: [0, 1, 2],
-    punctualLightViewPosition: [
-      new Vec3(-1, 0, 0),
-      new Vec3(0, 0, 0),
-      new Vec3()
-    ],
+    punctualLightViewPosition: [new Vec3(-1, 0, 0), Vec3.Zero, new Vec3()],
     punctualLightViewDirection: [
       new Vec3(),
       new Vec3(0, 0, -1),

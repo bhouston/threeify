@@ -3,6 +3,36 @@ import { hashFloat4 } from './utils/hash';
 export class Color4 {
   static readonly NUM_COMPONENTS = 4;
 
+  // using these functions instead of static properties to avoid
+  // issues where people modify the constants.
+  static get Transparent() {
+    return new Color4(0, 0, 0, 0);
+  }
+  static get Black() {
+    return new Color4(0, 0, 0, 1);
+  }
+  static get White() {
+    return new Color4(1, 1, 1, 1);
+  }
+  static get Red() {
+    return new Color4(1, 0, 0, 1);
+  }
+  static get Green() {
+    return new Color4(0, 1, 0, 1);
+  }
+  static get Blue() {
+    return new Color4(0, 0, 1, 1);
+  }
+  static get Yellow() {
+    return new Color4(1, 1, 0, 1);
+  }
+  static get Magenta() {
+    return new Color4(1, 0, 1, 1);
+  }
+  static get Cyan() {
+    return new Color4(0, 1, 1, 1);
+  }
+
   constructor(public r = 0, public g = 0, public b = 0, public a = 0) {}
 
   getHashCode(): number {

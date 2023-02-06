@@ -57,7 +57,7 @@ describe('Line3 Functions', () => {
   });
 
   test('line3ClosestPoint', () => {
-    const a = new Line3(new Vec3(0, 0, 0), new Vec3(1, 0, 0));
+    const a = new Line3(Vec3.Zero, new Vec3(1, 0, 0));
     const b = new Vec3(7, 8, 9);
     const c = line3ClosestPoint(a, b, true);
     expect(c.x).toBeCloseTo(1);

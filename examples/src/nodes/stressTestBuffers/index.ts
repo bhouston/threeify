@@ -65,8 +65,8 @@ async function init(): Promise<void> {
   }
 
   const directionalLight = new PointLight({
-    translation: new Vec3(0, 0, 0),
-    color: new Color3(1, 1, 1),
+    translation: Vec3.Zero,
+    color: Color3.White,
     intensity: 10
   });
   root.children.push(directionalLight);

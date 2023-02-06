@@ -59,8 +59,8 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 30),
+    pointLightViewPosition: Vec3.Zero,
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 30),
     pointLightRange: 6,
 
     // materials
@@ -71,7 +71,7 @@ async function init(): Promise<void> {
     specularRoughnessMap: specularRoughnessMap,
 
     clearCoatStrength: 0.5,
-    clearCoatTint: new Color3(1, 1, 1),
+    clearCoatTint: Color3.White,
 
     clearCoatBumpMap: clearCoatBumpMap,
 

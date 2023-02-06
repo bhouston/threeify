@@ -87,14 +87,14 @@ export class PhysicalMaterial extends Material {
   public alphaMode = AlphaMode.Opaque;
   public alphaCutoff = 0.5;
 
-  public albedoFactor = new Color3(1, 1, 1);
+  public albedoFactor = Color3.White;
   public albedoAlphaTextureAccessor?: TextureAccessor;
 
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_specular/README.md
   // TODO: These two textures should be combined into one, with factor as .a
   public specularFactor = 1;
   public specularFactorTextureAccessor?: TextureAccessor;
-  public specularColor = new Color3(1, 1, 1);
+  public specularColor = Color3.White;
   public specularColorTextureAccessor?: TextureAccessor;
 
   public specularRoughnessFactor = 0.5;
@@ -107,7 +107,7 @@ export class PhysicalMaterial extends Material {
   public occlusionFactor = 1;
   public occlusionTextureAccessor?: TextureAccessor;
 
-  public emissiveFactor = new Color3(0, 0, 0);
+  public emissiveFactor = Color3.Black;
   public emissiveTextureAccessor?: TextureAccessor;
   public emissiveIntensity = 1;
 
@@ -127,7 +127,7 @@ export class PhysicalMaterial extends Material {
   public clearcoatNormalTextureAccessor?: TextureAccessor;
 
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_sheen/README.md
-  public sheenColorFactor = new Color3(0, 0, 0);
+  public sheenColorFactor = Color3.Black;
   public sheenRoughnessFactor = 1;
   public sheenColorRoughnessTextureAccessor?: TextureAccessor;
 
@@ -138,7 +138,7 @@ export class PhysicalMaterial extends Material {
   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_volume/README.md
   public thicknessFactor = 0;
   public attenuationDistance = Number.POSITIVE_INFINITY;
-  public attenuationColor = new Color3(1, 1, 1);
+  public attenuationColor = Color3.White;
 
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_iridescence/README.md
   public iridescenceFactor = 0;

@@ -53,13 +53,13 @@ async function init(): Promise<void> {
 
     // lights
     pointLightViewPosition: new Vec3(1, 0, -0.5),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 40),
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 40),
     pointLightRange: 6,
 
     // materials
-    albedoModulator: new Vec3(1, 1, 1),
+    albedoModulator: Color3.White,
     albedoMap: map,
-    specularModulator: new Vec3(1, 1, 1),
+    specularModulator: Color3.White,
     specularMap: map,
     specularRoughnessModulator: 1,
     specularRoughnessMap: map

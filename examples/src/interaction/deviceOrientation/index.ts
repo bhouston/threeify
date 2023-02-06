@@ -40,7 +40,7 @@ async function init(): Promise<void> {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
     viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
-    viewLightPosition: new Vec3(0, 0, 0),
+    viewLightPosition: Vec3.Zero,
     map: makeTexImage2DFromTexture(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
