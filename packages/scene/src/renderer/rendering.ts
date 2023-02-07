@@ -78,11 +78,15 @@ export function renderScene(
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
 
+  const uniforms = {
+    debugOutputIndex: renderCache.userUniforms.debugOutputIndex
+  };
+
   renderMeshes(
     canvasFramebuffer,
     renderCache,
     opaqueMeshBatches,
-    {},
+    uniforms,
     normalDepthTesting,
     noBlending,
     normalCulling
@@ -92,7 +96,8 @@ export function renderScene(
     canvasFramebuffer,
     renderCache,
     blendMeshBatches,
-    {},
+    uniforms,
+
     normalDepthTesting,
     overBlending,
     normalCulling

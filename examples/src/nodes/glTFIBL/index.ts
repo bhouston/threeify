@@ -69,15 +69,15 @@ async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   console.time('fetchHDR');
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.moonless_golf_1k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.pedestrian_overpass_1k))
   );
   console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 7;
-  const transmissionMode = true;
+  const domeLightIntensity = 3;
+  const transmissionMode = false;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.SheenChair, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.FlightHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
