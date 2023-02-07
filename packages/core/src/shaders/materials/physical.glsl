@@ -53,9 +53,6 @@ vec4 toVec4(vec2 value) {
 vec4 toVec4(vec3 value) {
   return vec4(value, 1.0);
 }
-vec4 toVec4(vec4 value) {
-  return value;
-}
 
 #include <microgeometry/normalPacking>
 

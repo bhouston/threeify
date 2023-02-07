@@ -39,16 +39,16 @@ out vec4 outputColor;
 #pragma include <materials/alpha_mode>
 #pragma include <brdfs/transmission/transmission>
 
-//#define DEBUG_OUTPUTS (1)
+#define DEBUG_OUTPUTS (1)
 
 #if defined(DEBUG_OUTPUTS)
-  #define DEBUG_OUTPUT(index, output)                                            \
-    if (debugOutputIndex == (index)) {                                           \
-      outputColor = toVec4(output);                                              \
-      return;                                                                    \
-    }
+#define DEBUG_OUTPUT(index, output)                                            \
+  if (debugOutputIndex == (index)) {                                           \
+    outputColor = toVec4(output);                                              \
+    return;                                                                    \
+  }
 #else
-  #define DEBUG_OUTPUT(index, output)
+#define DEBUG_OUTPUT(index, output)
 #endif
 
 void main() {
@@ -73,10 +73,10 @@ void main() {
   }
 
   #if defined(DEBUG_OUTPUTS)
-    if (debugOutputIndex > 0 && debugOutputIndex < 26) {
-      outputColor = debugOutput(debugOutputIndex, material);
-      return;
-    }
+  if (debugOutputIndex > 0 && debugOutputIndex < 26) {
+    outputColor = debugOutput(debugOutputIndex, material);
+    return;
+  }
   #endif
 
   vec3 viewPosition = v_viewSurfacePosition;
@@ -125,63 +125,65 @@ void main() {
   vec3 clearcoatF0 = vec3(0.04);
   vec3 clearcoatF90 = vec3(1.0);
 
-  vec3 worldViewDirection = mat4UntransformDirection(
-    worldToView,
-    viewViewDirection
-  );
-  DEBUG_OUTPUT(31, normalToRgb(worldViewDirection));
-
-  vec3 worldNormal = mat4UntransformDirection(worldToView, viewNormal);
-  DEBUG_OUTPUT(32, normalToRgb(worldNormal));
-
-  vec3 transmissionRay = getVolumeTransmissionRay(
-    worldNormal,
-    worldViewDirection,
-    material.thickness,
-    material.ior,
-    localToWorld
-  );
-  vec3 refractedRayExit = worldPosition + transmissionRay;
-
-  // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
-  vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
-  vec2 refractionCoords = ndcPos.xy / ndcPos.w;
-  refractionCoords += 1.0;
-  refractionCoords /= 2.0;
-
-  // Sample framebuffer to get pixel the refracted ray hits.
-  vec4 transmittedLight = getTransmissionSample(
-    backgroundTexture,
-    refractionCoords,
-    material.specularRoughness,
-    ior
-  );
-  DEBUG_OUTPUT(33, transmittedLight.rgb);
-
-  vec3 attenuatedColor =
-    transmittedLight.xyz *
-    getVolumeAttenuation(
-      length(transmissionRay),
-      material.attenuationColor,
-      material.attenuationDistance
+  vec3 transmission_btdf = vec3(0.0);
+  if (material.transmission > 0.0) {
+    vec3 worldViewDirection = mat4UntransformDirection(
+      worldToView,
+      viewViewDirection
     );
-  DEBUG_OUTPUT(34, attenuatedColor);
+    DEBUG_OUTPUT(31, normalToRgb(worldViewDirection));
 
-  // Get the specular component.
-  vec3 F = BRDF_Specular_GGX_IBL(
-    worldNormal,
-    worldViewDirection,
-    specularF0,
-    specularF90,
-    material.specularRoughness
-  );
-  DEBUG_OUTPUT(35, F);
+    vec3 worldNormal = mat4UntransformDirection(worldToView, viewNormal);
+    DEBUG_OUTPUT(32, normalToRgb(worldNormal));
 
-  vec4 transmission_btdf = vec4(
-    (1.0 - F) * attenuatedColor * albedo,
-    transmittedLight.a
-  );
-  DEBUG_OUTPUT(36, transmission_btdf);
+    vec3 transmissionRay = getVolumeTransmissionRay(
+      worldNormal,
+      worldViewDirection,
+      material.thickness,
+      material.ior,
+      localToWorld
+    );
+    vec3 refractedRayExit = worldPosition + transmissionRay;
+
+    // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
+    vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
+    vec2 refractionCoords = ndcPos.xy / ndcPos.w;
+    refractionCoords += 1.0;
+    refractionCoords /= 2.0;
+
+    // Sample framebuffer to get pixel the refracted ray hits.
+    vec4 transmittedLight = getTransmissionSample(
+      backgroundTexture,
+      refractionCoords,
+      material.specularRoughness,
+      ior
+    );
+    DEBUG_OUTPUT(33, transmittedLight.rgb);
+
+    vec3 attenuatedColor =
+      transmittedLight.xyz *
+      getVolumeAttenuation(
+        length(transmissionRay),
+        material.attenuationColor,
+        material.attenuationDistance
+      );
+    DEBUG_OUTPUT(34, attenuatedColor);
+
+    // Get the specular component.
+    vec3 F = BRDF_Specular_GGX_IBL(
+      worldNormal,
+      worldViewDirection,
+      specularF0,
+      specularF90,
+      material.specularRoughness
+    );
+    DEBUG_OUTPUT(35, F);
+
+    transmission_btdf = (1.0 - F) * attenuatedColor * albedo;
+    DEBUG_OUTPUT(36, transmission_btdf);
+
+    material.alpha *= transmittedLight.a;
+  }
 
   /*vec4 transmission_btdf = BTDF_TransmissionAttenuation(
       worldNormal,
@@ -201,10 +203,12 @@ void main() {
       backgroundTexture
     );*/
 
+  //mix( totalDiffuse, transmission.rgb, material.transmission )
   // TODO: Just adding it here is completely wrong, also I am skipping the alpha component.
-  outgoingRadiance += transmission_btdf.xyz;
 
-  if (iblMapIntensity != vec3(0.0)) {
+  if (iblMapIntensity == vec3(0.0)) {
+    outgoingRadiance += transmission_btdf * material.transmission;
+  } else {
     //vec3 lightDirection = viewNormal;
     // vec3 reflectDirection = reflect( -viewDirection, viewNormal );
 
@@ -231,7 +235,7 @@ void main() {
       worldToView,
       material.specularRoughness
     );
-    DEBUG_OUTPUT(37, iblRadiance);
+    DEBUG_OUTPUT(38, iblRadiance);
 
     vec3 iblClearcoatRadiance = sampleIBLRadiance(
       iblMapTexture,
@@ -249,7 +253,12 @@ void main() {
     DEBUG_OUTPUT(40, diffuse_brdf);
 
     //vec3 specular_btdf = BTDF_SpecularGGX_IBL( viewNormal, viewViewDirection, material.specularRoughness );
-    vec3 indirect_brdf = diffuse_brdf;
+    vec3 indirect_brdf = mix(
+      diffuse_brdf,
+      transmission_btdf,
+      material.transmission
+    );
+    DEBUG_OUTPUT(41, indirect_brdf);
 
     // specular layer
     vec3 singleScattering = vec3(0.0),
@@ -271,12 +280,12 @@ void main() {
     vec3 specular_brdf =
       iblRadiance * singleScattering + multiScattering * iblIrradiance;
 
-    DEBUG_OUTPUT(41, specular_brdf);
+    DEBUG_OUTPUT(42, specular_brdf);
 
     indirect_brdf =
       indirect_brdf * (1.0 - max3(singleScattering + multiScattering)) +
       specular_brdf * specOcclusion;
-    DEBUG_OUTPUT(42, indirect_brdf);
+    DEBUG_OUTPUT(43, indirect_brdf);
 
     // sheen
     //   if (material.sheenColor != vec3(0.0)) {
@@ -288,11 +297,11 @@ void main() {
         material.sheenColor,
         material.sheenRoughness
       ) *
-      material.occlusion;
-    DEBUG_OUTPUT(43, sheen_brdf);
+      specOcclusion;
+    DEBUG_OUTPUT(44, sheen_brdf);
 
     indirect_brdf = sheenMix(material.sheenColor, indirect_brdf, sheen_brdf);
-    DEBUG_OUTPUT(44, indirect_brdf);
+    DEBUG_OUTPUT(45, indirect_brdf);
     //   }
 
     // if (material.clearcoatFactor != 0.0) {
@@ -318,7 +327,7 @@ void main() {
         material.occlusion,
         material.clearcoatRoughness
       );
-    DEBUG_OUTPUT(45, clearcoat_brdf);
+    DEBUG_OUTPUT(46, clearcoat_brdf);
 
     indirect_brdf = fresnelMix(
       clearcoatF0,
@@ -328,7 +337,7 @@ void main() {
       indirect_brdf,
       clearcoat_brdf
     );
-    DEBUG_OUTPUT(46, indirect_brdf);
+    DEBUG_OUTPUT(47, indirect_brdf);
 
     // }
 
@@ -363,14 +372,14 @@ void main() {
     float VdotH = saturate(dot(viewViewDirection, halfDirection));
 
     vec3 irradiance = directLight.radiance * dotNL;
-    DEBUG_OUTPUT(47, irradiance);
+    DEBUG_OUTPUT(48, irradiance);
 
     vec3 clearcoatIrradiance = directLight.radiance * clearCoatDotNL;
-    DEBUG_OUTPUT(48, clearcoatIrradiance);
+    DEBUG_OUTPUT(49, clearcoatIrradiance);
 
     vec3 diffuse_brdf =
       irradiance * BRDF_Diffuse_Lambert(albedo) * material.occlusion;
-    DEBUG_OUTPUT(49, diffuse_brdf);
+    DEBUG_OUTPUT(50, diffuse_brdf);
 
     vec3 direct_brdf = diffuse_brdf;
 
@@ -379,7 +388,7 @@ void main() {
       material.occlusion,
       material.specularRoughness
     );
-    DEBUG_OUTPUT(50, specOcclusion);
+    DEBUG_OUTPUT(51, specOcclusion);
 
     vec3 specular_brdf =
       irradiance *
@@ -390,7 +399,7 @@ void main() {
         material.specularRoughness
       ) *
       specOcclusion;
-    DEBUG_OUTPUT(51, specular_brdf);
+    DEBUG_OUTPUT(52, specular_brdf);
 
     direct_brdf = fresnelMix(
       specularF0,
@@ -400,7 +409,7 @@ void main() {
       diffuse_brdf,
       specular_brdf
     );
-    DEBUG_OUTPUT(52, direct_brdf);
+    DEBUG_OUTPUT(53, direct_brdf);
 
     // sheen
     //  if (material.sheenColor != vec3(0.0)) {
@@ -414,10 +423,10 @@ void main() {
         material.sheenRoughness
       ) *
       material.occlusion;
-    DEBUG_OUTPUT(53, sheen_brdf);
+    DEBUG_OUTPUT(54, sheen_brdf);
 
     direct_brdf = sheenMix(material.sheenColor, direct_brdf, sheen_brdf);
-    DEBUG_OUTPUT(54, direct_brdf);
+    DEBUG_OUTPUT(55, direct_brdf);
     //  }
 
     // clearcoat
@@ -435,7 +444,7 @@ void main() {
         material.occlusion,
         material.clearcoatRoughness
       );
-    DEBUG_OUTPUT(55, clearcoat_brdf);
+    DEBUG_OUTPUT(56, clearcoat_brdf);
 
     direct_brdf = fresnelMix(
       clearcoatF0,
@@ -446,7 +455,7 @@ void main() {
       clearcoat_brdf
     );
 
-    DEBUG_OUTPUT(56, direct_brdf);
+    DEBUG_OUTPUT(57, direct_brdf);
     // }
 
     outgoingRadiance += direct_brdf;
@@ -457,10 +466,11 @@ void main() {
 
   vec3 tonemapped = tonemappingACESFilmic(outgoingRadiance);
 
-  DEBUG_OUTPUT(57, tonemapped);
+  DEBUG_OUTPUT(58, tonemapped);
 
   //  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
-  outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance)) * material.alpha;
+  outputColor.rgb =
+    linearTosRGB(tonemappingACESFilmic(outgoingRadiance)) * material.alpha;
   outputColor.a = material.alpha;
 
 }

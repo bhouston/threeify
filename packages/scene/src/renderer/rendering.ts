@@ -82,7 +82,7 @@ export function renderScene(
     canvasFramebuffer,
     renderCache,
     opaqueMeshBatches,
-    undefined,
+    {},
     normalDepthTesting,
     noBlending,
     normalCulling
@@ -122,6 +122,12 @@ export function renderScene_Tranmission(
   const noDepthTesting = new DepthTestState(false);
   const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
 
+  const backgroundTexImage2D = backgroundFramebuffer.getAttachment(
+    Attachment.Color0
+  );
+  if (backgroundTexImage2D === undefined)
+    throw new Error('No color attachment 1');
+
   opaqueFramebuffer.clearState = new ClearState(Color3.Black, 1);
   opaqueFramebuffer.clear(BufferBit.All);
 
@@ -129,7 +135,7 @@ export function renderScene_Tranmission(
     opaqueFramebuffer,
     renderCache,
     opaqueMeshBatches,
-    undefined,
+    {},
     normalDepthTesting,
     noBlending,
     normalCulling
@@ -138,46 +144,44 @@ export function renderScene_Tranmission(
   const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
   if (opaqueTexImage2D === undefined) throw new Error('No color attachment 1');
 
-  backgroundFramebuffer.clearState = new ClearState(Color3.Black, 0);
-  backgroundFramebuffer.clear(BufferBit.All);
+  if (blendMeshBatches.length > 0) {
+    backgroundFramebuffer.clearState = new ClearState(Color3.Black, 1);
+    backgroundFramebuffer.clear(BufferBit.All);
 
-  const backgroundTexImage2D = backgroundFramebuffer.getAttachment(
-    Attachment.Color0
-  );
-  if (backgroundTexImage2D === undefined)
-    throw new Error('No color attachment 1');
+    copyPass({
+      source: opaqueTexImage2D,
+      target: backgroundTexImage2D,
+      blendState: noBlending,
+      depthTestState: noDepthTesting
+    });
+    backgroundTexImage2D.generateMipmaps();
 
-  copyPass({
-    source: opaqueTexImage2D,
-    target: backgroundTexImage2D,
-    blendState: noBlending,
-    depthTestState: noDepthTesting
-  });
-  backgroundTexImage2D.generateMipmaps();
+    const blendUniforms = {
+      backgroundTexture: backgroundTexImage2D,
+      debugOutputIndex: renderCache.userUniforms.debugOutputIndex
+    };
+    renderMeshes(
+      opaqueFramebuffer,
+      renderCache,
+      blendMeshBatches,
+      blendUniforms,
+      normalDepthTesting,
+      overBlending,
+      reverseCulling
+    );
+    renderMeshes(
+      opaqueFramebuffer,
+      renderCache,
+      blendMeshBatches,
+      blendUniforms,
+      normalDepthTesting,
+      overBlending,
+      normalCulling
+    );
+  }
 
-  renderMeshes(
-    opaqueFramebuffer,
-    renderCache,
-    blendMeshBatches,
-    {
-      backgroundTexture: backgroundTexImage2D
-    },
-    normalDepthTesting,
-    overBlending,
-    reverseCulling
-  );
-  renderMeshes(
-    opaqueFramebuffer,
-    renderCache,
-    blendMeshBatches,
-    {
-      backgroundTexture: backgroundTexImage2D
-    },
-    normalDepthTesting,
-    overBlending,
-    normalCulling
-  );
-
+  canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  canvasFramebuffer.clear(BufferBit.All);
   copyPass({
     source: opaqueTexImage2D,
     target: undefined,
@@ -229,7 +233,7 @@ export function renderMeshes(
     if (extraUniforms !== undefined) {
       uniforms.push(extraUniforms);
     }
-    uniforms.push(userUniforms);
+    // uniforms.push(userUniforms);
 
     renderBufferGeometry({
       framebuffer,
