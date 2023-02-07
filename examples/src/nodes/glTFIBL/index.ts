@@ -14,6 +14,7 @@ import {
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
+  renderScene,
   renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
@@ -68,14 +69,15 @@ async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   console.time('fetchHDR');
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.moonless_golf_1k))
   );
   console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 1;
+  const domeLightIntensity = 7;
+  const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.SheenChair, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -207,8 +209,11 @@ async function init(): Promise<void> {
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       gpuRender.time(() => {
-        //renderScene(canvasFramebuffer, renderCache);
-        renderScene_Tranmission(canvasFramebuffer, renderCache);
+        if (transmissionMode) {
+          renderScene_Tranmission(canvasFramebuffer, renderCache);
+        } else {
+          renderScene(canvasFramebuffer, renderCache);
+        }
       });
     });
   }
