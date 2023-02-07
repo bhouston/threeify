@@ -38,13 +38,6 @@ export function updateFramebuffers(
   );
   opaqueFramebuffer.attach(Attachment.Depth, sharedDepthAttachment);
 
-  const blendFramebuffer = new Framebuffer(context);
-  blendFramebuffer.attach(
-    Attachment.Color0,
-    makeColorAttachment(context, size)
-  );
-  blendFramebuffer.attach(Attachment.Depth, sharedDepthAttachment);
-
   const pow2Size = new Vec2(ceilPow2(size.x), ceilPow2(size.y));
   console.log('pow2Size', pow2Size);
   const backgroundFramebuffer = new Framebuffer(context);
@@ -61,7 +54,6 @@ export function updateFramebuffers(
 
   renderCache.opaqueFramebuffer = opaqueFramebuffer;
   renderCache.backgroundFramebuffer = backgroundFramebuffer;
-  renderCache.blendFramebuffer = blendFramebuffer;
 }
 
 export function renderScene(
@@ -115,23 +107,15 @@ export function renderScene_Tranmission(
     opaqueMeshBatches,
     blendMeshBatches,
     opaqueFramebuffer,
-    backgroundFramebuffer,
-    blendFramebuffer
+    backgroundFramebuffer
   } = renderCache;
   const { context } = canvasFramebuffer;
-  if (
-    opaqueFramebuffer === undefined ||
-    backgroundFramebuffer === undefined ||
-    blendFramebuffer === undefined
-  )
+  if (opaqueFramebuffer === undefined || backgroundFramebuffer === undefined)
     throw new Error('Framebuffers not initialized');
-
-  //canvasFramebuffer.cullingState = new CullingState(false, CullingSide.Back);
 
   const overBlending = blendModeToBlendState(Blending.Over, true);
   const noBlending = BlendState.None;
 
-  const noCulling = new CullingState(false);
   const normalCulling = new CullingState(true, CullingSide.Back);
   const reverseCulling = new CullingState(true, CullingSide.Front);
 
@@ -171,10 +155,8 @@ export function renderScene_Tranmission(
   });
   backgroundTexImage2D.generateMipmaps();
 
-  blendFramebuffer.clearState = new ClearState(Color3.Black, 0);
-  blendFramebuffer.clear(BufferBit.All);
   renderMeshes(
-    blendFramebuffer,
+    opaqueFramebuffer,
     renderCache,
     blendMeshBatches,
     {
@@ -185,7 +167,7 @@ export function renderScene_Tranmission(
     reverseCulling
   );
   renderMeshes(
-    blendFramebuffer,
+    opaqueFramebuffer,
     renderCache,
     blendMeshBatches,
     {
@@ -195,16 +177,6 @@ export function renderScene_Tranmission(
     overBlending,
     normalCulling
   );
-
-  const blendTexImage2D = blendFramebuffer.getAttachment(Attachment.Color0);
-  if (blendTexImage2D === undefined) throw new Error('No color attachment 2');
-
-  copyPass({
-    source: blendTexImage2D,
-    target: opaqueTexImage2D,
-    depthTestState: noDepthTesting,
-    blendState: overBlending
-  });
 
   copyPass({
     source: opaqueTexImage2D,
