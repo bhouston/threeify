@@ -30,7 +30,7 @@
       let scriptUrl = urlParams.get("scriptUrl");
       const name = urlParams.get("name") || "nodes/glTFIBL";
       if (name !== null) {
-        scriptUrl = `./dist/${name}/index.js`;
+        scriptUrl = `./dist/${name}/index.rollup.js`;
       }
       var script = document.createElement("script");
       script.setAttribute("type", "module");
