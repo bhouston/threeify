@@ -38,11 +38,11 @@ import {
   GLTFFormat,
   KhronosModel
 } from '../../utilities/khronosModels';
-import { GPUTimerPanel, Stats } from '../../utilities/Stats';
+import { GPUTimerPanel } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
-const stats = new Stats();
+//const stats = new Stats();
 
 const maxDebugOutputs = 62;
 let debugOutputIndex = 0;
@@ -97,7 +97,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const gpuRender = new GPUTimerPanel(context);
-  stats.addPanel(gpuRender);
+  //stats.addPanel(gpuRender);
 
   console.time('makeTexImage2DFromEquirectangularTexture');
   const cubeMap = makeTexImage2DFromEquirectangularTexture(
@@ -129,9 +129,15 @@ async function init(): Promise<void> {
 
   const orbitNode = new SceneNode({
     name: 'orbit',
-    translation: new Vec3(0, 0, -2),
+    translation: new Vec3(
+      Math.random() * 0.25 - 0.125,
+      Math.random() * 0.25 - 0.125,
+      -2
+    ),
     scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize)
   });
+
+  orbitController.rotation.copy(orbitNode.rotation);
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
   const pointLight1 = new PointLight({
@@ -202,27 +208,27 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    stats.time(() => {
-      canvasFramebuffer.clear();
+    //stats.time(() => {
+    canvasFramebuffer.clear();
 
-      renderCache.userUniforms.debugOutputIndex = debugOutputIndex;
+    renderCache.userUniforms.debugOutputIndex = debugOutputIndex;
 
-      orbitController.update();
-      orbitNode.rotation = orbitController.rotation;
-      camera.zoom = orbitController.zoom;
-      camera.dirty();
-      orbitNode.dirty();
+    orbitController.update();
+    orbitNode.rotation = orbitController.rotation;
+    camera.zoom = orbitController.zoom;
+    camera.dirty();
+    orbitNode.dirty();
 
-      updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
-      updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
-      gpuRender.time(() => {
-        if (transmissionMode) {
-          renderScene_Tranmission(canvasFramebuffer, renderCache);
-        } else {
-          renderScene(canvasFramebuffer, renderCache);
-        }
-      });
+    updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
+    updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+    gpuRender.time(() => {
+      if (transmissionMode) {
+        renderScene_Tranmission(canvasFramebuffer, renderCache);
+      } else {
+        renderScene(canvasFramebuffer, renderCache);
+      }
     });
+    //});
   }
 
   animate();
