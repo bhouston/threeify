@@ -16,5 +16,5 @@ float V_GGX_anisotropic(
   float lambdaV = NdotL * length(vec3(at * TdotV, ab * BdotV, NdotV));
   float lambdaL = NdotV * length(vec3(at * TdotL, ab * BdotL, NdotL));
   float v = 0.5 / (lambdaV + lambdaL);
-  return clamp(v, 0.0, 1.0);
+  return clamp(v, 0., 1.);
 }

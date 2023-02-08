@@ -35,7 +35,7 @@ void main() {
 
   vec3 specular = vec3(0.15);
   vec3 specularF0 = specularIntensityToF0(specular);
-  vec3 specularF90 = vec3(1.0);
+  vec3 specularF90 = vec3(1.);
   float specularRoughness =
     texture(specularRoughnessMap, v_uv0).r * specularRoughnessFactor;
 
@@ -60,7 +60,7 @@ void main() {
     normal,
     clearCoatBumpMap,
     v_uv0,
-    1.0
+    1.
   );
 
   PunctualLight punctualLight;
@@ -84,7 +84,7 @@ void main() {
       viewDirection,
       directLight.direction,
       clearCoatF0,
-      vec3(1.0),
+      vec3(1.),
       clearCoatRoughness
     );
   outgoingRadiance +=
@@ -102,6 +102,6 @@ void main() {
     directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

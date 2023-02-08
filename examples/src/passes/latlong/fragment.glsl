@@ -21,10 +21,10 @@ void main() {
 
   vec2 equirectangularUv = directionToLatLongUV(viewDirection);
 
-  vec3 mapColor = vec3(0.0);
+  vec3 mapColor = vec3(0.);
   mapColor += sRGBToLinear(texture(equirectangularMap, equirectangularUv).rgb);
 
   outputColor.rgb = linearTosRGB(mapColor);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

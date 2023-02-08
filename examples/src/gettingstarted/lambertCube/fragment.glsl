@@ -14,6 +14,6 @@ void main() {
   vec3 directionToLight = normalize(viewLightPosition - v_viewPosition);
   float lambertianIntensity = dot(directionToLight, v_viewNormal);
 
-  outputColor = vec4(albedo * lambertianIntensity, 1.0);
+  outputColor = vec4(albedo * lambertianIntensity, 1.);
 
 }

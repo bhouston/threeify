@@ -23,6 +23,6 @@ void main() {
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv0;
 
-  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
+  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.);
 
 }

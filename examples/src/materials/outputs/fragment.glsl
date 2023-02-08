@@ -28,20 +28,20 @@ out vec4 outputColor;
 void main() {
   OutputChannels outputChannels;
 
-  outputChannels.alpha = 1.0;
+  outputChannels.alpha = 1.;
   vec3 albedo = outputChannels.albedo = mix(
     vec3(0.2),
-    vec3(1.0, 0.0, 0.0),
+    vec3(1., 0., 0.),
     normalScale.y
   );
-  vec3 specular = vec3(1.0);
+  vec3 specular = vec3(1.);
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0(specular);
   vec3 normalDelta = normalize(
-    rgbToNormal(texture(normalMap, vec2(1.0) - v_uv0).rgb) *
-      vec3(normalScale, 1.0)
+    rgbToNormal(texture(normalMap, vec2(1.) - v_uv0).rgb) *
+      vec3(normalScale, 1.)
   );
-  outputChannels.metalness = 0.0;
+  outputChannels.metalness = 0.;
   outputChannels.roughness = specularRoughness;
 
   vec3 position = v_viewSurfacePosition;
@@ -55,14 +55,14 @@ void main() {
   );
   // warning, non-orthogonal matrix
   tangentToView *= mat3(
-    vec3(1.0, 0.0, 0.0),
-    vec3(0.0, 1.0, 0.0),
+    vec3(1., 0., 0.),
+    vec3(0., 1., 0.),
     normalize(normalDelta)
   );
   normal = tangentToView[2];
 
   outputChannels.normal = normal;
-  outputChannels.clipDepth = -position.z / 4.0;
+  outputChannels.clipDepth = -position.z / 4.;
 
   PunctualLight punctualLight;
   punctualLight.position = pointLightViewPosition;
@@ -95,8 +95,8 @@ void main() {
 
   int newFragmentOutputs = int(
     mod(
-      (-gl_FragCoord.x * 3.0 + gl_FragCoord.y) * 0.002 + float(time) / 3000.0,
-      13.0
+      (-gl_FragCoord.x * 3. + gl_FragCoord.y) * 0.002 + float(time) / 3000.,
+      13.
     )
   );
 

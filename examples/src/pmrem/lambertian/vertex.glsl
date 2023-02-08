@@ -12,9 +12,9 @@ out vec3 v_viewNormal;
 void main() {
   v_objectPosition = position;
   v_viewNormal = normalize(
-    (worldToView * localToWorld * vec4(normalize(position), 0.0)).xyz
+    (worldToView * localToWorld * vec4(normalize(position), 0.)).xyz
   );
-  v_viewPosition = (worldToView * localToWorld * vec4(position, 1.0)).xyz;
-  gl_Position = viewToScreen * vec4(v_viewPosition, 1.0);
+  v_viewPosition = (worldToView * localToWorld * vec4(position, 1.)).xyz;
+  gl_Position = viewToScreen * vec4(v_viewPosition, 1.);
 
 }

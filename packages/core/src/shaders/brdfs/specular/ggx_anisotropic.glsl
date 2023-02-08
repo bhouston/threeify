@@ -36,8 +36,8 @@ vec3 BRDF_Specular_GGX_Anisotropic(
 
   float VdotH = saturate(dot(viewDirection, halfDirection));
 
-  float at = max(alphaRoughness * (1.0 + anisotropy), 0.00001);
-  float ab = max(alphaRoughness * (1.0 - anisotropy), 0.00001);
+  float at = max(alphaRoughness * (1. + anisotropy), 0.00001);
+  float ab = max(alphaRoughness * (1. - anisotropy), 0.00001);
 
   vec3 F = F_Schlick_2(F0, F90, VdotH);
   float V = V_GGX_SmithCorrelated_Anisotropic(

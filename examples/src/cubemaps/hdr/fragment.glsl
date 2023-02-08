@@ -15,14 +15,14 @@ void main() {
   vec3 reflectDir = reflect(normalize(v_viewPosition), normalize(v_viewNormal));
   float lod = clamp(
     perceptualRoughness * float(mipCount),
-    0.0,
+    0.,
     float(mipCount)
   );
   outputColor.rgb = pow(
-    rgbdToLinear(texture(cubeMap, reflectDir, lod), 16.0),
+    rgbdToLinear(texture(cubeMap, reflectDir, lod), 16.),
     vec3(0.5)
   );
 
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

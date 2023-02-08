@@ -118,7 +118,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
 
 #if defined (NORMAL)
   material.normal =
-    vec3(normalScale, 1.0) *
+    vec3(normalScale, 1.) *
     rgbToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
 #else
   material.normal = vec3(0., 0., 1.);
@@ -126,21 +126,21 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
 
 #if defined (OCCLUSION)
   material.occlusion =
-    (sampleTexture(occlusionTextureAccessor, uvs).r - 1.0) * occlusionFactor +
-    1.0;
+    (sampleTexture(occlusionTextureAccessor, uvs).r - 1.) * occlusionFactor +
+    1.;
 #else
   material.occlusion = 1.;
 #endif
 
 #if defined (IOR)
-  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_ior/README.md
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_ior/README.md
   material.ior = ior;
 #else
   material.ior = 1.5;
 #endif
 
 #if defined(SPECULAR)
-  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_specular/README.md
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_specular/README.md
   material.specularFactor =
     specularFactor * sampleTexture(specularFactorTextureAccessor, uvs).r;
   material.specularColor =
@@ -152,7 +152,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
 #endif
 
 #if defined(CLEARCOAT)
-   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_clearcoat/README.md
+   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_clearcoat/README.md
   vec4 clearcoatFactorRoughness = sampleTexture(
     clearcoatFactorRoughnessTextureAccessor,
     uvs
@@ -161,7 +161,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.clearcoatRoughness =
     clearcoatRoughnessFactor * clearcoatFactorRoughness.g;
   material.clearcoatNormal =
-    vec3(clearcoatNormalScale, 1.0) *
+    vec3(clearcoatNormalScale, 1.) *
     rgbToNormal(sampleTexture(clearcoatNormalTextureAccessor, uvs).rgb);
 #else
   material.clearcoatFactor = 0.;
@@ -170,7 +170,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
 #endif
 
 #if defined(SHEEN)
-  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_sheen/README.md
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_sheen/README.md
   vec4 sheenColorRoughness = sampleTexture(
     sheenColorRoughnessTextureAccessor,
     uvs
@@ -191,14 +191,14 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
 #endif
 
 #if defined(TRANMISSION)
-  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_transmission/README.md
+  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_transmission/README.md
   material.transmission = transmissionFactor * transmissionFactorThickness.r;
 #else
   material.transmission = 0.;
 #endif
 
 #if defined(VOLUME)
-  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_volume/README.md
+  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_volume/README.md
   material.thickness = thicknessFactor * transmissionFactorThickness.g;
   material.attenuationColor = attenuationColor;
   material.attenuationDistance = attenuationDistance;
@@ -209,7 +209,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
 #endif
 
 #if defined(IRIDESCENCE)
-  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_materials_iridescence/README.md
+  // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_iridescence/README.md
   vec4 iridescenceFactorThickness = sampleTexture(
     iridescenceFactorThicknessTextureAccessor,
     uvs

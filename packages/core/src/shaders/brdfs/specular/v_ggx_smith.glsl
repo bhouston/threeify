@@ -13,9 +13,9 @@ float V_GGX_Smith(
   // also see #12151
 
   float a2 = pow2(alphaRoughness);
-  float gl = NdotL + sqrt(a2 + (1.0 - a2) * pow2(NdotL));
-  float gv = NdotV + sqrt(a2 + (1.0 - a2) * pow2(NdotV));
+  float gl = NdotL + sqrt(a2 + (1. - a2) * pow2(NdotL));
+  float gv = NdotV + sqrt(a2 + (1. - a2) * pow2(NdotV));
 
-  return 1.0 / (gl * gv);
+  return 1. / (gl * gv);
 
 } // validated

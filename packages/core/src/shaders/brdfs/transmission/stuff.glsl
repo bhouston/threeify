@@ -6,6 +6,6 @@ vec3 transmissionAbsorption(
   float thickness,
   vec3 absorptionColor
 ) {
-  vec3 r = refract(-v, n, 1.0 / ior);
+  vec3 r = refract(-v, n, 1. / ior);
   return exp(-absorptionColor * thickness * dot(-n, r));
 }

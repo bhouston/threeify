@@ -17,15 +17,15 @@ vec3 getVolumeTransmissionRay(
   vec3 refractionVector = refract(
     -worldViewDirection,
     normalize(worldNormal),
-    1.0 / ior
+    1. / ior
   );
   return normalize(refractionVector) * worldThickness;
 }
 
-// Scale roughness with IOR so that an IOR of 1.0 results in no microfacet refraction and
+// Scale roughness with IOR so that an IOR of 1. results in no microfacet refraction and
 // an IOR of 1.5 results in the default amount of microfacet refraction.
 float applyIorToRoughness(const float specularRoughness, const float ior) {
-  return specularRoughness * clamp(ior * 2.0 - 2.0, 0.0, 1.0);
+  return specularRoughness * clamp(ior * 2. - 2., 0., 1.);
 }
 
 // TODO: use gl_FragCoord instead of fragCoord.
@@ -48,7 +48,7 @@ vec3 getVolumeAttenuation(
   const float attenuationDistance
 ) {
   // Attenuation distance is +∞, i.e. the transmitted color is not attenuated at all.
-  if (isinf(attenuationDistance)) return vec3(1.0);
+  if (isinf(attenuationDistance)) return vec3(1.);
 
   // Beer's law https://en.wikipedia.org/wiki/Beer%E2%80%93Lambert_law
   vec3 attenuationCoefficient = -log(attenuationColor) / attenuationDistance;
@@ -82,10 +82,10 @@ vec4 BTDF_TransmissionAttenuation(
   vec3 refractedRayExit = worldPosition + transmissionRay;
 
   // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
-  vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
+  vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.);
   vec2 refractionCoords = ndcPos.xy / ndcPos.w;
-  refractionCoords += 1.0;
-  refractionCoords /= 2.0;
+  refractionCoords += 1.;
+  refractionCoords /= 2.;
 
   // Sample framebuffer to get pixel the refracted ray hits.
   vec4 transmittedLight = getTransmissionSample(
@@ -112,5 +112,5 @@ vec4 BTDF_TransmissionAttenuation(
     specularRoughness
   );
 
-  return vec4((1.0 - F) * attenuatedColor * albedo, transmittedLight.a);
+  return vec4((1. - F) * attenuatedColor * albedo, transmittedLight.a);
 }

@@ -44,7 +44,7 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
-const maxDebugOutputs = 57;
+const maxDebugOutputs = 62;
 let debugOutputIndex = 0;
 
 document.addEventListener('keydown', (event) => {
@@ -69,15 +69,15 @@ async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
   console.time('fetchHDR');
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.pedestrian_overpass_1k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
   console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 3;
-  const transmissionMode = false;
+  const domeLightIntensity = 1;
+  const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.FlightHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(

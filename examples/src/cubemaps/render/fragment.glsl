@@ -15,6 +15,6 @@ void main() {
   );
   outputColor = texture(cubeMap, reflectDir);
 
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

@@ -24,6 +24,6 @@ void main() {
   v_uv1 = uv1;
   v_uv1 = uv2;
 
-  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
+  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.);
 
 }

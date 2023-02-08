@@ -13,7 +13,7 @@ vec4 sampleTexture(
   const vec2 uv,
   const int textureIndex
 ) {
-  vec4 result = vec4(0.0);
+  vec4 result = vec4(0.);
   vec4 t = texture(textures[1], uv);
   if (textureIndex == 0) {
     result = t;

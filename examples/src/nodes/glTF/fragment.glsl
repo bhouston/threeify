@@ -62,15 +62,15 @@ void main() {
   //material.emissive = vec3( 0. );
   //material.specularRoughness = 0.5;
 
-  // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_ior/README.md
+  // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_ior/README.md
   vec3 specularF0 =
     saturate(iorToF0(material.ior) * material.specularColor) *
     material.specularFactor;
   vec3 specularF90 = vec3(material.specularFactor);
 
-  // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_specular/README.md
+  // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_specular/README.md
   specularF0 = mix(specularF0, material.albedo, material.metallic);
-  specularF90 = mix(specularF90, vec3(1.0), material.metallic);
+  specularF90 = mix(specularF90, vec3(1.), material.metallic);
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
   for (int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++) {
@@ -103,7 +103,7 @@ void main() {
       irradiance *
       mix(
         BRDF_Diffuse_Lambert(material.albedo) * material.occlusion,
-        vec3(0.0),
+        vec3(0.),
         material.metallic
       );
 
@@ -154,7 +154,7 @@ void main() {
       );
     vec3 coated_brdf = fresnelMix(
       vec3(0.04),
-      vec3(1.0),
+      vec3(1.),
       VdotH,
       material.clearcoatFactor,
       fabric_brdf,

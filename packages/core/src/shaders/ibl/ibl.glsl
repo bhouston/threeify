@@ -11,10 +11,10 @@
 };*/
 
 float convertGlossyExponentToSpecularRoughness(const float glossyExponent) {
-  return sqrt(2.0 / (glossyExponent + 2.0));
+  return sqrt(2. / (glossyExponent + 2.));
 }
 float convertSpecularRoughnessToGlossyExponent(const float specularRoughness) {
-  return 2.0 / (specularRoughness * specularRoughness) - 2.0;
+  return 2. / (specularRoughness * specularRoughness) - 2.;
 }
 
 float getMipLevelForSpecularRoughness(
@@ -27,8 +27,8 @@ float getMipLevelForSpecularRoughness(
   // From McGuire paper on phong cubemap IBL.
   // https://casual-effects.com/research/McGuire2013CubeMap/index.html
   float MIPlevel =
-    log2(pow(2.0, float(iblMapMaxLod)) * sqrt(3.0)) -
-    0.5 * log2(glossyExponent + 1.0);
+    log2(pow(2., float(iblMapMaxLod)) * sqrt(3.)) -
+    0.5 * log2(glossyExponent + 1.);
 
   return MIPlevel;
 }
@@ -57,7 +57,7 @@ vec3 sampleIBLRadiance(
   const mat4 worldToView,
   const float specularRoughness
 ) {
-  vec3 reflectDirection = reflect(viewDirection, viewNormal);
+  vec3 reflectDirection = reflect(-viewDirection, viewNormal);
   // Mixing the reflection with the normal is more accurate and keeps rough objects from gathering light from behind their tangent plane.
   reflectDirection = normalize(
     mix(reflectDirection, viewNormal, pow2(specularRoughness))

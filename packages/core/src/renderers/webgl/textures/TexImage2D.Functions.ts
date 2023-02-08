@@ -108,6 +108,8 @@ export function makeTexImage2DFromEquirectangularTexture(
     faceIndex: 0
   };
 
+  const cullingState = new CullingState(false);
+
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
@@ -115,7 +117,8 @@ export function makeTexImage2DFromEquirectangularTexture(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry
+      bufferGeometry: cubeFaceBufferGeometry,
+      cullingState
     });
   });
 

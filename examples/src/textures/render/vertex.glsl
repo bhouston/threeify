@@ -17,6 +17,6 @@ void main() {
   v_viewSurfaceNormal = mat4TransformDirection(localToView, normalize(normal));
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv = uv0;
-  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
+  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.);
 
 }

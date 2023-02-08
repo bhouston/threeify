@@ -2,15 +2,15 @@
 
 // YUV to RGB matrix
 const mat3 yuv2rgb = mat3(
-  1.0,
-  0.0,
+  1.,
+  0.,
   1.13983,
-  1.0,
+  1.,
   -0.39465,
   -0.5806,
-  1.0,
+  1.,
   2.03211,
-  0.0
+  0.
 );
 
 // RGB to YUV matrix

@@ -8,6 +8,6 @@ void main() {
   v_position = position;
   v_uv = uv0;
 
-  gl_Position = vec4(position, 1.0);
+  gl_Position = vec4(position, 1.);
 
 }

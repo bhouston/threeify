@@ -8,7 +8,7 @@ void testEquivalency(inout TestSuite suite, int testId, vec3 srgb) {
 }
 
 void tests(inout TestSuite suite) {
-  testEquivalency(suite, 3, vec3(0.0));
+  testEquivalency(suite, 3, vec3(0.));
   testEquivalency(suite, 4, vec3(0.1));
   testEquivalency(suite, 5, vec3(0.2));
   testEquivalency(suite, 6, vec3(0.3));

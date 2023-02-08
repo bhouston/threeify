@@ -19,5 +19,5 @@ void main() {
   );
 
   outputColor.rgb = albedo * saturate(lambertianIntensity + 0.5);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 }
