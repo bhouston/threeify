@@ -26,7 +26,11 @@ import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const shaderMaterial = new ShaderMaterial(
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
   );

@@ -23,7 +23,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const cubeTexture = new CubeMapTexture(
     await fetchCubeImages('/assets/textures/cube/pisa/*.png')
   );

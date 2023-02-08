@@ -89,6 +89,7 @@ export function makeTexImage2DFromEquirectangularTexture(
   const cubeFaceGeometry = passGeometry();
 
   const cubeFaceMaterial = new ShaderMaterial(
+    'latLongToCubeMap',
     cubeFaceVertexSource,
     cubeFaceFragmentSource
   );
@@ -170,7 +171,11 @@ export function copyPass(props: ICopyPassProps): void {
 
   // TODO: cache material + program.
   if (copyPassProgram === undefined) {
-    const material = new ShaderMaterial(copyVertexSource, copyFragmentSource);
+    const material = new ShaderMaterial(
+      'copyPass',
+      copyVertexSource,
+      copyFragmentSource
+    );
     copyPassProgram = makeProgramFromShaderMaterial(context, material);
   }
 

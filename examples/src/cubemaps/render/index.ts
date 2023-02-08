@@ -34,7 +34,7 @@ async function init(): Promise<void> {
   // const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const geometry = icosahedronGeometry(0.75, 4, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const imageSize = new Vec2(1024, 1024);
   const cubeTexture = new CubeMapTexture([
     imageSize,

@@ -23,7 +23,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 4, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const images = [];
   for (let level = 0; level < 9; level++) {
     for (let face = 0; face < 6; face++) {

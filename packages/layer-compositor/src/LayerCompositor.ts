@@ -152,7 +152,7 @@ export class LayerCompositor {
     this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
     this.#program = makeProgramFromShaderMaterial(
       this.context,
-      new ShaderMaterial(vertexSource, fragmentSource)
+      new ShaderMaterial('layerComposite', vertexSource, fragmentSource)
     );
   }
 

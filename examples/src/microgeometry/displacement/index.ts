@@ -38,7 +38,7 @@ async function init(): Promise<void> {
       translation3ToMat4(new Vec3(0, -172, -4))
     )
   );
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const displacementTexture = new Texture(
     await fetchImage('/assets/models/ninjaHead/displacement.jpg')
   );

@@ -33,7 +33,7 @@ async function init(): Promise<void> {
       scale3ToMat4(new Vec3(10, 10, 10))
     )
   );
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement

@@ -34,7 +34,7 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/cube/ennis/latLong.jpg')
   );
   const geometry = icosahedronGeometry(3, 4, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement

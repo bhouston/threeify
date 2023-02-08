@@ -28,7 +28,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
   const normalsTexture = new Texture(
     await fetchImage('/assets/textures/normalMap.png')

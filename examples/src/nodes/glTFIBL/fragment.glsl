@@ -40,7 +40,7 @@ out vec4 outputColor;
 #pragma include <materials/alpha_mode>
 #pragma include <brdfs/transmission/transmission>
 
-#define DEBUG_OUTPUTS (1)
+//#define DEBUG_OUTPUTS (1)
 
 #pragma include <materials/debugOutputs>
 #pragma include <materials/physicalDebugOutputs>

@@ -66,18 +66,25 @@ document.addEventListener('keydown', (event) => {
 });
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const shaderMaterial = new ShaderMaterial(
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   console.time('fetchHDR');
   const latLongTexture = new Texture(
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
+  /* const latLongTexture = new Texture(
+     await fetchImage('/assets/textures/cube/debug/latLong.png')
+   );*/
   console.timeEnd('fetchHDR');
-  const lightIntensity = 0;
-  const domeLightIntensity = 3;
-  const transmissionMode = true;
+  const lightIntensity = 1;
+  const domeLightIntensity = 1.5;
+  const transmissionMode = false;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(

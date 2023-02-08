@@ -26,7 +26,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = diskGeometry(0.5, 64);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const anisotropicFlow1Texture = new Texture(
     await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg')
   );

@@ -87,7 +87,9 @@ export class Program implements IResource {
     gl.attachShader(this.glProgram, this.fragmentShader.glShader);
 
     // link the program.
+    console.time('linkProgram, ' + this.name);
     gl.linkProgram(this.glProgram);
+    console.timeEnd('linkProgram, ' + this.name);
 
     // NOTE: purposely not checking here if it compiled.
     resources.register(this);
@@ -267,8 +269,8 @@ export function makeProgramFromShaderMaterial(
     context,
     vertexShaderCode: shaderMaterial.vertexShaderCode,
     fragmentShaderCode: shaderMaterial.fragmentShaderCode,
-    shaderDefines
+    shaderDefines,
+    name: shaderMaterial.name
   });
-  program.name = shaderMaterial.name;
   return program;
 }

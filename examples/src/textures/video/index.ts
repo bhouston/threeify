@@ -38,7 +38,7 @@ async function init(): Promise<void> {
       uvView.set(u, uv);
     }
   }
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const clickToPlayTexture = new Texture(
     await fetchImage('/assets/textures/videos/ClickToPlay.png')
   );

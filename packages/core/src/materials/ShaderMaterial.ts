@@ -11,9 +11,9 @@ import { IDisposable, IIdentifiable } from '../core/types.js';
 export class ShaderMaterial implements IIdentifiable, IDisposable {
   public readonly id: string = generateUUID();
   public disposed = false;
-  public name = '';
 
   constructor(
+    public name: string,
     public vertexShaderCode: string,
     public fragmentShaderCode: string,
     public glslVersion = 300

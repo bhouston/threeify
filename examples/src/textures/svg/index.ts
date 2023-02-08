@@ -30,7 +30,7 @@ async function init(): Promise<void> {
       new Vec2(1024, 1024)
     )
   );
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement

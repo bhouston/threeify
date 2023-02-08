@@ -24,7 +24,7 @@ geometry.attributes.position = makeFloat32Attribute(
 );
 geometry.indices = makeUint32Attribute([0, 1, 2], 1);
 
-const material = new ShaderMaterial(vertexSource, fragmentSource);
+const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
 const context = new RenderingContext(
   document.getElementById('framebuffer') as HTMLCanvasElement
