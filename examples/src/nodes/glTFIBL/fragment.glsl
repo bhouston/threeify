@@ -41,15 +41,7 @@ out vec4 outputColor;
 
 #define DEBUG_OUTPUTS (1)
 
-#if defined(DEBUG_OUTPUTS)
-#define DEBUG_OUTPUT(index, output)                                            \
-  if (debugOutputIndex == (index)) {                                           \
-    outputColor = toVec4(output);                                              \
-    return;                                                                    \
-  }
-#else
-#define DEBUG_OUTPUT(index, output)
-#endif
+#pragma include <materials/debugOutputs>
 
 void main() {
   vec2 uvs[NUM_UV_CHANNELS];
