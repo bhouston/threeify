@@ -60,8 +60,15 @@ export function renderScene(
   canvasFramebuffer: CanvasFramebuffer,
   renderCache: RenderCache
 ) {
-  const { opaqueMeshBatches, blendMeshBatches } = renderCache;
+  const {
+    opaqueMeshBatches,
+    opaqueFramebuffer,
+    blendMeshBatches,
+    userUniforms
+  } = renderCache;
   const { context } = canvasFramebuffer;
+  if (opaqueFramebuffer === undefined)
+    throw new Error('Framebuffers not initialized');
 
   //canvasFramebuffer.cullingState = new CullingState(false, CullingSide.Back);
 
@@ -79,8 +86,11 @@ export function renderScene(
   canvasFramebuffer.clear(BufferBit.All);
 
   const uniforms = {
-    debugOutputIndex: renderCache.userUniforms.debugOutputIndex
+    debugOutputIndex: userUniforms.debugOutputIndex
   };
+
+  opaqueFramebuffer.clearState = new ClearState(Color3.Black, 0);
+  opaqueFramebuffer.clear(BufferBit.All);
 
   renderMeshes(
     canvasFramebuffer,
@@ -88,9 +98,20 @@ export function renderScene(
     opaqueMeshBatches,
     uniforms,
     normalDepthTesting,
-    noBlending,
+    overBlending,
     normalCulling
   );
+
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
+  if (opaqueTexImage2D === undefined) throw new Error('No color attachment 1');
+
+  // this caused a buffer error in gl-lint.  if I comment it out, it works fine.
+  copyPass({
+    sourceTexImage2D: opaqueTexImage2D,
+    targetFramebuffer: canvasFramebuffer,
+    depthTestState: noDepthTesting,
+    blendState: overBlending
+  });
 }
 
 export function renderScene_Tranmission(
@@ -101,7 +122,8 @@ export function renderScene_Tranmission(
     opaqueMeshBatches,
     blendMeshBatches,
     opaqueFramebuffer,
-    backgroundFramebuffer
+    backgroundFramebuffer,
+    userUniforms
   } = renderCache;
   const { context } = canvasFramebuffer;
   if (opaqueFramebuffer === undefined || backgroundFramebuffer === undefined)
@@ -124,7 +146,7 @@ export function renderScene_Tranmission(
     renderCache,
     opaqueMeshBatches,
     {
-      debugOutputIndex: renderCache.userUniforms.debugOutputIndex
+      debugOutputIndex: userUniforms.debugOutputIndex
     },
     normalDepthTesting,
     overBlending,
@@ -145,8 +167,8 @@ export function renderScene_Tranmission(
       throw new Error('No color attachment 1');
 
     copyPass({
-      source: opaqueTexImage2D,
-      target: backgroundTexImage2D,
+      sourceTexImage2D: opaqueTexImage2D,
+      targetFramebuffer: backgroundFramebuffer,
       blendState: noBlending,
       depthTestState: noDepthTesting
     });
@@ -154,7 +176,7 @@ export function renderScene_Tranmission(
 
     const blendUniforms = {
       backgroundTexture: backgroundTexImage2D,
-      debugOutputIndex: renderCache.userUniforms.debugOutputIndex
+      debugOutputIndex: userUniforms.debugOutputIndex
     };
     renderMeshes(
       opaqueFramebuffer,
@@ -179,8 +201,8 @@ export function renderScene_Tranmission(
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
   copyPass({
-    source: opaqueTexImage2D,
-    target: undefined,
+    sourceTexImage2D: opaqueTexImage2D,
+    targetFramebuffer: canvasFramebuffer,
     depthTestState: noDepthTesting,
     blendState: overBlending
   });

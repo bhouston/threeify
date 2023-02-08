@@ -144,24 +144,21 @@ let copyPassProgram: Program | undefined;
 let copyPassBufferGeometry: BufferGeometry | undefined;
 
 export interface ICopyPassProps {
-  source: TexImage2D;
-  target?: TexImage2D;
+  sourceTexImage2D: TexImage2D;
+  targetFramebuffer: VirtualFramebuffer;
   depthTestState?: DepthTestState;
   blendState?: BlendState;
   cullingState?: CullingState;
 }
 export function copyPass(props: ICopyPassProps): void {
-  const { source, target, depthTestState, blendState, cullingState } = props;
-  const { context } = source;
-
-  let targetFramebuffer: VirtualFramebuffer;
-  if (target !== undefined) {
-    const framebuffer = new Framebuffer(context);
-    framebuffer.attach(Attachment.Color0, target);
-    targetFramebuffer = framebuffer;
-  } else {
-    targetFramebuffer = context.canvasFramebuffer;
-  }
+  const {
+    sourceTexImage2D,
+    targetFramebuffer,
+    depthTestState,
+    blendState,
+    cullingState
+  } = props;
+  const { context } = sourceTexImage2D;
 
   // TODO: cache geometry + bufferGeometry.
   if (copyPassBufferGeometry === undefined) {
@@ -180,7 +177,7 @@ export function copyPass(props: ICopyPassProps): void {
   }
 
   const uniforms = {
-    map: source
+    map: sourceTexImage2D
   };
 
   renderBufferGeometry({
@@ -192,10 +189,4 @@ export function copyPass(props: ICopyPassProps): void {
     blendState: blendState,
     cullingState: cullingState
   });
-
-  if (target) {
-    targetFramebuffer.flush();
-    targetFramebuffer.finish();
-    targetFramebuffer.dispose();
-  }
 }

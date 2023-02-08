@@ -40,7 +40,6 @@ out vec4 outputColor;
 #pragma include <materials/alpha_mode>
 #pragma include <brdfs/transmission/transmission>
 
-//#define DEBUG_OUTPUTS (1)
 
 #pragma include <materials/debugOutputs>
 #pragma include <materials/physicalDebugOutputs>
@@ -118,7 +117,8 @@ void main() {
   vec3 clearcoatF90 = vec3(1.0);
 
   vec3 transmission_btdf = vec3(0.0);
-  if (material.transmission > 0.0) {
+
+  if ( material.transmission > 0.0) {
     vec3 worldViewDirection = mat4UntransformDirection(
       worldToView,
       viewViewDirection
