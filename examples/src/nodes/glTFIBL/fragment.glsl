@@ -18,6 +18,7 @@ uniform mat4 localToWorld;
 uniform mat4 worldToView;
 uniform mat4 viewToScreen;
 
+uniform int mode;
 uniform sampler2D backgroundTexture;
 
 uniform int debugOutputIndex;
@@ -53,18 +54,18 @@ void main() {
   PhysicalMaterial material = readPhysicalMaterialFromUniforms(uvs);
   PHYSICAL_DEBUG_OUTPUT(material);
 
-  DEBUG_OUTPUT(59, mod(v_uv0,1.0));
-  DEBUG_OUTPUT(60, mod(v_uv1,1.0));
-  DEBUG_OUTPUT(61, mod(v_uv2,1.0));
-  
+  DEBUG_OUTPUT(59, mod(v_uv0, 1.0));
+  DEBUG_OUTPUT(60, mod(v_uv1, 1.0));
+  DEBUG_OUTPUT(61, mod(v_uv2, 1.0));
+
   if (
     material.alphaMode == ALPHAMODE_MASK &&
     material.alpha < material.alphaCutoff
   ) {
     // required on Apple M1 platforms (and maybe others?) to avoid artifacts.
     // discussed here: https://mastodon.gamedev.place/@BenHouston3D/109818279574922717
-    outputColor.rgba = vec4(0.);
-    gl_FragDepth = 1.;
+    outputColor.rgba = vec4(0.0);
+    gl_FragDepth = 1.0;
     discard;
   } else {
     gl_FragDepth = gl_FragCoord.z;
@@ -73,7 +74,7 @@ void main() {
   vec3 viewPosition = v_viewSurfacePosition;
   vec3 worldPosition = v_worldSurfacePosition;
   vec3 viewNormal =
-    normalize(v_viewSurfaceNormal) * (gl_FrontFacing ? 1. : -1.);
+    normalize(v_viewSurfaceNormal) * (gl_FrontFacing ? 1.0 : -1.0);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV(
@@ -90,7 +91,7 @@ void main() {
   );
   DEBUG_OUTPUT(27, normalToRgb(viewClearcoatNormal));
 
-  vec3 outgoingRadiance = vec3(0.);
+  vec3 outgoingRadiance = vec3(0.0);
 
   //material.albedo = vec3( 1. );
   //material.occlusion = 1.;
@@ -106,18 +107,18 @@ void main() {
 
   // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_specular/README.md
   specularF0 = mix(specularF0, material.albedo, material.metallic);
-  specularF90 = mix(specularF90, vec3(1.), material.metallic);
-  vec3 albedo = mix(material.albedo, vec3(0.), material.metallic);
+  specularF90 = mix(specularF90, vec3(1.0), material.metallic);
+  vec3 albedo = mix(material.albedo, vec3(0.0), material.metallic);
 
   DEBUG_OUTPUT(28, specularF0);
   DEBUG_OUTPUT(29, specularF90);
   DEBUG_OUTPUT(30, albedo);
 
   vec3 clearcoatF0 = vec3(0.04);
-  vec3 clearcoatF90 = vec3(1.);
+  vec3 clearcoatF90 = vec3(1.0);
 
-  vec3 transmission_btdf = vec3(0.);
-  if (material.transmission > 0.) {
+  vec3 transmission_btdf = vec3(0.0);
+  if (material.transmission > 0.0) {
     vec3 worldViewDirection = mat4UntransformDirection(
       worldToView,
       viewViewDirection
@@ -137,10 +138,10 @@ void main() {
     vec3 refractedRayExit = worldPosition + transmissionRay;
 
     // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
-    vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.);
+    vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
     vec2 refractionCoords = ndcPos.xy / ndcPos.w;
-    refractionCoords += 1.;
-    refractionCoords /= 2.;
+    refractionCoords += 1.0;
+    refractionCoords /= 2.0;
 
     // Sample framebuffer to get pixel the refracted ray hits.
     vec4 transmittedLight = getTransmissionSample(
@@ -170,7 +171,7 @@ void main() {
     );
     DEBUG_OUTPUT(35, F);
 
-    transmission_btdf = (1. - F) * attenuatedColor * albedo;
+    transmission_btdf = (1.0 - F) * attenuatedColor * albedo;
     DEBUG_OUTPUT(36, transmission_btdf);
 
     material.alpha *= transmittedLight.a;
@@ -197,7 +198,7 @@ void main() {
   //mix( totalDiffuse, transmission.rgb, material.transmission )
   // TODO: Just adding it here is completely wrong, also I am skipping the alpha component.
 
-  if (iblMapIntensity == vec3(0.)) {
+  if (iblMapIntensity == vec3(0.0)) {
     outgoingRadiance += transmission_btdf * material.transmission;
   } else {
     //vec3 lightDirection = viewNormal;
@@ -252,8 +253,8 @@ void main() {
     DEBUG_OUTPUT(41, indirect_brdf);
 
     // specular layer
-    vec3 singleScattering = vec3(0.),
-      multiScattering = vec3(0.);
+    vec3 singleScattering = vec3(0.0),
+      multiScattering = vec3(0.0);
     BRDF_Specular_GGX_Multiscatter_IBL(
       viewNormal,
       viewViewDirection,
@@ -274,7 +275,7 @@ void main() {
     DEBUG_OUTPUT(42, specular_brdf);
 
     indirect_brdf =
-      indirect_brdf * (1. - max3(singleScattering + multiScattering)) +
+      indirect_brdf * (1.0 - max3(singleScattering + multiScattering)) +
       specular_brdf * specOcclusion;
     DEBUG_OUTPUT(43, indirect_brdf);
 
@@ -456,12 +457,9 @@ void main() {
   outgoingRadiance += emissive_brdf;
 
   vec3 tonemapped = tonemappingACESFilmic(outgoingRadiance);
-
   DEBUG_OUTPUT(58, tonemapped);
-
-  //  outputColor.rgb = tonemappingACESFilmic( linearTosRGB( outgoingRadiance ) );
-  outputColor.rgb =
-    linearTosRGB(tonemappingACESFilmic(outgoingRadiance)) * material.alpha;
+  vec3 sRGB = linearTosRGB(tonemapped);
+  outputColor.rgb = sRGB * material.alpha;
   outputColor.a = material.alpha;
 
 }

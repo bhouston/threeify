@@ -39,7 +39,9 @@ vec4 getTransmissionSample(
   float backgroundLod =
     log2(float(textureSize(backgroundTexture, 0))) *
     applyIorToRoughness(specularRoughness, ior);
-  return textureLod(backgroundTexture, fragCoord, backgroundLod);
+  vec4 v = textureLod(backgroundTexture, fragCoord, backgroundLod);
+  v.xyz = untonemapACESFilmic( v.xyz);
+  return v;
 }
 
 vec3 getVolumeAttenuation(
