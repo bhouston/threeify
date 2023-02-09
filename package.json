@@ -42,8 +42,8 @@
   },
   "scripts": {
     "clean": "find . -name 'dist' -type d -prune -exec rm -rf {} + && find . -name 'tsconfig.tsbuildinfo' -type f -delete",
-    "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./packages/layer-compositor\" && tst --projectDir \"./examples\"",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch & tst --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
+    "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./packages/scene\" && tst --projectDir \"./packages/layer-compositor\" && tst --projectDir \"./examples\"",
+    "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch & tst --projectDir \"./packages/scene\" --watch & tst --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
     "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
     "format": "prettier \"examples/src/**/*.{ts,json,glsl}\" \"packages/**/src/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\" --fix",
     "docs": "typedoc",

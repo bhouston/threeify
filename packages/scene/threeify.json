@@ -1,0 +1,17 @@
+{
+  "glsl": {
+    "rootDir": "./src",
+    "includeDirs": [
+      "./src"
+    ],
+    "outDir": "./dist",
+    "extensions": [
+      "glsl",
+      "frag",
+      "vert"
+    ],
+    "minify": false,
+    "allowJSIncludes": true,
+    "verboseLevel": 0
+  }
+}

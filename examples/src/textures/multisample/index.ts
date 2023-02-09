@@ -10,6 +10,7 @@ import {
   copyPass,
   CullingSide,
   CullingState,
+  DepthTestFunc,
   DepthTestState,
   fetchImage,
   Framebuffer,
@@ -49,23 +50,35 @@ async function init(): Promise<void> {
   );
 
   const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
+    document.getElementById('framebuffer') as HTMLCanvasElement,
+    { antialias: false }
   );
+
   const { canvasFramebuffer } = context;
+  canvasFramebuffer.devicePixelRatio = 1;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+  canvasFramebuffer.resize();
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 
   const colorInternalFormat = InternalFormat.RGBA16F;
-  const framebufferSize = new Vec2(1024, 1024);
-  const colorRenderbuffer = new Renderbuffer(
+  const framebufferSize = canvasFramebuffer.size;
+  const msaaColorRenderbuffer = new Renderbuffer(
     context,
     4,
     colorInternalFormat,
     framebufferSize
   );
+  const msaaDepthRenderbuffer = new Renderbuffer(
+    context,
+    4,
+    InternalFormat.DepthComponent24,
+    framebufferSize
+  );
   const multisampleFramebuffer = new Framebuffer(context);
-  multisampleFramebuffer.attach(Attachment.Color0, colorRenderbuffer);
+
+  multisampleFramebuffer.attach(Attachment.Color0, msaaColorRenderbuffer);
+  multisampleFramebuffer.attach(Attachment.Depth, msaaDepthRenderbuffer);
   /* framebuffer.attachTexImage2D(
     Attachment.Depth,
     makeDepthAttachment(context, framebufferSize)
@@ -102,9 +115,11 @@ async function init(): Promise<void> {
   const depthTestState = new DepthTestState(false);
   const blendState = blendModeToBlendState(Blending.Over, true);
 
+  const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
   const noBlending = BlendState.None;
 
   const normalCulling = new CullingState(true, CullingSide.Back);
+  const noCulling = new CullingState(false);
 
   const noDepthTesting = new DepthTestState(false);
 
@@ -112,7 +127,7 @@ async function init(): Promise<void> {
     stats.time(() => {
       const now = Date.now();
       uniforms.localToWorld = euler3ToMat4(
-        new Euler3(now * 0.001, now * 0.00033, now * 0.00077),
+        new Euler3(now * 0.0001, now * 0.000033, now * 0.000077),
         uniforms.localToWorld
       );
       uniforms.map = uvTestTexture;
@@ -124,22 +139,21 @@ async function init(): Promise<void> {
           program,
           uniforms,
           bufferGeometry,
-          depthTestState: noDepthTesting,
-          blendState: noBlending
+          depthTestState: normalDepthTesting,
+          blendState: noBlending,
+          cullingState: noCulling
         });
 
         biltFramebuffers(multisampleFramebuffer, simpleFramebuffer);
 
         copyPass({
           sourceTexImage2D: colorAttachment,
-          targetFramebuffer: canvasFramebuffer,
-          depthTestState: noDepthTesting,
-          blendState: noBlending
+          targetFramebuffer: canvasFramebuffer
         });
       });
-
-      requestAnimationFrame(animate);
     });
+
+    requestAnimationFrame(animate);
   }
 
   animate();

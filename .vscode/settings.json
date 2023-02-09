@@ -16,6 +16,7 @@
     "lambertian",
     "lerp",
     "Mipmaps",
+    "msaa",
     "Nullary",
     "reserialization",
     "reserialized",

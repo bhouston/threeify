@@ -1,19 +1,17 @@
 import {
   Attachment,
-  Blending,
-  blendModeToBlendState,
+  biltFramebuffers,
   BlendState,
   BufferBit,
   CanvasFramebuffer,
   ClearState,
   copyPass,
-  CullingSide,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Framebuffer,
+  InternalFormat,
   makeColorAttachment,
-  makeDepthAttachment,
+  Renderbuffer,
   renderBufferGeometry,
   TexImage2D,
   TextureFilter,
@@ -31,28 +29,45 @@ export function updateFramebuffers(
 ) {
   const { context, size } = canvasFramebuffer;
 
-  const sharedDepthAttachment = makeDepthAttachment(context, size);
+  const colorInternalFormat = InternalFormat.RGBA8;
+  const msaaColorRenderbuffer = new Renderbuffer(
+    context,
+    4,
+    colorInternalFormat,
+    size
+  );
+  const msaaDepthRenderbuffer = new Renderbuffer(
+    context,
+    4,
+    InternalFormat.DepthComponent24,
+    size
+  );
+  const multisampleFramebuffer = new Framebuffer(context);
+
+  multisampleFramebuffer.attach(Attachment.Color0, msaaColorRenderbuffer);
+  multisampleFramebuffer.attach(Attachment.Depth, msaaDepthRenderbuffer);
+
   const opaqueFramebuffer = new Framebuffer(context);
   opaqueFramebuffer.attach(
-    Attachment.Color0,
-    makeColorAttachment(context, size)
-  );
-  opaqueFramebuffer.attach(Attachment.Depth, sharedDepthAttachment);
-
-  const backgroundFramebuffer = new Framebuffer(context);
-  backgroundFramebuffer.attach(
     Attachment.Color0,
     makeColorAttachment(
       context,
       size,
-      undefined,
+      colorInternalFormat,
       TextureFilter.Linear,
       TextureFilter.LinearMipmapLinear
     )
   );
 
+  const transmissionFramebuffer = new Framebuffer(context);
+  transmissionFramebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(context, size, colorInternalFormat)
+  );
+
+  renderCache.multisampleFramebuffer = multisampleFramebuffer;
   renderCache.opaqueFramebuffer = opaqueFramebuffer;
-  renderCache.backgroundFramebuffer = backgroundFramebuffer;
+  renderCache.transmissionFramebuffer = transmissionFramebuffer;
 }
 
 export function renderScene(
@@ -62,27 +77,21 @@ export function renderScene(
   const {
     opaqueMeshBatches,
     opaqueFramebuffer,
+    multisampleFramebuffer,
+    transmissionFramebuffer,
     blendMeshBatches,
     userUniforms
   } = renderCache;
   const { context } = canvasFramebuffer;
-  if (opaqueFramebuffer === undefined)
+  if (
+    multisampleFramebuffer === undefined ||
+    opaqueFramebuffer === undefined ||
+    transmissionFramebuffer === undefined
+  )
     throw new Error('Framebuffers not initialized');
 
-  //canvasFramebuffer.cullingState = new CullingState(false, CullingSide.Back);
-
-  const overBlending = blendModeToBlendState(Blending.Over, true);
-  const noBlending = BlendState.None;
-
-  const noCulling = new CullingState(false);
-  const normalCulling = new CullingState(true, CullingSide.Back);
-  const reverseCulling = new CullingState(true, CullingSide.Front);
-
-  const noDepthTesting = new DepthTestState(false);
-  const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
-
-  canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
-  canvasFramebuffer.clear(BufferBit.All);
+  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  multisampleFramebuffer.clear(BufferBit.All);
 
   const uniforms = {
     debugOutputIndex: userUniforms.debugOutputIndex,
@@ -90,14 +99,31 @@ export function renderScene(
   };
 
   renderMeshes(
-    canvasFramebuffer,
+    multisampleFramebuffer,
     renderCache,
     opaqueMeshBatches,
     uniforms,
-    normalDepthTesting,
-    overBlending,
-    normalCulling
+    DepthTestState.Normal,
+    BlendState.PremultipliedOver,
+    CullingState.Back
   );
+
+  biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
+  if (
+    opaqueTexImage2D === undefined ||
+    !(opaqueTexImage2D instanceof TexImage2D)
+  )
+    throw new Error('No color attachment 1');
+
+  opaqueTexImage2D.generateMipmaps();
+
+  canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  canvasFramebuffer.clear(BufferBit.All);
+  copyPass({
+    sourceTexImage2D: opaqueTexImage2D,
+    targetFramebuffer: canvasFramebuffer
+  });
 }
 
 export function renderScene_Tranmission(
@@ -107,39 +133,35 @@ export function renderScene_Tranmission(
   const {
     opaqueMeshBatches,
     blendMeshBatches,
+    multisampleFramebuffer,
     opaqueFramebuffer,
-    backgroundFramebuffer,
+    transmissionFramebuffer,
     userUniforms
   } = renderCache;
-  const { context } = canvasFramebuffer;
-  if (opaqueFramebuffer === undefined || backgroundFramebuffer === undefined)
+  if (
+    multisampleFramebuffer === undefined ||
+    opaqueFramebuffer === undefined ||
+    transmissionFramebuffer === undefined
+  )
     throw new Error('Framebuffers not initialized');
 
-  const overBlending = blendModeToBlendState(Blending.Over, true);
-  const noBlending = BlendState.None;
-
-  const normalCulling = new CullingState(true, CullingSide.Back);
-  const reverseCulling = new CullingState(true, CullingSide.Front);
-
-  const noDepthTesting = new DepthTestState(false);
-  const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
-
-  opaqueFramebuffer.clearState = new ClearState(Color3.Black, 1);
-  opaqueFramebuffer.clear(BufferBit.All);
+  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  multisampleFramebuffer.clear(BufferBit.All);
 
   renderMeshes(
-    opaqueFramebuffer,
+    multisampleFramebuffer,
     renderCache,
     opaqueMeshBatches,
     {
       debugOutputIndex: userUniforms.debugOutputIndex,
       outputTransformFlags: userUniforms.outputTransformFlags
     },
-    normalDepthTesting,
-    overBlending,
-    normalCulling
+    DepthTestState.Normal,
+    BlendState.PremultipliedOver,
+    CullingState.Back
   );
 
+  biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
   if (
     opaqueTexImage2D === undefined ||
@@ -147,59 +169,52 @@ export function renderScene_Tranmission(
   )
     throw new Error('No color attachment 1');
 
+  opaqueTexImage2D.generateMipmaps();
+
   if (blendMeshBatches.length > 0) {
-    backgroundFramebuffer.clearState = new ClearState(Color3.Black, 1);
-    backgroundFramebuffer.clear(BufferBit.All);
-
-    const backgroundTexImage2D = backgroundFramebuffer.getAttachment(
-      Attachment.Color0
-    );
-    if (
-      backgroundTexImage2D === undefined ||
-      !(backgroundTexImage2D instanceof TexImage2D)
-    )
-      throw new Error('No color attachment 1');
-
-    copyPass({
-      sourceTexImage2D: opaqueTexImage2D,
-      targetFramebuffer: backgroundFramebuffer,
-      blendState: noBlending,
-      depthTestState: noDepthTesting
-    });
-    backgroundTexImage2D.generateMipmaps();
-
     const blendUniforms = {
-      backgroundTexture: backgroundTexImage2D,
+      backgroundTexture: opaqueTexImage2D,
       debugOutputIndex: userUniforms.debugOutputIndex,
       outputTransformFlags: userUniforms.outputTransformFlags
     };
+
+    multisampleFramebuffer.clearState = new ClearState(Color3.Black, 1);
+    multisampleFramebuffer.clear(BufferBit.Color); // only clear color, leave depth untouched
     renderMeshes(
-      opaqueFramebuffer,
+      multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
       blendUniforms,
-      normalDepthTesting,
-      overBlending,
-      reverseCulling
+      DepthTestState.Normal,
+      BlendState.PremultipliedOver,
+      CullingState.Back
     );
     renderMeshes(
-      opaqueFramebuffer,
+      multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
       blendUniforms,
-      normalDepthTesting,
-      overBlending,
-      normalCulling
+      DepthTestState.Normal,
+      BlendState.PremultipliedOver,
+      CullingState.Front
     );
+
+    biltFramebuffers(multisampleFramebuffer, transmissionFramebuffer);
   }
+  const transmissionTexImage2D = transmissionFramebuffer.getAttachment(
+    Attachment.Color0
+  );
+  if (
+    transmissionTexImage2D === undefined ||
+    !(transmissionTexImage2D instanceof TexImage2D)
+  )
+    throw new Error('No color attachment 1');
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
   copyPass({
     sourceTexImage2D: opaqueTexImage2D,
-    targetFramebuffer: canvasFramebuffer,
-    depthTestState: noDepthTesting,
-    blendState: overBlending
+    targetFramebuffer: canvasFramebuffer
   });
 }
 

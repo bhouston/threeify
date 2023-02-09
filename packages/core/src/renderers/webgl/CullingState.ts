@@ -24,6 +24,10 @@ export enum CullingSide {
 export class CullingState
   implements ICloneable<CullingState>, IEquatable<CullingState>
 {
+  static readonly None = new CullingState(false);
+  static readonly Front = new CullingState(true, CullingSide.Front);
+  static readonly Back = new CullingState(true, CullingSide.Back);
+
   // TODO: Should be initialized to default WebGL states
   constructor(
     public enabled = true,
