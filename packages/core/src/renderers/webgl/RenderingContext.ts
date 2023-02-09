@@ -96,7 +96,7 @@ export class RenderingContext {
     // the following line will cause a bug if commented out.  --Ben 2023-02-01
     //if (this.#program !== program) {
     if (program !== undefined) {
-      program.validate();
+      program.isReady();
       this.gl.useProgram(program.glProgram);
     } else {
       this.gl.useProgram(null);

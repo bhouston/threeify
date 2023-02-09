@@ -61,11 +61,18 @@ async function toTexture(
     return undefined;
   }
   const mimeType = texture?.getMimeType() || 'image/png';
+  const name =
+    (texture?.getName() || texture?.getURI() || '') +
+    `(${mimeType}) ${size.x}x${size.y}`;
+  //console.time('createImageBitmapFromArrayBuffer ' + name);
   const imageBitmap = await createImageBitmapFromArrayBuffer(
     imageData,
     mimeType
   );
-  return new Texture(imageBitmap);
+  //console.timeEnd('createImageBitmapFromArrayBuffer ' + name);
+  const result = new Texture(imageBitmap);
+  result.name = name;
+  return result;
 }
 
 function toColor3(values: number[]): Color3 {

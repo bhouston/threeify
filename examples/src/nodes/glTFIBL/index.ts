@@ -72,14 +72,14 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  console.time('fetchHDR');
+  //console.time('fetchHDR');
   const latLongTexture = new Texture(
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
   /* const latLongTexture = new Texture(
      await fetchImage('/assets/textures/cube/debug/latLong.png')
    );*/
-  console.timeEnd('fetchHDR');
+  //console.timeEnd('fetchHDR');
   const lightIntensity = 1;
   const domeLightIntensity = 1.5;
   const transmissionMode = true;
@@ -101,13 +101,13 @@ async function init(): Promise<void> {
   const gpuRender = new GPUTimerPanel(context);
   //stats.addPanel(gpuRender);
 
-  console.time('makeTexImage2DFromEquirectangularTexture');
+  //console.time('makeTexImage2DFromEquirectangularTexture');
   const cubeMap = makeTexImage2DFromEquirectangularTexture(
     context,
     latLongTexture,
     new Vec2(1024, 1024)
   );
-  console.timeEnd('makeTexImage2DFromEquirectangularTexture');
+  //console.timeEnd('makeTexImage2DFromEquirectangularTexture');
 
   const orbitController = new Orbit(canvasHtmlElement);
   orbitController.zoom = 1.5;
@@ -116,13 +116,13 @@ async function init(): Promise<void> {
   const sceneTreeCache = new SceneTreeCache();
 
   const root = new SceneNode({ name: 'root' });
-  console.time('glTFToSceneNode');
+  //console.time('glTFToSceneNode');
 
-  console.timeEnd('glTFToSceneNode');
+  //console.timeEnd('glTFToSceneNode');
 
-  console.time('updateNodeTree');
+  //console.time('updateNodeTree');
   updateNodeTree(glTFModel, sceneTreeCache);
-  console.timeEnd('updateNodeTree');
+  //console.timeEnd('updateNodeTree');
 
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
@@ -189,7 +189,7 @@ async function init(): Promise<void> {
 
   console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
-  console.time('updateRenderCache');
+  //console.time('updateRenderCache');
   const renderCache = updateRenderCache(
     context,
     root,
@@ -199,7 +199,7 @@ async function init(): Promise<void> {
     },
     sceneTreeCache
   );
-  console.timeEnd('updateRenderCache');
+  //console.timeEnd('updateRenderCache');
 
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 

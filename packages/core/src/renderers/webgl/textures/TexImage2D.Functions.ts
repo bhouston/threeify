@@ -37,6 +37,7 @@ export function makeTexImage2DFromTexture(
   texture: Texture | CubeMapTexture,
   internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
+  //console.time('makeTexImage2DFromTexture ' + texture.name);
   const params = new TexParameters();
   params.anisotropyLevels = texture.anisotropicLevels;
   params.generateMipmaps = texture.generateMipmaps;
@@ -61,6 +62,8 @@ export function makeTexImage2DFromTexture(
     params
   );
   texImage2D.version = texture.version;
+  //console.timeEnd('makeTexImage2DFromTexture ' + texture.name);
+
   return texImage2D;
 }
 

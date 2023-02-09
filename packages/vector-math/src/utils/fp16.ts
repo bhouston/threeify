@@ -4,8 +4,6 @@
 import { clamp } from '../Functions';
 
 const lookupTables = (function () {
-  console.time('fp16 lookup tables');
-
   // float32 to float16 helpers
 
   const buffer = new ArrayBuffer(4);
@@ -100,7 +98,6 @@ const lookupTables = (function () {
       offsetTable[i] = 1024;
     }
   }
-  console.timeEnd('fp16 lookup tables');
   return {
     floatView: floatView,
     uint32View: uint32View,
