@@ -2,6 +2,7 @@ import {
   Blending,
   blendModeToBlendState,
   fetchHDR,
+  makeProgramFromShaderMaterial,
   makeTexImage2DFromEquirectangularTexture,
   Orbit,
   PhysicalMaterialOutputs,
@@ -81,7 +82,7 @@ async function init(): Promise<void> {
   console.timeEnd('fetchHDR');
   const lightIntensity = 1;
   const domeLightIntensity = 1.5;
-  const transmissionMode = false;
+  const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
@@ -92,10 +93,11 @@ async function init(): Promise<void> {
   ) as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement, { antialias: false });
   const { canvasFramebuffer } = context;
-  canvasFramebuffer.devicePixelRatio = 2;
+  canvasFramebuffer.devicePixelRatio = 1;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   //stats.addPanel(gpuRender);
 
@@ -193,7 +195,7 @@ async function init(): Promise<void> {
     root,
     camera,
     () => {
-      return shaderMaterial;
+      return program;
     },
     sceneTreeCache
   );

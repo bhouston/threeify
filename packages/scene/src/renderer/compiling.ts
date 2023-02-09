@@ -2,12 +2,11 @@ import {
   AlphaMode,
   CubeMapTexture,
   makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
+  Program,
   ProgramUniform,
   ProgramVertexArray,
   RenderingContext,
-  ShaderMaterial,
   Texture,
   UniformBufferMap,
   UniformValueMap,
@@ -65,7 +64,7 @@ export function updateRenderCache(
   context: RenderingContext,
   rootNode: SceneNode,
   activeCamera: CameraNode | undefined,
-  shaderResolver: (shaderName: string) => ShaderMaterial,
+  shaderResolver: (shaderName: string) => Program,
   sceneTreeCache: SceneTreeCache,
   renderCache: RenderCache = new RenderCache()
 ) {
@@ -145,7 +144,7 @@ function flattenMaterialParameters(
 function meshToSceneCache(
   context: RenderingContext,
   mesh: MeshNode,
-  shaderResolver: (shaderName: string) => ShaderMaterial,
+  shaderResolver: (shaderName: string) => Program,
   renderCache: RenderCache
 ) {
   const {
@@ -172,9 +171,7 @@ function meshToSceneCache(
   // compile shader program
   if (!shaderNameToProgram.has(material.shaderName)) {
     // get shader material
-    const shaderMaterial = shaderResolver(material.shaderName);
-    shaderMaterial.name = material.shaderName;
-    const program = makeProgramFromShaderMaterial(context, shaderMaterial);
+    const program = shaderResolver(material.shaderName);
     shaderNameToProgram.set(material.shaderName, program);
   }
 

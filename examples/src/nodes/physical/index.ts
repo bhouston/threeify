@@ -1,6 +1,7 @@
 import {
   fetchImage,
   icosahedronGeometry,
+  makeProgramFromShaderMaterial,
   RenderingContext,
   ShaderMaterial,
   Texture
@@ -46,6 +47,7 @@ async function init(): Promise<void> {
   );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const sceneTreeCache = new SceneTreeCache();
   const geometry = icosahedronGeometry(0.75, 5, true);
@@ -96,7 +98,7 @@ async function init(): Promise<void> {
     root,
     camera,
     () => {
-      return shaderMaterial;
+      return program;
     },
     sceneTreeCache
   );

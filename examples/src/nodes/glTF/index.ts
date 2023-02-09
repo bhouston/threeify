@@ -1,4 +1,9 @@
-import { Orbit, RenderingContext, ShaderMaterial } from '@threeify/core';
+import {
+  makeProgramFromShaderMaterial,
+  Orbit,
+  RenderingContext,
+  ShaderMaterial
+} from '@threeify/core';
 import {
   glTFToSceneNode,
   PerspectiveCamera,
@@ -41,6 +46,7 @@ async function init(): Promise<void> {
   const context = new RenderingContext(canvasHtmlElement);
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const orbitController = new Orbit(canvasHtmlElement);
   orbitController.zoom = 1.2;
@@ -122,7 +128,7 @@ async function init(): Promise<void> {
     root,
     camera,
     () => {
-      return shaderMaterial;
+      return program;
     },
     sceneTreeCache
   );

@@ -19,7 +19,7 @@ import {
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
-import { ceilPow2, Color3, Vec2 } from '@threeify/vector-math';
+import { Color3, floorPow2, Vec2 } from '@threeify/vector-math';
 
 import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
@@ -38,7 +38,7 @@ export function updateFramebuffers(
   );
   opaqueFramebuffer.attach(Attachment.Depth, sharedDepthAttachment);
 
-  const pow2Size = new Vec2(ceilPow2(size.x), ceilPow2(size.y));
+  const pow2Size = new Vec2(floorPow2(size.x), floorPow2(size.y));
   console.log('pow2Size', pow2Size);
   const backgroundFramebuffer = new Framebuffer(context);
   backgroundFramebuffer.attach(
@@ -89,9 +89,6 @@ export function renderScene(
     debugOutputIndex: userUniforms.debugOutputIndex
   };
 
-  opaqueFramebuffer.clearState = new ClearState(Color3.Black, 0);
-  opaqueFramebuffer.clear(BufferBit.All);
-
   renderMeshes(
     canvasFramebuffer,
     renderCache,
@@ -101,18 +98,6 @@ export function renderScene(
     overBlending,
     normalCulling
   );
-
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
-  if (opaqueTexImage2D === undefined) throw new Error('No color attachment 1');
-
-  // this caused a buffer error in gl-lint.  if I comment it out, it works fine.
-  copyPass({
-    sourceTexImage2D: opaqueTexImage2D,
-    targetFramebuffer: canvasFramebuffer,
-    depthTestState: noDepthTesting,
-    blendState: overBlending,
-    cullingState: noCulling
-  });
 }
 
 export function renderScene_Tranmission(
