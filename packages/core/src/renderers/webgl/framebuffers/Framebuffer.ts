@@ -10,12 +10,14 @@ import { Vec2 } from '@threeify/math';
 import { generateUUID } from '../../../core/generateUuid.js';
 import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
+import { Renderbuffer } from '../Renderbuffer.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
 import { Attachment } from './Attachment.js';
 import { VirtualFramebuffer } from './VirtualFramebuffer.js';
+import { TextureTarget } from '../textures/TextureTarget.js';
 
-export type AttachmentMap = { [point: number]: TexImage2D | undefined };
+export type AttachmentMap = { [point: number]: TexImage2D | Renderbuffer | undefined };
 
 export class Framebuffer extends VirtualFramebuffer implements IResource {
   public readonly id = generateUUID();
@@ -42,28 +44,39 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
 
   attach(
     attachmentPoint: Attachment,
-    texImage2D: TexImage2D,
-    target = texImage2D.target,
+    attachment: TexImage2D | Renderbuffer,
+    target: TextureTarget | undefined = undefined,
     level = 0
   ): void {
     const { gl } = this.context;
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
 
-    gl.framebufferTexture2D(
-      GL.FRAMEBUFFER,
-      attachmentPoint,
-      target,
-      texImage2D.glTexture,
-      level
-    );
-    this._attachments[attachmentPoint] = texImage2D;
-    this.size.copy(texImage2D.size);
+    if (attachment instanceof Renderbuffer) {
+      gl.framebufferRenderbuffer(
+        GL.FRAMEBUFFER,
+        attachmentPoint,
+        GL.RENDERBUFFER, // I copied this value from Three.js, but I am not sure it is correct?  But maybe?
+        attachment.glRenderbuffer
+      );
+    } else if (attachment instanceof TexImage2D) {
+      gl.framebufferTexture2D(
+        GL.FRAMEBUFFER,
+        attachmentPoint,
+        target ?? attachment.target,
+        attachment.glTexture,
+        level
+      );
+    } else {
+      throw new TypeError('Unknown attachment type');
+    }
+    this._attachments[attachmentPoint] = attachment;
+    this.size.copy(attachment.size);
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);
   }
 
-  getAttachment(attachmentPoint: Attachment): TexImage2D | undefined {
+  getAttachment(attachmentPoint: Attachment): TexImage2D | Renderbuffer | undefined {
     return this._attachments[attachmentPoint];
   }
 

@@ -23,6 +23,9 @@ uniform sampler2D backgroundTexture;
 
 uniform int debugOutputIndex;
 
+uniform int outputTransformFlags;
+uniform float exposure;
+
 out vec4 outputColor;
 
 #pragma include <microgeometry/tangentSpace>
@@ -39,7 +42,6 @@ out vec4 outputColor;
 #pragma include <color/tonemapping/acesfilmic>
 #pragma include <materials/alpha_mode>
 #pragma include <brdfs/transmission/transmission>
-
 
 #pragma include <materials/debugOutputs>
 #pragma include <materials/physicalDebugOutputs>
@@ -118,7 +120,7 @@ void main() {
 
   vec3 transmission_btdf = vec3(0.0);
 
-  if ( material.transmission > 0.0) {
+  if (material.transmission > 0.0) {
     vec3 worldViewDirection = mat4UntransformDirection(
       worldToView,
       viewViewDirection
@@ -456,10 +458,18 @@ void main() {
   vec3 emissive_brdf = material.emissive;
   outgoingRadiance += emissive_brdf;
 
-  vec3 tonemapped = tonemappingACESFilmic(outgoingRadiance);
+  vec3 tonemapped =
+    (outputTransformFlags & 0x1) != 0
+      ? tonemappingACESFilmic(outgoingRadiance)
+      : outgoingRadiance;
   DEBUG_OUTPUT(58, tonemapped);
-  vec3 sRGB = linearTosRGB(tonemapped);
-  outputColor.rgb = sRGB * material.alpha;
+  vec3 sRGB = 
+    (outputTransformFlags & 0x2) != 0 ? linearTosRGB(tonemapped) : tonemapped;
+
+  vec3 premultipliedAlpha = 
+    (outputTransformFlags & 0x4) != 0 ? (sRGB * material.alpha) : sRGB;
+
+  outputColor.rgb = premultipliedAlpha;
   outputColor.a = material.alpha;
 
 }

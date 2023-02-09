@@ -68,7 +68,7 @@ document.addEventListener('keydown', (event) => {
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(
-    'indet',
+    'index',
     vertexSource,
     fragmentSource
   );
@@ -85,7 +85,7 @@ async function init(): Promise<void> {
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -206,6 +206,8 @@ async function init(): Promise<void> {
   //canvasFramebuffer.clearState = new ClearState(Color3.White
 
   updateFramebuffers(canvasFramebuffer, renderCache);
+
+  renderCache.userUniforms.outputTransformFlags = 0x1 + 0x2 + 0x4;
 
   function animate(): void {
     requestAnimationFrame(animate);

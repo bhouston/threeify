@@ -19,7 +19,7 @@ import {
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
-import { Color3, floorPow2, Vec2 } from '@threeify/math';
+import { Color3 } from '@threeify/math';
 
 import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
@@ -38,14 +38,12 @@ export function updateFramebuffers(
   );
   opaqueFramebuffer.attach(Attachment.Depth, sharedDepthAttachment);
 
-  const pow2Size = new Vec2(floorPow2(size.x), floorPow2(size.y));
-  console.log('pow2Size', pow2Size);
   const backgroundFramebuffer = new Framebuffer(context);
   backgroundFramebuffer.attach(
     Attachment.Color0,
     makeColorAttachment(
       context,
-      pow2Size,
+      size,
       undefined,
       TextureFilter.Linear,
       TextureFilter.LinearMipmapLinear
@@ -86,7 +84,8 @@ export function renderScene(
   canvasFramebuffer.clear(BufferBit.All);
 
   const uniforms = {
-    debugOutputIndex: userUniforms.debugOutputIndex
+    debugOutputIndex: userUniforms.debugOutputIndex,
+    outputTransformFlags: userUniforms.outputTransformFlags
   };
 
   renderMeshes(
@@ -132,7 +131,8 @@ export function renderScene_Tranmission(
     renderCache,
     opaqueMeshBatches,
     {
-      debugOutputIndex: userUniforms.debugOutputIndex
+      debugOutputIndex: userUniforms.debugOutputIndex,
+      outputTransformFlags: userUniforms.outputTransformFlags
     },
     normalDepthTesting,
     overBlending,
@@ -162,7 +162,8 @@ export function renderScene_Tranmission(
 
     const blendUniforms = {
       backgroundTexture: backgroundTexImage2D,
-      debugOutputIndex: userUniforms.debugOutputIndex
+      debugOutputIndex: userUniforms.debugOutputIndex,
+      outputTransformFlags: userUniforms.outputTransformFlags
     };
     renderMeshes(
       opaqueFramebuffer,
@@ -187,7 +188,7 @@ export function renderScene_Tranmission(
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
   copyPass({
-    sourceTexImage2D: opaqueTexImage2D,
+    csourceTexImage2D: opaqueTexImage2D,
     targetFramebuffer: canvasFramebuffer,
     depthTestState: noDepthTesting,
     blendState: overBlending

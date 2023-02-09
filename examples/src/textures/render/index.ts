@@ -48,8 +48,8 @@ async function init(): Promise<void> {
   const framebufferSize = new Vec2(1024, 1024);
   const colorAttachment = makeColorAttachment(context, framebufferSize);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attach(Attachment.Color0, colorAttachment);
-  framebuffer.attach(
+  framebuffer.attachTexImage2D(Attachment.Color0, colorAttachment);
+  framebuffer.attachTexImage2D(
     Attachment.Depth,
     makeDepthAttachment(context, framebufferSize)
   );
