@@ -18,7 +18,7 @@ export class Float32ArrayImage extends ArrayImage<Float32Array> {
     height: number,
     pixelEncoding = PixelEncoding.Linear
   ) {
-    super(data, width, height, DataType.Float32, pixelEncoding);
+    super(data, width, height, DataType.Float, pixelEncoding);
   }
 }
 
@@ -39,6 +39,6 @@ export class Float16ArrayImage extends ArrayImage<Uint16Array> {
     height: number,
     pixelEncoding = PixelEncoding.Linear
   ) {
-    super(data, width, height, DataType.Float16, pixelEncoding);
+    super(data, width, height, DataType.HalfFloat, pixelEncoding);
   }
 }

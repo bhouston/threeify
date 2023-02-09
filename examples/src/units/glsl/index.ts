@@ -34,11 +34,11 @@ async function init(): Promise<void> {
 
   const framebufferSize = new Vec2(1024, 1);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attachTexImage2D(
+  framebuffer.attach(
     Attachment.Color0,
     makeColorAttachment(context, framebufferSize)
   );
-  framebuffer.attachTexImage2D(
+  framebuffer.attach(
     Attachment.Depth,
     makeDepthAttachment(context, framebufferSize)
   );

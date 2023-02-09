@@ -65,10 +65,10 @@ export * from './renderers/webgl/DepthTestState.js';
 export * from './renderers/webgl/GL.js';
 export * from './renderers/webgl/MaskState.js';
 export * from './renderers/webgl/Parameters.js';
-export * from './renderers/webgl/Renderbuffer.js';
+export * from './renderers/webgl/renderbuffers/Renderbuffer.js';
 export * from './renderers/webgl/RenderingContext.js';
 export * from './renderers/webgl/programs/ProgramVertexArray.js';
-
+export * from './renderers/webgl/textures/InternalFormat.js';
 export * from './renderers/webgl/textures/TextureBindings.js';
 
 export * from './renderers/webgl/shaders/Shader.js';

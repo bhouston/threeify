@@ -91,7 +91,7 @@ async function init(): Promise<void> {
     const now = Date.now();
 
     cubeFaceTargets.forEach((target, index) => {
-      framebuffer.attachTexImage2D(Attachment.Color0, cubeMap, target, 0);
+      framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
       patternUniforms.color = hslToColor3(
         new Vec3(index / 6 + now * 0.0001, 0.5, 0.5)
       );

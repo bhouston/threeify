@@ -10,20 +10,23 @@ import { Vec2 } from '@threeify/math';
 import { generateUUID } from '../../../core/generateUuid.js';
 import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
-import { Renderbuffer } from '../Renderbuffer.js';
+import { Renderbuffer } from '../renderbuffers/Renderbuffer.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
+import { TextureTarget } from '../textures/TextureTarget.js';
 import { Attachment } from './Attachment.js';
 import { VirtualFramebuffer } from './VirtualFramebuffer.js';
-import { TextureTarget } from '../textures/TextureTarget.js';
 
-export type AttachmentMap = { [point: number]: TexImage2D | Renderbuffer | undefined };
+export type AttachmentMap = {
+  [point: number]: TexImage2D | Renderbuffer | undefined;
+};
 
 export class Framebuffer extends VirtualFramebuffer implements IResource {
   public readonly id = generateUUID();
-  readonly glFramebuffer: WebGLFramebuffer;
-  readonly #size: Vec2 = new Vec2();
-  private _attachments: AttachmentMap = {};
+  public readonly glFramebuffer: WebGLFramebuffer;
+  public readonly size: Vec2 = new Vec2();
+  private readonly attachments: Map<number, TexImage2D | Renderbuffer> =
+    new Map();
 
   constructor(context: RenderingContext) {
     super(context);
@@ -52,38 +55,36 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
 
-    if (attachment instanceof Renderbuffer) {
+    if (attachment instanceof TexImage2D) {
+      const texImage2D = attachment as TexImage2D;
+      gl.framebufferTexture2D(
+        GL.FRAMEBUFFER,
+        attachmentPoint,
+        target ?? texImage2D.target,
+        texImage2D.glTexture,
+        level
+      );
+    } else if (attachment instanceof Renderbuffer) {
+      const renderbuffer = attachment as Renderbuffer;
       gl.framebufferRenderbuffer(
         GL.FRAMEBUFFER,
         attachmentPoint,
         GL.RENDERBUFFER, // I copied this value from Three.js, but I am not sure it is correct?  But maybe?
-        attachment.glRenderbuffer
+        renderbuffer.glRenderbuffer
       );
-    } else if (attachment instanceof TexImage2D) {
-      gl.framebufferTexture2D(
-        GL.FRAMEBUFFER,
-        attachmentPoint,
-        target ?? attachment.target,
-        attachment.glTexture,
-        level
-      );
-    } else {
-      throw new TypeError('Unknown attachment type');
     }
-    this._attachments[attachmentPoint] = attachment;
-    this.size.copy(attachment.size);
+
+    this.attachments.set(attachmentPoint, attachment);
+    this.size.copy(attachment.size); // TODO: What to do with conflicting sizes of attachments?
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);
   }
 
-  getAttachment(attachmentPoint: Attachment): TexImage2D | Renderbuffer | undefined {
-    return this._attachments[attachmentPoint];
+  getAttachment(
+    attachmentPoint: Attachment
+  ): TexImage2D | Renderbuffer | undefined {
+    return this.attachments.get(attachmentPoint);
   }
-
-  get size(): Vec2 {
-    return this.#size;
-  }
-
   dispose(): void {
     if (this.disposed) return;
 

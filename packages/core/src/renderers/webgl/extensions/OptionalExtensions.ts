@@ -25,6 +25,8 @@ export class OptionalExtensions {
   // OES_texture_half_float_linear: OES_texture_half_float_linear | null;
   WEBGL_debug_renderer_info: WEBGL_debug_renderer_info | null;
   WEBGL_debug_shaders: WEBGL_debug_shaders | null;
+  EXT_color_buffer_float: EXT_color_buffer_float | null;
+  EXT_color_buffer_half_float: EXT_color_buffer_half_float | null;
   // WEBGL_compressed_texture_astc: WEBGL_compressed_texture_astc | null;
   // WEBGL_compressed_texture_s3tc: WEBGL_compressed_texture_s3tc | null;
   // WEBGL_compressed_texture_s3tc_srgb: WEBGL_compressed_texture_s3tc_srgb | null;
@@ -36,6 +38,10 @@ export class OptionalExtensions {
         : null;
     this.EXT_texture_filter_anisotropic = gl.getExtension(
       'EXT_texture_filter_anisotropic'
+    );
+    this.EXT_color_buffer_float = gl.getExtension('EXT_color_buffer_float');
+    this.EXT_color_buffer_half_float = gl.getExtension(
+      'EXT_color_buffer_half_float'
     );
     this.KHR_parallel_shader_compile =
       gl.getExtension('KHR_parallel_shader_compile') !== null

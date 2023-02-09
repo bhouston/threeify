@@ -8,7 +8,7 @@
 import { Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/math';
 
 import { DataType } from '../renderers/webgl/textures/DataType.js';
-import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
+import { InternalFormat } from '../renderers/webgl/textures/InternalFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureTarget } from '../renderers/webgl/textures/TextureTarget.js';
 import { TextureSource, VirtualTexture } from './VirtualTexture.js';
@@ -19,7 +19,7 @@ export class CubeMapTexture extends VirtualTexture {
     level = 0,
     magFilter = TextureFilter.Linear,
     minFilter = TextureFilter.LinearMipmapLinear,
-    pixelFormat = PixelFormat.RGBA,
+    internalFormat = InternalFormat.RGBA8,
     dataType = DataType.UnsignedByte,
     generateMipmaps = true,
     anisotropicLevels = 1
@@ -28,7 +28,7 @@ export class CubeMapTexture extends VirtualTexture {
       level,
       magFilter,
       minFilter,
-      pixelFormat,
+      internalFormat,
       dataType,
       generateMipmaps,
       anisotropicLevels

@@ -69,7 +69,7 @@ async function init(): Promise<void> {
   const framebufferSize = new Vec2(1024, 1024);
   const depthAttachment = makeDepthAttachment(context, framebufferSize);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attachTexImage2D(Attachment.Depth, depthAttachment);
+  framebuffer.attach(Attachment.Depth, depthAttachment);
 
   const depthTestState = new DepthTestState(true, DepthTestFunc.LessOrEqual);
   const blendState = blendModeToBlendState(Blending.Over, true);

@@ -87,7 +87,7 @@ async function init(): Promise<void> {
   const framebuffer = new Framebuffer(context);
 
   cubeFaceTargets.forEach((target, index) => {
-    framebuffer.attachTexImage2D(
+    framebuffer.attach(
       Attachment.Color0,
       lambertianCubeMap,
       target,

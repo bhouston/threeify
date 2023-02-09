@@ -53,7 +53,7 @@ export function makeTexImage2DFromTexture(
   const texImage2D = new TexImage2D(
     context,
     texture instanceof CubeMapTexture ? texture.images : [texture.image],
-    texture.pixelFormat,
+    texture.internalFormat,
     texture.dataType,
     internalFormat,
     texture instanceof CubeMapTexture

@@ -4,6 +4,11 @@ import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType, sizeOfDataType } from '../textures/DataType.js';
 import {
+  InternalFormat,
+  internalFormatToDataType,
+  internalFormatToPixelFormat
+} from '../textures/InternalFormat.js';
+import {
   numPixelFormatComponents,
   PixelFormat
 } from '../textures/PixelFormat.js';
@@ -71,7 +76,7 @@ export function readPixelsFromFramebuffer(
 export function makeColorAttachment(
   context: RenderingContext,
   size: Vec2,
-  dataType: DataType | undefined = undefined,
+  internalFormat: InternalFormat = InternalFormat.RGBA8,
   magFilter: TextureFilter = TextureFilter.Linear,
   minFilter: TextureFilter = TextureFilter.Linear
 ): TexImage2D {
@@ -82,9 +87,9 @@ export function makeColorAttachment(
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.RGBA,
-    dataType ?? DataType.UnsignedByte,
-    PixelFormat.RGBA,
+    internalFormat,
+    internalFormatToDataType(internalFormat),
+    internalFormatToPixelFormat(internalFormat),
     TextureTarget.Texture2D,
     texParams
   );
@@ -107,10 +112,33 @@ export function makeDepthAttachment(
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.DepthComponent24, // In WebGL2 DEPTH_COMPONENT is not a valid internal format. Use DEPTH_COMPONENT16, DEPTH_COMPONENT24 or DEPTH_COMPONENT32F
+    InternalFormat.DepthComponent24, // In WebGL2 DEPTH_COMPONENT is not a valid internal format. Use DEPTH_COMPONENT16, DEPTH_COMPONENT24 or DEPTH_COMPONENT32F
     dataType,
     PixelFormat.DepthComponent,
     TextureTarget.Texture2D,
     texParams
+  );
+}
+
+export function biltFramebuffers(source: Framebuffer, dest: Framebuffer) {
+  const { context } = source;
+  const { gl } = context;
+
+  // After drawing to the multisampled renderbuffers
+  gl.bindFramebuffer(gl.READ_FRAMEBUFFER, source.glFramebuffer);
+  gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, dest.glFramebuffer);
+
+  gl.clearBufferfv(gl.COLOR, 0, [0, 0, 0, 1]);
+  gl.blitFramebuffer(
+    0,
+    0,
+    source.size.x,
+    source.size.y,
+    0,
+    0,
+    dest.size.x,
+    dest.size.y,
+    gl.COLOR_BUFFER_BIT,
+    gl.NEAREST
   );
 }

@@ -15,6 +15,7 @@ import {
   makeColorAttachment,
   makeDepthAttachment,
   renderBufferGeometry,
+  TexImage2D,
   TextureFilter,
   UniformValueMap,
   VirtualFramebuffer
@@ -140,7 +141,11 @@ export function renderScene_Tranmission(
   );
 
   const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
-  if (opaqueTexImage2D === undefined) throw new Error('No color attachment 1');
+  if (
+    opaqueTexImage2D === undefined ||
+    !(opaqueTexImage2D instanceof TexImage2D)
+  )
+    throw new Error('No color attachment 1');
 
   if (blendMeshBatches.length > 0) {
     backgroundFramebuffer.clearState = new ClearState(Color3.Black, 1);
@@ -149,7 +154,10 @@ export function renderScene_Tranmission(
     const backgroundTexImage2D = backgroundFramebuffer.getAttachment(
       Attachment.Color0
     );
-    if (backgroundTexImage2D === undefined)
+    if (
+      backgroundTexImage2D === undefined ||
+      !(backgroundTexImage2D instanceof TexImage2D)
+    )
       throw new Error('No color attachment 1');
 
     copyPass({
@@ -188,7 +196,7 @@ export function renderScene_Tranmission(
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
   copyPass({
-    csourceTexImage2D: opaqueTexImage2D,
+    sourceTexImage2D: opaqueTexImage2D,
     targetFramebuffer: canvasFramebuffer,
     depthTestState: noDepthTesting,
     blendState: overBlending

@@ -4,8 +4,10 @@
   "editor.formatOnPaste": true,
   "cSpell.words": [
     "barycoord",
+    "bilt",
     "clearcoat",
     "Equirectangular",
+    "Framebuffers",
     "glsl",
     "GLTF",
     "Halton",

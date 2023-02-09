@@ -15,8 +15,8 @@ export enum DataType {
   UnsignedShort = GL.UNSIGNED_SHORT,
   Int = GL.INT,
   UnsignedInt = GL.UNSIGNED_INT,
-  Float16 = GL.HALF_FLOAT,
-  Float32 = GL.FLOAT
+  HalfFloat = GL.HALF_FLOAT,
+  Float = GL.FLOAT
 }
 
 export function sizeOfDataType(dataType: DataType): number {
@@ -26,12 +26,12 @@ export function sizeOfDataType(dataType: DataType): number {
       return 1;
     case DataType.Short:
     case DataType.UnsignedShort:
-    case DataType.Float16:
+    case DataType.HalfFloat:
       return 2;
     case DataType.Int:
     case DataType.UnsignedInt:
-    case DataType.Float32:
-      return 5;
+    case DataType.Float:
+      return 4;
   }
   throw new Error(`unsupported data type: ${dataType}`);
 }

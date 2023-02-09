@@ -1,4 +1,6 @@
 import { GL } from '../GL.js';
+import { DataType } from './DataType.js';
+import { PixelFormat } from './PixelFormat.js';
 
 export enum InternalFormat {
   R8 = GL.R8,
@@ -42,4 +44,77 @@ export enum InternalFormat {
   RG32F = GL.RG32F,
   RGBA16F = GL.RGBA16F,
   RGBA32F = GL.RGBA32F
+}
+
+export function internalFormatToDataType(
+  internalFormat: InternalFormat
+): DataType {
+  switch (internalFormat) {
+    case InternalFormat.RGBA8:
+      return DataType.UnsignedByte;
+    case InternalFormat.RGBA16F:
+      return DataType.HalfFloat;
+    case InternalFormat.RGBA32F:
+      return DataType.Float;
+    case InternalFormat.DepthComponent24:
+      return DataType.UnsignedInt;
+    default:
+      throw new Error(`unsupported internalFormat: ${internalFormat}`);
+  }
+}
+
+export function internalFormatToPixelFormat(
+  internalFormat: InternalFormat
+): PixelFormat {
+  switch (internalFormat) {
+    case InternalFormat.R8:
+    case InternalFormat.R8I:
+    case InternalFormat.R8UI:
+    case InternalFormat.R16F:
+    case InternalFormat.R16I:
+    case InternalFormat.R16UI:
+    case InternalFormat.R32F:
+    case InternalFormat.R32I:
+    case InternalFormat.R32UI:
+      return PixelFormat.R;
+
+    case InternalFormat.RG8:
+    case InternalFormat.RG8I:
+    case InternalFormat.RG8UI:
+    case InternalFormat.RG16F:
+    case InternalFormat.RG16I:
+    case InternalFormat.RG16UI:
+    case InternalFormat.RG32F:
+    case InternalFormat.RG32I:
+    case InternalFormat.RG32UI:
+      return PixelFormat.RG;
+
+    case InternalFormat.RGB8:
+    case InternalFormat.RGB565:
+      return PixelFormat.RGB;
+
+    case InternalFormat.RGBA8:
+    case InternalFormat.RGBA8I:
+    case InternalFormat.RGBA8UI:
+    case InternalFormat.RGBA16F:
+    case InternalFormat.RGBA16I:
+    case InternalFormat.RGBA16UI:
+    case InternalFormat.RGBA32F:
+    case InternalFormat.RGBA32I:
+    case InternalFormat.RGBA32UI:
+    case InternalFormat.SRGB8_ALPHA8:
+    case InternalFormat.RGB10_A2:
+    case InternalFormat.RGB10_A2UI:
+    case InternalFormat.RGBA4:
+    case InternalFormat.RGB5_A1:
+      return PixelFormat.RGBA;
+
+    case InternalFormat.DepthComponent16:
+    case InternalFormat.DepthComponent24:
+    case InternalFormat.DepthComponentT32F:
+      return PixelFormat.DepthComponent;
+
+    default:
+      throw new Error(`unsupported internalFormat: ${internalFormat}`);
+  }
 }

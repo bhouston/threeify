@@ -1,10 +1,10 @@
 import { Vec2 } from '@threeify/math';
 
-import { generateUUID } from '../../core/generateUuid.js';
-import { ClearState } from './ClearState.js';
-import { IResource } from './IResource.js';
-import { RenderingContext } from './RenderingContext.js';
-import { InternalFormat } from './textures/InternalFormat.js';
+import { generateUUID } from '../../../core/generateUuid.js';
+import { ClearState } from '../ClearState.js';
+import { IResource } from '../IResource.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { InternalFormat } from '../textures/InternalFormat.js';
 
 export class Renderbuffer implements IResource {
   public readonly id = generateUUID();
@@ -26,6 +26,8 @@ export class Renderbuffer implements IResource {
         throw new Error('createRenderbuffer failed');
       }
 
+      gl.bindRenderbuffer(gl.RENDERBUFFER, glRenderbuffer);
+
       if (samples > 1) {
         gl.renderbufferStorageMultisample(
           gl.RENDERBUFFER,
@@ -42,6 +44,8 @@ export class Renderbuffer implements IResource {
           this.size.y
         );
       }
+
+      gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 
       this.glRenderbuffer = glRenderbuffer;
     }

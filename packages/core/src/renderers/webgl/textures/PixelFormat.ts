@@ -9,6 +9,8 @@ import { GL } from '../GL.js';
 
 // from https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/texImage2D
 export enum PixelFormat {
+  R = GL.RED,
+  RG = GL.RG,
   RGBA = GL.RGBA,
   RGB = GL.RGB,
   LuminanceAlpha = GL.LUMINANCE_ALPHA,
