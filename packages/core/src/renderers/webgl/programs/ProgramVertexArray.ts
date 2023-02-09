@@ -39,8 +39,7 @@ export class ProgramVertexArray implements IResource {
 
     // and make it the one we're currently working with
     gl.bindVertexArray(this.glVertexArrayObject);
-    console.log('creating verttex array object', bufferGeometry, program);
-    program.setAttributeBuffers(bufferGeometry, true);
+    program.setAttributeBuffers(bufferGeometry);
 
     gl.bindVertexArray(null);
 

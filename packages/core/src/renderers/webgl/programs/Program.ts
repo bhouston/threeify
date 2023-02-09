@@ -220,20 +220,10 @@ export class Program implements IResource {
   }
 
   setAttributeBuffers(vao: ProgramVertexArray): this;
-  setAttributeBuffers(
-    bufferGeometry: BufferGeometry,
-    creatingVertexArray?: boolean
-  ): this;
-  setAttributeBuffers(
-    buffers: ProgramVertexArray | BufferGeometry,
-    creatingVertexArray = false
-  ): this {
+  setAttributeBuffers(bufferGeometry: BufferGeometry): this;
+  setAttributeBuffers(buffers: ProgramVertexArray | BufferGeometry): this {
     const { gl } = this.context;
     if (buffers instanceof BufferGeometry) {
-      if (!creatingVertexArray) {
-        console.log('unbinding vertex array object');
-        gl.bindVertexArray(null);
-      }
       const bufferGeometry = buffers as BufferGeometry;
       for (const name in this.attributes) {
         const attribute = this.attributes[name];
@@ -245,14 +235,12 @@ export class Program implements IResource {
         }
       }
       if (bufferGeometry.indices !== undefined) {
-        console.log('assigning index buffer');
         gl.bindBuffer(
           bufferGeometry.indices.buffer.target,
           bufferGeometry.indices.buffer.glBuffer
         );
       }
     } else if (buffers instanceof ProgramVertexArray) {
-      console.log('binding vertex array object');
       const vao = buffers as ProgramVertexArray;
       gl.bindVertexArray(vao.glVertexArrayObject);
     } else {

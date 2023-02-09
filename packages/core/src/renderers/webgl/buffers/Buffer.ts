@@ -28,16 +28,10 @@ export class Buffer implements IResource {
       this.glBuffer = glBuffer;
     }
 
-    // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
-    // console.log(`gl.bindBuffer(${this.target}, ${this.glBuffer})`);
-    gl.bindBuffer(this.target, this.glBuffer);
-
-    // load data
-    gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
-    this.byteLength = arrayBuffer.byteLength;
-    gl.bufferSubData(this.target, 0, arrayBuffer);
-
     resources.register(this);
+
+    // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+    this.write(arrayBuffer);
   }
 
   write(arrayBuffer: ArrayBuffer): void {
