@@ -39,11 +39,11 @@ import {
   GLTFFormat,
   KhronosModel
 } from '../../utilities/khronosModels';
-import { GPUTimerPanel } from '../../utilities/Stats';
+import { GPUTimerPanel, Stats } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
-//const stats = new Stats();
+const stats = new Stats();
 
 const maxDebugOutputs = 62;
 let debugOutputIndex = 0;
@@ -68,7 +68,7 @@ document.addEventListener('keydown', (event) => {
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(
-    'indet',
+    'index',
     vertexSource,
     fragmentSource
   );
@@ -81,25 +81,28 @@ async function init(): Promise<void> {
    );*/
   //console.timeEnd('fetchHDR');
   const lightIntensity = 1;
-  const domeLightIntensity = 1.5;
+  const domeLightIntensity = 4.5;
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
-  const context = new RenderingContext(canvasHtmlElement, { antialias: false });
+  const context = new RenderingContext(canvasHtmlElement, {
+    antialias: false,
+    depth: false
+  });
   const { canvasFramebuffer } = context;
-  canvasFramebuffer.devicePixelRatio = 1;
+  canvasFramebuffer.devicePixelRatio = 1.5;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
-  //stats.addPanel(gpuRender);
+  stats.addPanel(gpuRender);
 
   //console.time('makeTexImage2DFromEquirectangularTexture');
   const cubeMap = makeTexImage2DFromEquirectangularTexture(
@@ -207,30 +210,32 @@ async function init(): Promise<void> {
 
   updateFramebuffers(canvasFramebuffer, renderCache);
 
+  renderCache.userUniforms.outputTransformFlags = 0x1 + 0x2 + 0x4;
+
   function animate(): void {
     requestAnimationFrame(animate);
 
-    //stats.time(() => {
-    canvasFramebuffer.clear();
+    stats.time(() => {
+      canvasFramebuffer.clear();
 
-    renderCache.userUniforms.debugOutputIndex = debugOutputIndex;
+      renderCache.userUniforms.debugOutputIndex = debugOutputIndex;
 
-    orbitController.update();
-    orbitNode.rotation = orbitController.rotation;
-    camera.zoom = orbitController.zoom;
-    camera.dirty();
-    orbitNode.dirty();
+      orbitController.update();
+      orbitNode.rotation = orbitController.rotation;
+      camera.zoom = orbitController.zoom;
+      camera.dirty();
+      orbitNode.dirty();
 
-    updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
-    updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
-    gpuRender.time(() => {
-      if (transmissionMode) {
-        renderScene_Tranmission(canvasFramebuffer, renderCache);
-      } else {
-        renderScene(canvasFramebuffer, renderCache);
-      }
+      updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
+      updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+      gpuRender.time(() => {
+        if (transmissionMode) {
+          renderScene_Tranmission(canvasFramebuffer, renderCache);
+        } else {
+          renderScene(canvasFramebuffer, renderCache);
+        }
+      });
     });
-    //});
   }
 
   animate();

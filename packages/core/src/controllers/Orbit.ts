@@ -1,10 +1,4 @@
-import {
-  Euler3,
-  euler3ToQuat,
-  Quat,
-  Vec2,
-  vec2Subtract
-} from '@threeify/math';
+import { Euler3, euler3ToQuat, Quat, Vec2, vec2Subtract } from '@threeify/math';
 
 import { IDisposable } from '../core/types.js';
 
@@ -40,17 +34,19 @@ export class Orbit implements IDisposable {
     this.onMouseWheelHandler = this.onMouseWheel.bind(this);
 
     this.domElement.style.touchAction = 'none'; // disable touch scroll
-    this.domElement.addEventListener(
-      'pointerdown',
-      this.onPointerDownHandler,
-      false
-    );
+    this.domElement.addEventListener('pointerdown', this.onPointerDownHandler, {
+      passive: true
+    });
     this.domElement.addEventListener(
       'pointercancel',
       this.onPointerCancelHandler,
-      false
+      {
+        passive: true
+      }
     );
-    this.domElement.addEventListener('wheel', this.onMouseWheelHandler, false);
+    this.domElement.addEventListener('wheel', this.onMouseWheelHandler, {
+      passive: true
+    });
   }
 
   dirty(): void {

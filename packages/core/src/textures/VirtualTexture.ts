@@ -3,6 +3,10 @@ import { Vec2 } from '@threeify/math';
 import { generateUUID } from '../core/generateUuid.js';
 import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
+import {
+  InternalFormat,
+  internalFormatToPixelFormat
+} from '../renderers/webgl/textures/InternalFormat.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import {
@@ -10,7 +14,6 @@ import {
   Float32ArrayImage,
   Uint8ArrayImage
 } from './ArrayBufferImage.js';
-
 export type TextureSource =
   | Float32ArrayImage
   | Uint8ArrayImage
@@ -38,16 +41,19 @@ export class VirtualTexture
   public disposed = false;
   public name = '';
   public size: Vec2 = new Vec2();
+  public pixelFormat: PixelFormat;
 
   constructor(
     public level = 0,
     public magFilter = TextureFilter.Linear,
     public minFilter = TextureFilter.Linear,
-    public pixelFormat = PixelFormat.RGBA,
+    public internalFormat = InternalFormat.RGBA8,
     public dataType = DataType.UnsignedByte,
     public generateMipmaps = true,
     public anisotropicLevels = 1
-  ) {}
+  ) {
+    this.pixelFormat = internalFormatToPixelFormat(internalFormat);
+  }
 
   get mipCount(): number {
     if (!this.generateMipmaps) {

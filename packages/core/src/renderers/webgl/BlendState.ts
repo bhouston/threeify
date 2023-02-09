@@ -93,6 +93,10 @@ export class BlendState
   implements ICloneable<BlendState>, IEquatable<BlendState>
 {
   static readonly None = new BlendState();
+  static readonly PremultipliedOver = blendModeToBlendState(
+    Blending.Over,
+    true
+  );
 
   // TODO: Should be initialized to default WebGL states
   constructor(

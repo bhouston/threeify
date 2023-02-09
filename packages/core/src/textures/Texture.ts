@@ -6,10 +6,12 @@
 //
 
 import { DataType } from '../renderers/webgl/textures/DataType.js';
-import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
+import {
+  InternalFormat,
+  internalFormatToDataType
+} from '../renderers/webgl/textures/InternalFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
-import { ArrayImage } from './ArrayBufferImage.js';
 import {
   getTextureSourceSize,
   TextureSource,
@@ -23,10 +25,8 @@ export class Texture extends VirtualTexture {
     level = 0,
     magFilter = TextureFilter.Linear,
     minFilter = TextureFilter.LinearMipmapLinear,
-    pixelFormat = PixelFormat.RGBA,
-    dataType = image instanceof ArrayImage
-      ? image.dataType
-      : DataType.UnsignedByte,
+    internalFormat = InternalFormat.RGBA8,
+    dataType = internalFormatToDataType(internalFormat),
     generateMipmaps = true,
     anisotropicLevels = 1
   ) {
@@ -34,7 +34,7 @@ export class Texture extends VirtualTexture {
       level,
       magFilter,
       minFilter,
-      pixelFormat,
+      internalFormat,
       dataType,
       generateMipmaps,
       anisotropicLevels
@@ -51,7 +51,7 @@ export function makeTextureFromVideoElement(video: HTMLVideoElement): Texture {
     0,
     TextureFilter.Linear,
     TextureFilter.Linear,
-    PixelFormat.RGB,
+    InternalFormat.RGB8,
     DataType.UnsignedByte,
     false,
     0

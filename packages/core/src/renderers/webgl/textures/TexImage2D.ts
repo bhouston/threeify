@@ -15,6 +15,7 @@ import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType } from './DataType.js';
+import { InternalFormat } from './InternalFormat.js';
 import { PixelFormat } from './PixelFormat.js';
 import { TexParameters } from './TexParameters.js';
 import { TextureTarget } from './TextureTarget.js';
@@ -29,7 +30,7 @@ export class TexImage2D implements IResource {
   constructor(
     public context: RenderingContext,
     public images: TextureSource[],
-    public internalFormat = PixelFormat.RGBA,
+    public internalFormat = InternalFormat.RGBA8,
     public dataType = DataType.UnsignedByte,
     public pixelFormat = PixelFormat.RGBA,
     public target = TextureTarget.Texture2D,

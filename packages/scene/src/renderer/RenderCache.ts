@@ -54,8 +54,9 @@ export class RenderCache {
   public maskMeshBatches: MeshBatch[] = [];
 
   // render targets
+  public multisampleFramebuffer?: Framebuffer;
   public opaqueFramebuffer?: Framebuffer;
-  public backgroundFramebuffer?: Framebuffer;
+  public transmissionFramebuffer?: Framebuffer;
 
   public userUniforms: UniformValueMap = {};
 }

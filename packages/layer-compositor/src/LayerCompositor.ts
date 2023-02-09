@@ -6,6 +6,7 @@ import {
   fetchImage,
   Framebuffer,
   IDisposable,
+  InternalFormat,
   isImageBitmapSupported,
   isiOS,
   isMacOS,
@@ -100,7 +101,7 @@ export function makeColorMipmapAttachment(
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.RGBA,
+    InternalFormat.RGBA8,
     dataType ?? DataType.UnsignedByte,
     PixelFormat.RGBA,
     TextureTarget.Texture2D,

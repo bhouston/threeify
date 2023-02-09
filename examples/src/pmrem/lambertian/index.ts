@@ -87,7 +87,12 @@ async function init(): Promise<void> {
   const framebuffer = new Framebuffer(context);
 
   cubeFaceTargets.forEach((target, index) => {
-    framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
+    framebuffer.attach(
+      Attachment.Color0,
+      lambertianCubeMap,
+      target,
+      0
+    );
     samplerUniforms.faceIndex = index;
 
     renderBufferGeometry({

@@ -53,7 +53,7 @@ export function makeTexImage2DFromTexture(
   const texImage2D = new TexImage2D(
     context,
     texture instanceof CubeMapTexture ? texture.images : [texture.image],
-    texture.pixelFormat,
+    texture.internalFormat,
     texture.dataType,
     internalFormat,
     texture instanceof CubeMapTexture
@@ -145,22 +145,17 @@ export function makeTexImage2DFromEquirectangularTexture(
 
 let copyPassProgram: Program | undefined;
 let copyPassBufferGeometry: BufferGeometry | undefined;
+const copyPassDepthTestState = new DepthTestState(false);
+const copyPassBlendState = BlendState.None;
+const copyPassCullingState = new CullingState(false);
 
 export interface ICopyPassProps {
   sourceTexImage2D: TexImage2D;
   targetFramebuffer: VirtualFramebuffer;
-  depthTestState?: DepthTestState;
-  blendState?: BlendState;
-  cullingState?: CullingState;
 }
+
 export function copyPass(props: ICopyPassProps): void {
-  const {
-    sourceTexImage2D,
-    targetFramebuffer,
-    depthTestState,
-    blendState,
-    cullingState
-  } = props;
+  const { sourceTexImage2D, targetFramebuffer } = props;
   const { context } = sourceTexImage2D;
 
   // TODO: cache geometry + bufferGeometry.
@@ -188,8 +183,8 @@ export function copyPass(props: ICopyPassProps): void {
     program: copyPassProgram,
     uniforms,
     bufferGeometry: copyPassBufferGeometry,
-    depthTestState: depthTestState,
-    blendState: blendState,
-    cullingState: cullingState
+    depthTestState: copyPassDepthTestState,
+    blendState: copyPassBlendState,
+    cullingState: copyPassCullingState
   });
 }

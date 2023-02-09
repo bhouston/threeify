@@ -4,6 +4,11 @@ import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType, sizeOfDataType } from '../textures/DataType.js';
 import {
+  InternalFormat,
+  internalFormatToDataType,
+  internalFormatToPixelFormat
+} from '../textures/InternalFormat.js';
+import {
   numPixelFormatComponents,
   PixelFormat
 } from '../textures/PixelFormat.js';
@@ -29,42 +34,49 @@ export function readPixelsFromFramebuffer(
     throw new Error(`can not read non-complete Framebuffer: ${status}`);
   }
 
-  const texImage2D = framebuffer.getAttachment(Attachment.Color0);
-  if (texImage2D === undefined) {
-    throw new Error('no attachment on Color0');
-  }
+  const attachment = framebuffer.getAttachment(Attachment.Color0);
+  if (attachment === undefined) throw new Error('no attachment on Color0');
 
-  const pixelByteLength =
-    sizeOfDataType(texImage2D.dataType) *
-    numPixelFormatComponents(texImage2D.pixelFormat) *
-    texImage2D.size.x *
-    texImage2D.size.y;
-  if (pixelBuffer === undefined) {
-    pixelBuffer = new Uint8Array(pixelByteLength);
-  }
-  if (pixelBuffer.byteLength < pixelByteLength) {
-    throw new Error(
-      `pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`
+  if (attachment instanceof TexImage2D) {
+    const texImage2D = attachment as TexImage2D;
+    if (texImage2D === undefined) {
+      throw new Error('no attachment on Color0');
+    }
+
+    const pixelByteLength =
+      sizeOfDataType(texImage2D.dataType) *
+      numPixelFormatComponents(texImage2D.pixelFormat) *
+      texImage2D.size.x *
+      texImage2D.size.y;
+    if (pixelBuffer === undefined) {
+      pixelBuffer = new Uint8Array(pixelByteLength);
+    }
+    if (pixelBuffer.byteLength < pixelByteLength) {
+      throw new Error(
+        `pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`
+      );
+    }
+
+    gl.readPixels(
+      0,
+      0,
+      texImage2D.size.x,
+      texImage2D.size.y,
+      texImage2D.pixelFormat,
+      texImage2D.dataType,
+      pixelBuffer
     );
+
+    return pixelBuffer;
+  } else {
+    throw new TypeError('not implemented');
   }
-
-  gl.readPixels(
-    0,
-    0,
-    texImage2D.size.x,
-    texImage2D.size.y,
-    texImage2D.pixelFormat,
-    texImage2D.dataType,
-    pixelBuffer
-  );
-
-  return pixelBuffer;
 }
 
 export function makeColorAttachment(
   context: RenderingContext,
   size: Vec2,
-  dataType: DataType | undefined = undefined,
+  internalFormat: InternalFormat = InternalFormat.RGBA8,
   magFilter: TextureFilter = TextureFilter.Linear,
   minFilter: TextureFilter = TextureFilter.Linear
 ): TexImage2D {
@@ -75,9 +87,9 @@ export function makeColorAttachment(
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.RGBA,
-    dataType ?? DataType.UnsignedByte,
-    PixelFormat.RGBA,
+    internalFormat,
+    internalFormatToDataType(internalFormat),
+    internalFormatToPixelFormat(internalFormat),
     TextureTarget.Texture2D,
     texParams
   );
@@ -100,10 +112,33 @@ export function makeDepthAttachment(
   return new TexImage2D(
     context,
     [size],
-    PixelFormat.DepthComponent24, // In WebGL2 DEPTH_COMPONENT is not a valid internal format. Use DEPTH_COMPONENT16, DEPTH_COMPONENT24 or DEPTH_COMPONENT32F
+    InternalFormat.DepthComponent24, // In WebGL2 DEPTH_COMPONENT is not a valid internal format. Use DEPTH_COMPONENT16, DEPTH_COMPONENT24 or DEPTH_COMPONENT32F
     dataType,
     PixelFormat.DepthComponent,
     TextureTarget.Texture2D,
     texParams
+  );
+}
+
+export function biltFramebuffers(source: Framebuffer, dest: Framebuffer) {
+  const { context } = source;
+  const { gl } = context;
+
+  // After drawing to the multisampled renderbuffers
+  gl.bindFramebuffer(gl.READ_FRAMEBUFFER, source.glFramebuffer);
+  gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, dest.glFramebuffer);
+
+  gl.clearBufferfv(gl.COLOR, 0, [0, 0, 0, 1]);
+  gl.blitFramebuffer(
+    0,
+    0,
+    source.size.x,
+    source.size.y,
+    0,
+    0,
+    dest.size.x,
+    dest.size.y,
+    gl.COLOR_BUFFER_BIT,
+    gl.NEAREST
   );
 }
