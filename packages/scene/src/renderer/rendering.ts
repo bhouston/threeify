@@ -110,7 +110,8 @@ export function renderScene(
     sourceTexImage2D: opaqueTexImage2D,
     targetFramebuffer: canvasFramebuffer,
     depthTestState: noDepthTesting,
-    blendState: overBlending
+    blendState: overBlending,
+    cullingState: noCulling
   });
 }
 

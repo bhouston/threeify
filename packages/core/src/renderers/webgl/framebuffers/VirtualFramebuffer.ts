@@ -11,6 +11,8 @@ import { IDisposable } from '../../../core/types.js';
 import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
 import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { ComponentType } from '../buffers/ComponentType.js';
+import { PrimitiveType } from '../buffers/PrimitiveType.js';
 import { ClearState } from '../ClearState.js';
 import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
@@ -120,6 +122,11 @@ export function renderBufferGeometry(props: {
   // draw
   const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
+    console.log(
+      PrimitiveType[bufferGeometry.primitive],
+      ComponentType[bufferGeometry.indices.componentType],
+      bufferGeometry.count
+    );
     gl.drawElements(
       bufferGeometry.primitive,
       bufferGeometry.count,

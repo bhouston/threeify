@@ -9,6 +9,7 @@ export class Buffer implements IResource {
   public disposed = false;
   public version = 0;
   public glBuffer: WebGLBuffer;
+  public byteLength = -1;
 
   constructor(
     public context: RenderingContext,
@@ -33,6 +34,7 @@ export class Buffer implements IResource {
 
     // load data
     gl.bufferData(this.target, arrayBuffer.byteLength, this.usage);
+    this.byteLength = arrayBuffer.byteLength;
     gl.bufferSubData(this.target, 0, arrayBuffer);
 
     resources.register(this);
@@ -46,6 +48,7 @@ export class Buffer implements IResource {
 
     // load data
     gl.bufferData(this.target, arrayBuffer, this.usage);
+    this.byteLength = arrayBuffer.byteLength;
   }
 
   writeSubData(

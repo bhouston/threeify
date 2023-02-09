@@ -6,6 +6,7 @@
 //
 
 import { BufferAccessor } from '../buffers/BufferAccessor.js';
+import { ComponentType } from '../buffers/ComponentType.js';
 import { GL } from '../GL.js';
 import { Program } from './Program.js';
 
@@ -40,6 +41,12 @@ export class ProgramAttribute {
 
   setBuffer(bufferAccessor: BufferAccessor): this {
     const { gl } = this.program.context;
+    console.log(
+      'enablingVertexBuffer',
+      this.glLocation,
+      bufferAccessor.componentsPerVertex,
+      ComponentType[bufferAccessor.componentType]
+    );
     gl.enableVertexAttribArray(this.glLocation);
     // Bind the position buffer.
     gl.bindBuffer(GL.ARRAY_BUFFER, bufferAccessor.buffer.glBuffer);
@@ -53,6 +60,13 @@ export class ProgramAttribute {
       bufferAccessor.vertexStride,
       bufferAccessor.byteOffset
     );
+    return this;
+  }
+
+  disable(): this {
+    const { gl } = this.program.context;
+    console.log('disablingVertexBuffer', this.glLocation);
+    gl.disableVertexAttribArray(this.glLocation);
     return this;
   }
 }
