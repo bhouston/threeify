@@ -85,15 +85,18 @@ async function init(): Promise<void> {
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
-  const context = new RenderingContext(canvasHtmlElement, { antialias: false });
+  const context = new RenderingContext(canvasHtmlElement, {
+    antialias: false,
+    depth: false
+  });
   const { canvasFramebuffer } = context;
-  canvasFramebuffer.devicePixelRatio = 1;
+  canvasFramebuffer.devicePixelRatio = 1.5;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 

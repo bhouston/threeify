@@ -20,6 +20,7 @@ import {
 } from '@threeify/core';
 import { Color3 } from '@threeify/math';
 
+import { combinePass } from './combinePass/combinePass';
 import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
 
@@ -145,7 +146,7 @@ export function renderScene_Tranmission(
   )
     throw new Error('Framebuffers not initialized');
 
-  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
   multisampleFramebuffer.clear(BufferBit.All);
 
   renderMeshes(
@@ -154,7 +155,7 @@ export function renderScene_Tranmission(
     opaqueMeshBatches,
     {
       debugOutputIndex: userUniforms.debugOutputIndex,
-      outputTransformFlags: userUniforms.outputTransformFlags
+      outputTransformFlags: 0x0
     },
     DepthTestState.Normal,
     BlendState.PremultipliedOver,
@@ -175,10 +176,10 @@ export function renderScene_Tranmission(
     const blendUniforms = {
       backgroundTexture: opaqueTexImage2D,
       debugOutputIndex: userUniforms.debugOutputIndex,
-      outputTransformFlags: userUniforms.outputTransformFlags
+      outputTransformFlags: 0x0
     };
 
-    multisampleFramebuffer.clearState = new ClearState(Color3.Black, 1);
+    multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
     multisampleFramebuffer.clear(BufferBit.Color); // only clear color, leave depth untouched
     renderMeshes(
       multisampleFramebuffer,
@@ -210,12 +211,19 @@ export function renderScene_Tranmission(
   )
     throw new Error('No color attachment 1');
 
-  canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
+  canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
   canvasFramebuffer.clear(BufferBit.All);
+  combinePass({
+    opaqueTexImage2D,
+    transmissionTexImage2D,
+    targetFramebuffer: canvasFramebuffer,
+    exposure: 1
+  });
+  /*
   copyPass({
     sourceTexImage2D: opaqueTexImage2D,
     targetFramebuffer: canvasFramebuffer
-  });
+  });*/
 }
 
 export function renderMeshes(

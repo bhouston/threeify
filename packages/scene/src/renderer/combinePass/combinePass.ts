@@ -45,8 +45,8 @@ export function combinePass(props: ICombinePassProps): void {
   if (program === undefined) {
     const material = new ShaderMaterial(
       'combinePass',
-      fragmentSource,
-      vertexSource
+      vertexSource,
+      fragmentSource
     );
     program = makeProgramFromShaderMaterial(context, material);
   }
