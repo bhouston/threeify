@@ -24,10 +24,10 @@ void main() {
   punctualLight.type = LightType_Point;
   punctualLight.position = pointLightViewPosition;
   punctualLight.intensity = pointLightIntensity;
-  punctualLight.direction = vec3(0.0);
+  punctualLight.direction = vec3(0.);
   punctualLight.range = pointLightRange;
-  punctualLight.innerConeCos = 0.0;
-  punctualLight.outerConeCos = 0.0;
+  punctualLight.innerConeCos = 0.;
+  punctualLight.outerConeCos = 0.;
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -43,6 +43,6 @@ void main() {
     directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

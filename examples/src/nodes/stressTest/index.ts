@@ -1,6 +1,7 @@
 import {
   fetchImage,
   icosahedronGeometry,
+  makeProgramFromShaderMaterial,
   RenderingContext,
   ShaderMaterial,
   Texture
@@ -10,7 +11,7 @@ import {
   PerspectiveCamera,
   PhysicalMaterial,
   PointLight,
-  renderScene,
+  renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   TextureAccessor,
@@ -26,7 +27,11 @@ import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const shaderMaterial = new ShaderMaterial(
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
   );
@@ -36,6 +41,7 @@ async function init(): Promise<void> {
   );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const sceneTreeCache = new SceneTreeCache();
 
@@ -63,8 +69,8 @@ async function init(): Promise<void> {
   }
 
   const directionalLight = new PointLight({
-    translation: new Vec3(0, 0, 0),
-    color: new Color3(1, 1, 1),
+    translation: Vec3.Zero,
+    color: Color3.White,
     intensity: 10
   });
   root.children.push(directionalLight);
@@ -85,7 +91,7 @@ async function init(): Promise<void> {
     root,
     camera,
     () => {
-      return shaderMaterial;
+      return program;
     },
     sceneTreeCache
   );
@@ -95,7 +101,7 @@ async function init(): Promise<void> {
     stats.time(() => {
       canvasFramebuffer.clear();
 
-      renderScene(canvasFramebuffer, renderCache);
+      renderScene_Tranmission(canvasFramebuffer, renderCache);
     });
   }
 

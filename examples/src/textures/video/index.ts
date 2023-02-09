@@ -38,7 +38,7 @@ async function init(): Promise<void> {
       uvView.set(u, uv);
     }
   }
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const clickToPlayTexture = new Texture(
     await fetchImage('/assets/textures/videos/ClickToPlay.png')
   );
@@ -62,7 +62,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    viewLightPosition: new Vec3(0, 0, 0),
+    viewLightPosition: Vec3.Zero,
     map: clickToPlayMap
   };
 
@@ -89,7 +89,7 @@ async function init(): Promise<void> {
   );
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
+  const whiteClearState = new ClearState(Color3.White, 1);
 
   function animate(): void {
     const now = Date.now();

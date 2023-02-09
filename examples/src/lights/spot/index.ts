@@ -23,7 +23,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = planeGeometry(3, 3);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')
   );
@@ -49,9 +49,9 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    spotLightViewPosition: new Vec3(0, 0, 0),
+    spotLightViewPosition: Vec3.Zero,
     spotLightViewDirection: new Vec3(0, 0, -1),
-    spotLightColor: color3MultiplyByScalar(new Color3(1, 1, 1), 10),
+    spotLightColor: color3MultiplyByScalar(Color3.White, 10),
     spotLightRange: 15,
     spotLightInnerCos: 1,
     spotLightOuterCos: Math.cos(Math.PI * 0.5),

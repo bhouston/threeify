@@ -87,14 +87,16 @@ export class Program implements IResource {
     gl.attachShader(this.glProgram, this.fragmentShader.glShader);
 
     // link the program.
+    //console.time('linkProgram, ' + this.name);
     gl.linkProgram(this.glProgram);
+    //console.timeEnd('linkProgram, ' + this.name);
 
     // NOTE: purposely not checking here if it compiled.
     resources.register(this);
   }
 
   // TODO: Convert this to a promise with a setTimeout(0) until the completion status is true
-  validate(): boolean {
+  isReady(): boolean {
     if (this.#validated || this.disposed) {
       return true;
     }
@@ -104,21 +106,20 @@ export class Program implements IResource {
 
     const { gl, resources } = this.context;
     // Check if it linked.
-    /* const { glxo } = this.context;
+    const { glxo } = this.context;
     const { KHR_parallel_shader_compile } = glxo;
     if (KHR_parallel_shader_compile !== null) {
-      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      if (
-        !gl.getProgramParameter(
-          this.glProgram,
-          KHR_parallel_shader_compile.COMPLETION_STATUS_KHR
-        )
-      ) {
+      const isDone = gl.getProgramParameter(
+        this.glProgram,
+        KHR_parallel_shader_compile.COMPLETION_STATUS_KHR
+      );
+      if (!isDone) {
         return false;
       }
-    }*/
+    }
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    //console.time('validateProgram, ' + this.name);
     if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {
       this.vertexShader.validate();
       this.fragmentShader.validate();
@@ -131,6 +132,7 @@ export class Program implements IResource {
       this.disposed = true;
       throw new Error(`program filed to link: ${infoLog}`);
     }
+    //console.timeEnd('validateProgram, ' + this.name);
     this.#validated = true;
     return true;
   }
@@ -228,6 +230,8 @@ export class Program implements IResource {
         const bufferAccessor = bufferGeometry.bufferAccessors[name];
         if (attribute !== undefined && bufferAccessor !== undefined) {
           attribute.setBuffer(bufferAccessor);
+        } else {
+          attribute.disable();
         }
       }
       if (bufferGeometry.indices !== undefined) {
@@ -267,8 +271,8 @@ export function makeProgramFromShaderMaterial(
     context,
     vertexShaderCode: shaderMaterial.vertexShaderCode,
     fragmentShaderCode: shaderMaterial.fragmentShaderCode,
-    shaderDefines
+    shaderDefines,
+    name: shaderMaterial.name
   });
-  program.name = shaderMaterial.name;
   return program;
 }

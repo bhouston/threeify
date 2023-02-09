@@ -3,7 +3,7 @@
 //
 
 //Sheen implementation-------------------------------------------------------------------------------------
-// See  https://github.com/sebavan/glTF/tree/KHR_materials_sheen/extensions/2.0/Khronos/KHR_materials_sheen
+// See  https://github.com/sebavan/glTF/tree/KHR_materials_sheen/extensions/2./Khronos/KHR_materials_sheen
 
 #pragma once
 #pragma include <math/math>
@@ -21,7 +21,7 @@ vec3 BRDF_Sheen_Ashikhmin(
 ) {
   vec3 halfDirection = normalize(lightDirection + viewDirection);
 
-  sheenRoughness = clamp(sheenRoughness, 0.07, 1.0);
+  sheenRoughness = clamp(sheenRoughness, 0.07, 1.);
 
   float NdotL = saturate(dot(normal, lightDirection));
   float NdotV = saturate(dot(normal, viewDirection));

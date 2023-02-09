@@ -16,7 +16,7 @@ export class SceneNode implements IIdentifiable, IVersionable {
   public name = '';
   public parent: SceneNode | undefined = undefined;
   public readonly children: SceneNode[] = [];
-  public translation = new Vec3(0, 0, 0);
+  public translation = Vec3.Zero;
   public rotation = new Quat(0, 0, 0, 1);
   public scale = new Vec3(1, 1, 1);
   public visible = true;

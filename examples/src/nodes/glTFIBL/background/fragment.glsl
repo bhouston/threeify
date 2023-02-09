@@ -21,11 +21,10 @@ void main() {
     v_homogeneousVertexPosition).xyz;
   vec3 viewDirection = normalize(viewPosition);
 
- 
-  vec3 mapColor = vec3(0.0);
+  vec3 mapColor = vec3(0.);
   mapColor += rgbeToLinear(texture(cubeMap, -viewDirection));
 
-  outputColor.rgb = linearTosRGB( tonemappingACESFilmic( mapColor ) );
-  outputColor.a = 1.0;
+  outputColor.rgb = linearTosRGB(tonemappingACESFilmic(mapColor));
+  outputColor.a = 1.;
 
 }

@@ -77,6 +77,6 @@ void main() {
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

@@ -49,7 +49,7 @@ describe('Box3 Functions', () => {
     expect(
       box3Equals(
         box3Scale(unit, new Vec3(2, 2, 2)),
-        new Box3(new Vec3(0, 0, 0), new Vec3(2, 2, 2))
+        new Box3(Vec3.Zero, new Vec3(2, 2, 2))
       )
     ).toBe(true);
   });
@@ -66,7 +66,7 @@ describe('Box3 Functions', () => {
     expect(
       box3Equals(
         box3ExpandByPoint3(unit, new Vec3(2, 2, 2)),
-        new Box3(new Vec3(0, 0, 0), new Vec3(2, 2, 2))
+        new Box3(Vec3.Zero, new Vec3(2, 2, 2))
       )
     ).toBe(true);
   });
@@ -129,7 +129,7 @@ describe('Box3 Functions', () => {
     expect(
       box3Equals(
         box3ExpandByPoint3(unit, new Vec3(2, 2, 2)),
-        new Box3(new Vec3(0, 0, 0), new Vec3(2, 2, 2))
+        new Box3(Vec3.Zero, new Vec3(2, 2, 2))
       )
     ).toBe(true);
   });

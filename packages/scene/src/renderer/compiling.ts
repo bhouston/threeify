@@ -2,12 +2,11 @@ import {
   AlphaMode,
   CubeMapTexture,
   makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
   makeTexImage2DFromTexture,
+  Program,
   ProgramUniform,
   ProgramVertexArray,
   RenderingContext,
-  ShaderMaterial,
   Texture,
   UniformBufferMap,
   UniformValueMap,
@@ -21,6 +20,7 @@ import {
 } from '@threeify/vector-math';
 
 import { MaterialParameters } from '../materials/MaterialParameters';
+import { PhysicalMaterial } from '../materials/PhysicalMaterial';
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { DomeLight } from '../scene/lights/DomeLight';
@@ -64,7 +64,7 @@ export function updateRenderCache(
   context: RenderingContext,
   rootNode: SceneNode,
   activeCamera: CameraNode | undefined,
-  shaderResolver: (shaderName: string) => ShaderMaterial,
+  shaderResolver: (shaderName: string) => Program,
   sceneTreeCache: SceneTreeCache,
   renderCache: RenderCache = new RenderCache()
 ) {
@@ -144,7 +144,7 @@ function flattenMaterialParameters(
 function meshToSceneCache(
   context: RenderingContext,
   mesh: MeshNode,
-  shaderResolver: (shaderName: string) => ShaderMaterial,
+  shaderResolver: (shaderName: string) => Program,
   renderCache: RenderCache
 ) {
   const {
@@ -171,9 +171,7 @@ function meshToSceneCache(
   // compile shader program
   if (!shaderNameToProgram.has(material.shaderName)) {
     // get shader material
-    const shaderMaterial = shaderResolver(material.shaderName);
-    shaderMaterial.name = material.shaderName;
-    const program = makeProgramFromShaderMaterial(context, shaderMaterial);
+    const program = shaderResolver(material.shaderName);
     shaderNameToProgram.set(material.shaderName, program);
   }
 
@@ -218,7 +216,7 @@ function updateLightUniforms(
 ) {
   const lightWorldPosition = mat4TransformVec3(
     light.localToWorldMatrix,
-    new Vec3(0, 0, 0)
+    Vec3.Zero
   );
   const lightIntensity = color3MultiplyByScalar(light.color, light.intensity);
 
@@ -289,8 +287,7 @@ function createMeshBatches(renderCache: RenderCache) {
     programGeometryToProgramVertexArray,
     materialIdToMaterialUniformBuffers,
     opaqueMeshBatches,
-    blendMeshBatches,
-    maskMeshBatches
+    blendMeshBatches
   } = renderCache;
 
   for (const node of breathFirstNodes) {
@@ -304,7 +301,7 @@ function createMeshBatches(renderCache: RenderCache) {
         throw new Error('Buffer Geometry not found');
 
       // get shader program
-      const material = mesh.material;
+      const material = mesh.material as PhysicalMaterial;
       const program = shaderNameToProgram.get(material.shaderName);
       if (program === undefined) throw new Error('Program not found');
 
@@ -370,23 +367,13 @@ function createMeshBatches(renderCache: RenderCache) {
         uniformValueMaps,
         uniformBufferMap
       );
-      switch (material.alphaMode) {
-        case AlphaMode.Opaque: {
-          opaqueMeshBatches.push(meshBatch);
-
-          break;
-        }
-        case AlphaMode.Blend: {
-          blendMeshBatches.push(meshBatch);
-
-          break;
-        }
-        case AlphaMode.Mask: {
-          maskMeshBatches.push(meshBatch);
-
-          break;
-        }
-        // No default
+      if (
+        material.alphaMode === AlphaMode.Blend ||
+        material.transmissionFactor > 0
+      ) {
+        blendMeshBatches.push(meshBatch);
+      } else {
+        opaqueMeshBatches.push(meshBatch);
       }
     }
   }

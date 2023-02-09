@@ -28,7 +28,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
   const normalsTexture = new Texture(
     await fetchImage('/assets/textures/normalMap.png')
@@ -55,8 +55,8 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 30),
+    pointLightViewPosition: Vec3.Zero,
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 30),
     pointLightRange: 12,
 
     // materials

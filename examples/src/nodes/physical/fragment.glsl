@@ -1,6 +1,6 @@
 precision highp float;
 
-#define NUM_UV_CHANNELS 1
+#define NUM_UV_CHANNELS (1)
 
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
@@ -24,10 +24,10 @@ void main() {
   vec2 uvs[NUM_UV_CHANNELS];
   uvs[0] = v_uv0;
 
-  PhysicalMaterial material = readPhysicalMaterialFromUniforms( uvs );
+  PhysicalMaterial material = readPhysicalMaterialFromUniforms(uvs);
 
   vec3 dielectricSpecularF0 =
-    min(pow2((ior - 1.0) / (ior + 1.0)), 1.0) *
+    min(pow2((ior - 1.) / (ior + 1.)), 1.) *
     material.specularColor *
     material.specularFactor;
   vec3 dielectricSpecularF90 = vec3(material.specularFactor);
@@ -77,7 +77,7 @@ void main() {
         viewDirection,
         directLight.direction,
         vec3(0.04) * material.clearcoatTint * material.clearcoatFactor,
-        vec3(1.0) * material.clearcoatFactor,
+        vec3(1.) * material.clearcoatFactor,
         material.clearcoatRoughness
       );
     outgoingRadiance +=
@@ -91,14 +91,12 @@ void main() {
         dielectricSpecularF90,
         material.specularRoughness
       );
-     vec3 c_diffuse =
-      directLight.radiance *
-      dotNL *
-      BRDF_Diffuse_Lambert(material.albedo);
-    outgoingRadiance += mix( c_diffuse, vec3(0.), material.metallic );
+    vec3 c_diffuse =
+      directLight.radiance * dotNL * BRDF_Diffuse_Lambert(material.albedo);
+    outgoingRadiance += mix(c_diffuse, vec3(0.), material.metallic);
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

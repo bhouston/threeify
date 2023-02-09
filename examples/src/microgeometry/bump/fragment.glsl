@@ -24,10 +24,10 @@ out vec4 outputColor;
 
 void main() {
   vec3 albedo = sRGBToLinear(texture(albedoMap, v_uv0).rgb);
-  vec3 specular = vec3(1.0);
+  vec3 specular = vec3(1.);
   float specularRoughness = texture(specularRoughnessMap, v_uv0).r;
   vec3 specularF0 = specularIntensityToF0(specular);
-  vec3 specularF90 = vec3(1.0);
+  vec3 specularF90 = vec3(1.);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -43,7 +43,7 @@ void main() {
     tangentToView[2],
     bumpMap,
     v_uv0,
-    4.0
+    4.
   );
   normal = tangentToView[2];
 
@@ -73,6 +73,6 @@ void main() {
     directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

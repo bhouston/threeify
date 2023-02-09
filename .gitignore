@@ -19,6 +19,5 @@ bundle.terserjs.zip
 www
 output.txt
 docs
-.gitignore
 .DS_Store
 *.tsbuildinfo

@@ -9,7 +9,7 @@ import { Color3, Vec3 } from '@threeify/vector-math';
 
 export class LightParameters {
   public iblMapTexture?: TexImage2D = undefined;
-  public iblMapIntensity: Color3 = new Color3(1, 1, 1);
+  public iblMapIntensity: Color3 = Color3.White;
   public iblMapMaxLod = 9;
   public numPunctualLights = 0;
   public punctualLightType: number[] = [];

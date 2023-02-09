@@ -3,37 +3,37 @@
 
 void testEquivalency(inout TestSuite suite, int testId, float value) {
   vec2 packed2 = unitIntervalToVec2(value);
-  packed2.x = float(int(packed2.x * 255.0)) / 255.0;
-  packed2.y = float(int(packed2.y * 255.0)) / 255.0;
+  packed2.x = float(int(packed2.x * 255.)) / 255.;
+  packed2.y = float(int(packed2.y * 255.)) / 255.;
   float value2 = vec2ToUnitInterval(packed2);
-  assert(suite, testId + 2, eqAbs(value, value2, 1.0 / (255.0 * 255.0)));
+  assert(suite, testId + 2, eqAbs(value, value2, 1. / (255. * 255.)));
 
   vec3 packed3 = unitIntervalToVec3(value);
-  packed3.x = float(int(packed3.x * 255.0)) / 255.0;
-  packed3.y = float(int(packed3.y * 255.0)) / 255.0;
-  packed3.z = float(int(packed3.z * 255.0)) / 255.0;
+  packed3.x = float(int(packed3.x * 255.)) / 255.;
+  packed3.y = float(int(packed3.y * 255.)) / 255.;
+  packed3.z = float(int(packed3.z * 255.)) / 255.;
   float value3 = vec3ToUnitInterval(packed3);
   assert(
     suite,
     testId + 3,
-    eqAbs(value, value3, 1.0 / (255.0 * 255.0 * 255.0))
+    eqAbs(value, value3, 1. / (255. * 255. * 255.))
   );
 
   vec4 packed4 = unitIntervalToVec4(value);
-  packed4.x = float(int(packed4.x * 255.0)) / 255.0;
-  packed4.y = float(int(packed4.y * 255.0)) / 255.0;
-  packed4.z = float(int(packed4.z * 255.0)) / 255.0;
-  packed4.w = float(int(packed4.w * 255.0)) / 255.0;
+  packed4.x = float(int(packed4.x * 255.)) / 255.;
+  packed4.y = float(int(packed4.y * 255.)) / 255.;
+  packed4.z = float(int(packed4.z * 255.)) / 255.;
+  packed4.w = float(int(packed4.w * 255.)) / 255.;
   float value4 = vec4ToUnitInterval(packed4);
   assert(
     suite,
     testId + 4,
-    eqAbs(value, value4, 1.0 / (255.0 * 255.0 * 255.0 * 255.0))
+    eqAbs(value, value4, 1. / (255. * 255. * 255. * 255.))
   );
 }
 
 void tests(inout TestSuite suite) {
-  testEquivalency(suite, 10, 0.0);
+  testEquivalency(suite, 10, 0.);
   testEquivalency(suite, 20, 0.000001);
   testEquivalency(suite, 30, 0.000002);
   testEquivalency(suite, 40, 0.000003);
@@ -64,6 +64,6 @@ void tests(inout TestSuite suite) {
   testEquivalency(suite, 290, 0.3);
   testEquivalency(suite, 300, 0.321);
   testEquivalency(suite, 310, 0.6421);
-  testEquivalency(suite, 320, 1.0);
+  testEquivalency(suite, 320, 1.);
 
 }

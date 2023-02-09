@@ -7,7 +7,7 @@ export interface ILight extends ISceneNodeProps {
   intensity?: number;
 }
 export class Light extends SceneNode {
-  public color = new Color3(1, 1, 1);
+  public color = Color3.White;
   public intensity = 1;
 
   constructor(props: ILight) {

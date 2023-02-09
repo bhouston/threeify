@@ -34,7 +34,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')
   );
@@ -72,7 +72,7 @@ async function init(): Promise<void> {
     map: uvTestTexture
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const whiteClearState = new ClearState(new Color3(0, 0, 0), 0);
+  const whiteClearState = new ClearState(Color3.Black, 0);
 
   const depthTestState = new DepthTestState(false);
   const blendState = blendModeToBlendState(Blending.Over, true);

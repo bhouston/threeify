@@ -24,7 +24,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = convertToInterleavedGeometry(icosahedronGeometry(0.75, 2));
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const cubeTexture = new CubeMapTexture(
     await fetchCubeHDRs('/assets/textures/cube/pisa/*.hdr')
   );

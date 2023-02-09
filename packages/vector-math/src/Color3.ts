@@ -3,6 +3,33 @@ import { hashFloat3 } from './utils/hash';
 export class Color3 {
   static readonly NUM_COMPONENTS = 3;
 
+  // using these functions instead of static properties to avoid
+  // issues where people modify the constants.
+  static get Black() {
+    return new Color3(0, 0, 0);
+  }
+  static get White() {
+    return new Color3(1, 1, 1);
+  }
+  static get Red() {
+    return new Color3(1, 0, 0);
+  }
+  static get Green() {
+    return new Color3(0, 1, 0);
+  }
+  static get Blue() {
+    return new Color3(0, 0, 1);
+  }
+  static get Yellow() {
+    return new Color3(1, 1, 0);
+  }
+  static get Magenta() {
+    return new Color3(1, 0, 1);
+  }
+  static get Cyan() {
+    return new Color3(0, 1, 1);
+  }
+
   constructor(public r = 0, public g = 0, public b = 0) {}
 
   getHashCode(): number {

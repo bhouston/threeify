@@ -129,6 +129,11 @@ export function renderBufferGeometry(props: {
   } else {
     gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
   }
+
+  // unbind VAO as leaving it bind will allow others to modify its state!
+  if (programVertexArray !== undefined) {
+    gl.bindVertexArray(null);
+  }
 }
 
 function setProgramUniforms(

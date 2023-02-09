@@ -1,6 +1,7 @@
 import {
   fetchImage,
   icosahedronGeometry,
+  makeProgramFromShaderMaterial,
   RenderingContext,
   ShaderMaterial,
   Texture
@@ -10,7 +11,7 @@ import {
   PerspectiveCamera,
   PhysicalMaterial,
   PointLight,
-  renderScene as renderScene,
+  renderScene_Tranmission as renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   TextureAccessor,
@@ -23,7 +24,11 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const shaderMaterial = new ShaderMaterial(
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
   );
@@ -33,14 +38,15 @@ async function init(): Promise<void> {
   );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const geometry = icosahedronGeometry(0.75, 5, true);
   const root = new SceneNode({ name: 'root' });
   const sphereMesh = new MeshNode({
-    translation: new Vec3(0, 0, 0),
+    translation: Vec3.Zero,
     geometry,
     material: new PhysicalMaterial({
-      albedoFactor: new Color3(1, 1, 1),
+      albedoFactor: Color3.White,
       albedoAlphaTextureAccessor: new TextureAccessor(texture),
       specularRoughnessFactor: 0,
       metallicFactor: 1
@@ -49,7 +55,7 @@ async function init(): Promise<void> {
   root.children.push(sphereMesh);
   const pointLight = new PointLight({
     translation: new Vec3(2, 0, 2),
-    color: new Color3(1, 1, 1),
+    color: Color3.White,
     intensity: 10,
     range: 20
   });
@@ -72,7 +78,7 @@ async function init(): Promise<void> {
     root,
     camera,
     () => {
-      return shaderMaterial;
+      return program;
     },
     sceneTreeCache
   );
@@ -80,7 +86,7 @@ async function init(): Promise<void> {
   function animate(): void {
     canvasFramebuffer.clear();
 
-    renderScene(canvasFramebuffer, renderCache);
+    renderScene_Tranmission(canvasFramebuffer, renderCache);
 
     requestAnimationFrame(animate);
   }

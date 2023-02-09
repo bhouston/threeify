@@ -25,7 +25,11 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = passGeometry();
-  const passMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const passMaterial = new ShaderMaterial(
+    'index',
+    vertexSource,
+    fragmentSource
+  );
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement

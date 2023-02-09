@@ -23,13 +23,13 @@ void main() {
   v_uv0 = uv0;
 
   float displacementAmount =
-    texture(displacementMap, vec2(1.0) - uv0).x * displacementScale;
+    texture(displacementMap, vec2(1.) - uv0).x * displacementScale;
   v_viewSurfacePosition = displacePosition(
     v_viewSurfacePosition,
     v_viewSurfaceNormal,
     displacementAmount
   );
 
-  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
+  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.);
 
 }

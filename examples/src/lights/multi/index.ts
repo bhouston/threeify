@@ -26,7 +26,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/moon_2k.jpg')
   );
@@ -54,11 +54,7 @@ async function init(): Promise<void> {
     // lights
     numPunctualLights: 3,
     punctualLightType: [0, 1, 2],
-    punctualLightViewPosition: [
-      new Vec3(-1, 0, 0),
-      new Vec3(0, 0, 0),
-      new Vec3()
-    ],
+    punctualLightViewPosition: [new Vec3(-1, 0, 0), Vec3.Zero, new Vec3()],
     punctualLightViewDirection: [
       new Vec3(),
       new Vec3(0, 0, -1),

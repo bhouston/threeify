@@ -12,7 +12,7 @@ import { depthFirstVisitor } from '../scene/Visitors';
 
 export class PunctualLightUniforms {
   domeCubeMap?: CubeMapTexture | TexImage2D;
-  domeIntensity = new Color3(1, 1, 1);
+  domeIntensity = Color3.White;
 
   numLights = 0;
   lightTypes: number[] = [];

@@ -29,7 +29,7 @@ vec3 perturbNormalFromBumpMap(
 
   float fDet = dot(dPdx, R1);
 
-  fDet *= float(gl_FrontFacing) * 2.0 - 1.0;
+  fDet *= float(gl_FrontFacing) * 2. - 1.;
 
   vec3 vGrad = sign(fDet) * (gradBump.x * R1 + gradBump.y * R2);
 

@@ -7,12 +7,23 @@ import {
   CubeMapTexture
 } from '../../../textures/CubeTexture.js';
 import { Texture } from '../../../textures/Texture.js';
-import { makeBufferGeometryFromGeometry } from '../buffers/BufferGeometry.js';
+import { BlendState } from '../BlendState.js';
+import {
+  BufferGeometry,
+  makeBufferGeometryFromGeometry
+} from '../buffers/BufferGeometry.js';
+import { CullingState } from '../CullingState.js';
+import { DepthTestState } from '../DepthTestState.js';
 import { Attachment } from '../framebuffers/Attachment.js';
 import { Framebuffer } from '../framebuffers/Framebuffer.js';
-import { renderBufferGeometry } from '../framebuffers/VirtualFramebuffer.js';
-import { makeProgramFromShaderMaterial } from '../programs/Program.js';
+import {
+  renderBufferGeometry,
+  VirtualFramebuffer
+} from '../framebuffers/VirtualFramebuffer.js';
+import { makeProgramFromShaderMaterial, Program } from '../programs/Program.js';
 import { RenderingContext } from '../RenderingContext.js';
+import copyFragmentSource from './copy/fragment.glsl';
+import copyVertexSource from './copy/vertex.glsl';
 import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { PixelFormat } from './PixelFormat.js';
@@ -21,12 +32,12 @@ import { TexParameters } from './TexParameters.js';
 import { TextureFilter } from './TextureFilter.js';
 import { TextureTarget } from './TextureTarget.js';
 import { TextureWrap } from './TextureWrap.js';
-
 export function makeTexImage2DFromTexture(
   context: RenderingContext,
   texture: Texture | CubeMapTexture,
   internalFormat: PixelFormat = PixelFormat.RGBA
 ): TexImage2D {
+  //console.time('makeTexImage2DFromTexture ' + texture.name);
   const params = new TexParameters();
   params.anisotropyLevels = texture.anisotropicLevels;
   params.generateMipmaps = texture.generateMipmaps;
@@ -51,6 +62,8 @@ export function makeTexImage2DFromTexture(
     params
   );
   texImage2D.version = texture.version;
+  //console.timeEnd('makeTexImage2DFromTexture ' + texture.name);
+
   return texImage2D;
 }
 
@@ -79,6 +92,7 @@ export function makeTexImage2DFromEquirectangularTexture(
   const cubeFaceGeometry = passGeometry();
 
   const cubeFaceMaterial = new ShaderMaterial(
+    'latLongToCubeMap',
     cubeFaceVertexSource,
     cubeFaceFragmentSource
   );
@@ -98,6 +112,8 @@ export function makeTexImage2DFromEquirectangularTexture(
     faceIndex: 0
   };
 
+  const cullingState = new CullingState(false);
+
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
@@ -105,7 +121,8 @@ export function makeTexImage2DFromEquirectangularTexture(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry
+      bufferGeometry: cubeFaceBufferGeometry,
+      cullingState
     });
   });
 
@@ -124,4 +141,55 @@ export function makeTexImage2DFromEquirectangularTexture(
   cubeMap.version = latLongTexture.version;
 
   return cubeMap;
+}
+
+let copyPassProgram: Program | undefined;
+let copyPassBufferGeometry: BufferGeometry | undefined;
+
+export interface ICopyPassProps {
+  sourceTexImage2D: TexImage2D;
+  targetFramebuffer: VirtualFramebuffer;
+  depthTestState?: DepthTestState;
+  blendState?: BlendState;
+  cullingState?: CullingState;
+}
+export function copyPass(props: ICopyPassProps): void {
+  const {
+    sourceTexImage2D,
+    targetFramebuffer,
+    depthTestState,
+    blendState,
+    cullingState
+  } = props;
+  const { context } = sourceTexImage2D;
+
+  // TODO: cache geometry + bufferGeometry.
+  if (copyPassBufferGeometry === undefined) {
+    const geometry = passGeometry();
+    copyPassBufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  }
+
+  // TODO: cache material + program.
+  if (copyPassProgram === undefined) {
+    const material = new ShaderMaterial(
+      'copyPass',
+      copyVertexSource,
+      copyFragmentSource
+    );
+    copyPassProgram = makeProgramFromShaderMaterial(context, material);
+  }
+
+  const uniforms = {
+    map: sourceTexImage2D
+  };
+
+  renderBufferGeometry({
+    framebuffer: targetFramebuffer,
+    program: copyPassProgram,
+    uniforms,
+    bufferGeometry: copyPassBufferGeometry,
+    depthTestState: depthTestState,
+    blendState: blendState,
+    cullingState: cullingState
+  });
 }

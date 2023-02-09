@@ -38,7 +38,7 @@ async function init(): Promise<void> {
       translation3ToMat4(new Vec3(0, -172, -4))
     )
   );
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const displacementTexture = new Texture(
     await fetchImage('/assets/models/ninjaHead/displacement.jpg')
   );
@@ -71,8 +71,8 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 40),
+    pointLightViewPosition: Vec3.Zero,
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 40),
     pointLightRange: 12,
 
     // materials

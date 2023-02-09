@@ -1,6 +1,7 @@
 import {
   Buffer,
   BufferGeometry,
+  Framebuffer,
   Program,
   ProgramVertexArray,
   TexImage2D,
@@ -51,4 +52,10 @@ export class RenderCache {
   public opaqueMeshBatches: MeshBatch[] = [];
   public blendMeshBatches: MeshBatch[] = [];
   public maskMeshBatches: MeshBatch[] = [];
+
+  // render targets
+  public opaqueFramebuffer?: Framebuffer;
+  public backgroundFramebuffer?: Framebuffer;
+
+  public userUniforms: UniformValueMap = {};
 }

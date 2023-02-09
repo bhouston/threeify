@@ -1,9 +1,14 @@
-import { Orbit, RenderingContext, ShaderMaterial } from '@threeify/core';
+import {
+  makeProgramFromShaderMaterial,
+  Orbit,
+  RenderingContext,
+  ShaderMaterial
+} from '@threeify/core';
 import {
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
-  renderScene,
+  renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   subTreeStats,
@@ -30,13 +35,18 @@ import vertexSource from './vertex.glsl';
 //const stats = new Stats();
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(vertexSource, fragmentSource);
+  const shaderMaterial = new ShaderMaterial(
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
   ) as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement);
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const orbitController = new Orbit(canvasHtmlElement);
   orbitController.zoom = 1.2;
@@ -46,18 +56,18 @@ async function init(): Promise<void> {
   const sheenChairMode = false;
 
   const root = new SceneNode({ name: 'root' });
-  console.time('glTFToSceneNode');
+  //console.time('glTFToSceneNode');
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
       sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
       GLTFFormat.glTF
     )
   );
-  console.timeEnd('glTFToSceneNode');
+  //console.timeEnd('glTFToSceneNode');
 
-  console.time('updateNodeTree');
+  //console.time('updateNodeTree');
   updateNodeTree(glTFModel, sceneTreeCache);
-  console.timeEnd('updateNodeTree');
+  //console.timeEnd('updateNodeTree');
 
   const glTFBoundingBox = glTFModel.subTreeBoundingBox;
   glTFModel.translation = vec3Negate(box3Center(glTFBoundingBox));
@@ -102,7 +112,7 @@ async function init(): Promise<void> {
     verticalFov: 25,
     near: 0.1,
     far: 1000,
-    translation: new Vec3(0, 0, 0)
+    translation: Vec3.Zero
   });
   root.children.push(camera);
 
@@ -112,20 +122,19 @@ async function init(): Promise<void> {
 
   console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
-  console.time('updateRenderCache');
+  //console.time('updateRenderCache');
   const renderCache = updateRenderCache(
     context,
     root,
     camera,
     () => {
-      return shaderMaterial;
+      return program;
     },
     sceneTreeCache
   );
-  console.timeEnd('updateRenderCache');
+  //console.timeEnd('updateRenderCache');
 
-  canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
-  //canvasFramebuffer.clearState = new ClearState(new Color3(1, 1, 1));
+  //canvasFramebuffer.clearState = new ClearState(Color3.White);
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -141,7 +150,7 @@ async function init(): Promise<void> {
 
     updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
     updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
-    renderScene(canvasFramebuffer, renderCache);
+    renderScene_Tranmission(canvasFramebuffer, renderCache);
     //});
   }
 

@@ -17,7 +17,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = planeGeometry(1, 1, 1, 1);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const colors = [
     new Color4(1, 0, 0, 1),
     new Color4(0, 1, 0, 1),

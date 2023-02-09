@@ -17,6 +17,7 @@
     "Nullary",
     "reserialization",
     "reserialized",
+    "RGBE",
     "Slerp",
     "threeify",
     "threekit"
@@ -24,7 +25,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
   "[glsl]": {
-    "editor.defaultFormatter": "raczzalan.webgl-glsl-editor"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": ["source.formatDocument"]
   },
   "files.exclude": {
    }

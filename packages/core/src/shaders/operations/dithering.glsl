@@ -7,12 +7,12 @@ vec3 dithering(vec3 color) {
   float grid_position = rand(gl_FragCoord.xy);
 
   //Shift the individual colors differently, thus making it even harder to see the dithering pattern
-  vec3 dither_shift_RGB = vec3(0.25 / 255.0, -0.25 / 255.0, 0.25 / 255.0);
+  vec3 dither_shift_RGB = vec3(0.25 / 255., -0.25 / 255., 0.25 / 255.);
 
   //modify shift acording to grid position.
   dither_shift_RGB = mix(
-    2.0 * dither_shift_RGB,
-    -2.0 * dither_shift_RGB,
+    2. * dither_shift_RGB,
+    -2. * dither_shift_RGB,
     grid_position
   );
 

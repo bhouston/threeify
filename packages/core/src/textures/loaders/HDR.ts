@@ -11,8 +11,7 @@ import {
   normalizedByteToFloat32s
 } from '@threeify/vector-math';
 
-import { DataType } from '../../renderers/webgl/textures/DataType.js';
-import { ArrayBufferImage } from '../ArrayBufferImage.js';
+import { Float16ArrayImage, Uint8ArrayImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';
 
 class ReadBuffer {
@@ -20,9 +19,9 @@ class ReadBuffer {
 }
 export async function fetchCubeHDRs(
   urlPattern: string
-): Promise<ArrayBufferImage[]> {
+): Promise<Uint8ArrayImage[]> {
   const cubeMapFaces = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
-  const fetchPromises: Promise<ArrayBufferImage>[] = [];
+  const fetchPromises: Promise<Uint8ArrayImage>[] = [];
   cubeMapFaces.forEach((face) => {
     fetchPromises.push(fetchHDR(urlPattern.replace('*', face)));
   });
@@ -31,23 +30,22 @@ export async function fetchCubeHDRs(
 
 // TODO: This doesn't work!
 export function rgbeToFloat16(
-  arrayBufferImage: ArrayBufferImage
-): ArrayBufferImage {
+  arrayBufferImage: Uint8ArrayImage
+): Float16ArrayImage {
   const float32Array = normalizedByteToFloat32s(
     arrayBufferImage.data as Uint8Array
   );
   float32RGBEToFloat32Linear(float32Array, float32Array);
-  const result = new ArrayBufferImage(
+  const result = new Float16ArrayImage(
     float32sToFloat16s(float32Array),
     arrayBufferImage.width,
     arrayBufferImage.height,
-    DataType.Float16,
     PixelEncoding.Linear
   );
   console.log('hdr image', result);
   return result;
 }
-export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
+export async function fetchHDR(url: string): Promise<Uint8ArrayImage> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
@@ -57,7 +55,7 @@ export async function fetchHDR(url: string): Promise<ArrayBufferImage> {
   return parseHDR(await response.arrayBuffer());
 }
 
-export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
+export function parseHDR(arrayBuffer: ArrayBuffer): Uint8ArrayImage {
   const readBuffer = new ReadBuffer(new Uint8Array(arrayBuffer), 0);
   const header = readHeader(readBuffer);
   const pixelData = readRLEPixelData(
@@ -66,11 +64,10 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ArrayBufferImage {
     header.height
   );
 
-  return new ArrayBufferImage(
+  return new Uint8ArrayImage(
     pixelData,
     header.width,
     header.height,
-    DataType.UnsignedByte,
     PixelEncoding.RGBE
   );
 }

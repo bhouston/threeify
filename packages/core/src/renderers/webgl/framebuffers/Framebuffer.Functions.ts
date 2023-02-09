@@ -64,12 +64,14 @@ export function readPixelsFromFramebuffer(
 export function makeColorAttachment(
   context: RenderingContext,
   size: Vec2,
-  dataType: DataType | undefined = undefined
+  dataType: DataType | undefined = undefined,
+  magFilter: TextureFilter = TextureFilter.Linear,
+  minFilter: TextureFilter = TextureFilter.Linear
 ): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = false;
-  texParams.magFilter = TextureFilter.Linear;
-  texParams.minFilter = TextureFilter.Linear;
+  texParams.magFilter = magFilter;
+  texParams.minFilter = minFilter;
   return new TexImage2D(
     context,
     [size],

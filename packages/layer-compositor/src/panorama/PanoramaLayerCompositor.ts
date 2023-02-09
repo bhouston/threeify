@@ -52,7 +52,7 @@ export class PanoramaLayerCompositor extends LayerCompositor {
     this.#sphereGeometry = makeBufferGeometryFromGeometry(this.context, sphere);
     this.#sphereProgram = makeProgramFromShaderMaterial(
       this.context,
-      new ShaderMaterial(vertex, fragment)
+      new ShaderMaterial('panoramicLayerCompositor', vertex, fragment)
     );
   }
 
@@ -71,7 +71,7 @@ export class PanoramaLayerCompositor extends LayerCompositor {
     const canvasSize = canvasFramebuffer.size;
     const canvasAspectRatio = canvasSize.x / canvasSize.y;
 
-    canvasFramebuffer.clearState = new ClearState(new Color3(0, 0, 0), 0);
+    canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
     canvasFramebuffer.clear();
 
     let verticalFov = this.fov / 2;

@@ -27,7 +27,7 @@ geometry.attributes.color = makeUint8Attribute(
   true
 );
 
-const material = new ShaderMaterial(vertexSource, fragmentSource);
+const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
 const context = new RenderingContext(
   document.getElementById('framebuffer') as HTMLCanvasElement

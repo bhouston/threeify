@@ -33,7 +33,7 @@ async function init(): Promise<void> {
       scale3ToMat4(new Vec3(10, 10, 10))
     )
   );
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
@@ -55,8 +55,8 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    pointLightViewPosition: new Vec3(0, 0, 0),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 30),
+    pointLightViewPosition: Vec3.Zero,
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 30),
     pointLightRange: 6,
 
     // materials

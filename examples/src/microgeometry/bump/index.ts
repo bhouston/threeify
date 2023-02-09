@@ -26,7 +26,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const albedoTexture = new Texture(
     await fetchImage('/assets/textures/bricks/albedo.jpg')
   );
@@ -58,7 +58,7 @@ async function init(): Promise<void> {
 
     // lights
     pointLightViewPosition: new Vec3(2, 0, 3),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 10),
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 10),
     pointLightRange: 12,
 
     // materials

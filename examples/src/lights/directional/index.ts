@@ -27,7 +27,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/moon_2k.jpg')
   );
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
 
     // lights
     directionalLightViewDirection: new Vec3(0, 0, -1),
-    directionalLightColor: color3MultiplyByScalar(new Color3(1, 1, 1), 5),
+    directionalLightColor: color3MultiplyByScalar(Color3.White, 5),
 
     // materials
     albedoMap: map

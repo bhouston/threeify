@@ -60,6 +60,7 @@ async function init(): Promise<void> {
 
     try {
       const passMaterial = new ShaderMaterial(
+        'index',
         vertexSource,
         glslUnitTest.source
       );

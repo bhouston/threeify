@@ -14,7 +14,7 @@ void main() {
   vec3 reflectDir = v_localNormal; //reflect( normalize( v_viewPosition ),normalize(v_viewNormal) );
   float lod = clamp(
     perceptualRoughness * float(mipCount),
-    0.0,
+    0.,
     float(mipCount)
   );
   outputColor = texture(cubeMap, reflectDir, lod);

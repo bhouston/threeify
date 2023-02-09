@@ -27,7 +27,7 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const fgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/fg.svg',
@@ -80,8 +80,8 @@ async function init(): Promise<void> {
   const premultipliedAlphas = [false, true];
   const fgMaps = [fgMap, fgSplatMap];
 
-  const blackClearState = new ClearState(new Color3(0, 0, 0), 1);
-  const whiteClearState = new ClearState(new Color3(1, 1, 1), 1);
+  const blackClearState = new ClearState(Color3.Black, 1);
+  const whiteClearState = new ClearState(Color3.White, 1);
 
   function animate(): void {
     const time = Date.now();

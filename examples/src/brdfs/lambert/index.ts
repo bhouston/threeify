@@ -26,7 +26,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const material = new ShaderMaterial(vertexSource, fragmentSource);
+  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
   );
@@ -53,11 +53,11 @@ async function init(): Promise<void> {
 
     // lights
     pointLightViewPosition: new Vec3(1, 0, -0.5),
-    pointLightIntensity: color3MultiplyByScalar(new Color3(1, 1, 1), 40),
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 40),
     pointLightRange: 6,
 
     // materials
-    albedoModulator: new Vec3(1, 1, 1),
+    albedoModulator: Color3.White,
     albedoMap: albedoMap
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);

@@ -13,7 +13,7 @@ export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>
 {
   constructor(
-    public color = new Color3(0, 0, 0),
+    public color = Color3.Black,
     public alpha = 1,
     public depth = 1,
     public stencil = 0

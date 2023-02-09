@@ -1,6 +1,6 @@
 precision highp float;
 
-#define NUM_UV_CHANNELS 1
+#define NUM_UV_CHANNELS (1)
 
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
@@ -29,7 +29,6 @@ out vec4 outputColor;
 #pragma include <color/spaces/srgb>
 #pragma include <math/mat4>
 #pragma include <brdfs/specular/ggx>
-
 
 void main() {
   vec3 albedoColor = albedo * sRGBToLinear(texture(albedoTexture, v_uv0).rgb);
@@ -80,6 +79,6 @@ void main() {
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.0;
+  outputColor.a = 1.;
 
 }

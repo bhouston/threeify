@@ -17,5 +17,5 @@ uniform TriangleArray triangleArray;
 out vec4 outputColor;
 
 void main() {
-  outputColor = vec4(triangle.color + triangles[0].color  + triangles[1].color+ colors[0] + triangleArray.color[0] + triangleArray.color[1], 1.0);
+  outputColor = vec4(triangle.color + triangles[0].color  + triangles[1].color+ colors[0] + triangleArray.color[0] + triangleArray.color[1], 1.);
 }
