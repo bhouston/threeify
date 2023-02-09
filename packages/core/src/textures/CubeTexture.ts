@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/vector-math';
+import { Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/math';
 
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';

@@ -23,7 +23,7 @@
     "**/*.test.ts"
   ],
   "references": [
-    { "path": "../vector-math" },
+    { "path": "../math" },
     { "path": "../core" }
   ]
 }

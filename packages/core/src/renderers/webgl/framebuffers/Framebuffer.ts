@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vec2 } from '@threeify/vector-math';
+import { Vec2 } from '@threeify/math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
 import { GL } from '../GL.js';

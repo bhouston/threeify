@@ -7,7 +7,7 @@ import {
   mat4ToEuler3,
   Vec3,
   vec3Length
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 export function negativeZDirectionToEuler(
   d: Vec3,

@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Box2, Vec2 } from '@threeify/vector-math';
+import { Box2, Vec2 } from '@threeify/math';
 
 import { IDisposable } from '../../../core/types.js';
 import { warnOnce } from '../../../warnOnce.js';

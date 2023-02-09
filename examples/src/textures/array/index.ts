@@ -10,7 +10,7 @@ import {
   TexImage2D,
   Texture
 } from '@threeify/core';
-import { Color4 } from '@threeify/vector-math';
+import { Color4 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

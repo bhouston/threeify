@@ -1,5 +1,5 @@
 {
-  "name": "@threeify/vector-math",
+  "name": "@threeify/math",
   "description": "Computer graphics oriented, High performance, tree-shakeable, TypeScript 3D vector math library.",
   "version": "3.0.0",
   "type": "module",
@@ -40,6 +40,6 @@
     "typescript": "4.8.4"
   },
   "dependencies": {
-    "@threeify/vector-math": "*"
+    "@threeify/math": "*"
   }
 }

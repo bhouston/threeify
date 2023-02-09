@@ -22,7 +22,7 @@ import {
   mat4PerspectiveFov,
   scale3ToMat4,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { copySourceBlendState } from '../Layer';
 import {

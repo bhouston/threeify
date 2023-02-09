@@ -11,6 +11,14 @@ import {
   Texture
 } from '@threeify/core';
 import {
+  box3Center,
+  box3MaxSize,
+  Color3,
+  Vec2,
+  Vec3,
+  vec3Negate
+} from '@threeify/math';
+import {
   DomeLight,
   glTFToSceneNode,
   PerspectiveCamera,
@@ -25,14 +33,6 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
-import {
-  box3Center,
-  box3MaxSize,
-  Color3,
-  Vec2,
-  Vec3,
-  vec3Negate
-} from '@threeify/vector-math';
 
 import {
   getKhronosGlTFUrl,
@@ -68,7 +68,7 @@ document.addEventListener('keydown', (event) => {
 
 async function init(): Promise<void> {
   const shaderMaterial = new ShaderMaterial(
-    'index',
+    'indet',
     vertexSource,
     fragmentSource
   );

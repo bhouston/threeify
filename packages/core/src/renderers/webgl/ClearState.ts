@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Color3, color3Equals } from '@threeify/vector-math';
+import { Color3, color3Equals } from '@threeify/math';
 
 import { ICloneable, IEquatable } from '../../core/types.js';
 

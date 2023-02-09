@@ -7,7 +7,7 @@ import {
   Vec2,
   Vec3,
   Vec4
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 export type MaterialPropertyValue =
   | number

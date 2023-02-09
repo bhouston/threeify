@@ -4,7 +4,7 @@ import {
   color3MultiplyByScalar,
   Vec2,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { Material } from './Material.js';
 import { MaterialParameters } from './MaterialParameters.js';

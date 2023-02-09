@@ -1,7 +1,7 @@
 // Reference:
 // https://learnopengl.com/Getting-started/Coordinate-Systems
 
-import { Vec2, Vec3 } from '@threeify/vector-math';
+import { Vec2, Vec3 } from '@threeify/math';
 
 // right hand coordinate system
 // same as view space and local space

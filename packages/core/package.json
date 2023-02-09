@@ -40,6 +40,6 @@
     "test": "jest ./src"
   },
   "dependencies": {
-    "@threeify/vector-math": "*"
+    "@threeify/math": "*"
   }
 }

@@ -33,7 +33,7 @@ import {
   Quat,
   Vec2,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { PhysicalMaterial } from '../materials/PhysicalMaterial';
 import { TextureAccessor } from '../materials/TextureAccessor';

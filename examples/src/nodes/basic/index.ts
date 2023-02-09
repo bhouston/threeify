@@ -6,6 +6,7 @@ import {
   ShaderMaterial,
   Texture
 } from '@threeify/core';
+import { Color3, Vec3 } from '@threeify/math';
 import {
   MeshNode,
   PerspectiveCamera,
@@ -18,7 +19,6 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
-import { Color3, Vec3 } from '@threeify/vector-math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

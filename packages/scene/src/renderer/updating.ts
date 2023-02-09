@@ -7,7 +7,7 @@ import {
   mat4Inverse,
   mat4Multiply,
   mat4TransformBox3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { MeshNode } from '../scene/Mesh';
 import { SceneNode } from '../scene/SceneNode';

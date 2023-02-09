@@ -5,6 +5,13 @@ import {
   ShaderMaterial
 } from '@threeify/core';
 import {
+  box3Center,
+  box3MaxSize,
+  Color3,
+  Vec3,
+  vec3Negate
+} from '@threeify/math';
+import {
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
@@ -16,13 +23,6 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
-import {
-  box3Center,
-  box3MaxSize,
-  Color3,
-  Vec3,
-  vec3Negate
-} from '@threeify/vector-math';
 
 import {
   getKhronosGlTFUrl,

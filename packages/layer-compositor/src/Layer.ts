@@ -7,7 +7,7 @@ import {
   translation3ToMat4,
   Vec2,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { LayerCompositor } from './LayerCompositor';
 import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';

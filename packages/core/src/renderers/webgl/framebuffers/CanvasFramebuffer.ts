@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Vec2 } from '@threeify/vector-math';
+import { Vec2 } from '@threeify/math';
 
 import { RenderingContext } from '../RenderingContext.js';
 import { VirtualFramebuffer } from './VirtualFramebuffer.js';

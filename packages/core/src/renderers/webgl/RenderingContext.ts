@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Box2 } from '@threeify/vector-math';
+import { Box2 } from '@threeify/math';
 
 import { BlendState } from './BlendState.js';
 import { ClearState } from './ClearState.js';

@@ -40,7 +40,7 @@ import {
   vec2MultiplyByScalar,
   vec2Subtract,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
 import { copySourceBlendState, Layer } from './Layer';

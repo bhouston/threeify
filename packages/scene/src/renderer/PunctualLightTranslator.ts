@@ -1,5 +1,5 @@
 import { CubeMapTexture, TexImage2D } from '@threeify/core';
-import { Color3, color3MultiplyByScalar, Vec3 } from '@threeify/vector-math';
+import { Color3, color3MultiplyByScalar, Vec3 } from '@threeify/math';
 
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { DomeLight } from '../scene/lights/DomeLight';

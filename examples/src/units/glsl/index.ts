@@ -15,7 +15,7 @@ import {
   RenderingContext,
   ShaderMaterial
 } from '@threeify/core';
-import { Color3, Vec2 } from '@threeify/vector-math';
+import { Color3, Vec2 } from '@threeify/math';
 
 import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';

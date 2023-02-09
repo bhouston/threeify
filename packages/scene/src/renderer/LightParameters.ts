@@ -1,5 +1,5 @@
 import { TexImage2D } from '@threeify/core';
-import { Color3, Vec3 } from '@threeify/vector-math';
+import { Color3, Vec3 } from '@threeify/math';
 
 /*export type IBLMap = {
   texture?: TexImage2D;

@@ -19,7 +19,7 @@ import {
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
-import { Color3, floorPow2, Vec2 } from '@threeify/vector-math';
+import { Color3, floorPow2, Vec2 } from '@threeify/math';
 
 import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';

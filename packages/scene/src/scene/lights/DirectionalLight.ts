@@ -1,4 +1,4 @@
-import { Vec3 } from '@threeify/vector-math';
+import { Vec3 } from '@threeify/math';
 
 import { ILight, Light } from './Light';
 

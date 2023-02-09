@@ -1,4 +1,4 @@
-import { Mat4, mat4PerspectiveFov } from '@threeify/vector-math';
+import { Mat4, mat4PerspectiveFov } from '@threeify/math';
 
 import { CameraNode, ICameraProps } from './CameraNode';
 

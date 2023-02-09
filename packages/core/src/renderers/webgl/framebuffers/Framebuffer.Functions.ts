@@ -1,4 +1,4 @@
-import { Vec2 } from '@threeify/vector-math';
+import { Vec2 } from '@threeify/math';
 
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';

@@ -18,7 +18,7 @@ import {
   mat4Inverse,
   mat4PerspectiveFov,
   quatToMat4
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

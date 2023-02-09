@@ -1,4 +1,4 @@
-import { Mat4 } from '@threeify/vector-math';
+import { Mat4 } from '@threeify/math';
 
 import { ISceneNodeProps, SceneNode } from '../SceneNode';
 

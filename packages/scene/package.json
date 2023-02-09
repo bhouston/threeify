@@ -44,7 +44,7 @@
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
     "@threeify/core": "*",
-    "@threeify/vector-math": "*",
+    "@threeify/math": "*",
     "draco3dgltf": "^1.5.5",
     "meshoptimizer": "^0.18.1"
   }

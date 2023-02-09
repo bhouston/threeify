@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "@threeify/core": "*",
-    "@threeify/vector-math": "*"
+    "@threeify/math": "*"
   }
 }

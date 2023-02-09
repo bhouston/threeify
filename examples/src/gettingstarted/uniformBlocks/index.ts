@@ -12,7 +12,7 @@ import {
   RenderingContext,
   ShaderMaterial
 } from '@threeify/core';
-import { Color3, hslToColor3, Vec3 } from '@threeify/vector-math';
+import { Color3, hslToColor3, Vec3 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';

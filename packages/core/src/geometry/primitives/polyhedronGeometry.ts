@@ -13,7 +13,7 @@ import {
   vec3Lerp,
   vec3MultiplyByScalar,
   vec3Normalize
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { makeFloat32Attribute } from '../Attribute.js';
 import { computeVertexNormals } from '../Geometry.Functions.js';

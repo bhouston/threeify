@@ -13,7 +13,7 @@ import {
   vec3ArrayToFloat32Array,
   Vec4,
   vec4ArrayToFloat32Array
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { Buffer } from '../buffers/Buffer.js';
 import { RenderingContext } from '../RenderingContext.js';

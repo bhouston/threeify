@@ -4,7 +4,7 @@ import {
   Quat,
   Vec2,
   vec2Subtract
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { IDisposable } from '../core/types.js';
 

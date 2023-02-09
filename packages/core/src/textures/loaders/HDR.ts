@@ -9,7 +9,7 @@ import {
   float32RGBEToFloat32Linear,
   float32sToFloat16s,
   normalizedByteToFloat32s
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { Float16ArrayImage, Uint8ArrayImage } from '../ArrayBufferImage.js';
 import { PixelEncoding } from '../PixelEncoding.js';

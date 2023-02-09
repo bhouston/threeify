@@ -12,7 +12,7 @@ import {
   vec3Cross,
   vec3Normalize,
   vec3Subtract
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';

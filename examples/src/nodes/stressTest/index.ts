@@ -6,6 +6,7 @@ import {
   ShaderMaterial,
   Texture
 } from '@threeify/core';
+import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/math';
 import {
   MeshNode,
   PerspectiveCamera,
@@ -18,7 +19,6 @@ import {
   updateNodeTree,
   updateRenderCache
 } from '@threeify/scene';
-import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/vector-math';
 
 import { Stats } from '../../utilities/Stats';
 import fragmentSource from './fragment.glsl';

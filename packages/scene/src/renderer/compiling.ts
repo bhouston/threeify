@@ -17,7 +17,7 @@ import {
   mat4TransformNormal3,
   mat4TransformVec3,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { MaterialParameters } from '../materials/MaterialParameters';
 import { PhysicalMaterial } from '../materials/PhysicalMaterial';

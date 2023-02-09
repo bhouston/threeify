@@ -7,7 +7,7 @@ import {
   Quat,
   quatMultiply,
   Vec3
-} from '@threeify/vector-math';
+} from '@threeify/math';
 
 import { IDisposable } from '../core/types.js';
 

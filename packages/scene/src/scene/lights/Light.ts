@@ -1,4 +1,4 @@
-import { Color3 } from '@threeify/vector-math';
+import { Color3 } from '@threeify/math';
 
 import { ISceneNodeProps, SceneNode } from '../SceneNode';
 

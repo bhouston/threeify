@@ -1,5 +1,5 @@
 import { Texture } from '@threeify/core';
-import { Mat3 } from '@threeify/vector-math';
+import { Mat3 } from '@threeify/math';
 
 import {
   IMaterialParameterProvider,

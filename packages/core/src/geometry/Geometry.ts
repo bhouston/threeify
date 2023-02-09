@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Box3, box3Empty } from '@threeify/vector-math';
+import { Box3, box3Empty } from '@threeify/math';
 
 import { generateUUID } from '../core/generateUuid.js';
 import { PrimitiveType } from '../renderers/webgl/buffers/PrimitiveType.js';
