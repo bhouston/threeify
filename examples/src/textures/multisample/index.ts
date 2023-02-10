@@ -18,7 +18,7 @@ import {
   makeBufferGeometryFromGeometry,
   makeColorAttachment,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
@@ -93,7 +93,7 @@ async function init(): Promise<void> {
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
   const program = makeProgramFromShaderMaterial(context, material);
-  const uvTestTexture = makeTexImage2DFromTexture(context, texture);
+  const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
     localToWorld: new Mat4(),

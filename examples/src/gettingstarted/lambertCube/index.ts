@@ -3,7 +3,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -40,7 +40,7 @@ async function init(): Promise<void> {
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
     viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
     viewLightPosition: Vec3.Zero,
-    map: makeTexImage2DFromTexture(context, texture)
+    map: textureToTexImage2D(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 

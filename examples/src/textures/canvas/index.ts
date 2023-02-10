@@ -4,7 +4,7 @@ import {
   ClearState,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -71,7 +71,7 @@ async function init(): Promise<void> {
   const ctx = canvas.getContext('2d');
 
   const texture = new Texture(canvas);
-  const uvTestTexture = makeTexImage2DFromTexture(context, texture);
+  const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
     localToWorld: new Mat4(),

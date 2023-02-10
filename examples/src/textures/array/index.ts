@@ -2,7 +2,7 @@ import {
   createSolidColorImageData,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -36,7 +36,7 @@ async function init(): Promise<void> {
 
   const texImage2DArray: TexImage2D[] = [];
   textures.forEach((texture) => {
-    texImage2DArray.push(makeTexImage2DFromTexture(context, texture));
+    texImage2DArray.push(textureToTexImage2D(context, texture));
   });
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const program = makeProgramFromShaderMaterial(context, material);

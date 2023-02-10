@@ -44,7 +44,8 @@ export * from './geometry/primitives/planeGeometry.js';
 export * from './geometry/primitives/polyhedronGeometry.js';
 
 export * from './renderers/utilities/copyPass.js';
-export * from './renderers/utilities/makeTexImage2DFromEquirectangularTexture.js';
+export * from './renderers/utilities/equirectangular.js';
+export * from './renderers/utilities/TextureEncoding.js';
 
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';

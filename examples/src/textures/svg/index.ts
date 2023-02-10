@@ -5,7 +5,7 @@ import {
   fetchImageElement,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -41,8 +41,8 @@ async function init(): Promise<void> {
   context.blendState = blendModeToBlendState(Blending.Over, true);
 
   const program = makeProgramFromShaderMaterial(context, material);
-  const bgUniforms = { map: makeTexImage2DFromTexture(context, bgTexture) };
-  const fgUniforms = { map: makeTexImage2DFromTexture(context, fgTexture) };
+  const bgUniforms = { map: textureToTexImage2D(context, bgTexture) };
+  const fgUniforms = { map: textureToTexImage2D(context, fgTexture) };
 
   const geometry = planeGeometry(1, 1, 1, 1);
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);

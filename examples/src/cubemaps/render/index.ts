@@ -6,12 +6,12 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  TextureFilter
+  TextureFilter,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -67,7 +67,7 @@ async function init(): Promise<void> {
     context,
     patternGeometry
   );
-  const cubeMap = makeTexImage2DFromTexture(context, cubeTexture);
+  const cubeMap = textureToTexImage2D(context, cubeTexture);
 
   const framebuffer = new Framebuffer(context);
 

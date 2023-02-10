@@ -6,15 +6,16 @@ import {
   Framebuffer,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
+  makeCubeMapFromEquirectangularTexture,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromEquirectangularTexture,
-  makeTexImage2DFromTexture,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureEncoding,
   TextureFilter,
+  textureToTexImage2D,
   TextureWrap
 } from '@threeify/core';
 import {
@@ -59,10 +60,11 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const envCubeMap = makeTexImage2DFromEquirectangularTexture(
+  const envCubeMap = makeCubeMapFromEquirectangularTexture(
     context,
     garageTexture,
-    new Vec2(1024, 1024)
+    TextureEncoding.Linear,
+    1024
   );
 
   const samplerGeometry = passGeometry();
@@ -79,20 +81,12 @@ async function init(): Promise<void> {
     context,
     samplerGeometry
   );
-  const lambertianCubeMap = makeTexImage2DFromTexture(
-    context,
-    lambertianCubeTexture
-  );
+  const lambertianCubeMap = textureToTexImage2D(context, lambertianCubeTexture);
 
   const framebuffer = new Framebuffer(context);
 
   cubeFaceTargets.forEach((target, index) => {
-    framebuffer.attach(
-      Attachment.Color0,
-      lambertianCubeMap,
-      target,
-      0
-    );
+    framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
     samplerUniforms.faceIndex = index;
 
     renderBufferGeometry({

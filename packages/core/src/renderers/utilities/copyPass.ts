@@ -7,6 +7,8 @@ import {
 } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
+import { Attachment } from '../webgl/framebuffers/Attachment';
+import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
 import {
   renderBufferGeometry,
   VirtualFramebuffer
@@ -26,18 +28,24 @@ let passBufferGeometry: BufferGeometry | undefined;
 export interface ICopyPassProps {
   sourceTexImage2D: TexImage2D;
   sourceEncoding?: TextureEncoding;
-  targetFramebuffer: VirtualFramebuffer;
+  targetFramebuffer?: VirtualFramebuffer;
+  targetTexImage2D?: TexImage2D;
   targetEncoding?: TextureEncoding;
 }
 
 export function copyPass(props: ICopyPassProps): void {
   const {
     sourceTexImage2D,
-    targetFramebuffer,
     sourceEncoding,
+    targetFramebuffer,
+    targetTexImage2D,
     targetEncoding
   } = props;
   const { context } = sourceTexImage2D;
+
+  if (targetFramebuffer !== undefined && targetTexImage2D !== undefined) {
+    throw new Error('Cannot specify both a target framebuffer and texture.');
+  }
 
   // TODO: cache geometry + bufferGeometry.
   if (passBufferGeometry === undefined) {
@@ -61,9 +69,21 @@ export function copyPass(props: ICopyPassProps): void {
     targetEncoding:
       targetEncoding !== undefined ? targetEncoding : TextureEncoding.Linear
   };
+  console.log('uniforms', uniforms);
+  let localFramebuffer = targetFramebuffer;
+  let tempFramebuffer: Framebuffer | undefined = undefined;
+
+  if (targetFramebuffer === undefined && targetTexImage2D !== undefined) {
+    tempFramebuffer = new Framebuffer(context);
+    tempFramebuffer.attach(Attachment.Color0, targetTexImage2D);
+    localFramebuffer = tempFramebuffer;
+  }
+
+  if (localFramebuffer === undefined)
+    throw new Error('No target framebuffer or texture specified.');
 
   renderBufferGeometry({
-    framebuffer: targetFramebuffer,
+    framebuffer: localFramebuffer,
     program,
     uniforms,
     bufferGeometry: passBufferGeometry,
@@ -71,4 +91,8 @@ export function copyPass(props: ICopyPassProps): void {
     blendState: BlendState.None,
     cullingState: CullingState.None
   });
+
+  if (tempFramebuffer !== undefined) {
+    tempFramebuffer.dispose();
+  }
 }

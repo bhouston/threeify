@@ -3,11 +3,11 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -40,8 +40,8 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const albedoMap = makeTexImage2DFromTexture(context, texture);
-  const clearCoatBumpMap = makeTexImage2DFromTexture(context, scratchesTexture);
+  const albedoMap = textureToTexImage2D(context, texture);
+  const clearCoatBumpMap = textureToTexImage2D(context, scratchesTexture);
   const specularRoughnessMap = clearCoatBumpMap;
   const clearCoatRoughnessMap = specularRoughnessMap;
 

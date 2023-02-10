@@ -6,7 +6,7 @@ import {
   fetchImageElement,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -50,9 +50,9 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const fgMap = makeTexImage2DFromTexture(context, fgTexture);
-  const fgSplatMap = makeTexImage2DFromTexture(context, fgSplatTexture);
-  const bgMap = makeTexImage2DFromTexture(context, bgTexture);
+  const fgMap = textureToTexImage2D(context, fgTexture);
+  const fgSplatMap = textureToTexImage2D(context, fgSplatTexture);
+  const bgMap = textureToTexImage2D(context, bgTexture);
 
   const program = makeProgramFromShaderMaterial(context, material);
   const bgUniforms = {

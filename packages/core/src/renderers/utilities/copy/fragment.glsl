@@ -15,8 +15,8 @@ void main() {
   
   vec4 sourceColor = texture(sourceMap, v_uv0 );
   
-  vec3 linearColor = encodingToLinear( sourceColor, sourceEncoding );
+  vec4 linearColor = encodingToLinear( sourceColor, sourceEncoding );
   vec4 targetColor = linearToEncoding( linearColor, targetEncoding );
 
-  outputColor = sourceColor;
+  outputColor = targetColor;
 }

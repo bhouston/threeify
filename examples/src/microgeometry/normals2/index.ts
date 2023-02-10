@@ -2,7 +2,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -40,7 +40,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const normalsMap = makeTexImage2DFromTexture(context, normalsTexture);
+  const normalsMap = textureToTexImage2D(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices

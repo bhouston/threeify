@@ -2,10 +2,12 @@ import { TextureFilter } from './TextureFilter.js';
 import { TextureWrap } from './TextureWrap.js';
 
 export class TexParameters {
-  generateMipmaps = true;
-  wrapS: TextureWrap = TextureWrap.Repeat;
-  wrapT: TextureWrap = TextureWrap.Repeat;
-  magFilter: TextureFilter = TextureFilter.Linear;
-  minFilter: TextureFilter = TextureFilter.LinearMipmapLinear;
-  anisotropyLevels = 2;
+  constructor(
+    public magFilter = TextureFilter.Linear,
+    public minFilter = TextureFilter.LinearMipmapLinear,
+    public wrapS = TextureWrap.Repeat,
+    public wrapT = TextureWrap.Repeat,
+    public generateMipmaps = true,
+    public anisotropyLevels = 2
+  ) {}
 }

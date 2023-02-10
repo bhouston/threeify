@@ -12,7 +12,7 @@ import {
   makeBufferGeometryFromGeometry,
   makeDepthAttachment,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -47,7 +47,7 @@ async function init(): Promise<void> {
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')
   );
-  const uvTestTexture = makeTexImage2DFromTexture(context, texture);
+  const uvTestTexture = textureToTexImage2D(context, texture);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -2)),

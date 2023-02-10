@@ -182,7 +182,7 @@ export class TexImage2D implements IResource {
   }
 }
 
-export function makeTexImage2DFromTexture(
+export function textureToTexImage2D(
   context: RenderingContext,
   texture: Texture | CubeMapTexture,
   internalFormat: PixelFormat = PixelFormat.RGBA

@@ -3,11 +3,11 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -38,7 +38,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
-  const albedoMap = makeTexImage2DFromTexture(context, texture);
+  const albedoMap = textureToTexImage2D(context, texture);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

@@ -2,7 +2,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -28,7 +28,7 @@ async function init(): Promise<void> {
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
   const program = makeProgramFromShaderMaterial(context, material);
-  const texImage2D = makeTexImage2DFromTexture(context, texture);
+  const texImage2D = textureToTexImage2D(context, texture);
 
   const uniforms = { map: texImage2D };
 

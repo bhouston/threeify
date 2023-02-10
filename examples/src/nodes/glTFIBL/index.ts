@@ -2,19 +2,20 @@ import {
   Blending,
   blendModeToBlendState,
   fetchHDR,
+  InternalFormat,
+  makeCubeMapFromEquirectangularTexture,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromEquirectangularTexture,
   Orbit,
   PhysicalMaterialOutputs,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  TextureEncoding
 } from '@threeify/core';
 import {
   box3Center,
   box3MaxSize,
   Color3,
-  Vec2,
   Vec3,
   vec3Negate
 } from '@threeify/math';
@@ -76,12 +77,13 @@ async function init(): Promise<void> {
   const latLongTexture = new Texture(
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
+
   /* const latLongTexture = new Texture(
      await fetchImage('/assets/textures/cube/debug/latLong.png')
    );*/
   //console.timeEnd('fetchHDR');
-  const lightIntensity = 1;
-  const domeLightIntensity = 2.5;
+  const lightIntensity = 0;
+  const domeLightIntensity = 1.5;
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
@@ -100,16 +102,18 @@ async function init(): Promise<void> {
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const cubeMap = makeCubeMapFromEquirectangularTexture(
+    context,
+    latLongTexture,
+    TextureEncoding.RGBE,
+    1024,
+    InternalFormat.RGBA16F
+  );
+
   const program = makeProgramFromShaderMaterial(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 
-  //console.time('makeTexImage2DFromEquirectangularTexture');
-  const cubeMap = makeTexImage2DFromEquirectangularTexture(
-    context,
-    latLongTexture,
-    new Vec2(1024, 1024)
-  );
   //console.timeEnd('makeTexImage2DFromEquirectangularTexture');
 
   const orbitController = new Orbit(canvasHtmlElement);

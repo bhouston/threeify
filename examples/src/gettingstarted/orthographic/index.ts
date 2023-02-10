@@ -3,7 +3,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -48,7 +48,7 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     ),
     viewLightPosition: Vec3.Zero,
-    map: makeTexImage2DFromTexture(context, texture)
+    map: textureToTexImage2D(context, texture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 

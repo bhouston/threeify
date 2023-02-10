@@ -31,6 +31,8 @@ export enum InternalFormat {
   RGBA16I = GL.RGBA16I,
   RGBA32I = GL.RGBA32I,
   RGBA32UI = GL.RGBA32UI,
+  RGB9_E5 = GL.RGB9_E5,
+  R11F_G11F_B10F = GL.R11F_G11F_B10F,
   DepthComponent16 = GL.DEPTH_COMPONENT16,
   DepthComponent24 = GL.DEPTH_COMPONENT24,
   DepthComponentT32F = GL.DEPTH_COMPONENT32F,
@@ -58,6 +60,10 @@ export function internalFormatToDataType(
       return DataType.Float;
     case InternalFormat.DepthComponent24:
       return DataType.UnsignedInt;
+    case InternalFormat.RGB9_E5:
+      return DataType.UnsignedInt_5_9_9_9_Rev;
+    case InternalFormat.R11F_G11F_B10F:
+      return DataType.UnsignedInt_10F_11F_11F_Rev;
     default:
       throw new Error(`unsupported internalFormat: ${internalFormat}`);
   }
@@ -91,6 +97,8 @@ export function internalFormatToPixelFormat(
 
     case InternalFormat.RGB8:
     case InternalFormat.RGB565:
+    case InternalFormat.RGB9_E5:
+    case InternalFormat.R11F_G11F_B10F:
       return PixelFormat.RGB;
 
     case InternalFormat.RGBA8:
