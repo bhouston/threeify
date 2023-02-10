@@ -1,10 +1,5 @@
 import { AlphaMode, SolidTextures } from '@threeify/core';
-import {
-  Color3,
-  color3MultiplyByScalar,
-  Vec2,
-  Vec3
-} from '@threeify/math';
+import { Color3, color3MultiplyByScalar, Vec2, Vec3 } from '@threeify/math';
 
 import { Material } from './Material.js';
 import { MaterialParameters } from './MaterialParameters.js';

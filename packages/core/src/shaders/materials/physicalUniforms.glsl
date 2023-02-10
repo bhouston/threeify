@@ -3,7 +3,6 @@
 #pragma include <materials/physical>
 #pragma include <textures/textureAccessors>
 
-
 #define EMISSIVE (1)
 #define NORMAL (1)
 #define OCCLUSION (1)
@@ -15,7 +14,6 @@
 #define VOLUME (1)
 #define IRIDESCENCE (1)
 
-
 uniform int alphaMode;
 uniform float alphaCutoff;
 uniform float alpha;
@@ -26,22 +24,22 @@ uniform float specularRoughnessFactor;
 uniform float metallicFactor;
 uniform TextureAccessor metallicSpecularRoughnessTextureAccessor;
 
-#if defined (EMISSIVE)
+#if defined(EMISSIVE)
 uniform vec3 emissiveFactor;
 uniform TextureAccessor emissiveTextureAccessor;
 #endif
 
-#if defined (NORMAL)
+#if defined(NORMAL)
 uniform vec2 normalScale;
 uniform TextureAccessor normalTextureAccessor;
 #endif
 
-#if defined (OCCLUSION)
+#if defined(OCCLUSION)
 uniform float occlusionFactor;
 uniform TextureAccessor occlusionTextureAccessor;
 #endif
 
-#if defined (IOR)
+#if defined(IOR)
 uniform float ior;
 #endif
 
@@ -108,51 +106,51 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
     specularRoughnessFactor * metallicSpecularRoughness.g;
   material.metallic = metallicFactor * metallicSpecularRoughness.b;
 
-#if defined (EMISSIVE)
+  #if defined(EMISSIVE)
   material.emissive =
     emissiveFactor *
     sRGBToLinear(sampleTexture(emissiveTextureAccessor, uvs).rgb);
-#else 
-  material.emissive = vec3(0.);
-#endif
+  #else
+  material.emissive = vec3(0.0);
+  #endif
 
-#if defined (NORMAL)
+  #if defined(NORMAL)
   material.normal =
-    vec3(normalScale, 1.) *
+    vec3(normalScale, 1.0) *
     rgbToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
-#else
-  material.normal = vec3(0., 0., 1.);
-#endif
+  #else
+  material.normal = vec3(0.0, 0.0, 1.0);
+  #endif
 
-#if defined (OCCLUSION)
+  #if defined(OCCLUSION)
   material.occlusion =
-    (sampleTexture(occlusionTextureAccessor, uvs).r - 1.) * occlusionFactor +
-    1.;
-#else
-  material.occlusion = 1.;
-#endif
+    (sampleTexture(occlusionTextureAccessor, uvs).r - 1.0) * occlusionFactor +
+    1.0;
+  #else
+  material.occlusion = 1.0;
+  #endif
 
-#if defined (IOR)
+  #if defined(IOR)
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_ior/README.md
   material.ior = ior;
-#else
+  #else
   material.ior = 1.5;
-#endif
+  #endif
 
-#if defined(SPECULAR)
+  #if defined(SPECULAR)
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_specular/README.md
   material.specularFactor =
     specularFactor * sampleTexture(specularFactorTextureAccessor, uvs).r;
   material.specularColor =
     specularColor *
     sRGBToLinear(sampleTexture(specularColorTextureAccessor, uvs).rgb);
-#else
-  material.specularFactor = 1.;
-  material.specularColor = vec3(1.);
-#endif
+  #else
+  material.specularFactor = 1.0;
+  material.specularColor = vec3(1.0);
+  #endif
 
-#if defined(CLEARCOAT)
-   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_clearcoat/README.md
+  #if defined(CLEARCOAT)
+  // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_clearcoat/README.md
   vec4 clearcoatFactorRoughness = sampleTexture(
     clearcoatFactorRoughnessTextureAccessor,
     uvs
@@ -161,15 +159,15 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.clearcoatRoughness =
     clearcoatRoughnessFactor * clearcoatFactorRoughness.g;
   material.clearcoatNormal =
-    vec3(clearcoatNormalScale, 1.) *
+    vec3(clearcoatNormalScale, 1.0) *
     rgbToNormal(sampleTexture(clearcoatNormalTextureAccessor, uvs).rgb);
-#else
-  material.clearcoatFactor = 0.;
-  material.clearcoatRoughness = 0.;
-  material.clearcoatNormal = vec3(0.,0.,1.);
-#endif
+  #else
+  material.clearcoatFactor = 0.0;
+  material.clearcoatRoughness = 0.0;
+  material.clearcoatNormal = vec3(0.0, 0.0, 1.0);
+  #endif
 
-#if defined(SHEEN)
+  #if defined(SHEEN)
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_sheen/README.md
   vec4 sheenColorRoughness = sampleTexture(
     sheenColorRoughnessTextureAccessor,
@@ -178,37 +176,37 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.sheenColor =
     sheenColorFactor * sRGBToLinear(sheenColorRoughness.rgb);
   material.sheenRoughness = sheenRoughnessFactor * sheenColorRoughness.a;
-#else
-  material.sheenColor = vec3(0.);
-  material.sheenRoughness = 0.;
-#endif
+  #else
+  material.sheenColor = vec3(0.0);
+  material.sheenRoughness = 0.0;
+  #endif
 
-#if defined(TRANSMISSION) || defined(VOLUME)
+  #if defined(TRANSMISSION) || defined(VOLUME)
   vec4 transmissionFactorThickness = sampleTexture(
     transmissionFactorThicknessTextureAccessor,
     uvs
   );
-#endif
+  #endif
 
-#if defined(TRANMISSION)
+  #if defined(TRANMISSION)
   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_transmission/README.md
   material.transmission = transmissionFactor * transmissionFactorThickness.r;
-#else
-  material.transmission = 0.;
-#endif
+  #else
+  material.transmission = 0.0;
+  #endif
 
-#if defined(VOLUME)
+  #if defined(VOLUME)
   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_volume/README.md
   material.thickness = thicknessFactor * transmissionFactorThickness.g;
   material.attenuationColor = attenuationColor;
   material.attenuationDistance = attenuationDistance;
-#else
-  material.thickness = 0.;
-  material.attenuationColor = vec3(0.);
-  material.attenuationDistance = 0.;
-#endif
+  #else
+  material.thickness = 0.0;
+  material.attenuationColor = vec3(0.0);
+  material.attenuationDistance = 0.0;
+  #endif
 
-#if defined(IRIDESCENCE)
+  #if defined(IRIDESCENCE)
   // https://github.com/KhronosGroup/glTF/tree/main/extensions/2./Khronos/KHR_materials_iridescence/README.md
   vec4 iridescenceFactorThickness = sampleTexture(
     iridescenceFactorThicknessTextureAccessor,
@@ -221,11 +219,11 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
     iridescenceThicknessMaximum,
     iridescenceFactorThickness.g
   );
-#else
-  material.iridescence = 0.;
+  #else
+  material.iridescence = 0.0;
   material.iridescenceIor = 1.5;
-  material.iridescenceThickness = 400.;
-#endif
+  material.iridescenceThickness = 400.0;
+  #endif
 
   return material;
 }

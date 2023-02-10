@@ -30,7 +30,7 @@ void main() {
     specularRoughnessModulator *
     sRGBToLinear(texture(specularRoughnessMap, v_uv0).rgb).r;
   vec3 specularF0 = specularIntensityToF0(specular);
-  vec3 specularF90 = vec3(1.);
+  vec3 specularF90 = vec3(1.0);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -62,6 +62,6 @@ void main() {
     directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.;
+  outputColor.a = 1.0;
 
 }

@@ -23,15 +23,15 @@ out vec4 outputColor;
 #pragma include <microgeometry/tangentSpace>
 
 void main() {
-  vec3 albedo = mix(vec3(0.2), vec3(1., 0., 0.), normalScale.y);
-  vec3 specular = vec3(1.);
+  vec3 albedo = mix(vec3(0.2), vec3(1.0, 0.0, 0.0), normalScale.y);
+  vec3 specular = vec3(1.0);
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0(specular);
-  vec3 specularF90 = vec3(1.);
+  vec3 specularF90 = vec3(1.0);
 
   vec3 normalDelta = normalize(
-    rgbToNormal(texture(normalMap, vec2(1.) - v_uv0).rgb) *
-      vec3(normalScale, 1.)
+    rgbToNormal(texture(normalMap, vec2(1.0) - v_uv0).rgb) *
+      vec3(normalScale, 1.0)
   );
 
   vec3 position = v_viewSurfacePosition;
@@ -45,8 +45,8 @@ void main() {
   );
   // warning, non-orthogonal matrix
   tangentToView *= mat3(
-    vec3(1., 0., 0.),
-    vec3(0., 1., 0.),
+    vec3(1.0, 0.0, 0.0),
+    vec3(0.0, 1.0, 0.0),
     normalize(normalDelta)
   );
   normal = tangentToView[2];
@@ -77,6 +77,6 @@ void main() {
     directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.;
+  outputColor.a = 1.0;
 
 }

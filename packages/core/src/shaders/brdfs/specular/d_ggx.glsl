@@ -11,7 +11,7 @@
 // alpha is "roughness squared" in Disney’s reparameterization
 float D_GGX(const float alphaRoughness, const float NdotH) {
   float a2 = pow2(alphaRoughness);
-  float denom = pow2(NdotH) * (a2 - 1.) + 1.; // avoid alpha = 0 with NdotH = 1
+  float denom = pow2(NdotH) * (a2 - 1.0) + 1.0; // avoid alpha = 0 with NdotH = 1
 
   return RECIPROCAL_PI * a2 / pow2(denom);
 

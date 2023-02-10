@@ -1,7 +1,7 @@
 #pragma once
 
 vec2 decodeDirection(vec2 value) {
-  return value * 2. - 1.;
+  return value * 2.0 - 1.0;
 }
 
 /**
@@ -20,13 +20,13 @@ mat3 tangentToViewFromPositionNormalUV(vec3 position, vec3 normal, vec2 uv0) {
 
 // from glTF IBL Sampler.
 mat3 tangentToViewFromNormal(const vec3 normal) {
-  vec3 bitangent = vec3(0., 1., 0.);
+  vec3 bitangent = vec3(0.0, 1.0, 0.0);
   if (abs(normal.y) > abs(normal.x) && abs(normal.y) > abs(normal.z)) {
     // Sampling +Y or -Y, so we need a more robust bitangent.
-    if (normal.y > 0.) {
-      bitangent = vec3(0., 0., 1.);
+    if (normal.y > 0.0) {
+      bitangent = vec3(0.0, 0.0, 1.0);
     } else {
-      bitangent = vec3(0., 0., -1.);
+      bitangent = vec3(0.0, 0.0, -1.0);
     }
   }
 

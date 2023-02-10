@@ -53,10 +53,10 @@ void BRDF_Specular_GGX_Multiscatter_IBL(
   vec3 FssEss = specularF0 * fab.x + specularF90 * fab.y;
 
   float Ess = fab.x + fab.y;
-  float Ems = 1. - Ess;
+  float Ems = 1.0 - Ess;
 
-  vec3 Favg = specularF0 + (1. - specularF0) * 0.047619; // 1/21
-  vec3 Fms = FssEss * Favg / (1. - Ems * Favg);
+  vec3 Favg = specularF0 + (1.0 - specularF0) * 0.047619; // 1/21
+  vec3 Fms = FssEss * Favg / (1.0 - Ems * Favg);
 
   singleScatter = FssEss;
   multiScatter = Fms * Ems;

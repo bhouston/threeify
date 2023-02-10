@@ -52,10 +52,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const displacementMap = textureToTexImage2D(
-    context,
-    displacementTexture
-  );
+  const displacementMap = textureToTexImage2D(context, displacementTexture);
   const normalMap = textureToTexImage2D(context, normalTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {

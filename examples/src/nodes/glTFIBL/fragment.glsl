@@ -463,11 +463,15 @@ void main() {
       ? tonemappingACESFilmic(outgoingRadiance)
       : outgoingRadiance;
   DEBUG_OUTPUT(58, tonemapped);
-  vec3 sRGB = 
-    (outputTransformFlags & 0x2) != 0 ? linearTosRGB(tonemapped) : tonemapped;
+  vec3 sRGB =
+    (outputTransformFlags & 0x2) != 0
+      ? linearTosRGB(tonemapped)
+      : tonemapped;
 
-  vec3 premultipliedAlpha = 
-    (outputTransformFlags & 0x4) != 0 ? (sRGB * material.alpha) : sRGB;
+  vec3 premultipliedAlpha =
+    (outputTransformFlags & 0x4) != 0
+      ? sRGB * material.alpha
+      : sRGB;
 
   outputColor.rgb = premultipliedAlpha;
   outputColor.a = material.alpha;

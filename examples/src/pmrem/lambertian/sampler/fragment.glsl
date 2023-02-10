@@ -18,7 +18,7 @@ vec4 sampleIBL(vec3 direction, float lod) {
 void main() {
   vec3 direction = cubeFaceUVToDirection(faceIndex, v_uv);
 
-  outputColor.rgb = BRDF_Diffuse_Lambert_Filter(direction, 1.);
-  outputColor.a = 1.;
+  outputColor.rgb = BRDF_Diffuse_Lambert_Filter(direction, 1.0);
+  outputColor.a = 1.0;
 
 }

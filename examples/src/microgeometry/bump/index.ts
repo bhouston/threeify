@@ -64,10 +64,7 @@ async function init(): Promise<void> {
     // materials
     albedoMap: textureToTexImage2D(context, albedoTexture),
     bumpMap: textureToTexImage2D(context, bumpTexture),
-    specularRoughnessMap: textureToTexImage2D(
-      context,
-      specularRoughnessTexture
-    )
+    specularRoughnessMap: textureToTexImage2D(context, specularRoughnessTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 

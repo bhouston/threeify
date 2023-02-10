@@ -1,11 +1,11 @@
 vec2 weyl(int i) {
   //return fract(float(n)*vec2(0.754877669, 0.569840296));
-  return fract(vec2(i * ivec2(12664745, 9560333)) / exp2(24.)); // integer mul to avoid round-off
+  return fract(vec2(i * ivec2(12664745, 9560333)) / exp2(24.0)); // integer mul to avoid round-off
 }
 
 float halton(int b, int i) {
-  float r = 0.;
-  float f = 1.;
+  float r = 0.0;
+  float f = 1.0;
   for (int j = 0; j < 2048; j++) {
     if (i <= 0) break;
     f = f / float(b);

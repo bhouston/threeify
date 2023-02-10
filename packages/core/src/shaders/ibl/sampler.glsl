@@ -13,37 +13,37 @@
 
 vec3 BRDF_Diffuse_Lambert_SampleDirection(vec2 sampleUv) {
   float phi = PI2 * sampleUv.x;
-  float cosTheta = 0.;
-  float sinTheta = 0.;
+  float cosTheta = 0.0;
+  float sinTheta = 0.0;
 
-  cosTheta = 1. - sampleUv.y;
-  sinTheta = sqrt(1. - cosTheta * cosTheta);
+  cosTheta = 1.0 - sampleUv.y;
+  sinTheta = sqrt(1.0 - cosTheta * cosTheta);
 
   return normalize(vec3(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta));
 }
 
 vec3 BRDF_Specular_GGX_SampleDirection(vec2 sampleUv) {
   float phi = PI2 * sampleUv.x;
-  float cosTheta = 0.;
-  float sinTheta = 0.;
+  float cosTheta = 0.0;
+  float sinTheta = 0.0;
 
   float alphaRoughness = pow2(roughness);
   cosTheta = sqrt(
-    (1. - sampleUv.y) / (1. + (pow2(alphaRoughness) - 1.) * sampleUv.y)
+    (1.0 - sampleUv.y) / (1.0 + (pow2(alphaRoughness) - 1.0) * sampleUv.y)
   );
-  sinTheta = sqrt(1. - pow2(cosTheta));
+  sinTheta = sqrt(1.0 - pow2(cosTheta));
 
   return normalize(vec3(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta));
 }
 
 vec3 BRDF_Specular_GGX_SampleDirection(vec2 sampleUv) {
   float phi = PI2 * sampleUv.x;
-  float cosTheta = 0.;
-  float sinTheta = 0.;
+  float cosTheta = 0.0;
+  float sinTheta = 0.0;
 
   float alphaRoughness = pow2(roughness);
-  sinTheta = pow(sampleUv.y, alphaRoughness / (2. * alphaRoughness + 1.));
-  cosTheta = sqrt(1. - pow2(sinTheta));
+  sinTheta = pow(sampleUv.y, alphaRoughness / (2.0 * alphaRoughness + 1.0));
+  cosTheta = sqrt(1.0 - pow2(sinTheta));
 
   return normalize(vec3(sinTheta * cos(phi), sinTheta * sin(phi), cosTheta));
 }
@@ -92,7 +92,7 @@ float BRDF_Specular_GGX_PDF(
   float NdotH = saturate(dot(normal, halfDirection));
   float alpha = pow2(roughness);
   float D = D_GGX(alpha, NdotH);
-  return max(D * NdotH / (4. * dotVH), 0.);
+  return max(D * NdotH / (4.0 * dotVH), 0.0);
 }
 
 float BRDF_Sheen_Charlie_PDF(
@@ -104,7 +104,7 @@ float BRDF_Sheen_Charlie_PDF(
   float dotVH = saturate(dot(viewDirection, halfDirection));
   float NdotH = saturate(dot(normal, halfDirection));
   float D = D_Charlie(sheenRoughness, NdotH);
-  return max(D * NdotH / (4. * dotVH), 0.);
+  return max(D * NdotH / (4.0 * dotVH), 0.0);
 }
 
 /*
@@ -191,10 +191,10 @@ vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWid
 // See https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
 vec3 LUT(uint distributionType, float NdotV, float roughness) {
   // Compute spherical view vector: (sin(phi), 0, cos(phi))
-  vec3 V = vec3(sqrt(1. - NdotV * NdotV), 0., NdotV);
+  vec3 V = vec3(sqrt(1.0 - NdotV * NdotV), 0.0, NdotV);
 
   // The macro surface normal just points up.
-  vec3 N = vec3(0., 0., 1.);
+  vec3 N = vec3(0.0, 0.0, 1.0);
 
   // To make the LUT independant from the material's F0, which is part of the Fresnel term
   // when substituted by Schlick's approximation, we factor it out of the integral,
@@ -215,12 +215,12 @@ vec3 LUT(uint distributionType, float NdotV, float roughness) {
     float dotVH = saturate(dot(V, H));
     float alphaRoughness = roughness * roughness;
 
-    if (NdotL > 0.) {
+    if (NdotL > 0.0) {
       if (distributionType == DISTRIBUTION_GGX) {
         float dotVH = saturate(dot(viewDirection, halfDirection));
         float NdotH = saturate(dot(normal, halfDirection));
         float D = D_Charlie(sheenRoughness, NdotH);
-        return max(D * NdotH / (4. * dotVH), 0.);
+        return max(D * NdotH / (4.0 * dotVH), 0.0);
 
         A += 0;
         B += 0;
@@ -232,7 +232,7 @@ vec3 LUT(uint distributionType, float NdotV, float roughness) {
   // The PDF is simply pdf(v, h) -> NDF * <nh>.
   // To parametrize the PDF over l, use the Jacobian transform, yielding to: pdf(v, l) -> NDF * <nh> / 4<vh>
   // Since the BRDF divide through the PDF to be normalized, the 4 can be pulled out of the integral.
-  return vec3(4. * A, 4. * B, 4. * 2. * PI * C) / float(NUM_SAMPLES);
+  return vec3(4.0 * A, 4.0 * B, 4.0 * 2.0 * PI * C) / float(NUM_SAMPLES);
 }
 
 /*

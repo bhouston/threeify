@@ -70,7 +70,7 @@ void main() {
         viewDirection,
         directLight.direction,
         vec3(0.04),
-        vec3(1.),
+        vec3(1.0),
         roughness
       );
     outgoingRadiance +=
@@ -79,6 +79,6 @@ void main() {
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.;
+  outputColor.a = 1.0;
 
 }

@@ -24,19 +24,19 @@ uniform float punctualLightOuterCos[MAX_PUNCTUAL_LIGHTS];
 PunctualLight readPunctualLightFromUniforms(int lightIndex, mat4 worldToView) {
   PunctualLight punctualLight;
   #if MAX_PUNCTUAL_LIGHTS > 0
-    punctualLight.type = punctualLightType[lightIndex];
-    punctualLight.position = mat4TransformPosition(
-      worldToView,
-      punctualLightWorldPosition[lightIndex]
-    );
-    punctualLight.direction = mat4TransformDirection(
-      worldToView,
-      punctualLightWorldDirection[lightIndex]
-    );
-    punctualLight.intensity = punctualLightIntensity[lightIndex];
-    punctualLight.range = punctualLightRange[lightIndex];
-    punctualLight.innerConeCos = punctualLightInnerCos[lightIndex];
-    punctualLight.outerConeCos = punctualLightOuterCos[lightIndex];
+  punctualLight.type = punctualLightType[lightIndex];
+  punctualLight.position = mat4TransformPosition(
+    worldToView,
+    punctualLightWorldPosition[lightIndex]
+  );
+  punctualLight.direction = mat4TransformDirection(
+    worldToView,
+    punctualLightWorldDirection[lightIndex]
+  );
+  punctualLight.intensity = punctualLightIntensity[lightIndex];
+  punctualLight.range = punctualLightRange[lightIndex];
+  punctualLight.innerConeCos = punctualLightInnerCos[lightIndex];
+  punctualLight.outerConeCos = punctualLightOuterCos[lightIndex];
   #endif
   return punctualLight;
 }

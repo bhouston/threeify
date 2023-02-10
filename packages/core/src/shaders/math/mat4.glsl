@@ -2,49 +2,49 @@
 
 mat4 mat4Identity() {
   return mat4(
-    1.,
-    0.,
-    0.,
-    0.,
-    0.,
-    1.,
-    0.,
-    0.,
-    0.,
-    0.,
-    1.,
-    0.,
-    0.,
-    0.,
-    0.,
-    1.
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
   );
 }
 
 mat4 mat4RotateXDirection(const vec2 dir) {
   return mat4(
-    vec4(1., 0., 0., 0.),
-    vec4(0., dir.x, -dir.y, 0.),
-    vec4(0., dir.y, dir.x, 0.),
-    vec4(0., 0., 0., 1.)
+    vec4(1.0, 0.0, 0.0, 0.0),
+    vec4(0.0, dir.x, -dir.y, 0.0),
+    vec4(0.0, dir.y, dir.x, 0.0),
+    vec4(0.0, 0.0, 0.0, 1.0)
   );
 }
 
 mat4 mat4RotateYDirection(const vec2 dir) {
   return mat4(
-    vec4(dir.x, 0., dir.y, 0.),
-    vec4(0., 1., 0., 0.),
-    vec4(-dir.y, 0., dir.x, 0.),
-    vec4(0., 0., 0., 1.)
+    vec4(dir.x, 0.0, dir.y, 0.0),
+    vec4(0.0, 1.0, 0.0, 0.0),
+    vec4(-dir.y, 0.0, dir.x, 0.0),
+    vec4(0.0, 0.0, 0.0, 1.0)
   );
 }
 
 mat4 mat4RotateZDirection(const vec2 dir) {
   return mat4(
-    vec4(dir.x, -dir.y, 0., 0.),
-    vec4(dir.y, dir.x, 0., 0.),
-    vec4(0., 0., 1., 0.),
-    vec4(0., 0., 0., 1.)
+    vec4(dir.x, -dir.y, 0.0, 0.0),
+    vec4(dir.y, dir.x, 0.0, 0.0),
+    vec4(0.0, 0.0, 1.0, 0.0),
+    vec4(0.0, 0.0, 0.0, 1.0)
   );
 }
 
@@ -63,25 +63,25 @@ mat4 mat4RotateZ(const float angle) {
 // https://thebookofshaders.com/08/
 mat4 scale3ToMat4(const vec3 scale) {
   return mat4(
-    vec4(scale.x, 0., 0., 0.),
-    vec4(0., scale.y, 0., 0.),
-    vec4(0., 0., scale.z, 0.),
-    vec4(0., 0., 0., 1.)
+    vec4(scale.x, 0.0, 0.0, 0.0),
+    vec4(0.0, scale.y, 0.0, 0.0),
+    vec4(0.0, 0.0, scale.z, 0.0),
+    vec4(0.0, 0.0, 0.0, 1.0)
   );
 }
 
 vec3 mat4TransformPosition(const mat4 m, const vec3 p) {
-  return (m * vec4(p, 1.)).xyz;
+  return (m * vec4(p, 1.0)).xyz;
 }
 
 vec3 mat4TransformDirection(const mat4 m, const vec3 dir) {
-  return normalize((m * vec4(dir, 0.)).xyz);
+  return normalize((m * vec4(dir, 0.0)).xyz);
 }
 
 vec3 mat4UntransformDirection(const mat4 m, const vec3 dir) {
   // dir can be either a direction vector or a normal vector
   // upper-left 3x3 of matrix is assumed to be orthogonal
-  return normalize((vec4(dir, 0.) * m).xyz);
+  return normalize((vec4(dir, 0.0) * m).xyz);
 }
 
 vec3 mat4ToScale3(const mat4 matrix) {
