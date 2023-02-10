@@ -43,6 +43,9 @@ export * from './geometry/primitives/passGeometry.js';
 export * from './geometry/primitives/planeGeometry.js';
 export * from './geometry/primitives/polyhedronGeometry.js';
 
+export * from './renderers/utilities/copyPass.js';
+export * from './renderers/utilities/makeTexImage2DFromEquirectangularTexture.js';
+
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';
 
@@ -78,7 +81,6 @@ export * from './renderers/webgl/shaders/ShaderDefines.js';
 export * from './renderers/webgl/textures/DataType.js';
 export * from './renderers/webgl/textures/PixelFormat.js';
 export * from './renderers/webgl/textures/TexImage2D.js';
-export * from './renderers/webgl/textures/TexImage2D.Functions.js';
 export * from './renderers/webgl/textures/TexParameters.js';
 export * from './renderers/webgl/textures/TextureFilter.js';
 export * from './renderers/webgl/textures/TextureSourceType.js';

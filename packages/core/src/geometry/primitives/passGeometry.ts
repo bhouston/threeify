@@ -10,12 +10,6 @@ import { Vec2 } from '@threeify/math';
 import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
 import { Geometry } from '../Geometry.js';
 
-/**
- * A 2D pass geometry
- *
- * @param min in clip space
- * @param max in clip space
- */
 export function passGeometry(): Geometry {
   const min = new Vec2(-1, -1);
   const max = new Vec2(1, 1);
@@ -40,3 +34,5 @@ export function passGeometry(): Geometry {
 
   return geometry;
 }
+
+export const PassGeometry = passGeometry();

@@ -10,6 +10,7 @@
     "Framebuffers",
     "glsl",
     "GLTF",
+    "glxo",
     "Halton",
     "interruptible",
     "Khronos",

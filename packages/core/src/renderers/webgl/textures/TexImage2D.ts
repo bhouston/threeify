@@ -6,10 +6,12 @@
 // * @bhouston
 //
 
-import { isPow2, Vec2 } from '@threeify/math';
+import { Vec2 } from '@threeify/math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
 import { ArrayImage } from '../../../textures/ArrayBufferImage.js';
+import { CubeMapTexture } from '../../../textures/CubeTexture.js';
+import { Texture } from '../../../textures/Texture.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
@@ -19,6 +21,7 @@ import { InternalFormat } from './InternalFormat.js';
 import { PixelFormat } from './PixelFormat.js';
 import { TexParameters } from './TexParameters.js';
 import { TextureTarget } from './TextureTarget.js';
+import { TextureWrap } from './TextureWrap.js';
 
 export class TexImage2D implements IResource {
   public readonly id = generateUUID();
@@ -78,9 +81,7 @@ export class TexImage2D implements IResource {
     }
 
     if (texParameters.generateMipmaps) {
-      if (isPow2(this.size.x) && isPow2(this.size.y)) {
-        gl.generateMipmap(this.target);
-      }
+      gl.generateMipmap(this.target);
     }
 
     gl.bindTexture(this.target, null);
@@ -179,6 +180,41 @@ export class TexImage2D implements IResource {
       this.size.set(image.width, image.height);
     }
   }
+}
+
+export function makeTexImage2DFromTexture(
+  context: RenderingContext,
+  texture: Texture | CubeMapTexture,
+  internalFormat: PixelFormat = PixelFormat.RGBA
+): TexImage2D {
+  //console.time('makeTexImage2DFromTexture ' + texture.name);
+  const params = new TexParameters();
+  params.anisotropyLevels = texture.anisotropicLevels;
+  params.generateMipmaps = texture.generateMipmaps;
+  params.magFilter = texture.magFilter;
+  params.minFilter = texture.minFilter;
+  if (texture instanceof CubeMapTexture) {
+    params.wrapS = TextureWrap.ClampToEdge;
+    params.wrapT = TextureWrap.ClampToEdge;
+  } else {
+    params.wrapS = texture.wrapS;
+    params.wrapT = texture.wrapT;
+  }
+  const texImage2D = new TexImage2D(
+    context,
+    texture instanceof CubeMapTexture ? texture.images : [texture.image],
+    texture.internalFormat,
+    texture.dataType,
+    internalFormat,
+    texture instanceof CubeMapTexture
+      ? TextureTarget.TextureCubeMap
+      : TextureTarget.Texture2D,
+    params
+  );
+  texImage2D.version = texture.version;
+  //console.timeEnd('makeTexImage2DFromTexture ' + texture.name);
+
+  return texImage2D;
 }
 
 /*
