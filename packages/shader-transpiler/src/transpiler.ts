@@ -68,7 +68,9 @@ export function glslToJavaScriptTranspiler(
           const test2IncludeFilePath = testIncludeFilePath + extension;
           pathsAttempted.push(test2IncludeFilePath);
           if (fs.existsSync(test2IncludeFilePath)) {
-            includeFilePath = test2IncludeFilePath;
+            if (fs.statSync(test2IncludeFilePath).isFile()) {
+              includeFilePath = test2IncludeFilePath;
+            }
           }
         });
       });
