@@ -155,7 +155,7 @@ void main() {
     DEBUG_OUTPUT(33, transmittedLight.rgb);
 
     vec3 attenuatedColor =
-      transmittedLight.xyz *
+      transmittedLight.xyz * // already pre-multiplied by alpha
       getVolumeAttenuation(
         length(transmissionRay),
         material.attenuationColor,
@@ -175,8 +175,6 @@ void main() {
 
     transmission_btdf = (1.0 - F) * attenuatedColor * albedo;
     DEBUG_OUTPUT(36, transmission_btdf);
-
-    //material.alpha *= transmittedLight.a;
   }
 
   /*vec4 transmission_btdf = BTDF_TransmissionAttenuation(
