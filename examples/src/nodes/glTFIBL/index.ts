@@ -83,11 +83,11 @@ async function init(): Promise<void> {
    );*/
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 1;
+  const domeLightIntensity = 1.5;
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.IridescenceLamp, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -95,7 +95,8 @@ async function init(): Promise<void> {
   ) as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement, {
     antialias: false,
-    depth: false
+    depth: false,
+    premultipliedAlpha: true
   });
   const { canvasFramebuffer } = context;
   canvasFramebuffer.devicePixelRatio = 1.5;

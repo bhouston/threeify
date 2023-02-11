@@ -176,7 +176,7 @@ void main() {
     transmission_btdf = (1.0 - F) * attenuatedColor * albedo;
     DEBUG_OUTPUT(36, transmission_btdf);
 
-    material.alpha *= transmittedLight.a;
+    //material.alpha *= transmittedLight.a;
   }
 
   /*vec4 transmission_btdf = BTDF_TransmissionAttenuation(
