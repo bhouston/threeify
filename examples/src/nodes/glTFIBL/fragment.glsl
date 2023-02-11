@@ -93,13 +93,7 @@ void main() {
   DEBUG_OUTPUT(27, normalToRgb(viewClearcoatNormal));
 
   vec3 outgoingRadiance = vec3(0.0);
-
-  //material.albedo = vec3( 1. );
-  //material.occlusion = 1.;
-  //material.metallic = 0.;
-  //material.emissive = vec3( 0. );
-  //material.specularRoughness = 0.5;
-
+  
   // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_ior/README.md
   vec3 specularF0 =
     saturate(iorToF0(material.ior) * material.specularColor) *
@@ -177,27 +171,6 @@ void main() {
     DEBUG_OUTPUT(36, transmission_btdf);
   }
 
-  /*vec4 transmission_btdf = BTDF_TransmissionAttenuation(
-      worldNormal,
-      worldViewDirection,
-      worldPosition,
-      localToWorld,
-      worldToView,
-      viewToScreen,
-      material.albedo,
-      specularF0,
-      specularF90,
-      material.ior,
-      material.specularRoughness,
-      material.thickness,
-      material.attenuationColor,
-      material.attenuationDistance,
-      backgroundTexture
-    );*/
-
-  //mix( totalDiffuse, transmission.rgb, material.transmission )
-  // TODO: Just adding it here is completely wrong, also I am skipping the alpha component.
-
   if (iblMapIntensity == vec3(0.0)) {
     outgoingRadiance += transmission_btdf * material.transmission;
   } else {
@@ -244,7 +217,6 @@ void main() {
     vec3 diffuse_brdf = albedo * iblIrradiance * material.occlusion;
     DEBUG_OUTPUT(40, diffuse_brdf);
 
-    //vec3 specular_btdf = BTDF_SpecularGGX_IBL( viewNormal, viewViewDirection, material.specularRoughness );
     vec3 indirect_brdf = mix(
       diffuse_brdf,
       transmission_btdf,
