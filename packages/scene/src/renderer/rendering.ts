@@ -96,7 +96,7 @@ export function renderScene(
 
   const uniforms = {
     debugOutputIndex: userUniforms.debugOutputIndex,
-    outputTransformFlags: userUniforms.outputTransformFlags
+    outputTransformFlags: 0x1 + 0x2 + 0x4
   };
 
   renderMeshes(
@@ -155,7 +155,7 @@ export function renderScene_Tranmission(
     opaqueMeshBatches,
     {
       debugOutputIndex: userUniforms.debugOutputIndex,
-      outputTransformFlags: 0x0
+      outputTransformFlags: 0x4
     },
     DepthTestState.Normal,
     BlendState.PremultipliedOver,
@@ -176,7 +176,7 @@ export function renderScene_Tranmission(
     const blendUniforms = {
       backgroundTexture: opaqueTexImage2D,
       debugOutputIndex: userUniforms.debugOutputIndex,
-      outputTransformFlags: 0x0
+      outputTransformFlags: 0x4
     };
 
     multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);

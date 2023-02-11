@@ -83,11 +83,11 @@ async function init(): Promise<void> {
    );*/
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 0.5;
+  const domeLightIntensity = 1;
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.IridescenceLamp, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
