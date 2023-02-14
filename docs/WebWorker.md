@@ -62,3 +62,27 @@ transferable objects parameter of the web workers message passing system.
 Ideas for Web Workers:
 - It may be useful to have the HDR decoder work within a web worker?
 - Can I uplaod webgl2 stuff in a web worker?
+
+
+
+The way that the web worker works in Three.js is this:
+- imports from three the geometry type.
+- has 4 workers.
+- acts like a queue.
+- sends tasks to the worker, the worker responds when they are done.
+
+
+A nice interface:
+- Have a promise-based interface for decoding.
+- There should be a non-worker-based queue.
+- It should initialize the workers.
+- Tasks and the promises go into a queue.
+- If a worker is free, the first item from the queue goes into the worker.
+- When a worker is done, we complete the promise, then check the queue, and fill any empty workers.
+
+Data structure:
+- Queue of tasks (name + data + promise callbacks)
+- An array of waiting workers and an array of pending workers.
+
+
+
