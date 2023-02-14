@@ -42,6 +42,7 @@ import {
 } from '../../utilities/khronosModels';
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import { ShaderOutputs } from './ShaderOutputs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
@@ -63,7 +64,10 @@ document.addEventListener('keydown', (event) => {
       break;
   }
   console.log(
-    `Debug Channel ${PhysicalMaterialOutputs[debugOutputIndex]} (${debugOutputIndex})`
+    `Debug Channel ${
+      PhysicalMaterialOutputs[debugOutputIndex] ||
+      ShaderOutputs[debugOutputIndex]
+    } (${debugOutputIndex})`
   );
 });
 
@@ -87,7 +91,7 @@ async function init(): Promise<void> {
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(

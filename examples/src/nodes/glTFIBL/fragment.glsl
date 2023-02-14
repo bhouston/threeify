@@ -1,5 +1,6 @@
 precision highp float;
 
+//#define DEBUG_OUTPUTS (1)
 #define NUM_UV_CHANNELS (3)
 
 in vec3 v_worldSurfacePosition;
@@ -55,9 +56,9 @@ void main() {
   PhysicalMaterial material = readPhysicalMaterialFromUniforms(uvs);
   PHYSICAL_DEBUG_OUTPUT(material);
 
-  DEBUG_OUTPUT(59, mod(v_uv0, 1.0));
-  DEBUG_OUTPUT(60, mod(v_uv1, 1.0));
-  DEBUG_OUTPUT(61, mod(v_uv2, 1.0));
+  DEBUG_OUTPUT(26, mod(v_uv0, 1.0));
+  DEBUG_OUTPUT(27, mod(v_uv1, 1.0));
+  DEBUG_OUTPUT(28, mod(v_uv2, 1.0));
 
   if (
     material.alphaMode == ALPHAMODE_MASK &&
@@ -77,6 +78,7 @@ void main() {
   vec3 viewNormal =
     normalize(v_viewSurfaceNormal) * (gl_FrontFacing ? 1.0 : -1.0);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
+  DEBUG_OUTPUT(29, normalToRgb(viewViewDirection));
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV(
     viewPosition,
@@ -84,13 +86,13 @@ void main() {
     v_uv0
   );
   viewNormal = adjustNormal(tangentToView, material.normal);
-  DEBUG_OUTPUT(26, normalToRgb(viewNormal));
+  DEBUG_OUTPUT(30, normalToRgb(viewNormal));
 
   vec3 viewClearcoatNormal = adjustNormal(
     tangentToView,
     material.clearcoatNormal
   );
-  DEBUG_OUTPUT(27, normalToRgb(viewClearcoatNormal));
+  DEBUG_OUTPUT(31, normalToRgb(viewClearcoatNormal));
 
   vec3 outgoingRadiance = vec3(0.0);
   
@@ -105,9 +107,9 @@ void main() {
   specularF90 = mix(specularF90, vec3(1.0), material.metallic);
   vec3 albedo = mix(material.albedo, vec3(0.0), material.metallic);
 
-  DEBUG_OUTPUT(28, specularF0);
-  DEBUG_OUTPUT(29, specularF90);
-  DEBUG_OUTPUT(30, albedo);
+  DEBUG_OUTPUT(32, specularF0);
+  DEBUG_OUTPUT(33, specularF90);
+  DEBUG_OUTPUT(34, albedo);
 
   vec3 clearcoatF0 = vec3(0.04);
   vec3 clearcoatF90 = vec3(1.0);
@@ -119,10 +121,10 @@ void main() {
       worldToView,
       viewViewDirection
     );
-    DEBUG_OUTPUT(31, normalToRgb(worldViewDirection));
+    DEBUG_OUTPUT(35, normalToRgb(worldViewDirection));
 
     vec3 worldNormal = mat4UntransformDirection(worldToView, viewNormal);
-    DEBUG_OUTPUT(32, normalToRgb(worldNormal));
+    DEBUG_OUTPUT(36, normalToRgb(worldNormal));
 
     vec3 transmissionRay = getVolumeTransmissionRay(
       worldNormal,
@@ -132,12 +134,14 @@ void main() {
       localToWorld
     );
     vec3 refractedRayExit = worldPosition + transmissionRay;
+    DEBUG_OUTPUT(37, normalToRgb(refractedRayExit));
 
     // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
     vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
     vec2 refractionCoords = ndcPos.xy / ndcPos.w;
     refractionCoords += 1.0;
     refractionCoords /= 2.0;
+    DEBUG_OUTPUT(38, refractionCoords.xy);
 
     // Sample framebuffer to get pixel the refracted ray hits.
     vec4 transmittedLight = getTransmissionSample(
@@ -146,7 +150,7 @@ void main() {
       material.specularRoughness,
       ior
     );
-    DEBUG_OUTPUT(33, transmittedLight.rgb);
+    DEBUG_OUTPUT(39, transmittedLight.rgb);
 
     vec3 attenuatedColor =
       transmittedLight.xyz * // already pre-multiplied by alpha
@@ -155,7 +159,7 @@ void main() {
         material.attenuationColor,
         material.attenuationDistance
       );
-    DEBUG_OUTPUT(34, attenuatedColor);
+    DEBUG_OUTPUT(40, attenuatedColor);
 
     // Get the specular component.
     vec3 F = BRDF_Specular_GGX_IBL(
@@ -165,10 +169,10 @@ void main() {
       specularF90,
       material.specularRoughness
     );
-    DEBUG_OUTPUT(35, F);
+    DEBUG_OUTPUT(41, F);
 
     transmission_btdf = (1.0 - F) * attenuatedColor * albedo;
-    DEBUG_OUTPUT(36, transmission_btdf);
+    DEBUG_OUTPUT(42, transmission_btdf);
   }
 
   if (iblMapIntensity == vec3(0.0)) {
@@ -189,7 +193,7 @@ void main() {
       viewNormal,
       worldToView
     );
-    DEBUG_OUTPUT(37, iblIrradiance);
+    DEBUG_OUTPUT(43, iblIrradiance);
 
     vec3 iblRadiance = sampleIBLRadiance(
       iblMapTexture,
@@ -200,7 +204,7 @@ void main() {
       worldToView,
       material.specularRoughness
     );
-    DEBUG_OUTPUT(38, iblRadiance);
+    DEBUG_OUTPUT(44, iblRadiance);
 
     vec3 iblClearcoatRadiance = sampleIBLRadiance(
       iblMapTexture,
@@ -211,18 +215,18 @@ void main() {
       worldToView,
       material.clearcoatRoughness
     );
-    DEBUG_OUTPUT(39, iblClearcoatRadiance);
+    DEBUG_OUTPUT(45, iblClearcoatRadiance);
 
     // lambert diffuse
     vec3 diffuse_brdf = albedo * iblIrradiance * material.occlusion;
-    DEBUG_OUTPUT(40, diffuse_brdf);
+    DEBUG_OUTPUT(46, diffuse_brdf);
 
     vec3 indirect_brdf = mix(
       diffuse_brdf,
       transmission_btdf,
       material.transmission
     );
-    DEBUG_OUTPUT(41, indirect_brdf);
+    DEBUG_OUTPUT(47, indirect_brdf);
 
     // specular layer
     vec3 singleScattering = vec3(0.0),
@@ -244,12 +248,12 @@ void main() {
     vec3 specular_brdf =
       iblRadiance * singleScattering + multiScattering * iblIrradiance;
 
-    DEBUG_OUTPUT(42, specular_brdf);
+    DEBUG_OUTPUT(48, specular_brdf);
 
     indirect_brdf =
       indirect_brdf * (1.0 - max3(singleScattering + multiScattering)) +
       specular_brdf * specOcclusion;
-    DEBUG_OUTPUT(43, indirect_brdf);
+    DEBUG_OUTPUT(49, indirect_brdf);
 
     // sheen
     //   if (material.sheenColor != vec3(0.)) {
@@ -262,10 +266,10 @@ void main() {
         material.sheenRoughness
       ) *
       specOcclusion;
-    DEBUG_OUTPUT(44, sheen_brdf);
+    DEBUG_OUTPUT(50, sheen_brdf);
 
     indirect_brdf = sheenMix(material.sheenColor, indirect_brdf, sheen_brdf);
-    DEBUG_OUTPUT(45, indirect_brdf);
+    DEBUG_OUTPUT(51, indirect_brdf);
     //   }
 
     // if (material.clearcoatFactor != 0.) {
@@ -291,7 +295,7 @@ void main() {
         material.occlusion,
         material.clearcoatRoughness
       );
-    DEBUG_OUTPUT(46, clearcoat_brdf);
+    DEBUG_OUTPUT(52, clearcoat_brdf);
 
     indirect_brdf = fresnelMix(
       clearcoatF0,
@@ -301,7 +305,7 @@ void main() {
       indirect_brdf,
       clearcoat_brdf
     );
-    DEBUG_OUTPUT(47, indirect_brdf);
+    DEBUG_OUTPUT(53, indirect_brdf);
 
     // }
 
@@ -336,14 +340,14 @@ void main() {
     float VdotH = saturate(dot(viewViewDirection, halfDirection));
 
     vec3 irradiance = directLight.radiance * dotNL;
-    DEBUG_OUTPUT(48, irradiance);
+    DEBUG_OUTPUT(54, irradiance);
 
     vec3 clearcoatIrradiance = directLight.radiance * clearCoatDotNL;
-    DEBUG_OUTPUT(49, clearcoatIrradiance);
+    DEBUG_OUTPUT(55, clearcoatIrradiance);
 
     vec3 diffuse_brdf =
       irradiance * BRDF_Diffuse_Lambert(albedo) * material.occlusion;
-    DEBUG_OUTPUT(50, diffuse_brdf);
+    DEBUG_OUTPUT(56, diffuse_brdf);
 
     vec3 direct_brdf = diffuse_brdf;
 
@@ -352,7 +356,7 @@ void main() {
       material.occlusion,
       material.specularRoughness
     );
-    DEBUG_OUTPUT(51, specOcclusion);
+    DEBUG_OUTPUT(57, specOcclusion);
 
     vec3 specular_brdf =
       irradiance *
@@ -363,7 +367,7 @@ void main() {
         material.specularRoughness
       ) *
       specOcclusion;
-    DEBUG_OUTPUT(52, specular_brdf);
+    DEBUG_OUTPUT(58, specular_brdf);
 
     direct_brdf = fresnelMix(
       specularF0,
@@ -373,7 +377,7 @@ void main() {
       diffuse_brdf,
       specular_brdf
     );
-    DEBUG_OUTPUT(53, direct_brdf);
+    DEBUG_OUTPUT(59, direct_brdf);
 
     // sheen
     //  if (material.sheenColor != vec3(0.)) {
@@ -387,10 +391,10 @@ void main() {
         material.sheenRoughness
       ) *
       material.occlusion;
-    DEBUG_OUTPUT(54, sheen_brdf);
+    DEBUG_OUTPUT(60, sheen_brdf);
 
     direct_brdf = sheenMix(material.sheenColor, direct_brdf, sheen_brdf);
-    DEBUG_OUTPUT(55, direct_brdf);
+    DEBUG_OUTPUT(61, direct_brdf);
     //  }
 
     // clearcoat
@@ -408,7 +412,7 @@ void main() {
         material.occlusion,
         material.clearcoatRoughness
       );
-    DEBUG_OUTPUT(56, clearcoat_brdf);
+    DEBUG_OUTPUT(62, clearcoat_brdf);
 
     direct_brdf = fresnelMix(
       clearcoatF0,
@@ -419,7 +423,7 @@ void main() {
       clearcoat_brdf
     );
 
-    DEBUG_OUTPUT(57, direct_brdf);
+    DEBUG_OUTPUT(63, direct_brdf);
     // }
 
     outgoingRadiance += direct_brdf;
@@ -432,11 +436,13 @@ void main() {
     (outputTransformFlags & 0x1) != 0
       ? tonemappingACESFilmic(outgoingRadiance)
       : outgoingRadiance;
-  DEBUG_OUTPUT(58, tonemapped);
+  DEBUG_OUTPUT(64, tonemapped);
   vec3 sRGB =
     (outputTransformFlags & 0x2) != 0
       ? linearTosRGB(tonemapped)
       : tonemapped;
+
+  DEBUG_OUTPUT(65, sRGB);
 
   vec3 premultipliedAlpha =
     (outputTransformFlags & 0x4) != 0
