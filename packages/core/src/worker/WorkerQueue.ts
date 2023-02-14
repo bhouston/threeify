@@ -90,7 +90,7 @@ export class WorkerQueue {
 
   // check whether any of the worker threads is ready for a new task.
   // if so, assign the next task in the queue to the worker thread.
-  public keepWorkersBusy() {
+  private keepWorkersBusy() {
     while (this.requestQueue.length > 0 && this.idleWorkerThreads.length > 0) {
       const request = this.requestQueue.shift();
       if (request === undefined) throw new Error('request is undefined');
