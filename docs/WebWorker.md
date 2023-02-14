@@ -84,5 +84,7 @@ Data structure:
 - Queue of tasks (name + data + promise callbacks)
 - An array of waiting workers and an array of pending workers.
 
+One type of web worker for all background tasks.  Then I do not overload background CPUs.
 
-
+Question:
+- How do I listen to messages posted back to the main thread?

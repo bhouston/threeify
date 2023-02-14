@@ -43,6 +43,8 @@ export * from './geometry/primitives/passGeometry.js';
 export * from './geometry/primitives/planeGeometry.js';
 export * from './geometry/primitives/polyhedronGeometry.js';
 
+export * from './worker/WorkerQueue.js';
+
 export * from './renderers/utilities/copyPass.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
