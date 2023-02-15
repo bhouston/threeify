@@ -1,5 +1,11 @@
 export * from './warnOnce';
 
+export * from './core/assert.js';
+export * from './core/coords.js';
+export * from './core/generateUuid.js';
+export * from './core/types.js';
+export * from './core/sleep.js';
+
 export * from './platform/Detection.js';
 
 export * from './controllers/DeviceOrientation.js';
@@ -12,11 +18,6 @@ export * from './renderers/webgl/buffers/BufferTarget.js';
 export * from './renderers/webgl/buffers/BufferUsage.js';
 export * from './renderers/webgl/buffers/ComponentType.js';
 export * from './renderers/webgl/buffers/PrimitiveType.js';
-
-export * from './core/assert.js';
-export * from './core/coords.js';
-export * from './core/generateUuid.js';
-export * from './core/types.js';
 
 export * from './renderers/webgl/extensions/Extensions.js';
 export * from './renderers/webgl/extensions/OptionalExtensions.js';
@@ -43,7 +44,7 @@ export * from './geometry/primitives/passGeometry.js';
 export * from './geometry/primitives/planeGeometry.js';
 export * from './geometry/primitives/polyhedronGeometry.js';
 
-export * from './worker/WorkerQueue.js';
+export * from './worker/WorkerPool.js';
 
 export * from './renderers/utilities/copyPass.js';
 export * from './renderers/utilities/equirectangular.js';
@@ -80,6 +81,9 @@ export * from './renderers/webgl/textures/TextureBindings.js';
 export * from './renderers/webgl/shaders/Shader.js';
 export * from './renderers/webgl/shaders/ShaderType.js';
 export * from './renderers/webgl/shaders/ShaderDefines.js';
+
+export * from './worker/BackgroundWorker.js';
+export * from './worker/WorkerPool.js';
 
 export * from './renderers/webgl/textures/DataType.js';
 export * from './renderers/webgl/textures/PixelFormat.js';

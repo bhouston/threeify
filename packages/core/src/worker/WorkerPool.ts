@@ -1,11 +1,11 @@
-export interface IWorkerResponse {
+export interface IWorkerPoolResponse {
   type: string;
   requestId: number;
   result?: any;
   message?: string;
 }
 
-export interface IWorkerRequest {
+export interface IWorkerPoolRequest {
   id: number;
   type: string;
   parameters: any;
@@ -14,12 +14,12 @@ export interface IWorkerRequest {
   reject: (error: Error) => void;
 }
 
-export class WorkerQueue {
+export class WorkerPool {
   private nextRequestId = 0;
-  public requestQueue: IWorkerRequest[] = [];
-  public processingRequests: IWorkerRequest[] = [];
-  public workerThreads: Worker[] = [];
-  public idleWorkerThreads: Worker[] = [];
+  private requestQueue: IWorkerPoolRequest[] = [];
+  private processingRequests: IWorkerPoolRequest[] = [];
+  private workerThreads: Worker[] = [];
+  private idleWorkerThreads: Worker[] = [];
 
   public constructor(numWorkerThreads = navigator?.hardwareConcurrency || 4) {
     for (let i = 0; i < numWorkerThreads; i++) {
@@ -32,6 +32,14 @@ export class WorkerQueue {
       this.workerThreads.push(worker);
       this.idleWorkerThreads.push(worker);
     }
+  }
+
+  public get queueLength() {
+    return this.requestQueue.length;
+  }
+
+  public get numWorkers() {
+    return this.workerThreads.length;
   }
 
   private onWorkerMessage(
