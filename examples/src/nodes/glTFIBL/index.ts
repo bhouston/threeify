@@ -42,8 +42,8 @@ import {
 } from '../../utilities/khronosModels';
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
-import { ShaderOutputs } from './ShaderOutputs';
 import fragmentSource from './fragment.glsl';
+import { ShaderOutputs } from './ShaderOutputs';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
@@ -91,7 +91,7 @@ async function init(): Promise<void> {
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(

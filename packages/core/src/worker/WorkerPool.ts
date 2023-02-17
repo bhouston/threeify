@@ -1,11 +1,4 @@
-export interface IWorkerPoolResponse {
-  type: string;
-  requestId: number;
-  result?: any;
-  message?: string;
-}
-
-export interface IWorkerPoolRequest {
+interface IPoolRequest {
   id: number;
   type: string;
   parameters: any;
@@ -14,16 +7,26 @@ export interface IWorkerPoolRequest {
   reject: (error: Error) => void;
 }
 
+interface IPoolResponse {
+  type: string;
+  requestId: number;
+  result?: any;
+  message?: string;
+}
+
 export class WorkerPool {
   private nextRequestId = 0;
-  private requestQueue: IWorkerPoolRequest[] = [];
-  private processingRequests: IWorkerPoolRequest[] = [];
+  private requestQueue: IPoolRequest[] = [];
+  private processingRequests: IPoolRequest[] = [];
   private workerThreads: Worker[] = [];
   private idleWorkerThreads: Worker[] = [];
 
-  public constructor(numWorkerThreads = navigator?.hardwareConcurrency || 4) {
+  public constructor(
+    public workerSourceUrl: string,
+    numWorkerThreads = navigator?.hardwareConcurrency || 4
+  ) {
     for (let i = 0; i < numWorkerThreads; i++) {
-      const worker = new Worker('/packages/core/dist/worker/Worker.js', {
+      const worker = new Worker(workerSourceUrl, {
         type: 'module'
       });
       worker.onmessage = (event) => {
@@ -42,28 +45,25 @@ export class WorkerPool {
     return this.workerThreads.length;
   }
 
-  private onWorkerMessage(
-    worker: Worker,
-    event: MessageEvent<IWorkerResponse>
-  ) {
-    const workerIndex = this.workerThreads.indexOf(worker);
+  private onWorkerMessage(worker: Worker, event: MessageEvent<IPoolResponse>) {
+    const response = event.data;
     //console.log(
-    //  `WorkerQueue: received message from worker #${workerIndex}, re: request ${event.data?.requestId}`
+    //  `WorkerQueue: received message from worker #${this.workerThreads.indexOf(worker)}, re: request ${response?.requestId}`
     //);
     const request = this.processingRequests.find(
-      (request) => request.id === event.data.requestId
+      (request) => request.id === response.requestId
     );
     if (request === undefined) throw new Error('request is undefined');
 
-    switch (event.data.type) {
+    switch (response.type) {
       case 'completed':
-        request.resolve(event.data.result);
+        request.resolve(response.result);
         break;
       case 'error':
-        request.reject(new Error(event.data.message || 'no message'));
+        request.reject(new Error(response.message || 'no message'));
         break;
       default:
-        throw new Error(`Unknown event type ${event.type}`);
+        throw new Error(`Unknown event type ${response.type}`);
     }
 
     this.idleWorkerThreads.push(worker);
@@ -102,16 +102,18 @@ export class WorkerPool {
     while (this.requestQueue.length > 0 && this.idleWorkerThreads.length > 0) {
       const request = this.requestQueue.shift();
       if (request === undefined) throw new Error('request is undefined');
+
       const worker = this.idleWorkerThreads.shift();
       if (worker === undefined) throw new Error('worker is undefined');
-      const workerIndex = this.workerThreads.indexOf(worker);
+
       //console.log(
-      //  `WorkerQueue: assigning request ${request.id} to worker #${workerIndex}`
+      //  `WorkerQueue: assigning request ${request.id} to worker #${this.workerThreads.indexOf(worker)}`
       //);
       worker.postMessage(
         { id: request.id, type: request.type, parameters: request.parameters },
         request.buffers
       );
+
       this.processingRequests.push(request);
     }
   }

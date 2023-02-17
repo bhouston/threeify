@@ -88,3 +88,7 @@ One type of web worker for all background tasks.  Then I do not overload backgro
 
 Question:
 - How do I listen to messages posted back to the main thread?
+
+
+Update, the above all works!
+
