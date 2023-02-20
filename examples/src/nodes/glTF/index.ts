@@ -120,7 +120,7 @@ async function init(): Promise<void> {
 
   const treeStats = subTreeStats(root);
 
-  console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
+  //console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
   //console.time('updateRenderCache');
   const renderCache = updateRenderCache(

@@ -113,7 +113,7 @@ export async function makeCubeMapFromEquirectangularTexture(
 
   let linearLatLongMap = latLongMap;
   if (sourceEncoding !== TextureEncoding.Linear) {
-    console.log('converting to linear from ' + TextureEncoding[sourceEncoding]);
+    //console.log('converting to linear from ' + TextureEncoding[sourceEncoding]);
     // convert from RGBE to Linear
     linearLatLongMap = new TexImage2D(
       context,

@@ -74,7 +74,7 @@ document.addEventListener('keydown', (event) => {
 async function init(): Promise<void> {
   console.time('init');
   const glTFModelPromise = glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
   );
 
   const shaderMaterial = new ShaderMaterial(
@@ -206,7 +206,7 @@ async function init(): Promise<void> {
 
   const treeStats = subTreeStats(root);
 
-  console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
+  //console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
   //console.time('updateRenderCache');
   const program = await programPromise;
