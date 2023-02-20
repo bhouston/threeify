@@ -74,7 +74,7 @@ document.addEventListener('keydown', (event) => {
 async function init(): Promise<void> {
   console.time('init');
   const glTFModelPromise = glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const shaderMaterial = new ShaderMaterial(
