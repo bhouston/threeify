@@ -1,9 +1,11 @@
 import {
   Buffer,
   BufferGeometry,
+  CopyPass,
   Framebuffer,
   Program,
   ProgramVertexArray,
+  RenderingContext,
   TexImage2D,
   UniformValueMap
 } from '@threeify/core';
@@ -17,6 +19,9 @@ import { MeshBatch } from './MeshBatch';
 import { NodeUniforms } from './NodeUniforms';
 
 export class RenderCache {
+  constructor(public context: RenderingContext) {
+    this.copyPass = new CopyPass(this.context);
+  }
   public breathFirstNodes: SceneNode[] = [];
 
   // cameraCache
@@ -59,4 +64,6 @@ export class RenderCache {
   public transmissionFramebuffer?: Framebuffer;
 
   public userUniforms: UniformValueMap = {};
+
+  public copyPass: CopyPass;
 }

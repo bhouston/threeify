@@ -1,3 +1,4 @@
+import { IDisposable } from '../../core/types';
 import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
 import { BlendState } from '../webgl/BlendState';
@@ -22,9 +23,6 @@ import { TexImage2D } from '../webgl/textures/TexImage2D';
 import copyFragmentSource from './copy/fragment.glsl';
 import copyVertexSource from './copy/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
-let programPromise: Promise<Program> | undefined = undefined;
-let program: Program | undefined;
-let passBufferGeometry: BufferGeometry | undefined;
 
 export interface ICopyPassProps {
   sourceTexImage2D: TexImage2D;
@@ -34,77 +32,74 @@ export interface ICopyPassProps {
   targetEncoding?: TextureEncoding;
 }
 
-export function prewarmCopyPass(context: RenderingContext) {
-  if (program === undefined && programPromise === undefined) {
-    const material = new ShaderMaterial(
-      'copyPass',
-      copyVertexSource,
-      copyFragmentSource
-    );
-    programPromise = makeProgramFromShaderMaterial(context, material);
-  }
-  if (passBufferGeometry === undefined) {
-    passBufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
-  }
-}
+export class CopyPass implements IDisposable {
+  programPromise: Promise<Program>;
+  bufferGeometry: BufferGeometry;
 
-export async function copyPass(props: ICopyPassProps): Promise<void> {
-  const {
-    sourceTexImage2D,
-    sourceEncoding,
-    targetFramebuffer,
-    targetTexImage2D,
-    targetEncoding
-  } = props;
-  const { context } = sourceTexImage2D;
-
-  if (targetFramebuffer !== undefined && targetTexImage2D !== undefined) {
-    throw new Error('Cannot specify both a target framebuffer and texture.');
+  constructor(public readonly context: RenderingContext) {
+    this.programPromise = context.programCache.acquireRef('copyPass', () => {
+      const material = new ShaderMaterial(
+        'copyPass',
+        copyVertexSource,
+        copyFragmentSource
+      );
+      return makeProgramFromShaderMaterial(context, material);
+    });
+    this.bufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
   }
 
-  if (program === undefined && passBufferGeometry === undefined) {
-    prewarmCopyPass(context);
+  dispose() {
+    this.context.programCache.releaseRef('copyPass');
   }
 
-  const uniforms = {
-    sourceMap: sourceTexImage2D,
-    sourceEncoding:
-      sourceEncoding !== undefined ? sourceEncoding : TextureEncoding.Linear,
-    targetEncoding:
-      targetEncoding !== undefined ? targetEncoding : TextureEncoding.Linear
-  };
+  async exec(props: ICopyPassProps) {
+    const {
+      sourceTexImage2D,
+      sourceEncoding,
+      targetFramebuffer,
+      targetTexImage2D,
+      targetEncoding
+    } = props;
+    const { context } = sourceTexImage2D;
 
-  let localFramebuffer = targetFramebuffer;
-  let tempFramebuffer: Framebuffer | undefined = undefined;
+    if (targetFramebuffer !== undefined && targetTexImage2D !== undefined) {
+      throw new Error('Cannot specify both a target framebuffer and texture.');
+    }
 
-  if (targetFramebuffer === undefined && targetTexImage2D !== undefined) {
-    tempFramebuffer = new Framebuffer(context);
-    tempFramebuffer.attach(Attachment.Color0, targetTexImage2D);
-    localFramebuffer = tempFramebuffer;
-  }
+    const program = await this.programPromise;
 
-  if (localFramebuffer === undefined)
-    throw new Error('No target framebuffer or texture specified.');
+    const uniforms = {
+      sourceMap: sourceTexImage2D,
+      sourceEncoding:
+        sourceEncoding !== undefined ? sourceEncoding : TextureEncoding.Linear,
+      targetEncoding:
+        targetEncoding !== undefined ? targetEncoding : TextureEncoding.Linear
+    };
 
-  if (program === undefined) {
-    if (programPromise === undefined)
-      throw new Error('programPromise is undefined');
-    program = await programPromise;
-  }
-  if (passBufferGeometry === undefined)
-    throw new Error('passBufferGeometry is undefined');
+    let localFramebuffer = targetFramebuffer;
+    let tempFramebuffer: Framebuffer | undefined = undefined;
 
-  renderBufferGeometry({
-    framebuffer: localFramebuffer,
-    program,
-    uniforms,
-    bufferGeometry: passBufferGeometry,
-    depthTestState: DepthTestState.None,
-    blendState: BlendState.None,
-    cullingState: CullingState.None
-  });
+    if (targetFramebuffer === undefined && targetTexImage2D !== undefined) {
+      tempFramebuffer = new Framebuffer(context);
+      tempFramebuffer.attach(Attachment.Color0, targetTexImage2D);
+      localFramebuffer = tempFramebuffer;
+    }
 
-  if (tempFramebuffer !== undefined) {
-    tempFramebuffer.dispose();
+    if (localFramebuffer === undefined)
+      throw new Error('No target framebuffer or texture specified.');
+
+    renderBufferGeometry({
+      framebuffer: localFramebuffer,
+      program,
+      uniforms,
+      bufferGeometry: this.bufferGeometry,
+      depthTestState: DepthTestState.None,
+      blendState: BlendState.None,
+      cullingState: CullingState.None
+    });
+
+    if (tempFramebuffer !== undefined) {
+      tempFramebuffer.dispose();
+    }
   }
 }

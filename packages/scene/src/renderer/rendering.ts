@@ -5,7 +5,6 @@ import {
   BufferBit,
   CanvasFramebuffer,
   ClearState,
-  copyPass,
   CullingState,
   DepthTestState,
   Framebuffer,
@@ -76,14 +75,15 @@ export function renderScene(
   renderCache: RenderCache
 ) {
   const {
+    context,
     opaqueMeshBatches,
     opaqueFramebuffer,
     multisampleFramebuffer,
     transmissionFramebuffer,
     blendMeshBatches,
+    copyPass,
     userUniforms
   } = renderCache;
-  const { context } = canvasFramebuffer;
   if (
     multisampleFramebuffer === undefined ||
     opaqueFramebuffer === undefined ||
@@ -121,7 +121,7 @@ export function renderScene(
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
-  copyPass({
+  copyPass.exec({
     sourceTexImage2D: opaqueTexImage2D,
     targetFramebuffer: canvasFramebuffer
   });

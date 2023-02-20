@@ -21,3 +21,6 @@ output.txt
 .DS_Store
 *.tsbuildinfo
 output2.txt
+
+assets/gltf-Sample-Models
+assets/three.js
