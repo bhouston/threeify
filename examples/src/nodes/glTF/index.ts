@@ -2,7 +2,8 @@ import {
   makeProgramFromShaderMaterial,
   Orbit,
   RenderingContext,
-  ShaderMaterial
+  ShaderMaterial,
+  TextureCache
 } from '@threeify/core';
 import {
   box3Center,
@@ -57,11 +58,13 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   //console.time('glTFToSceneNode');
+  const textureCache = new TextureCache();
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
       sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
       GLTFFormat.glTF
-    )
+    ),
+    textureCache
   );
   //console.timeEnd('glTFToSceneNode');
 

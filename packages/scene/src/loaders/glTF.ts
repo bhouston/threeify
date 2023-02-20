@@ -23,7 +23,8 @@ import {
   AttributeData,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  Texture
+  Texture,
+  TextureCache
 } from '@threeify/core';
 import {
   Color3,
@@ -52,15 +53,12 @@ const semanticToThreeifyName: { [key: string]: string } = {
   WEIGHTS_0: 'weights0'
 };
 
-async function toTexture(
-  texture: GLTFTexture | null
-): Promise<Texture | undefined> {
-  const size = toVec2(texture?.getSize() || [1, 1]);
-  const imageData = texture?.getImage();
-  if (imageData === null || imageData === undefined) {
-    return undefined;
-  }
-  const mimeType = texture?.getMimeType() || 'image/png';
+async function toTexture(texture: GLTFTexture): Promise<Texture> {
+  const size = toVec2(texture.getSize() || [1, 1]);
+  //console.log(`gltfTexture URI ${texture?.getURI()}`);
+  const imageData = texture.getImage();
+  if (imageData === null) throw new Error('image data in null!');
+  const mimeType = texture.getMimeType() || 'image/png';
   const name =
     (texture?.getName() || texture?.getURI() || '') +
     `(${mimeType}) ${size.x}x${size.y}`;
@@ -101,7 +99,10 @@ function toAlphaMode(alphaMode: string): AlphaMode {
       return AlphaMode.Opaque;
   }
 }
-export async function glTFToSceneNode(url: string): Promise<SceneNode> {
+export async function glTFToSceneNode(
+  url: string,
+  textureCache: TextureCache
+): Promise<SceneNode> {
   const io = new WebIO();
   io.registerExtensions(KHRONOS_EXTENSIONS);
   /*io.registerExtensions([
@@ -133,13 +134,16 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
 
   const childrenPromises: Promise<SceneNode>[] = [];
   for (const glTFChildNode of glTFScene.listChildren()) {
-    childrenPromises.push(translateNode(glTFChildNode));
+    childrenPromises.push(translateNode(glTFChildNode, textureCache));
   }
   rootNode.children.push(...(await Promise.all(childrenPromises)));
   return rootNode;
 }
 
-async function translateNode(glTFNode: Node): Promise<SceneNode> {
+async function translateNode(
+  glTFNode: Node,
+  textureCache: TextureCache
+): Promise<SceneNode> {
   const translation = toVec3(glTFNode.getTranslation());
   const rotation = toQuat(glTFNode.getRotation());
   const scale = toVec3(glTFNode.getScale());
@@ -151,11 +155,11 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
   const childrenPromises: Promise<SceneNode>[] = [];
 
   if (glTFMesh !== null) {
-    childrenPromises.push(...translateMeshes(glTFMesh));
+    childrenPromises.push(...translateMeshes(glTFMesh, textureCache));
   }
 
   for (const glTFChildNode of glTFNode.listChildren()) {
-    childrenPromises.push(translateNode(glTFChildNode));
+    childrenPromises.push(translateNode(glTFChildNode, textureCache));
   }
 
   sceneNode.children.push(...(await Promise.all(childrenPromises)));
@@ -186,16 +190,24 @@ function getUVIndex(textureInfo: TextureInfo | null): number {
 
 async function getTextureAccessor(
   glTFTexture: GLTFTexture | null,
-  textureInfo: TextureInfo | null
+  textureInfo: TextureInfo | null,
+  textureCache: TextureCache
 ): Promise<TextureAccessor | undefined> {
-  const texture = await toTexture(glTFTexture);
+  if (glTFTexture === null || glTFTexture === undefined) return undefined;
+  const uri = glTFTexture.getURI();
+  const texture = await textureCache.acquireRef(uri, () =>
+    toTexture(glTFTexture)
+  );
   if (texture === undefined) return undefined;
   const uvTransform = getUVTransform(textureInfo);
   const uvIndex = getUVIndex(textureInfo);
   return new TextureAccessor(texture, uvTransform, uvIndex);
 }
 
-function translateMeshes(glTFMesh: Mesh): Promise<MeshNode>[] {
+function translateMeshes(
+  glTFMesh: Mesh,
+  textureCache: TextureCache
+): Promise<MeshNode>[] {
   const meshNodePromises: Promise<MeshNode>[] = [];
 
   glTFMesh.listPrimitives().forEach((primitive) => {
@@ -262,34 +274,41 @@ function translateMeshes(glTFMesh: Mesh): Promise<MeshNode>[] {
 
         const metallicRoughnessTextureAccessorPromise = getTextureAccessor(
           glTFMaterial.getMetallicRoughnessTexture(),
-          glTFMaterial.getMetallicRoughnessTextureInfo()
+          glTFMaterial.getMetallicRoughnessTextureInfo(),
+          textureCache
         );
         const albedoAlphaTextureAccessorPromise = getTextureAccessor(
           glTFMaterial.getBaseColorTexture(),
-          glTFMaterial.getBaseColorTextureInfo()
+          glTFMaterial.getBaseColorTextureInfo(),
+          textureCache
         );
         const emissiveTextureAccessorPromise = getTextureAccessor(
           glTFMaterial.getEmissiveTexture(),
-          glTFMaterial.getEmissiveTextureInfo()
+          glTFMaterial.getEmissiveTextureInfo(),
+          textureCache
         );
         const normalTextureAccessorPromise = getTextureAccessor(
           glTFMaterial.getNormalTexture(),
-          glTFMaterial.getNormalTextureInfo()
+          glTFMaterial.getNormalTextureInfo(),
+          textureCache
         );
 
         const occlusionTextureAccessorPromise = getTextureAccessor(
           glTFMaterial.getOcclusionTexture(),
-          glTFMaterial.getOcclusionTextureInfo()
+          glTFMaterial.getOcclusionTextureInfo(),
+          textureCache
         );
 
         const specularFactorTextureAccessorPromise = getTextureAccessor(
           glTFSpecular?.getSpecularTexture() || null,
-          glTFSpecular?.getSpecularTextureInfo() || null
+          glTFSpecular?.getSpecularTextureInfo() || null,
+          textureCache
         );
 
         const specularColorTextureAccessorPromise = getTextureAccessor(
           glTFSpecular?.getSpecularColorTexture() || null,
-          glTFSpecular?.getSpecularColorTextureInfo() || null
+          glTFSpecular?.getSpecularColorTextureInfo() || null,
+          textureCache
         );
 
         if (glTFClearcoat !== null) {
@@ -311,11 +330,13 @@ function translateMeshes(glTFMesh: Mesh): Promise<MeshNode>[] {
         const clearcoatFactorRoughnessTextureAccessorPromise =
           getTextureAccessor(
             glTFClearcoat?.getClearcoatTexture() || null,
-            glTFClearcoat?.getClearcoatTextureInfo() || null
+            glTFClearcoat?.getClearcoatTextureInfo() || null,
+            textureCache
           );
         const clearcoatNormalTextureAccessorPromise = getTextureAccessor(
           glTFClearcoat?.getClearcoatNormalTexture() || null,
-          glTFClearcoat?.getClearcoatNormalTextureInfo() || null
+          glTFClearcoat?.getClearcoatNormalTextureInfo() || null,
+          textureCache
         );
 
         if (glTFSheen !== null) {
@@ -336,7 +357,8 @@ function translateMeshes(glTFMesh: Mesh): Promise<MeshNode>[] {
 
         const sheenColorRoughnessTextureAccessorPromise = getTextureAccessor(
           glTFSheen?.getSheenColorTexture() || null,
-          glTFSheen?.getSheenColorTextureInfo() || null
+          glTFSheen?.getSheenColorTextureInfo() || null,
+          textureCache
         );
 
         if (glTFIridescence !== null) {
@@ -358,7 +380,8 @@ function translateMeshes(glTFMesh: Mesh): Promise<MeshNode>[] {
         const iridescenceFactorThicknessTextureAccessorPromise =
           getTextureAccessor(
             glTFIridescence?.getIridescenceTexture() || null,
-            glTFIridescence?.getIridescenceTextureInfo() || null
+            glTFIridescence?.getIridescenceTextureInfo() || null,
+            textureCache
           );
 
         if (glTFTransmission !== null && glTFVolume !== null) {
@@ -380,7 +403,8 @@ function translateMeshes(glTFMesh: Mesh): Promise<MeshNode>[] {
         const transmissionFactorThicknessTextureAccessorPromise =
           getTextureAccessor(
             glTFTransmission?.getTransmissionTexture(),
-            glTFTransmission?.getTransmissionTextureInfo()
+            glTFTransmission?.getTransmissionTextureInfo(),
+            textureCache
           );
 
         Promise.all([

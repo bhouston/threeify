@@ -10,6 +10,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureCache,
   TextureEncoding
 } from '@threeify/core';
 import {
@@ -73,8 +74,10 @@ document.addEventListener('keydown', (event) => {
 
 async function init(): Promise<void> {
   console.time('init');
+  const textueCache = new TextureCache();
   const glTFModelPromise = glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF),
+    textueCache
   );
 
   const shaderMaterial = new ShaderMaterial(

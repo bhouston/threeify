@@ -186,6 +186,7 @@ function meshToSceneCache(
       // convert from Parameters to Uniforms
       if (uniformValue instanceof Texture) {
         const texture = uniformValue as Texture;
+
         const textureId = texture.id;
         let texImage2D = textureIdToTexImage2D.get(textureId);
         if (texImage2D === undefined) {

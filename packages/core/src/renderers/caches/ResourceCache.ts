@@ -14,14 +14,26 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
       const cacheEntry = this.idToCacheEntryMap.get(id);
       if (cacheEntry === undefined) throw new Error('cacheEntry is undefined ');
       cacheEntry.referenceCount++;
-      console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
+      //console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
       return cacheEntry.promise;
     }
     const cacheEntry = new ResourceCacheEntry<T>(resourceCreator());
     this.idToCacheEntryMap.set(id, cacheEntry);
     cacheEntry.referenceCount++;
-    console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
+    //console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
     return cacheEntry.promise;
+  }
+
+  has(id: string) {
+    return this.idToCacheEntryMap.has(id);
+  }
+
+  insertRef(id: string, resource: T) {
+    this.acquireRef(id, () => {
+      return new Promise((resolve) => {
+        return resolve(resource);
+      });
+    });
   }
 
   releaseRef(id: string) {
@@ -35,7 +47,7 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
     if (cacheEntry === undefined) throw new Error('cacheEntry is undefined ');
     cacheEntry.referenceCount--;
 
-    console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
+    //console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
     // when reference count reaches zero, delete entry and also dispose of resource.
     if (cacheEntry.referenceCount === 0) {
       this.idToCacheEntryMap.delete(id);
