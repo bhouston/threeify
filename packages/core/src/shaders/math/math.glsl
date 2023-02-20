@@ -8,13 +8,13 @@ const float RECIPROCAL_PI2 = 0.15915494309189535;
 const float EPSILON = 1e-6;
 
 float saturate(const float a) {
-  return clamp(a, 0., 1.);
+  return clamp(a, 0.0, 1.0);
 }
 vec3 saturate(const vec3 a) {
-  return clamp(a, 0., 1.);
+  return clamp(a, 0.0, 1.0);
 }
 vec3 whiteComplement(const vec3 a) {
-  return 1. - saturate(a);
+  return 1.0 - saturate(a);
 }
 float pow2(const float x) {
   return x * x;
@@ -30,13 +30,13 @@ float average(const vec3 color) {
   return dot(color, vec3(0.333333333333));
 }
 float degToRad(const float deg) {
-  return deg * PI / 180.;
+  return deg * PI / 180.0;
 }
 float radToDeg(const float rad) {
-  return rad * 180. / PI;
+  return rad * 180.0 / PI;
 }
 float max3(const vec3 v) {
   return max(max(v.x, v.y), v.z);
 }
 
-const float NAN = sqrt(0.);
+const float NAN = sqrt(0.0);

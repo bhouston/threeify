@@ -3,7 +3,7 @@ import {
   fetchOBJ,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -52,11 +52,8 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const displacementMap = makeTexImage2DFromTexture(
-    context,
-    displacementTexture
-  );
-  const normalMap = makeTexImage2DFromTexture(context, normalTexture);
+  const displacementMap = textureToTexImage2D(context, displacementTexture);
+  const normalMap = textureToTexImage2D(context, normalTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices

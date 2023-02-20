@@ -2,19 +2,20 @@ import {
   Blending,
   blendModeToBlendState,
   fetchHDR,
+  InternalFormat,
+  makeCubeMapFromEquirectangularTexture,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromEquirectangularTexture,
   Orbit,
   PhysicalMaterialOutputs,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  TextureEncoding
 } from '@threeify/core';
 import {
   box3Center,
   box3MaxSize,
   Color3,
-  Vec2,
   Vec3,
   vec3Negate
 } from '@threeify/math';
@@ -42,6 +43,7 @@ import {
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
+import { ShaderOutputs } from './ShaderOutputs';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
@@ -62,7 +64,10 @@ document.addEventListener('keydown', (event) => {
       break;
   }
   console.log(
-    `Debug Channel ${PhysicalMaterialOutputs[debugOutputIndex]} (${debugOutputIndex})`
+    `Debug Channel ${
+      PhysicalMaterialOutputs[debugOutputIndex] ||
+      ShaderOutputs[debugOutputIndex]
+    } (${debugOutputIndex})`
   );
 });
 
@@ -76,16 +81,17 @@ async function init(): Promise<void> {
   const latLongTexture = new Texture(
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
+
   /* const latLongTexture = new Texture(
      await fetchImage('/assets/textures/cube/debug/latLong.png')
    );*/
   //console.timeEnd('fetchHDR');
-  const lightIntensity = 1;
-  const domeLightIntensity = 4.5;
+  const lightIntensity = 0;
+  const domeLightIntensity = 1.5;
   const transmissionMode = true;
 
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.SciFiHelmet, GLTFFormat.glTF)
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
   );
 
   const canvasHtmlElement = document.getElementById(
@@ -93,23 +99,26 @@ async function init(): Promise<void> {
   ) as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement, {
     antialias: false,
-    depth: false
+    depth: false,
+    premultipliedAlpha: true
   });
   const { canvasFramebuffer } = context;
   canvasFramebuffer.devicePixelRatio = 1.5;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
+  const cubeMap = makeCubeMapFromEquirectangularTexture(
+    context,
+    latLongTexture,
+    TextureEncoding.RGBE,
+    1024,
+    InternalFormat.RGBA16F
+  );
+
   const program = makeProgramFromShaderMaterial(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 
-  //console.time('makeTexImage2DFromEquirectangularTexture');
-  const cubeMap = makeTexImage2DFromEquirectangularTexture(
-    context,
-    latLongTexture,
-    new Vec2(1024, 1024)
-  );
   //console.timeEnd('makeTexImage2DFromEquirectangularTexture');
 
   const orbitController = new Orbit(canvasHtmlElement);

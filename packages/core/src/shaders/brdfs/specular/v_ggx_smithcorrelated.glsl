@@ -11,8 +11,8 @@ float V_GGX_SmithCorrelated(
 ) {
   // NdotL and NdotV are explicitly swapped. This is not a mistake.
   float a2 = pow2(alphaRoughness);
-  float gv = NdotL * sqrt(a2 + (1. - a2) * pow2(NdotV));
-  float gl = NdotV * sqrt(a2 + (1. - a2) * pow2(NdotL));
+  float gv = NdotL * sqrt(a2 + (1.0 - a2) * pow2(NdotV));
+  float gl = NdotV * sqrt(a2 + (1.0 - a2) * pow2(NdotL));
 
   return 0.5 / max(gv + gl, EPSILON);
 

@@ -4,10 +4,10 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial
+  ShaderMaterial,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Euler3,
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
       1,
       canvasFramebuffer.aspectRatio
     ),
-    cubeMap: makeTexImage2DFromTexture(context, cubeTexture),
+    cubeMap: textureToTexImage2D(context, cubeTexture),
     perceptualRoughness: 0,
     mipCount: cubeTexture.mipCount
   };

@@ -3,11 +3,11 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -37,7 +37,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const map = makeTexImage2DFromTexture(context, texture);
+  const map = textureToTexImage2D(context, texture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices

@@ -14,18 +14,20 @@ uniform int mipCount;
 
 out vec4 outputColor;
 
-
 void main() {
- /* vec3 reflectDir = reflect(
+  /* vec3 reflectDir = reflect(
     normalize(v_viewSurfacePosition),
     normalize(v_viewSurfaceNormal)
   );*/
   float lod = clamp(
     perceptualRoughness * float(mipCount),
-    0.,
+    0.0,
     float(mipCount)
   );
-  outputColor.xyz = texture(cubeMap, mat4UntransformDirection( localToWorld, v_viewSurfaceNormal)).xyz;
-  outputColor.a = 1.;
+  outputColor.xyz = texture(
+    cubeMap,
+    mat4UntransformDirection(localToWorld, v_viewSurfaceNormal)
+  ).xyz;
+  outputColor.a = 1.0;
 
 }

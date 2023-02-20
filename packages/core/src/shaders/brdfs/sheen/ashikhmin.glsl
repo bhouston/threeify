@@ -21,7 +21,7 @@ vec3 BRDF_Sheen_Ashikhmin(
 ) {
   vec3 halfDirection = normalize(lightDirection + viewDirection);
 
-  sheenRoughness = clamp(sheenRoughness, 0.07, 1.);
+  sheenRoughness = clamp(sheenRoughness, 0.07, 1.0);
 
   float NdotL = saturate(dot(normal, lightDirection));
   float NdotV = saturate(dot(normal, viewDirection));

@@ -12,7 +12,7 @@ import {
   makeColorAttachment,
   makeDepthAttachment,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -55,7 +55,7 @@ async function init(): Promise<void> {
   );
 
   const program = makeProgramFromShaderMaterial(context, material);
-  const uvTestTexture = makeTexImage2DFromTexture(context, texture);
+  const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
     localToWorld: new Mat4(),

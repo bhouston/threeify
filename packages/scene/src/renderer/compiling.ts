@@ -2,12 +2,12 @@ import {
   AlphaMode,
   CubeMapTexture,
   makeBufferGeometryFromGeometry,
-  makeTexImage2DFromTexture,
   Program,
   ProgramUniform,
   ProgramVertexArray,
   RenderingContext,
   Texture,
+  textureToTexImage2D,
   UniformBufferMap,
   UniformValueMap,
   VirtualFramebuffer
@@ -189,7 +189,7 @@ function meshToSceneCache(
         const textureId = texture.id;
         let texImage2D = textureIdToTexImage2D.get(textureId);
         if (texImage2D === undefined) {
-          texImage2D = makeTexImage2DFromTexture(context, texture);
+          texImage2D = textureToTexImage2D(context, texture);
           textureIdToTexImage2D.set(textureId, texImage2D);
         }
         materialUniforms[uniformName] = texImage2D;
@@ -230,7 +230,7 @@ function updateLightUniforms(
     lightUniforms.iblMapTexture =
       light.cubeMap !== undefined
         ? light.cubeMap instanceof CubeMapTexture
-          ? makeTexImage2DFromTexture(context, light.cubeMap)
+          ? textureToTexImage2D(context, light.cubeMap)
           : light.cubeMap
         : undefined;
     lightUniforms.iblMapIntensity = color3MultiplyByScalar(

@@ -20,7 +20,7 @@ vec3 BRDF_Sheen_Charlie(
 ) {
   vec3 halfDirection = normalize(lightDirection + viewDirection);
 
-  float safeSheenRoughness = clamp(sheenRoughness, 0.07, 1.);
+  float safeSheenRoughness = clamp(sheenRoughness, 0.07, 1.0);
 
   float NdotL = saturate(dot(viewNormal, lightDirection));
   float NdotV = saturate(dot(viewNormal, viewDirection));

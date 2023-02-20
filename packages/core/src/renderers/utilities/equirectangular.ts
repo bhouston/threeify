@@ -1,0 +1,152 @@
+import { Vec2 } from '@threeify/math';
+
+import { PassGeometry } from '../../geometry/primitives/passGeometry';
+import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeTexture';
+import { Texture } from '../../textures/Texture';
+import { makeBufferGeometryFromGeometry } from '../webgl/buffers/BufferGeometry';
+import { CullingState } from '../webgl/CullingState';
+import { Attachment } from '../webgl/framebuffers/Attachment';
+import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
+import { renderBufferGeometry } from '../webgl/framebuffers/VirtualFramebuffer';
+import { makeProgramFromShaderMaterial } from '../webgl/programs/Program';
+import { RenderingContext } from '../webgl/RenderingContext';
+import {
+  InternalFormat,
+  internalFormatToDataType,
+  internalFormatToPixelFormat
+} from '../webgl/textures/InternalFormat';
+import {
+  TexImage2D,
+  textureToTexImage2D as textureToTexImage2D
+} from '../webgl/textures/TexImage2D';
+import { TexParameters } from '../webgl/textures/TexParameters';
+import { TextureFilter } from '../webgl/textures/TextureFilter';
+import { TextureTarget } from '../webgl/textures/TextureTarget';
+import { TextureWrap } from '../webgl/textures/TextureWrap';
+import { copyPass } from './copyPass';
+import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
+import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
+import { TextureEncoding } from './TextureEncoding';
+
+export function makeTexImage2DFromEquirectangularTexImage2D(
+  context: RenderingContext,
+  latLongTexture: TexImage2D,
+  faceWidth = 512,
+  targetInternalFormat = InternalFormat.RGBA8,
+  generateMipmaps = true
+): TexImage2D {
+  const faceSize = new Vec2(faceWidth, faceWidth);
+  const cubeTexture = new CubeMapTexture(
+    [faceSize, faceSize, faceSize, faceSize, faceSize, faceSize],
+    0,
+    undefined,
+    undefined,
+    targetInternalFormat,
+    internalFormatToDataType(targetInternalFormat)
+  );
+  cubeTexture.generateMipmaps = generateMipmaps;
+
+  const cubeFaceMaterial = new ShaderMaterial(
+    'latLongToCubeMap',
+    cubeFaceVertexSource,
+    cubeFaceFragmentSource
+  );
+  const cubeFaceProgram = makeProgramFromShaderMaterial(
+    context,
+    cubeFaceMaterial
+  );
+  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(
+    context,
+    PassGeometry
+  );
+  const cubeMap = textureToTexImage2D(context, cubeTexture);
+
+  const cubeFaceFramebuffer = new Framebuffer(context);
+  const cubeFaceUniforms = {
+    map: latLongTexture,
+    faceIndex: 0
+  };
+
+  const cullingState = new CullingState(false);
+
+  cubeFaceTargets.forEach((target, index) => {
+    cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
+    cubeFaceUniforms.faceIndex = index;
+    renderBufferGeometry({
+      framebuffer: cubeFaceFramebuffer,
+      program: cubeFaceProgram,
+      uniforms: cubeFaceUniforms,
+      bufferGeometry: cubeFaceBufferGeometry,
+      cullingState
+    });
+  });
+
+  if (generateMipmaps) {
+    cubeMap.generateMipmaps();
+  }
+
+  cubeFaceFramebuffer.flush();
+  cubeFaceFramebuffer.finish();
+
+  cubeFaceFramebuffer.dispose();
+  // cubeFaceBufferGeometry.dispose(); - causes crashes.  Huh?
+  cubeFaceProgram.dispose();
+
+  cubeMap.version = latLongTexture.version;
+
+  return cubeMap;
+}
+
+export function makeCubeMapFromEquirectangularTexture(
+  context: RenderingContext,
+  latLongTexture: Texture,
+  sourceEncoding = TextureEncoding.Linear,
+  faceWidth = 512,
+  targetInternalFormat = InternalFormat.RGBA8
+) {
+  // convert to TexImage2D
+  latLongTexture.wrapS = TextureWrap.Repeat;
+  latLongTexture.wrapT = TextureWrap.ClampToEdge;
+  latLongTexture.minFilter = TextureFilter.Linear;
+  const latLongMap = textureToTexImage2D(context, latLongTexture);
+
+  let linearLatLongMap = latLongMap;
+  if (sourceEncoding !== TextureEncoding.Linear) {
+    console.log('converting to linear from ' + TextureEncoding[sourceEncoding]);
+    // convert from RGBE to Linear
+    linearLatLongMap = new TexImage2D(
+      context,
+      [latLongMap.size],
+      targetInternalFormat,
+      internalFormatToDataType(targetInternalFormat),
+      internalFormatToPixelFormat(targetInternalFormat),
+      TextureTarget.Texture2D,
+      new TexParameters(
+        TextureFilter.Linear,
+        TextureFilter.Linear,
+        TextureWrap.Repeat,
+        TextureWrap.ClampToEdge
+      )
+    );
+    copyPass({
+      sourceTexImage2D: latLongMap,
+      sourceEncoding: TextureEncoding.RGBE,
+      targetTexImage2D: linearLatLongMap,
+      targetEncoding: TextureEncoding.Linear
+    });
+  }
+
+  const cubeMap = makeTexImage2DFromEquirectangularTexImage2D(
+    context,
+    linearLatLongMap,
+    faceWidth,
+    targetInternalFormat,
+    true
+  );
+
+  latLongMap.dispose();
+  linearLatLongMap.dispose();
+
+  return cubeMap;
+}

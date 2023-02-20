@@ -19,12 +19,12 @@ vec3 BRDF_Sheen_Charlie_IBL(
       : -8.48 * r2 + 14.3 * sheenRoughness - 9.95;
   float b =
     sheenRoughness < 0.25
-      ? 44. * r2 - 23.7 * sheenRoughness + 3.26
+      ? 44.0 * r2 - 23.7 * sheenRoughness + 3.26
       : 1.97 * r2 - 3.27 * sheenRoughness + 0.72;
   float DG =
     exp(a * dotNV + b) +
     (sheenRoughness < 0.25
-      ? 0.
+      ? 0.0
       : 0.1 * (sheenRoughness - 0.25));
 
   return sheenColor * saturate(DG);

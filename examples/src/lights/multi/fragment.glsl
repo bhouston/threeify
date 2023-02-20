@@ -31,7 +31,7 @@ void main() {
   vec3 specular = vec3(0.5);
   float specularRoughness = 0.25;
   vec3 specularF0 = specularIntensityToF0(specular);
-  vec3 specularF90 = vec3(1.);
+  vec3 specularF90 = vec3(1.0);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -53,7 +53,7 @@ void main() {
     punctualLight.type = punctualLightType[i];
     punctualLight.position = mat4TransformPosition(
       worldToView,
-      vec3(0., 0., 2)
+      vec3(0.0, 0.0, 2)
     ); // punctualLightWorldPosition[i] );
     punctualLight.direction = mat4TransformDirection(
       worldToView,
@@ -88,6 +88,6 @@ void main() {
   }
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.;
+  outputColor.a = 1.0;
 
 }

@@ -11,10 +11,10 @@
 };*/
 
 float convertGlossyExponentToSpecularRoughness(const float glossyExponent) {
-  return sqrt(2. / (glossyExponent + 2.));
+  return sqrt(2.0 / (glossyExponent + 2.0));
 }
 float convertSpecularRoughnessToGlossyExponent(const float specularRoughness) {
-  return 2. / (specularRoughness * specularRoughness) - 2.;
+  return 2.0 / (specularRoughness * specularRoughness) - 2.0;
 }
 
 float getMipLevelForSpecularRoughness(
@@ -27,8 +27,8 @@ float getMipLevelForSpecularRoughness(
   // From McGuire paper on phong cubemap IBL.
   // https://casual-effects.com/research/McGuire2013CubeMap/index.html
   float MIPlevel =
-    log2(pow(2., float(iblMapMaxLod)) * sqrt(3.)) -
-    0.5 * log2(glossyExponent + 1.);
+    log2(pow(2.0, float(iblMapMaxLod)) * sqrt(3.0)) -
+    0.5 * log2(glossyExponent + 1.0);
 
   return MIPlevel;
 }
@@ -42,9 +42,11 @@ vec3 sampleIBLIrradiance(
 ) {
   // convert to world
   vec3 worldNormal = mat4UntransformDirection(worldToView, viewNormal);
-  vec3 iblColor = rgbeToLinear(
-    textureLod(iblMapTexture, worldNormal, float(iblMapMaxLod))
-  );
+  vec3 iblColor = textureLod(
+    iblMapTexture,
+    worldNormal,
+    float(iblMapMaxLod)
+  ).rgb;
   return iblColor * iblMapIntensity;
 }
 
@@ -74,8 +76,10 @@ vec3 sampleIBLRadiance(
     specularRoughness,
     iblMapMaxLod
   );
-  vec3 iblColor = rgbeToLinear(
-    textureLod(iblMapTexture, worldReflectDirection, mipLevel)
-  );
+  vec3 iblColor = textureLod(
+    iblMapTexture,
+    worldReflectDirection,
+    mipLevel
+  ).rgb;
   return iblColor * iblMapIntensity;
 }

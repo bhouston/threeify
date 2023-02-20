@@ -12,7 +12,6 @@ import {
   isMacOS,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   PixelFormat,
   planeGeometry,
   Program,
@@ -24,6 +23,7 @@ import {
   Texture,
   TextureFilter,
   TextureTarget,
+  textureToTexImage2D,
   TextureWrap,
   transformGeometry,
   UniformValueMap
@@ -249,10 +249,7 @@ export class LayerCompositor {
 
           // console.log(`loading: ${url}`);
           // load texture onto the GPU
-          const texImage2D = makeTexImage2DFromTexture(
-            compositor.context,
-            texture
-          );
+          const texImage2D = textureToTexImage2D(compositor.context, texture);
           delete compositor.texImage2DPromiseCache[url];
           return (compositor.layerImageCache[url] = new LayerImage(
             url,

@@ -1,12 +1,4 @@
-import {
-  Color3,
-  Color4,
-  Mat3,
-  Mat4,
-  Vec2,
-  Vec3,
-  Vec4
-} from '@threeify/math';
+import { Color3, Color4, Mat3, Mat4, Vec2, Vec3, Vec4 } from '@threeify/math';
 
 import { TexImage2D } from '../textures/TexImage2D';
 

@@ -4,7 +4,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   makeTextureFromVideoElement,
   planeGeometry,
   renderBufferGeometry,
@@ -50,7 +50,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const program = makeProgramFromShaderMaterial(context, material);
-  const clickToPlayMap = makeTexImage2DFromTexture(context, clickToPlayTexture);
+  const clickToPlayMap = textureToTexImage2D(context, clickToPlayTexture);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
@@ -106,7 +106,7 @@ async function init(): Promise<void> {
       video.readyState >= video.HAVE_CURRENT_DATA
     ) {
       if (videoMap === undefined) {
-        videoMap = makeTexImage2DFromTexture(context, videoTexture);
+        videoMap = textureToTexImage2D(context, videoTexture);
         uniforms.map = videoMap;
       }
       videoMap.loadImages([video]);

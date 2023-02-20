@@ -3,7 +3,7 @@ import {
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -38,7 +38,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const normalMap = makeTexImage2DFromTexture(context, normalsTexture);
+  const normalMap = textureToTexImage2D(context, normalsTexture);
   const program = makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices

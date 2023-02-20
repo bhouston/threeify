@@ -2,7 +2,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   Orbit,
   passGeometry,
   renderBufferGeometry,
@@ -49,7 +49,7 @@ async function init(): Promise<void> {
           texture.wrapT = TextureWrap.ClampToEdge;
           texture.minFilter = TextureFilter.Linear;
           textures[i] = texture;
-          texImage2Ds[i] = makeTexImage2DFromTexture(context, texture);
+          texImage2Ds[i] = textureToTexImage2D(context, texture);
         }
       )
     );

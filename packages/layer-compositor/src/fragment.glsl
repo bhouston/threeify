@@ -28,8 +28,8 @@ void main() {
 
   if (maskMode != 0) {
     // Check if we're in the [ 0., 1. ] UV range for masking. Otherwise, we'll get clamping artifacts.
-    const vec2 lowerBound = vec2(0.);
-    const vec2 upperBound = vec2(1.);
+    const vec2 lowerBound = vec2(0.0);
+    const vec2 upperBound = vec2(1.0);
 
     // Check ( v >= lower && v <= upper). Rework into (v >= lower && -v >= -upper), which combines to (v,-v) >= (lower, -upper)
     const vec4 comboBounds = vec4(lowerBound, -upperBound);
@@ -39,7 +39,7 @@ void main() {
 
     vec4 maskColor = hasMaskData
       ? texture2D(maskMap, v_mask_uv, mipmapBias)
-      : vec4(0.);
+      : vec4(0.0);
 
     // premultiply alpha as the source PNG is not premultiplied
     if (convertToPremultipliedAlpha == 1) {

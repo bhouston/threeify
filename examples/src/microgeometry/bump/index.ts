@@ -3,7 +3,7 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
+  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -62,12 +62,9 @@ async function init(): Promise<void> {
     pointLightRange: 12,
 
     // materials
-    albedoMap: makeTexImage2DFromTexture(context, albedoTexture),
-    bumpMap: makeTexImage2DFromTexture(context, bumpTexture),
-    specularRoughnessMap: makeTexImage2DFromTexture(
-      context,
-      specularRoughnessTexture
-    )
+    albedoMap: textureToTexImage2D(context, albedoTexture),
+    bumpMap: textureToTexImage2D(context, bumpTexture),
+    specularRoughnessMap: textureToTexImage2D(context, specularRoughnessTexture)
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 

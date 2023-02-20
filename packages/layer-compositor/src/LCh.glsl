@@ -24,7 +24,7 @@ vec3 withChroma(vec3 color, float chroma) {
 
   if (min >= max) {
     // Gray Color
-    return vec3(0.);
+    return vec3(0.0);
   }
 
   float curChroma = getChroma(color);
@@ -44,10 +44,10 @@ vec3 withLuma(vec3 color, float luma) {
   float max = maxComponent(withL);
 
   // In case the color ends up outside the RGB Gamut, re-scale the color to amke it fit.
-  if (min < 0.) {
+  if (min < 0.0) {
     return (withL - luma) * luma / (luma - min) + luma;
-  } else if (max > 1.) {
-    return (withL - luma) * (1. - luma) / (max - luma) + luma;
+  } else if (max > 1.0) {
+    return (withL - luma) * (1.0 - luma) / (max - luma) + luma;
   } else {
     return withL;
   }

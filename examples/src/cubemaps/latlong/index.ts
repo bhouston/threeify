@@ -3,26 +3,29 @@ import {
   blendModeToBlendState,
   CullingState,
   DepthTestState,
+  fetchHDR,
   fetchImage,
   icosahedronGeometry,
+  InternalFormat,
   makeBufferGeometryFromGeometry,
+  makeCubeMapFromEquirectangularTexture,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromEquirectangularTexture,
   Orbit,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  TextureEncoding
 } from '@threeify/core';
 import {
   Euler3,
   euler3ToQuat,
   mat4Compose,
   mat4PerspectiveFov,
-  Vec2,
   Vec3
 } from '@threeify/math';
 
+import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -31,8 +34,9 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/cube/debug/latLong.png')
   );
   const ennisTexture = new Texture(
-    await fetchImage('/assets/textures/cube/ennis/latLong.jpg')
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
+
   const geometry = icosahedronGeometry(3, 4, true);
   const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
@@ -46,16 +50,19 @@ async function init(): Promise<void> {
   orbitController.zoom = 1.5;
   orbitController.zoomMax = 9;
 
-  const latLongCubeMap = makeTexImage2DFromEquirectangularTexture(
+  const latLongCubeMap = makeCubeMapFromEquirectangularTexture(
     context,
     latLongTexture,
-    new Vec2(1024, 1024)
+    TextureEncoding.Linear,
+    1024
   );
 
-  const ennisCubeMap = makeTexImage2DFromEquirectangularTexture(
+  const ennisCubeMap = makeCubeMapFromEquirectangularTexture(
     context,
     ennisTexture,
-    new Vec2(1024, 1024)
+    TextureEncoding.RGBE,
+    1024,
+    InternalFormat.RGBA16F
   );
 
   const program = makeProgramFromShaderMaterial(context, material);
@@ -100,7 +107,7 @@ async function init(): Promise<void> {
     uniforms.perceptualRoughness = Math.sin(now * 0.001) * 0.5 + 0.5;
 
     uniforms.cubeMap =
-      Math.sin(now * 0.001) > 0 ? latLongCubeMap : ennisCubeMap;
+      Math.sin(now * 0.002) > 0 ? latLongCubeMap : ennisCubeMap;
 
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,

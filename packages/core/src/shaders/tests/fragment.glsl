@@ -81,13 +81,13 @@ void assert(inout TestSuite suite, int id, bool value) {
   asset(suite, id, (lhs) <= (rhs));
 
 void initSuite(inout TestSuite suite) {
-  suite.selectorId = int(floor(v_uv.x * 1024.));
+  suite.selectorId = int(floor(v_uv.x * 1024.0));
   suite.selectorResult = 2;
 
 }
 
 vec4 toSuiteResult(TestSuite suite) {
-  return vec4(0., 0., float(suite.selectorResult) / 255., 1.);
+  return vec4(0.0, 0.0, float(suite.selectorResult) / 255.0, 1.0);
 }
 
 void tests(inout TestSuite suite);

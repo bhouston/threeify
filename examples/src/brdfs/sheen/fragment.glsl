@@ -22,11 +22,11 @@ out vec4 outputColor;
 #pragma include <microgeometry/tangentSpace>
 
 void main() {
-  vec3 albedo = vec3(0., 0., 1.);
+  vec3 albedo = vec3(0.0, 0.0, 1.0);
   vec3 specular = vec3(0.15);
   float specularRoughness = 0.5;
   vec3 specularF0 = specularIntensityToF0(specular);
-  vec3 specularF90 = vec3(1.);
+  vec3 specularF90 = vec3(1.0);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);
@@ -75,6 +75,6 @@ void main() {
     directLight.radiance * dotNL * BRDF_Diffuse_Lambert(albedo);
 
   outputColor.rgb = linearTosRGB(outgoingRadiance);
-  outputColor.a = 1.;
+  outputColor.a = 1.0;
 
 }

@@ -3,11 +3,11 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  makeTexImage2DFromTexture,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -40,11 +40,11 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const anisotropicFlow1Map = makeTexImage2DFromTexture(
+  const anisotropicFlow1Map = textureToTexImage2D(
     context,
     anisotropicFlow1Texture
   );
-  const anisotropicFlow2Map = makeTexImage2DFromTexture(
+  const anisotropicFlow2Map = textureToTexImage2D(
     context,
     anisotropicFlow2Texture
   );
