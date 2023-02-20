@@ -33,6 +33,7 @@ export class Program implements IResource {
   public readonly vertexShader: Shader;
   public readonly fragmentShader: Shader;
   public readonly glProgram: WebGLProgram;
+  #isLinked = false;
   #validated = false;
   #uniformsInitialized = false;
   #uniforms: UniformMap = {};
@@ -58,7 +59,7 @@ export class Program implements IResource {
     this.name = name ?? '';
 
     const localShaderDefines = shaderDefines ?? {};
-    localShaderDefines['ID'] = this.id;
+    //localShaderDefines['ID'] = this.id;
 
     this.vertexShader = new Shader(
       this.context,
@@ -89,11 +90,6 @@ export class Program implements IResource {
     gl.attachShader(this.glProgram, this.vertexShader.glShader);
     gl.attachShader(this.glProgram, this.fragmentShader.glShader);
 
-    // link the program.
-    //console.time('linkProgram, ' + this.name);
-    gl.linkProgram(this.glProgram);
-    //console.timeEnd('linkProgram, ' + this.name);
-
     // NOTE: purposely not checking here if it compiled.
     resources.register(this);
   }
@@ -104,10 +100,18 @@ export class Program implements IResource {
       return true;
     }
 
+    const { gl, resources } = this.context;
+
+    if (!this.#isLinked) {
+      // link the program.
+      //console.time('linkProgram, ' + this.name);
+      gl.linkProgram(this.glProgram);
+      this.#isLinked = true;
+      //console.timeEnd('linkProgram, ' + this.name);
+    }
     // This is only done if necessary and delayed per best practices here:
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
 
-    const { gl, resources } = this.context;
     // Check if it linked.
     const { glxo } = this.context;
     const { KHR_parallel_shader_compile } = glxo;
