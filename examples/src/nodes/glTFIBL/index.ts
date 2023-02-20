@@ -107,7 +107,7 @@ async function init(): Promise<void> {
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const cubeMap = makeCubeMapFromEquirectangularTexture(
+  const cubeMap = await makeCubeMapFromEquirectangularTexture(
     context,
     latLongTexture,
     TextureEncoding.RGBE,
@@ -115,7 +115,7 @@ async function init(): Promise<void> {
     InternalFormat.RGBA16F
   );
 
-  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
+  const program = await makeProgramFromShaderMaterial(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 

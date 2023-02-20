@@ -29,13 +29,13 @@ import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
 
-export function makeTexImage2DFromEquirectangularTexImage2D(
+export async function makeTexImage2DFromEquirectangularTexImage2D(
   context: RenderingContext,
   latLongTexture: TexImage2D,
   faceWidth = 512,
   targetInternalFormat = InternalFormat.RGBA8,
   generateMipmaps = true
-): TexImage2D {
+): Promise<TexImage2D> {
   const faceSize = new Vec2(faceWidth, faceWidth);
   const cubeTexture = new CubeMapTexture(
     [faceSize, faceSize, faceSize, faceSize, faceSize, faceSize],
@@ -52,7 +52,7 @@ export function makeTexImage2DFromEquirectangularTexImage2D(
     cubeFaceVertexSource,
     cubeFaceFragmentSource
   );
-  const cubeFaceProgram = makeProgramFromShaderMaterial(
+  const cubeFaceProgram = await makeProgramFromShaderMaterial(
     context,
     cubeFaceMaterial
   );
@@ -98,7 +98,7 @@ export function makeTexImage2DFromEquirectangularTexImage2D(
   return cubeMap;
 }
 
-export function makeCubeMapFromEquirectangularTexture(
+export async function makeCubeMapFromEquirectangularTexture(
   context: RenderingContext,
   latLongTexture: Texture,
   sourceEncoding = TextureEncoding.Linear,
@@ -129,7 +129,7 @@ export function makeCubeMapFromEquirectangularTexture(
         TextureWrap.ClampToEdge
       )
     );
-    copyPass({
+    await copyPass({
       sourceTexImage2D: latLongMap,
       sourceEncoding: TextureEncoding.RGBE,
       targetTexImage2D: linearLatLongMap,
@@ -137,7 +137,7 @@ export function makeCubeMapFromEquirectangularTexture(
     });
   }
 
-  const cubeMap = makeTexImage2DFromEquirectangularTexImage2D(
+  const cubeMap = await makeTexImage2DFromEquirectangularTexImage2D(
     context,
     linearLatLongMap,
     faceWidth,

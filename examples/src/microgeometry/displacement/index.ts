@@ -3,11 +3,11 @@ import {
   fetchOBJ,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
   Texture,
+  textureToTexImage2D,
   transformGeometry
 } from '@threeify/core';
 import {
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
 
   const displacementMap = textureToTexImage2D(context, displacementTexture);
   const normalMap = textureToTexImage2D(context, normalTexture);
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

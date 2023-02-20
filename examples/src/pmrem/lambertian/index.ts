@@ -60,7 +60,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const envCubeMap = makeCubeMapFromEquirectangularTexture(
+  const envCubeMap = await makeCubeMapFromEquirectangularTexture(
     context,
     garageTexture,
     TextureEncoding.Linear,
@@ -68,7 +68,7 @@ async function init(): Promise<void> {
   );
 
   const samplerGeometry = passGeometry();
-  const samplerProgram = makeProgramFromShaderMaterial(
+  const samplerProgram = await makeProgramFromShaderMaterial(
     context,
     samplerMaterial
   );
@@ -97,7 +97,7 @@ async function init(): Promise<void> {
     });
   });
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
 
   const uniforms = {
     localToWorld: new Mat4(),

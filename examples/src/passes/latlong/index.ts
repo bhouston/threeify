@@ -2,7 +2,6 @@ import {
   fetchImage,
   makeBufferGeometryFromGeometry,
   makeProgramFromShaderMaterial,
-  textureToTexImage2D,
   Orbit,
   passGeometry,
   renderBufferGeometry,
@@ -11,6 +10,7 @@ import {
   TexImage2D,
   Texture,
   TextureFilter,
+  textureToTexImage2D,
   TextureWrap
 } from '@threeify/core';
 import {
@@ -62,7 +62,10 @@ async function init(): Promise<void> {
 
   const orbit = new Orbit(context.canvas);
 
-  const passProgram = makeProgramFromShaderMaterial(context, passMaterial);
+  const passProgram = await makeProgramFromShaderMaterial(
+    context,
+    passMaterial
+  );
   const passUniforms = {
     viewToWorld: new Mat4(),
     screenToView: mat4Inverse(

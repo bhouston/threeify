@@ -50,14 +50,14 @@ async function init(): Promise<void> {
   orbitController.zoom = 1.5;
   orbitController.zoomMax = 9;
 
-  const latLongCubeMap = makeCubeMapFromEquirectangularTexture(
+  const latLongCubeMap = await makeCubeMapFromEquirectangularTexture(
     context,
     latLongTexture,
     TextureEncoding.Linear,
     1024
   );
 
-  const ennisCubeMap = makeCubeMapFromEquirectangularTexture(
+  const ennisCubeMap = await makeCubeMapFromEquirectangularTexture(
     context,
     ennisTexture,
     TextureEncoding.RGBE,
@@ -65,7 +65,7 @@ async function init(): Promise<void> {
     InternalFormat.RGBA16F
   );
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: mat4Compose(
       new Vec3(0, 0, 0),

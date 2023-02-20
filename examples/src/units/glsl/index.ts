@@ -52,7 +52,7 @@ async function init(): Promise<void> {
   let totalFailures = 0;
   let totalDuplicates = 0;
 
-  glslTestSuites.forEach((glslUnitTest) => {
+  for (const glslUnitTest of glslTestSuites) {
     const passIds = [];
     const failureIds = [];
     const duplicateIds = [];
@@ -64,7 +64,10 @@ async function init(): Promise<void> {
         vertexSource,
         glslUnitTest.source
       );
-      const unitProgram = makeProgramFromShaderMaterial(context, passMaterial);
+      const unitProgram = await makeProgramFromShaderMaterial(
+        context,
+        passMaterial
+      );
 
       framebuffer.clear(BufferBit.All);
       renderBufferGeometry({
@@ -120,7 +123,7 @@ async function init(): Promise<void> {
       );
     }
     output.push('');
-  });
+  }
 
   output.push(
     '',

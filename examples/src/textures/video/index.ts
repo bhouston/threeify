@@ -49,7 +49,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const clickToPlayMap = textureToTexImage2D(context, clickToPlayTexture);
   const uniforms = {
     localToWorld: new Mat4(),

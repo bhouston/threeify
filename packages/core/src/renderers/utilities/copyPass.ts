@@ -17,11 +17,12 @@ import {
   makeProgramFromShaderMaterial,
   Program
 } from '../webgl/programs/Program';
+import { RenderingContext } from '../webgl/RenderingContext';
 import { TexImage2D } from '../webgl/textures/TexImage2D';
 import copyFragmentSource from './copy/fragment.glsl';
 import copyVertexSource from './copy/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
-
+let programPromise: Promise<Program> | undefined = undefined;
 let program: Program | undefined;
 let passBufferGeometry: BufferGeometry | undefined;
 
@@ -33,7 +34,21 @@ export interface ICopyPassProps {
   targetEncoding?: TextureEncoding;
 }
 
-export function copyPass(props: ICopyPassProps): void {
+export function prewarmCopyPass(context: RenderingContext) {
+  if (program === undefined && programPromise === undefined) {
+    const material = new ShaderMaterial(
+      'copyPass',
+      copyVertexSource,
+      copyFragmentSource
+    );
+    programPromise = makeProgramFromShaderMaterial(context, material);
+  }
+  if (passBufferGeometry === undefined) {
+    passBufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
+  }
+}
+
+export async function copyPass(props: ICopyPassProps): Promise<void> {
   const {
     sourceTexImage2D,
     sourceEncoding,
@@ -47,19 +62,8 @@ export function copyPass(props: ICopyPassProps): void {
     throw new Error('Cannot specify both a target framebuffer and texture.');
   }
 
-  // TODO: cache geometry + bufferGeometry.
-  if (passBufferGeometry === undefined) {
-    passBufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
-  }
-
-  // TODO: cache material + program.
-  if (program === undefined) {
-    const material = new ShaderMaterial(
-      'copyPass',
-      copyVertexSource,
-      copyFragmentSource
-    );
-    program = makeProgramFromShaderMaterial(context, material);
+  if (program === undefined && passBufferGeometry === undefined) {
+    prewarmCopyPass(context);
   }
 
   const uniforms = {
@@ -69,7 +73,7 @@ export function copyPass(props: ICopyPassProps): void {
     targetEncoding:
       targetEncoding !== undefined ? targetEncoding : TextureEncoding.Linear
   };
-  console.log('uniforms', uniforms);
+
   let localFramebuffer = targetFramebuffer;
   let tempFramebuffer: Framebuffer | undefined = undefined;
 
@@ -81,6 +85,14 @@ export function copyPass(props: ICopyPassProps): void {
 
   if (localFramebuffer === undefined)
     throw new Error('No target framebuffer or texture specified.');
+
+  if (program === undefined) {
+    if (programPromise === undefined)
+      throw new Error('programPromise is undefined');
+    program = await programPromise;
+  }
+  if (passBufferGeometry === undefined)
+    throw new Error('passBufferGeometry is undefined');
 
   renderBufferGeometry({
     framebuffer: localFramebuffer,

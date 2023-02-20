@@ -18,12 +18,12 @@ import {
   makeBufferGeometryFromGeometry,
   makeColorAttachment,
   makeProgramFromShaderMaterial,
-  textureToTexImage2D,
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -92,7 +92,7 @@ async function init(): Promise<void> {
   const simpleFramebuffer = new Framebuffer(context);
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
