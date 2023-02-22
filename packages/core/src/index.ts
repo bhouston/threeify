@@ -46,7 +46,7 @@ export * from './geometry/primitives/polyhedronGeometry.js';
 
 export * from './worker/WorkerPool.js';
 
-export * from './renderers/utilities/copyPass-other.js';
+export * from './renderers/utilities/CopyPass.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
 

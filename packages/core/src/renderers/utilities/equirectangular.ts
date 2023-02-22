@@ -24,7 +24,7 @@ import { TexParameters } from '../webgl/textures/TexParameters';
 import { TextureFilter } from '../webgl/textures/TextureFilter';
 import { TextureTarget } from '../webgl/textures/TextureTarget';
 import { TextureWrap } from '../webgl/textures/TextureWrap';
-import { CopyPass } from './copyPass-other';
+import { CopyPass } from './CopyPass';
 import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
