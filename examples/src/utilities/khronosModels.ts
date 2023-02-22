@@ -93,8 +93,8 @@ export function getKhronosGlTFUrl(
   const modelName = KhronosModel[model];
   const formatFolder = glTFFormatToFolder[format];
   const extension = glTFFormatToExtension[format];
-  //const rootPath =
-  //  'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0';
-  const rootPath = '/assets/glTF-Sample-Models/2.0';
+  const rootPath =
+    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0';
+  //const rootPath = '/assets/glTF-Sample-Models/2.0';
   return `${rootPath}/${modelName}/${formatFolder}/${modelName}.${extension}`;
 }
