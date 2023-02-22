@@ -24,7 +24,6 @@
     "@types/offscreencanvas": "^2019.7.0",
     "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@web/dev-server": "^0.1.35",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -38,13 +37,14 @@
     "ts-jest": "^29.0.3",
     "ts-jest-resolver": "^2.0.0",
     "typedoc": "^0.23.15",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "vite": "^4.1.4"
   },
   "scripts": {
     "clean": "find . -name 'tsconfig.tsbuildinfo' -type f -delete",
     "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./packages/scene\" && tst --projectDir \"./packages/layer-compositor\" && tst --projectDir \"./examples\"",
     "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch & tst --projectDir \"./packages/scene\" --watch & tst --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
-    "start": "npm run watch & web-dev-server --watch --app-index examples/index.html --node-resolve --open",
+    "start": "npm run watch & vite --open examples/index.html",
     "format": "prettier \"examples/src/**/*.{ts,json,glsl}\" \"packages/**/src/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/src/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest"
