@@ -54,7 +54,7 @@ async function init(): Promise<void> {
   const fgSplatMap = textureToTexImage2D(context, fgSplatTexture);
   const bgMap = textureToTexImage2D(context, bgTexture);
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const bgUniforms = {
     localToWorld: new Mat4(),
     premultipliedAlpha: 0,

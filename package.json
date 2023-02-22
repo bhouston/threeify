@@ -41,7 +41,10 @@
     "vite": "^4.1.4"
   },
   "scripts": {
-    "clean": "find . -name 'tsconfig.tsbuildinfo' -type f -delete",
+    "clean": "npm run clean:dist && npm run clean:node_modules && npm run clean:tsbuildinfo",
+    "clean:dist": "find . -name 'dist' -type d -prune -exec rm -rf '{}' +",
+    "clean:node_modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
+    "clean:buildinfo": "find . -name 'tsconfig.tsbuildinfo' -type f -delete",
     "build": "tsc --build && tst --projectDir \"./packages/core\" && tst --projectDir \"./packages/scene\" && tst --projectDir \"./packages/layer-compositor\" && tst --projectDir \"./examples\"",
     "watch": "tsc --build  --watch --preserveWatchOutput & tst --projectDir \"./packages/core\" --watch & tst --projectDir \"./packages/scene\" --watch & tst --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
     "start": "npm run watch & vite --open examples/index.html",
@@ -60,6 +63,6 @@
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
-    "@threeify/shader-transpiler": "*"
+    "@threeify/shader-transpiler": "^3.0.0"
   }
 }

@@ -23,7 +23,8 @@ import {
   AttributeData,
   createImageBitmapFromArrayBuffer,
   Geometry,
-  Texture
+  Texture,
+  TextureCache
 } from '@threeify/core';
 import {
   Color3,
@@ -52,15 +53,12 @@ const semanticToThreeifyName: { [key: string]: string } = {
   WEIGHTS_0: 'weights0'
 };
 
-async function toTexture(
-  texture: GLTFTexture | null
-): Promise<Texture | undefined> {
-  const size = toVec2(texture?.getSize() || [1, 1]);
-  const imageData = texture?.getImage();
-  if (imageData === null || imageData === undefined) {
-    return undefined;
-  }
-  const mimeType = texture?.getMimeType() || 'image/png';
+async function toTexture(texture: GLTFTexture): Promise<Texture> {
+  const size = toVec2(texture.getSize() || [1, 1]);
+  //console.log(`gltfTexture URI ${texture?.getURI()}`);
+  const imageData = texture.getImage();
+  if (imageData === null) throw new Error('image data in null!');
+  const mimeType = texture.getMimeType() || 'image/png';
   const name =
     (texture?.getName() || texture?.getURI() || '') +
     `(${mimeType}) ${size.x}x${size.y}`;
@@ -101,7 +99,10 @@ function toAlphaMode(alphaMode: string): AlphaMode {
       return AlphaMode.Opaque;
   }
 }
-export async function glTFToSceneNode(url: string): Promise<SceneNode> {
+export async function glTFToSceneNode(
+  url: string,
+  textureCache: TextureCache
+): Promise<SceneNode> {
   const io = new WebIO();
   io.registerExtensions(KHRONOS_EXTENSIONS);
   /*io.registerExtensions([
@@ -131,13 +132,18 @@ export async function glTFToSceneNode(url: string): Promise<SceneNode> {
 
   const rootNode = new SceneNode({ name: 'glTF' });
 
+  const childrenPromises: Promise<SceneNode>[] = [];
   for (const glTFChildNode of glTFScene.listChildren()) {
-    rootNode.children.push(await translateNode(glTFChildNode));
+    childrenPromises.push(translateNode(glTFChildNode, textureCache));
   }
+  rootNode.children.push(...(await Promise.all(childrenPromises)));
   return rootNode;
 }
 
-async function translateNode(glTFNode: Node): Promise<SceneNode> {
+async function translateNode(
+  glTFNode: Node,
+  textureCache: TextureCache
+): Promise<SceneNode> {
   const translation = toVec3(glTFNode.getTranslation());
   const rotation = toQuat(glTFNode.getRotation());
   const scale = toVec3(glTFNode.getScale());
@@ -145,13 +151,18 @@ async function translateNode(glTFNode: Node): Promise<SceneNode> {
   const sceneNode = new SceneNode({ translation, scale, rotation });
 
   const glTFMesh: Mesh | null = glTFNode.getMesh();
+
+  const childrenPromises: Promise<SceneNode>[] = [];
+
   if (glTFMesh !== null) {
-    sceneNode.children.push(...(await translateMeshes(glTFMesh)));
+    childrenPromises.push(...translateMeshes(glTFMesh, textureCache));
   }
 
   for (const glTFChildNode of glTFNode.listChildren()) {
-    sceneNode.children.push(await translateNode(glTFChildNode));
+    childrenPromises.push(translateNode(glTFChildNode, textureCache));
   }
+
+  sceneNode.children.push(...(await Promise.all(childrenPromises)));
 
   return sceneNode;
 }
@@ -179,24 +190,29 @@ function getUVIndex(textureInfo: TextureInfo | null): number {
 
 async function getTextureAccessor(
   glTFTexture: GLTFTexture | null,
-  textureInfo: TextureInfo | null
+  textureInfo: TextureInfo | null,
+  textureCache: TextureCache
 ): Promise<TextureAccessor | undefined> {
-  const texture = await toTexture(glTFTexture);
+  if (glTFTexture === null || glTFTexture === undefined) return undefined;
+  const uri = glTFTexture.getURI();
+  const texture = await textureCache.acquireRef(uri, () =>
+    toTexture(glTFTexture)
+  );
   if (texture === undefined) return undefined;
   const uvTransform = getUVTransform(textureInfo);
   const uvIndex = getUVIndex(textureInfo);
   return new TextureAccessor(texture, uvTransform, uvIndex);
 }
 
-async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
-  const meshNodes: MeshNode[] = [];
+function translateMeshes(
+  glTFMesh: Mesh,
+  textureCache: TextureCache
+): Promise<MeshNode>[] {
+  const meshNodePromises: Promise<MeshNode>[] = [];
 
-  for (const primitive of glTFMesh.listPrimitives()) {
+  glTFMesh.listPrimitives().forEach((primitive) => {
     const geometry = new Geometry();
-    let physicalMaterial = new PhysicalMaterial({});
-
     geometry.primitive = primitive.getMode();
-
     const indices = primitive.getIndices();
     if (indices !== null) {
       geometry.indices = new Attribute(
@@ -208,6 +224,8 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
         indices.getNormalized()
       );
     }
+
+    let physicalMaterial = new PhysicalMaterial({});
 
     primitive.listSemantics().forEach((semantic, index) => {
       const attribute = primitive.listAttributes()[index];
@@ -227,265 +245,282 @@ async function translateMeshes(glTFMesh: Mesh): Promise<MeshNode[]> {
     });
 
     const glTFMaterial = primitive.getMaterial();
-
     if (glTFMaterial !== null) {
-      // convert to simultaneously resolving promises
+      const meshNodePromise = new Promise<MeshNode>((resolve) => {
+        // convert to simultaneously resolving promises
 
-      const glTFIor = glTFMaterial.getExtension('KHR_materials_ior') as IOR;
-      const glTFSpecular = glTFMaterial.getExtension(
-        'KHR_materials_specular'
-      ) as Specular;
-      const glTFEmissiveStrength = glTFMaterial.getExtension(
-        'KHR_materials_emissive_strength'
-      ) as EmissiveStrength;
-      const glTFClearcoat = glTFMaterial.getExtension(
-        'KHR_materials_clearcoat'
-      ) as Clearcoat;
-      const glTFSheen = glTFMaterial.getExtension(
-        'KHR_materials_sheen'
-      ) as Sheen;
-      const glTFIridescence = glTFMaterial.getExtension(
-        'KHR_materials_iridescence'
-      ) as Iridescence;
-      const glTFTransmission = glTFMaterial.getExtension(
-        'KHR_materials_transmission'
-      ) as Transmission;
-      const glTFVolume = glTFMaterial.getExtension(
-        'KHR_materials_volume'
-      ) as Volume;
+        const glTFIor = glTFMaterial.getExtension('KHR_materials_ior') as IOR;
+        const glTFSpecular = glTFMaterial.getExtension(
+          'KHR_materials_specular'
+        ) as Specular;
+        const glTFEmissiveStrength = glTFMaterial.getExtension(
+          'KHR_materials_emissive_strength'
+        ) as EmissiveStrength;
+        const glTFClearcoat = glTFMaterial.getExtension(
+          'KHR_materials_clearcoat'
+        ) as Clearcoat;
+        const glTFSheen = glTFMaterial.getExtension(
+          'KHR_materials_sheen'
+        ) as Sheen;
+        const glTFIridescence = glTFMaterial.getExtension(
+          'KHR_materials_iridescence'
+        ) as Iridescence;
+        const glTFTransmission = glTFMaterial.getExtension(
+          'KHR_materials_transmission'
+        ) as Transmission;
+        const glTFVolume = glTFMaterial.getExtension(
+          'KHR_materials_volume'
+        ) as Volume;
 
-      const metallicRoughnessTextureAccessorPromise = getTextureAccessor(
-        glTFMaterial.getMetallicRoughnessTexture(),
-        glTFMaterial.getMetallicRoughnessTextureInfo()
-      );
-      const albedoAlphaTextureAccessorPromise = getTextureAccessor(
-        glTFMaterial.getBaseColorTexture(),
-        glTFMaterial.getBaseColorTextureInfo()
-      );
-      const emissiveTextureAccessorPromise = getTextureAccessor(
-        glTFMaterial.getEmissiveTexture(),
-        glTFMaterial.getEmissiveTextureInfo()
-      );
-      const normalTextureAccessorPromise = getTextureAccessor(
-        glTFMaterial.getNormalTexture(),
-        glTFMaterial.getNormalTextureInfo()
-      );
-
-      const occlusionTextureAccessorPromise = getTextureAccessor(
-        glTFMaterial.getOcclusionTexture(),
-        glTFMaterial.getOcclusionTextureInfo()
-      );
-
-      const specularFactorTextureAccessorPromise = getTextureAccessor(
-        glTFSpecular?.getSpecularTexture() || null,
-        glTFSpecular?.getSpecularTextureInfo() || null
-      );
-
-      const specularColorTextureAccessorPromise = getTextureAccessor(
-        glTFSpecular?.getSpecularColorTexture() || null,
-        glTFSpecular?.getSpecularColorTextureInfo() || null
-      );
-
-      if (glTFClearcoat !== null) {
-        if (
-          glTFClearcoat?.getClearcoatTexture() !== null &&
-          glTFClearcoat?.getClearcoatRoughnessTexture() !== null
-        ) {
-          if (
-            glTFClearcoat?.getClearcoatTexture() !==
-            glTFClearcoat?.getClearcoatRoughnessTexture()
-          ) {
-            throw new Error(
-              'Clearcoat and Clearcoat Roughness textures must be the same.'
-            );
-          }
-        }
-      }
-
-      const clearcoatFactorRoughnessTextureAccessorPromise = getTextureAccessor(
-        glTFClearcoat?.getClearcoatTexture() || null,
-        glTFClearcoat?.getClearcoatTextureInfo() || null
-      );
-      const clearcoatNormalTextureAccessorPromise = getTextureAccessor(
-        glTFClearcoat?.getClearcoatNormalTexture() || null,
-        glTFClearcoat?.getClearcoatNormalTextureInfo() || null
-      );
-
-      if (glTFSheen !== null) {
-        if (
-          glTFSheen?.getSheenColorTexture() !== null &&
-          glTFSheen?.getSheenRoughnessTexture() !== null
-        ) {
-          if (
-            glTFSheen?.getSheenColorTexture() !==
-            glTFSheen?.getSheenRoughnessTexture()
-          ) {
-            throw new Error(
-              'Sheen Color and Roughness textures must be the same.'
-            );
-          }
-        }
-      }
-
-      const sheenColorRoughnessTextureAccessorPromise = getTextureAccessor(
-        glTFSheen?.getSheenColorTexture() || null,
-        glTFSheen?.getSheenColorTextureInfo() || null
-      );
-
-      if (glTFIridescence !== null) {
-        if (
-          glTFIridescence?.getIridescenceTexture() !== null &&
-          glTFIridescence?.getIridescenceThicknessTexture() !== null
-        ) {
-          if (
-            glTFIridescence?.getIridescenceTexture() !==
-            glTFIridescence?.getIridescenceThicknessTexture()
-          ) {
-            throw new Error(
-              'Sheen Color and Roughness textures must be the same.'
-            );
-          }
-        }
-      }
-
-      const iridescenceFactorThicknessTextureAccessorPromise =
-        getTextureAccessor(
-          glTFIridescence?.getIridescenceTexture() || null,
-          glTFIridescence?.getIridescenceTextureInfo() || null
+        const metallicRoughnessTextureAccessorPromise = getTextureAccessor(
+          glTFMaterial.getMetallicRoughnessTexture(),
+          glTFMaterial.getMetallicRoughnessTextureInfo(),
+          textureCache
+        );
+        const albedoAlphaTextureAccessorPromise = getTextureAccessor(
+          glTFMaterial.getBaseColorTexture(),
+          glTFMaterial.getBaseColorTextureInfo(),
+          textureCache
+        );
+        const emissiveTextureAccessorPromise = getTextureAccessor(
+          glTFMaterial.getEmissiveTexture(),
+          glTFMaterial.getEmissiveTextureInfo(),
+          textureCache
+        );
+        const normalTextureAccessorPromise = getTextureAccessor(
+          glTFMaterial.getNormalTexture(),
+          glTFMaterial.getNormalTextureInfo(),
+          textureCache
         );
 
-      if (glTFTransmission !== null && glTFVolume !== null) {
-        if (
-          glTFTransmission?.getTransmissionTexture() !== null &&
-          glTFVolume?.getThicknessTexture() !== null
-        ) {
-          if (
-            glTFTransmission?.getTransmissionTexture() !==
-            glTFVolume?.getThicknessTexture()
-          ) {
-            throw new Error(
-              'Sheen Color and Roughness textures must be the same.'
-            );
-          }
-        }
-      }
-
-      const transmissionFactorThicknessTextureAccessorPromise =
-        getTextureAccessor(
-          glTFTransmission?.getTransmissionTexture(),
-          glTFTransmission?.getTransmissionTextureInfo()
+        const occlusionTextureAccessorPromise = getTextureAccessor(
+          glTFMaterial.getOcclusionTexture(),
+          glTFMaterial.getOcclusionTextureInfo(),
+          textureCache
         );
 
-      const data = await Promise.all([
-        metallicRoughnessTextureAccessorPromise,
-        albedoAlphaTextureAccessorPromise,
-        emissiveTextureAccessorPromise,
-        normalTextureAccessorPromise,
-        occlusionTextureAccessorPromise,
-        specularFactorTextureAccessorPromise,
-        specularColorTextureAccessorPromise,
-        clearcoatFactorRoughnessTextureAccessorPromise,
-        clearcoatNormalTextureAccessorPromise,
-        sheenColorRoughnessTextureAccessorPromise,
-        iridescenceFactorThicknessTextureAccessorPromise,
-        transmissionFactorThicknessTextureAccessorPromise
-      ]);
+        const specularFactorTextureAccessorPromise = getTextureAccessor(
+          glTFSpecular?.getSpecularTexture() || null,
+          glTFSpecular?.getSpecularTextureInfo() || null,
+          textureCache
+        );
 
-      const metallicRoughnessTextureAccessor = data[0];
-      const albedoAlphaTextureAccessor = data[1];
-      const emissiveTextureAccessor = data[2];
-      const normalTextureAccessor = data[3];
-      const occlusionTextureAccessor = data[4];
-      const specularFactorTextureAccessor = data[5];
-      const specularColorTextureAccessor = data[6];
-      const clearcoatFactorRoughnessTextureAccessor = data[7];
-      const clearcoatNormalTextureAccessor = data[8];
-      const sheenColorRoughnessTextureAccessor = data[9];
-      const iridescenceFactorThicknessTextureAccessor = data[10];
-      const transmissionFactorThicknessTextureAccessor = data[11];
+        const specularColorTextureAccessorPromise = getTextureAccessor(
+          glTFSpecular?.getSpecularColorTexture() || null,
+          glTFSpecular?.getSpecularColorTextureInfo() || null,
+          textureCache
+        );
 
-      physicalMaterial = new PhysicalMaterial({
-        alpha: glTFMaterial.getAlpha(),
-        alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
-        alphaCutoff: glTFMaterial.getAlphaCutoff(),
+        if (glTFClearcoat !== null) {
+          if (
+            glTFClearcoat?.getClearcoatTexture() !== null &&
+            glTFClearcoat?.getClearcoatRoughnessTexture() !== null
+          ) {
+            if (
+              glTFClearcoat?.getClearcoatTexture() !==
+              glTFClearcoat?.getClearcoatRoughnessTexture()
+            ) {
+              throw new Error(
+                'Clearcoat and Clearcoat Roughness textures must be the same.'
+              );
+            }
+          }
+        }
 
-        albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
-        albedoAlphaTextureAccessor: albedoAlphaTextureAccessor,
+        const clearcoatFactorRoughnessTextureAccessorPromise =
+          getTextureAccessor(
+            glTFClearcoat?.getClearcoatTexture() || null,
+            glTFClearcoat?.getClearcoatTextureInfo() || null,
+            textureCache
+          );
+        const clearcoatNormalTextureAccessorPromise = getTextureAccessor(
+          glTFClearcoat?.getClearcoatNormalTexture() || null,
+          glTFClearcoat?.getClearcoatNormalTextureInfo() || null,
+          textureCache
+        );
 
-        specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
-        metallicFactor: glTFMaterial.getMetallicFactor(),
-        metallicSpecularRoughnessTextureAccessor:
-          metallicRoughnessTextureAccessor,
+        if (glTFSheen !== null) {
+          if (
+            glTFSheen?.getSheenColorTexture() !== null &&
+            glTFSheen?.getSheenRoughnessTexture() !== null
+          ) {
+            if (
+              glTFSheen?.getSheenColorTexture() !==
+              glTFSheen?.getSheenRoughnessTexture()
+            ) {
+              throw new Error(
+                'Sheen Color and Roughness textures must be the same.'
+              );
+            }
+          }
+        }
 
-        emissiveFactor: color3MultiplyByScalar(
-          toColor3(glTFMaterial.getEmissiveFactor()),
-          glTFEmissiveStrength !== null
-            ? glTFEmissiveStrength.getEmissiveStrength()
-            : 1
-        ),
-        emissiveTextureAccessor: emissiveTextureAccessor,
+        const sheenColorRoughnessTextureAccessorPromise = getTextureAccessor(
+          glTFSheen?.getSheenColorTexture() || null,
+          glTFSheen?.getSheenColorTextureInfo() || null,
+          textureCache
+        );
 
-        normalScale: toVec2([
-          glTFMaterial.getNormalScale(),
-          glTFMaterial.getNormalScale()
-        ]),
-        normalTextureAccessor: normalTextureAccessor,
+        if (glTFIridescence !== null) {
+          if (
+            glTFIridescence?.getIridescenceTexture() !== null &&
+            glTFIridescence?.getIridescenceThicknessTexture() !== null
+          ) {
+            if (
+              glTFIridescence?.getIridescenceTexture() !==
+              glTFIridescence?.getIridescenceThicknessTexture()
+            ) {
+              throw new Error(
+                'Sheen Color and Roughness textures must be the same.'
+              );
+            }
+          }
+        }
 
-        occlusionFactor: glTFMaterial.getOcclusionStrength(),
-        occlusionTextureAccessor: occlusionTextureAccessor,
+        const iridescenceFactorThicknessTextureAccessorPromise =
+          getTextureAccessor(
+            glTFIridescence?.getIridescenceTexture() || null,
+            glTFIridescence?.getIridescenceTextureInfo() || null,
+            textureCache
+          );
 
-        ior: glTFIor?.getIOR(),
+        if (glTFTransmission !== null && glTFVolume !== null) {
+          if (
+            glTFTransmission?.getTransmissionTexture() !== null &&
+            glTFVolume?.getThicknessTexture() !== null
+          ) {
+            if (
+              glTFTransmission?.getTransmissionTexture() !==
+              glTFVolume?.getThicknessTexture()
+            ) {
+              throw new Error(
+                'Sheen Color and Roughness textures must be the same.'
+              );
+            }
+          }
+        }
 
-        specularFactor: glTFSpecular?.getSpecularFactor(),
-        specularFactorTextureAccessor: specularFactorTextureAccessor,
-        specularColor:
-          glTFSpecular !== null
-            ? toColor3(glTFSpecular.getSpecularColorFactor())
-            : undefined,
-        specularColorTextureAccessor: specularColorTextureAccessor,
+        const transmissionFactorThicknessTextureAccessorPromise =
+          getTextureAccessor(
+            glTFTransmission?.getTransmissionTexture(),
+            glTFTransmission?.getTransmissionTextureInfo(),
+            textureCache
+          );
 
-        clearcoatFactor: glTFClearcoat?.getClearcoatFactor(),
-        clearcoatRoughnessFactor: glTFClearcoat?.getClearcoatRoughnessFactor(),
-        clearcoatFactorRoughnessTextureAccessor:
-          clearcoatFactorRoughnessTextureAccessor,
-        clearcoatNormalTextureAccessor: clearcoatNormalTextureAccessor,
+        Promise.all([
+          metallicRoughnessTextureAccessorPromise,
+          albedoAlphaTextureAccessorPromise,
+          emissiveTextureAccessorPromise,
+          normalTextureAccessorPromise,
+          occlusionTextureAccessorPromise,
+          specularFactorTextureAccessorPromise,
+          specularColorTextureAccessorPromise,
+          clearcoatFactorRoughnessTextureAccessorPromise,
+          clearcoatNormalTextureAccessorPromise,
+          sheenColorRoughnessTextureAccessorPromise,
+          iridescenceFactorThicknessTextureAccessorPromise,
+          transmissionFactorThicknessTextureAccessorPromise
+        ]).then((data) => {
+          const metallicRoughnessTextureAccessor = data[0];
+          const albedoAlphaTextureAccessor = data[1];
+          const emissiveTextureAccessor = data[2];
+          const normalTextureAccessor = data[3];
+          const occlusionTextureAccessor = data[4];
+          const specularFactorTextureAccessor = data[5];
+          const specularColorTextureAccessor = data[6];
+          const clearcoatFactorRoughnessTextureAccessor = data[7];
+          const clearcoatNormalTextureAccessor = data[8];
+          const sheenColorRoughnessTextureAccessor = data[9];
+          const iridescenceFactorThicknessTextureAccessor = data[10];
+          const transmissionFactorThicknessTextureAccessor = data[11];
 
-        sheenColorFactor:
-          glTFSheen !== null
-            ? toColor3(glTFSheen.getSheenColorFactor())
-            : undefined,
-        sheenRoughnessFactor: glTFSheen?.getSheenRoughnessFactor(),
-        sheenColorRoughnessTextureAccessor: sheenColorRoughnessTextureAccessor,
+          physicalMaterial = new PhysicalMaterial({
+            alpha: glTFMaterial.getAlpha(),
+            alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
+            alphaCutoff: glTFMaterial.getAlphaCutoff(),
 
-        iridescenceFactor: glTFIridescence?.getIridescenceFactor(),
-        iridescenceIor: glTFIridescence?.getIridescenceIOR(),
-        iridescenceThicknessMinimum:
-          glTFIridescence?.getIridescenceThicknessMaximum(),
-        iridescenceThicknessMaximum:
-          glTFIridescence?.getIridescenceThicknessMaximum(),
-        iridescenceFactorThicknessTextureAccessor:
-          iridescenceFactorThicknessTextureAccessor,
+            albedoFactor: toColor3(glTFMaterial.getBaseColorFactor()),
+            albedoAlphaTextureAccessor: albedoAlphaTextureAccessor,
 
-        transmissionFactor: glTFTransmission?.getTransmissionFactor(),
-        thicknessFactor: glTFVolume?.getThicknessFactor(),
-        transmissionFactorThicknessTextureAccessor:
-          transmissionFactorThicknessTextureAccessor,
+            specularRoughnessFactor: glTFMaterial.getRoughnessFactor(),
+            metallicFactor: glTFMaterial.getMetallicFactor(),
+            metallicSpecularRoughnessTextureAccessor:
+              metallicRoughnessTextureAccessor,
 
-        attenuationDistance: glTFVolume?.getAttenuationDistance(),
-        attenuationColor:
-          glTFVolume !== null
-            ? toColor3(glTFVolume?.getAttenuationColor())
-            : undefined
+            emissiveFactor: color3MultiplyByScalar(
+              toColor3(glTFMaterial.getEmissiveFactor()),
+              glTFEmissiveStrength !== null
+                ? glTFEmissiveStrength.getEmissiveStrength()
+                : 1
+            ),
+            emissiveTextureAccessor: emissiveTextureAccessor,
+
+            normalScale: toVec2([
+              glTFMaterial.getNormalScale(),
+              glTFMaterial.getNormalScale()
+            ]),
+            normalTextureAccessor: normalTextureAccessor,
+
+            occlusionFactor: glTFMaterial.getOcclusionStrength(),
+            occlusionTextureAccessor: occlusionTextureAccessor,
+
+            ior: glTFIor?.getIOR(),
+
+            specularFactor: glTFSpecular?.getSpecularFactor(),
+            specularFactorTextureAccessor: specularFactorTextureAccessor,
+            specularColor:
+              glTFSpecular !== null
+                ? toColor3(glTFSpecular.getSpecularColorFactor())
+                : undefined,
+            specularColorTextureAccessor: specularColorTextureAccessor,
+
+            clearcoatFactor: glTFClearcoat?.getClearcoatFactor(),
+            clearcoatRoughnessFactor:
+              glTFClearcoat?.getClearcoatRoughnessFactor(),
+            clearcoatFactorRoughnessTextureAccessor:
+              clearcoatFactorRoughnessTextureAccessor,
+            clearcoatNormalTextureAccessor: clearcoatNormalTextureAccessor,
+
+            sheenColorFactor:
+              glTFSheen !== null
+                ? toColor3(glTFSheen.getSheenColorFactor())
+                : undefined,
+            sheenRoughnessFactor: glTFSheen?.getSheenRoughnessFactor(),
+            sheenColorRoughnessTextureAccessor:
+              sheenColorRoughnessTextureAccessor,
+
+            iridescenceFactor: glTFIridescence?.getIridescenceFactor(),
+            iridescenceIor: glTFIridescence?.getIridescenceIOR(),
+            iridescenceThicknessMinimum:
+              glTFIridescence?.getIridescenceThicknessMaximum(),
+            iridescenceThicknessMaximum:
+              glTFIridescence?.getIridescenceThicknessMaximum(),
+            iridescenceFactorThicknessTextureAccessor:
+              iridescenceFactorThicknessTextureAccessor,
+
+            transmissionFactor: glTFTransmission?.getTransmissionFactor(),
+            thicknessFactor: glTFVolume?.getThicknessFactor(),
+            transmissionFactorThicknessTextureAccessor:
+              transmissionFactorThicknessTextureAccessor,
+
+            attenuationDistance: glTFVolume?.getAttenuationDistance(),
+            attenuationColor:
+              glTFVolume !== null
+                ? toColor3(glTFVolume?.getAttenuationColor())
+                : undefined
+          });
+
+          return resolve(
+            new MeshNode({
+              geometry,
+              material: physicalMaterial
+            })
+          );
+        });
       });
-    }
 
-    meshNodes.push(
-      new MeshNode({
-        name: 'glTFMesh',
-        geometry,
-        material: physicalMaterial
-      })
-    );
-  }
-  return meshNodes;
+      meshNodePromises.push(meshNodePromise);
+    }
+  });
+  return meshNodePromises;
 }

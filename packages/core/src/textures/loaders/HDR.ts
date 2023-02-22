@@ -5,47 +5,25 @@
 //
 //
 
-import {
-  float32RGBEToFloat32Linear,
-  float32sToFloat16s,
-  normalizedByteToFloat32s
-} from '@threeify/math';
-
-import { Float16ArrayImage, Uint8ArrayImage } from '../ArrayBufferImage.js';
-import { PixelEncoding } from '../PixelEncoding.js';
-
 class ReadBuffer {
-  constructor(public data: Uint8Array, public position: number) {}
+  constructor(public data: Uint8ClampedArray, public position: number) {}
 }
 export async function fetchCubeHDRs(
   urlPattern: string
-): Promise<Uint8ArrayImage[]> {
+): Promise<ImageBitmap[]> {
   const cubeMapFaces = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
-  const fetchPromises: Promise<Uint8ArrayImage>[] = [];
+  const fetchPromises: Promise<ImageBitmap>[] = [];
   cubeMapFaces.forEach((face) => {
-    fetchPromises.push(fetchHDR(urlPattern.replace('*', face)));
+    fetchPromises.push(
+      fetchHDR(urlPattern.replace('*', face)).then((hdr) => {
+        return createImageBitmap(hdr);
+      })
+    );
   });
   return Promise.all(fetchPromises);
 }
 
-// TODO: This doesn't work!
-export function rgbeToFloat16(
-  arrayBufferImage: Uint8ArrayImage
-): Float16ArrayImage {
-  const float32Array = normalizedByteToFloat32s(
-    arrayBufferImage.data as Uint8Array
-  );
-  float32RGBEToFloat32Linear(float32Array, float32Array);
-  const result = new Float16ArrayImage(
-    float32sToFloat16s(float32Array),
-    arrayBufferImage.width,
-    arrayBufferImage.height,
-    PixelEncoding.Linear
-  );
-  console.log('hdr image', result);
-  return result;
-}
-export async function fetchHDR(url: string): Promise<Uint8ArrayImage> {
+export async function fetchHDR(url: string): Promise<ImageData> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
@@ -55,8 +33,8 @@ export async function fetchHDR(url: string): Promise<Uint8ArrayImage> {
   return parseHDR(await response.arrayBuffer());
 }
 
-export function parseHDR(arrayBuffer: ArrayBuffer): Uint8ArrayImage {
-  const readBuffer = new ReadBuffer(new Uint8Array(arrayBuffer), 0);
+export function parseHDR(arrayBuffer: ArrayBuffer): ImageData {
+  const readBuffer = new ReadBuffer(new Uint8ClampedArray(arrayBuffer), 0);
   const header = readHeader(readBuffer);
   const pixelData = readRLEPixelData(
     readBuffer.data.subarray(readBuffer.position),
@@ -64,12 +42,7 @@ export function parseHDR(arrayBuffer: ArrayBuffer): Uint8ArrayImage {
     header.height
   );
 
-  return new Uint8ArrayImage(
-    pixelData,
-    header.width,
-    header.height,
-    PixelEncoding.RGBE
-  );
+  return new ImageData(pixelData, header.width, header.height);
 }
 
 function stringFromCharCodes(unicode: Uint16Array): string {
@@ -208,10 +181,10 @@ function readHeader(buffer: ReadBuffer): Header {
   return header;
 }
 function readRLEPixelData(
-  byteArray: Uint8Array,
+  byteArray: Uint8ClampedArray,
   width: number,
   height: number
-): Uint8Array {
+): Uint8ClampedArray {
   if (
     // run length encoding is not allowed so read flat
     width < 8 ||
@@ -229,13 +202,13 @@ function readRLEPixelData(
     throw new Error('hdr: wrong scanline width');
   }
 
-  const dataRgba = new Uint8Array(4 * width * height);
+  const dataRgba = new Uint8ClampedArray(4 * width * height);
 
   let offset = 0;
   let pos = 0;
   const ptrEnd = 4 * width;
-  const rgbeStart = new Uint8Array(4);
-  const scanlineBuffer = new Uint8Array(ptrEnd);
+  const rgbeStart = new Uint8ClampedArray(4);
+  const scanlineBuffer = new Uint8ClampedArray(ptrEnd);
 
   // read in each successive scanline
   while (height > 0 && pos < byteArray.byteLength) {

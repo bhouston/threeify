@@ -2,7 +2,8 @@ import {
   makeProgramFromShaderMaterial,
   Orbit,
   RenderingContext,
-  ShaderMaterial
+  ShaderMaterial,
+  TextureCache
 } from '@threeify/core';
 import {
   box3Center,
@@ -46,7 +47,7 @@ async function init(): Promise<void> {
   const context = new RenderingContext(canvasHtmlElement);
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
-  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
+  const program = await makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const orbitController = new Orbit(canvasHtmlElement);
   orbitController.zoom = 1.2;
@@ -57,11 +58,13 @@ async function init(): Promise<void> {
 
   const root = new SceneNode({ name: 'root' });
   //console.time('glTFToSceneNode');
+  const textureCache = new TextureCache();
   const glTFModel = await glTFToSceneNode(
     getKhronosGlTFUrl(
       sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
       GLTFFormat.glTF
-    )
+    ),
+    textureCache
   );
   //console.timeEnd('glTFToSceneNode');
 
@@ -120,7 +123,7 @@ async function init(): Promise<void> {
 
   const treeStats = subTreeStats(root);
 
-  console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
+  //console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
   //console.time('updateRenderCache');
   const renderCache = updateRenderCache(

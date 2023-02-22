@@ -50,7 +50,7 @@ export class PanoramaLayerCompositor extends LayerCompositor {
       )
     );
     this.#sphereGeometry = makeBufferGeometryFromGeometry(this.context, sphere);
-    this.#sphereProgram = makeProgramFromShaderMaterial(
+    this.#sphereProgram = await makeProgramFromShaderMaterial(
       this.context,
       new ShaderMaterial('panoramicLayerCompositor', vertex, fragment)
     );

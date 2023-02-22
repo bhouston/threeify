@@ -27,7 +27,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const texImage2D = textureToTexImage2D(context, texture);
 
   const uniforms = { map: texImage2D };

@@ -41,7 +41,7 @@ async function init(): Promise<void> {
   );
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
-  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
+  const program = await makeProgramFromShaderMaterial(context, shaderMaterial);
 
   const sceneTreeCache = new SceneTreeCache();
 
