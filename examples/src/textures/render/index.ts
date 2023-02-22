@@ -12,11 +12,11 @@ import {
   makeColorAttachment,
   makeDepthAttachment,
   makeProgramFromShaderMaterial,
-  textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
     makeDepthAttachment(context, framebufferSize)
   );
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {

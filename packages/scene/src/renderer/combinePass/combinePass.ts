@@ -26,7 +26,7 @@ export interface ICombinePassProps {
   exposure: number;
 }
 
-export function combinePass(props: ICombinePassProps): void {
+export async function combinePass(props: ICombinePassProps): Promise<void> {
   const {
     opaqueTexImage2D,
     transmissionTexImage2D,
@@ -48,7 +48,7 @@ export function combinePass(props: ICombinePassProps): void {
       vertexSource,
       fragmentSource
     );
-    program = makeProgramFromShaderMaterial(context, material);
+    program = await makeProgramFromShaderMaterial(context, material);
   }
 
   const uniforms = {

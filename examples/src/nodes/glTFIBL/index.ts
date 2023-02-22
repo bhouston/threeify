@@ -10,6 +10,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   Texture,
+  TextureCache,
   TextureEncoding
 } from '@threeify/core';
 import {
@@ -72,14 +73,35 @@ document.addEventListener('keydown', (event) => {
 });
 
 async function init(): Promise<void> {
+  console.time('init');
+  const textueCache = new TextureCache();
+  const glTFModelPromise = glTFToSceneNode(
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF),
+    textueCache
+  );
+
   const shaderMaterial = new ShaderMaterial(
     'index',
     vertexSource,
     fragmentSource
   );
   //console.time('fetchHDR');
-  const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+  const hdrPromise = fetchHDR(
+    getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
+  );
+  const latLongTexturePromise = hdrPromise.then((hdr) => {
+    return new Texture(hdr);
+  });
+
+  //console.timeEnd('glTFToSceneNode');
+  const cubeMapPromise = latLongTexturePromise.then((latLongTexture) =>
+    makeCubeMapFromEquirectangularTexture(
+      context,
+      latLongTexture,
+      TextureEncoding.RGBE,
+      1024,
+      InternalFormat.RGBA16F
+    )
   );
 
   /* const latLongTexture = new Texture(
@@ -89,10 +111,6 @@ async function init(): Promise<void> {
   const lightIntensity = 0;
   const domeLightIntensity = 1.5;
   const transmissionMode = true;
-
-  const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF)
-  );
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
@@ -107,15 +125,7 @@ async function init(): Promise<void> {
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const cubeMap = makeCubeMapFromEquirectangularTexture(
-    context,
-    latLongTexture,
-    TextureEncoding.RGBE,
-    1024,
-    InternalFormat.RGBA16F
-  );
-
-  const program = makeProgramFromShaderMaterial(context, shaderMaterial);
+  const programPromise = makeProgramFromShaderMaterial(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 
@@ -130,7 +140,7 @@ async function init(): Promise<void> {
   const root = new SceneNode({ name: 'root' });
   //console.time('glTFToSceneNode');
 
-  //console.timeEnd('glTFToSceneNode');
+  const glTFModel = await glTFModelPromise;
 
   //console.time('updateNodeTree');
   updateNodeTree(glTFModel, sceneTreeCache);
@@ -188,7 +198,7 @@ async function init(): Promise<void> {
   root.children.push(camera);
   const domeLight = new DomeLight({
     name: 'DomeLight',
-    cubeMap: cubeMap,
+    cubeMap: await cubeMapPromise,
     translation: orbitNode.translation,
     color: Color3.White,
     intensity: domeLightIntensity
@@ -199,9 +209,10 @@ async function init(): Promise<void> {
 
   const treeStats = subTreeStats(root);
 
-  console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
+  //console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
   //console.time('updateRenderCache');
+  const program = await programPromise;
   const renderCache = updateRenderCache(
     context,
     root,
@@ -247,6 +258,7 @@ async function init(): Promise<void> {
     });
   }
 
+  console.timeEnd('init');
   animate();
 }
 

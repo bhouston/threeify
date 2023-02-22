@@ -8,6 +8,8 @@
 import { Box2 } from '@threeify/math';
 
 import { BlendState } from './BlendState.js';
+import { ProgramCache } from './caches/ProgramCache.js';
+import { TexImage2DCache } from './caches/TexImage2DCache.js';
 import { ClearState } from './ClearState.js';
 import { CullingState } from './CullingState.js';
 import { DepthTestState } from './DepthTestState.js';
@@ -28,6 +30,8 @@ export class RenderingContext {
   readonly glxo: OptionalExtensions;
   readonly canvasFramebuffer: CanvasFramebuffer;
   public readonly resources: Resources;
+  public readonly textureCache: TexImage2DCache;
+  public readonly programCache: ProgramCache;
 
   #program: Program | undefined = undefined;
   #framebuffer: VirtualFramebuffer;
@@ -63,6 +67,9 @@ export class RenderingContext {
     this.glxo = new OptionalExtensions(this.gl);
 
     this.resources = new Resources(this);
+
+    this.textureCache = new TexImage2DCache(this);
+    this.programCache = new ProgramCache(this);
 
     this.canvasFramebuffer = new CanvasFramebuffer(this);
     this.#framebuffer = this.canvasFramebuffer;

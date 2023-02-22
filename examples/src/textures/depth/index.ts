@@ -42,7 +42,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
 
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')

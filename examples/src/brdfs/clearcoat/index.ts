@@ -45,7 +45,7 @@ async function init(): Promise<void> {
   const specularRoughnessMap = clearCoatBumpMap;
   const clearCoatRoughnessMap = specularRoughnessMap;
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

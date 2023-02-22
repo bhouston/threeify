@@ -55,7 +55,7 @@ async function init(): Promise<void> {
 
   const patternGeometry = passGeometry();
   console.log('patternGeometry', patternGeometry);
-  const patternProgram = makeProgramFromShaderMaterial(
+  const patternProgram = await makeProgramFromShaderMaterial(
     context,
     patternMaterial
   );
@@ -71,7 +71,7 @@ async function init(): Promise<void> {
 
   const framebuffer = new Framebuffer(context);
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),

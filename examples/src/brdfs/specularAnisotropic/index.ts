@@ -48,7 +48,7 @@ async function init(): Promise<void> {
     context,
     anisotropicFlow2Texture
   );
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

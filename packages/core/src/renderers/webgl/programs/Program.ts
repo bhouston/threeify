@@ -57,17 +57,20 @@ export class Program implements IResource {
     this.context = context;
     this.name = name ?? '';
 
+    const localShaderDefines = shaderDefines ?? {};
+    //localShaderDefines['ID'] = this.id;
+
     this.vertexShader = new Shader(
       this.context,
       vertexShaderCode,
       ShaderType.Vertex,
-      shaderDefines
+      localShaderDefines
     );
     this.fragmentShader = new Shader(
       this.context,
       fragmentShaderCode,
       ShaderType.Fragment,
-      shaderDefines
+      localShaderDefines
     );
 
     const { gl, resources } = this.context;
@@ -262,11 +265,11 @@ export class Program implements IResource {
   }
 }
 
-export function makeProgramFromShaderMaterial(
+export async function makeProgramFromShaderMaterial(
   context: RenderingContext,
   shaderMaterial: ShaderMaterial,
   shaderDefines: ShaderDefines = {}
-): Program {
+): Promise<Program> {
   const program = new Program({
     context,
     vertexShaderCode: shaderMaterial.vertexShaderCode,
@@ -274,5 +277,17 @@ export function makeProgramFromShaderMaterial(
     shaderDefines,
     name: shaderMaterial.name
   });
-  return program;
+  /*
+  return new Promise<Program>((resolve) => {
+    resolve(program);
+  });*/
+
+  return new Promise<Program>((resolve) => {
+    const checkValueInterval = setInterval(() => {
+      if (program.isReady()) {
+        clearInterval(checkValueInterval);
+        resolve(program);
+      }
+    }, 0);
+  });
 }

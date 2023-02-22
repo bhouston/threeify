@@ -46,7 +46,7 @@ export * from './geometry/primitives/polyhedronGeometry.js';
 
 export * from './worker/WorkerPool.js';
 
-export * from './renderers/utilities/copyPass.js';
+export * from './renderers/utilities/copyPass-other.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
 
@@ -103,3 +103,6 @@ export * from './textures/loaders/ImageData.js';
 export * from './textures/loaders/SolidTextures.js';
 
 export * from './shaders/materials/PhysicalMaterialOutputs.js';
+
+export * from './renderers/caches/ResourceCache.js';
+export * from './renderers/caches/TextureCache.js';

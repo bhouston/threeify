@@ -39,7 +39,7 @@ async function init(): Promise<void> {
     texImage2DArray.push(textureToTexImage2D(context, texture));
   });
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uniforms = { maps: texImage2DArray };
 
   renderBufferGeometry({

@@ -7,7 +7,7 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
-  copyPass,
+  CopyPass,
   CullingSide,
   CullingState,
   DepthTestFunc,
@@ -18,12 +18,12 @@ import {
   makeBufferGeometryFromGeometry,
   makeColorAttachment,
   makeProgramFromShaderMaterial,
-  textureToTexImage2D,
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -92,7 +92,7 @@ async function init(): Promise<void> {
   const simpleFramebuffer = new Framebuffer(context);
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
@@ -123,6 +123,8 @@ async function init(): Promise<void> {
 
   const noDepthTesting = new DepthTestState(false);
 
+  const copyPass = new CopyPass(context);
+
   function animate(): void {
     stats.time(() => {
       const now = Date.now();
@@ -133,7 +135,7 @@ async function init(): Promise<void> {
       uniforms.map = uvTestTexture;
 
       multisampleFramebuffer.clear(BufferBit.All, whiteClearState);
-      gpuRender.time(() => {
+      gpuRender.time(async () => {
         renderBufferGeometry({
           framebuffer: multisampleFramebuffer,
           program,
@@ -146,7 +148,7 @@ async function init(): Promise<void> {
 
         biltFramebuffers(multisampleFramebuffer, simpleFramebuffer);
 
-        copyPass({
+        await copyPass.exec({
           sourceTexImage2D: colorAttachment,
           targetFramebuffer: canvasFramebuffer
         });

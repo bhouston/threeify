@@ -40,7 +40,7 @@ async function init(): Promise<void> {
 
   context.blendState = blendModeToBlendState(Blending.Over, true);
 
-  const program = makeProgramFromShaderMaterial(context, material);
+  const program = await makeProgramFromShaderMaterial(context, material);
   const bgUniforms = { map: textureToTexImage2D(context, bgTexture) };
   const fgUniforms = { map: textureToTexImage2D(context, fgTexture) };
 
