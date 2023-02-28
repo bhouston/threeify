@@ -10,8 +10,26 @@ import watch from 'watch';
 import { getOptions } from './options.js';
 import { transpile } from './transpiler.js';
 
+function throttle<T extends (...args: any[]) => any>(
+  callback: T,
+  delay: number
+): T {
+  let timer: NodeJS.Timer | null = null;
+
+  return function (this: any, ...args: any[]) {
+    if (timer === null) {
+      timer = setTimeout(() => {
+        callback.apply(this, args);
+        timer = null;
+      }, delay);
+    }
+  } as T;
+}
+
 async function main() {
   const options = await getOptions();
+
+  console.log('options', options);
 
   options.projectDir = path.resolve(options.projectDir);
 
@@ -47,17 +65,24 @@ async function main() {
 
   // watch for changes
   if (options.watch) {
-    console.log('watching for changes');
-    watch.watchTree(rootDir, (f, curr, prev) => {
-      if (typeof f === 'object' && prev === null && curr === null) {
-        // Finished walking the tree
-      } else if (prev === null) {
-        // f is a new file
-      } else if (curr.nlink === 0) {
-        // f was removed
-      } else {
-        // f was changed
+    console.log('glsl-transpiler - watching for changes');
+
+    const trottleRecompiler = throttle(() => {
+      // find all the glsl files in the root directory
+      const files = glob.sync('**/*.glsl', { cwd: rootDir });
+
+      // transpile each file
+      for (const file of files) {
+        const src = path.join(rootDir, file);
+        const dest = path.join(outDir, file) + '.ts';
+        //console.log(`transpiling ${src} to ${dest}`);
+        transpile(src, dest, options);
       }
+    }, 0);
+
+    watch.watchTree(rootDir, (f, curr, prev) => {
+      console.log('glsl-transpiler - recompile on changes');
+      trottleRecompiler();
     });
   }
 }

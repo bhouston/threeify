@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
-import process, { exit } from 'node:process';
-import { Command } from 'commander';
 import { promises as fsPromises } from 'node:fs';
 import path from 'node:path';
+import process, { exit } from 'node:process';
+
+import { Command } from 'commander';
 
 export type Options = {
   projectDir: string;
@@ -61,6 +62,7 @@ export async function getOptions() {
   program.parse(process.argv);
 
   const cmdLineOptions = program.opts() as OptionsOverride;
+  console.log('cmdLineOptions', cmdLineOptions);
 
   const projectDir = cmdLineOptions.projectDir || defaultOptions.projectDir;
 
