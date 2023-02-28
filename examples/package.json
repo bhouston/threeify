@@ -28,7 +28,7 @@
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.4.0",
-    "@threeify/shader-transpiler": "*",
+    "@threeify/glsl-transpiler": "*",
     "@types/draco3d": "^1.4.2",
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
@@ -42,8 +42,8 @@
     "vite": "^4.1.4"
   },
   "scripts": {
-    "build": "tsc --build && tst",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tst --watch",
+    "build": "glsl-transpiler && tsc --build",
+    "watch": "glsl-transpiler --watch && tsc --build  --watch --preserveWatchOutput",
     "docs": "typedoc",
     "test": "jest ./src"
   },

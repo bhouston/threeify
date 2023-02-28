@@ -109,7 +109,7 @@ async function init(): Promise<void> {
    );*/
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 1.5;
+  const domeLightIntensity = 1;
   const transmissionMode = true;
 
   const canvasHtmlElement = document.getElementById(

@@ -31,7 +31,7 @@
     "test": "jest ./src"
   },
   "devDependencies": {
-    "@threeify/shader-transpiler": "*",
+    "@threeify/glsl-transpiler": "*",
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "jest": "^29.1.2",

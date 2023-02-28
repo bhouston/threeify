@@ -21,7 +21,7 @@
     "**/*.test.ts"
   ],
   "references": [
-    { "path": "./packages/shader-transpiler" },
+    { "path": "./packages/glsl-transpiler" },
     { "path": "./packages/math" },
     { "path": "./packages/core" },
     { "path": "./packages/scene" },
