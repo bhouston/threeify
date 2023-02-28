@@ -46,14 +46,13 @@
     "clean:node_modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "clean:buildinfo": "find . -name 'tsconfig.tsbuildinfo' -type f -delete",
     "build": "tsc --build && glsl-transpiler --projectDir \"./packages/core\" && glsl-transpiler --projectDir \"./packages/scene\" && glsl-transpiler --projectDir \"./packages/layer-compositor\" && glsl-transpiler --projectDir \"./examples\"",
-    "watch": "tsc --build  --watch --preserveWatchOutput & glsl-transpiler --projectDir \"./packages/core\" --watch & glsl-transpiler --projectDir \"./packages/scene\" --watch & glsl-transpiler --projectDir \"./packages/layer-compositor\" --watch & tst --watch --projectDir \"./examples\"",
+    "watch": "tsc --build  --watch --preserveWatchOutput & glsl-transpiler --projectDir \"./packages/core\" --watch & glsl-transpiler --projectDir \"./packages/scene\" --watch & glsl-transpiler --projectDir \"./packages/layer-compositor\" --watch & glsl-transpiler --watch --projectDir \"./examples\"",
     "start": "npm run watch & vite --open examples/index.html",
     "format": "prettier \"examples/{src,glsl}/**/*.{ts,json,glsl}\" \"packages/*/{src,glsl}/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest"
   },
   "workspaces": [
-    "packages/shader-transpiler",
     "packages/glsl-transpiler",
     "packages/math",
     "packages/core",
