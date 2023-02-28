@@ -7,7 +7,7 @@ import path from 'node:path';
 import glob from 'glob';
 import watch from 'watch';
 
-import { Options, getOptions } from './options.js';
+import { getOptions } from './options.js';
 import { transpile } from './transpiler.js';
 
 async function main() {
@@ -41,7 +41,7 @@ async function main() {
   for (const file of files) {
     const src = path.join(rootDir, file);
     const dest = path.join(outDir, file) + '.ts';
-    console.log(`transpiling ${src} to ${dest}`);
+    //console.log(`transpiling ${src} to ${dest}`);
     transpile(src, dest, options);
   }
 

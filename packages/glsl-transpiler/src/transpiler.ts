@@ -27,7 +27,7 @@ function pathToVariableName(path: string): string {
     .replace(/\./g, '_')
     .replace(/.glsl/g, '')
     .replace(/_+/g, '_');
-  console.log('pathToVariableName', path, variableName);
+  // console.log('pathToVariableName', path, variableName);
   return variableName;
 }
 
@@ -40,7 +40,7 @@ export async function transpile(
   const importNamesToPaths: Map<string, string> = new Map();
 
   // read the glsl file
-  console.log('reading glsl source file', glslSourceFileName);
+  //console.log('reading glsl source file', glslSourceFileName);
   let glslSource = await fsPromises.readFile(glslSourceFileName, 'utf-8');
 
   // for each match of the import regex, add the import to the list of imports, and remove the import from the glsl source
@@ -51,9 +51,9 @@ export async function transpile(
   glslSource = glslSource.replace(
     importRegex,
     (match: string, importPath: string, other: string) => {
-      console.log(
-        `replacement match:${match} importPath:${importPath} other:${other}`
-      );
+      // console.log(
+      //   `replacement match:${match} importPath:${importPath} other:${other}`
+      //  );
 
       // convert the import path to a variable name
       const importName = pathToVariableName(importPath);
@@ -106,6 +106,6 @@ export async function transpile(
     fs.mkdirSync(outDir, { recursive: true });
   }
   // write the typescript source to the output file
-  console.log('writing typescript source file', typeScriptOutputFileName);
+  // console.log('writing typescript source file', typeScriptOutputFileName);
   await fsPromises.writeFile(typeScriptOutputFileName, tsSource);
 }
