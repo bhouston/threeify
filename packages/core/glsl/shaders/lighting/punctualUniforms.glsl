@@ -1,7 +1,7 @@
 #pragma once
 
 #pragma import "./punctual.glsl"
-#pragma import "./ibl/ibl.glsl"
+#pragma import "../ibl/ibl.glsl"
 
 uniform samplerCube iblMapTexture;
 uniform vec3 iblMapIntensity;
@@ -19,7 +19,7 @@ uniform float punctualLightInnerCos[MAX_PUNCTUAL_LIGHTS];
 uniform float punctualLightOuterCos[MAX_PUNCTUAL_LIGHTS];
 #endif
 
-#pragma import "math/mat4"
+#pragma import "../math/mat4.glsl"
 
 PunctualLight readPunctualLightFromUniforms(int lightIndex, mat4 worldToView) {
   PunctualLight punctualLight;

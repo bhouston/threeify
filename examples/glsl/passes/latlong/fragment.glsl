@@ -9,8 +9,8 @@ uniform sampler2D equirectangularMap;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/shaders/cubemaps/latLong.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/dist/shaders/cubemaps/latLong.glsl"
 
 void main() {
   // step one, convert from screen space to ray.

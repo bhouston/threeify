@@ -35,10 +35,8 @@ export enum ShaderOutputs {
   PunctualSpecularDirectBRDF = 59,
   PunctualSheenBRDF = 60,
   PunctualSheenDirectBRDF = 61,
-    PunctualClearcoatBRDF = 62,
-    PunctualClearcoatDirectBRDF = 63,
-    TonemappedColor = 64,
-    sRGBColor  = 65,
-
-
+  PunctualClearcoatBRDF = 62,
+  PunctualClearcoatDirectBRDF = 63,
+  TonemappedColor = 64,
+  sRGBColor = 65
 }

@@ -12,8 +12,8 @@ in vec2 v_uv1;
 in vec2 v_uv2;
 
 #define MAX_PUNCTUAL_LIGHTS (3)
-#pragma import "@threeify/core/shaders/lighting/punctualUniforms.glsl"
-#pragma import "@threeify/core/shaders/materials/physicalUniforms.glsl"
+#pragma import "@threeify/core/dist/shaders/lighting/punctualUniforms.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/physicalUniforms.glsl"
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
@@ -29,23 +29,23 @@ uniform float exposure;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/shaders/microgeometry/tangentSpace.glsl"
-#pragma import "@threeify/core/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
 
-#pragma import "@threeify/core/shaders/brdfs/specular/ggx.glsl"
-#pragma import "@threeify/core/shaders/brdfs/specular/fresnel.glsl"
-#pragma import "@threeify/core/shaders/brdfs/specular/ggx_ibl.glsl"
-#pragma import "@threeify/core/shaders/brdfs/sheen/charlie_ibl.glsl"
-#pragma import "@threeify/core/shaders/brdfs/sheen/charlie.glsl"
-#pragma import "@threeify/core/shaders/brdfs/sheen/sheenMix.glsl"
-#pragma import "@threeify/core/shaders/math/mat4.glsl"
-#pragma import "@threeify/core/shaders/ao/ao.glsl"
-#pragma import "@threeify/core/shaders/color/tonemapping/acesfilmic.glsl"
-#pragma import "@threeify/core/shaders/materials/alpha_mode.glsl"
-#pragma import "@threeify/core/shaders/brdfs/transmission/transmission.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/fresnel.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_ibl.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie_ibl.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/sheen/sheenMix.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/ao/ao.glsl"
+#pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/alpha_mode.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/transmission/transmission.glsl"
 
-#pragma import "@threeify/core/shaders/materials/debugOutputs.glsl"
-#pragma import "@threeify/core/shaders/materials/physicalDebugOutputs.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/debugOutputs.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/physicalDebugOutputs.glsl"
 
 void main() {
   vec2 uvs[NUM_UV_CHANNELS];
@@ -95,7 +95,7 @@ void main() {
   DEBUG_OUTPUT(31, normalToRgb(viewClearcoatNormal));
 
   vec3 outgoingRadiance = vec3(0.0);
-  
+
   // validated from https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_ior/README.md
   vec3 specularF0 =
     saturate(iorToF0(material.ior) * material.specularColor) *

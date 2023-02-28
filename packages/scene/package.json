@@ -26,8 +26,8 @@
     "url": "https://github.com/bhouston/threeify"
   },
   "scripts": {
-    "build": "tsc --build",
-    "watch": "tsc --build  --watch --preserveWatchOutput",
+    "build": "glsl-transpiler && tsc --build",
+    "watch": "glsl-transpiler --watch & tsc --build  --watch --preserveWatchOutput",
     "test": "jest ./src"
   },
   "devDependencies": {

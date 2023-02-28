@@ -1,6 +1,6 @@
 #pragma import "../math.glsl"
 #pragma import "../math/sampling/hammersley.glsl"
-#pragma import "../brdfs/specular/d_ggx.glsl" // NOTE: takes alpha, original versions here took roughness
+#pragma import "../brdfs/specular/d_ggx.glsl"
 #pragma import "../brdfs/sheen/d_charlie.glsl"
 #pragma import "../microgeometry/tangentSpace.glsl"
 
@@ -184,8 +184,8 @@ vec3 filterColor(uint distributionType, vec3 N, float roughness, float filterWid
 }
 
 */
-#pragma import "brdfs/specular/v_ggx_smithcorrelated"  // NOTE: takes alpha, original versions here took roughness
-#pragma import "brdfs/sheen/v_charlie"
+#pragma import "../brdfs/specular/v_ggx_smithcorrelated.glsl"
+#pragma import "../brdfs/sheen/v_charlie.glsl"
 
 // Compute LUT for GGX distribution.
 // See https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf

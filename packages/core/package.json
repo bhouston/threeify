@@ -16,6 +16,11 @@
     "3D"
   ],
   "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*",
     "./shaders/*": "./dist/shaders/*"
   },
   "homepage": "http://bhouston.github.com/threeify",
@@ -39,7 +44,7 @@
   },
   "scripts": {
     "build": "glsl-transpiler && tsc --build",
-    "watch": " glsl-transpiler --watch & tsc --build  --watch --preserveWatchOutput",
+    "watch": "glsl-transpiler --watch & tsc --build  --watch --preserveWatchOutput",
     "test": "jest ./src"
   },
   "dependencies": {

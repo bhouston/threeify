@@ -10,7 +10,7 @@ out vec3 v_viewSurfacePosition;
 out vec3 v_viewSurfaceNormal;
 out vec2 v_uv;
 
-#pragma import "@threeify/core/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
 void main() {
   mat4 localToView = worldToView * localToWorld;

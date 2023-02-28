@@ -42,8 +42,8 @@
     "vite": "^4.1.4"
   },
   "scripts": {
-    "build": "tsc --build && tst",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tst --watch",
+    "build": "glsl-transpiler && tsc --build",
+    "watch": "glsl-transpiler --watch && tsc --build  --watch --preserveWatchOutput",
     "docs": "typedoc",
     "test": "jest ./src"
   },

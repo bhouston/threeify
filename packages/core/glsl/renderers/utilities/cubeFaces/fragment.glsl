@@ -7,8 +7,8 @@ uniform int faceIndex;
 
 out vec4 outputColor;
 
-#pragma include <cubemaps/cubeFaces>
-#pragma include <cubemaps/latLong>
+#pragma import "../../../shaders/cubemaps/cubeFaces.glsl"
+#pragma import "../../../shaders/cubemaps/latLong.glsl"
 
 void main() {
   vec3 direction = cubeFaceUVToDirection(faceIndex, v_uv0);

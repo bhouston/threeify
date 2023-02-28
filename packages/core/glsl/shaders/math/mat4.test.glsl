@@ -1,4 +1,4 @@
-#pragma import "../tests/fragment"
+#pragma import "../tests/fragment.glsl"
 #pragma import "../math.glsl"
 #pragma import "./mat4.glsl"
 

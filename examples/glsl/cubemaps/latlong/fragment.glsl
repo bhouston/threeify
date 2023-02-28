@@ -1,6 +1,6 @@
 precision highp float;
 
-#pragma import "@threeify/core/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;

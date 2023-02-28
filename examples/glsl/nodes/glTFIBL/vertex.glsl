@@ -16,7 +16,7 @@ out vec2 v_uv0;
 out vec2 v_uv1;
 out vec2 v_uv2;
 
-#pragma import "@threeify/core/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
 void main() {
   v_worldSurfaceNormal = mat4TransformDirection(

@@ -9,7 +9,7 @@ uniform vec3 viewLightPosition;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/shaders/math/math.glsl"
+#pragma import "@threeify/core/dist/shaders/math/math.glsl"
 
 void main() {
   vec3 albedo = texture(map, v_uv).xxx;

@@ -84,9 +84,9 @@ uniform float iridescenceThicknessMaximum;
 uniform TextureAccessor iridescenceFactorThicknessTextureAccessor;
 #endif
 
-#pragma import "microgeometry/normalPacking"
-#pragma import "color/spaces/srgb"
-#pragma import "microgeometry/normalMapping"
+#pragma import "../microgeometry/normalPacking.glsl"
+#pragma import "../color/spaces/srgb.glsl"
+#pragma import "../microgeometry/normalMapping.glsl"
 
 PhysicalMaterial readPhysicalMaterialFromUniforms(
   const vec2 uvs[NUM_UV_CHANNELS]

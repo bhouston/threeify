@@ -14,13 +14,13 @@ uniform float displacementScale;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/shaders/lighting/punctual.glsl"
-#pragma import "@threeify/core/shaders/brdfs/ambient/basic.glsl"
-#pragma import "@threeify/core/shaders/brdfs/diffuse/lambert.glsl"
-#pragma import "@threeify/core/shaders/brdfs/specular/ggx.glsl"
-#pragma import "@threeify/core/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/shaders/microgeometry/normalPacking.glsl"
-#pragma import "@threeify/core/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/dist/shaders/lighting/punctual.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/ambient/basic.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/normalPacking.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
 
 void main() {
   vec3 albedo = mix(vec3(0.2), vec3(1.0, 0.0, 0.0), normalScale.y);

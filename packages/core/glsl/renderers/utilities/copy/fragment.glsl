@@ -1,6 +1,6 @@
 precision highp float;
 
-#pragma include <color/encodings>
+#pragma import "../../../shaders/color/encodings.glsl"
 
 in vec2 v_uv0;
 

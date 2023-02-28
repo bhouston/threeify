@@ -8,8 +8,8 @@ uniform float exposure;
 
 out vec4 outputColor;
 
-#pragma include <color/tonemapping/acesfilmic>
-#pragma include <color/spaces/srgb>
+#pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
 
 void main() {
   vec4 transmissionColor = texture(transmissionTexture, v_uv0);

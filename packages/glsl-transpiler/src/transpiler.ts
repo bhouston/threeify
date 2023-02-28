@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-string-replace-all */
 // take a glsl file and transpilte it into a typescript file
 //
 // the glsl file defines imports using a typescript like syntax in this fashion:
@@ -21,10 +22,11 @@ const importRegex = /^#pragma import "(?<path>[^\n"]+)"$/gm;
 
 function pathToVariableName(path: string): string {
   const variableName = path
-    .replace('@', '_')
+    .replace(/@/g, '_')
     .replace(/\//g, '_')
-    .replace('.', '_')
-    .replace(/.glsl/, '');
+    .replace(/\./g, '_')
+    .replace(/.glsl/g, '')
+    .replace(/_+/g, '_');
   console.log('pathToVariableName', path, variableName);
   return variableName;
 }
@@ -39,14 +41,14 @@ export async function transpile(
 
   // read the glsl file
   console.log('reading glsl source file', glslSourceFileName);
-  const glslSource = await fsPromises.readFile(glslSourceFileName, 'utf-8');
+  let glslSource = await fsPromises.readFile(glslSourceFileName, 'utf-8');
 
   // for each match of the import regex, add the import to the list of imports, and remove the import from the glsl source
   // and insert the expected variable into the javascript literal.
   // the expected variable is the name of the file without the extension
   // for example, if the import is #pragma import './my-shader.glsl'
 
-  const glslSourceWithoutImports = glslSource.replace(
+  glslSource = glslSource.replace(
     importRegex,
     (match: string, importPath: string, other: string) => {
       console.log(
@@ -64,8 +66,24 @@ export async function transpile(
     }
   );
 
+  if (glslSource.includes('#pragma once')) {
+    // convert the import path to a variable name
+    const includeGuardName = pathToVariableName(
+      glslSourceFileName.replace(options.rootDir, '')
+    );
+
+    const includeGuardPrefix = `#ifndef ${includeGuardName}\n#define ${includeGuardName}\n`;
+    const includeGuardPostfix = `\n\n#endif // end of include guard`;
+
+    glslSource =
+      includeGuardPrefix +
+      glslSource.replace(/#pragma once/gm, '') +
+      '\n' +
+      includeGuardPostfix;
+  }
+
   // create the javascript literal
-  const jsLiteral = '`' + glslSourceWithoutImports + '`';
+  const jsLiteral = '`' + glslSource + '`';
 
   // create the typescript source
   let tsSource = '';

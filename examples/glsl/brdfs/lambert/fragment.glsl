@@ -13,9 +13,9 @@ uniform sampler2D albedoMap;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/shaders/lighting/punctual.glsl"
-#pragma import "@threeify/core/shaders/brdfs/diffuse/lambert.glsl"
-#pragma import "@threeify/core/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/dist/shaders/lighting/punctual.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
 
 void main() {
   vec3 albedo = albedoModulator * sRGBToLinear(texture(albedoMap, v_uv0).rgb);
