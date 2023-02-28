@@ -21,9 +21,9 @@ const importRegex = /^#pragma import "(?<path>[^\n"]+)"$/gm;
 
 function pathToVariableName(path: string): string {
   const variableName = path
-    .replaceAll('@', '_')
+    .replace('@', '_')
     .replace(/\//g, '_')
-    .replaceAll('.', '_')
+    .replace('.', '_')
     .replace(/.glsl/, '');
   console.log('pathToVariableName', path, variableName);
   return variableName;
