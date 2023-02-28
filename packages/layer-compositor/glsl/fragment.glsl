@@ -10,8 +10,8 @@ uniform int convertToPremultipliedAlpha;
 uniform int maskMode;
 uniform int blendMode;
 
-#pragma include "./mask.frag"
-#pragma include "./blend.frag"
+#pragma import "./mask.glsl"
+#pragma import "./blend.glsl"
 
 varying vec2 v_image_uv;
 varying vec2 v_layer_uv;
