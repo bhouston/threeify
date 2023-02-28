@@ -62,7 +62,6 @@ export async function getOptions() {
   program.parse(process.argv);
 
   const cmdLineOptions = program.opts() as OptionsOverride;
-  console.log('cmdLineOptions', cmdLineOptions);
 
   const projectDir = cmdLineOptions.projectDir || defaultOptions.projectDir;
 

@@ -29,8 +29,6 @@ function throttle<T extends (...args: any[]) => any>(
 async function main() {
   const options = await getOptions();
 
-  console.log('options', options);
-
   options.projectDir = path.resolve(options.projectDir);
 
   const rootDir = path.join(options.projectDir, options.rootDir);
@@ -40,6 +38,8 @@ async function main() {
     console.log(`projectDir: ${options.projectDir}`);
     console.log(`rootDir: ${rootDir}`);
     console.log(`outDir: ${outDir}`);
+    console.log(`watch: ${options.watch}`);
+    console.log(`minify: ${options.minify}`);
   }
 
   if (!fs.existsSync(rootDir)) {
