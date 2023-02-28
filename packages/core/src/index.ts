@@ -102,7 +102,7 @@ export * from './textures/VirtualTexture.js';
 export * from './textures/loaders/ImageData.js';
 export * from './textures/loaders/SolidTextures.js';
 
-export * from './shaders/materials/PhysicalMaterialOutputs.js';
+export * from './materials/PhysicalMaterialOutputs.js';
 
 export * from './renderers/caches/ResourceCache.js';
 export * from './renderers/caches/TextureCache.js';

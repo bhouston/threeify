@@ -15,6 +15,9 @@
     "webgpu",
     "3D"
   ],
+  "exports": {
+    "./shaders/*": "./dist/shaders/*"
+  },
   "homepage": "http://bhouston.github.com/threeify",
   "author": "threeify authors",
   "bugs": {
@@ -26,7 +29,7 @@
     "url": "https://github.com/bhouston/threeify"
   },
   "devDependencies": {
-    "@threeify/shader-transpiler": "*",
+    "@threeify/glsl-transpiler": "*",
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "jest": "^29.1.2",
@@ -35,8 +38,8 @@
     "typescript": "4.8.4"
   },
   "scripts": {
-    "build": "tsc --build && tst",
-    "watch": "tsc --build  --watch --preserveWatchOutput & tst --watch",
+    "build": "glsl-transpiler && tsc --build",
+    "watch": " glsl-transpiler --watch & tsc --build  --watch --preserveWatchOutput",
     "test": "jest ./src"
   },
   "dependencies": {

@@ -1,0 +1,8 @@
+{
+  "glsl": {
+    "rootDir": "./glsl",
+    "outDir": "./src",
+    "minify": false,
+    "verboseLevel": 0
+  }
+}
