@@ -4,6 +4,7 @@ export interface IBackgroundRequest {
   id: number;
   type: string;
   parameters: any;
+  buffers?: ArrayBuffer[];
 }
 
 export interface IBackgroundResponse {
