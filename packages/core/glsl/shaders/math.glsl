@@ -35,6 +35,9 @@ float degToRad(const float deg) {
 float radToDeg(const float rad) {
   return rad * 180.0 / PI;
 }
+float min3(const vec3 v ) {
+  return min(min(v.x, v.y), v.z);
+}
 float max3(const vec3 v) {
   return max(max(v.x, v.y), v.z);
 }
