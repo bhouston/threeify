@@ -20,7 +20,8 @@ void main() {
   float angle = atan( screenSurfaceVelocity.x, screenSurfaceVelocity.y );
   float speed = length( screenSurfaceVelocity );
 
-  vec3 debugColor = vec3( screenSurfaceVelocity.x* 10000.0, screenSurfaceVelocity.y * 10000.0, 0.0 );
+  vec3 debugColor = hsl2rgb( angle/PI, speed/2.0, 0.5 );
+  //( screenSurfaceVelocity.x* 1.0, screenSurfaceVelocity.y * 1.0, 0.0 );
 
   outputColor.rgb = linearTosRGB(debugColor);
   outputColor.a = 1.0;
