@@ -1,13 +1,10 @@
 precision highp float;
 
 in vec3 v_viewSurfacePosition;
-in vec3 v_screenSurfacePosition;
-in vec3 v_viewSurfaceNormal;
+in vec4 v_screenSurfacePosition;
 
 in vec3 v_previousViewSurfacePosition;
-in vec3 v_previousScreenSurfacePosition;
-
-in vec2 v_uv0;
+in vec4 v_previousScreenSurfacePosition;
 
 uniform float deltaTime;
 
@@ -18,12 +15,12 @@ out vec4 outputColor;
 
 void main() {
 
-  vec3 screenSurfaceVelocity = (v_screenSurfacePosition - v_previousScreenSurfacePosition) / deltaTime;
+  vec2 screenSurfaceVelocity = (v_screenSurfacePosition - v_previousScreenSurfacePosition).xy / deltaTime;
 
-  float angle = atan2( velocity.x, velocity.y );
-  float speed = length( velocity );
+  float angle = atan( screenSurfaceVelocity.x, screenSurfaceVelocity.y );
+  float speed = length( screenSurfaceVelocity );
 
-  vec3 debugColor = hsl2rgb( angle / PI, 1.0, speed * 10.0 );
+  vec3 debugColor = vec3( screenSurfaceVelocity.x* 10000.0, screenSurfaceVelocity.y * 10000.0, 0.0 );
 
   outputColor.rgb = linearTosRGB(debugColor);
   outputColor.a = 1.0;

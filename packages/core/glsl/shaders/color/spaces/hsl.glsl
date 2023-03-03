@@ -38,7 +38,7 @@ vec3 rgb2hsl(vec3 rgb) {
   vec3 hsl; // init to 0 to avoid warnings ? (and reverse if + remove first part)
 
   float fmin = min3(rgb);
-  float fmax = max4(rgb);
+  float fmax = max3(rgb);
   float delta = fmax - fmin;
 
   hsl.z = (fmax + fmin) / 2.0; // Luminance
