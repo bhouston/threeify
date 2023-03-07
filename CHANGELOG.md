@@ -281,7 +281,7 @@
 
 ### Features
 
-- makeCubeMapFromEquirectangularTexture utility function ([cf6a476](https://github.com/bhouston/threeify/commit/cf6a476686bd4910a687506ea758a08ef58b176e))
+- equirectangularTextureToCubeMap utility function ([cf6a476](https://github.com/bhouston/threeify/commit/cf6a476686bd4910a687506ea758a08ef58b176e))
 
 # [1.57.0](https://github.com/bhouston/threeify/compare/v1.56.0...v1.57.0) (2020-07-23)
 

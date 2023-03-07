@@ -1,5 +1,11 @@
 precision highp float;
 
+
+#pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
+
+in vec4 v_homogeneousVertexPosition;
+
 uniform float standardDeviation; // The standard deviation of the Gaussian filter
 uniform sampler2D texture; // The input texture
 
@@ -9,23 +15,25 @@ float distanceSquared( int x, int y ) {
   return float(x * x + y * y);
 }
 
-#define FILTER_RADIUS (2)
+#define FILTER_SAMPLES (11)
+#define FILTER_RADIUS ((FILTER_SAMPLES - 1)/ 2)
 
 vec4 approximateGaussian(sampler2D tex, vec2 texCoord, float stdDeviation) {
-  vec2 size = textureSize(texture, 0);
-  float size = length(textureSize);
-  float lod = log2(size / stdDeviation);
+  ivec2 size = textureSize(texture, 0);
+  float textureWidth = length( vec2(float(size.x), float(size.y)));
+  float lod = log2(textureWidth)-log2(textureWidth / stdDeviation);
 
   vec4 color = vec4(0.0);
   float totalWeight = 0.0;
 
   for (int i = -FILTER_RADIUS; i <= FILTER_RADIUS; i++) {
     for (int j = -FILTER_RADIUS; j <= FILTER_RADIUS; j++) {
+      vec2 offset = vec2(float(i), float(j)) * 0.75;
       float weight = exp(
-        -distanceSquared( i, j ) / (2.0 * stdDeviation * stdDeviation)
+        -dot( offset, offset ) / (2.0 * stdDeviation * stdDeviation)
       );
       totalWeight += weight;
-      color += textureLod(tex, texCoord + vec2(i, j) / size, lod) * weight;
+      color += textureLod(tex, texCoord + offset / textureWidth, lod) * weight;
     }
   }
 
@@ -35,8 +43,11 @@ vec4 approximateGaussian(sampler2D tex, vec2 texCoord, float stdDeviation) {
 void main() {
   vec4 color = approximateGaussian(
     texture,
-    gl_FragCoord.xy,
+    v_homogeneousVertexPosition.xy,
     standardDeviation
   );
-  outputColor = color;
+  outputColor.rgb = linearTosRGB(tonemappingACESFilmic(color.rgb)); // textureLod(texture, v_homogeneousVertexPosition.xy, 0.0);
+  outputColor.a = 1.0;
+  //outputColor.r = 1.0;
+  //outputColor.a = 1.0;
 }

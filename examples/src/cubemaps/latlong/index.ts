@@ -8,7 +8,7 @@ import {
   icosahedronGeometry,
   InternalFormat,
   makeBufferGeometryFromGeometry,
-  makeCubeMapFromEquirectangularTexture,
+  equirectangularTextureToCubeMap,
   makeProgramFromShaderMaterial,
   Orbit,
   renderBufferGeometry,
@@ -50,14 +50,14 @@ async function init(): Promise<void> {
   orbitController.zoom = 1.5;
   orbitController.zoomMax = 9;
 
-  const latLongCubeMap = await makeCubeMapFromEquirectangularTexture(
+  const latLongCubeMap = await equirectangularTextureToCubeMap(
     context,
     latLongTexture,
     TextureEncoding.Linear,
     1024
   );
 
-  const ennisCubeMap = await makeCubeMapFromEquirectangularTexture(
+  const ennisCubeMap = await equirectangularTextureToCubeMap(
     context,
     ennisTexture,
     TextureEncoding.RGBE,

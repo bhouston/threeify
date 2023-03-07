@@ -6,7 +6,7 @@ import {
   Framebuffer,
   icosahedronGeometry,
   makeBufferGeometryFromGeometry,
-  makeCubeMapFromEquirectangularTexture,
+  equirectangularTextureToCubeMap,
   makeProgramFromShaderMaterial,
   passGeometry,
   renderBufferGeometry,
@@ -60,7 +60,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const envCubeMap = await makeCubeMapFromEquirectangularTexture(
+  const envCubeMap = await equirectangularTextureToCubeMap(
     context,
     garageTexture,
     TextureEncoding.Linear,

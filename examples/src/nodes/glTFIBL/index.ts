@@ -1,9 +1,9 @@
 import {
   Blending,
   blendModeToBlendState,
+  equirectangularTextureToCubeMap,
   fetchHDR,
   InternalFormat,
-  makeCubeMapFromEquirectangularTexture,
   makeProgramFromShaderMaterial,
   Orbit,
   PhysicalMaterialOutputs,
@@ -95,7 +95,7 @@ async function init(): Promise<void> {
 
   //console.timeEnd('glTFToSceneNode');
   const cubeMapPromise = latLongTexturePromise.then((latLongTexture) =>
-    makeCubeMapFromEquirectangularTexture(
+    equirectangularTextureToCubeMap(
       context,
       latLongTexture,
       TextureEncoding.RGBE,

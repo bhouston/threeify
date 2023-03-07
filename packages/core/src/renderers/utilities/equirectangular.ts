@@ -29,7 +29,7 @@ import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
 
-export async function makeTexImage2DFromEquirectangularTexImage2D(
+export async function equirectangularTexImage2DToCubeMapTexImage2D(
   context: RenderingContext,
   latLongTexture: TexImage2D,
   faceWidth = 512,
@@ -98,7 +98,7 @@ export async function makeTexImage2DFromEquirectangularTexImage2D(
   return cubeMap;
 }
 
-export async function makeCubeMapFromEquirectangularTexture(
+export async function equirectangularTextureToCubeMap(
   context: RenderingContext,
   latLongTexture: Texture,
   sourceEncoding = TextureEncoding.Linear,
@@ -139,7 +139,7 @@ export async function makeCubeMapFromEquirectangularTexture(
     });
   }
 
-  const cubeMap = await makeTexImage2DFromEquirectangularTexImage2D(
+  const cubeMap = await equirectangularTexImage2DToCubeMapTexImage2D(
     context,
     linearLatLongMap,
     faceWidth,
