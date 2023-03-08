@@ -20,26 +20,24 @@ import {
 } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
 import { TexImage2D } from '../webgl/textures/TexImage2D';
-import fragmentSource from './copy/fragment.glsl';
-import vertexSource from './copy/vertex.glsl';
-import { TextureEncoding } from './TextureEncoding';
+import fragmentSource from './toneMapping/fragment.glsl';
+import vertexSource from './toneMapping/vertex.glsl';
 
-export interface ICopyPassProps {
+export interface IToneMappingPassProps {
   sourceTexImage2D: TexImage2D;
-  sourceEncoding?: TextureEncoding;
+  exposure: number;
   targetFramebuffer?: VirtualFramebuffer;
   targetTexImage2D?: TexImage2D;
-  targetEncoding?: TextureEncoding;
 }
 
-export class CopyPass implements IDisposable {
+export class ToneMappingPass implements IDisposable {
   programPromise: Promise<Program>;
   bufferGeometry: BufferGeometry;
 
   constructor(public readonly context: RenderingContext) {
-    this.programPromise = context.programCache.acquireRef('copyPass', () => {
+    this.programPromise = context.programCache.acquireRef('toneMapping', () => {
       const material = new ShaderMaterial(
-        'copyPass',
+        'toneMapping',
         vertexSource,
         fragmentSource
       );
@@ -52,28 +50,16 @@ export class CopyPass implements IDisposable {
     this.context.programCache.releaseRef('copyPass');
   }
 
-  async exec(props: ICopyPassProps) {
-    const {
-      sourceTexImage2D,
-      sourceEncoding,
-      targetFramebuffer,
-      targetTexImage2D,
-      targetEncoding
-    } = props;
+  async exec(props: IToneMappingPassProps) {
+    const { sourceTexImage2D, exposure, targetFramebuffer, targetTexImage2D } =
+      props;
     const { context } = sourceTexImage2D;
-
-    if (targetFramebuffer !== undefined && targetTexImage2D !== undefined) {
-      throw new Error('Cannot specify both a target framebuffer and texture.');
-    }
 
     const program = await this.programPromise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
-      sourceEncoding:
-        sourceEncoding !== undefined ? sourceEncoding : TextureEncoding.Linear,
-      targetEncoding:
-        targetEncoding !== undefined ? targetEncoding : TextureEncoding.Linear
+      exposure: exposure !== undefined ? 1.0 : exposure
     };
 
     let localFramebuffer = targetFramebuffer;

@@ -1,9 +1,13 @@
 import {
+  Attachment,
+  BufferBit,
   CopyPass,
   DataType,
   fetchHDR,
+  Framebuffer,
   InternalFormat,
   makeBufferGeometryFromGeometry,
+  makeColorAttachment,
   makeProgramFromShaderMaterial,
   passGeometry,
   PixelFormat,
@@ -13,22 +17,25 @@ import {
   TexImage2D,
   Texture,
   TextureEncoding,
-  textureToTexImage2D
+  TextureFilter,
+  textureToTexImage2D,
+  ToneMappingPass
 } from '@threeify/core';
+import { Vec2 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-let blurRadius = 16;
+let blurRadius = 4.5;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      blurRadius = Math.min(blurRadius * 2, 128);
+      blurRadius = Math.min(blurRadius + 0.25, 128.5);
       break;
     case 'ArrowDown':
-      blurRadius = Math.max(blurRadius / 2, 1);
+      blurRadius = Math.max(blurRadius - 0.25, 0.5);
       break;
   }
 
@@ -75,7 +82,6 @@ async function init(): Promise<void> {
     targetEncoding: TextureEncoding.Linear
   });
 
-  hdrTexImage2D.generateMipmaps();
   rgbeTexImage2D.dispose();
 
   const passProgram = await makeProgramFromShaderMaterial(
@@ -84,20 +90,65 @@ async function init(): Promise<void> {
   );
   const passUniforms = {
     standardDeviation: blurRadius,
-    textureMap: hdrTexImage2D
+    textureMap: hdrTexImage2D,
+    direction: new Vec2( 1, 0 )
   };
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+
+    const hFramebuffer = new Framebuffer(context);
+    hFramebuffer.attach(
+      Attachment.Color0,
+      makeColorAttachment(
+        context,
+        hdrTexImage2D.size,
+        InternalFormat.RGBA16F,
+        TextureFilter.Linear,
+        TextureFilter.Linear
+      )
+    );
+
+      const vFramebuffer = new Framebuffer(context);
+      vFramebuffer.attach(
+        Attachment.Color0,
+        makeColorAttachment(
+          context,
+          hdrTexImage2D.size,
+          InternalFormat.RGBA16F,
+          TextureFilter.Linear,
+          TextureFilter.Linear
+        )
+      );
+
+      const toneMappingPass = new ToneMappingPass(context);
 
   function animate(): void {
     requestAnimationFrame(animate);
 
     passUniforms.standardDeviation = blurRadius;
+    passUniforms.textureMap = hdrTexImage2D;
+    passUniforms.direction = new Vec2(1, 0);
 
     renderBufferGeometry({
-      framebuffer: canvasFramebuffer,
+      framebuffer: hFramebuffer,
       program: passProgram,
       uniforms: passUniforms,
       bufferGeometry
+    });
+    
+    passUniforms.textureMap = hFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
+    passUniforms.direction = new Vec2(0, 1);
+
+    renderBufferGeometry({
+      framebuffer: vFramebuffer,
+      program: passProgram,
+      uniforms: passUniforms,
+      bufferGeometry
+    });
+
+    toneMappingPass.exec({
+      sourceTexImage2D: vFramebuffer.getAttachment(Attachment.Color0) as TexImage2D,
+      exposure: 1,
+      targetFramebuffer: canvasFramebuffer
     });
   }
 

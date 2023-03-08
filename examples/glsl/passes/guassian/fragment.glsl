@@ -4,10 +4,10 @@ precision highp float;
 #pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
 #pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
 
-in vec4 v_homogeneousVertexPosition;
+in vec2 v_uv0;
 
 uniform float standardDeviation; // The standard deviation of the Gaussian filter
-uniform sampler2D texture; // The input texture
+uniform sampler2D textureMap; // The input texture
 
 out vec4 outputColor;
 
@@ -19,7 +19,7 @@ float distanceSquared( int x, int y ) {
 #define FILTER_RADIUS ((FILTER_SAMPLES - 1)/ 2)
 
 vec4 approximateGaussian(sampler2D tex, vec2 texCoord, float stdDeviation) {
-  ivec2 size = textureSize(texture, 0);
+  ivec2 size = textureSize(tex, 0);
   float textureWidth = length( vec2(float(size.x), float(size.y)));
   float lod = log2(textureWidth)-log2(textureWidth / stdDeviation);
 
@@ -42,8 +42,8 @@ vec4 approximateGaussian(sampler2D tex, vec2 texCoord, float stdDeviation) {
 
 void main() {
   vec4 color = approximateGaussian(
-    texture,
-    v_homogeneousVertexPosition.xy,
+    textureMap,
+    v_uv0,
     standardDeviation
   );
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(color.rgb)); // textureLod(texture, v_homogeneousVertexPosition.xy, 0.0);

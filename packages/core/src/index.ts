@@ -49,6 +49,7 @@ export * from './worker/WorkerPool.js';
 export * from './renderers/utilities/CopyPass.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
+export * from './renderers/utilities/ToneMappingPass.js';
 
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';
