@@ -81,8 +81,10 @@ async function main() {
     }, 0);
 
     watch.watchTree(rootDir, (f, curr, prev) => {
-      console.log('glsl-transpiler - recompile on changes');
-      trottleRecompiler();
+      if (f.endsWith('.glsl')) {
+        console.log('glsl-transpiler - recompile on changes', f);
+        trottleRecompiler();
+      }
     });
   }
 }
