@@ -21,7 +21,7 @@ float airyDiskPdf(in float x, in float stdDev) {
    return gaussianPdf(x, stdDev * 0.9)*0.002/0.021;
 }
 
-#define KERNEL_RADIUS (64)
+#define KERNEL_RADIUS (7)
 
 void main() {
   ivec2 size = textureSize(textureMap, 0);

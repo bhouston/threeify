@@ -25,8 +25,10 @@ import { Vec2 } from '@threeify/math';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
+import toneMappingFragmentSource from './toneMapping/fragment.glsl';
+import toneMappingVertexSource from './toneMapping/vertex.glsl';
 
-let blurRadius = 4.5;
+let blurRadius = 2.5;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
@@ -47,6 +49,11 @@ async function init(): Promise<void> {
     'index',
     vertexSource,
     fragmentSource
+  );
+  const toneMappingMaterial = new ShaderMaterial(
+    'index',
+    toneMappingVertexSource,
+    toneMappingFragmentSource
   );
 
   const context = new RenderingContext(
@@ -92,6 +99,22 @@ async function init(): Promise<void> {
     textureMap: hdrTexImage2D,
     direction: new Vec2(1, 0)
   };
+
+  const toneMappingProgram = await makeProgramFromShaderMaterial(
+    context,
+    toneMappingMaterial
+  );
+
+  // 0.01749417950271505 - ratio of primary airy disk to secondary airy disk at F.
+
+  const toneMappingUniforms = {
+    baseMap: hdrTexImage2D,
+    baseScale: 1 - 0.025,
+    overlapMap: null,
+    overlapScale: 0.025,
+    exposure: 1.0
+  };
+
   const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
 
   const hFramebuffer = new Framebuffer(context);
@@ -146,12 +169,15 @@ async function init(): Promise<void> {
       bufferGeometry
     });
 
-    toneMappingPass.exec({
-      sourceTexImage2D: vFramebuffer.getAttachment(
-        Attachment.Color0
-      ) as TexImage2D,
-      exposure: 1,
-      targetFramebuffer: canvasFramebuffer
+    toneMappingUniforms.overlapMap = vFramebuffer.getAttachment(
+      Attachment.Color0
+    ) as TexImage2D;
+
+    renderBufferGeometry({
+      framebuffer: canvasFramebuffer,
+      program: toneMappingProgram,
+      uniforms: toneMappingUniforms,
+      bufferGeometry
     });
   }
 
