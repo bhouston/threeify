@@ -28,7 +28,7 @@ export type OptionsOverride = {
 
 const defaultOptions = {
   projectDir: process.cwd(),
-  rootDir: 'glsl',
+  rootDir: 'src',
   outDir: 'src',
   watch: false,
   minify: false,
