@@ -28,15 +28,15 @@ import vertexSource from './vertex.glsl';
 import toneMappingFragmentSource from './toneMapping/fragment.glsl';
 import toneMappingVertexSource from './toneMapping/vertex.glsl';
 
-let blurRadius = 2.5;
+let blurRadius = 5;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      blurRadius = Math.min(blurRadius + 0.25, 128.5);
+      blurRadius = Math.min(blurRadius + 1, 128);
       break;
     case 'ArrowDown':
-      blurRadius = Math.max(blurRadius - 0.25, 0.5);
+      blurRadius = Math.max(blurRadius - 1, 1);
       break;
   }
 
@@ -82,6 +82,7 @@ async function init(): Promise<void> {
     PixelFormat.RGBA
   );
 
+
   const copyPass = new CopyPass(context);
   await copyPass.exec({
     sourceTexImage2D: rgbeTexImage2D,
@@ -90,6 +91,7 @@ async function init(): Promise<void> {
     targetEncoding: TextureEncoding.Linear
   });
 
+  hdrTexImage2D.generateMipmaps();
   rgbeTexImage2D.dispose();
 
   const passProgram = await makeProgramFromShaderMaterial(
@@ -97,7 +99,7 @@ async function init(): Promise<void> {
     passMaterial
   );
   const passUniforms = {
-    standardDeviation: blurRadius,
+    filterWidthInPixels: blurRadius,
     textureMap: hdrTexImage2D,
     direction: new Vec2(1, 0)
   };
@@ -111,9 +113,9 @@ async function init(): Promise<void> {
 
   const toneMappingUniforms = {
     baseMap: hdrTexImage2D,
-    baseScale: 1 - 0.025,
+    baseScale: 0, // 1 - 0.025,
     overlapMap: null,
-    overlapScale: 0.025,
+    overlapScale: 1, // 0.025,
     exposure: 1.0
   };
 
@@ -127,7 +129,7 @@ async function init(): Promise<void> {
       hdrTexImage2D.size,
       InternalFormat.RGBA16F,
       TextureFilter.Linear,
-      TextureFilter.Linear
+      TextureFilter.LinearMipmapLinear
     )
   );
 
@@ -148,7 +150,7 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    passUniforms.standardDeviation = blurRadius;
+    passUniforms.filterWidthInPixels = blurRadius;
     passUniforms.textureMap = hdrTexImage2D;
     passUniforms.direction = new Vec2(1, 0);
 
@@ -163,6 +165,8 @@ async function init(): Promise<void> {
       Attachment.Color0
     ) as TexImage2D;
     passUniforms.direction = new Vec2(0, 1);
+
+    passUniforms.textureMap.generateMipmaps();
 
     renderBufferGeometry({
       framebuffer: vFramebuffer,
