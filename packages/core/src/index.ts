@@ -11,6 +11,7 @@ export * from './platform/Detection.js';
 export * from './controllers/DeviceOrientation.js';
 export * from './controllers/Orbit.js';
 
+export * from './renderers/caches/ResourceCache.js';
 export * from './renderers/webgl/buffers/Buffer.js';
 export * from './renderers/webgl/buffers/BufferAccessor.js';
 export * from './renderers/webgl/buffers/BufferGeometry.js';

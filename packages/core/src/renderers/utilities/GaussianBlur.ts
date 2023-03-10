@@ -1,26 +1,21 @@
 import { Vec2, vec2Equals } from '@threeify/math';
+
 import { assert } from '../../core/assert';
 import { IDisposable } from '../../core/types';
 import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { ResourceRef } from '../caches/ResourceCache';
 import { BlendState } from '../webgl/BlendState';
 import {
   BufferGeometry,
-  makeBufferGeometryFromGeometry
+  makeBufferGeometryFromGeometry as geometryToBufferGeometry
 } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
-import { Attachment } from '../webgl/framebuffers/Attachment';
+import { colorAttachmentToFramebuffer } from '../webgl/framebuffers/Framebuffer';
+import { renderBufferGeometry } from '../webgl/framebuffers/VirtualFramebuffer';
 import {
-  colorAttachmentToFramebuffer,
-  Framebuffer
-} from '../webgl/framebuffers/Framebuffer';
-import {
-  renderBufferGeometry,
-  VirtualFramebuffer
-} from '../webgl/framebuffers/VirtualFramebuffer';
-import {
-  makeProgramFromShaderMaterial,
+  makeProgramFromShaderMaterial as shaderMaterialToProgram,
   Program
 } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
@@ -38,22 +33,22 @@ export interface IGaussianBlurProps {
 }
 
 export class GaussianBlur implements IDisposable {
-  programPromise: Promise<Program>;
+  programRef: ResourceRef<Program>;
   bufferGeometry: BufferGeometry;
 
   constructor(public readonly context: RenderingContext) {
-    this.programPromise = context.programCache.acquireRef(
+    this.programRef = context.programCache.acquireRef(
       'gaussianSparableBlur',
       (name) => {
         const material = new ShaderMaterial(name, vertexSource, fragmentSource);
-        return makeProgramFromShaderMaterial(context, material);
+        return shaderMaterialToProgram(context, material);
       }
     );
-    this.bufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
+    this.bufferGeometry = geometryToBufferGeometry(context, PassGeometry);
   }
 
   dispose() {
-    this.context.programCache.releaseRef('copyPass');
+    this.programRef.dispose();
   }
 
   async exec(props: IGaussianBlurProps) {
@@ -72,14 +67,13 @@ export class GaussianBlur implements IDisposable {
       'Temp texture size does not match target size.'
     );
 
-    const { context } = sourceTexImage2D;
-    const program = await this.programPromise;
+    const program = await this.programRef.promise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
       sourceLod: sourceLod,
       standardDeviation: standardDeviation,
-      kernelRadius: Math.ceil(standardDeviation * 3.0),
+      kernelRadius: Math.ceil(standardDeviation * 3),
       direction: new Vec2(1, 0)
     };
 

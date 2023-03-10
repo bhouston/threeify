@@ -2,7 +2,7 @@ precision highp float;
 
 #pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
 #pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/dist/shaders/math/sampling/guassian.glsl"
+#pragma import "@threeify/core/dist/shaders/math/sampling/gaussian.glsl"
 
 in vec2 v_uv0;
 
