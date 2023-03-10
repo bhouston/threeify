@@ -2,6 +2,7 @@ import { assert } from '../../core/assert';
 import { IDisposable } from '../../core/types';
 import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { ResourceRef } from '../caches/ResourceCache';
 import { BlendState } from '../webgl/BlendState';
 import {
   BufferGeometry,
@@ -9,8 +10,6 @@ import {
 } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
-import { Attachment } from '../webgl/framebuffers/Attachment';
-import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
 import {
   renderBufferGeometry,
   VirtualFramebuffer
@@ -31,31 +30,27 @@ export interface IToneMapperProps {
 }
 
 export class ToneMapper implements IDisposable {
-  programPromise: Promise<Program>;
+  programRef: ResourceRef<Program>;
   bufferGeometry: BufferGeometry;
 
   constructor(public readonly context: RenderingContext) {
-    this.programPromise = context.programCache.acquireRef('toneMapping', (name) => {
-      const material = new ShaderMaterial(
-        name,
-        vertexSource,
-        fragmentSource
-      );
+    this.programRef = context.programCache.acquireRef('toneMapping', (name) => {
+      const material = new ShaderMaterial(name, vertexSource, fragmentSource);
       return makeProgramFromShaderMaterial(context, material);
     });
     this.bufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
   }
 
   dispose() {
-    this.context.programCache.releaseRef('copyPass');
+    this.programRef.dispose();
   }
 
   async exec(props: IToneMapperProps) {
     const { sourceTexImage2D, exposure, targetFramebuffer } = props;
 
-    assert( exposure > 0 );
+    assert(exposure > 0);
 
-    const program = await this.programPromise;
+    const program = await this.programRef.promise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
