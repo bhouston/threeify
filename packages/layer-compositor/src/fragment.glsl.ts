@@ -1,5 +1,5 @@
-import _mask from './mask.glsl.js';
-import _blend from './blend.glsl.js';
+import _mask from './mask.glsl';
+import _blend from './blend.glsl';
 
 export default `precision highp float;
 
