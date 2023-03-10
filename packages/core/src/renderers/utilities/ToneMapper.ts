@@ -1,3 +1,4 @@
+import { assert } from '../../core/assert';
 import { IDisposable } from '../../core/types';
 import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
@@ -23,21 +24,20 @@ import { TexImage2D } from '../webgl/textures/TexImage2D';
 import fragmentSource from './toneMapping/fragment.glsl';
 import vertexSource from './toneMapping/vertex.glsl';
 
-export interface IToneMappingPassProps {
+export interface IToneMapperProps {
   sourceTexImage2D: TexImage2D;
   exposure: number;
-  targetFramebuffer?: VirtualFramebuffer;
-  targetTexImage2D?: TexImage2D;
+  targetFramebuffer: VirtualFramebuffer;
 }
 
-export class ToneMappingPass implements IDisposable {
+export class ToneMapper implements IDisposable {
   programPromise: Promise<Program>;
   bufferGeometry: BufferGeometry;
 
   constructor(public readonly context: RenderingContext) {
-    this.programPromise = context.programCache.acquireRef('toneMapping', () => {
+    this.programPromise = context.programCache.acquireRef('toneMapping', (name) => {
       const material = new ShaderMaterial(
-        'toneMapping',
+        name,
         vertexSource,
         fragmentSource
       );
@@ -50,32 +50,20 @@ export class ToneMappingPass implements IDisposable {
     this.context.programCache.releaseRef('copyPass');
   }
 
-  async exec(props: IToneMappingPassProps) {
-    const { sourceTexImage2D, exposure, targetFramebuffer, targetTexImage2D } =
-      props;
-    const { context } = sourceTexImage2D;
+  async exec(props: IToneMapperProps) {
+    const { sourceTexImage2D, exposure, targetFramebuffer } = props;
+
+    assert( exposure > 0 );
 
     const program = await this.programPromise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
-      exposure: exposure !== undefined ? 1.0 : exposure
+      exposure: exposure
     };
 
-    let localFramebuffer = targetFramebuffer;
-    let tempFramebuffer: Framebuffer | undefined = undefined;
-
-    if (targetFramebuffer === undefined && targetTexImage2D !== undefined) {
-      tempFramebuffer = new Framebuffer(context);
-      tempFramebuffer.attach(Attachment.Color0, targetTexImage2D);
-      localFramebuffer = tempFramebuffer;
-    }
-
-    if (localFramebuffer === undefined)
-      throw new Error('No target framebuffer or texture specified.');
-
     renderBufferGeometry({
-      framebuffer: localFramebuffer,
+      framebuffer: targetFramebuffer,
       program,
       uniforms,
       bufferGeometry: this.bufferGeometry,
@@ -83,9 +71,5 @@ export class ToneMappingPass implements IDisposable {
       blendState: BlendState.None,
       cullingState: CullingState.None
     });
-
-    if (tempFramebuffer !== undefined) {
-      tempFramebuffer.dispose();
-    }
   }
 }

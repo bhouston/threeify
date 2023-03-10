@@ -8,9 +8,13 @@
 import { Box2, Vec2 } from '@threeify/math';
 
 import { IDisposable } from '../../../core/types.js';
+import { PassGeometry } from '../../../geometry/primitives/passGeometry.js';
 import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
-import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import {
+  BufferGeometry,
+  makeBufferGeometryFromGeometry
+} from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
 import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
@@ -134,6 +138,44 @@ export function renderBufferGeometry(props: {
   if (programVertexArray !== undefined) {
     gl.bindVertexArray(null);
   }
+}
+
+function renderPass(props: {
+  framebuffer: VirtualFramebuffer;
+  program: Program;
+  uniforms?: UniformValueMap | UniformValueMap[];
+  uniformBuffers?: UniformBufferMap;
+  programVertexArray?: ProgramVertexArray;
+  depthTestState?: DepthTestState;
+  blendState?: BlendState;
+  maskState?: MaskState;
+  cullingState?: CullingState;
+}): void {
+  const {
+    framebuffer,
+    blendState,
+    depthTestState,
+    maskState,
+    cullingState,
+    program,
+    uniforms: uniformValueMaps,
+    uniformBuffers: uniformBufferMap,
+    programVertexArray
+  } = props;
+
+  const { context } = framebuffer;
+  context.bufferGeometryCache.acquireRef(
+    'passGeometry',
+    () =>
+      new Promise<BufferGeometry>((resolve) => {
+        const passGeometry = makeBufferGeometryFromGeometry(
+          context,
+          PassGeometry
+        );
+        passGeometry.name = "passGeometry";
+        resolve(passGeometry);
+      })
+  );
 }
 
 function setProgramUniforms(

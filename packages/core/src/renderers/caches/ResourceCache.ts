@@ -9,7 +9,7 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
 
   constructor(public name: string) {}
 
-  acquireRef(id: string, resourceCreator: () => Promise<T>): Promise<T> {
+  acquireRef(id: string, resourceCreator: (id: string) => Promise<T>): Promise<T> {
     if (this.idToCacheEntryMap.has(id)) {
       const cacheEntry = this.idToCacheEntryMap.get(id);
       if (cacheEntry === undefined) throw new Error('cacheEntry is undefined ');
@@ -17,7 +17,7 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
       //console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);
       return cacheEntry.promise;
     }
-    const cacheEntry = new ResourceCacheEntry<T>(resourceCreator());
+    const cacheEntry = new ResourceCacheEntry<T>(resourceCreator( id ));
     this.idToCacheEntryMap.set(id, cacheEntry);
     cacheEntry.referenceCount++;
     //console.log(`[${id}].referenceCount = ${cacheEntry.referenceCount}`);

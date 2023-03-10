@@ -37,9 +37,9 @@ export class CopyPass implements IDisposable {
   bufferGeometry: BufferGeometry;
 
   constructor(public readonly context: RenderingContext) {
-    this.programPromise = context.programCache.acquireRef('copyPass', () => {
+    this.programPromise = context.programCache.acquireRef('copyPass', (name) => {
       const material = new ShaderMaterial(
-        'copyPass',
+        name,
         vertexSource,
         fragmentSource
       );
