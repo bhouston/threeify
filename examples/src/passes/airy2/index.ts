@@ -18,7 +18,7 @@ import {
   TextureEncoding,
   TextureFilter,
   textureToTexImage2D,
-  ToneMappingPass
+  ToneMapper
 } from '@threeify/core';
 import { Vec2 } from '@threeify/math';
 
@@ -145,7 +145,7 @@ async function init(): Promise<void> {
     )
   );
 
-  const toneMappingPass = new ToneMappingPass(context);
+  const toneMappingPass = new ToneMapper(context);
 
   function animate(): void {
     requestAnimationFrame(animate);
