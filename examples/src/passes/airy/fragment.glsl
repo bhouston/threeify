@@ -24,8 +24,7 @@ float airyDiskPdf(in float x, in float stdDev) {
 #define KERNEL_RADIUS (7)
 
 void main() {
-  ivec2 size = textureSize(textureMap, 0);
-  vec2 texSize = vec2(float(size.x), float(size.y));
+  vec2 texSize = vec2(textureSize(textureMap, 0));
   
   vec2 vUv = v_uv0;
   vec2 invSize = 1.0 / texSize;

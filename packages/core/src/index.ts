@@ -51,7 +51,7 @@ export * from './renderers/utilities/CopyPass.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
 export * from './renderers/utilities/ToneMapper.js';
-export * from './renderers/utilities/GaussianBlur.js';
+export * from './renderers/utilities/gaussianblur/GaussianBlur.js';
 
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';

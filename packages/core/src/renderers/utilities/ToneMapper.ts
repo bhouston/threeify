@@ -12,12 +12,10 @@ import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
 import {
   renderBufferGeometry,
+  renderPass,
   VirtualFramebuffer
 } from '../webgl/framebuffers/VirtualFramebuffer';
-import {
-  shaderMaterialToProgram,
-  Program
-} from '../webgl/programs/Program';
+import { shaderMaterialToProgram, Program } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
 import { TexImage2D } from '../webgl/textures/TexImage2D';
 import fragmentSource from './toneMapping/fragment.glsl';
@@ -31,40 +29,40 @@ export interface IToneMapperProps {
 
 export class ToneMapper implements IDisposable {
   programRef: ResourceRef<Program>;
-  bufferGeometry: BufferGeometry;
+  program: Program | undefined;
 
   constructor(public readonly context: RenderingContext) {
     this.programRef = context.programCache.acquireRef('toneMapping', (name) => {
       const material = new ShaderMaterial(name, vertexSource, fragmentSource);
       return shaderMaterialToProgram(context, material);
     });
-    this.bufferGeometry = geometryToBufferGeometry(context, PassGeometry);
+  }
+
+  async ready(): Promise<void> {
+    this.program = await this.programRef.promise;
   }
 
   dispose() {
     this.programRef.dispose();
   }
 
-  async exec(props: IToneMapperProps) {
+  exec(props: IToneMapperProps) {
+    const program = this.program;
+    if (program === undefined) throw new Error('Program is not ready.');
+
     const { sourceTexImage2D, exposure, targetFramebuffer } = props;
 
     assert(exposure > 0);
-
-    const program = await this.programRef.promise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
       exposure: exposure
     };
 
-    renderBufferGeometry({
+    renderPass({
       framebuffer: targetFramebuffer,
       program,
-      uniforms,
-      bufferGeometry: this.bufferGeometry,
-      depthTestState: DepthTestState.None,
-      blendState: BlendState.None,
-      cullingState: CullingState.None
+      uniforms
     });
   }
 }

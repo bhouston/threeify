@@ -3,6 +3,7 @@ import {
   BufferGeometry,
   CopyPass,
   Framebuffer,
+  GaussianBlur,
   Program,
   ProgramVertexArray,
   RenderingContext,
@@ -21,6 +22,7 @@ import { NodeUniforms } from './NodeUniforms';
 export class RenderCache {
   constructor(public context: RenderingContext) {
     this.copyPass = new CopyPass(this.context);
+    this.gaussianBlur = new GaussianBlur(this.context);
   }
   public breathFirstNodes: SceneNode[] = [];
 
@@ -62,8 +64,11 @@ export class RenderCache {
   public multisampleFramebuffer?: Framebuffer;
   public opaqueFramebuffer?: Framebuffer;
   public transmissionFramebuffer?: Framebuffer;
+  public blurTempFramebuffer?: Framebuffer;
+  public blurFramebuffer?: Framebuffer;
 
   public userUniforms: UniformValueMap = {};
 
   public copyPass: CopyPass;
+  public gaussianBlur: GaussianBlur;
 }

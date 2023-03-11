@@ -140,7 +140,7 @@ export function renderBufferGeometry(props: {
   }
 }
 
-function renderPass(props: {
+export interface IRenderPassProps {
   framebuffer: VirtualFramebuffer;
   program: Program;
   uniforms?: UniformValueMap | UniformValueMap[];
@@ -150,7 +150,15 @@ function renderPass(props: {
   blendState?: BlendState;
   maskState?: MaskState;
   cullingState?: CullingState;
-}): void {
+}
+
+export function renderPass(
+  props = {
+    depthTestState: DepthTestState.None,
+    blendState: BlendState.None,
+    cullingState: CullingState.None
+  } as IRenderPassProps
+): void {
   const {
     framebuffer,
     blendState,
@@ -168,11 +176,8 @@ function renderPass(props: {
     'passGeometry',
     () =>
       new Promise<BufferGeometry>((resolve) => {
-        const passGeometry = geometryToBufferGeometry(
-          context,
-          PassGeometry
-        );
-        passGeometry.name = "passGeometry";
+        const passGeometry = geometryToBufferGeometry(context, PassGeometry);
+        passGeometry.name = 'passGeometry';
         resolve(passGeometry);
       })
   );

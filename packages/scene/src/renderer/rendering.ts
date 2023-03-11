@@ -17,7 +17,7 @@ import {
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
-import { Color3 } from '@threeify/math';
+import { Color3, vec2Ceil, vec2MultiplyByScalar } from '@threeify/math';
 
 import { combinePass } from './combinePass/combinePass';
 import { MeshBatch } from './MeshBatch';
@@ -65,9 +65,23 @@ export function updateFramebuffers(
     makeColorAttachment(context, size, colorInternalFormat)
   );
 
+  const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 0.5));
+  const blurTempFramebuffer = new Framebuffer(context);
+  blurTempFramebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(context, blurSize, colorInternalFormat)
+  );
+  const blurFramebuffer = new Framebuffer(context);
+  blurFramebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(context, blurSize, colorInternalFormat)
+  );
+
   renderCache.multisampleFramebuffer = multisampleFramebuffer;
   renderCache.opaqueFramebuffer = opaqueFramebuffer;
   renderCache.transmissionFramebuffer = transmissionFramebuffer;
+  renderCache.blurTempFramebuffer = blurTempFramebuffer;
+  renderCache.blurFramebuffer = blurFramebuffer;
 }
 
 export function renderScene(
@@ -202,6 +216,8 @@ export function renderScene_Tranmission(
 
     biltFramebuffers(multisampleFramebuffer, transmissionFramebuffer);
   }
+  TODO: render transmission on top of multisample Buffer
+  TODO: blur result and overlay on top of multisample Buffer.
   const transmissionTexImage2D = transmissionFramebuffer.getAttachment(
     Attachment.Color0
   );

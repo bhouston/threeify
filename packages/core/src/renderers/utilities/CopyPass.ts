@@ -13,6 +13,7 @@ import { Attachment } from '../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
 import {
   renderBufferGeometry,
+  renderPass,
   VirtualFramebuffer
 } from '../webgl/framebuffers/VirtualFramebuffer';
 import {
@@ -35,21 +36,38 @@ export interface ICopyPassProps {
 
 export class CopyPass implements IDisposable {
   programRef: ResourceRef<Program>;
-  bufferGeometry: BufferGeometry;
+  program: Program | undefined;
+  bufferGeometryRef: ResourceRef<BufferGeometry>;
+  bufferGeometry: BufferGeometry | undefined;
 
   constructor(public readonly context: RenderingContext) {
     this.programRef = context.programCache.acquireRef('copyPass', (name) => {
       const material = new ShaderMaterial(name, vertexSource, fragmentSource);
       return shaderMaterialToProgram(context, material);
     });
-    this.bufferGeometry = geometryToBufferGeometry(context, PassGeometry);
+      this.bufferGeometryRef = context.bufferGeometryCache.acquireRef(
+        'pass',
+        (name) => {
+          return new Promise<BufferGeometry>((resolve) => {
+            return resolve(geometryToBufferGeometry(context, PassGeometry));
+          });
+        }
+      );
+  }
+
+  async ready(): Promise<void> {
+    this.program = await this.programRef.promise;
+    this.bufferGeometry = await this.bufferGeometryRef.promise;
   }
 
   dispose() {
     this.programRef.dispose();
   }
 
-  async exec(props: ICopyPassProps) {
+  exec(props: ICopyPassProps) {
+     const program = this.program;
+     if (program === undefined) throw new Error('Program is not ready.');
+
     const {
       sourceTexImage2D,
       sourceEncoding,
@@ -62,8 +80,6 @@ export class CopyPass implements IDisposable {
     if (targetFramebuffer !== undefined && targetTexImage2D !== undefined) {
       throw new Error('Cannot specify both a target framebuffer and texture.');
     }
-
-    const program = await this.programRef.promise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
@@ -85,14 +101,10 @@ export class CopyPass implements IDisposable {
     if (localFramebuffer === undefined)
       throw new Error('No target framebuffer or texture specified.');
 
-    renderBufferGeometry({
+    renderPass({
       framebuffer: localFramebuffer,
       program,
-      uniforms,
-      bufferGeometry: this.bufferGeometry,
-      depthTestState: DepthTestState.None,
-      blendState: BlendState.None,
-      cullingState: CullingState.None
+      uniforms
     });
 
     if (tempFramebuffer !== undefined) {
