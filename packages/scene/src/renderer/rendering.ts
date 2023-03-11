@@ -110,7 +110,7 @@ export function renderScene(
 
   const uniforms = {
     debugOutputIndex: userUniforms.debugOutputIndex,
-    outputTransformFlags: 0x1 + 0x2 + 0x4
+    outputTransformFlags: /*0x1 + 0x2 +*/ 0x4
   };
 
   renderMeshes(
@@ -135,8 +135,15 @@ export function renderScene(
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
-  copyPass.exec({
+  /*copyPass.exec({
     sourceTexImage2D: opaqueTexImage2D,
+    targetFramebuffer: canvasFramebuffer
+  });*/
+
+   
+  renderCache.toneMapper.exec({
+    sourceTexImage2D: opaqueTexImage2D,
+    exposure: 1,
     targetFramebuffer: canvasFramebuffer
   });
 }
@@ -160,7 +167,7 @@ export function renderScene_Tranmission(
   )
     throw new Error('Framebuffers not initialized');
 
-  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
+  multisampleFramebuffer.clearState = new ClearState(Color3.Red, 0);
   multisampleFramebuffer.clear(BufferBit.All);
 
   renderMeshes(
@@ -193,8 +200,6 @@ export function renderScene_Tranmission(
       outputTransformFlags: 0x4
     };
 
-    multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
-    multisampleFramebuffer.clear(BufferBit.Color); // only clear color, leave depth untouched
     renderMeshes(
       multisampleFramebuffer,
       renderCache,
@@ -214,27 +219,29 @@ export function renderScene_Tranmission(
       CullingState.Front
     );
 
-    biltFramebuffers(multisampleFramebuffer, transmissionFramebuffer);
+    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   }
-  TODO: render transmission on top of multisample Buffer
-  TODO: blur result and overlay on top of multisample Buffer.
-  const transmissionTexImage2D = transmissionFramebuffer.getAttachment(
-    Attachment.Color0
-  );
-  if (
-    transmissionTexImage2D === undefined ||
-    !(transmissionTexImage2D instanceof TexImage2D)
-  )
-    throw new Error('No color attachment 1');
 
-  canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
+ // TODO: render transmission on top of multisample Buffer
+ // TODO: blur result and overlay on top of multisample Buffer.
+
+ // TODO: Do tone mapping pass here
+
+  canvasFramebuffer.clearState = new ClearState(Color3.Blue, 0);
   canvasFramebuffer.clear(BufferBit.All);
-  combinePass({
+ 
+  renderCache.toneMapper.exec({
+    sourceTexImage2D: opaqueTexImage2D,
+    exposure: 1,
+    targetFramebuffer: canvasFramebuffer
+  });
+
+  /*combinePass({
     opaqueTexImage2D,
     transmissionTexImage2D,
     targetFramebuffer: canvasFramebuffer,
     exposure: 1
-  });
+  });*/
   /*
   copyPass({
     sourceTexImage2D: opaqueTexImage2D,

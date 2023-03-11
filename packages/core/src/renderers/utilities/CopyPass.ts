@@ -66,7 +66,7 @@ export class CopyPass implements IDisposable {
 
   exec(props: ICopyPassProps) {
      const program = this.program;
-     if (program === undefined) throw new Error('Program is not ready.');
+     if (program === undefined) throw new Error(`Program ${this.programRef.id} is not ready.`);
 
     const {
       sourceTexImage2D,

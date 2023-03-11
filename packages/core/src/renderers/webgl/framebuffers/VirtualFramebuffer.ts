@@ -10,6 +10,7 @@ import { Box2, Vec2 } from '@threeify/math';
 import { IDisposable } from '../../../core/types.js';
 import { PassGeometry } from '../../../geometry/primitives/passGeometry.js';
 import { warnOnce } from '../../../warnOnce.js';
+import { ResourceRef } from '../../caches/ResourceCache.js';
 import { BlendState } from '../BlendState.js';
 import {
   BufferGeometry,
@@ -166,21 +167,25 @@ export function renderPass(
     maskState,
     cullingState,
     program,
-    uniforms: uniformValueMaps,
-    uniformBuffers: uniformBufferMap,
+    uniforms,
+    uniformBuffers,
     programVertexArray
   } = props;
 
   const { context } = framebuffer;
-  context.bufferGeometryCache.acquireRef(
-    'passGeometry',
-    () =>
-      new Promise<BufferGeometry>((resolve) => {
-        const passGeometry = geometryToBufferGeometry(context, PassGeometry);
-        passGeometry.name = 'passGeometry';
-        resolve(passGeometry);
-      })
-  );
+  const { passGeometry } = context;
+
+  renderBufferGeometry({
+    framebuffer,
+    program,
+    uniforms,
+    uniformBuffers,
+    bufferGeometry: passGeometry,
+    blendState,
+    depthTestState,
+    maskState,
+    cullingState
+  });
 }
 
 function setProgramUniforms(

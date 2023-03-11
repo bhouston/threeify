@@ -76,11 +76,6 @@ export class TexImage2D implements IResource {
             tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT
           );
         }
-        console.log(
-          'gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT)',
-          gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
-        );
-        console.log('maxAllowableAnisotropy', maxAllowableAnisotropy);
         gl.texParameterf(
           this.target,
           tfa.TEXTURE_MAX_ANISOTROPY_EXT,

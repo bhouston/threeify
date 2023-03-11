@@ -14,8 +14,7 @@ void main() {
   vec4 sourceColor = texture(sourceMap, v_uv0);
   vec3 tonemapped = tonemappingACESFilmic(sourceColor.rgb * exposure);
   vec3 sRGB = linearTosRGB(tonemapped);
-  vec3 premultipliedAlpha = sRGB * sourceColor.a;
-
-  outputColor.rgb = premultipliedAlpha;
+ 
+  outputColor.rgb = sRGB;
   outputColor.a = sourceColor.a;
 }

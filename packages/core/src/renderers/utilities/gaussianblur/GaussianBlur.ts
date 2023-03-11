@@ -60,7 +60,7 @@ export class GaussianBlur implements IDisposable {
     } as IGaussianBlurProps
   ) {
     const program = this.program;
-    if (program === undefined) throw new Error('Program is not ready.');
+    if (program === undefined) throw new Error(`Program ${this.programRef.id} is not ready.`);
 
     
       const {

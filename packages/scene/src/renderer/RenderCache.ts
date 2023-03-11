@@ -8,6 +8,7 @@ import {
   ProgramVertexArray,
   RenderingContext,
   TexImage2D,
+  ToneMapper,
   UniformValueMap
 } from '@threeify/core';
 
@@ -23,7 +24,16 @@ export class RenderCache {
   constructor(public context: RenderingContext) {
     this.copyPass = new CopyPass(this.context);
     this.gaussianBlur = new GaussianBlur(this.context);
+    this.toneMapper = new ToneMapper(this.context);
   }
+
+  async ready(): Promise<void> {
+    console.log( 'waiting for copy, guassian blur and tonemapper to be ready');
+    await Promise.all( [this.copyPass.ready()
+    , this.gaussianBlur.ready(),
+     this.toneMapper.ready() ] );
+  }
+
   public breathFirstNodes: SceneNode[] = [];
 
   // cameraCache
@@ -71,4 +81,5 @@ export class RenderCache {
 
   public copyPass: CopyPass;
   public gaussianBlur: GaussianBlur;
+  public toneMapper: ToneMapper;
 }

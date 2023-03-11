@@ -131,7 +131,8 @@ export async function equirectangularTextureToCubeMap(
     );
 
     const copyPass = new CopyPass(context);
-    await copyPass.exec({
+    await copyPass.ready();
+    copyPass.exec({
       sourceTexImage2D: latLongMap,
       sourceEncoding: TextureEncoding.RGBE,
       targetTexImage2D: linearLatLongMap,

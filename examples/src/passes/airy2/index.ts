@@ -84,12 +84,14 @@ async function init(): Promise<void> {
 
 
   const copyPass = new CopyPass(context);
-  await copyPass.exec({
-    sourceTexImage2D: rgbeTexImage2D,
-    sourceEncoding: TextureEncoding.RGBE,
-    targetTexImage2D: hdrTexImage2D,
-    targetEncoding: TextureEncoding.Linear
-  });
+   await copyPass.ready();
+
+   copyPass.exec({
+     sourceTexImage2D: rgbeTexImage2D,
+     sourceEncoding: TextureEncoding.RGBE,
+     targetTexImage2D: hdrTexImage2D,
+     targetEncoding: TextureEncoding.Linear
+   });
 
   hdrTexImage2D.generateMipmaps();
   rgbeTexImage2D.dispose();

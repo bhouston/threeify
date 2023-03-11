@@ -227,7 +227,7 @@ async function init(): Promise<void> {
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 
   //canvasFramebuffer.clearState = new ClearState(Color3.White
-
+    await renderCache.ready();
   updateFramebuffers(canvasFramebuffer, renderCache);
 
   renderCache.userUniforms.outputTransformFlags = 0x1 + 0x2 + 0x4;
@@ -249,11 +249,11 @@ async function init(): Promise<void> {
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       gpuRender.time(() => {
-        if (transmissionMode) {
-          renderScene_Tranmission(canvasFramebuffer, renderCache);
-        } else {
+        //if (transmissionMode) {
+        //  renderScene_Tranmission(canvasFramebuffer, renderCache);
+        //} else {
           renderScene(canvasFramebuffer, renderCache);
-        }
+        //}
       });
     });
   }

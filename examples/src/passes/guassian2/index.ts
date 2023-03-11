@@ -75,7 +75,9 @@ async function init(): Promise<void> {
   );
 
   const copyPass = new CopyPass(context);
-  await copyPass.exec({
+  await copyPass.ready();
+  
+  copyPass.exec({
     sourceTexImage2D: rgbeTexImage2D,
     sourceEncoding: TextureEncoding.RGBE,
     targetTexImage2D: hdrTexImage2D,

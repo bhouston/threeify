@@ -124,6 +124,8 @@ async function init(): Promise<void> {
   const noDepthTesting = new DepthTestState(false);
 
   const copyPass = new CopyPass(context);
+  await copyPass.ready();
+  
 
   function animate(): void {
     stats.time(() => {
@@ -148,7 +150,7 @@ async function init(): Promise<void> {
 
         biltFramebuffers(multisampleFramebuffer, simpleFramebuffer);
 
-        await copyPass.exec({
+        copyPass.exec({
           sourceTexImage2D: colorAttachment,
           targetFramebuffer: canvasFramebuffer
         });
