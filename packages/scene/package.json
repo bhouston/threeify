@@ -41,8 +41,8 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "@gltf-transform/core": "^2.5.1",
-    "@gltf-transform/extensions": "^2.5.1",
+    "@gltf-transform/core": "^3.0.4",
+    "@gltf-transform/extensions": "^3.0.4",
     "@threeify/core": "*",
     "@threeify/math": "*",
     "draco3dgltf": "^1.5.5",
