@@ -72,7 +72,7 @@ export function primitiveCount(target: BufferGeometry | Geometry): number {
   }
 }
 
-export function makeBufferGeometryFromGeometry(
+export function geometryToBufferGeometry(
   context: RenderingContext,
   geometry: Geometry
 ): BufferGeometry {

@@ -1,8 +1,8 @@
 import {
   BufferGeometry,
   ClearState,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   octahedronGeometry,
   Program,
   renderBufferGeometry,
@@ -49,8 +49,8 @@ export class PanoramaLayerCompositor extends LayerCompositor {
         angleAxisToMat4(new Vec3(0, 1, 0), Math.PI / 2)
       )
     );
-    this.#sphereGeometry = makeBufferGeometryFromGeometry(this.context, sphere);
-    this.#sphereProgram = await makeProgramFromShaderMaterial(
+    this.#sphereGeometry = geometryToBufferGeometry(this.context, sphere);
+    this.#sphereProgram = await shaderMaterialToProgram(
       this.context,
       new ShaderMaterial('panoramicLayerCompositor', vertex, fragment)
     );

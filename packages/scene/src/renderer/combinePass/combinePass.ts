@@ -3,8 +3,8 @@ import {
   BufferGeometry,
   CullingState,
   DepthTestState,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   passGeometry,
   Program,
   renderBufferGeometry,
@@ -38,7 +38,7 @@ export async function combinePass(props: ICombinePassProps): Promise<void> {
   // TODO: cache geometry + bufferGeometry.
   if (bufferGeometry === undefined) {
     const geometry = passGeometry();
-    bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+    bufferGeometry = geometryToBufferGeometry(context, geometry);
   }
 
   // TODO: cache material + program.
@@ -48,7 +48,7 @@ export async function combinePass(props: ICombinePassProps): Promise<void> {
       vertexSource,
       fragmentSource
     );
-    program = await makeProgramFromShaderMaterial(context, material);
+    program = await shaderMaterialToProgram(context, material);
   }
 
   const uniforms = {

@@ -13,7 +13,7 @@ import { warnOnce } from '../../../warnOnce.js';
 import { BlendState } from '../BlendState.js';
 import {
   BufferGeometry,
-  makeBufferGeometryFromGeometry
+  geometryToBufferGeometry
 } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
 import { CullingState } from '../CullingState.js';
@@ -168,7 +168,7 @@ function renderPass(props: {
     'passGeometry',
     () =>
       new Promise<BufferGeometry>((resolve) => {
-        const passGeometry = makeBufferGeometryFromGeometry(
+        const passGeometry = geometryToBufferGeometry(
           context,
           PassGeometry
         );

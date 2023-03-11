@@ -5,9 +5,9 @@ import {
   fetchHDR,
   Framebuffer,
   InternalFormat,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   makeColorAttachment,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   passGeometry,
   PixelFormat,
   renderBufferGeometry,
@@ -92,7 +92,7 @@ async function init(): Promise<void> {
 
   rgbeTexImage2D.dispose();
 
-  const passProgram = await makeProgramFromShaderMaterial(
+  const passProgram = await shaderMaterialToProgram(
     context,
     passMaterial
   );
@@ -102,7 +102,7 @@ async function init(): Promise<void> {
     direction: new Vec2(1, 0)
   };
 
-  const toneMappingProgram = await makeProgramFromShaderMaterial(
+  const toneMappingProgram = await shaderMaterialToProgram(
     context,
     toneMappingMaterial
   );
@@ -117,7 +117,7 @@ async function init(): Promise<void> {
     exposure: 1.0
   };
 
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const hFramebuffer = new Framebuffer(context);
   hFramebuffer.attach(

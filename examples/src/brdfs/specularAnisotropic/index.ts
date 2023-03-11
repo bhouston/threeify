@@ -1,8 +1,8 @@
 import {
   diskGeometry,
   fetchImage,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -48,7 +48,7 @@ async function init(): Promise<void> {
     context,
     anisotropicFlow2Texture
   );
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -70,7 +70,7 @@ async function init(): Promise<void> {
     specularAnisotropicStrength: 0.5,
     specularAnisotropicFlowMap: anisotropicFlow1Map
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     const now = Date.now();

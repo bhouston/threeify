@@ -7,9 +7,9 @@ import {
   fetchImage,
   icosahedronGeometry,
   InternalFormat,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   equirectangularTextureToCubeMap,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   Orbit,
   renderBufferGeometry,
   RenderingContext,
@@ -65,7 +65,7 @@ async function init(): Promise<void> {
     InternalFormat.RGBA16F
   );
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     localToWorld: mat4Compose(
       new Vec3(0, 0, 0),
@@ -88,7 +88,7 @@ async function init(): Promise<void> {
     mipCount: latLongCubeMap.mipCount,
     perceptualRoughness: 0
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const depthTestState = new DepthTestState(false);
   const cullingState = new CullingState(false);
   const blendState = blendModeToBlendState(Blending.Over, true);

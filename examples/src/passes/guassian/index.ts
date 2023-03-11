@@ -3,8 +3,8 @@ import {
   DataType,
   fetchHDR,
   InternalFormat,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   passGeometry,
   PixelFormat,
   renderBufferGeometry,
@@ -78,7 +78,7 @@ async function init(): Promise<void> {
   hdrTexImage2D.generateMipmaps();
   rgbeTexImage2D.dispose();
 
-  const passProgram = await makeProgramFromShaderMaterial(
+  const passProgram = await shaderMaterialToProgram(
     context,
     passMaterial
   );
@@ -86,7 +86,7 @@ async function init(): Promise<void> {
     standardDeviation: blurRadius,
     textureMap: hdrTexImage2D
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     requestAnimationFrame(animate);

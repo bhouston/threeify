@@ -5,9 +5,9 @@ import {
   DepthTestFunc,
   DepthTestState,
   Geometry,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   makeFloat32Attribute,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   makeUint8Attribute,
   renderBufferGeometry,
   RenderingContext,
@@ -38,8 +38,8 @@ async function init() {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {};
 
   context.depthTestState = new DepthTestState(true, DepthTestFunc.Less);

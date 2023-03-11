@@ -5,12 +5,12 @@ import {
   DepthTestFunc,
   DepthTestState,
   Framebuffer,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   makeColorAttachment,
   makeDepthAttachment,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   passGeometry,
-  readPixelsFromFramebuffer,
+  frameBufferToPixels,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial
@@ -30,7 +30,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const unitUniforms = {};
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const framebufferSize = new Vec2(1024, 1);
   const framebuffer = new Framebuffer(context);
@@ -64,7 +64,7 @@ async function init(): Promise<void> {
         vertexSource,
         glslUnitTest.source
       );
-      const unitProgram = await makeProgramFromShaderMaterial(
+      const unitProgram = await shaderMaterialToProgram(
         context,
         passMaterial
       );
@@ -77,7 +77,7 @@ async function init(): Promise<void> {
         bufferGeometry
       });
 
-      const result = readPixelsFromFramebuffer(framebuffer) as Uint8Array;
+      const result = frameBufferToPixels(framebuffer) as Uint8Array;
 
       for (let i = 0; i < result.length; i += 4) {
         const runResult = result[i + 2];

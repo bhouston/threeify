@@ -1,8 +1,8 @@
 import {
   fetchImage,
   fetchOBJ,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
 
   const displacementMap = textureToTexImage2D(context, displacementTexture);
   const normalMap = textureToTexImage2D(context, normalTexture);
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -79,7 +79,7 @@ async function init(): Promise<void> {
     displacementScale: 1
   };
 
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     const now = Date.now();

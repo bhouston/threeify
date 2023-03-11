@@ -20,7 +20,7 @@ import { TextureWrap } from '../textures/TextureWrap.js';
 import { Attachment } from './Attachment.js';
 import { Framebuffer } from './Framebuffer.js';
 
-export function readPixelsFromFramebuffer(
+export function frameBufferToPixels(
   framebuffer: Framebuffer,
   pixelBuffer: ArrayBufferView | undefined = undefined
 ): ArrayBufferView {

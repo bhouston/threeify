@@ -1,8 +1,8 @@
 import {
   fetchImage,
   icosahedronGeometry,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -45,7 +45,7 @@ async function init(): Promise<void> {
   const specularRoughnessMap = clearCoatBumpMap;
   const clearCoatRoughnessMap = specularRoughnessMap;
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -78,7 +78,7 @@ async function init(): Promise<void> {
     clearCoatRoughnessFactor: 0.1,
     clearCoatRoughnessMap: clearCoatRoughnessMap
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     const now = Date.now();

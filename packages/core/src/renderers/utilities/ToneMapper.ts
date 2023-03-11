@@ -6,7 +6,7 @@ import { ResourceRef } from '../caches/ResourceCache';
 import { BlendState } from '../webgl/BlendState';
 import {
   BufferGeometry,
-  makeBufferGeometryFromGeometry
+  geometryToBufferGeometry
 } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
@@ -15,7 +15,7 @@ import {
   VirtualFramebuffer
 } from '../webgl/framebuffers/VirtualFramebuffer';
 import {
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   Program
 } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
@@ -36,9 +36,9 @@ export class ToneMapper implements IDisposable {
   constructor(public readonly context: RenderingContext) {
     this.programRef = context.programCache.acquireRef('toneMapping', (name) => {
       const material = new ShaderMaterial(name, vertexSource, fragmentSource);
-      return makeProgramFromShaderMaterial(context, material);
+      return shaderMaterialToProgram(context, material);
     });
-    this.bufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
+    this.bufferGeometry = geometryToBufferGeometry(context, PassGeometry);
   }
 
   dispose() {

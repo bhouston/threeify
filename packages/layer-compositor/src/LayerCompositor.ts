@@ -10,8 +10,8 @@ import {
   isImageBitmapSupported,
   isiOS,
   isMacOS,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   PixelFormat,
   planeGeometry,
   Program,
@@ -150,8 +150,8 @@ export class LayerCompositor {
     this.context.canvasFramebuffer.resize();
     const plane = planeGeometry(1, 1, 1, 1);
     transformGeometry(plane, translation3ToMat4(new Vec3(0.5, 0.5, 0)));
-    this.#bufferGeometry = makeBufferGeometryFromGeometry(this.context, plane);
-    this.#program = makeProgramFromShaderMaterial(
+    this.#bufferGeometry = geometryToBufferGeometry(this.context, plane);
+    this.#program = shaderMaterialToProgram(
       this.context,
       new ShaderMaterial('layerComposite', vertexSource, fragmentSource)
     );

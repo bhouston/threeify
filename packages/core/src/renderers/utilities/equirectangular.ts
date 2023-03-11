@@ -4,12 +4,12 @@ import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
 import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeTexture';
 import { Texture } from '../../textures/Texture';
-import { makeBufferGeometryFromGeometry } from '../webgl/buffers/BufferGeometry';
+import { geometryToBufferGeometry } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { Attachment } from '../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
 import { renderBufferGeometry } from '../webgl/framebuffers/VirtualFramebuffer';
-import { makeProgramFromShaderMaterial } from '../webgl/programs/Program';
+import { shaderMaterialToProgram } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
 import {
   InternalFormat,
@@ -52,11 +52,11 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
     cubeFaceVertexSource,
     cubeFaceFragmentSource
   );
-  const cubeFaceProgram = await makeProgramFromShaderMaterial(
+  const cubeFaceProgram = await shaderMaterialToProgram(
     context,
     cubeFaceMaterial
   );
-  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(
+  const cubeFaceBufferGeometry = geometryToBufferGeometry(
     context,
     PassGeometry
   );

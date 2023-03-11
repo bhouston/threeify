@@ -2,8 +2,8 @@ import {
   CubeMapTexture,
   fetchCubeImages,
   icosahedronGeometry,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -34,7 +34,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const cubeMap = textureToTexImage2D(context, cubeTexture);
   const uniforms = {
     localToWorld: new Mat4(),
@@ -48,7 +48,7 @@ async function init(): Promise<void> {
     ),
     cubeMap: cubeMap
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     requestAnimationFrame(animate);

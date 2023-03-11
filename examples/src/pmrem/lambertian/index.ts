@@ -5,9 +5,9 @@ import {
   fetchImage,
   Framebuffer,
   icosahedronGeometry,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   equirectangularTextureToCubeMap,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -68,7 +68,7 @@ async function init(): Promise<void> {
   );
 
   const samplerGeometry = passGeometry();
-  const samplerProgram = await makeProgramFromShaderMaterial(
+  const samplerProgram = await shaderMaterialToProgram(
     context,
     samplerMaterial
   );
@@ -77,7 +77,7 @@ async function init(): Promise<void> {
     faceIndex: 0
   };
 
-  const samplerBufferGeometry = makeBufferGeometryFromGeometry(
+  const samplerBufferGeometry = geometryToBufferGeometry(
     context,
     samplerGeometry
   );
@@ -97,7 +97,7 @@ async function init(): Promise<void> {
     });
   });
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
 
   const uniforms = {
     localToWorld: new Mat4(),
@@ -111,7 +111,7 @@ async function init(): Promise<void> {
     ),
     cubeMap: lambertianCubeMap
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     requestAnimationFrame(animate);

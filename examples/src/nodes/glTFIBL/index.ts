@@ -4,7 +4,7 @@ import {
   equirectangularTextureToCubeMap,
   fetchHDR,
   InternalFormat,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   Orbit,
   PhysicalMaterialOutputs,
   RenderingContext,
@@ -125,7 +125,7 @@ async function init(): Promise<void> {
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const programPromise = makeProgramFromShaderMaterial(context, shaderMaterial);
+  const programPromise = shaderMaterialToProgram(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 

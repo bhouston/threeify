@@ -3,8 +3,8 @@ import {
   blendModeToBlendState,
   DepthTestState,
   fetchImageElement,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
@@ -40,12 +40,12 @@ async function init(): Promise<void> {
 
   context.blendState = blendModeToBlendState(Blending.Over, true);
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const bgUniforms = { map: textureToTexImage2D(context, bgTexture) };
   const fgUniforms = { map: textureToTexImage2D(context, fgTexture) };
 
   const geometry = planeGeometry(1, 1, 1, 1);
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   context.depthTestState = new DepthTestState(false);
   renderBufferGeometry({

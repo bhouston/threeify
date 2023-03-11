@@ -8,14 +8,14 @@ import { ResourceRef } from '../caches/ResourceCache';
 import { BlendState } from '../webgl/BlendState';
 import {
   BufferGeometry,
-  makeBufferGeometryFromGeometry as geometryToBufferGeometry
+  geometryToBufferGeometry as geometryToBufferGeometry
 } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
 import { colorAttachmentToFramebuffer } from '../webgl/framebuffers/Framebuffer';
 import { renderBufferGeometry } from '../webgl/framebuffers/VirtualFramebuffer';
 import {
-  makeProgramFromShaderMaterial as shaderMaterialToProgram,
+  shaderMaterialToProgram as shaderMaterialToProgram,
   Program
 } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
@@ -30,6 +30,7 @@ export interface IGaussianBlurProps {
 
   tempTexImage2D: TexImage2D;
   targetTexImage2D: TexImage2D;
+  targetAlpha: number;
 }
 
 export class GaussianBlur implements IDisposable {
@@ -51,13 +52,18 @@ export class GaussianBlur implements IDisposable {
     this.programRef.dispose();
   }
 
-  async exec(props: IGaussianBlurProps) {
+  async exec(props = {
+    sourceLod: 0,
+    standardDeviation: 4,
+    targetAlpha: 1
+  } as IGaussianBlurProps) {
     const {
       sourceTexImage2D,
       sourceLod,
       standardDeviation,
       tempTexImage2D,
-      targetTexImage2D
+      targetTexImage2D,
+      targetAlpha
     } = props;
 
     assert(sourceLod >= 0);
@@ -66,6 +72,7 @@ export class GaussianBlur implements IDisposable {
       vec2Equals(tempTexImage2D.size, targetTexImage2D.size),
       'Temp texture size does not match target size.'
     );
+    assert(0 <= targetAlpha && targetAlpha <= 1);
 
     const program = await this.programRef.promise;
 
@@ -74,7 +81,8 @@ export class GaussianBlur implements IDisposable {
       sourceLod: sourceLod,
       standardDeviation: standardDeviation,
       kernelRadius: Math.ceil(standardDeviation * 3),
-      direction: new Vec2(1, 0)
+      direction: new Vec2(1, 0),
+      targetAlpha: 1
     };
 
     using(colorAttachmentToFramebuffer(tempTexImage2D), (tempFramebuffer) => {
@@ -91,6 +99,7 @@ export class GaussianBlur implements IDisposable {
 
     uniforms.direction = new Vec2(0, 1);
     uniforms.sourceMap = tempTexImage2D;
+    uniforms.targetAlpha = targetAlpha;
 
     using(
       colorAttachmentToFramebuffer(targetTexImage2D),
