@@ -30,6 +30,8 @@ import vertexSource from './vertex.glsl';
 
 let blurRadius = 4.5;
 
+let lodLevel = 0;
+
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
@@ -38,9 +40,16 @@ document.addEventListener('keydown', (event) => {
     case 'ArrowDown':
       blurRadius = Math.max(blurRadius - 0.25, 0.5);
       break;
+    case 'ArrowLeft':
+      lodLevel = Math.min(lodLevel + 1, 8);
+      break;
+    case 'ArrowRight':
+      lodLevel = Math.max(lodLevel - 1, 0);
+      break;
   }
 
   console.log('blurRadius', blurRadius);
+  console.log( 'lodLevel', lodLevel);
 });
 
 async function init(): Promise<void> {
@@ -87,6 +96,8 @@ async function init(): Promise<void> {
 
   rgbeTexImage2D.dispose();
 
+  hdrTexImage2D.generateMipmaps();
+
 
     const hFramebuffer = new Framebuffer(context);
     hFramebuffer.attach(
@@ -123,7 +134,7 @@ async function init(): Promise<void> {
 
     gaussianBlur.exec({
       sourceTexImage2D: hdrTexImage2D,
-      sourceLod: 0,
+      sourceLod: lodLevel,
       standardDeviationInTexels: blurRadius,
       tempTexImage2D: hFramebuffer.getAttachment(
         Attachment.Color0

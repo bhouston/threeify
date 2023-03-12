@@ -89,7 +89,7 @@ export class GaussianBlur implements IDisposable {
     const uniforms = {
       sourceMap: sourceTexImage2D,
       sourceLod: sourceLod,
-      standardDeviationInTexels: standardDeviationInTexels,
+      standardDeviationInTexels: standardDeviationInTexels / Math.pow(2, sourceLod),
       kernelRadiusInTexels: Math.ceil(standardDeviationInTexels * 3),
       blurDirection: new Vec2(1, 0),
       targetAlpha: 1
@@ -107,6 +107,10 @@ export class GaussianBlur implements IDisposable {
     uniforms.sourceMap = tempTexImage2D;
     uniforms.targetAlpha = targetAlpha;
 
+    if( sourceLod > 0 ) {
+      tempTexImage2D.generateMipmaps();
+    }
+    
     renderPass({
       framebuffer: targetFramebuffer,
       program,
