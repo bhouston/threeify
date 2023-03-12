@@ -1,9 +1,13 @@
 import {
+  Attachment,
+  BufferBit,
   CopyPass,
   DataType,
   fetchHDR,
+  Framebuffer,
   InternalFormat,
   geometryToBufferGeometry,
+  makeColorAttachment,
   shaderMaterialToProgram,
   passGeometry,
   PixelFormat,
@@ -13,22 +17,26 @@ import {
   TexImage2D,
   Texture,
   TextureEncoding,
-  textureToTexImage2D
+  TextureFilter,
+  textureToTexImage2D,
+  ToneMapper,
+  GaussianBlur
 } from '@threeify/core';
+import { Vec2 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-let blurRadius = 16;
+let blurRadius = 4.5;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      blurRadius = Math.min(blurRadius * 2, 128);
+      blurRadius = Math.min(blurRadius + 0.25, 128.5);
       break;
     case 'ArrowDown':
-      blurRadius = Math.max(blurRadius / 2, 1);
+      blurRadius = Math.max(blurRadius - 0.25, 0.5);
       break;
   }
 
@@ -77,29 +85,57 @@ async function init(): Promise<void> {
     targetEncoding: TextureEncoding.Linear
   });
 
-  hdrTexImage2D.generateMipmaps();
   rgbeTexImage2D.dispose();
 
-  const passProgram = await shaderMaterialToProgram(
-    context,
-    passMaterial
-  );
-  const passUniforms = {
-    standardDeviation: blurRadius,
-    textureMap: hdrTexImage2D
-  };
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+
+    const hFramebuffer = new Framebuffer(context);
+    hFramebuffer.attach(
+      Attachment.Color0,
+      makeColorAttachment(
+        context,
+        hdrTexImage2D.size,
+        InternalFormat.RGBA16F,
+        TextureFilter.Linear,
+        TextureFilter.Linear
+      )
+    );
+
+      const vFramebuffer = new Framebuffer(context);
+      vFramebuffer.attach(
+        Attachment.Color0,
+        makeColorAttachment(
+          context,
+          hdrTexImage2D.size,
+          InternalFormat.RGBA16F,
+          TextureFilter.Linear,
+          TextureFilter.Linear
+        )
+      );
+
+
+      const gaussianBlur = new GaussianBlur(context);
+      const toneMapper = new ToneMapper(context);
+
+      await Promise.all([gaussianBlur.ready(), toneMapper.ready()]);
 
   function animate(): void {
     requestAnimationFrame(animate);
 
-    passUniforms.standardDeviation = blurRadius;
+    gaussianBlur.exec({
+      sourceTexImage2D: hdrTexImage2D,
+      sourceLod: 0,
+      standardDeviationInTexels: blurRadius,
+      tempTexImage2D: hFramebuffer.getAttachment(
+        Attachment.Color0
+      ) as TexImage2D,
+      targetFramebuffer: vFramebuffer,
+      targetAlpha: 1
+    });
 
-    renderBufferGeometry({
-      framebuffer: canvasFramebuffer,
-      program: passProgram,
-      uniforms: passUniforms,
-      bufferGeometry
+    toneMapper.exec({
+      sourceTexImage2D: vFramebuffer.getAttachment(Attachment.Color0) as TexImage2D,
+      exposure: 1,
+      targetFramebuffer: canvasFramebuffer
     });
   }
 

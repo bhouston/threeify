@@ -73,9 +73,7 @@ export class RenderCache {
   // render targets
   public multisampleFramebuffer?: Framebuffer;
   public opaqueFramebuffer?: Framebuffer;
-  public transmissionFramebuffer?: Framebuffer;
-  public blurTempFramebuffer?: Framebuffer;
-  public blurFramebuffer?: Framebuffer;
+  public tempFramebuffer?: Framebuffer;
 
   public userUniforms: UniformValueMap = {};
 

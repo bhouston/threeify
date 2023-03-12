@@ -109,7 +109,7 @@ async function init(): Promise<void> {
    );*/
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 1;
+  const domeLightIntensity = 1.5;
   const transmissionMode = true;
 
   const canvasHtmlElement = document.getElementById(
@@ -249,10 +249,10 @@ async function init(): Promise<void> {
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       gpuRender.time(() => {
-        //if (transmissionMode) {
-        //  renderScene_Tranmission(canvasFramebuffer, renderCache);
-        //} else {
-          renderScene(canvasFramebuffer, renderCache);
+        // if (transmissionMode) {
+          renderScene_Tranmission(canvasFramebuffer, renderCache);
+       // } else {
+        //  renderScene(canvasFramebuffer, renderCache);
         //}
       });
     });

@@ -29,7 +29,7 @@ export function updateFramebuffers(
 ) {
   const { context, size } = canvasFramebuffer;
 
-  const colorInternalFormat = InternalFormat.RGBA8;
+  const colorInternalFormat = InternalFormat.RGBA16F;
   const msaaColorRenderbuffer = new Renderbuffer(
     context,
     4,
@@ -59,29 +59,16 @@ export function updateFramebuffers(
     )
   );
 
-  const transmissionFramebuffer = new Framebuffer(context);
-  transmissionFramebuffer.attach(
-    Attachment.Color0,
-    makeColorAttachment(context, size, colorInternalFormat)
-  );
-
   const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 0.5));
-  const blurTempFramebuffer = new Framebuffer(context);
-  blurTempFramebuffer.attach(
-    Attachment.Color0,
-    makeColorAttachment(context, blurSize, colorInternalFormat)
-  );
-  const blurFramebuffer = new Framebuffer(context);
-  blurFramebuffer.attach(
+  const tempFramebuffer = new Framebuffer(context);
+  tempFramebuffer.attach(
     Attachment.Color0,
     makeColorAttachment(context, blurSize, colorInternalFormat)
   );
 
   renderCache.multisampleFramebuffer = multisampleFramebuffer;
   renderCache.opaqueFramebuffer = opaqueFramebuffer;
-  renderCache.transmissionFramebuffer = transmissionFramebuffer;
-  renderCache.blurTempFramebuffer = blurTempFramebuffer;
-  renderCache.blurFramebuffer = blurFramebuffer;
+  renderCache.tempFramebuffer = tempFramebuffer;
 }
 
 export function renderScene(
@@ -93,15 +80,13 @@ export function renderScene(
     opaqueMeshBatches,
     opaqueFramebuffer,
     multisampleFramebuffer,
-    transmissionFramebuffer,
     blendMeshBatches,
     copyPass,
     userUniforms
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
-    opaqueFramebuffer === undefined ||
-    transmissionFramebuffer === undefined
+    opaqueFramebuffer === undefined
   )
     throw new Error('Framebuffers not initialized');
 
@@ -131,10 +116,6 @@ export function renderScene(
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
-  /*copyPass.exec({
-    sourceTexImage2D: opaqueTexImage2D,
-    targetFramebuffer: canvasFramebuffer
-  });*/
 
   renderCache.toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
@@ -152,17 +133,17 @@ export function renderScene_Tranmission(
     blendMeshBatches,
     multisampleFramebuffer,
     opaqueFramebuffer,
-    transmissionFramebuffer,
+    tempFramebuffer,
     userUniforms
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
     opaqueFramebuffer === undefined ||
-    transmissionFramebuffer === undefined
+    tempFramebuffer === undefined
   )
     throw new Error('Framebuffers not initialized');
 
-  multisampleFramebuffer.clearState = new ClearState(Color3.Red, 0);
+  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
   multisampleFramebuffer.clear(BufferBit.All);
 
   renderMeshes(
@@ -189,7 +170,17 @@ export function renderScene_Tranmission(
       outputTransformFlags: 0x4
     };
 
-    renderMeshes(
+     renderMeshes(
+       multisampleFramebuffer,
+       renderCache,
+       blendMeshBatches,
+       blendUniforms,
+       DepthTestState.Normal,
+       BlendState.PremultipliedOver,
+       CullingState.Front
+     );
+
+     renderMeshes(
       multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
@@ -198,25 +189,22 @@ export function renderScene_Tranmission(
       BlendState.PremultipliedOver,
       CullingState.Back
     );
-    renderMeshes(
-      multisampleFramebuffer,
-      renderCache,
-      blendMeshBatches,
-      blendUniforms,
-      DepthTestState.Normal,
-      BlendState.PremultipliedOver,
-      CullingState.Front
-    );
-
+   
     biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   }
+  
+    const tempTexImage2D = tempFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
 
-  // TODO: render transmission on top of multisample Buffer
-  // TODO: blur result and overlay on top of multisample Buffer.
+  renderCache.gaussianBlur.exec({
+    sourceTexImage2D: opaqueTexImage2D,
+    sourceLod: 0,
+    standardDeviationInTexels: 5,
+    tempTexImage2D: tempTexImage2D,
+    targetFramebuffer: multisampleFramebuffer,
+    targetAlpha: 1
+  });
 
-  // TODO: Do tone mapping pass here
-
-  canvasFramebuffer.clearState = new ClearState(Color3.Blue, 0);
+  canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
   canvasFramebuffer.clear(BufferBit.All);
 
   renderCache.toneMapper.exec({
@@ -224,18 +212,6 @@ export function renderScene_Tranmission(
     exposure: 1,
     targetFramebuffer: canvasFramebuffer
   });
-
-  /*combinePass({
-    opaqueTexImage2D,
-    transmissionTexImage2D,
-    targetFramebuffer: canvasFramebuffer,
-    exposure: 1
-  });*/
-  /*
-  copyPass({
-    sourceTexImage2D: opaqueTexImage2D,
-    targetFramebuffer: canvasFramebuffer
-  });*/
 }
 
 export function renderMeshes(
