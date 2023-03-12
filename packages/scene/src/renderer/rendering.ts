@@ -59,7 +59,7 @@ export function updateFramebuffers(
     )
   );
 
-  const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 0.5));
+  const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 1));
   const tempFramebuffer = new Framebuffer(context);
   tempFramebuffer.attach(
     Attachment.Color0,
@@ -200,9 +200,11 @@ export function renderScene_Tranmission(
     sourceLod: 0,
     standardDeviationInTexels: 5,
     tempTexImage2D: tempTexImage2D,
-    targetFramebuffer: multisampleFramebuffer,
-    targetAlpha: 1
+    targetFramebuffer: opaqueFramebuffer,
+    targetAlpha: 0.5
   });
+
+  //    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
   canvasFramebuffer.clear(BufferBit.All);

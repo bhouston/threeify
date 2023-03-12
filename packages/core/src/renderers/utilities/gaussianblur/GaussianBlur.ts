@@ -1,4 +1,4 @@
-import { Vec2, vec2Equals } from '@threeify/math';
+import { Vec2, vec2Equals, vec2ToString } from '@threeify/math';
 
 import { assert } from '../../../core/assert';
 import { using } from '../../../core/using';
@@ -82,7 +82,7 @@ export class GaussianBlur implements IDisposable {
     assert(standardDeviationInTexels >= 0);
     assert(
       vec2Equals(tempTexImage2D.size, targetFramebuffer.size),
-      'Temp texture size does not match target size.'
+      `Temp texture size ${vec2ToString(tempTexImage2D.size)} does not match target size ${vec2ToString(targetFramebuffer.size)}.`
     );
     assert(0 <= targetAlpha && targetAlpha <= 1);
 
