@@ -2,8 +2,8 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
@@ -62,7 +62,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
 
   const canvas = document.createElement('canvas');
   canvas.width = 256;
@@ -87,7 +87,7 @@ async function init(): Promise<void> {
     viewLightPosition: Vec3.Zero,
     map: uvTestTexture
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const whiteClearState = new ClearState(Color3.White, 1);
 

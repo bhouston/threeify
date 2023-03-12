@@ -1,10 +1,10 @@
 import {
   Blending,
   blendModeToBlendState,
+  equirectangularTextureToCubeMap,
   fetchHDR,
   InternalFormat,
-  makeCubeMapFromEquirectangularTexture,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   Orbit,
   PhysicalMaterialOutputs,
   RenderingContext,
@@ -95,7 +95,7 @@ async function init(): Promise<void> {
 
   //console.timeEnd('glTFToSceneNode');
   const cubeMapPromise = latLongTexturePromise.then((latLongTexture) =>
-    makeCubeMapFromEquirectangularTexture(
+    equirectangularTextureToCubeMap(
       context,
       latLongTexture,
       TextureEncoding.RGBE,
@@ -109,7 +109,7 @@ async function init(): Promise<void> {
    );*/
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
-  const domeLightIntensity = 1;
+  const domeLightIntensity = 1.5;
   const transmissionMode = true;
 
   const canvasHtmlElement = document.getElementById(
@@ -125,7 +125,7 @@ async function init(): Promise<void> {
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const programPromise = makeProgramFromShaderMaterial(context, shaderMaterial);
+  const programPromise = shaderMaterialToProgram(context, shaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 
@@ -227,7 +227,7 @@ async function init(): Promise<void> {
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 
   //canvasFramebuffer.clearState = new ClearState(Color3.White
-
+    await renderCache.ready();
   updateFramebuffers(canvasFramebuffer, renderCache);
 
   renderCache.userUniforms.outputTransformFlags = 0x1 + 0x2 + 0x4;
@@ -249,11 +249,11 @@ async function init(): Promise<void> {
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
       gpuRender.time(() => {
-        if (transmissionMode) {
+        // if (transmissionMode) {
           renderScene_Tranmission(canvasFramebuffer, renderCache);
-        } else {
-          renderScene(canvasFramebuffer, renderCache);
-        }
+       // } else {
+        //  renderScene(canvasFramebuffer, renderCache);
+        //}
       });
     });
   }

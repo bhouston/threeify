@@ -65,6 +65,12 @@ export function vec3Min(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
 export function vec3Max(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
   return result.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
 }
+export function vec3Ceil(a: Vec3, result = new Vec3()): Vec3 {
+  return result.set(Math.ceil(a.x), Math.ceil(a.y), Math.ceil(a.z));
+}
+export function vec3Floor(a: Vec3, result = new Vec3()): Vec3 {
+  return result.set(Math.floor(a.x), Math.floor(a.y), Math.floor(a.z));
+}
 export function vec3Clamp(
   a: Vec3,
   min: Vec3,

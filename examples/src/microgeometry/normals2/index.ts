@@ -1,7 +1,7 @@
 import {
   fetchImage,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   planeGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -41,7 +41,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const normalsMap = textureToTexImage2D(context, normalsTexture);
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -63,7 +63,7 @@ async function init(): Promise<void> {
     normalModulator: new Vec2(-1, 1),
     normalMap: normalsMap
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     const now = Date.now();

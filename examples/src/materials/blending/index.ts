@@ -4,8 +4,8 @@ import {
   ClearState,
   fetchImage,
   fetchImageElement,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
   const fgSplatMap = textureToTexImage2D(context, fgSplatTexture);
   const bgMap = textureToTexImage2D(context, bgTexture);
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const bgUniforms = {
     localToWorld: new Mat4(),
     premultipliedAlpha: 0,
@@ -69,7 +69,7 @@ async function init(): Promise<void> {
   };
 
   const geometry = planeGeometry(1, 1, 1, 1);
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const blendings = [
     Blending.Over,

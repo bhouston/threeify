@@ -17,7 +17,7 @@ import {
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
-import { Color3 } from '@threeify/math';
+import { Color3, vec2Ceil, vec2MultiplyByScalar } from '@threeify/math';
 
 import { combinePass } from './combinePass/combinePass';
 import { MeshBatch } from './MeshBatch';
@@ -29,7 +29,7 @@ export function updateFramebuffers(
 ) {
   const { context, size } = canvasFramebuffer;
 
-  const colorInternalFormat = InternalFormat.RGBA8;
+  const colorInternalFormat = InternalFormat.RGBA16F;
   const msaaColorRenderbuffer = new Renderbuffer(
     context,
     4,
@@ -59,15 +59,16 @@ export function updateFramebuffers(
     )
   );
 
-  const transmissionFramebuffer = new Framebuffer(context);
-  transmissionFramebuffer.attach(
+  const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 0.5));
+  const tempFramebuffer = new Framebuffer(context);
+  tempFramebuffer.attach(
     Attachment.Color0,
-    makeColorAttachment(context, size, colorInternalFormat)
+    makeColorAttachment(context, blurSize, colorInternalFormat)
   );
 
   renderCache.multisampleFramebuffer = multisampleFramebuffer;
   renderCache.opaqueFramebuffer = opaqueFramebuffer;
-  renderCache.transmissionFramebuffer = transmissionFramebuffer;
+  renderCache.tempFramebuffer = tempFramebuffer;
 }
 
 export function renderScene(
@@ -79,15 +80,13 @@ export function renderScene(
     opaqueMeshBatches,
     opaqueFramebuffer,
     multisampleFramebuffer,
-    transmissionFramebuffer,
     blendMeshBatches,
     copyPass,
     userUniforms
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
-    opaqueFramebuffer === undefined ||
-    transmissionFramebuffer === undefined
+    opaqueFramebuffer === undefined
   )
     throw new Error('Framebuffers not initialized');
 
@@ -96,7 +95,7 @@ export function renderScene(
 
   const uniforms = {
     debugOutputIndex: userUniforms.debugOutputIndex,
-    outputTransformFlags: 0x1 + 0x2 + 0x4
+    outputTransformFlags: /*0x1 + 0x2 +*/ 0x4
   };
 
   renderMeshes(
@@ -110,19 +109,17 @@ export function renderScene(
   );
 
   biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
-  if (
-    opaqueTexImage2D === undefined ||
-    !(opaqueTexImage2D instanceof TexImage2D)
-  )
-    throw new Error('No color attachment 1');
-
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(
+    Attachment.Color0
+  ) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
-  copyPass.exec({
+
+  renderCache.toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
+    exposure: 1,
     targetFramebuffer: canvasFramebuffer
   });
 }
@@ -136,13 +133,13 @@ export function renderScene_Tranmission(
     blendMeshBatches,
     multisampleFramebuffer,
     opaqueFramebuffer,
-    transmissionFramebuffer,
+    tempFramebuffer,
     userUniforms
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
     opaqueFramebuffer === undefined ||
-    transmissionFramebuffer === undefined
+    tempFramebuffer === undefined
   )
     throw new Error('Framebuffers not initialized');
 
@@ -163,13 +160,7 @@ export function renderScene_Tranmission(
   );
 
   biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
-  if (
-    opaqueTexImage2D === undefined ||
-    !(opaqueTexImage2D instanceof TexImage2D)
-  )
-    throw new Error('No color attachment 1');
-
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
   if (blendMeshBatches.length > 0) {
@@ -179,9 +170,17 @@ export function renderScene_Tranmission(
       outputTransformFlags: 0x4
     };
 
-    multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
-    multisampleFramebuffer.clear(BufferBit.Color); // only clear color, leave depth untouched
-    renderMeshes(
+     renderMeshes(
+       multisampleFramebuffer,
+       renderCache,
+       blendMeshBatches,
+       blendUniforms,
+       DepthTestState.Normal,
+       BlendState.PremultipliedOver,
+       CullingState.Front
+     );
+
+     renderMeshes(
       multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
@@ -190,40 +189,29 @@ export function renderScene_Tranmission(
       BlendState.PremultipliedOver,
       CullingState.Back
     );
-    renderMeshes(
-      multisampleFramebuffer,
-      renderCache,
-      blendMeshBatches,
-      blendUniforms,
-      DepthTestState.Normal,
-      BlendState.PremultipliedOver,
-      CullingState.Front
-    );
-
-    biltFramebuffers(multisampleFramebuffer, transmissionFramebuffer);
+   
+    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   }
-  const transmissionTexImage2D = transmissionFramebuffer.getAttachment(
-    Attachment.Color0
-  );
-  if (
-    transmissionTexImage2D === undefined ||
-    !(transmissionTexImage2D instanceof TexImage2D)
-  )
-    throw new Error('No color attachment 1');
+  
+    const tempTexImage2D = tempFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
+
+  renderCache.gaussianBlur.exec({
+    sourceTexImage2D: opaqueTexImage2D,
+    sourceLod: 0,
+    standardDeviationInTexels: 5,
+    tempTexImage2D: tempTexImage2D,
+    targetFramebuffer: multisampleFramebuffer,
+    targetAlpha: 1
+  });
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
   canvasFramebuffer.clear(BufferBit.All);
-  combinePass({
-    opaqueTexImage2D,
-    transmissionTexImage2D,
-    targetFramebuffer: canvasFramebuffer,
-    exposure: 1
-  });
-  /*
-  copyPass({
+
+  renderCache.toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
+    exposure: 1,
     targetFramebuffer: canvasFramebuffer
-  });*/
+  });
 }
 
 export function renderMeshes(

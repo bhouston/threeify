@@ -265,7 +265,7 @@ export class Program implements IResource {
   }
 }
 
-export async function makeProgramFromShaderMaterial(
+export async function shaderMaterialToProgram(
   context: RenderingContext,
   shaderMaterial: ShaderMaterial,
   shaderDefines: ShaderDefines = {}

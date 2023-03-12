@@ -6,8 +6,11 @@
 //
 
 import { Box2 } from '@threeify/math';
+import { PassGeometry } from '../../geometry/primitives/passGeometry.js';
 
 import { BlendState } from './BlendState.js';
+import { BufferGeometry, geometryToBufferGeometry } from './buffers/BufferGeometry.js';
+import { BufferGeometryCache } from './caches/BufferGeometryCache.js';
 import { ProgramCache } from './caches/ProgramCache.js';
 import { TexImage2DCache } from './caches/TexImage2DCache.js';
 import { ClearState } from './ClearState.js';
@@ -32,6 +35,7 @@ export class RenderingContext {
   public readonly resources: Resources;
   public readonly textureCache: TexImage2DCache;
   public readonly programCache: ProgramCache;
+  public readonly bufferGeometryCache: BufferGeometryCache;
 
   #program: Program | undefined = undefined;
   #framebuffer: VirtualFramebuffer;
@@ -43,6 +47,7 @@ export class RenderingContext {
   #maskState: MaskState = new MaskState();
   #cullingState: CullingState = new CullingState();
   initialMode = true;
+  passGeometry: BufferGeometry;
 
   constructor(
     public canvas: HTMLCanvasElement,
@@ -70,6 +75,9 @@ export class RenderingContext {
 
     this.textureCache = new TexImage2DCache(this);
     this.programCache = new ProgramCache(this);
+    this.bufferGeometryCache = new BufferGeometryCache(this);
+
+    this.passGeometry = geometryToBufferGeometry(this, PassGeometry);
 
     this.canvasFramebuffer = new CanvasFramebuffer(this);
     this.#framebuffer = this.canvasFramebuffer;

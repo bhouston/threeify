@@ -195,9 +195,7 @@ async function getTextureAccessor(
 ): Promise<TextureAccessor | undefined> {
   if (glTFTexture === null || glTFTexture === undefined) return undefined;
   const uri = glTFTexture.getURI();
-  const texture = await textureCache.acquireRef(uri, () =>
-    toTexture(glTFTexture)
-  );
+  const texture = await textureCache.acquire(uri, () => toTexture(glTFTexture));
   if (texture === undefined) return undefined;
   const uvTransform = getUVTransform(textureInfo);
   const uvIndex = getUVIndex(textureInfo);

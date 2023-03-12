@@ -15,9 +15,9 @@ import {
   fetchImage,
   Framebuffer,
   InternalFormat,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   makeColorAttachment,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
@@ -92,7 +92,7 @@ async function init(): Promise<void> {
   const simpleFramebuffer = new Framebuffer(context);
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
@@ -109,7 +109,7 @@ async function init(): Promise<void> {
     viewLightPosition: new Vec3(0, 0, -2),
     map: uvTestTexture
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const whiteClearState = new ClearState(Color3.Black, 0);
 
   const depthTestState = new DepthTestState(false);
@@ -124,6 +124,8 @@ async function init(): Promise<void> {
   const noDepthTesting = new DepthTestState(false);
 
   const copyPass = new CopyPass(context);
+  await copyPass.ready();
+  
 
   function animate(): void {
     stats.time(() => {
@@ -148,7 +150,7 @@ async function init(): Promise<void> {
 
         biltFramebuffers(multisampleFramebuffer, simpleFramebuffer);
 
-        await copyPass.exec({
+        copyPass.exec({
           sourceTexImage2D: colorAttachment,
           targetFramebuffer: canvasFramebuffer
         });

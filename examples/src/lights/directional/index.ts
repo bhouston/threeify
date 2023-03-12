@@ -1,8 +1,8 @@
 import {
   fetchImage,
   icosahedronGeometry,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -39,7 +39,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const map = textureToTexImage2D(context, texture);
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -59,7 +59,7 @@ async function init(): Promise<void> {
     // materials
     albedoMap: map
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     const now = Date.now();

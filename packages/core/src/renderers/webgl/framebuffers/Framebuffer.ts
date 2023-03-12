@@ -50,7 +50,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     attachment: TexImage2D | Renderbuffer,
     target: TextureTarget | undefined = undefined,
     level = 0
-  ): void {
+  ): this {
     const { gl } = this.context;
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, this.glFramebuffer);
@@ -78,13 +78,25 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     this.size.copy(attachment.size); // TODO: What to do with conflicting sizes of attachments?
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);
+
+    return this;
   }
 
+  hasAttachment(attachmentPoint: Attachment): boolean {
+    return this.attachments.has(attachmentPoint);
+  }
   getAttachment(
     attachmentPoint: Attachment
-  ): TexImage2D | Renderbuffer | undefined {
-    return this.attachments.get(attachmentPoint);
+  ): TexImage2D | Renderbuffer {
+    const attachment = this.attachments.get(attachmentPoint);
+    if (attachment === undefined) {
+      throw new Error(
+        `Framebuffer does not have attachment ${attachmentPoint}`
+      );
+    }
+    return attachment;
   }
+
   dispose(): void {
     if (this.disposed) return;
 
@@ -93,4 +105,22 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     resources.unregister(this);
     this.disposed = true;
   }
+}
+
+export function colorAttachmentToFramebuffer(
+  colorTexImage2D: TexImage2D
+): Framebuffer {
+  const framebuffer = new Framebuffer(colorTexImage2D.context);
+  framebuffer.attach(Attachment.Color0, colorTexImage2D);
+  return framebuffer;
+}
+
+export function colorAndDepthAttachmentToFramebuffer(
+  colorTexImage2D: TexImage2D,
+  depthTexImage2D: TexImage2D
+): Framebuffer {
+  const framebuffer = new Framebuffer(colorTexImage2D.context);
+  framebuffer.attach(Attachment.Color0, colorTexImage2D);
+  framebuffer.attach(Attachment.Depth, depthTexImage2D);
+  return framebuffer;
 }

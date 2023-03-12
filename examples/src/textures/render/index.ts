@@ -8,10 +8,10 @@ import {
   DepthTestState,
   fetchImage,
   Framebuffer,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   makeColorAttachment,
   makeDepthAttachment,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
@@ -54,7 +54,7 @@ async function init(): Promise<void> {
     makeDepthAttachment(context, framebufferSize)
   );
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {
@@ -71,7 +71,7 @@ async function init(): Promise<void> {
     viewLightPosition: new Vec3(0, 0, -2),
     map: uvTestTexture
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const whiteClearState = new ClearState(Color3.Black, 0);
 
   const depthTestState = new DepthTestState(false);

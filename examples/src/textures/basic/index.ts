@@ -1,7 +1,7 @@
 import {
   fetchImage,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
@@ -26,8 +26,8 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+  const program = await shaderMaterialToProgram(context, material);
   const texImage2D = textureToTexImage2D(context, texture);
 
   const uniforms = { map: texImage2D };

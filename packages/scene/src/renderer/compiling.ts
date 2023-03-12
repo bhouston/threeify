@@ -1,7 +1,7 @@
 import {
   AlphaMode,
   CubeMapTexture,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   Program,
   ProgramUniform,
   ProgramVertexArray,
@@ -158,7 +158,7 @@ function meshToSceneCache(
   // make buffer geometry
   const geometry = mesh.geometry;
   if (!geometryIdToBufferGeometry.has(geometry.id)) {
-    const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+    const bufferGeometry = geometryToBufferGeometry(context, geometry);
     geometryIdToBufferGeometry.set(geometry.id, bufferGeometry);
   }
 

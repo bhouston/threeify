@@ -1,7 +1,7 @@
 import {
   fetchImage,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   Orbit,
   passGeometry,
   renderBufferGeometry,
@@ -62,7 +62,7 @@ async function init(): Promise<void> {
 
   const orbit = new Orbit(context.canvas);
 
-  const passProgram = await makeProgramFromShaderMaterial(
+  const passProgram = await shaderMaterialToProgram(
     context,
     passMaterial
   );
@@ -73,7 +73,7 @@ async function init(): Promise<void> {
     ),
     equirectangularMap: texImage2Ds[0]
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     requestAnimationFrame(animate);

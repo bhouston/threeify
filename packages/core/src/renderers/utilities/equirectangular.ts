@@ -4,12 +4,12 @@ import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
 import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeTexture';
 import { Texture } from '../../textures/Texture';
-import { makeBufferGeometryFromGeometry } from '../webgl/buffers/BufferGeometry';
+import { geometryToBufferGeometry } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { Attachment } from '../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
 import { renderBufferGeometry } from '../webgl/framebuffers/VirtualFramebuffer';
-import { makeProgramFromShaderMaterial } from '../webgl/programs/Program';
+import { shaderMaterialToProgram } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
 import {
   InternalFormat,
@@ -29,7 +29,7 @@ import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
 
-export async function makeTexImage2DFromEquirectangularTexImage2D(
+export async function equirectangularTexImage2DToCubeMapTexImage2D(
   context: RenderingContext,
   latLongTexture: TexImage2D,
   faceWidth = 512,
@@ -52,11 +52,11 @@ export async function makeTexImage2DFromEquirectangularTexImage2D(
     cubeFaceVertexSource,
     cubeFaceFragmentSource
   );
-  const cubeFaceProgram = await makeProgramFromShaderMaterial(
+  const cubeFaceProgram = await shaderMaterialToProgram(
     context,
     cubeFaceMaterial
   );
-  const cubeFaceBufferGeometry = makeBufferGeometryFromGeometry(
+  const cubeFaceBufferGeometry = geometryToBufferGeometry(
     context,
     PassGeometry
   );
@@ -98,7 +98,7 @@ export async function makeTexImage2DFromEquirectangularTexImage2D(
   return cubeMap;
 }
 
-export async function makeCubeMapFromEquirectangularTexture(
+export async function equirectangularTextureToCubeMap(
   context: RenderingContext,
   latLongTexture: Texture,
   sourceEncoding = TextureEncoding.Linear,
@@ -131,7 +131,8 @@ export async function makeCubeMapFromEquirectangularTexture(
     );
 
     const copyPass = new CopyPass(context);
-    await copyPass.exec({
+    await copyPass.ready();
+    copyPass.exec({
       sourceTexImage2D: latLongMap,
       sourceEncoding: TextureEncoding.RGBE,
       targetTexImage2D: linearLatLongMap,
@@ -139,7 +140,7 @@ export async function makeCubeMapFromEquirectangularTexture(
     });
   }
 
-  const cubeMap = await makeTexImage2DFromEquirectangularTexImage2D(
+  const cubeMap = await equirectangularTexImage2DToCubeMapTexImage2D(
     context,
     linearLatLongMap,
     faceWidth,

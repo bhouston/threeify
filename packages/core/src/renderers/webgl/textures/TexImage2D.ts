@@ -23,7 +23,7 @@ import { TexParameters } from './TexParameters.js';
 import { TextureTarget } from './TextureTarget.js';
 import { TextureWrap } from './TextureWrap.js';
 
-const maxAllowableAnisotropy = -1;
+let maxAllowableAnisotropy = -1;
 
 export class TexImage2D implements IResource {
   public readonly id = generateUUID();
@@ -72,8 +72,9 @@ export class TexImage2D implements IResource {
       if (tfa !== null) {
         // TODO: Cache this at some point for speed improvements
         if (maxAllowableAnisotropy === -1) {
-          maxAllowableAnisotropy ==
-            gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+          maxAllowableAnisotropy = gl.getParameter(
+            tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT
+          );
         }
         gl.texParameterf(
           this.target,

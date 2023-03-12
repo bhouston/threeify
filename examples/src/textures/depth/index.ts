@@ -9,9 +9,9 @@ import {
   DepthTestState,
   fetchImage,
   Framebuffer,
-  makeBufferGeometryFromGeometry,
+  geometryToBufferGeometry,
   makeDepthAttachment,
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   textureToTexImage2D,
   renderBufferGeometry,
   RenderingContext,
@@ -42,7 +42,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
 
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')
@@ -62,7 +62,7 @@ async function init(): Promise<void> {
     viewLightPosition: new Vec3(0, 0, -2),
     map: uvTestTexture
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const whiteClearState = new ClearState(Color3.White, 1);
 

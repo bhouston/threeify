@@ -9,6 +9,7 @@
     "clearcoat",
     "Equirectangular",
     "Framebuffers",
+    "gaussianblur",
     "glsl",
     "GLTF",
     "glxo",
@@ -24,6 +25,7 @@
     "reserialized",
     "RGBE",
     "Slerp",
+    "Texels",
     "threeify",
     "threekit"
   ],

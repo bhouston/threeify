@@ -4,8 +4,8 @@ import {
   CubeMapTexture,
   Framebuffer,
   icosahedronGeometry,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
@@ -55,7 +55,7 @@ async function init(): Promise<void> {
 
   const patternGeometry = passGeometry();
   console.log('patternGeometry', patternGeometry);
-  const patternProgram = await makeProgramFromShaderMaterial(
+  const patternProgram = await shaderMaterialToProgram(
     context,
     patternMaterial
   );
@@ -63,7 +63,7 @@ async function init(): Promise<void> {
     color: new Color3(1, 0, 0)
   };
 
-  const patternBufferGeometry = makeBufferGeometryFromGeometry(
+  const patternBufferGeometry = geometryToBufferGeometry(
     context,
     patternGeometry
   );
@@ -71,7 +71,7 @@ async function init(): Promise<void> {
 
   const framebuffer = new Framebuffer(context);
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
@@ -84,7 +84,7 @@ async function init(): Promise<void> {
     ),
     cubeMap: cubeMap
   };
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     requestAnimationFrame(animate);

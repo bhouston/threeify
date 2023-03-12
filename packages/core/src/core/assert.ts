@@ -1,6 +1,6 @@
-export function assertTrue(
+export function assert(
   condition: true | false,
-  message = 'assertTrue failure'
+  message = 'assertion failure'
 ): condition is true {
   if (!condition) {
     throw new Error(message);

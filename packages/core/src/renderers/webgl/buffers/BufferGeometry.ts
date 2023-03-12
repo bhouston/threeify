@@ -20,6 +20,7 @@ import { PrimitiveType } from './PrimitiveType.js';
 export class BufferGeometry implements IDisposable {
   public version = 0;
   public disposed = false;
+  public name = '';
   public bufferAccessors: { [key: string]: BufferAccessor | undefined } = {};
   public indices: BufferAccessor | undefined = undefined;
   public primitive: PrimitiveType = PrimitiveType.Triangles;
@@ -71,7 +72,7 @@ export function primitiveCount(target: BufferGeometry | Geometry): number {
   }
 }
 
-export function makeBufferGeometryFromGeometry(
+export function geometryToBufferGeometry(
   context: RenderingContext,
   geometry: Geometry
 ): BufferGeometry {

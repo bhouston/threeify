@@ -272,7 +272,7 @@ export class ProgramUniform {
           return this;
         } else {
           throw new TypeError(
-            'expected TexImage2D, are you using obsolete texture bindings?'
+            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`
           );
         }
         break;
@@ -286,7 +286,7 @@ export class ProgramUniform {
           return this;
         } else {
           throw new TypeError(
-            'expected TexImage2D, are you using obsolete texture bindings?'
+            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`
           );
         }
         break;
@@ -411,7 +411,7 @@ export class ProgramUniform {
           return this;
         } else {
           throw new TypeError(
-            'expected TexImage2D, are you using obsolete texture bindings?'
+            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`
           );
         }
         break;

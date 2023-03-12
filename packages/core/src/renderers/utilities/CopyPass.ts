@@ -1,10 +1,11 @@
 import { IDisposable } from '../../core/types';
 import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
+import { ResourceRef } from '../../renderers/caches/ResourceCache';
 import { BlendState } from '../webgl/BlendState';
 import {
   BufferGeometry,
-  makeBufferGeometryFromGeometry
+  geometryToBufferGeometry
 } from '../webgl/buffers/BufferGeometry';
 import { CullingState } from '../webgl/CullingState';
 import { DepthTestState } from '../webgl/DepthTestState';
@@ -12,16 +13,17 @@ import { Attachment } from '../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
 import {
   renderBufferGeometry,
+  renderPass,
   VirtualFramebuffer
 } from '../webgl/framebuffers/VirtualFramebuffer';
 import {
-  makeProgramFromShaderMaterial,
+  shaderMaterialToProgram,
   Program
 } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
 import { TexImage2D } from '../webgl/textures/TexImage2D';
-import copyFragmentSource from './copy/fragment.glsl';
-import copyVertexSource from './copy/vertex.glsl';
+import fragmentSource from './copy/fragment.glsl';
+import vertexSource from './copy/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
 
 export interface ICopyPassProps {
@@ -33,26 +35,39 @@ export interface ICopyPassProps {
 }
 
 export class CopyPass implements IDisposable {
-  programPromise: Promise<Program>;
-  bufferGeometry: BufferGeometry;
+  programRef: ResourceRef<Program>;
+  program: Program | undefined;
+  bufferGeometryRef: ResourceRef<BufferGeometry>;
+  bufferGeometry: BufferGeometry | undefined;
 
   constructor(public readonly context: RenderingContext) {
-    this.programPromise = context.programCache.acquireRef('copyPass', () => {
-      const material = new ShaderMaterial(
-        'copyPass',
-        copyVertexSource,
-        copyFragmentSource
-      );
-      return makeProgramFromShaderMaterial(context, material);
+    this.programRef = context.programCache.acquireRef('copyPass', (name) => {
+      const material = new ShaderMaterial(name, vertexSource, fragmentSource);
+      return shaderMaterialToProgram(context, material);
     });
-    this.bufferGeometry = makeBufferGeometryFromGeometry(context, PassGeometry);
+      this.bufferGeometryRef = context.bufferGeometryCache.acquireRef(
+        'pass',
+        (name) => {
+          return new Promise<BufferGeometry>((resolve) => {
+            return resolve(geometryToBufferGeometry(context, PassGeometry));
+          });
+        }
+      );
+  }
+
+  async ready(): Promise<void> {
+    this.program = await this.programRef.promise;
+    this.bufferGeometry = await this.bufferGeometryRef.promise;
   }
 
   dispose() {
-    this.context.programCache.releaseRef('copyPass');
+    this.programRef.dispose();
   }
 
-  async exec(props: ICopyPassProps) {
+  exec(props: ICopyPassProps) {
+     const program = this.program;
+     if (program === undefined) throw new Error(`Program ${this.programRef.id} is not ready.`);
+
     const {
       sourceTexImage2D,
       sourceEncoding,
@@ -65,8 +80,6 @@ export class CopyPass implements IDisposable {
     if (targetFramebuffer !== undefined && targetTexImage2D !== undefined) {
       throw new Error('Cannot specify both a target framebuffer and texture.');
     }
-
-    const program = await this.programPromise;
 
     const uniforms = {
       sourceMap: sourceTexImage2D,
@@ -88,14 +101,10 @@ export class CopyPass implements IDisposable {
     if (localFramebuffer === undefined)
       throw new Error('No target framebuffer or texture specified.');
 
-    renderBufferGeometry({
+    renderPass({
       framebuffer: localFramebuffer,
       program,
-      uniforms,
-      bufferGeometry: this.bufferGeometry,
-      depthTestState: DepthTestState.None,
-      blendState: BlendState.None,
-      cullingState: CullingState.None
+      uniforms
     });
 
     if (tempFramebuffer !== undefined) {

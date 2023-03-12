@@ -2,8 +2,8 @@ import {
   BufferBit,
   ClearState,
   fetchImage,
-  makeBufferGeometryFromGeometry,
-  makeProgramFromShaderMaterial,
+  geometryToBufferGeometry,
+  shaderMaterialToProgram,
   textureToTexImage2D,
   makeTextureFromVideoElement,
   planeGeometry,
@@ -49,7 +49,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await makeProgramFromShaderMaterial(context, material);
+  const program = await shaderMaterialToProgram(context, material);
   const clickToPlayMap = textureToTexImage2D(context, clickToPlayTexture);
   const uniforms = {
     localToWorld: new Mat4(),
@@ -88,7 +88,7 @@ async function init(): Promise<void> {
     false
   );
 
-  const bufferGeometry = makeBufferGeometryFromGeometry(context, geometry);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const whiteClearState = new ClearState(Color3.White, 1);
 
   function animate(): void {

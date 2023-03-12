@@ -11,6 +11,7 @@ export * from './platform/Detection.js';
 export * from './controllers/DeviceOrientation.js';
 export * from './controllers/Orbit.js';
 
+export * from './renderers/caches/ResourceCache.js';
 export * from './renderers/webgl/buffers/Buffer.js';
 export * from './renderers/webgl/buffers/BufferAccessor.js';
 export * from './renderers/webgl/buffers/BufferGeometry.js';
@@ -49,6 +50,8 @@ export * from './worker/WorkerPool.js';
 export * from './renderers/utilities/CopyPass.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
+export * from './renderers/utilities/tonemapper/ToneMapper.js';
+export * from './renderers/utilities/gaussianblur/GaussianBlur.js';
 
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';
