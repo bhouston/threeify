@@ -34,43 +34,33 @@ export function frameBufferToPixels(
     throw new Error(`can not read non-complete Framebuffer: ${status}`);
   }
 
-  const attachment = framebuffer.getAttachment(Attachment.Color0);
-  if (attachment === undefined) throw new Error('no attachment on Color0');
+  const texImage2D = framebuffer.getAttachment(Attachment.Color0) as TexImage2D;
 
-  if (attachment instanceof TexImage2D) {
-    const texImage2D = attachment as TexImage2D;
-    if (texImage2D === undefined) {
-      throw new Error('no attachment on Color0');
-    }
-
-    const pixelByteLength =
-      sizeOfDataType(texImage2D.dataType) *
-      numPixelFormatComponents(texImage2D.pixelFormat) *
-      texImage2D.size.x *
-      texImage2D.size.y;
-    if (pixelBuffer === undefined) {
-      pixelBuffer = new Uint8Array(pixelByteLength);
-    }
-    if (pixelBuffer.byteLength < pixelByteLength) {
-      throw new Error(
-        `pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`
-      );
-    }
-
-    gl.readPixels(
-      0,
-      0,
-      texImage2D.size.x,
-      texImage2D.size.y,
-      texImage2D.pixelFormat,
-      texImage2D.dataType,
-      pixelBuffer
-    );
-
-    return pixelBuffer;
-  } else {
-    throw new TypeError('not implemented');
+  const pixelByteLength =
+    sizeOfDataType(texImage2D.dataType) *
+    numPixelFormatComponents(texImage2D.pixelFormat) *
+    texImage2D.size.x *
+    texImage2D.size.y;
+  if (pixelBuffer === undefined) {
+    pixelBuffer = new Uint8Array(pixelByteLength);
   }
+  if (pixelBuffer.byteLength < pixelByteLength) {
+    throw new Error(
+      `pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`
+    );
+  }
+
+  gl.readPixels(
+    0,
+    0,
+    texImage2D.size.x,
+    texImage2D.size.y,
+    texImage2D.pixelFormat,
+    texImage2D.dataType,
+    pixelBuffer
+  );
+
+  return pixelBuffer;
 }
 
 export function makeColorAttachment(

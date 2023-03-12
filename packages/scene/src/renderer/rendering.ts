@@ -124,13 +124,9 @@ export function renderScene(
   );
 
   biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
-  if (
-    opaqueTexImage2D === undefined ||
-    !(opaqueTexImage2D instanceof TexImage2D)
-  )
-    throw new Error('No color attachment 1');
-
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(
+    Attachment.Color0
+  ) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
@@ -140,7 +136,6 @@ export function renderScene(
     targetFramebuffer: canvasFramebuffer
   });*/
 
-   
   renderCache.toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
     exposure: 1,
@@ -184,13 +179,7 @@ export function renderScene_Tranmission(
   );
 
   biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0);
-  if (
-    opaqueTexImage2D === undefined ||
-    !(opaqueTexImage2D instanceof TexImage2D)
-  )
-    throw new Error('No color attachment 1');
-
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
   if (blendMeshBatches.length > 0) {
@@ -222,14 +211,14 @@ export function renderScene_Tranmission(
     biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   }
 
- // TODO: render transmission on top of multisample Buffer
- // TODO: blur result and overlay on top of multisample Buffer.
+  // TODO: render transmission on top of multisample Buffer
+  // TODO: blur result and overlay on top of multisample Buffer.
 
- // TODO: Do tone mapping pass here
+  // TODO: Do tone mapping pass here
 
   canvasFramebuffer.clearState = new ClearState(Color3.Blue, 0);
   canvasFramebuffer.clear(BufferBit.All);
- 
+
   renderCache.toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
     exposure: 1,

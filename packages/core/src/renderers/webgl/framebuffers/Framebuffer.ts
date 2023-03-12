@@ -82,10 +82,19 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     return this;
   }
 
+  hasAttachment(attachmentPoint: Attachment): boolean {
+    return this.attachments.has(attachmentPoint);
+  }
   getAttachment(
     attachmentPoint: Attachment
-  ): TexImage2D | Renderbuffer | undefined {
-    return this.attachments.get(attachmentPoint);
+  ): TexImage2D | Renderbuffer {
+    const attachment = this.attachments.get(attachmentPoint);
+    if (attachment === undefined) {
+      throw new Error(
+        `Framebuffer does not have attachment ${attachmentPoint}`
+      );
+    }
+    return attachment;
   }
 
   dispose(): void {
