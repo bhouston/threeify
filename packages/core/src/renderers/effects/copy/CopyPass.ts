@@ -1,4 +1,5 @@
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
+import { TextureEncoding } from '../../utilities/TextureEncoding';
 import { Attachment } from '../../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../../webgl/framebuffers/Framebuffer';
 import {
@@ -9,7 +10,6 @@ import { shaderMaterialToProgram } from '../../webgl/programs/Program';
 import { RenderingContext } from '../../webgl/RenderingContext';
 import { TexImage2D } from '../../webgl/textures/TexImage2D';
 import { IEffect } from '../IEffect';
-import { TextureEncoding } from '../TextureEncoding';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
