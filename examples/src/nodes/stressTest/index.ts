@@ -1,13 +1,14 @@
 import {
   fetchImage,
   icosahedronGeometry,
-  shaderMaterialToProgram,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   Texture
 } from '@threeify/core';
 import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/math';
 import {
+  createRenderCache,
   MeshNode,
   PerspectiveCamera,
   PhysicalMaterial,
@@ -86,14 +87,16 @@ async function init(): Promise<void> {
 
   updateNodeTree(root, sceneTreeCache); // update the node tree (matrices, parents, etc.)
 
-  const renderCache = updateRenderCache(
+  const renderCache = await createRenderCache(context);
+  updateRenderCache(
     context,
     root,
     camera,
     () => {
       return program;
     },
-    sceneTreeCache
+    sceneTreeCache,
+    renderCache
   );
 
   function animate(): void {

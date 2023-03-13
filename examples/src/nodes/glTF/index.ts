@@ -1,8 +1,8 @@
 import {
-  shaderMaterialToProgram,
   Orbit,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TextureCache
 } from '@threeify/core';
 import {
@@ -13,6 +13,7 @@ import {
   vec3Negate
 } from '@threeify/math';
 import {
+  createRenderCache,
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
@@ -126,14 +127,16 @@ async function init(): Promise<void> {
   //console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
 
   //console.time('updateRenderCache');
-  const renderCache = updateRenderCache(
+  const renderCache = await createRenderCache(context);
+  updateRenderCache(
     context,
     root,
     camera,
     () => {
       return program;
     },
-    sceneTreeCache
+    sceneTreeCache,
+    renderCache
   );
   //console.timeEnd('updateRenderCache');
 

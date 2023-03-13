@@ -1,23 +1,13 @@
 import { assert } from '../../../core/assert';
-import { IDisposable } from '../../../core/types';
-import { PassGeometry } from '../../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
-import { ResourceRef } from '../../caches/ResourceCache';
-import { BlendState } from '../../webgl/BlendState';
 import {
-  BufferGeometry,
-  geometryToBufferGeometry
-} from '../../webgl/buffers/BufferGeometry';
-import { CullingState } from '../../webgl/CullingState';
-import { DepthTestState } from '../../webgl/DepthTestState';
-import {
-  renderBufferGeometry,
   renderPass,
   VirtualFramebuffer
 } from '../../webgl/framebuffers/VirtualFramebuffer';
-import { shaderMaterialToProgram, Program } from '../../webgl/programs/Program';
+import { shaderMaterialToProgram } from '../../webgl/programs/Program';
 import { RenderingContext } from '../../webgl/RenderingContext';
 import { TexImage2D } from '../../webgl/textures/TexImage2D';
+import { IEffect } from '../IEffect';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -27,42 +17,38 @@ export interface IToneMapperProps {
   targetFramebuffer: VirtualFramebuffer;
 }
 
-export class ToneMapper implements IDisposable {
-  programRef: ResourceRef<Program>;
-  program: Program | undefined;
+export interface ToneMapper extends IEffect {
+  exec(props: IToneMapperProps): void;
+}
 
-  constructor(public readonly context: RenderingContext) {
-    this.programRef = context.programCache.acquireRef('toneMapping', (name) => {
-      const material = new ShaderMaterial(name, vertexSource, fragmentSource);
-      return shaderMaterialToProgram(context, material);
-    });
-  }
+export async function createToneMapper(
+  context: RenderingContext
+): Promise<ToneMapper> {
+  const programRef = context.programCache.acquireRef('toneMapping', (name) => {
+    const material = new ShaderMaterial(name, vertexSource, fragmentSource);
+    return shaderMaterialToProgram(context, material);
+  });
+  const program = await programRef.promise;
 
-  async ready(): Promise<void> {
-    this.program = await this.programRef.promise;
-  }
+  return {
+    exec: (props: IToneMapperProps) => {
+      const { sourceTexImage2D, exposure, targetFramebuffer } = props;
 
-  dispose() {
-    this.programRef.dispose();
-  }
+      assert(exposure > 0);
 
-  exec(props: IToneMapperProps) {
-    const program = this.program;
-    if (program === undefined) throw new Error(`Program ${this.programRef.id} is not ready.`);
+      const uniforms = {
+        sourceMap: sourceTexImage2D,
+        exposure: exposure
+      };
 
-    const { sourceTexImage2D, exposure, targetFramebuffer } = props;
-
-    assert(exposure > 0);
-
-    const uniforms = {
-      sourceMap: sourceTexImage2D,
-      exposure: exposure
-    };
-
-    renderPass({
-      framebuffer: targetFramebuffer,
-      program,
-      uniforms
-    });
-  }
+      renderPass({
+        framebuffer: targetFramebuffer,
+        program,
+        uniforms
+      });
+    },
+    dispose: () => {
+      programRef.dispose();
+    }
+  };
 }

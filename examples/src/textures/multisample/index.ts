@@ -7,21 +7,21 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
-  CopyPass,
+  createCopyPass,
   CullingSide,
   CullingState,
   DepthTestFunc,
   DepthTestState,
   fetchImage,
   Framebuffer,
-  InternalFormat,
   geometryToBufferGeometry,
+  InternalFormat,
   makeColorAttachment,
-  shaderMaterialToProgram,
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   Texture,
   textureToTexImage2D
 } from '@threeify/core';
@@ -123,9 +123,7 @@ async function init(): Promise<void> {
 
   const noDepthTesting = new DepthTestState(false);
 
-  const copyPass = new CopyPass(context);
-  await copyPass.ready();
-  
+  const copyPass = await createCopyPass(context);
 
   function animate(): void {
     stats.time(() => {

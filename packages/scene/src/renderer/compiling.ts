@@ -66,7 +66,7 @@ export function updateRenderCache(
   activeCamera: CameraNode | undefined,
   shaderResolver: (shaderName: string) => Program,
   sceneTreeCache: SceneTreeCache,
-  renderCache: RenderCache = new RenderCache(context)
+  renderCache: RenderCache
 ) {
   const {
     nodeIdToUniforms,
