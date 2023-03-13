@@ -47,11 +47,12 @@ export * from './geometry/primitives/polyhedronGeometry.js';
 
 export * from './worker/WorkerPool.js';
 
-export * from './renderers/utilities/CopyPass.js';
+export * from './renderers/utilities/copy/CopyPass.js';
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
 export * from './renderers/utilities/tonemapper/ToneMapper.js';
 export * from './renderers/utilities/gaussianblur/GaussianBlur.js';
+export * from './renderers/utilities/IEffect';
 
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';

@@ -38,7 +38,7 @@ export async function createToneMapper(
 
       const uniforms = {
         sourceMap: sourceTexImage2D,
-        exposure: exposure
+        exposure
       };
 
       renderPass({
@@ -47,6 +47,7 @@ export async function createToneMapper(
         uniforms
       });
     },
+
     dispose: () => {
       programRef.dispose();
     }

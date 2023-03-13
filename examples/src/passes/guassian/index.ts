@@ -86,7 +86,7 @@ async function init(): Promise<void> {
   copyPass.exec({
     sourceTexImage2D: rgbeTexImage2D,
     sourceEncoding: TextureEncoding.RGBE,
-    targetTexImage2D: hdrTexImage2D,
+    targetFramebufferOrTexImage2D: hdrTexImage2D,
     targetEncoding: TextureEncoding.Linear
   });
 

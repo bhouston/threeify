@@ -1,14 +1,11 @@
 import {
   Attachment,
   biltFramebuffers,
-  Blending,
-  blendModeToBlendState,
   BlendState,
   boxGeometry,
   BufferBit,
   ClearState,
   createCopyPass,
-  CullingSide,
   CullingState,
   DepthTestFunc,
   DepthTestState,
@@ -23,6 +20,7 @@ import {
   ShaderMaterial,
   shaderMaterialToProgram,
   Texture,
+  TextureEncoding,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -111,17 +109,9 @@ async function init(): Promise<void> {
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const whiteClearState = new ClearState(Color3.Black, 0);
-
-  const depthTestState = new DepthTestState(false);
-  const blendState = blendModeToBlendState(Blending.Over, true);
-
   const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
   const noBlending = BlendState.None;
-
-  const normalCulling = new CullingState(true, CullingSide.Back);
   const noCulling = new CullingState(false);
-
-  const noDepthTesting = new DepthTestState(false);
 
   const copyPass = await createCopyPass(context);
 
@@ -150,7 +140,9 @@ async function init(): Promise<void> {
 
         copyPass.exec({
           sourceTexImage2D: colorAttachment,
-          targetFramebuffer: canvasFramebuffer
+          sourceEncoding: TextureEncoding.Linear,
+          targetFramebufferOrTexImage2D: canvasFramebuffer,
+          targetEncoding: TextureEncoding.Linear
         });
       });
     });

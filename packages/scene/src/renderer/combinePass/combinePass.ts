@@ -1,23 +1,16 @@
 import {
-  BlendState,
-  BufferGeometry,
-  CullingState,
-  DepthTestState,
-  geometryToBufferGeometry,
-  shaderMaterialToProgram,
-  passGeometry,
-  Program,
-  renderBufferGeometry,
+  assert,
+  IEffect,
+  RenderingContext,
+  renderPass,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TexImage2D,
   VirtualFramebuffer
 } from '@threeify/core';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
-
-let program: Program | undefined;
-let bufferGeometry: BufferGeometry | undefined;
 
 export interface ICombinePassProps {
   opaqueTexImage2D: TexImage2D;
@@ -26,44 +19,44 @@ export interface ICombinePassProps {
   exposure: number;
 }
 
-export async function combinePass(props: ICombinePassProps): Promise<void> {
-  const {
-    opaqueTexImage2D,
-    transmissionTexImage2D,
-    targetFramebuffer,
-    exposure
-  } = props;
-  const { context } = opaqueTexImage2D;
+export interface CombinePass extends IEffect {
+  exec(props: ICombinePassProps): void;
+}
 
-  // TODO: cache geometry + bufferGeometry.
-  if (bufferGeometry === undefined) {
-    const geometry = passGeometry();
-    bufferGeometry = geometryToBufferGeometry(context, geometry);
-  }
-
-  // TODO: cache material + program.
-  if (program === undefined) {
-    const material = new ShaderMaterial(
-      'combinePass',
-      vertexSource,
-      fragmentSource
-    );
-    program = await shaderMaterialToProgram(context, material);
-  }
-
-  const uniforms = {
-    opaqueTexture: opaqueTexImage2D,
-    transmissionTexture: transmissionTexImage2D,
-    exposure: exposure || 1
-  };
-
-  renderBufferGeometry({
-    framebuffer: targetFramebuffer,
-    program: program,
-    uniforms,
-    bufferGeometry: bufferGeometry,
-    depthTestState: DepthTestState.None,
-    blendState: BlendState.None,
-    cullingState: CullingState.None
+export async function createCombinePass(
+  context: RenderingContext
+): Promise<CombinePass> {
+  const programRef = context.programCache.acquireRef('combinePass', (name) => {
+    const material = new ShaderMaterial(name, vertexSource, fragmentSource);
+    return shaderMaterialToProgram(context, material);
   });
+  const program = await programRef.promise;
+
+  return {
+    exec: (props: ICombinePassProps) => {
+      const {
+        opaqueTexImage2D,
+        transmissionTexImage2D,
+        targetFramebuffer,
+        exposure
+      } = props;
+
+      assert(exposure > 0);
+
+      const uniforms = {
+        opaqueTexture: opaqueTexImage2D,
+        transmissionTexture: transmissionTexImage2D,
+        exposure: exposure || 1
+      };
+
+      renderPass({
+        framebuffer: targetFramebuffer,
+        program,
+        uniforms
+      });
+    },
+    dispose: () => {
+      programRef.dispose();
+    }
+  };
 }

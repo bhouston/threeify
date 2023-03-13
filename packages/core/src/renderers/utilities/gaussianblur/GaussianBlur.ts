@@ -67,7 +67,7 @@ export async function createGaussianBlur(
 
       const uniforms = {
         sourceMap: sourceTexImage2D,
-        sourceLod: sourceLod,
+        sourceLod,
         standardDeviationInTexels:
           standardDeviationInTexels / Math.pow(2, sourceLod),
         kernelRadiusInTexels: Math.ceil(standardDeviationInTexels * 3),
