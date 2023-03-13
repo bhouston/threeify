@@ -3,13 +3,13 @@ import {
   cubeFaceTargets,
   CubeMapTexture,
   Framebuffer,
-  icosahedronGeometry,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
+  icosahedronGeometry,
   passGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TextureFilter,
   textureToTexImage2D
 } from '@threeify/core';
