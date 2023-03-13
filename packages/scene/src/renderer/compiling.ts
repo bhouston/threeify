@@ -14,6 +14,7 @@ import {
 } from '@threeify/core';
 import {
   color3MultiplyByScalar,
+  mat4Inverse,
   mat4TransformNormal3,
   mat4TransformVec3,
   Vec3
@@ -117,6 +118,7 @@ function updateCameraUniforms(
 ) {
   cameraUniforms.viewToScreen.copy(camera.getProjection()); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
+  mat4Inverse(cameraUniforms.worldToView, cameraUniforms.viewToWorld);
 }
 
 function flattenMaterialParameters(

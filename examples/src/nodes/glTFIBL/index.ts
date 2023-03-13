@@ -20,13 +20,13 @@ import {
   Vec3,
   vec3Negate
 } from '@threeify/math';
+import { renderScene_Tranmission } from '@threeify/scene';
 import {
   createRenderCache,
   DomeLight,
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
-  renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   subTreeStats,
@@ -253,7 +253,7 @@ async function init(): Promise<void> {
         // if (transmissionMode) {
         renderScene_Tranmission(canvasFramebuffer, renderCache);
         // } else {
-        //  renderScene(canvasFramebuffer, renderCache);
+        //renderScene(canvasFramebuffer, renderCache);
         //}
       });
     });

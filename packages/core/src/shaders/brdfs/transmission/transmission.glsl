@@ -51,6 +51,7 @@ vec3 getVolumeAttenuation(
   if (isinf(attenuationDistance)) return vec3(1.0);
 
   // Beer's law https://en.wikipedia.org/wiki/Beer%E2%80%93Lambert_law
+
   vec3 attenuationCoefficient = -log(attenuationColor) / attenuationDistance;
   return exp(-attenuationCoefficient * distance);
 }
