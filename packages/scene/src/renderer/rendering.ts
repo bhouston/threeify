@@ -214,7 +214,6 @@ export function renderScene_Tranmission(
     biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   }
 
-  /*
   const tempTexImage2D = tempFramebuffer.getAttachment(
     Attachment.Color0
   ) as TexImage2D;
@@ -225,8 +224,8 @@ export function renderScene_Tranmission(
     standardDeviationInTexels: 5,
     tempTexImage2D: tempTexImage2D,
     targetFramebuffer: opaqueFramebuffer,
-    targetAlpha: 1
-  });*/
+    targetAlpha: 0.02
+  });
 
   //    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
 

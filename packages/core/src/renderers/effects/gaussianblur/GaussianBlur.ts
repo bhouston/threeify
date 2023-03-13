@@ -1,9 +1,11 @@
-import { Vec2, vec2Equals, vec2ToString } from '@threeify/math';
+import { Color3, Vec2, vec2Equals, vec2ToString } from '@threeify/math';
 
 import { assert } from '../../../core/assert';
 import { using } from '../../../core/using';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
 import { BlendState } from '../../webgl/BlendState';
+import { ClearState } from '../../webgl/ClearState';
+import { BufferBit } from '../../webgl/framebuffers/BufferBit';
 import {
   colorAttachmentToFramebuffer,
   Framebuffer
@@ -76,6 +78,9 @@ export async function createGaussianBlur(
       };
 
       using(colorAttachmentToFramebuffer(tempTexImage2D), (tempFramebuffer) => {
+        tempFramebuffer.clearState = new ClearState(Color3.Black, 0);
+        tempFramebuffer.clear(BufferBit.All);
+
         renderPass({
           framebuffer: tempFramebuffer,
           program,
