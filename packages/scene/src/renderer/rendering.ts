@@ -41,16 +41,18 @@ export function updateFramebuffers(
 ) {
   const { context, size } = canvasFramebuffer;
 
+  const numSamples = 1;
+
   const colorInternalFormat = InternalFormat.RGBA16F;
   const msaaColorRenderbuffer = new Renderbuffer(
     context,
-    4,
+    numSamples,
     colorInternalFormat,
     size
   );
   const msaaDepthRenderbuffer = new Renderbuffer(
     context,
-    4,
+    numSamples,
     InternalFormat.DepthComponent24,
     size
   );
@@ -88,14 +90,13 @@ export function renderScene(
   renderCache: RenderCache
 ) {
   const {
-    context,
     opaqueMeshBatches,
     opaqueFramebuffer,
     multisampleFramebuffer,
-    blendMeshBatches,
     copyPass,
     toneMapper,
-    userUniforms
+    userUniforms,
+    blendMeshBatches
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
@@ -117,6 +118,16 @@ export function renderScene(
     multisampleFramebuffer,
     renderCache,
     opaqueMeshBatches,
+    uniforms,
+    DepthTestState.Normal,
+    BlendState.PremultipliedOver,
+    CullingState.Back
+  );
+
+  renderMeshes(
+    multisampleFramebuffer,
+    renderCache,
+    blendMeshBatches,
     uniforms,
     DepthTestState.Normal,
     BlendState.PremultipliedOver,
@@ -184,14 +195,14 @@ export function renderScene_Tranmission(
   ) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
-  if (blendMeshBatches.length > 0) {
+  /*if (blendMeshBatches.length > 0) {
     const blendUniforms = {
       backgroundTexture: opaqueTexImage2D,
       debugOutputIndex: userUniforms.debugOutputIndex,
       outputTransformFlags: 0x4
     };
 
-    renderMeshes(
+    /* renderMeshes(
       multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
@@ -209,10 +220,10 @@ export function renderScene_Tranmission(
       DepthTestState.Normal,
       BlendState.PremultipliedOver,
       CullingState.Back
-    );
+    );*
 
-    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  }
+    // biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
+  }*/
 
   const tempTexImage2D = tempFramebuffer.getAttachment(
     Attachment.Color0
@@ -223,11 +234,11 @@ export function renderScene_Tranmission(
     sourceLod: 0,
     standardDeviationInTexels: 5,
     tempTexImage2D: tempTexImage2D,
-    targetFramebuffer: opaqueFramebuffer,
-    targetAlpha: 0.02
+    targetFramebuffer: multisampleFramebuffer,
+    targetAlpha: 1
   });
 
-  //    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
+  biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
   canvasFramebuffer.clear(BufferBit.All);

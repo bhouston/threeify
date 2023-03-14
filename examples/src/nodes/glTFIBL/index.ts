@@ -1,7 +1,6 @@
 import {
   Blending,
   blendModeToBlendState,
-  createCubemapBackground,
   equirectangularTextureToCubeMap,
   fetchHDR,
   InternalFormat,
@@ -10,7 +9,6 @@ import {
   RenderingContext,
   ShaderMaterial,
   shaderMaterialToProgram,
-  TexImage2D,
   Texture,
   TextureCache,
   TextureEncoding
@@ -19,11 +17,10 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
-  mat4Inverse,
   Vec3,
   vec3Negate
 } from '@threeify/math';
-import { renderScene_Tranmission } from '@threeify/scene';
+import { renderScene, renderScene_Tranmission } from '@threeify/scene';
 import {
   createRenderCache,
   DomeLight,
@@ -51,7 +48,7 @@ import { ShaderOutputs } from './ShaderOutputs';
 import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
-const maxDebugOutputs = 62;
+const maxDebugOutputs = 71;
 let debugOutputIndex = 0;
 
 document.addEventListener('keydown', (event) => {
@@ -124,7 +121,7 @@ async function init(): Promise<void> {
     premultipliedAlpha: true
   });
   const { canvasFramebuffer } = context;
-  canvasFramebuffer.devicePixelRatio = 1.5;
+  canvasFramebuffer.devicePixelRatio = 1;
   canvasFramebuffer.resize();
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -254,11 +251,11 @@ async function init(): Promise<void> {
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
 
       gpuRender.time(() => {
-        // if (transmissionMode) {
-        renderScene_Tranmission(canvasFramebuffer, renderCache);
-        // } else {
-        //renderScene(canvasFramebuffer, renderCache);
-        //}
+        if (transmissionMode) {
+          renderScene_Tranmission(canvasFramebuffer, renderCache);
+        } else {
+          renderScene(canvasFramebuffer, renderCache);
+        }
       });
     });
   }

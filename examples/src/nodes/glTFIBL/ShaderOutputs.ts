@@ -8,8 +8,8 @@ export enum ShaderOutputs {
   SpecularF0 = 32,
   SpecularF90 = 33,
   Albedo = 34,
-  WorldViewDirection = 35,
-  WorldVNormal = 36,
+  ViewViewDirection = 35,
+  WorldViewDirection = 36,
   RefractRayExit = 37,
   RetractUVCoords = 38,
   TransmittedLight = 39,
@@ -37,6 +37,11 @@ export enum ShaderOutputs {
   PunctualSheenDirectBRDF = 61,
   PunctualClearcoatBRDF = 62,
   PunctualClearcoatDirectBRDF = 63,
-  TonemappedColor = 64,
-  sRGBColor = 65
+  PostPunctual = 64,
+  Emissive = 65,
+  PostEmissive = 66,
+  ToneMapped = 67,
+  sRGBColor = 68,
+  Alpha = 69,
+  PrePunctual = 70
 }

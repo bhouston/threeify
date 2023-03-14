@@ -119,16 +119,17 @@ void main() {
 
   vec3 transmission_btdf = vec3(0.0);
 
-  if (material.transmission > 0.0) {
+  if (material.transmission > 0. || true ) {
+    DEBUG_OUTPUT(35, normalToRgb(viewViewDirection));
     vec3 worldViewDirection = mat4TransformDirection(
       viewToWorld,
       viewViewDirection
     );
-    DEBUG_OUTPUT(35, normalToRgb(worldViewDirection));
+  
+    DEBUG_OUTPUT(36, normalToRgb(worldViewDirection));
 
     vec3 worldNormal = mat4TransformDirection(viewToWorld, viewNormal);
-    DEBUG_OUTPUT(36, normalToRgb(worldNormal));
-
+    
     vec3 transmissionRay = getVolumeTransmissionRay(
       worldNormal,
       worldViewDirection,
@@ -314,6 +315,8 @@ void main() {
 
     outgoingRadiance += indirect_brdf;
   }
+   
+  DEBUG_OUTPUT(70, outgoingRadiance);
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
   for (int i = 0; i < MAX_PUNCTUAL_LIGHTS; i++) {
@@ -432,27 +435,40 @@ void main() {
     outgoingRadiance += direct_brdf;
   }
 
+
+  DEBUG_OUTPUT(64, outgoingRadiance);
   vec3 emissive_brdf = material.emissive;
+
+  DEBUG_OUTPUT(65, emissive_brdf);
+
   outgoingRadiance += emissive_brdf;
+
+  DEBUG_OUTPUT(66, outgoingRadiance);
 
   vec3 tonemapped =
     (outputTransformFlags & 0x1) != 0
       ? tonemappingACESFilmic(outgoingRadiance)
       : outgoingRadiance;
-  DEBUG_OUTPUT(64, tonemapped);
+  DEBUG_OUTPUT(67, tonemapped);
   vec3 sRGB =
     (outputTransformFlags & 0x2) != 0
       ? linearTosRGB(tonemapped)
       : tonemapped;
 
-  DEBUG_OUTPUT(65, sRGB);
+  DEBUG_OUTPUT(68, sRGB);
 
   vec3 premultipliedAlpha =
     (outputTransformFlags & 0x4) != 0
       ? sRGB * material.alpha
       : sRGB;
 
+  DEBUG_OUTPUT(69, material.alpha);
+
+
+  DEBUG_OUTPUT(0, premultipliedAlpha );
+
   outputColor.rgb = premultipliedAlpha;
   outputColor.a = material.alpha;
+
 
 }

@@ -14,5 +14,6 @@ bool nanDetector(vec4 sourceColor, out vec4 result) {
     return true;
   }
   result = sourceColor;
+  result.a = 1.0;
   return false;
 }

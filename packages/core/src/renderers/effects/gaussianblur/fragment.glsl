@@ -3,6 +3,7 @@ precision highp float;
 #pragma import "../../../shaders/color/tonemapping/acesfilmic.glsl"
 #pragma import "../../../shaders/color/spaces/srgb.glsl"
 #pragma import "../../../shaders/math/sampling/gaussian.glsl"
+#pragma import "../../../shaders/debug/nanDetector.glsl"
 
 in vec2 v_uv0;
 
@@ -37,4 +38,6 @@ void main() {
 
   outputColor = colorSum / weightSum;
   outputColor *= targetAlpha;
+
+  //nanDetector(outputColor, outputColor);
 }

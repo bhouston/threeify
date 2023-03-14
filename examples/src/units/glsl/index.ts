@@ -12,9 +12,9 @@ import {
   ShaderMaterial,
   shaderMaterialToProgram
 } from '@threeify/core';
+import vertexSource from '@threeify/core/dist/shaders/tests/vertex.glsl';
 import { Color3, Vec2 } from '@threeify/math';
 
-import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';
 
 async function init(): Promise<void> {
