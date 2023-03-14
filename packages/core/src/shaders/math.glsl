@@ -40,3 +40,27 @@ float max3(const vec3 v) {
 }
 
 const float NAN = sqrt(0.0);
+
+float safePow( const float a, const float b ) {
+  return pow(max( a, 0. ), b);
+}
+
+float safePow2( const float a ) {
+  return pow2(max( a, 0. ));
+}
+
+float safeLog( const float x ) {
+  return log(max( x, 1e-6 ));
+}
+
+float safeLog2( const float x ) {
+  return log2(max( x, 1e-6 ));
+}
+
+float luminance( const in vec3 color ) {
+  return dot( color, vec3( 0.2126, 0.7152, 0.0722 ) );
+}
+
+float safeSqrt( const float x ) {
+  return sqrt(max( x, 0.0 ));
+}

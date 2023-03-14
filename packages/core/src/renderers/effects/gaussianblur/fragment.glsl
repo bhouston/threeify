@@ -40,4 +40,5 @@ void main() {
   outputColor *= targetAlpha;
 
   //nanDetector(outputColor, outputColor);
+
 }

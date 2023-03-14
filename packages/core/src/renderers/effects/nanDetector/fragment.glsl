@@ -12,7 +12,6 @@ void main() {
   vec4 sourceColor = texture(sourceMap, v_uv0);
 
   vec4 result;
-  nanDetector(sourceColor, outresult)
-  ;
+  nanDetector(sourceColor, outresult);
   outputColor = result;
 }

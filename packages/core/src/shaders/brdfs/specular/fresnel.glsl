@@ -18,7 +18,7 @@ vec3 F_Schlick(const vec3 specularColor, const float LdotH) {
 // The following equation models the Fresnel reflectance term of the spec equation (aka F())
 // Implementation of fresnel from [4], Equation 15
 vec3 F_Schlick_2(vec3 f0, vec3 f90, float VdotH) {
-  return f0 + (f90 - f0) * pow(clamp(1.0 - VdotH, 0.0, 1.0), 5.0);
+  return f0 + (f90 - f0) * safePow(clamp(1.0 - VdotH, 0.0, 1.0), 5.0);
 }
 
 // Q: Where is this from?  Should we use it?
@@ -37,7 +37,7 @@ vec3 F_Schlick_RoughnessDependent(
 
 // validated from KHR_material_ior, https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_ior/README.md
 float iorToF0(const float ior) {
-  return pow2((ior - 1.0) / (ior + 1.0));
+  return safePow2((ior - 1.0) / (ior + 1.0));
 }
 
 // validated from KHR_material_specular, https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_specular/README.md

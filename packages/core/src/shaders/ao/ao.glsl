@@ -14,7 +14,7 @@ float specularOcclusion(
   const float specularRoughness
 ) {
   return saturate(
-    pow(dotNV + ambientOcclusion, exp2(-16.0 * specularRoughness - 1.0)) -
+    safePow( dotNV + ambientOcclusion, exp2(-16.0 * specularRoughness - 1.0)) -
       1.0 +
       ambientOcclusion
   );

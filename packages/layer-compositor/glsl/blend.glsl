@@ -14,11 +14,11 @@ vec4 compositeColors(vec4 src, vec4 dst) {
   if (blendMode < 24) {
     if (blendMode < 16) {
       // Multiply (Matching Html Canvas and Photoshop)
-      if (blendMode == 13) blend = Sc * Dc;
-      else // Screen (Matching Html Canvas and Photoshop)
-      if (blendMode == 14) blend = 1.0 - (1.0 - Sc) * (1.0 - Dc);
-      else // Overlay (Matching Html Canvas and Photoshop)
-      /* blendMode == 15 */
+      if (blendMode == 13)
+        blend = Sc * Dc; // Screen (Matching Html Canvas and Photoshop)
+      else if (blendMode == 14)
+        blend = 1.0 - (1.0 - Sc) * (1.0 - Dc); // Overlay (Matching Html Canvas and Photoshop)
+      else /* blendMode == 15 */
       {
         vec3 edge = step(0.5, Dc);
         vec3 mul = Sc * Dc;
