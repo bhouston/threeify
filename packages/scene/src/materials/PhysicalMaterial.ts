@@ -116,7 +116,7 @@ export class PhysicalMaterial extends Material {
 
   // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_clearcoat/README.md
   public clearcoatFactor = 0;
-  public clearcoatRoughnessFactor = 0;
+  public clearcoatRoughnessFactor = 0.5;
   public clearcoatFactorRoughnessTextureAccessor?: TextureAccessor;
   public clearcoatNormalScale = new Vec2(1, 1);
   public clearcoatNormalTextureAccessor?: TextureAccessor;

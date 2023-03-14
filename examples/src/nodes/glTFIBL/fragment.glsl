@@ -385,6 +385,7 @@ void main() {
     );
     DEBUG_OUTPUT(59, direct_brdf);
 
+
     // sheen
     //  if (material.sheenColor != vec3(0.)) {
     vec3 sheen_brdf =
