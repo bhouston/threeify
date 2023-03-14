@@ -1,32 +1,23 @@
 import {
   Attachment,
-  BufferBit,
-  CopyPass,
+  createCopyPass,
+  createGaussianBlur,
+  createRenderingContext,
+  createToneMapper,
   DataType,
   fetchHDR,
   Framebuffer,
   InternalFormat,
-  geometryToBufferGeometry,
   makeColorAttachment,
-  shaderMaterialToProgram,
-  passGeometry,
   PixelFormat,
-  renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
   TexImage2D,
   Texture,
   TextureEncoding,
   TextureFilter,
-  textureToTexImage2D,
-  ToneMapper,
-  GaussianBlur
+  textureToTexImage2D
 } from '@threeify/core';
-import { Vec2 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
 
 let blurRadius = 4.5;
 
@@ -49,20 +40,11 @@ document.addEventListener('keydown', (event) => {
   }
 
   console.log('blurRadius', blurRadius);
-  console.log( 'lodLevel', lodLevel);
+  console.log('lodLevel', lodLevel);
 });
 
 async function init(): Promise<void> {
-  const geometry = passGeometry();
-  const passMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
 
   const hdrPromise = fetchHDR(
     getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
@@ -84,13 +66,14 @@ async function init(): Promise<void> {
     PixelFormat.RGBA
   );
 
-  const copyPass = new CopyPass(context);
-  await copyPass.ready();
-  
+  const copyPass = await createCopyPass(context);
+  const gaussianBlur = await createGaussianBlur(context);
+  const toneMapper = await createToneMapper(context);
+
   copyPass.exec({
     sourceTexImage2D: rgbeTexImage2D,
     sourceEncoding: TextureEncoding.RGBE,
-    targetTexImage2D: hdrTexImage2D,
+    targetFramebufferOrTexImage2D: hdrTexImage2D,
     targetEncoding: TextureEncoding.Linear
   });
 
@@ -98,36 +81,29 @@ async function init(): Promise<void> {
 
   hdrTexImage2D.generateMipmaps();
 
+  const hFramebuffer = new Framebuffer(context);
+  hFramebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(
+      context,
+      hdrTexImage2D.size,
+      InternalFormat.RGBA16F,
+      TextureFilter.Linear,
+      TextureFilter.Linear
+    )
+  );
 
-    const hFramebuffer = new Framebuffer(context);
-    hFramebuffer.attach(
-      Attachment.Color0,
-      makeColorAttachment(
-        context,
-        hdrTexImage2D.size,
-        InternalFormat.RGBA16F,
-        TextureFilter.Linear,
-        TextureFilter.Linear
-      )
-    );
-
-      const vFramebuffer = new Framebuffer(context);
-      vFramebuffer.attach(
-        Attachment.Color0,
-        makeColorAttachment(
-          context,
-          hdrTexImage2D.size,
-          InternalFormat.RGBA16F,
-          TextureFilter.Linear,
-          TextureFilter.Linear
-        )
-      );
-
-
-      const gaussianBlur = new GaussianBlur(context);
-      const toneMapper = new ToneMapper(context);
-
-      await Promise.all([gaussianBlur.ready(), toneMapper.ready()]);
+  const vFramebuffer = new Framebuffer(context);
+  vFramebuffer.attach(
+    Attachment.Color0,
+    makeColorAttachment(
+      context,
+      hdrTexImage2D.size,
+      InternalFormat.RGBA16F,
+      TextureFilter.Linear,
+      TextureFilter.Linear
+    )
+  );
 
   function animate(): void {
     requestAnimationFrame(animate);
@@ -144,7 +120,9 @@ async function init(): Promise<void> {
     });
 
     toneMapper.exec({
-      sourceTexImage2D: vFramebuffer.getAttachment(Attachment.Color0) as TexImage2D,
+      sourceTexImage2D: vFramebuffer.getAttachment(
+        Attachment.Color0
+      ) as TexImage2D,
       exposure: 1,
       targetFramebuffer: canvasFramebuffer
     });

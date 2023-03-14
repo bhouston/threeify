@@ -1,7 +1,7 @@
 attribute vec3 position;
 
 uniform mat4 localToView;
-uniform mat4 viewToScreen;
+uniform mat4 viewToClip;
 
 uniform mat3 viewToImageUv;
 uniform mat3 viewToLayerUv;
@@ -28,7 +28,7 @@ void main() {
   v_layer_uv = (viewToLayerUv * viewPos2d).xy;
   v_mask_uv = (viewToMaskUv * viewPos2d).xy;
 
-  gl_Position = viewToScreen * viewPos;
+  gl_Position = viewToClip * viewPos;
 
 }
 

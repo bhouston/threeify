@@ -17,6 +17,7 @@ vec4 toVec4(vec3 value) {
 #define DEBUG_OUTPUT(index, output)                                            \
   if (debugOutputIndex == (index)) {                                           \
     outputColor = toVec4(output);                                              \
+    nanDetector(outputColor, outputColor);                                     \
     return;                                                                    \
   }
 #else

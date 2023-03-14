@@ -1,14 +1,13 @@
 import { Vec2 } from '@threeify/math';
 
-import { PassGeometry } from '../../geometry/primitives/passGeometry';
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeTexture';
+import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeMapTexture';
 import { Texture } from '../../textures/Texture';
-import { geometryToBufferGeometry } from '../webgl/buffers/BufferGeometry';
+import { createCopyPass } from '../effects/copy/CopyPass';
 import { CullingState } from '../webgl/CullingState';
 import { Attachment } from '../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
-import { renderBufferGeometry } from '../webgl/framebuffers/VirtualFramebuffer';
+import { renderPass } from '../webgl/framebuffers/VirtualFramebuffer';
 import { shaderMaterialToProgram } from '../webgl/programs/Program';
 import { RenderingContext } from '../webgl/RenderingContext';
 import {
@@ -24,7 +23,6 @@ import { TexParameters } from '../webgl/textures/TexParameters';
 import { TextureFilter } from '../webgl/textures/TextureFilter';
 import { TextureTarget } from '../webgl/textures/TextureTarget';
 import { TextureWrap } from '../webgl/textures/TextureWrap';
-import { CopyPass } from './CopyPass';
 import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
 import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
 import { TextureEncoding } from './TextureEncoding';
@@ -56,10 +54,6 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
     context,
     cubeFaceMaterial
   );
-  const cubeFaceBufferGeometry = geometryToBufferGeometry(
-    context,
-    PassGeometry
-  );
   const cubeMap = textureToTexImage2D(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
@@ -73,11 +67,10 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
   cubeFaceTargets.forEach((target, index) => {
     cubeFaceFramebuffer.attach(Attachment.Color0, cubeMap, target, 0);
     cubeFaceUniforms.faceIndex = index;
-    renderBufferGeometry({
+    renderPass({
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      bufferGeometry: cubeFaceBufferGeometry,
       cullingState
     });
   });
@@ -86,11 +79,7 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
     cubeMap.generateMipmaps();
   }
 
-  cubeFaceFramebuffer.flush();
-  cubeFaceFramebuffer.finish();
-
   cubeFaceFramebuffer.dispose();
-  // cubeFaceBufferGeometry.dispose(); - causes crashes.  Huh?
   cubeFaceProgram.dispose();
 
   cubeMap.version = latLongTexture.version;
@@ -130,14 +119,15 @@ export async function equirectangularTextureToCubeMap(
       )
     );
 
-    const copyPass = new CopyPass(context);
-    await copyPass.ready();
+    const copyPass = await createCopyPass(context);
     copyPass.exec({
       sourceTexImage2D: latLongMap,
       sourceEncoding: TextureEncoding.RGBE,
-      targetTexImage2D: linearLatLongMap,
+      targetFramebufferOrTexImage2D: linearLatLongMap,
       targetEncoding: TextureEncoding.Linear
     });
+
+    copyPass.dispose();
   }
 
   const cubeMap = await equirectangularTexImage2DToCubeMapTexImage2D(

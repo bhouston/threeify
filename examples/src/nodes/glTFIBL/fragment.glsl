@@ -1,6 +1,6 @@
 precision highp float;
 
-//#define DEBUG_OUTPUTS (1)
+#define DEBUG_OUTPUTS (0)
 #define NUM_UV_CHANNELS (3)
 
 in vec3 v_worldSurfacePosition;
@@ -11,13 +11,16 @@ in vec2 v_uv0;
 in vec2 v_uv1;
 in vec2 v_uv2;
 
+#pragma import "@threeify/core/dist/shaders/debug/nanDetector.glsl"
+
 #define MAX_PUNCTUAL_LIGHTS (3)
 #pragma import "@threeify/core/dist/shaders/lighting/punctualUniforms.glsl"
 #pragma import "@threeify/core/dist/shaders/materials/physicalUniforms.glsl"
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
-uniform mat4 viewToScreen;
+uniform mat4 viewToWorld;
+uniform mat4 viewToClip;
 
 uniform int mode;
 uniform sampler2D backgroundTexture;
@@ -117,13 +120,13 @@ void main() {
   vec3 transmission_btdf = vec3(0.0);
 
   if (material.transmission > 0.0) {
-    vec3 worldViewDirection = mat4UntransformDirection(
-      worldToView,
+    vec3 worldViewDirection = mat4TransformDirection(
+      viewToWorld,
       viewViewDirection
     );
     DEBUG_OUTPUT(35, normalToRgb(worldViewDirection));
 
-    vec3 worldNormal = mat4UntransformDirection(worldToView, viewNormal);
+    vec3 worldNormal = mat4TransformDirection(viewToWorld, viewNormal);
     DEBUG_OUTPUT(36, normalToRgb(worldNormal));
 
     vec3 transmissionRay = getVolumeTransmissionRay(
@@ -137,7 +140,7 @@ void main() {
     DEBUG_OUTPUT(37, normalToRgb(refractedRayExit));
 
     // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
-    vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
+    vec4 ndcPos = viewToClip * worldToView * vec4(refractedRayExit, 1.0);
     vec2 refractionCoords = ndcPos.xy / ndcPos.w;
     refractionCoords += 1.0;
     refractionCoords /= 2.0;

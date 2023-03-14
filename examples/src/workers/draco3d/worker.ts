@@ -16,15 +16,15 @@ async function init() {
   const decoderModule = await createDecoderModule({
     wasmBinary
   });*/
- // console.log('DracoDecoderModule', DracoDecoderModule);
-//const decoder = new DracoDecoderModule.Decoder();
+  // console.log('DracoDecoderModule', DracoDecoderModule);
+  //const decoder = new DracoDecoderModule.Decoder();
 
   backgroundWorker.handlers.set(
     'decode',
     (request: IBackgroundRequest): Promise<IBackgroundResponse> => {
       return new Promise<IBackgroundResponse>((resolve, reject) => {
         const buffer = request.buffers[0];
-      /*  const decodeBuffer = new DracoDecoderModule.DecoderBuffer();
+        /*  const decodeBuffer = new DracoDecoderModule.DecoderBuffer();
         decodeBuffer.Init(new Int8Array(buffer), buffer.byteLength);
         const geometryType = decoder.GetEncodedGeometryType(decodeBuffer);
         const geometry: any = {};
@@ -49,8 +49,8 @@ async function init() {
         return resolve({
           requestId: request.id,
           result: true
-        //  result: geometry,
-         // buffers: geometry.buffers
+          //  result: geometry,
+          // buffers: geometry.buffers
         });
       });
     }

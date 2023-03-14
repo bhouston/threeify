@@ -1,12 +1,10 @@
 import {
+  createRenderingContext,
   fetchImage,
-  geometryToBufferGeometry,
-  shaderMaterialToProgram,
   Orbit,
-  passGeometry,
-  renderBufferGeometry,
-  RenderingContext,
+  renderPass,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TexImage2D,
   Texture,
   TextureFilter,
@@ -24,16 +22,13 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const geometry = passGeometry();
   const passMaterial = new ShaderMaterial(
     'index',
     vertexSource,
     fragmentSource
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
 
   let imageIndex = 0;
 
@@ -49,7 +44,7 @@ async function init(): Promise<void> {
           texture.wrapT = TextureWrap.ClampToEdge;
           texture.minFilter = TextureFilter.Linear;
           textures[i] = texture;
-          texImage2Ds[i] = textureToTexImage2D(context, texture);
+          return (texImage2Ds[i] = textureToTexImage2D(context, texture));
         }
       )
     );
@@ -57,29 +52,25 @@ async function init(): Promise<void> {
 
   await Promise.all(images);
 
-  const { canvasFramebuffer } = context;
+  const { canvasFramebuffer, canvas } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const orbit = new Orbit(context.canvas);
+  const orbit = new Orbit(canvas);
 
-  const passProgram = await shaderMaterialToProgram(
-    context,
-    passMaterial
-  );
+  const passProgram = await shaderMaterialToProgram(context, passMaterial);
   const passUniforms = {
     viewToWorld: new Mat4(),
-    screenToView: mat4Inverse(
+    clipToView: mat4Inverse(
       mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
     ),
     equirectangularMap: texImage2Ds[0]
   };
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     requestAnimationFrame(animate);
 
     passUniforms.viewToWorld = mat4Inverse(quatToMat4(orbit.rotation));
-    passUniforms.screenToView = mat4Inverse(
+    passUniforms.clipToView = mat4Inverse(
       mat4PerspectiveFov(
         15 * (1 - orbit.zoom) + 15,
         0.1,
@@ -90,11 +81,10 @@ async function init(): Promise<void> {
     );
     passUniforms.equirectangularMap = texImage2Ds[imageIndex];
 
-    renderBufferGeometry({
+    renderPass({
       framebuffer: canvasFramebuffer,
       program: passProgram,
-      uniforms: passUniforms,
-      bufferGeometry
+      uniforms: passUniforms
     });
 
     orbit.update();

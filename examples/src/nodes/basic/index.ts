@@ -1,13 +1,13 @@
 import {
-  fetchImage,
+  createRenderingContext,
+  fetchTexture,
   icosahedronGeometry,
-  shaderMaterialToProgram,
-  RenderingContext,
   ShaderMaterial,
-  Texture
+  shaderMaterialToProgram
 } from '@threeify/core';
 import { Color3, Vec3 } from '@threeify/math';
 import {
+  createRenderCache,
   MeshNode,
   PerspectiveCamera,
   PhysicalMaterial,
@@ -29,13 +29,9 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
   const program = await shaderMaterialToProgram(context, shaderMaterial);
@@ -73,14 +69,16 @@ async function init(): Promise<void> {
   const sceneTreeCache = new SceneTreeCache();
   updateNodeTree(root, sceneTreeCache); // update the node tree (matrices, parents, etc.)
 
-  const renderCache = updateRenderCache(
+  const renderCache = await createRenderCache(context);
+  updateRenderCache(
     context,
     root,
     camera,
     () => {
       return program;
     },
-    sceneTreeCache
+    sceneTreeCache,
+    renderCache
   );
 
   function animate(): void {

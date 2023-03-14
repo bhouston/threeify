@@ -291,3 +291,19 @@ export async function shaderMaterialToProgram(
     }, 0);
   });
 }
+
+export async function shaderSourceToProgram(
+  context: RenderingContext,
+  name: string,
+  vertexShaderCode: string,
+  fragmentShaderCode: string,
+  shaderDefines: ShaderDefines = {}
+) {
+  const material = new ShaderMaterial(
+    name,
+    vertexShaderCode,
+    fragmentShaderCode
+  );
+
+  return await shaderMaterialToProgram(context, material, shaderDefines);
+}

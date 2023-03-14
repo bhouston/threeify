@@ -17,7 +17,7 @@ export class OrthographicCamera extends CameraNode {
     if (props.center !== undefined) this.center.copy(props.center);
   }
 
-  getProjection(result = new Mat4()): Mat4 {
+  getViewToClipProjection(result = new Mat4()): Mat4 {
     return mat4OrthographicSimple(
       this.height,
       this.center,

@@ -1,14 +1,16 @@
 import {
   Blending,
   blendModeToBlendState,
+  createCubemapBackground,
   equirectangularTextureToCubeMap,
   fetchHDR,
   InternalFormat,
-  shaderMaterialToProgram,
   Orbit,
   PhysicalMaterialOutputs,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
+  TexImage2D,
   Texture,
   TextureCache,
   TextureEncoding
@@ -17,16 +19,17 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
+  mat4Inverse,
   Vec3,
   vec3Negate
 } from '@threeify/math';
+import { renderScene_Tranmission } from '@threeify/scene';
 import {
+  createRenderCache,
   DomeLight,
   glTFToSceneNode,
   PerspectiveCamera,
   PointLight,
-  renderScene,
-  renderScene_Tranmission,
   SceneNode,
   SceneTreeCache,
   subTreeStats,
@@ -213,21 +216,22 @@ async function init(): Promise<void> {
 
   //console.time('updateRenderCache');
   const program = await programPromise;
-  const renderCache = updateRenderCache(
+  const renderCache = await createRenderCache(context);
+  updateRenderCache(
     context,
     root,
     camera,
     () => {
       return program;
     },
-    sceneTreeCache
+    sceneTreeCache,
+    renderCache
   );
   //console.timeEnd('updateRenderCache');
 
   canvasFramebuffer.blendState = blendModeToBlendState(Blending.Over, true);
 
   //canvasFramebuffer.clearState = new ClearState(Color3.White
-    await renderCache.ready();
   updateFramebuffers(canvasFramebuffer, renderCache);
 
   renderCache.userUniforms.outputTransformFlags = 0x1 + 0x2 + 0x4;
@@ -248,11 +252,12 @@ async function init(): Promise<void> {
 
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+
       gpuRender.time(() => {
         // if (transmissionMode) {
-          renderScene_Tranmission(canvasFramebuffer, renderCache);
-       // } else {
-        //  renderScene(canvasFramebuffer, renderCache);
+        renderScene_Tranmission(canvasFramebuffer, renderCache);
+        // } else {
+        //renderScene(canvasFramebuffer, renderCache);
         //}
       });
     });

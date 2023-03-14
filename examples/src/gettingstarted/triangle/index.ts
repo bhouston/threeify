@@ -1,16 +1,13 @@
 import {
-  CullingSide,
+  createRenderingContext,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Geometry,
   geometryToBufferGeometry,
   makeFloat32Attribute,
-  shaderMaterialToProgram,
   makeUint8Attribute,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial
+  shaderSourceToProgram
 } from '@threeify/core';
 
 import fragmentSource from './fragment.glsl';
@@ -28,20 +25,21 @@ async function init() {
     true
   );
 
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {};
 
-  context.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  context.cullingState = new CullingState(false, CullingSide.Back);
+  context.depthTestState = DepthTestState.Normal;
+  context.cullingState = CullingState.None;
 
   renderBufferGeometry({
     framebuffer: canvasFramebuffer,

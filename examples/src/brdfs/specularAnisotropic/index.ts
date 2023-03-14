@@ -1,13 +1,10 @@
 import {
+  createRenderingContext,
   diskGeometry,
-  fetchImage,
+  fetchTexImage2D,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture,
-  textureToTexImage2D
+  shaderSourceToProgram
 } from '@threeify/core';
 import {
   Color3,
@@ -26,34 +23,31 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = diskGeometry(0.5, 64);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const anisotropicFlow1Texture = new Texture(
-    await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg')
-  );
-  const anisotropicFlow2Texture = new Texture(
-    await fetchImage('/assets/textures/anisotropic/radialLarge.jpg')
-  );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const anisotropicFlow1Map = textureToTexImage2D(
+  const anisotropicFlow1Map = await fetchTexImage2D(
     context,
-    anisotropicFlow1Texture
+
+    '/assets/textures/anisotropic/radialSmallOverlapping.jpg'
   );
-  const anisotropicFlow2Map = textureToTexImage2D(
+  const anisotropicFlow2Map = await fetchTexImage2D(
     context,
-    anisotropicFlow2Texture
+    '/assets/textures/anisotropic/radialLarge.jpg'
   );
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       35,
       0.1,
       4,

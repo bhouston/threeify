@@ -1,18 +1,17 @@
 import {
   Attachment,
+  createRenderingContext,
   cubeFaceTargets,
   CubeMapTexture,
-  fetchImage,
-  Framebuffer,
-  icosahedronGeometry,
-  geometryToBufferGeometry,
   equirectangularTextureToCubeMap,
-  shaderMaterialToProgram,
-  passGeometry,
+  fetchTexture,
+  Framebuffer,
+  geometryToBufferGeometry,
+  icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture,
+  renderPass,
+  shaderMaterialToProgram,
+  shaderSourceToProgram,
   TextureEncoding,
   TextureFilter,
   textureToTexImage2D,
@@ -34,10 +33,10 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const garageTexture = new Texture(
-    await fetchImage('/assets/textures/cube/garage/latLong.jpg')
+  const garageTexture = await fetchTexture(
+    '/assets/textures/cube/garage/latLong.jpg'
   );
+
   garageTexture.wrapS = TextureWrap.Repeat;
   garageTexture.wrapT = TextureWrap.ClampToEdge;
   garageTexture.minFilter = TextureFilter.Linear;
@@ -54,9 +53,7 @@ async function init(): Promise<void> {
   lambertianCubeTexture.minFilter = TextureFilter.Linear;
   lambertianCubeTexture.generateMipmaps = false;
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -67,7 +64,6 @@ async function init(): Promise<void> {
     1024
   );
 
-  const samplerGeometry = passGeometry();
   const samplerProgram = await shaderMaterialToProgram(
     context,
     samplerMaterial
@@ -77,10 +73,6 @@ async function init(): Promise<void> {
     faceIndex: 0
   };
 
-  const samplerBufferGeometry = geometryToBufferGeometry(
-    context,
-    samplerGeometry
-  );
   const lambertianCubeMap = textureToTexImage2D(context, lambertianCubeTexture);
 
   const framebuffer = new Framebuffer(context);
@@ -89,20 +81,24 @@ async function init(): Promise<void> {
     framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
     samplerUniforms.faceIndex = index;
 
-    renderBufferGeometry({
+    renderPass({
       framebuffer,
       program: samplerProgram,
-      uniforms: samplerUniforms,
-      bufferGeometry: samplerBufferGeometry
+      uniforms: samplerUniforms
     });
   });
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
 
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       25,
       0.1,
       10,

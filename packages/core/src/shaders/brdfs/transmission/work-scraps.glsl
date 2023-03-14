@@ -7,7 +7,7 @@ vec3 worldNormal = inverseTransformDirection( viewNormal, worldToView );
 
 vec4 transmission = BTDF_TransmissionAttenuation(
     worldNormal, worldViewDirection, worldPosition,
-    localToWorld, worldToView, viewToScreen,
+    localToWorld, worldToView, viewToClip,
     material.albedo, specularF0, specularF90, material.ior, material.specularRoughness, 
     material.thickness, material.attenuationColor, material.attenuationDistance,
     backgroundTexture );

@@ -37,12 +37,11 @@
     "ts-jest": "^29.0.3",
     "ts-jest-resolver": "^2.0.0",
     "typedoc": "^0.23.15",
-    "typescript": "4.8.4",
     "vite": "^4.1.4"
   },
   "scripts": {
     "bootstrap": "npm install && npm run build --workspace=@threeify/glsl-transpiler && npm install",
-    "clean": "npm run clean:dist && npm run clean:node_modules && npm run clean:tsbuildinfo",
+    "clean": "npm run clean:dist && npm run clean:node_modules && npm run clean:buildinfo",
     "clean:dist": "find . -name 'dist' -type d -prune -exec rm -rf '{}' +",
     "clean:node_modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "clean:buildinfo": "find . -name 'tsconfig.tsbuildinfo' -type f -delete",
@@ -65,6 +64,7 @@
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
-    "@threeify/glsl-transpiler": "*"
+    "@threeify/glsl-transpiler": "*",
+    "typescript": "^4.9.5"
   }
 }

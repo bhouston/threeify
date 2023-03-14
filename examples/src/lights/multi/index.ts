@@ -1,12 +1,10 @@
 import {
-  fetchImage,
-  icosahedronGeometry,
+  createRenderingContext,
+  fetchTexture,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
+  icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture,
+  shaderSourceToProgram,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -26,24 +24,24 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/moon_2k.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/planets/moon_2k.jpg');
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const map = textureToTexImage2D(context, texture);
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       25,
       0.1,
       4,

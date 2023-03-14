@@ -1,12 +1,10 @@
 import {
-  CubeMapTexture,
-  fetchCubeImages,
-  icosahedronGeometry,
+  createRenderingContext,
+  fetchCubeMapTexture,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
+  icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -23,23 +21,25 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const cubeTexture = new CubeMapTexture(
-    await fetchCubeImages('/assets/textures/cube/pisa/*.png')
+  const cubeTexture = await fetchCubeMapTexture(
+    '/assets/textures/cube/pisa/*.png'
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const cubeMap = textureToTexImage2D(context, cubeTexture);
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       25,
       0.1,
       4,

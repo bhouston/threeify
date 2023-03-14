@@ -1,13 +1,11 @@
 import {
   boxGeometry,
+  createRenderingContext,
   DeviceOrientation,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture,
+  shaderSourceToProgram,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -24,22 +22,22 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/uv_grid_opengl.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
+    viewToClip: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
     viewLightPosition: Vec3.Zero,
     map: textureToTexImage2D(context, texture)
   };

@@ -1,13 +1,13 @@
 import {
-  fetchImage,
+  createRenderingContext,
+  fetchTexture,
   icosahedronGeometry,
-  shaderMaterialToProgram,
-  RenderingContext,
   ShaderMaterial,
-  Texture
+  shaderMaterialToProgram
 } from '@threeify/core';
 import { Color3, Vec2, Vec3 } from '@threeify/math';
 import {
+  createRenderCache,
   MeshNode,
   PerspectiveCamera,
   PhysicalMaterial,
@@ -29,22 +29,18 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
+  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
+  const flooringNormalTexture = await fetchTexture(
+    '/assets/textures/metal_flooring_normals.jpg'
   );
-  const flooringNormalTexture = new Texture(
-    await fetchImage('/assets/textures/metal_flooring_normals.jpg')
+  const scratchesTexture = await fetchTexture(
+    '/assets/textures/golfball/scratches.png'
   );
-  const scratchesTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/scratches.png')
-  );
-  const golfballNormalTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/normals2.jpg')
+  const golfballNormalTexture = await fetchTexture(
+    '/assets/textures/golfball/normals2.jpg'
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
   const program = await shaderMaterialToProgram(context, shaderMaterial);
@@ -93,14 +89,16 @@ async function init(): Promise<void> {
 
   updateNodeTree(root, sceneTreeCache); // update the node tree (matrices, parents, etc.)
 
-  const renderCache = updateRenderCache(
+  const renderCache = await createRenderCache(context);
+  updateRenderCache(
     context,
     root,
     camera,
     () => {
       return program;
     },
-    sceneTreeCache
+    sceneTreeCache,
+    renderCache
   );
 
   function animate(): void {

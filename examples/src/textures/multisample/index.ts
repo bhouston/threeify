@@ -1,29 +1,24 @@
 import {
   Attachment,
   biltFramebuffers,
-  Blending,
-  blendModeToBlendState,
   BlendState,
   boxGeometry,
   BufferBit,
   ClearState,
-  CopyPass,
-  CullingSide,
+  createCopyPass,
   CullingState,
   DepthTestFunc,
   DepthTestState,
-  fetchImage,
+  fetchTexImage2D,
   Framebuffer,
-  InternalFormat,
   geometryToBufferGeometry,
+  InternalFormat,
   makeColorAttachment,
-  shaderMaterialToProgram,
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial,
-  Texture,
-  textureToTexImage2D
+  shaderSourceToProgram,
+  TextureEncoding
 } from '@threeify/core';
 import {
   Color3,
@@ -44,10 +39,6 @@ const stats = new Stats();
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/uv_grid_opengl.jpg')
-  );
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement,
@@ -92,13 +83,21 @@ async function init(): Promise<void> {
   const simpleFramebuffer = new Framebuffer(context);
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
-  const program = await shaderMaterialToProgram(context, material);
-  const uvTestTexture = textureToTexImage2D(context, texture);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
+  const uvTestTexture = await fetchTexImage2D(
+    context,
+    '/assets/textures/uv_grid_opengl.jpg'
+  );
 
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: mat4OrthographicSimple(
+    viewToClip: mat4OrthographicSimple(
       1.5,
       new Vec2(),
       0.1,
@@ -111,21 +110,11 @@ async function init(): Promise<void> {
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const whiteClearState = new ClearState(Color3.Black, 0);
-
-  const depthTestState = new DepthTestState(false);
-  const blendState = blendModeToBlendState(Blending.Over, true);
-
   const normalDepthTesting = new DepthTestState(true, DepthTestFunc.Less, true);
   const noBlending = BlendState.None;
-
-  const normalCulling = new CullingState(true, CullingSide.Back);
   const noCulling = new CullingState(false);
 
-  const noDepthTesting = new DepthTestState(false);
-
-  const copyPass = new CopyPass(context);
-  await copyPass.ready();
-  
+  const copyPass = await createCopyPass(context);
 
   function animate(): void {
     stats.time(() => {
@@ -152,7 +141,9 @@ async function init(): Promise<void> {
 
         copyPass.exec({
           sourceTexImage2D: colorAttachment,
-          targetFramebuffer: canvasFramebuffer
+          sourceEncoding: TextureEncoding.Linear,
+          targetFramebufferOrTexImage2D: canvasFramebuffer,
+          targetEncoding: TextureEncoding.Linear
         });
       });
     });

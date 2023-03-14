@@ -22,10 +22,10 @@ export class SceneNode implements IIdentifiable, IVersionable {
   public visible = true;
 
   // derived
-  public localToParentMatrix = new Mat4();
-  public parentToLocalMatrix = new Mat4();
-  public localToWorldMatrix = new Mat4();
-  public worldToLocalMatrix = new Mat4();
+  public localToParent = new Mat4();
+  public parentToLocal = new Mat4();
+  public localToWorld = new Mat4();
+  public worldToLocal = new Mat4();
   public nodeBoundingBox = new Box3();
   public subTreeBoundingBox = new Box3();
 

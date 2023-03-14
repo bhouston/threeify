@@ -1,13 +1,10 @@
 import {
-  fetchImage,
-  icosahedronGeometry,
+  createRenderingContext,
+  fetchTexImage2D,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
+  icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture,
-  textureToTexImage2D
+  shaderSourceToProgram
 } from '@threeify/core';
 import {
   Color3,
@@ -26,31 +23,33 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
-  );
-  const scratchesTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/scratches.png')
-  );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const albedoMap = textureToTexImage2D(context, texture);
-  const clearCoatBumpMap = textureToTexImage2D(context, scratchesTexture);
+  const albedoMap = await fetchTexImage2D(
+    context,
+    '/assets/textures/planets/jupiter_2k.jpg'
+  );
+  const clearCoatBumpMap = await fetchTexImage2D(
+    context,
+    '/assets/textures/golfball/scratches.png'
+  );
   const specularRoughnessMap = clearCoatBumpMap;
   const clearCoatRoughnessMap = specularRoughnessMap;
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       25,
       0.1,
       4,

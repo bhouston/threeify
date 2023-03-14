@@ -10,8 +10,8 @@ import { Vec2 } from '@threeify/math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
 import { ArrayImage } from '../../../textures/ArrayBufferImage.js';
-import { CubeMapTexture } from '../../../textures/CubeTexture.js';
-import { Texture } from '../../../textures/Texture.js';
+import { CubeMapTexture } from '../../../textures/CubeMapTexture.js';
+import { fetchTexture, Texture } from '../../../textures/Texture.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
@@ -235,3 +235,11 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
   }
 }
 */
+
+export async function fetchTexImage2D(
+  context: RenderingContext,
+  url: string
+): Promise<TexImage2D> {
+  const texture = await fetchTexture(url);
+  return textureToTexImage2D(context, texture);
+}

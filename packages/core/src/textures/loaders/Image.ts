@@ -83,7 +83,7 @@ export function fetchImage(url: string): Promise<Image> {
   return fetchImageElement(url);
 }
 
-export async function fetchCubeImages(urlPattern: string): Promise<Image[]> {
+export async function fetchCubeMapImages(urlPattern: string): Promise<Image[]> {
   const cubeMapFaces = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
   const fetchPromises: Promise<Image>[] = [];
   cubeMapFaces.forEach((face) => {

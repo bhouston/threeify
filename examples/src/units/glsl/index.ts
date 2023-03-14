@@ -2,18 +2,15 @@ import {
   Attachment,
   BufferBit,
   ClearState,
-  DepthTestFunc,
+  createRenderingContext,
   DepthTestState,
   Framebuffer,
-  geometryToBufferGeometry,
+  frameBufferToPixels,
   makeColorAttachment,
   makeDepthAttachment,
-  shaderMaterialToProgram,
-  passGeometry,
-  frameBufferToPixels,
-  renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial
+  renderPass,
+  ShaderMaterial,
+  shaderMaterialToProgram
 } from '@threeify/core';
 import { Color3, Vec2 } from '@threeify/math';
 
@@ -21,16 +18,11 @@ import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';
 
 async function init(): Promise<void> {
-  const geometry = passGeometry();
-
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const unitUniforms = {};
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const framebufferSize = new Vec2(1024, 1);
   const framebuffer = new Framebuffer(context);
@@ -44,7 +36,7 @@ async function init(): Promise<void> {
   );
 
   framebuffer.clearState = new ClearState(new Color3(0.5, 0.5, 0.5), 0.5);
-  framebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  framebuffer.depthTestState = DepthTestState.Normal;
 
   const output: string[] = [];
 
@@ -64,17 +56,13 @@ async function init(): Promise<void> {
         vertexSource,
         glslUnitTest.source
       );
-      const unitProgram = await shaderMaterialToProgram(
-        context,
-        passMaterial
-      );
+      const unitProgram = await shaderMaterialToProgram(context, passMaterial);
 
       framebuffer.clear(BufferBit.All);
-      renderBufferGeometry({
+      renderPass({
         framebuffer,
         program: unitProgram,
-        uniforms: unitUniforms,
-        bufferGeometry
+        uniforms: unitUniforms
       });
 
       const result = frameBufferToPixels(framebuffer) as Uint8Array;

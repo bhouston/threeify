@@ -5,6 +5,9 @@ import {
   BufferBit,
   CanvasFramebuffer,
   ClearState,
+  createCopyPass,
+  createGaussianBlur,
+  createToneMapper,
   CullingState,
   DepthTestState,
   Framebuffer,
@@ -12,6 +15,7 @@ import {
   makeColorAttachment,
   Renderbuffer,
   renderBufferGeometry,
+  RenderingContext,
   TexImage2D,
   TextureFilter,
   UniformValueMap,
@@ -19,9 +23,17 @@ import {
 } from '@threeify/core';
 import { Color3, vec2Ceil, vec2MultiplyByScalar } from '@threeify/math';
 
-import { combinePass } from './combinePass/combinePass';
 import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
+
+export async function createRenderCache(context: RenderingContext) {
+  const [copyPass, gaussianBlur, toneMapper] = await Promise.all([
+    createCopyPass(context),
+    createGaussianBlur(context),
+    createToneMapper(context)
+  ]);
+  return new RenderCache(context, copyPass, gaussianBlur, toneMapper);
+}
 
 export function updateFramebuffers(
   canvasFramebuffer: CanvasFramebuffer,
@@ -59,7 +71,7 @@ export function updateFramebuffers(
     )
   );
 
-  const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 0.5));
+  const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 1));
   const tempFramebuffer = new Framebuffer(context);
   tempFramebuffer.attach(
     Attachment.Color0,
@@ -82,11 +94,14 @@ export function renderScene(
     multisampleFramebuffer,
     blendMeshBatches,
     copyPass,
+    toneMapper,
     userUniforms
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
-    opaqueFramebuffer === undefined
+    opaqueFramebuffer === undefined ||
+    copyPass === undefined ||
+    toneMapper === undefined
   )
     throw new Error('Framebuffers not initialized');
 
@@ -117,7 +132,7 @@ export function renderScene(
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 1);
   canvasFramebuffer.clear(BufferBit.All);
 
-  renderCache.toneMapper.exec({
+  toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
     exposure: 1,
     targetFramebuffer: canvasFramebuffer
@@ -134,14 +149,18 @@ export function renderScene_Tranmission(
     multisampleFramebuffer,
     opaqueFramebuffer,
     tempFramebuffer,
-    userUniforms
+    userUniforms,
+    gaussianBlur,
+    toneMapper
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
     opaqueFramebuffer === undefined ||
-    tempFramebuffer === undefined
+    tempFramebuffer === undefined ||
+    gaussianBlur === undefined ||
+    toneMapper === undefined
   )
-    throw new Error('Framebuffers not initialized');
+    throw new Error('Framebuffers or effects not initialized');
 
   multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
   multisampleFramebuffer.clear(BufferBit.All);
@@ -160,7 +179,9 @@ export function renderScene_Tranmission(
   );
 
   biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(
+    Attachment.Color0
+  ) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
   if (blendMeshBatches.length > 0) {
@@ -170,17 +191,17 @@ export function renderScene_Tranmission(
       outputTransformFlags: 0x4
     };
 
-     renderMeshes(
-       multisampleFramebuffer,
-       renderCache,
-       blendMeshBatches,
-       blendUniforms,
-       DepthTestState.Normal,
-       BlendState.PremultipliedOver,
-       CullingState.Front
-     );
+    renderMeshes(
+      multisampleFramebuffer,
+      renderCache,
+      blendMeshBatches,
+      blendUniforms,
+      DepthTestState.Normal,
+      BlendState.PremultipliedOver,
+      CullingState.Front
+    );
 
-     renderMeshes(
+    renderMeshes(
       multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
@@ -189,25 +210,29 @@ export function renderScene_Tranmission(
       BlendState.PremultipliedOver,
       CullingState.Back
     );
-   
+
     biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
   }
-  
-    const tempTexImage2D = tempFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
 
-  renderCache.gaussianBlur.exec({
+  const tempTexImage2D = tempFramebuffer.getAttachment(
+    Attachment.Color0
+  ) as TexImage2D;
+
+  gaussianBlur.exec({
     sourceTexImage2D: opaqueTexImage2D,
     sourceLod: 0,
     standardDeviationInTexels: 5,
     tempTexImage2D: tempTexImage2D,
-    targetFramebuffer: multisampleFramebuffer,
-    targetAlpha: 1
+    targetFramebuffer: opaqueFramebuffer,
+    targetAlpha: 0.02
   });
+
+  //    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
 
   canvasFramebuffer.clearState = new ClearState(Color3.Black, 0);
   canvasFramebuffer.clear(BufferBit.All);
 
-  renderCache.toneMapper.exec({
+  toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
     exposure: 1,
     targetFramebuffer: canvasFramebuffer

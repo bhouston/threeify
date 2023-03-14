@@ -11,6 +11,7 @@ import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { InternalFormat } from '../renderers/webgl/textures/InternalFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureTarget } from '../renderers/webgl/textures/TextureTarget.js';
+import { fetchCubeMapImages } from './loaders/Image.js';
 import { TextureSource, VirtualTexture } from './VirtualTexture.js';
 
 export class CubeMapTexture extends VirtualTexture {
@@ -103,3 +104,9 @@ export function makeMat4CubeMapProjection(near: number, far: number, result = ne
   const CUBE_PROJECTION = mat4.perspective(Math.PI / 2, aspect, near, far);
 }
 */
+
+export async function fetchCubeMapTexture(
+  urlPattern: string
+): Promise<CubeMapTexture> {
+  return new CubeMapTexture(await fetchCubeMapImages(urlPattern));
+}

@@ -11,5 +11,5 @@ export function using<T extends { dispose(): void }>(
 
 // usage
 //using(new Resource(), (resource) => {
-  // code that uses the resource
+// code that uses the resource
 //});

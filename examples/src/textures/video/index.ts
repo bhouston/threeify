@@ -1,17 +1,16 @@
 import {
   BufferBit,
   ClearState,
-  fetchImage,
+  createRenderingContext,
+  fetchTexImage2D,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
-  textureToTexImage2D,
   makeTextureFromVideoElement,
   planeGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   TexImage2D,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -38,23 +37,25 @@ async function init(): Promise<void> {
       uvView.set(u, uv);
     }
   }
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-  const clickToPlayTexture = new Texture(
-    await fetchImage('/assets/textures/videos/ClickToPlay.png')
-  );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
-  const clickToPlayMap = textureToTexImage2D(context, clickToPlayTexture);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
+  const clickToPlayMap = await fetchTexImage2D(
+    context,
+    '/assets/textures/videos/ClickToPlay.png'
+  );
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: mat4OrthographicSimple(
+    viewToClip: mat4OrthographicSimple(
       1.5,
       new Vec2(),
       0.1,

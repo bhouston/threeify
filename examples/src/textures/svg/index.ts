@@ -1,16 +1,15 @@
 import {
   Blending,
   blendModeToBlendState,
+  createRenderingContext,
   DepthTestState,
   fetchImageElement,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
-  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture
+  shaderSourceToProgram,
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import { Vec2 } from '@threeify/math';
 
@@ -30,17 +29,19 @@ async function init(): Promise<void> {
       new Vec2(1024, 1024)
     )
   );
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   context.blendState = blendModeToBlendState(Blending.Over, true);
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const bgUniforms = { map: textureToTexImage2D(context, bgTexture) };
   const fgUniforms = { map: textureToTexImage2D(context, fgTexture) };
 

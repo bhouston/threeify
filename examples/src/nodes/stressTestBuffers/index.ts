@@ -1,15 +1,14 @@
 import {
+  createRenderingContext,
   DepthTestFunc,
   DepthTestState,
-  fetchImage,
+  fetchTexture,
   icosahedronGeometry,
-  shaderMaterialToProgram,
-  RenderingContext,
-  ShaderMaterial,
-  Texture
+  shaderSourceToProgram
 } from '@threeify/core';
 import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/math';
 import {
+  createRenderCache,
   MeshNode,
   PerspectiveCamera,
   PhysicalMaterial,
@@ -29,21 +28,17 @@ import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(
+  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
+
+  const context = createRenderingContext(document, 'framebuffer');
+  const { canvasFramebuffer } = context;
+  window.addEventListener('resize', () => canvasFramebuffer.resize());
+  const program = await shaderSourceToProgram(
+    context,
     'index',
     vertexSource,
     fragmentSource
   );
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
-  );
-
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
-  const { canvasFramebuffer } = context;
-  window.addEventListener('resize', () => canvasFramebuffer.resize());
-  const program = await shaderMaterialToProgram(context, shaderMaterial);
 
   const sceneTreeCache = new SceneTreeCache();
 
@@ -86,15 +81,16 @@ async function init(): Promise<void> {
   root.children.push(camera);
 
   updateNodeTree(root, sceneTreeCache); // update the node tree (matrices, parents, etc.)
-
-  const renderCache = updateRenderCache(
+  const renderCache = await createRenderCache(context);
+  updateRenderCache(
     context,
     root,
     camera,
     () => {
       return program;
     },
-    sceneTreeCache
+    sceneTreeCache,
+    renderCache
   );
 
   canvasFramebuffer.depthTestState = new DepthTestState(

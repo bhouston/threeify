@@ -2,16 +2,15 @@ import {
   Blending,
   blendModeToBlendState,
   ClearState,
-  fetchImage,
+  createRenderingContext,
   fetchImageElement,
+  fetchTexture,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
-  textureToTexImage2D,
   planeGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture
+  shaderSourceToProgram,
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -27,16 +26,16 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const fgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/fg.svg',
       new Vec2(1024, 1024)
     )
   );
-  const fgSplatTexture = new Texture(
-    await fetchImage('/assets/textures/decals/splat.png')
+  const fgSplatTexture = await fetchTexture(
+    '/assets/textures/decals/splat.png'
   );
+
   const bgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/bg.svg',
@@ -44,9 +43,7 @@ async function init(): Promise<void> {
     )
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -54,7 +51,12 @@ async function init(): Promise<void> {
   const fgSplatMap = textureToTexImage2D(context, fgSplatTexture);
   const bgMap = textureToTexImage2D(context, bgTexture);
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const bgUniforms = {
     localToWorld: new Mat4(),
     premultipliedAlpha: 0,

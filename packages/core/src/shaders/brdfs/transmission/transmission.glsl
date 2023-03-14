@@ -51,6 +51,7 @@ vec3 getVolumeAttenuation(
   if (isinf(attenuationDistance)) return vec3(1.0);
 
   // Beer's law https://en.wikipedia.org/wiki/Beer%E2%80%93Lambert_law
+
   vec3 attenuationCoefficient = -log(attenuationColor) / attenuationDistance;
   return exp(-attenuationCoefficient * distance);
 }
@@ -61,7 +62,7 @@ vec4 BTDF_TransmissionAttenuation(
   const vec3 worldPosition,
   const mat4 localToWorld,
   const mat4 worldToView,
-  const mat4 viewToScreen,
+  const mat4 viewToClip,
   const vec3 albedo,
   const vec3 specularF0,
   const vec3 specularF90,
@@ -82,8 +83,8 @@ vec4 BTDF_TransmissionAttenuation(
   vec3 refractedRayExit = worldPosition + transmissionRay;
 
   // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
-  vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
-  vec2 refractionCoords = ndcPos.xy / ndcPos.w;
+  vec4 clipPosition = viewToClip * worldToView * vec4(refractedRayExit, 1.0);
+  vec2 refractionCoords = clipPosition.xy / clipPosition.w;
   refractionCoords += 1.0;
   refractionCoords /= 2.0;
 

@@ -100,11 +100,7 @@ export function postOrderUpdateNode(
   node.children.forEach((child) => {
     box3ExpandByBox3(
       node.subTreeBoundingBox,
-      mat4TransformBox3(
-        child.localToParentMatrix,
-        child.subTreeBoundingBox,
-        tempBox
-      ),
+      mat4TransformBox3(child.localToParent, child.subTreeBoundingBox, tempBox),
       node.subTreeBoundingBox
     );
   });
@@ -132,30 +128,27 @@ export function preOrderUpdateNode(
 
   // update local to parent matrices
   if (nodeIdToUpdateVersion.get(node.id) !== node.version) {
-    node.localToParentMatrix = mat4Compose(
+    node.localToParent = mat4Compose(
       node.translation,
       node.rotation,
       node.scale,
-      node.localToParentMatrix
+      node.localToParent
     );
-    node.parentToLocalMatrix = mat4Inverse(
-      node.localToParentMatrix,
-      node.parentToLocalMatrix
-    );
+    node.parentToLocal = mat4Inverse(node.localToParent, node.parentToLocal);
   }
 
   // update local to world matrices.
   if (node.parent !== undefined) {
     // localToParentMatrix happens first, and then parent.localToWorldMatrix - this is correct
     mat4Multiply(
-      node.parent.localToWorldMatrix,
-      node.localToParentMatrix,
-      node.localToWorldMatrix
+      node.parent.localToWorld,
+      node.localToParent,
+      node.localToWorld
     );
-    mat4Inverse(node.localToWorldMatrix, node.worldToLocalMatrix);
+    mat4Inverse(node.localToWorld, node.worldToLocal);
   } else {
-    node.localToWorldMatrix.copy(node.localToParentMatrix);
-    node.worldToLocalMatrix.copy(node.parentToLocalMatrix);
+    node.localToWorld.copy(node.localToParent);
+    node.worldToLocal.copy(node.parentToLocal);
   }
 
   /*if (node.parent !== undefined) {

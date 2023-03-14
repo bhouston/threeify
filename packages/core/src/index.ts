@@ -47,11 +47,16 @@ export * from './geometry/primitives/polyhedronGeometry.js';
 
 export * from './worker/WorkerPool.js';
 
-export * from './renderers/utilities/CopyPass.js';
+export * from './renderers/effects/copy/CopyPass.js';
+export * from './renderers/effects/tonemapper/ToneMapper.js';
+export * from './renderers/effects/gaussianblur/GaussianBlur.js';
+export * from './renderers/effects/combinePass/CombinePass.js';
+export * from './renderers/effects/nanDetector/NanDetector.js';
+export * from './renderers/effects/cubemapBackground/CubemapBackground.js';
+export * from './renderers/effects/IEffect';
+
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';
-export * from './renderers/utilities/tonemapper/ToneMapper.js';
-export * from './renderers/utilities/gaussianblur/GaussianBlur.js';
 
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';
@@ -98,7 +103,7 @@ export * from './renderers/webgl/textures/TextureTarget.js';
 export * from './renderers/webgl/textures/TextureWrap.js';
 
 export * from './textures/ArrayBufferImage.js';
-export * from './textures/CubeTexture.js';
+export * from './textures/CubeMapTexture.js';
 export * from './textures/PixelEncoding.js';
 export * from './textures/Texture.js';
 export * from './textures/VirtualTexture.js';

@@ -14,6 +14,7 @@ import {
 } from '@threeify/core';
 import {
   color3MultiplyByScalar,
+  mat4Inverse,
   mat4TransformNormal3,
   mat4TransformVec3,
   Vec3
@@ -47,7 +48,7 @@ export function updateDirtyNodes(
     renderCache;
   for (const node of breathFirstNodes) {
     const nodeUniforms = nodeIdToUniforms.get(node.id) || new NodeUniforms();
-    nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
+    nodeUniforms.localToWorld.copy(node.localToWorld);
     nodeIdToUniforms.set(node.id, nodeUniforms);
   }
 
@@ -66,7 +67,7 @@ export function updateRenderCache(
   activeCamera: CameraNode | undefined,
   shaderResolver: (shaderName: string) => Program,
   sceneTreeCache: SceneTreeCache,
-  renderCache: RenderCache = new RenderCache(context)
+  renderCache: RenderCache
 ) {
   const {
     nodeIdToUniforms,
@@ -80,7 +81,7 @@ export function updateRenderCache(
     breathFirstNodes.push(node);
 
     const nodeUniforms = new NodeUniforms();
-    nodeUniforms.localToWorld.copy(node.localToWorldMatrix);
+    nodeUniforms.localToWorld.copy(node.localToWorld);
     nodeIdToUniforms.set(node.id, nodeUniforms);
 
     nodeIdToVersion.set(node.id, node.version);
@@ -115,8 +116,9 @@ function updateCameraUniforms(
   camera: CameraNode,
   cameraUniforms: CameraUniforms
 ) {
-  cameraUniforms.viewToScreen.copy(camera.getProjection()); // TODO, use a dynamic aspect ratio
-  cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
+  cameraUniforms.viewToClip.copy(camera.getViewToClipProjection()); // TODO, use a dynamic aspect ratio
+  cameraUniforms.worldToView.copy(camera.worldToView);
+  mat4Inverse(cameraUniforms.worldToView, cameraUniforms.viewToWorld);
 }
 
 function flattenMaterialParameters(
@@ -215,10 +217,7 @@ function updateLightUniforms(
   lightUniforms: LightParameters,
   context: RenderingContext
 ) {
-  const lightWorldPosition = mat4TransformVec3(
-    light.localToWorldMatrix,
-    Vec3.Zero
-  );
+  const lightWorldPosition = mat4TransformVec3(light.localToWorld, Vec3.Zero);
   const lightIntensity = color3MultiplyByScalar(light.color, light.intensity);
 
   let lightType = LightType.Directional;
@@ -247,7 +246,7 @@ function updateLightUniforms(
   if (light instanceof SpotLight) {
     lightType = LightType.Spot;
     lightWorldDirection = mat4TransformNormal3(
-      light.localToWorldMatrix,
+      light.localToWorld,
       new Vec3(0, 0, -1)
     );
 
@@ -262,7 +261,7 @@ function updateLightUniforms(
   if (light instanceof DirectionalLight) {
     lightType = LightType.Directional;
     lightWorldDirection = mat4TransformNormal3(
-      light.localToWorldMatrix,
+      light.localToWorld,
       new Vec3(0, 0, -1)
     );
   }
