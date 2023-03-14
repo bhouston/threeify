@@ -5,15 +5,13 @@ import {
   DepthTestFunc,
   DepthTestState,
   Framebuffer,
-  geometryToBufferGeometry,
+  frameBufferToPixels,
   makeColorAttachment,
   makeDepthAttachment,
-  shaderMaterialToProgram,
-  passGeometry,
-  frameBufferToPixels,
-  renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial
+  renderPass,
+  ShaderMaterial,
+  shaderMaterialToProgram
 } from '@threeify/core';
 import { Color3, Vec2 } from '@threeify/math';
 
@@ -21,8 +19,6 @@ import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';
 
 async function init(): Promise<void> {
-  const geometry = passGeometry();
-
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
   );
@@ -30,7 +26,6 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const unitUniforms = {};
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const framebufferSize = new Vec2(1024, 1);
   const framebuffer = new Framebuffer(context);
@@ -64,17 +59,13 @@ async function init(): Promise<void> {
         vertexSource,
         glslUnitTest.source
       );
-      const unitProgram = await shaderMaterialToProgram(
-        context,
-        passMaterial
-      );
+      const unitProgram = await shaderMaterialToProgram(context, passMaterial);
 
       framebuffer.clear(BufferBit.All);
-      renderBufferGeometry({
+      renderPass({
         framebuffer,
         program: unitProgram,
-        uniforms: unitUniforms,
-        bufferGeometry
+        uniforms: unitUniforms
       });
 
       const result = frameBufferToPixels(framebuffer) as Uint8Array;

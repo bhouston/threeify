@@ -8,10 +8,8 @@ import {
   Framebuffer,
   InternalFormat,
   makeColorAttachment,
-  passGeometry,
   PixelFormat,
   RenderingContext,
-  ShaderMaterial,
   TexImage2D,
   Texture,
   TextureEncoding,
@@ -20,8 +18,6 @@ import {
 } from '@threeify/core';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
 
 let blurRadius = 4.5;
 
@@ -48,13 +44,6 @@ document.addEventListener('keydown', (event) => {
 });
 
 async function init(): Promise<void> {
-  const geometry = passGeometry();
-  const passMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement
   );

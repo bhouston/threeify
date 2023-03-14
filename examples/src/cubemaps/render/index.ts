@@ -4,12 +4,8 @@ import {
   cubeFaceTargets,
   CubeMapTexture,
   Framebuffer,
-  geometryToBufferGeometry,
-  icosahedronGeometry,
-  passGeometry,
-  renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial,
+  renderPass,
   shaderMaterialToProgram,
   TextureFilter,
   textureToTexImage2D
@@ -27,9 +23,7 @@ import {
   Vec3
 } from '@threeify/math';
 
-import fragmentSource from './fragment.glsl';
 import { patternMaterial } from './pattern/PatternMaterial.js';
-import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.
@@ -53,8 +47,6 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const patternGeometry = passGeometry();
-  console.log('patternGeometry', patternGeometry);
   const patternProgram = await shaderMaterialToProgram(
     context,
     patternMaterial
@@ -63,15 +55,11 @@ async function init(): Promise<void> {
     color: new Color3(1, 0, 0)
   };
 
-  const patternBufferGeometry = geometryToBufferGeometry(
-    context,
-    patternGeometry
-  );
   const cubeMap = textureToTexImage2D(context, cubeTexture);
 
   const framebuffer = new Framebuffer(context);
- const cubemapBackground = await createCubemapBackground(context);
- 
+  const cubemapBackground = await createCubemapBackground(context);
+
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
@@ -84,7 +72,7 @@ async function init(): Promise<void> {
     ),
     cubeMap: cubeMap
   };
- 
+
   function animate(): void {
     requestAnimationFrame(animate);
     const now = Date.now();
@@ -95,11 +83,10 @@ async function init(): Promise<void> {
         new Vec3(index / 6 + now * 0.0001, 0.5, 0.5)
       );
 
-      renderBufferGeometry({
+      renderPass({
         framebuffer,
         program: patternProgram,
-        uniforms: patternUniforms,
-        bufferGeometry: patternBufferGeometry
+        uniforms: patternUniforms
       });
     });
 
@@ -108,13 +95,13 @@ async function init(): Promise<void> {
       uniforms.localToWorld
     );
 
-     cubemapBackground.exec({
-       cubeMapTexImage2D: cubeMap,
-       cubeMapIntensity: 1,
-       targetFramebuffer: canvasFramebuffer,
-       viewToWorld: uniforms.localToWorld,
-       clipToView: mat4Inverse(uniforms.viewToClip)
-     });
+    cubemapBackground.exec({
+      cubeMapTexImage2D: cubeMap,
+      cubeMapIntensity: 1,
+      targetFramebuffer: canvasFramebuffer,
+      viewToWorld: uniforms.localToWorld,
+      clipToView: mat4Inverse(uniforms.viewToClip)
+    });
   }
 
   animate();
