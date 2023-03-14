@@ -15,7 +15,7 @@ export class PerspectiveCamera extends CameraNode {
     this.verticalFov = props.verticalFov || this.verticalFov;
   }
 
-  getProjection(result = new Mat4()): Mat4 {
+  getViewToClipProjection(result = new Mat4()): Mat4 {
     return mat4PerspectiveFov(
       this.verticalFov,
       this.near,

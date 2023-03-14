@@ -32,5 +32,13 @@ export abstract class CameraNode extends SceneNode {
         : this.viewAspectRatio;
   }
 
-  abstract getProjection(): Mat4;
+  get worldToView(): Mat4 {
+    return this.worldToLocal;
+  }
+
+  get viewToWorld(): Mat4 {
+    return this.localToWorld;
+  }
+
+  abstract getViewToClipProjection(): Mat4;
 }
