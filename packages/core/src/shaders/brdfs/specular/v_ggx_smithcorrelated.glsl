@@ -10,9 +10,9 @@ float V_GGX_SmithCorrelated(
   const float NdotV
 ) {
   // NdotL and NdotV are explicitly swapped. This is not a mistake.
-  float a2 = safePow2(alphaRoughness);
-  float gv = NdotL * safeSqrt(a2 + (1.0 - a2) * safePow2(NdotV));
-  float gl = NdotV * safeSqrt(a2 + (1.0 - a2) * safePow2(NdotL));
+  float a2 = pow2(alphaRoughness);
+  float gv = NdotL * sqrt(a2 + (1.0 - a2) * pow2(NdotV));
+  float gl = NdotV * sqrt(a2 + (1.0 - a2) * pow2(NdotL));
 
   return 0.5 / max(gv + gl, EPSILON);
 
