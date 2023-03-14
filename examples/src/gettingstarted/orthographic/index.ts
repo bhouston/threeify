@@ -1,11 +1,10 @@
 import {
   boxGeometry,
   createRenderingContext,
-  fetchTexture,
+  fetchTexImage2D,
   geometryToBufferGeometry,
   renderBufferGeometry,
-  shaderSourceToProgram,
-  textureToTexImage2D
+  shaderSourceToProgram
 } from '@threeify/core';
 import {
   Euler3,
@@ -22,11 +21,15 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
+
+  const map = await fetchTexImage2D(
+    context,
+    '/assets/textures/uv_grid_opengl.jpg'
+  );
 
   const program = await shaderSourceToProgram(
     context,
@@ -46,7 +49,7 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     ),
     viewLightPosition: Vec3.Zero,
-    map: textureToTexImage2D(context, texture)
+    map: map
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 

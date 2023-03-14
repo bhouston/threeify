@@ -7,9 +7,6 @@
 
 import { Vec2 } from '@threeify/math';
 
-import { CubeMapTexture } from '../CubeMapTexture';
-import { Texture } from '../Texture';
-
 export function fetchImageElement(
   url: string,
   size = new Vec2()
@@ -86,10 +83,6 @@ export function fetchImage(url: string): Promise<Image> {
   return fetchImageElement(url);
 }
 
-export async function fetchTexture(url: string): Promise<Texture> {
-  return new Texture(await fetchImage(url));
-}
-
 export async function fetchCubeMapImages(urlPattern: string): Promise<Image[]> {
   const cubeMapFaces = ['px', 'nx', 'py', 'ny', 'pz', 'nz'];
   const fetchPromises: Promise<Image>[] = [];
@@ -97,10 +90,4 @@ export async function fetchCubeMapImages(urlPattern: string): Promise<Image[]> {
     fetchPromises.push(fetchImage(urlPattern.replace('*', face)));
   });
   return Promise.all(fetchPromises);
-}
-
-export async function fetchCubeMapTexture(
-  urlPattern: string
-): Promise<CubeMapTexture> {
-  return new CubeMapTexture(await fetchCubeMapImages(urlPattern));
 }

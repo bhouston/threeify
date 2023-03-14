@@ -7,14 +7,13 @@ import {
   ClearState,
   createRenderingContext,
   DepthTestState,
-  fetchTexture,
+  fetchTexImage2D,
   Framebuffer,
   geometryToBufferGeometry,
   makeColorAttachment,
   makeDepthAttachment,
   renderBufferGeometry,
-  shaderSourceToProgram,
-  textureToTexImage2D
+  shaderSourceToProgram
 } from '@threeify/core';
 import {
   Color3,
@@ -32,7 +31,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
@@ -53,7 +51,10 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const uvTestTexture = textureToTexImage2D(context, texture);
+  const uvTestTexture = await fetchTexImage2D(
+    context,
+    '/assets/textures/uv_grid_opengl.jpg'
+  );
 
   const uniforms = {
     localToWorld: new Mat4(),

@@ -1,10 +1,10 @@
 import {
   createRenderingContext,
+  fetchTexImage2D,
   geometryToBufferGeometry,
   icosahedronGeometry,
   renderBufferGeometry,
-  shaderSourceToProgram,
-  textureToTexImage2D
+  shaderSourceToProgram
 } from '@threeify/core';
 import {
   Color3,
@@ -23,12 +23,15 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
+
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const map = textureToTexImage2D(context, texture);
+  const map = await fetchTexImage2D(
+    context,
+    '/assets/textures/planets/jupiter_2k.jpg'
+  );
   const program = await shaderSourceToProgram(
     context,
     'index',

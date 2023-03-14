@@ -1,11 +1,10 @@
 import {
   createRenderingContext,
-  fetchTexture,
+  fetchTexImage2D,
   geometryToBufferGeometry,
   planeGeometry,
   renderBufferGeometry,
-  shaderSourceToProgram,
-  textureToTexImage2D
+  shaderSourceToProgram
 } from '@threeify/core';
 
 import fragmentSource from './fragment.glsl';
@@ -13,7 +12,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = planeGeometry(1, 1, 1, 1);
-  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
@@ -26,7 +24,10 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const texImage2D = textureToTexImage2D(context, texture);
+  const texImage2D = await fetchTexImage2D(
+    context,
+    '/assets/textures/uv_grid_opengl.jpg'
+  );
 
   const uniforms = { map: texImage2D };
 

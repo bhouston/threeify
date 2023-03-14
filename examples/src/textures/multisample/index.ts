@@ -9,7 +9,7 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
-  fetchTexture,
+  fetchTexImage2D,
   Framebuffer,
   geometryToBufferGeometry,
   InternalFormat,
@@ -18,8 +18,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   shaderSourceToProgram,
-  TextureEncoding,
-  textureToTexImage2D
+  TextureEncoding
 } from '@threeify/core';
 import {
   Color3,
@@ -40,7 +39,6 @@ const stats = new Stats();
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement,
@@ -91,7 +89,10 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const uvTestTexture = textureToTexImage2D(context, texture);
+  const uvTestTexture = await fetchTexImage2D(
+    context,
+    '/assets/textures/uv_grid_opengl.jpg'
+  );
 
   const uniforms = {
     localToWorld: new Mat4(),

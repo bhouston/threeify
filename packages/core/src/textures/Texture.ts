@@ -12,6 +12,7 @@ import {
 } from '../renderers/webgl/textures/InternalFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
+import { fetchImage } from './loaders/Image.js';
 import {
   getTextureSourceSize,
   TextureSource,
@@ -56,4 +57,8 @@ export function makeTextureFromVideoElement(video: HTMLVideoElement): Texture {
     false,
     0
   );
+}
+
+export async function fetchTexture(url: string): Promise<Texture> {
+  return new Texture(await fetchImage(url));
 }

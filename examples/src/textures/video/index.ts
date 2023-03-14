@@ -2,7 +2,7 @@ import {
   BufferBit,
   ClearState,
   createRenderingContext,
-  fetchTexture,
+  fetchTexImage2D,
   geometryToBufferGeometry,
   makeTextureFromVideoElement,
   planeGeometry,
@@ -37,9 +37,6 @@ async function init(): Promise<void> {
       uvView.set(u, uv);
     }
   }
-  const clickToPlayTexture = await fetchTexture(
-    '/assets/textures/videos/ClickToPlay.png'
-  );
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
@@ -51,7 +48,10 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const clickToPlayMap = textureToTexImage2D(context, clickToPlayTexture);
+  const clickToPlayMap = await fetchTexImage2D(
+    context,
+    '/assets/textures/videos/ClickToPlay.png'
+  );
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
