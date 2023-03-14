@@ -7,9 +7,9 @@ import {
   Framebuffer,
   geometryToBufferGeometry,
   icosahedronGeometry,
-  passGeometry,
   renderBufferGeometry,
   RenderingContext,
+  renderPass,
   ShaderMaterial,
   shaderMaterialToProgram,
   Texture,
@@ -67,7 +67,6 @@ async function init(): Promise<void> {
     1024
   );
 
-  const samplerGeometry = passGeometry();
   const samplerProgram = await shaderMaterialToProgram(
     context,
     samplerMaterial
@@ -77,10 +76,6 @@ async function init(): Promise<void> {
     faceIndex: 0
   };
 
-  const samplerBufferGeometry = geometryToBufferGeometry(
-    context,
-    samplerGeometry
-  );
   const lambertianCubeMap = textureToTexImage2D(context, lambertianCubeTexture);
 
   const framebuffer = new Framebuffer(context);
@@ -89,11 +84,10 @@ async function init(): Promise<void> {
     framebuffer.attach(Attachment.Color0, lambertianCubeMap, target, 0);
     samplerUniforms.faceIndex = index;
 
-    renderBufferGeometry({
+    renderPass({
       framebuffer,
       program: samplerProgram,
-      uniforms: samplerUniforms,
-      bufferGeometry: samplerBufferGeometry
+      uniforms: samplerUniforms
     });
   });
 
