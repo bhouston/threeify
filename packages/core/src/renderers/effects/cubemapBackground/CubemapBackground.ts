@@ -2,6 +2,7 @@ import { Mat4 } from '@threeify/math';
 
 import { assert } from '../../../core/assert';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
+import { DepthTestState } from '../../webgl/DepthTestState';
 import {
   renderPass,
   VirtualFramebuffer
@@ -16,8 +17,8 @@ import vertexSource from './vertex.glsl';
 export interface ICubemapBackgroundProps {
   cubeMapTexImage2D: TexImage2D;
   cubeMapIntensity: number;
-  worldToView: Mat4;
-  viewToClip: Mat4;
+  viewToWorld: Mat4;
+  clipToView: Mat4;
   targetFramebuffer: VirtualFramebuffer;
 }
 
@@ -37,14 +38,15 @@ export async function createCubemapBackground(
   );
   const program = await programRef.promise;
 
+
   return {
     exec: (props: ICubemapBackgroundProps) => {
       const {
         cubeMapTexImage2D,
         cubeMapIntensity,
         targetFramebuffer,
-        worldToView,
-        viewToClip
+        viewToWorld,
+        clipToView
       } = props;
 
       assert(cubeMapIntensity > 0);
@@ -52,14 +54,15 @@ export async function createCubemapBackground(
       const uniforms = {
         cubeMap: cubeMapTexImage2D,
         cubeMapIntensity,
-        worldToView,
-        viewToClip
+        viewToWorld,
+        clipToView
       };
 
       renderPass({
         framebuffer: targetFramebuffer,
         program,
-        uniforms
+        uniforms,
+        depthTestState: DepthTestState.Normal
       });
     },
     dispose: () => {

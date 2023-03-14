@@ -68,7 +68,7 @@ async function init(): Promise<void> {
   );
   const passUniforms = {
     viewToWorld: new Mat4(),
-    screenToView: mat4Inverse(
+    clipToView: mat4Inverse(
       mat4PerspectiveFov(30, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
     ),
     equirectangularMap: texImage2Ds[0]
@@ -79,7 +79,7 @@ async function init(): Promise<void> {
     requestAnimationFrame(animate);
 
     passUniforms.viewToWorld = mat4Inverse(quatToMat4(orbit.rotation));
-    passUniforms.screenToView = mat4Inverse(
+    passUniforms.clipToView = mat4Inverse(
       mat4PerspectiveFov(
         15 * (1 - orbit.zoom) + 15,
         0.1,

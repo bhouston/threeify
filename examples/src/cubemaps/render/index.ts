@@ -1,5 +1,6 @@
 import {
   Attachment,
+  createCubemapBackground,
   cubeFaceTargets,
   CubeMapTexture,
   Framebuffer,
@@ -19,6 +20,7 @@ import {
   euler3ToMat4,
   hslToColor3,
   Mat4,
+  mat4Inverse,
   mat4PerspectiveFov,
   translation3ToMat4,
   Vec2,
@@ -33,8 +35,6 @@ async function init(): Promise<void> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.
   // const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
-  const geometry = icosahedronGeometry(0.75, 4, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const imageSize = new Vec2(1024, 1024);
   const cubeTexture = new CubeMapTexture([
     imageSize,
@@ -70,8 +70,8 @@ async function init(): Promise<void> {
   const cubeMap = textureToTexImage2D(context, cubeTexture);
 
   const framebuffer = new Framebuffer(context);
-
-  const program = await shaderMaterialToProgram(context, material);
+ const cubemapBackground = await createCubemapBackground(context);
+ 
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
@@ -84,8 +84,7 @@ async function init(): Promise<void> {
     ),
     cubeMap: cubeMap
   };
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
-
+ 
   function animate(): void {
     requestAnimationFrame(animate);
     const now = Date.now();
@@ -109,12 +108,13 @@ async function init(): Promise<void> {
       uniforms.localToWorld
     );
 
-    renderBufferGeometry({
-      framebuffer: canvasFramebuffer,
-      program,
-      uniforms,
-      bufferGeometry
-    });
+     cubemapBackground.exec({
+       cubeMapTexImage2D: cubeMap,
+       cubeMapIntensity: 1,
+       targetFramebuffer: canvasFramebuffer,
+       viewToWorld: uniforms.localToWorld,
+       clipToView: mat4Inverse(uniforms.viewToClip)
+     });
   }
 
   animate();

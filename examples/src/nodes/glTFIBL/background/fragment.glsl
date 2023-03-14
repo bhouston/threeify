@@ -3,7 +3,7 @@ precision highp float;
 in vec4 v_homogeneousVertexPosition;
 
 uniform mat4 viewToWorld;
-uniform mat4 screenToView;
+uniform mat4 clipToView;
 
 uniform samplerCube cubeMap;
 
@@ -17,7 +17,7 @@ out vec4 outputColor;
 void main() {
   // step one, convert from screen space to ray.
   vec3 viewPosition = (viewToWorld *
-    screenToView *
+    clipToView *
     v_homogeneousVertexPosition).xyz;
   vec3 viewDirection = normalize(viewPosition);
 

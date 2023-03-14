@@ -1,6 +1,7 @@
 import {
   Blending,
   blendModeToBlendState,
+  createCubemapBackground,
   equirectangularTextureToCubeMap,
   fetchHDR,
   InternalFormat,
@@ -9,6 +10,7 @@ import {
   RenderingContext,
   ShaderMaterial,
   shaderMaterialToProgram,
+  TexImage2D,
   Texture,
   TextureCache,
   TextureEncoding
@@ -17,6 +19,7 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
+  mat4Inverse,
   Vec3,
   vec3Negate
 } from '@threeify/math';
@@ -249,12 +252,14 @@ async function init(): Promise<void> {
 
       updateNodeTree(root, sceneTreeCache); // this is by far the slowest part of the system.
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
+
       gpuRender.time(() => {
         // if (transmissionMode) {
         renderScene_Tranmission(canvasFramebuffer, renderCache);
         // } else {
         //renderScene(canvasFramebuffer, renderCache);
         //}
+    
       });
     });
   }

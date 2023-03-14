@@ -52,6 +52,7 @@ export * from './renderers/effects/tonemapper/ToneMapper.js';
 export * from './renderers/effects/gaussianblur/GaussianBlur.js';
 export * from './renderers/effects/combinePass/CombinePass.js';
 export * from './renderers/effects/nanDetector/NanDetector.js';
+export * from './renderers/effects/cubemapBackground/CubemapBackground.js';
 export * from './renderers/effects/IEffect';
 
 export * from './renderers/utilities/equirectangular.js';

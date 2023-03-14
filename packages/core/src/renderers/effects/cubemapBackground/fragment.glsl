@@ -1,41 +1,19 @@
 precision highp float;
 
-in vec2 v_uv0;
+in vec4 v_homogeneousVertexPosition;
+
+uniform mat4 viewToWorld;
+uniform mat4 clipToView;
 
 uniform samplerCube cubeMap;
 uniform float cubeMapIntensity;
-uniform mat4 viewToWorld;
-uniform mat4 viewToClip;
-uniform mat4 screenToView;
 
 out vec4 outputColor;
 
-vec4 clipPositionToScreenPosition( const in vec2 fragCoord, const in float fragDepth ) {
-  return vec4(fragCoord.xy * 2.0 - 1.0, 2.0 * fragCoord.z - 1.0, fragCoord.w);
-}
-
-vec4 screenPositionToViewPosition( const in mat4 screenToView, const in vec4 screenPosition ) {
-  vec4 viewPosition = screenToView * screenPosition;
-  viewPosition.xyz /= viewPosition.w;
-  return viewPosition;
-}
-
 void main() {
+  // step one, convert from screen space to ray.
+  vec4 viewPosition = viewToWorld * clipToView * v_homogeneousVertexPosition;
+  vec3 viewDirection = normalize(viewPosition.xyz);
 
-  float centerViewZ = getViewZ( centerDepth );
-			vec3 viewPosition = getViewPosition( vUv, centerDepth, centerViewZ );
-
-
-  // construct screen coordinate
-  vec4 screenCoord = vec4( gl_FragCoord.xy, 1.0 );
-
-  // convert screen to view
-  vec4 viewCoord = screenToView * screenCoord;
-  // convert to world
-  vec4 worldCoord = viewToWorld * viewCoord;
-
-  // normalize and then look up in cube map
-  vec3 worldNormal = normalize(worldCoord.xyz);
-  
-  outputColor = texture(cubeMap, worldNormal) * cubeMapIntensity;
+  outputColor = texture(cubeMap, -viewDirection) * cubeMapIntensity;
 }
