@@ -43,7 +43,7 @@ async function init(): Promise<void> {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       25,
       0.1,
       4,
@@ -69,7 +69,7 @@ async function init(): Promise<void> {
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
-    uniforms.viewToScreen = mat4PerspectiveFov(
+    uniforms.viewToClip = mat4PerspectiveFov(
       25,
       0.1,
       4,

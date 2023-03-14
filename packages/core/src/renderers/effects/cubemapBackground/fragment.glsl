@@ -5,18 +5,18 @@ in vec2 v_uv0;
 uniform samplerCube cubeMap;
 uniform float cubeMapIntensity;
 uniform mat4 viewToWorld;
-uniform mat4 viewToScreen;
+uniform mat4 viewToClip;
 uniform mat4 screenToView;
 
 out vec4 outputColor;
 
-vec4 fragCoordAnDepthToScreenPosition( const in vec2 fragCoord, const in float fragDepth ) {
-  return vec4(fragCoord.xy * 2.0 - 1.0, 2.0 * fragDepth - 1.0, 1.0);
+vec4 clipPositionToScreenPosition( const in vec2 fragCoord, const in float fragDepth ) {
+  return vec4(fragCoord.xy * 2.0 - 1.0, 2.0 * fragCoord.z - 1.0, fragCoord.w);
 }
 
 vec4 screenPositionToViewPosition( const in mat4 screenToView, const in vec4 screenPosition ) {
   vec4 viewPosition = screenToView * screenPosition;
-  viewPosition.xyz /= viewCoord.w;
+  viewPosition.xyz /= viewPosition.w;
   return viewPosition;
 }
 

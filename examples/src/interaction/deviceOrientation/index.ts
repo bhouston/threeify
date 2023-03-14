@@ -39,7 +39,7 @@ async function init(): Promise<void> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToScreen: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
+    viewToClip: mat4Perspective(-0.25, 0.25, 0.25, -0.25, 0.1, 4),
     viewLightPosition: Vec3.Zero,
     map: textureToTexImage2D(context, texture)
   };

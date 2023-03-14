@@ -8,7 +8,7 @@ uniform Node {
 
 uniform Camera {
   mat4 worldToView;
-  mat4 viewToScreen;
+  mat4 viewToClip;
 };
 
 out vec3 v_viewSurfacePosition;
@@ -23,6 +23,6 @@ void main() {
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv0;
 
-  gl_Position = viewToScreen * vec4(v_viewSurfacePosition, 1.0);
+  gl_Position = viewToClip * vec4(v_viewSurfacePosition, 1.0);
 
 }

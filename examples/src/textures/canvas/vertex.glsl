@@ -4,7 +4,7 @@ in vec2 uv0;
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
-uniform mat4 viewToScreen;
+uniform mat4 viewToClip;
 
 out vec3 v_viewPosition;
 out vec3 v_viewNormal;
@@ -16,6 +16,6 @@ void main() {
   );
   v_viewPosition = (worldToView * localToWorld * vec4(position, 1.0)).xyz;
   v_uv = uv0;
-  gl_Position = viewToScreen * vec4(v_viewPosition, 1.0);
+  gl_Position = viewToClip * vec4(v_viewPosition, 1.0);
 
 }

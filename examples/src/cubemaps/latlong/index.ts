@@ -77,7 +77,7 @@ async function init(): Promise<void> {
       euler3ToQuat(new Euler3(0, 0, 0)),
       new Vec3(1, 1, 1)
     ),
-    viewToScreen: mat4PerspectiveFov(
+    viewToClip: mat4PerspectiveFov(
       25,
       0.1,
       4,

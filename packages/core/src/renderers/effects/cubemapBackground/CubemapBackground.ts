@@ -17,7 +17,7 @@ export interface ICubemapBackgroundProps {
   cubeMapTexImage2D: TexImage2D;
   cubeMapIntensity: number;
   worldToView: Mat4;
-  viewToScreen: Mat4;
+  viewToClip: Mat4;
   targetFramebuffer: VirtualFramebuffer;
 }
 
@@ -44,7 +44,7 @@ export async function createCubemapBackground(
         cubeMapIntensity,
         targetFramebuffer,
         worldToView,
-        viewToScreen
+        viewToClip
       } = props;
 
       assert(cubeMapIntensity > 0);
@@ -53,7 +53,7 @@ export async function createCubemapBackground(
         cubeMap: cubeMapTexImage2D,
         cubeMapIntensity,
         worldToView,
-        viewToScreen
+        viewToClip
       };
 
       renderPass({

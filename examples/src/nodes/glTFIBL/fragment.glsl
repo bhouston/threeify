@@ -21,7 +21,7 @@ in vec2 v_uv2;
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
 uniform mat4 viewToWorld;
-uniform mat4 viewToScreen;
+uniform mat4 viewToClip;
 
 uniform int mode;
 uniform sampler2D backgroundTexture;
@@ -141,7 +141,7 @@ void main() {
     DEBUG_OUTPUT(37, normalToRgb(refractedRayExit));
 
     // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
-    vec4 ndcPos = viewToScreen * worldToView * vec4(refractedRayExit, 1.0);
+    vec4 ndcPos = viewToClip * worldToView * vec4(refractedRayExit, 1.0);
     vec2 refractionCoords = ndcPos.xy / ndcPos.w;
     refractionCoords += 1.0;
     refractionCoords /= 2.0;

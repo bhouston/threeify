@@ -25,7 +25,7 @@ uniform float roughness;
 
 uniform Camera {
   mat4 worldToView;
-  mat4 viewToScreen;
+  mat4 viewToClip;
 };
 
 out vec4 outputColor;

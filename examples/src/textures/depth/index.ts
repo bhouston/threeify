@@ -51,7 +51,7 @@ async function init(): Promise<void> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
-    viewToScreen: mat4OrthographicSimple(
+    viewToClip: mat4OrthographicSimple(
       1.5,
       new Vec2(),
       0.1,

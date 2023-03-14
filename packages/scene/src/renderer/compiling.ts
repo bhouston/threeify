@@ -116,7 +116,7 @@ function updateCameraUniforms(
   camera: CameraNode,
   cameraUniforms: CameraUniforms
 ) {
-  cameraUniforms.viewToScreen.copy(camera.getProjection()); // TODO, use a dynamic aspect ratio
+  cameraUniforms.viewToClip.copy(camera.getProjection()); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToLocalMatrix);
   mat4Inverse(cameraUniforms.worldToView, cameraUniforms.viewToWorld);
 }
