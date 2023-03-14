@@ -1,11 +1,11 @@
 import {
   createCubemapBackground,
+  createRenderingContext,
   equirectangularTextureToCubeMap,
   fetchHDR,
   fetchImage,
   InternalFormat,
   Orbit,
-  RenderingContext,
   Texture,
   TextureEncoding
 } from '@threeify/core';
@@ -26,9 +26,7 @@ async function init(): Promise<void> {
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer, canvas } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 

@@ -1,17 +1,16 @@
 import {
   BufferBit,
   ClearState,
+  createRenderingContext,
   fetchImage,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
-  textureToTexImage2D,
   makeTextureFromVideoElement,
   planeGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   TexImage2D,
-  Texture
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -38,18 +37,20 @@ async function init(): Promise<void> {
       uvView.set(u, uv);
     }
   }
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const clickToPlayTexture = new Texture(
     await fetchImage('/assets/textures/videos/ClickToPlay.png')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const clickToPlayMap = textureToTexImage2D(context, clickToPlayTexture);
   const uniforms = {
     localToWorld: new Mat4(),

@@ -38,7 +38,6 @@ export async function createCubemapBackground(
   );
   const program = await programRef.promise;
 
-
   return {
     exec: (props: ICubemapBackgroundProps) => {
       const {

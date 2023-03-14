@@ -1,11 +1,10 @@
 import {
+  createRenderingContext,
   diskGeometry,
   fetchImage,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   Texture,
   textureToTexImage2D
 } from '@threeify/core';
@@ -26,7 +25,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = diskGeometry(0.5, 64);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const anisotropicFlow1Texture = new Texture(
     await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg')
   );
@@ -34,9 +32,7 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/anisotropic/radialLarge.jpg')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -48,7 +44,12 @@ async function init(): Promise<void> {
     context,
     anisotropicFlow2Texture
   );
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

@@ -5,18 +5,17 @@ import {
   boxGeometry,
   BufferBit,
   ClearState,
+  createRenderingContext,
   DepthTestFunc,
   DepthTestState,
   fetchImage,
   Framebuffer,
   geometryToBufferGeometry,
   makeDepthAttachment,
-  shaderMaterialToProgram,
-  textureToTexImage2D,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  Texture
+  shaderSourceToProgram,
+  Texture,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
   Color3,
@@ -34,15 +33,17 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
 
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')

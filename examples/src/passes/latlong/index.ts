@@ -1,7 +1,7 @@
 import {
+  createRenderingContext,
   fetchImage,
   Orbit,
-  RenderingContext,
   renderPass,
   ShaderMaterial,
   shaderMaterialToProgram,
@@ -28,9 +28,7 @@ async function init(): Promise<void> {
     fragmentSource
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
 
   let imageIndex = 0;
 

@@ -100,11 +100,7 @@ export function postOrderUpdateNode(
   node.children.forEach((child) => {
     box3ExpandByBox3(
       node.subTreeBoundingBox,
-      mat4TransformBox3(
-        child.localToParent,
-        child.subTreeBoundingBox,
-        tempBox
-      ),
+      mat4TransformBox3(child.localToParent, child.subTreeBoundingBox, tempBox),
       node.subTreeBoundingBox
     );
   });
@@ -138,10 +134,7 @@ export function preOrderUpdateNode(
       node.scale,
       node.localToParent
     );
-    node.parentToLocal = mat4Inverse(
-      node.localToParent,
-      node.parentToLocal
-    );
+    node.parentToLocal = mat4Inverse(node.localToParent, node.parentToLocal);
   }
 
   // update local to world matrices.

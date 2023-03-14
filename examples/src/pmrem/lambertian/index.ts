@@ -1,5 +1,6 @@
 import {
   Attachment,
+  createRenderingContext,
   cubeFaceTargets,
   CubeMapTexture,
   equirectangularTextureToCubeMap,
@@ -8,10 +9,9 @@ import {
   geometryToBufferGeometry,
   icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
   renderPass,
-  ShaderMaterial,
   shaderMaterialToProgram,
+  shaderSourceToProgram,
   Texture,
   TextureEncoding,
   TextureFilter,
@@ -34,7 +34,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const garageTexture = new Texture(
     await fetchImage('/assets/textures/cube/garage/latLong.jpg')
   );
@@ -54,9 +53,7 @@ async function init(): Promise<void> {
   lambertianCubeTexture.minFilter = TextureFilter.Linear;
   lambertianCubeTexture.generateMipmaps = false;
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -91,7 +88,12 @@ async function init(): Promise<void> {
     });
   });
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
 
   const uniforms = {
     localToWorld: new Mat4(),

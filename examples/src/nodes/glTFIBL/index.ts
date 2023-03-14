@@ -259,7 +259,6 @@ async function init(): Promise<void> {
         // } else {
         //renderScene(canvasFramebuffer, renderCache);
         //}
-    
       });
     });
   }

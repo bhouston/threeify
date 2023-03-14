@@ -16,20 +16,22 @@ uniform float targetAlpha; // The target alpha value
 out vec4 outputColor;
 
 void main() {
-
   vec2 sourceTextureSize = vec2(textureSize(sourceMap, sourceLod));
   vec2 texelToUVSpace = 1.0 / sourceTextureSize;
-  
-  float weightSum = gaussianPdf( 0.0, standardDeviationInTexels );
-  vec4 colorSum = texture( sourceMap, v_uv0) * weightSum;
+
+  float weightSum = gaussianPdf(0.0, standardDeviationInTexels);
+  vec4 colorSum = texture(sourceMap, v_uv0) * weightSum;
 
   float sourceLodF = float(sourceLod);
 
-  for( int i = 1; i <= kernelRadiusInTexels; i ++ ) {
-    float x = float( i );
-    float weight = gaussianPdf( x, standardDeviationInTexels );
+  for (int i = 1; i <= kernelRadiusInTexels; i++) {
+    float x = float(i);
+    float weight = gaussianPdf(x, standardDeviationInTexels);
     vec2 uvOffset = blurDirection * texelToUVSpace * x;
-    colorSum += ( textureLod( sourceMap, v_uv0 + uvOffset, sourceLodF ) + textureLod( sourceMap, v_uv0 - uvOffset, sourceLodF ) ) * weight;
+    colorSum +=
+      (textureLod(sourceMap, v_uv0 + uvOffset, sourceLodF) +
+        textureLod(sourceMap, v_uv0 - uvOffset, sourceLodF)) *
+      weight;
     weightSum += 2.0 * weight;
   }
 

@@ -1,13 +1,12 @@
 import {
   convertToInterleavedGeometry,
+  createRenderingContext,
   CubeMapTexture,
   fetchCubeImages,
-  icosahedronGeometry,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
+  icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -26,18 +25,20 @@ async function init(): Promise<void> {
   const geometry = convertToInterleavedGeometry(
     icosahedronGeometry(0.75, 2, true)
   );
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const cubeTexture = new CubeMapTexture(
     await fetchCubeImages('/assets/textures/cube/pisa/*.png')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const cubeMap = textureToTexImage2D(context, cubeTexture);
   const uniforms = {
     localToWorld: new Mat4(),

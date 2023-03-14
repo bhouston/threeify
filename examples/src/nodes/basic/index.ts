@@ -1,7 +1,7 @@
 import {
+  createRenderingContext,
   fetchImage,
   icosahedronGeometry,
-  RenderingContext,
   ShaderMaterial,
   shaderMaterialToProgram,
   Texture
@@ -34,9 +34,7 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
   const program = await shaderMaterialToProgram(context, shaderMaterial);

@@ -1,11 +1,10 @@
 import {
+  createRenderingContext,
   fetchImage,
   fetchOBJ,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   Texture,
   textureToTexImage2D,
   transformGeometry
@@ -38,7 +37,6 @@ async function init(): Promise<void> {
       translation3ToMat4(new Vec3(0, -172, -4))
     )
   );
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const displacementTexture = new Texture(
     await fetchImage('/assets/models/ninjaHead/displacement.jpg')
   );
@@ -46,15 +44,18 @@ async function init(): Promise<void> {
     await fetchImage('/assets/models/ninjaHead/normal.png')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const displacementMap = textureToTexImage2D(context, displacementTexture);
   const normalMap = textureToTexImage2D(context, normalTexture);
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

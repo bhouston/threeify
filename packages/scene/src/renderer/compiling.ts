@@ -217,10 +217,7 @@ function updateLightUniforms(
   lightUniforms: LightParameters,
   context: RenderingContext
 ) {
-  const lightWorldPosition = mat4TransformVec3(
-    light.localToWorld,
-    Vec3.Zero
-  );
+  const lightWorldPosition = mat4TransformVec3(light.localToWorld, Vec3.Zero);
   const lightIntensity = color3MultiplyByScalar(light.color, light.intensity);
 
   let lightType = LightType.Directional;

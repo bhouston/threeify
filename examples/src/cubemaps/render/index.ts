@@ -1,10 +1,10 @@
 import {
   Attachment,
   createCubemapBackground,
+  createRenderingContext,
   cubeFaceTargets,
   CubeMapTexture,
   Framebuffer,
-  RenderingContext,
   renderPass,
   shaderMaterialToProgram,
   TextureFilter,
@@ -41,9 +41,7 @@ async function init(): Promise<void> {
   cubeTexture.minFilter = TextureFilter.Linear;
   cubeTexture.generateMipmaps = false;
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 

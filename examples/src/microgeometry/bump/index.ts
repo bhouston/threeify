@@ -1,11 +1,10 @@
 import {
   boxGeometry,
+  createRenderingContext,
   fetchImage,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   Texture,
   textureToTexImage2D
 } from '@threeify/core';
@@ -26,7 +25,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const albedoTexture = new Texture(
     await fetchImage('/assets/textures/bricks/albedo.jpg')
   );
@@ -37,13 +35,16 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/bricks/roughness.jpg')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

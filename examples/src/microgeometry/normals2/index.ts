@@ -1,11 +1,10 @@
 import {
+  createRenderingContext,
   fetchImage,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   planeGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
+  shaderSourceToProgram,
   Texture,
   textureToTexImage2D
 } from '@threeify/core';
@@ -28,20 +27,22 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   // this is using the standard opengl normal map.
   const normalsTexture = new Texture(
     await fetchImage('/assets/textures/normalMap.png')
   );
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const normalsMap = textureToTexImage2D(context, normalsTexture);
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),

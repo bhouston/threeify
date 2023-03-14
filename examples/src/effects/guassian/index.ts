@@ -2,6 +2,7 @@ import {
   Attachment,
   createCopyPass,
   createGaussianBlur,
+  createRenderingContext,
   createToneMapper,
   DataType,
   fetchHDR,
@@ -9,7 +10,6 @@ import {
   InternalFormat,
   makeColorAttachment,
   PixelFormat,
-  RenderingContext,
   TexImage2D,
   Texture,
   TextureEncoding,
@@ -44,9 +44,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 async function init(): Promise<void> {
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
 
   const hdrPromise = fetchHDR(
     getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)

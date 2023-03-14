@@ -1,12 +1,11 @@
 import {
+  createRenderingContext,
   CubeMapTexture,
   fetchImage,
   geometryToBufferGeometry,
   icosahedronGeometry,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  shaderMaterialToProgram,
+  shaderSourceToProgram,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -23,7 +22,6 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 4, true);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const images = [];
   for (let level = 0; level < 9; level++) {
     for (let face = 0; face < 6; face++) {
@@ -37,13 +35,16 @@ async function init(): Promise<void> {
   const cubeTexture = new CubeMapTexture(await Promise.all(images));
   cubeTexture.generateMipmaps = false;
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),

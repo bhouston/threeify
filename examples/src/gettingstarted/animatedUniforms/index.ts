@@ -1,16 +1,13 @@
 import {
-  CullingSide,
+  createRenderingContext,
   CullingState,
-  DepthTestFunc,
   DepthTestState,
   Geometry,
   geometryToBufferGeometry,
   makeFloat32Attribute,
-  shaderMaterialToProgram,
   makeUint32Attribute,
   renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial
+  shaderSourceToProgram
 } from '@threeify/core';
 import { Color3, hslToColor3, Vec3 } from '@threeify/math';
 
@@ -25,19 +22,20 @@ async function init() {
   );
   geometry.indices = makeUint32Attribute([0, 1, 2], 1);
 
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
-
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uniforms = { scale: 1, color: new Color3() };
-  context.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
-  context.cullingState = new CullingState(false, CullingSide.Back);
+  context.depthTestState = DepthTestState.Normal;
+  context.cullingState = CullingState.None;
 
   function animate(): void {
     requestAnimationFrame(animate);

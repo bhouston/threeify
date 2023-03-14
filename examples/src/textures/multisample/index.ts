@@ -17,8 +17,7 @@ import {
   Renderbuffer,
   renderBufferGeometry,
   RenderingContext,
-  ShaderMaterial,
-  shaderMaterialToProgram,
+  shaderSourceToProgram,
   Texture,
   TextureEncoding,
   textureToTexImage2D
@@ -42,7 +41,6 @@ const stats = new Stats();
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const material = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = new Texture(
     await fetchImage('/assets/textures/uv_grid_opengl.jpg')
   );
@@ -90,7 +88,12 @@ async function init(): Promise<void> {
   const simpleFramebuffer = new Framebuffer(context);
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
-  const program = await shaderMaterialToProgram(context, material);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
   const uvTestTexture = textureToTexImage2D(context, texture);
 
   const uniforms = {

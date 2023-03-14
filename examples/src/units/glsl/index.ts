@@ -2,13 +2,12 @@ import {
   Attachment,
   BufferBit,
   ClearState,
-  DepthTestFunc,
+  createRenderingContext,
   DepthTestState,
   Framebuffer,
   frameBufferToPixels,
   makeColorAttachment,
   makeDepthAttachment,
-  RenderingContext,
   renderPass,
   ShaderMaterial,
   shaderMaterialToProgram
@@ -19,9 +18,7 @@ import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';
 
 async function init(): Promise<void> {
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement
-  );
+  const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
@@ -39,7 +36,7 @@ async function init(): Promise<void> {
   );
 
   framebuffer.clearState = new ClearState(new Color3(0.5, 0.5, 0.5), 0.5);
-  framebuffer.depthTestState = new DepthTestState(true, DepthTestFunc.Less);
+  framebuffer.depthTestState = DepthTestState.Normal;
 
   const output: string[] = [];
 

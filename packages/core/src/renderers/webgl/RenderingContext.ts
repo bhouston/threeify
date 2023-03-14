@@ -6,10 +6,13 @@
 //
 
 import { Box2 } from '@threeify/math';
-import { PassGeometry } from '../../geometry/primitives/passGeometry.js';
 
+import { PassGeometry } from '../../geometry/primitives/passGeometry.js';
 import { BlendState } from './BlendState.js';
-import { BufferGeometry, geometryToBufferGeometry } from './buffers/BufferGeometry.js';
+import {
+  BufferGeometry,
+  geometryToBufferGeometry
+} from './buffers/BufferGeometry.js';
 import { BufferGeometryCache } from './caches/BufferGeometryCache.js';
 import { ProgramCache } from './caches/ProgramCache.js';
 import { TexImage2DCache } from './caches/TexImage2DCache.js';
@@ -248,4 +251,20 @@ export class RenderingContext {
     this.gl.cullFace(cs.sides);
     this.#cullingState.copy(cs);
   }
+}
+
+export function createRenderingContext(
+  document: Document,
+  elementId: string
+): RenderingContext {
+  const element = document.getElementById('framebuffer');
+  if (element === null) {
+    throw new Error('Could not find element with id "framebuffer"');
+  }
+  if (!(element instanceof HTMLCanvasElement)) {
+    throw new TypeError(
+      'Element with id "framebuffer" is not a canvas element'
+    );
+  }
+  return new RenderingContext(element);
 }

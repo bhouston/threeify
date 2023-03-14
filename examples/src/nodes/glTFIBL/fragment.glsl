@@ -13,7 +13,6 @@ in vec2 v_uv2;
 
 #pragma import "@threeify/core/dist/shaders/debug/nanDetector.glsl"
 
-
 #define MAX_PUNCTUAL_LIGHTS (3)
 #pragma import "@threeify/core/dist/shaders/lighting/punctualUniforms.glsl"
 #pragma import "@threeify/core/dist/shaders/materials/physicalUniforms.glsl"
@@ -120,7 +119,7 @@ void main() {
 
   vec3 transmission_btdf = vec3(0.0);
 
-  if (material.transmission > 0.0 ) {
+  if (material.transmission > 0.0) {
     vec3 worldViewDirection = mat4TransformDirection(
       viewToWorld,
       viewViewDirection
