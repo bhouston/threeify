@@ -1,11 +1,10 @@
 import {
   boxGeometry,
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -22,9 +21,7 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/uv_grid_opengl.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;

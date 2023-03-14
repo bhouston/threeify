@@ -4,7 +4,7 @@ import {
   cubeFaceTargets,
   CubeMapTexture,
   equirectangularTextureToCubeMap,
-  fetchImage,
+  fetchTexture,
   Framebuffer,
   geometryToBufferGeometry,
   icosahedronGeometry,
@@ -12,7 +12,6 @@ import {
   renderPass,
   shaderMaterialToProgram,
   shaderSourceToProgram,
-  Texture,
   TextureEncoding,
   TextureFilter,
   textureToTexImage2D,
@@ -34,9 +33,10 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);
-  const garageTexture = new Texture(
-    await fetchImage('/assets/textures/cube/garage/latLong.jpg')
+  const garageTexture = await fetchTexture(
+    '/assets/textures/cube/garage/latLong.jpg'
   );
+
   garageTexture.wrapS = TextureWrap.Repeat;
   garageTexture.wrapT = TextureWrap.ClampToEdge;
   garageTexture.minFilter = TextureFilter.Linear;

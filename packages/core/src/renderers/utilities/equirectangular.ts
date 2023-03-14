@@ -1,7 +1,7 @@
 import { Vec2 } from '@threeify/math';
 
 import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeTexture';
+import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeMapTexture';
 import { Texture } from '../../textures/Texture';
 import { createCopyPass } from '../effects/copy/CopyPass';
 import { CullingState } from '../webgl/CullingState';

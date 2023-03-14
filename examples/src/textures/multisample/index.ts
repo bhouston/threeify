@@ -9,7 +9,7 @@ import {
   CullingState,
   DepthTestFunc,
   DepthTestState,
-  fetchImage,
+  fetchTexture,
   Framebuffer,
   geometryToBufferGeometry,
   InternalFormat,
@@ -18,7 +18,6 @@ import {
   renderBufferGeometry,
   RenderingContext,
   shaderSourceToProgram,
-  Texture,
   TextureEncoding,
   textureToTexImage2D
 } from '@threeify/core';
@@ -41,9 +40,7 @@ const stats = new Stats();
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const texture = new Texture(
-    await fetchImage('/assets/textures/uv_grid_opengl.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
 
   const context = new RenderingContext(
     document.getElementById('framebuffer') as HTMLCanvasElement,

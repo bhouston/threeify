@@ -1,11 +1,10 @@
 import {
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
   planeGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -28,9 +27,7 @@ import vertexSource from './vertex.glsl';
 async function init(): Promise<void> {
   const geometry = planeGeometry(1.5, 1.5, 10, 10);
   // this is using the standard opengl normal map.
-  const normalsTexture = new Texture(
-    await fetchImage('/assets/textures/normalMap.png')
-  );
+  const normalsTexture = await fetchTexture('/assets/textures/normalMap.png');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;

@@ -1,10 +1,8 @@
 import {
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   icosahedronGeometry,
-  ShaderMaterial,
-  shaderMaterialToProgram,
-  Texture
+  shaderSourceToProgram
 } from '@threeify/core';
 import { Color3, Euler3, euler3ToQuat, Vec3 } from '@threeify/math';
 import {
@@ -28,19 +26,17 @@ import vertexSource from './vertex.glsl';
 const stats = new Stats();
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
-  const program = await shaderMaterialToProgram(context, shaderMaterial);
+  const program = await shaderSourceToProgram(
+    context,
+    'index',
+    vertexSource,
+    fragmentSource
+  );
 
   const sceneTreeCache = new SceneTreeCache();
 

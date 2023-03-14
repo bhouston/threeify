@@ -3,8 +3,8 @@ import {
   blendModeToBlendState,
   ClearState,
   createRenderingContext,
-  fetchImage,
   fetchImageElement,
+  fetchTexture,
   geometryToBufferGeometry,
   planeGeometry,
   renderBufferGeometry,
@@ -32,9 +32,10 @@ async function init(): Promise<void> {
       new Vec2(1024, 1024)
     )
   );
-  const fgSplatTexture = new Texture(
-    await fetchImage('/assets/textures/decals/splat.png')
+  const fgSplatTexture = await fetchTexture(
+    '/assets/textures/decals/splat.png'
   );
+
   const bgTexture = new Texture(
     await fetchImageElement(
       '/assets/textures/alphaCompositing/bg.svg',

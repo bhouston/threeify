@@ -1,11 +1,10 @@
 import {
   boxGeometry,
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -25,14 +24,14 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
-  const albedoTexture = new Texture(
-    await fetchImage('/assets/textures/bricks/albedo.jpg')
+  const albedoTexture = await fetchTexture(
+    '/assets/textures/bricks/albedo.jpg'
   );
-  const bumpTexture = new Texture(
-    await fetchImage('/assets/textures/bricks/bump.jpg')
-  );
-  const specularRoughnessTexture = new Texture(
-    await fetchImage('/assets/textures/bricks/roughness.jpg')
+
+  const bumpTexture = await fetchTexture('/assets/textures/bricks/bump.jpg');
+
+  const specularRoughnessTexture = await fetchTexture(
+    '/assets/textures/bricks/roughness.jpg'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

@@ -1,11 +1,10 @@
 import {
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
   icosahedronGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -26,8 +25,8 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 5, true);
-  const normalsTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/normals2.jpg')
+  const normalsTexture = await fetchTexture(
+    '/assets/textures/golfball/normals2.jpg'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

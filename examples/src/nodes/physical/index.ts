@@ -1,10 +1,9 @@
 import {
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   icosahedronGeometry,
   ShaderMaterial,
-  shaderMaterialToProgram,
-  Texture
+  shaderMaterialToProgram
 } from '@threeify/core';
 import { Color3, Vec2, Vec3 } from '@threeify/math';
 import {
@@ -30,17 +29,15 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
+  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
+  const flooringNormalTexture = await fetchTexture(
+    '/assets/textures/metal_flooring_normals.jpg'
   );
-  const flooringNormalTexture = new Texture(
-    await fetchImage('/assets/textures/metal_flooring_normals.jpg')
+  const scratchesTexture = await fetchTexture(
+    '/assets/textures/golfball/scratches.png'
   );
-  const scratchesTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/scratches.png')
-  );
-  const golfballNormalTexture = new Texture(
-    await fetchImage('/assets/textures/golfball/normals2.jpg')
+  const golfballNormalTexture = await fetchTexture(
+    '/assets/textures/golfball/normals2.jpg'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

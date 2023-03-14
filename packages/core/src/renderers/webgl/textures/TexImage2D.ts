@@ -10,7 +10,7 @@ import { Vec2 } from '@threeify/math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
 import { ArrayImage } from '../../../textures/ArrayBufferImage.js';
-import { CubeMapTexture } from '../../../textures/CubeTexture.js';
+import { CubeMapTexture } from '../../../textures/CubeMapTexture.js';
 import { Texture } from '../../../textures/Texture.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';

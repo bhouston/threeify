@@ -1,11 +1,10 @@
 import {
   createRenderingContext,
   diskGeometry,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -25,11 +24,11 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const geometry = diskGeometry(0.5, 64);
-  const anisotropicFlow1Texture = new Texture(
-    await fetchImage('/assets/textures/anisotropic/radialSmallOverlapping.jpg')
+  const anisotropicFlow1Texture = await fetchTexture(
+    '/assets/textures/anisotropic/radialSmallOverlapping.jpg'
   );
-  const anisotropicFlow2Texture = new Texture(
-    await fetchImage('/assets/textures/anisotropic/radialLarge.jpg')
+  const anisotropicFlow2Texture = await fetchTexture(
+    '/assets/textures/anisotropic/radialLarge.jpg'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

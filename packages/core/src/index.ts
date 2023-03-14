@@ -103,7 +103,7 @@ export * from './renderers/webgl/textures/TextureTarget.js';
 export * from './renderers/webgl/textures/TextureWrap.js';
 
 export * from './textures/ArrayBufferImage.js';
-export * from './textures/CubeTexture.js';
+export * from './textures/CubeMapTexture.js';
 export * from './textures/PixelEncoding.js';
 export * from './textures/Texture.js';
 export * from './textures/VirtualTexture.js';

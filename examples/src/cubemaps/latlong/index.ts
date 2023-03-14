@@ -3,7 +3,7 @@ import {
   createRenderingContext,
   equirectangularTextureToCubeMap,
   fetchHDR,
-  fetchImage,
+  fetchTexture,
   InternalFormat,
   Orbit,
   Texture,
@@ -19,8 +19,8 @@ import {
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 
 async function init(): Promise<void> {
-  const latLongTexture = new Texture(
-    await fetchImage('/assets/textures/cube/debug/latLong.png')
+  const latLongTexture = await fetchTexture(
+    '/assets/textures/cube/debug/latLong.png'
   );
   const ennisTexture = new Texture(
     await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))

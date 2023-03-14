@@ -1,8 +1,7 @@
 import {
   convertToInterleavedGeometry,
   createRenderingContext,
-  CubeMapTexture,
-  fetchCubeImages,
+  fetchCubeMapTexture,
   geometryToBufferGeometry,
   icosahedronGeometry,
   renderBufferGeometry,
@@ -25,8 +24,8 @@ async function init(): Promise<void> {
   const geometry = convertToInterleavedGeometry(
     icosahedronGeometry(0.75, 2, true)
   );
-  const cubeTexture = new CubeMapTexture(
-    await fetchCubeImages('/assets/textures/cube/pisa/*.png')
+  const cubeTexture = await fetchCubeMapTexture(
+    '/assets/textures/cube/pisa/*.png'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

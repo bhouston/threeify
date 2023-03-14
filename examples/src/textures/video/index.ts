@@ -2,7 +2,7 @@ import {
   BufferBit,
   ClearState,
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   geometryToBufferGeometry,
   makeTextureFromVideoElement,
   planeGeometry,
@@ -37,8 +37,8 @@ async function init(): Promise<void> {
       uvView.set(u, uv);
     }
   }
-  const clickToPlayTexture = new Texture(
-    await fetchImage('/assets/textures/videos/ClickToPlay.png')
+  const clickToPlayTexture = await fetchTexture(
+    '/assets/textures/videos/ClickToPlay.png'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

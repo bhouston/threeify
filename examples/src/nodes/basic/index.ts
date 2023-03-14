@@ -1,10 +1,9 @@
 import {
   createRenderingContext,
-  fetchImage,
+  fetchTexture,
   icosahedronGeometry,
   ShaderMaterial,
-  shaderMaterialToProgram,
-  Texture
+  shaderMaterialToProgram
 } from '@threeify/core';
 import { Color3, Vec3 } from '@threeify/math';
 import {
@@ -30,9 +29,7 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
-  const texture = new Texture(
-    await fetchImage('/assets/textures/planets/jupiter_2k.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;

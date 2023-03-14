@@ -1,11 +1,10 @@
 import {
   createRenderingContext,
-  fetchImage,
   fetchOBJ,
+  fetchTexture,
   geometryToBufferGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D,
   transformGeometry
 } from '@threeify/core';
@@ -37,11 +36,11 @@ async function init(): Promise<void> {
       translation3ToMat4(new Vec3(0, -172, -4))
     )
   );
-  const displacementTexture = new Texture(
-    await fetchImage('/assets/models/ninjaHead/displacement.jpg')
+  const displacementTexture = await fetchTexture(
+    '/assets/models/ninjaHead/displacement.jpg'
   );
-  const normalTexture = new Texture(
-    await fetchImage('/assets/models/ninjaHead/normal.png')
+  const normalTexture = await fetchTexture(
+    '/assets/models/ninjaHead/normal.png'
   );
 
   const context = createRenderingContext(document, 'framebuffer');

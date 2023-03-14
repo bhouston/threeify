@@ -8,13 +8,12 @@ import {
   createRenderingContext,
   DepthTestFunc,
   DepthTestState,
-  fetchImage,
+  fetchTexture,
   Framebuffer,
   geometryToBufferGeometry,
   makeDepthAttachment,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
   textureToTexImage2D
 } from '@threeify/core';
 import {
@@ -45,9 +44,7 @@ async function init(): Promise<void> {
     fragmentSource
   );
 
-  const texture = new Texture(
-    await fetchImage('/assets/textures/uv_grid_opengl.jpg')
-  );
+  const texture = await fetchTexture('/assets/textures/uv_grid_opengl.jpg');
   const uvTestTexture = textureToTexImage2D(context, texture);
   const uniforms = {
     localToWorld: new Mat4(),
