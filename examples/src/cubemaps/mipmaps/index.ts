@@ -1,12 +1,12 @@
 import {
   CubeMapTexture,
   fetchImage,
-  icosahedronGeometry,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
+  icosahedronGeometry,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   textureToTexImage2D
 } from '@threeify/core';
 import {
