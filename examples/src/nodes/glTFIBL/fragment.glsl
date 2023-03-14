@@ -1,6 +1,6 @@
 precision highp float;
 
-#define DEBUG_OUTPUTS (0)
+//#define DEBUG_OUTPUTS (1)
 #define NUM_UV_CHANNELS (3)
 
 in vec3 v_worldSurfacePosition;

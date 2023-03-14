@@ -41,7 +41,7 @@ export function updateFramebuffers(
 ) {
   const { context, size } = canvasFramebuffer;
 
-  const numSamples = 1;
+  const numSamples = 4;
 
   const colorInternalFormat = InternalFormat.RGBA16F;
   const msaaColorRenderbuffer = new Renderbuffer(
@@ -195,14 +195,14 @@ export function renderScene_Tranmission(
   ) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
 
-  /*if (blendMeshBatches.length > 0) {
+  if (blendMeshBatches.length > 0) {
     const blendUniforms = {
       backgroundTexture: opaqueTexImage2D,
       debugOutputIndex: userUniforms.debugOutputIndex,
       outputTransformFlags: 0x4
     };
 
-    /* renderMeshes(
+    renderMeshes(
       multisampleFramebuffer,
       renderCache,
       blendMeshBatches,
@@ -220,10 +220,10 @@ export function renderScene_Tranmission(
       DepthTestState.Normal,
       BlendState.PremultipliedOver,
       CullingState.Back
-    );*
+    );
 
-    // biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  }*/
+    biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
+  }
 
   const tempTexImage2D = tempFramebuffer.getAttachment(
     Attachment.Color0
@@ -232,10 +232,10 @@ export function renderScene_Tranmission(
   gaussianBlur.exec({
     sourceTexImage2D: opaqueTexImage2D,
     sourceLod: 0,
-    standardDeviationInTexels: 5,
+    standardDeviationInTexels: 20,
     tempTexImage2D: tempTexImage2D,
     targetFramebuffer: multisampleFramebuffer,
-    targetAlpha: 1
+    targetAlpha: 0.05
   });
 
   biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
