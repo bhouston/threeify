@@ -47,7 +47,8 @@ export enum DepthTestFunc {
 export class DepthTestState
   implements ICloneable<DepthTestState>, IEquatable<DepthTestState>
 {
-  static readonly Normal = new DepthTestState(true, DepthTestFunc.Less, true);
+  static readonly Less = new DepthTestState(true, DepthTestFunc.Less, true);
+  static readonly LessOrEqual = new DepthTestState(true, DepthTestFunc.LessOrEqual, true);
   static readonly None = new DepthTestState(false);
 
   // TODO: Should be intialized to default WebGL states

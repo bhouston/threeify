@@ -34,7 +34,7 @@ async function init() {
     fragmentSource
   );
   const uniforms = { scale: 1, color: new Color3() };
-  context.depthTestState = DepthTestState.Normal;
+  context.depthTestState = DepthTestState.Less;
   context.cullingState = CullingState.None;
 
   function animate(): void {

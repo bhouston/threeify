@@ -61,8 +61,8 @@ export function updateFramebuffers(
   multisampleFramebuffer.attach(Attachment.Color0, msaaColorRenderbuffer);
   multisampleFramebuffer.attach(Attachment.Depth, msaaDepthRenderbuffer);
 
-  const opaqueFramebuffer = new Framebuffer(context);
-  opaqueFramebuffer.attach(
+  const tempMipmapFramebuffer = new Framebuffer(context);
+  tempMipmapFramebuffer.attach(
     Attachment.Color0,
     makeColorAttachment(
       context,
@@ -81,7 +81,7 @@ export function updateFramebuffers(
   );
 
   renderCache.multisampleFramebuffer = multisampleFramebuffer;
-  renderCache.opaqueFramebuffer = opaqueFramebuffer;
+  renderCache.tempMipmapFramebuffer = tempMipmapFramebuffer;
   renderCache.tempFramebuffer = tempFramebuffer;
 }
 
@@ -91,7 +91,7 @@ export function renderScene(
 ) {
   const {
     opaqueMeshBatches,
-    opaqueFramebuffer,
+    tempMipmapFramebuffer,
     multisampleFramebuffer,
     copyPass,
     toneMapper,
@@ -100,7 +100,7 @@ export function renderScene(
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
-    opaqueFramebuffer === undefined ||
+    tempMipmapFramebuffer === undefined ||
     copyPass === undefined ||
     toneMapper === undefined
   )
@@ -119,7 +119,7 @@ export function renderScene(
     renderCache,
     opaqueMeshBatches,
     uniforms,
-    DepthTestState.Normal,
+    DepthTestState.Less,
     BlendState.PremultipliedOver,
     CullingState.Back
   );
@@ -129,13 +129,15 @@ export function renderScene(
     renderCache,
     blendMeshBatches,
     uniforms,
-    DepthTestState.Normal,
+    DepthTestState.Less,
     BlendState.PremultipliedOver,
     CullingState.Back
   );
 
-  biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(
+  // Alternative approach: could do inline tone-mapping and blit to canvasFramebuffer
+
+  biltFramebuffers(multisampleFramebuffer, tempMipmapFramebuffer);
+  const opaqueTexImage2D = tempMipmapFramebuffer.getAttachment(
     Attachment.Color0
   ) as TexImage2D;
   opaqueTexImage2D.generateMipmaps();
@@ -158,7 +160,7 @@ export function renderScene_Tranmission(
     opaqueMeshBatches,
     blendMeshBatches,
     multisampleFramebuffer,
-    opaqueFramebuffer,
+    tempMipmapFramebuffer: opaqueFramebuffer,
     tempFramebuffer,
     userUniforms,
     gaussianBlur,
@@ -173,8 +175,29 @@ export function renderScene_Tranmission(
   )
     throw new Error('Framebuffers or effects not initialized');
 
+  const normalFramebuffer = opaqueFramebuffer;
+
+  // render depth pre-pass
   multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
   multisampleFramebuffer.clear(BufferBit.All);
+
+  renderMeshes(
+    multisampleFramebuffer,
+    renderCache,
+    opaqueMeshBatches,
+    {
+      outputTransformFlags: 0x8
+    },
+    DepthTestState.Less,
+    BlendState.None,
+    CullingState.Back
+  );
+
+  // capture normal buffer
+  biltFramebuffers(multisampleFramebuffer, normalFramebuffer);
+
+  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
+  multisampleFramebuffer.clear(BufferBit.Color);
 
   renderMeshes(
     multisampleFramebuffer,
@@ -184,7 +207,7 @@ export function renderScene_Tranmission(
       debugOutputIndex: userUniforms.debugOutputIndex,
       outputTransformFlags: 0x4
     },
-    DepthTestState.Normal,
+    DepthTestState.LessOrEqual,
     BlendState.PremultipliedOver,
     CullingState.Back
   );
@@ -207,7 +230,7 @@ export function renderScene_Tranmission(
       renderCache,
       blendMeshBatches,
       blendUniforms,
-      DepthTestState.Normal,
+      DepthTestState.Less,
       BlendState.PremultipliedOver,
       CullingState.Front
     );
@@ -217,7 +240,7 @@ export function renderScene_Tranmission(
       renderCache,
       blendMeshBatches,
       blendUniforms,
-      DepthTestState.Normal,
+      DepthTestState.Less,
       BlendState.PremultipliedOver,
       CullingState.Back
     );

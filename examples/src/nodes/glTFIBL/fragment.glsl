@@ -22,7 +22,6 @@ uniform mat4 worldToView;
 uniform mat4 viewToWorld;
 uniform mat4 viewToClip;
 
-uniform int mode;
 uniform sampler2D backgroundTexture;
 
 uniform int debugOutputIndex;
@@ -96,6 +95,17 @@ void main() {
     material.clearcoatNormal
   );
   DEBUG_OUTPUT(31, normalToRgb(viewClearcoatNormal));
+
+  if((outputTransformFlags & 0x8) != 0) {
+    if( material.clearcoatFactor > 0.0 ) {
+      outputColor.rgb = normalToRgb( viewClearcoatNormal );
+    }
+    else {
+      outputColor.rgb = normalToRgb( viewNormal );
+    }
+    outputColor.a = 1.0;
+    return;
+  }
 
   vec3 outgoingRadiance = vec3(0.0);
 

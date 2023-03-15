@@ -66,7 +66,7 @@ export class RenderCache {
 
   // render targets
   public multisampleFramebuffer?: Framebuffer;
-  public opaqueFramebuffer?: Framebuffer;
+  public tempMipmapFramebuffer?: Framebuffer;
   public tempFramebuffer?: Framebuffer;
 
   public userUniforms: UniformValueMap = {};
