@@ -28,6 +28,9 @@ export class RenderCache {
     public toneMapper: ToneMapper
   ) {}
 
+  public isBloom = true;
+  public isTransmission = true;
+
   public breathFirstNodes: SceneNode[] = [];
 
   // cameraCache

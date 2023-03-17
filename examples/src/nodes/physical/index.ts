@@ -12,7 +12,7 @@ import {
   PerspectiveCamera,
   PhysicalMaterial,
   PointLight,
-  renderScene_Tranmission,
+  renderScene,
   SceneNode,
   SceneTreeCache,
   TextureAccessor,
@@ -104,7 +104,7 @@ async function init(): Promise<void> {
   function animate(): void {
     canvasFramebuffer.clear();
 
-    renderScene_Tranmission(canvasFramebuffer, renderCache);
+    renderScene(canvasFramebuffer, renderCache);
 
     requestAnimationFrame(animate);
   }

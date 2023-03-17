@@ -20,7 +20,7 @@ import {
   Vec3,
   vec3Negate
 } from '@threeify/math';
-import { renderScene, renderScene_Tranmission } from '@threeify/scene';
+import { renderScene } from '@threeify/scene';
 import {
   createRenderCache,
   DomeLight,
@@ -110,7 +110,7 @@ async function init(): Promise<void> {
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
   const domeLightIntensity = 1.5;
-  const transmissionMode = true;
+  const transmissionMode = false;
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
@@ -251,11 +251,7 @@ async function init(): Promise<void> {
       updateDirtyNodes(sceneTreeCache, renderCache, canvasFramebuffer);
 
       gpuRender.time(() => {
-        if (transmissionMode) {
-          renderScene_Tranmission(canvasFramebuffer, renderCache);
-        } else {
-          renderScene(canvasFramebuffer, renderCache);
-        }
+        renderScene(canvasFramebuffer, renderCache);
       });
     });
   }
