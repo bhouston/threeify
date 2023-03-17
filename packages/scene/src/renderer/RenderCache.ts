@@ -4,6 +4,7 @@ import {
   CopyPass,
   Framebuffer,
   GaussianBlur,
+  InternalFormat,
   Program,
   ProgramVertexArray,
   RenderingContext,
@@ -28,6 +29,8 @@ export class RenderCache {
     public toneMapper: ToneMapper
   ) {}
 
+  public renderInternalFormat = InternalFormat.RGBA16F; // alternative is: RGBA8
+  public numMSAASamples = 4;
   public isBloom = true;
   public isTransmission = true;
 
@@ -69,7 +72,7 @@ export class RenderCache {
 
   // render targets
   public multisampleFramebuffer?: Framebuffer;
-  public opaqueFramebuffer?: Framebuffer;
+  public tempMipmapFramebuffer?: Framebuffer;
   public tempFramebuffer?: Framebuffer;
 
   public userUniforms: UniformValueMap = {};

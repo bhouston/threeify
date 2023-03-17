@@ -36,7 +36,7 @@ async function init(): Promise<void> {
   );
 
   framebuffer.clearState = new ClearState(new Color3(0.5, 0.5, 0.5), 0.5);
-  framebuffer.depthTestState = DepthTestState.Normal;
+  framebuffer.depthTestState = DepthTestState.Less;
 
   const output: string[] = [];
 

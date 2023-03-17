@@ -38,7 +38,7 @@ async function init() {
   );
   const uniforms = {};
 
-  context.depthTestState = DepthTestState.Normal;
+  context.depthTestState = DepthTestState.Less;
   context.cullingState = CullingState.None;
 
   renderBufferGeometry({

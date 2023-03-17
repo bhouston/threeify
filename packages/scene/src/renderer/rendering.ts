@@ -41,18 +41,15 @@ export function updateFramebuffers(
 ) {
   const { context, size } = canvasFramebuffer;
 
-  const numSamples = 2;
-
-  const colorInternalFormat = InternalFormat.RGBA16F;
   const msaaColorRenderbuffer = new Renderbuffer(
     context,
-    numSamples,
-    colorInternalFormat,
+    renderCache.numMSAASamples,
+    renderCache.renderInternalFormat,
     size
   );
   const msaaDepthRenderbuffer = new Renderbuffer(
     context,
-    numSamples,
+    renderCache.numMSAASamples,
     InternalFormat.DepthComponent24,
     size
   );
@@ -61,13 +58,13 @@ export function updateFramebuffers(
   multisampleFramebuffer.attach(Attachment.Color0, msaaColorRenderbuffer);
   multisampleFramebuffer.attach(Attachment.Depth, msaaDepthRenderbuffer);
 
-  const opaqueFramebuffer = new Framebuffer(context);
-  opaqueFramebuffer.attach(
+  const tempMipmapFramebuffer = new Framebuffer(context);
+  tempMipmapFramebuffer.attach(
     Attachment.Color0,
     makeColorAttachment(
       context,
       size,
-      colorInternalFormat,
+      renderCache.renderInternalFormat,
       TextureFilter.Linear,
       TextureFilter.LinearMipmapLinear
     )
@@ -77,11 +74,11 @@ export function updateFramebuffers(
   const tempFramebuffer = new Framebuffer(context);
   tempFramebuffer.attach(
     Attachment.Color0,
-    makeColorAttachment(context, blurSize, colorInternalFormat)
+    makeColorAttachment(context, blurSize, renderCache.renderInternalFormat)
   );
 
   renderCache.multisampleFramebuffer = multisampleFramebuffer;
-  renderCache.opaqueFramebuffer = opaqueFramebuffer;
+  renderCache.tempMipmapFramebuffer = tempMipmapFramebuffer;
   renderCache.tempFramebuffer = tempFramebuffer;
 }
 
@@ -93,7 +90,7 @@ export function renderScene(
     opaqueMeshBatches,
     blendMeshBatches,
     multisampleFramebuffer,
-    opaqueFramebuffer,
+    tempMipmapFramebuffer: opaqueFramebuffer,
     tempFramebuffer,
     userUniforms,
     gaussianBlur,
@@ -110,8 +107,29 @@ export function renderScene(
   )
     throw new Error('Framebuffers or effects not initialized');
 
+  const normalFramebuffer = opaqueFramebuffer;
+
+  // render depth pre-pass
   multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
   multisampleFramebuffer.clear(BufferBit.All);
+
+  renderMeshes(
+    multisampleFramebuffer,
+    renderCache,
+    opaqueMeshBatches,
+    {
+      outputTransformFlags: 0x8
+    },
+    DepthTestState.Less,
+    BlendState.None,
+    CullingState.Back
+  );
+
+  // capture normal buffer
+  biltFramebuffers(multisampleFramebuffer, normalFramebuffer);
+
+  multisampleFramebuffer.clearState = new ClearState(Color3.Black, 0);
+  multisampleFramebuffer.clear(BufferBit.Color);
 
   renderMeshes(
     multisampleFramebuffer,
@@ -121,7 +139,7 @@ export function renderScene(
       debugOutputIndex: userUniforms.debugOutputIndex,
       outputTransformFlags: 0x4
     },
-    DepthTestState.Normal,
+    DepthTestState.LessOrEqual,
     BlendState.PremultipliedOver,
     CullingState.Back
   );
@@ -147,7 +165,7 @@ export function renderScene(
       renderCache,
       blendMeshBatches,
       blendUniforms,
-      DepthTestState.Normal,
+      DepthTestState.Less,
       BlendState.PremultipliedOver,
       CullingState.Front
     );
@@ -157,7 +175,7 @@ export function renderScene(
       renderCache,
       blendMeshBatches,
       blendUniforms,
-      DepthTestState.Normal,
+      DepthTestState.Less,
       BlendState.PremultipliedOver,
       CullingState.Back
     );
