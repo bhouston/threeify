@@ -11,7 +11,7 @@ import {
   PerspectiveCamera,
   PhysicalMaterial,
   PointLight,
-  renderScene_Tranmission,
+  renderScene,
   SceneNode,
   SceneTreeCache,
   TextureAccessor,
@@ -98,7 +98,7 @@ async function init(): Promise<void> {
     stats.time(() => {
       canvasFramebuffer.clear();
 
-      renderScene_Tranmission(canvasFramebuffer, renderCache);
+      renderScene(canvasFramebuffer, renderCache);
     });
   }
 

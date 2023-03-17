@@ -40,3 +40,4 @@ float max3(const vec3 v) {
 }
 
 const float NAN = sqrt(0.0);
+

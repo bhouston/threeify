@@ -12,9 +12,9 @@ import {
   ShaderMaterial,
   shaderMaterialToProgram
 } from '@threeify/core';
+import vertexSource from '@threeify/core/dist/shaders/tests/vertex.glsl';
 import { Color3, Vec2 } from '@threeify/math';
 
-import vertexSource from '../../../lib/shaders/includes/tests/vertex.glsl';
 import { glslTestSuites } from './testSuites';
 
 async function init(): Promise<void> {
@@ -36,7 +36,7 @@ async function init(): Promise<void> {
   );
 
   framebuffer.clearState = new ClearState(new Color3(0.5, 0.5, 0.5), 0.5);
-  framebuffer.depthTestState = DepthTestState.Normal;
+  framebuffer.depthTestState = DepthTestState.Less;
 
   const output: string[] = [];
 

@@ -12,6 +12,6 @@ float D_GGX_anisotropic(
 ) {
   float a2 = at * ab;
   vec3 f = vec3(ab * TdotH, at * BdotH, a2 * NdotH);
-  float w2 = a2 / dot(f, f);
+  float w2 = a2 / (dot(f, f) + 1e-5);
   return RECIPROCAL_PI * a2 * pow2(w2);
 }

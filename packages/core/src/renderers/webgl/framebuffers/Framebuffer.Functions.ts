@@ -74,6 +74,8 @@ export function makeColorAttachment(
   texParams.generateMipmaps = false;
   texParams.magFilter = magFilter;
   texParams.minFilter = minFilter;
+  texParams.wrapS = TextureWrap.ClampToEdge;
+  texParams.wrapT = TextureWrap.ClampToEdge;
   return new TexImage2D(
     context,
     [size],

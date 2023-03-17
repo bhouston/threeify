@@ -37,4 +37,5 @@ void main() {
 
   outputColor = colorSum / weightSum;
   outputColor *= targetAlpha;
+
 }

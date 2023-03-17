@@ -223,8 +223,6 @@ function translateMeshes(
       );
     }
 
-    let physicalMaterial = new PhysicalMaterial({});
-
     primitive.listSemantics().forEach((semantic, index) => {
       const attribute = primitive.listAttributes()[index];
 
@@ -432,7 +430,7 @@ function translateMeshes(
           const iridescenceFactorThicknessTextureAccessor = data[10];
           const transmissionFactorThicknessTextureAccessor = data[11];
 
-          physicalMaterial = new PhysicalMaterial({
+          const physicalMaterial = new PhysicalMaterial({
             alpha: glTFMaterial.getAlpha(),
             alphaMode: toAlphaMode(glTFMaterial.getAlphaMode()),
             alphaCutoff: glTFMaterial.getAlphaCutoff(),

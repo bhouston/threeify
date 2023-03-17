@@ -61,7 +61,7 @@ export async function createCubemapBackground(
         framebuffer: targetFramebuffer,
         program,
         uniforms,
-        depthTestState: DepthTestState.Normal
+        depthTestState: DepthTestState.Less
       });
     },
     dispose: () => {

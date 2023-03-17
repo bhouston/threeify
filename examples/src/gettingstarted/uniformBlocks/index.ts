@@ -42,7 +42,7 @@ async function init() {
     materialUniformBuffer
   );
 
-  context.depthTestState = DepthTestState.Normal;
+  context.depthTestState = DepthTestState.Less;
   context.cullingState = CullingState.None;
 
   function animate(): void {
