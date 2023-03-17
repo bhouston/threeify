@@ -38,10 +38,12 @@ vec3 viewZToClipW(const mat4 viewToClip, const float viewZ) {
   return viewToClip[2][3] * viewZ + viewToClip[3][3];
 }
 
-vec4 screenPositionToClipPosition(const vec2 fragCoord, const float clipW) {
-  return vec4(fragCoord.xy * 2.0 - 1.0, 2.0 * fragCoord.z - 1.0, fragCoord.w);
+// unsure if this is correct
+vec4 screenPositionToClipPosition(const vec4 fragCoord) {
+  return vec4(fragCoord.xyz * 2.0 - 1.0, fragCoord.w);
 }
 
+// probably correct
 vec4 clipPositionToViewPosition(
   const mat4 clipToView,
   const vec4 clipPosition
@@ -49,4 +51,10 @@ vec4 clipPositionToViewPosition(
   vec4 viewPosition = clipToView * clipPosition;
   viewPosition.xyz /= viewPosition.w;
   return viewPosition;
+}
+
+
+vec3 screenPositionToViewPosition(const mat4 clipToView, const vec4 fradCoord) {
+    vec4 clipSpacePosition = screenPositionToClipPosition( fragCoord );
+    return clipPositionToViewPosition( clipToView, clipSpacePosition );
 }
