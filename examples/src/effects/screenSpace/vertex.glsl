@@ -8,6 +8,7 @@ uniform mat4 viewToClip;
 
 out vec3 v_viewSurfacePosition;
 out vec3 v_viewSurfaceNormal;
+out vec4 v_clipSurfacePosition;
 out vec2 v_uv0;
 
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
@@ -18,6 +19,7 @@ void main() {
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv0;
 
-  gl_Position = viewToClip * vec4(v_viewSurfacePosition, 1.0);
+  v_clipSurfacePosition = viewToClip * vec4(v_viewSurfacePosition, 1.0);
+  gl_Position = v_clipSurfacePosition;
 
 }

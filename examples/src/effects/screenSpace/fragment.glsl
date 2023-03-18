@@ -2,6 +2,7 @@ precision highp float;
 
 in vec3 v_viewSurfacePosition;
 in vec3 v_viewSurfaceNormal;
+in vec4 v_clipSurfacePosition;
 in vec2 v_uv0;
 
 uniform mat4 clipToView;
@@ -37,7 +38,7 @@ void main() {
   }
 
   // screen uv coord
-  vec2 screenUv = gl_FragCoord.xy / screenSize;
+  vec2 screenUv = fragCoordToUVSpace( gl_FragCoord.xy, screenSize );
   if( mode == 2 ) {
     outputColor = vec4( screenUv, 0.0, 1.0);
     return;
@@ -53,24 +54,28 @@ void main() {
   }
 
   // error between reconstructed depth and true depth
-  float error = abs( viewZ - v_viewSurfacePosition.z );
+  float viewZError = abs( viewZ - v_viewSurfacePosition.z );
   if( mode == 4)  {
-    outputColor.rgb = vec3( error * 4.0 + 0.1, 0.1, 0.1 );
+    outputColor.rgb = vec3( viewZError * 4.0 + 0.1, 0.1, 0.1 );
     outputColor.a = 1.0;
     return;
   }
 
   // construct clip position
   float clipW = viewZToClipW( viewToClip, viewZ);
-  vec4 clipPosition = vec4( 2.0 * vec3( screenUv, depth ) - 1.0, clipW );
-
-  ERROR: TODO, compare reconstruct clip position to actual
+  vec4 clipPosition = vec4( ( 2.0 * vec3( screenUv, depth ) - 1.0 ) * clipW, clipW );
+  float clipPositionError = distance( clipPosition.xy, v_clipSurfacePosition.xy );
+  if( mode == 5)  {
+    outputColor.rgb = vec3( 0.1, clipPositionError * 4.0 + 0.1, 0.1 );
+    outputColor.a = 1.0;
+    return;
+  }
 
   // reconstruct view position from clip position
   vec3 viewPosition = clipPositionToViewPosition( clipToView, clipPosition );
-  float errorDistance = distance( viewPosition, v_viewSurfacePosition );
-  if( mode == 5)  {
-    outputColor.rgb = vec3( errorDistance * 4.0 + 0.1, 0.1, 0.1 );
+  float viewPositionError = distance( viewPosition, v_viewSurfacePosition );
+  if( mode == 6)  {
+    outputColor.rgb = vec3( 0.1, 0.1, viewPositionError * 4.0 + 0.1 );
     outputColor.a = 1.0;
     return;
   }
