@@ -80,7 +80,7 @@ void main() {
   vec3 viewNormal =
     normalize(v_viewSurfaceNormal) * (gl_FrontFacing ? 1.0 : -1.0);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
-  DEBUG_OUTPUT(29, normalToRgb(viewViewDirection));
+  DEBUG_OUTPUT(29, normalToColor(viewViewDirection));
 
   mat3 tangentToView = tangentToViewFromPositionNormalUV(
     viewPosition,
@@ -88,20 +88,20 @@ void main() {
     v_uv0
   );
   viewNormal = adjustNormal(tangentToView, material.normal);
-  DEBUG_OUTPUT(30, normalToRgb(viewNormal));
+  DEBUG_OUTPUT(30, normalToColor(viewNormal));
 
   vec3 viewClearcoatNormal = adjustNormal(
     tangentToView,
     material.clearcoatNormal
   );
-  DEBUG_OUTPUT(31, normalToRgb(viewClearcoatNormal));
+  DEBUG_OUTPUT(31, normalToColor(viewClearcoatNormal));
 
   if((outputTransformFlags & 0x8) != 0) {
     if( material.clearcoatFactor > 0.0 ) {
-      outputColor.rgb = normalToRgb( viewClearcoatNormal );
+      outputColor.rgb = normalToColor( viewClearcoatNormal );
     }
     else {
-      outputColor.rgb = normalToRgb( viewNormal );
+      outputColor.rgb = normalToColor( viewNormal );
     }
     outputColor.a = 1.0;
     return;
@@ -130,13 +130,13 @@ void main() {
   vec3 transmission_btdf = vec3(0.0);
 
   if (material.transmission > 0. || true ) {
-    DEBUG_OUTPUT(35, normalToRgb(viewViewDirection));
+    DEBUG_OUTPUT(35, normalToColor(viewViewDirection));
     vec3 worldViewDirection = mat4TransformDirection(
       viewToWorld,
       viewViewDirection
     );
   
-    DEBUG_OUTPUT(36, normalToRgb(worldViewDirection));
+    DEBUG_OUTPUT(36, normalToColor(worldViewDirection));
 
     vec3 worldNormal = mat4TransformDirection(viewToWorld, viewNormal);
     
@@ -148,7 +148,7 @@ void main() {
       localToWorld
     );
     vec3 refractedRayExit = worldPosition + transmissionRay;
-    DEBUG_OUTPUT(37, normalToRgb(refractedRayExit));
+    DEBUG_OUTPUT(37, normalToColor(refractedRayExit));
 
     // Project refracted vector on the framebuffer, while mapping to normalized device coordinates.
     vec4 ndcPos = viewToClip * worldToView * vec4(refractedRayExit, 1.0);

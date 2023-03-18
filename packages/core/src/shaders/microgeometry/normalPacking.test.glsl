@@ -2,8 +2,8 @@
 #pragma import "./normalPacking.glsl"
 
 void testEquivalency(inout TestSuite suite, int testId, vec3 normal) {
-  vec3 rgb = normalToRgb(normal);
-  vec3 normal2 = rgbToNormal(rgb);
+  vec3 rgb = normalToColor(normal);
+  vec3 normal2 = colorToNormal(rgb);
   assert(suite, testId, eqAbs(normal, normal2, 0.0001));
 }
 

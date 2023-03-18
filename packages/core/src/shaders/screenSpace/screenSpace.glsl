@@ -34,7 +34,7 @@ float perspectiveDepthToViewZ(
   return near * far / ((far - near) * invClipZ - far);
 }
 
-vec3 viewZToClipW(const mat4 viewToClip, const float viewZ) {
+float viewZToClipW(const mat4 viewToClip, const float viewZ) {
   return viewToClip[2][3] * viewZ + viewToClip[3][3];
 }
 
@@ -44,17 +44,17 @@ vec4 screenPositionToClipPosition(const vec4 fragCoord) {
 }
 
 // probably correct
-vec4 clipPositionToViewPosition(
+vec3 clipPositionToViewPosition(
   const mat4 clipToView,
   const vec4 clipPosition
 ) {
   vec4 viewPosition = clipToView * clipPosition;
   viewPosition.xyz /= viewPosition.w;
-  return viewPosition;
+  return viewPosition.xyz;
 }
 
 
-vec3 screenPositionToViewPosition(const mat4 clipToView, const vec4 fradCoord) {
+vec3 screenPositionToViewPosition(const mat4 clipToView, const vec4 fragCoord) {
     vec4 clipSpacePosition = screenPositionToClipPosition( fragCoord );
     return clipPositionToViewPosition( clipToView, clipSpacePosition );
 }

@@ -13,6 +13,7 @@ import {
   euler3ToMat4,
   EulerOrder3,
   Mat4,
+  mat4Inverse,
   mat4PerspectiveFov,
   translation3ToMat4,
   Vec3
@@ -38,6 +39,7 @@ async function init(): Promise<void> {
     context,
     '/assets/textures/planets/jupiter_2k.jpg'
   );
+
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
@@ -67,13 +69,6 @@ async function init(): Promise<void> {
     uniforms.localToWorld = euler3ToMat4(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
-    );
-    uniforms.viewToClip = mat4PerspectiveFov(
-      25,
-      0.1,
-      4,
-      1,
-      canvasFramebuffer.aspectRatio
     );
     uniforms.pointLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 3,

@@ -29,7 +29,7 @@ void main() {
   vec3 specularF90 = vec3(1.0);
 
   vec3 normalDelta =
-    vec3(normalModulator, 1.0) * rgbToNormal(texture(normalMap, v_uv0).rgb);
+    vec3(normalModulator, 1.0) * colorToNormal(texture(normalMap, v_uv0).rgb);
 
   vec3 position = v_viewSurfacePosition;
   vec3 normal = normalize(v_viewSurfaceNormal);

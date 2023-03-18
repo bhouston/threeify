@@ -30,7 +30,7 @@ void main() {
   vec3 specularF90 = vec3(1.0);
 
   vec3 normalDelta = normalize(
-    rgbToNormal(texture(normalMap, vec2(1.0) - v_uv0).rgb) *
+    colorToNormal(texture(normalMap, vec2(1.0) - v_uv0).rgb) *
       vec3(normalScale, 1.0)
   );
 

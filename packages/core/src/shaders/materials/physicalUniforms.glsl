@@ -117,7 +117,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   #if defined(NORMAL)
   material.normal =
     vec3(normalScale, 1.0) *
-    rgbToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
+    colorToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
   #else
   material.normal = vec3(0.0, 0.0, 1.0);
   #endif
@@ -160,7 +160,7 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
     max( clearcoatRoughnessFactor * clearcoatFactorRoughness.g, 0.03 );
   material.clearcoatNormal =
     vec3(clearcoatNormalScale, 1.0) *
-    rgbToNormal(sampleTexture(clearcoatNormalTextureAccessor, uvs).rgb);
+    colorToNormal(sampleTexture(clearcoatNormalTextureAccessor, uvs).rgb);
   #else
   material.clearcoatFactor = 0.0;
   material.clearcoatRoughness = 0.5;
