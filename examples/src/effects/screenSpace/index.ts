@@ -2,6 +2,7 @@ import {
   Attachment,
   ClearState,
   createRenderingContext,
+  DepthTestState,
   fetchOBJ,
   Framebuffer,
   geometryToBufferGeometry,
@@ -10,8 +11,10 @@ import {
   makeDepthAttachment,
   renderBufferGeometry,
   shaderSourceToProgram,
+  SolidTextures,
   TexImage2D,
   TextureFilter,
+  textureToTexImage2D,
   transformGeometry
 } from '@threeify/core';
 import {
@@ -66,16 +69,21 @@ async function init(): Promise<void> {
     Attachment.Depth
   ) as TexImage2D;
 
+  const whiteTexture = SolidTextures.White;
+  const whiteMap = textureToTexImage2D( context, whiteTexture );
+
   const program = await shaderSourceToProgram(
     context,
     'index',
     vertexSource,
     fragmentSource
   );
+  const nearZ = 1;
+  const farZ = 4;
   const viewToClip = mat4PerspectiveFov(
     25,
-    0.1,
-    4,
+    nearZ,
+    farZ,
     1,
     canvasFramebuffer.aspectRatio
   );
@@ -85,6 +93,8 @@ async function init(): Promise<void> {
     worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
     viewToClip,
     clipToView: mat4Inverse(viewToClip),
+    nearZ,
+    farZ
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
@@ -99,28 +109,30 @@ async function init(): Promise<void> {
     // render to the depth buffer.
     offscreenFramebuffer.clear();
     renderBufferGeometry({
-      framebuffer: canvasFramebuffer,
+      framebuffer: offscreenFramebuffer,
       program,
       uniforms: {
         mode: 0,
+        depthMap: whiteMap,
         ...uniforms
       },
-      bufferGeometry
+      bufferGeometry,
+      depthTestState: DepthTestState.Less
     });
 
     // access the depth buffer and compare it to the true position.
     // output the error as an hsl color.
-    /*canvasFramebuffer.clear();
+    canvasFramebuffer.clear();
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
       uniforms: {
-        mode: 2,
+        mode: ( (Date.now() / 1000 ) % 5 ),
         depthMap: depthMap,
         ...uniforms
       },
       bufferGeometry
-    });*/
+    });
 
     requestAnimationFrame(animate);
   }
