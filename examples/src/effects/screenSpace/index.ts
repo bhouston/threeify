@@ -127,7 +127,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms: {
-        mode: ( (Date.now() / 1000 ) % 5 ),
+        mode: ( (Date.now() / 1000 ) % 6 ),
         depthMap: depthMap,
         ...uniforms
       },
