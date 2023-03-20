@@ -828,12 +828,22 @@ export function mat4LookAt(
   te[0] = right.x;
   te[4] = up2.x;
   te[8] = look.x;
+  te[12] = 0;
+
   te[1] = right.y;
   te[5] = up2.y;
   te[9] = look.y;
+  te[13] = 0;
+
   te[2] = right.z;
   te[6] = up2.z;
   te[10] = look.z;
+  te[14] = 0;
+
+  te[3] = 0;
+  te[7] = 0;
+  te[11] = 0;
+  te[15] = 1;
 
   return result;
 }

@@ -5,6 +5,7 @@ export * from './core/coords.js';
 export * from './core/generateUuid.js';
 export * from './core/types.js';
 export * from './core/sleep.js';
+export * from './core/using.js';
 
 export * from './platform/Detection.js';
 
