@@ -241,3 +241,29 @@ export function mat4TransformNormal3(
 
   return vec3Normalize(result, result);
 }
+
+export function vec3Reflect(
+  incident: Vec3,
+  normal: Vec3,
+  result = new Vec3()
+): Vec3 {
+  const dot = vec3Dot(incident, normal);
+  return vec3Subtract(
+    incident,
+    vec3MultiplyByScalar(normal, 2 * dot, result),
+    result
+  );
+}
+
+// project vector onto another vector
+export function vec3Project(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
+  const dot = vec3Dot(a, b);
+  return vec3MultiplyByScalar(b, dot / vec3Dot(b, b), result);
+}
+
+// determine angle between two vectors
+export function vec3Angle(a: Vec3, b: Vec3): number {
+  const theta = vec3Dot(a, b) / (vec3Length(a) * vec3Length(b));
+  // clamp, to handle numerical problems
+  return Math.acos(Math.min(Math.max(theta, -1), 1));
+}
