@@ -1,5 +1,7 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the Mat4 function helpers
 
+import * as THREE from 'three';
+
 import { EPSILON } from './Functions.js';
 import { mat3Equals, mat4ToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
@@ -11,6 +13,7 @@ import {
   mat4Delta,
   mat4Equals,
   mat4Identity,
+  mat4LookAt,
   mat4Multiply,
   mat4MultiplyByScalar,
   mat4Negate,
@@ -415,5 +418,41 @@ describe('Mat4 Functions', () => {
     expect(m2.elements[0]).toBeCloseTo(2, EPSILON);
     expect(m2.elements[5]).toBeCloseTo(2, EPSILON);
     expect(m2.elements[12]).toBeCloseTo(2, EPSILON);
+  });
+
+  test('mat4LookAt', () => {
+    const cubeFaceLooks = [
+      new Vec3(1, 0, 0),
+      new Vec3(-1, 0, 0),
+      new Vec3(0, 1, 0),
+      new Vec3(0, -1, 0), // wrong
+      new Vec3(0, 0, 1),
+      new Vec3(0, 0, -1) // wrong
+    ];
+
+    // www.khronos.org/opengl/wiki/Cubemap_Texture
+    const cubeFaceUps = [
+      new Vec3(0, -1, 0),
+      new Vec3(0, -1, 0),
+      new Vec3(0, 0, +1),
+      new Vec3(0, 0, -1),
+      new Vec3(0, -1, 0),
+      new Vec3(0, -1, 0)
+    ];
+
+    for (let i = 0; i < 6; i++) {
+      const forward = cubeFaceLooks[i];
+      const up = cubeFaceUps[i];
+      const lookAt = mat4LookAt(new Vec3(0, 0, 0), forward, up);
+      const tjMat4 = new THREE.Matrix4();
+      tjMat4.lookAt(
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(forward.x, forward.y, forward.z),
+        new THREE.Vector3(up.x, up.y, up.z)
+      );
+      for (let j = 0; j < 16; j++) {
+        expect(lookAt.elements[j]).toBeCloseTo(tjMat4.elements[j], EPSILON);
+      }
+    }
   });
 });
