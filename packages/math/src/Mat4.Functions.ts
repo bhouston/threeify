@@ -796,54 +796,51 @@ export function mat4LookAt(
 ): Mat4 {
   const te = result.elements;
 
-  const look = vec3Subtract(eye, target);
+  const yUp = up.clone();
 
-  const lookLength = vec3Length(look);
+  const zLook = vec3Subtract(eye, target);
+
+  const lookLength = vec3Length(zLook);
   if (lookLength === 0) {
-    look.z = 1;
+    zLook.z = 1;
   } else {
-    vec3MultiplyByScalar(look, 1 / lookLength, look);
+    vec3MultiplyByScalar(zLook, 1 / lookLength, zLook);
   }
 
-  const right = vec3Cross(up, look);
+  const xRight = vec3Cross(yUp, zLook);
 
-  const rightLength = vec3Length(right);
+  const rightLength = vec3Length(xRight);
   if (rightLength === 0) {
     // up and z are parallel
+    zLook.x += 0.0001;
 
-    if (Math.abs(up.z) === 1) {
-      up.x += 0.0001;
-    } else {
-      up.z += 0.0001;
-    }
-
-    vec3Normalize(up, up);
-    vec3Cross(right, up, right);
+    vec3Cross(yUp, zLook, xRight);
+    vec3Normalize(xRight, xRight);
   } else {
-    vec3MultiplyByScalar(right, 1 / rightLength, right);
+    vec3MultiplyByScalar(xRight, 1 / rightLength, xRight);
   }
 
-  const up2 = vec3Cross(look, right);
+  const yUp2 = vec3Cross(zLook, xRight);
 
-  te[0] = right.x;
-  te[4] = up2.x;
-  te[8] = look.x;
-  te[12] = 0;
+  te[0] = xRight.x;
+  te[1] = xRight.y;
+  te[2] = xRight.z;
+  //te[3] = 0;
 
-  te[1] = right.y;
-  te[5] = up2.y;
-  te[9] = look.y;
-  te[13] = 0;
+  te[4] = yUp2.x;
+  te[5] = yUp2.y;
+  te[6] = yUp2.z;
+  //te[7] = 0;
 
-  te[2] = right.z;
-  te[6] = up2.z;
-  te[10] = look.z;
-  te[14] = 0;
+  te[8] = zLook.x;
+  te[9] = zLook.y;
+  te[10] = zLook.z;
+  //te[11] = 0;
 
-  te[3] = 0;
-  te[7] = 0;
-  te[11] = 0;
-  te[15] = 1;
+  //te[12] = 0;
+  //te[13] = 0;
+  //te[14] = 0;
+  //te[15] = 1;
 
   return result;
 }

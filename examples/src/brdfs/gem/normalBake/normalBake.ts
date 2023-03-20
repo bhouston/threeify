@@ -2,6 +2,7 @@ import {
   Attachment,
   BlendState,
   BufferGeometry,
+  cubeFaceDebugColor,
   cubeFaceTargets,
   CullingState,
   DepthTestState,
@@ -13,7 +14,7 @@ import {
   TexImage2D,
   using
 } from '@threeify/core';
-import { Color3, Mat4, mat4PerspectiveFov, Vec3 } from '@threeify/math';
+import { Color3, Mat4, mat4PerspectiveFov } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -45,11 +46,13 @@ export async function renderGeometryNormalsIntoCubeMap(
           framebuffer.clear();
 
           uniforms.worldToView = makeMat4CubeMapTransform(
-            new Vec3(),
             index,
             uniforms.worldToView
           );
-          //uniforms.debugColor = cubeFaceDebugColor[index];
+
+          console.log(uniforms.worldToView);
+          uniforms.debugColor = cubeFaceDebugColor[index];
+          uniforms.debugColor = new Color3();
 
           renderBufferGeometry({
             framebuffer,

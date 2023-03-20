@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Color3, Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/math';
+import { Color3, Mat4, mat4LookAt, Vec2, Vec3 } from '@threeify/math';
 
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { InternalFormat } from '../renderers/webgl/textures/InternalFormat.js';
@@ -68,22 +68,33 @@ export const cubeFaceTargets = [
   TextureTarget.CubeMapNegativeZ
 ];
 
+//github.com/mrdoob/three.js/blob/dev/src/cameras/CubeCamera.js#L18
 export const cubeFaceLooks = [
   new Vec3(1, 0, 0),
   new Vec3(-1, 0, 0),
-  new Vec3(0, -1, 0),
-  new Vec3(0, -1, 0),
+  new Vec3(0, 1, 0),
+  new Vec3(0, -1, 0), // wrong
   new Vec3(0, 0, 1),
-  new Vec3(0, 0, -1)
+  new Vec3(0, 0, -1) // wrong
 ];
 
+// www.khronos.org/opengl/wiki/Cubemap_Texture
 export const cubeFaceUps = [
   new Vec3(0, -1, 0),
   new Vec3(0, -1, 0),
+  new Vec3(0, 0, +1),
   new Vec3(0, 0, -1),
-  new Vec3(0, 0, -1),
-  new Vec3(0, 1, 0),
+  new Vec3(0, -1, 0),
   new Vec3(0, -1, 0)
+];
+
+export const cubeFaceRights = [
+  new Vec3(0, 0, -1),
+  new Vec3(0, 0, +1),
+  new Vec3(+1, 0, 0),
+  new Vec3(+1, 0, 0),
+  new Vec3(+1, 0, 0),
+  new Vec3(-1, 0, 0)
 ];
 
 export const cubeFaceDebugColor = [
@@ -96,13 +107,12 @@ export const cubeFaceDebugColor = [
 ];
 
 export function makeMat4CubeMapTransform(
-  position: Vec3,
   faceIndex: number,
   result = new Mat4()
 ): Mat4 {
   return mat4LookAt(
-    position,
-    vec3Add(position, cubeFaceLooks[faceIndex]),
+    new Vec3(0, 0, 0),
+    cubeFaceLooks[faceIndex],
     cubeFaceUps[faceIndex],
     result
   );
