@@ -18,6 +18,21 @@ import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';
 import { Geometry } from './Geometry.js';
 
+export function outputDebugInfo(geometry: Geometry): void {
+  console.log('geometry.name', geometry.name);
+  if (geometry.indices !== undefined) {
+    console.log('geometry.indices.count', geometry.indices.count);
+  }
+  for (const name in geometry.attributes) {
+    const attribute = geometry.attributes[name];
+    if (attribute !== undefined) {
+      console.log(
+        `attribute ${name}: count ${attribute.count} bytesPerVertex ${attribute.bytesPerVertex}`
+      );
+    }
+  }
+}
+
 function copyBytesUsingStride(
   dest: ArrayBuffer,
   source: ArrayBuffer,

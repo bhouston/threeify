@@ -11,15 +11,16 @@ export async function fetchOBJ(url: string): Promise<Geometry[]> {
       `response error: ${response.status}:${response.statusText}`
     );
   }
-  return parseOBJ(await response.text());
+  return parseOBJ(await response.text(), url);
 }
 
-const oRegexp = /^o +(.+)/;
-const gRegexp = /^g +(.+)/;
+const objectRegexp = /^o +(.+)/;
+const groupRegexp = /^g +(.+)/;
+const surfaceRegexp = /^s +(.+)/;
 const vRegexp = /^v +([\d+.-]+) +([\d+.-]+) +([\d+.-]+)/;
 const vnRegexp = /^vn +([\d+.-]+) +([\d+.-]+) +([\d+.-]+)/;
 const vtRegexp = /^vt +([\d+.-]+) +([\d+.-]+)/;
-const fRegexp =
+const faceRegexp =
   // eslint-disable-next-line unicorn/no-unsafe-regex
   /^f( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))( +(\d+)\/(\d*)\/(\d*))?/;
 
@@ -30,7 +31,7 @@ const fRegexp =
 // const useMtlRegexp = /^usemtl +(.*)$/;
 // const useMapRegexp = /^usemap +(.*)$/;
 
-export function parseOBJ(text: string): Geometry[] {
+export function parseOBJ(text: string, source: string): Geometry[] {
   const geometries: Geometry[] = [];
   let workingPositions: number[] = [];
   let workingNormals: number[] = [];
@@ -45,16 +46,25 @@ export function parseOBJ(text: string): Geometry[] {
     if (indices.length === 0) {
       return;
     }
-    const geometry = new Geometry();
-    geometry.indices = makeUint32Attribute(indices);
-    geometry.attributes.position = makeFloat32Attribute(positions, 3);
-    geometry.attributes.normal = makeFloat32Attribute(normals, 3);
-    geometry.attributes.uv0 = makeFloat32Attribute(uvs, 2);
 
+    const geometry = new Geometry();
+    geometry.name = source + ':group';
+
+    geometry.indices = makeUint32Attribute(indices);
     indices = [];
+
+    geometry.attributes.position = makeFloat32Attribute(positions, 3);
     positions = [];
-    normals = [];
-    uvs = [];
+
+    if (normals.length > 0) {
+      geometry.attributes.normal = makeFloat32Attribute(normals, 3);
+      normals = [];
+    }
+
+    if (uvs.length > 0) {
+      geometry.attributes.uv0 = makeFloat32Attribute(uvs, 2);
+      uvs = [];
+    }
 
     geometries.push(geometry);
   }
@@ -93,7 +103,7 @@ export function parseOBJ(text: string): Geometry[] {
       );
       return;
     }
-    const fMatch = line.match(fRegexp);
+    const fMatch = line.match(faceRegexp);
     if (fMatch !== null) {
       const startVertex = positions.length / 3;
       let numVertices = 3;
@@ -136,9 +146,9 @@ export function parseOBJ(text: string): Geometry[] {
       for (let i = 0; i < numVertices - 2; i++) {
         indices.push(startVertex, startVertex + i + 1, startVertex + i + 2);
       }
-    } else if (oRegexp.test(line)) {
+    } else if (objectRegexp.test(line)) {
       commitObject();
-    } else if (gRegexp.test(line)) {
+    } else if (groupRegexp.test(line)) {
       commitGroup();
     } /* else if (commentRegexp.test(line)) {
       // ignore comments

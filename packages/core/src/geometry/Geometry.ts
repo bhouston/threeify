@@ -13,6 +13,7 @@ import { Attribute } from './Attribute.js';
 import { positionAttributeToBoundingBox } from './Geometry.Functions.js';
 
 export class Geometry {
+  name = '';
   id: string = generateUUID();
   indices: Attribute | undefined = undefined;
   attributes: { [key: string]: Attribute | undefined } = {};

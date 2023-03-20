@@ -67,6 +67,8 @@ export * from './materials/Blending.js';
 export * from './materials/OutputChannels.js';
 export * from './materials/ShaderMaterial.js';
 export * from './materials/AlphaMode.js';
+export * from './materials/IORConstants.js';
+export * from './materials/AbbeConstants.js';
 
 export * from './renderers/webgl/programs/Program.js';
 export * from './renderers/webgl/programs/ProgramAttribute.js';

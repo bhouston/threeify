@@ -165,7 +165,7 @@ void main() {
     outgoingRadiance += coated_brdf; // coated_brdf;
   }
 
-  outputColor.rgb = tonemappingACESFilmic(linearTosRGB(outgoingRadiance));
+  outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));
   outputColor.a = material.alpha;
 
 }

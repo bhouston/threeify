@@ -8,14 +8,9 @@
 import { Box2, Vec2 } from '@threeify/math';
 
 import { IDisposable } from '../../../core/types.js';
-import { PassGeometry } from '../../../geometry/primitives/passGeometry.js';
 import { warnOnce } from '../../../warnOnce.js';
-import { ResourceRef } from '../../caches/ResourceCache.js';
 import { BlendState } from '../BlendState.js';
-import {
-  BufferGeometry,
-  geometryToBufferGeometry
-} from '../buffers/BufferGeometry.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
 import { ClearState } from '../ClearState.js';
 import { CullingState } from '../CullingState.js';
 import { DepthTestState } from '../DepthTestState.js';
@@ -125,6 +120,9 @@ export function renderBufferGeometry(props: {
   // draw
   const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
+    //console.log(
+    //  `gl.drawElements( ${bufferGeometry.primitive}, ${bufferGeometry.count}, ${bufferGeometry.indices.componentType}, 0)`
+    //);
     gl.drawElements(
       bufferGeometry.primitive,
       bufferGeometry.count,
@@ -132,6 +130,9 @@ export function renderBufferGeometry(props: {
       0
     );
   } else {
+    //console.log(
+    //  `gl.drawArrays( ${bufferGeometry.primitive}, 0, ${bufferGeometry.count})`
+    //);
     gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
   }
 

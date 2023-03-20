@@ -1,11 +1,10 @@
 import {
   createRenderingContext,
-  fetchOBJ,
+  fetchTexImage2D,
   geometryToBufferGeometry,
-  outputDebugInfo,
+  icosahedronGeometry,
   renderBufferGeometry,
-  shaderSourceToProgram,
-  transformGeometry
+  shaderSourceToProgram
 } from '@threeify/core';
 import {
   Color3,
@@ -14,9 +13,8 @@ import {
   euler3ToMat4,
   EulerOrder3,
   Mat4,
-  mat4Multiply,
+  mat4Inverse,
   mat4PerspectiveFov,
-  scale3ToMat4,
   translation3ToMat4,
   Vec3
 } from '@threeify/math';
@@ -25,15 +23,7 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const [geometry] = await fetchOBJ('/assets/models/cloth/cloth.obj');
-  outputDebugInfo(geometry);
-  transformGeometry(
-    geometry,
-    mat4Multiply(
-      translation3ToMat4(new Vec3(0, -0.5, 0)),
-      scale3ToMat4(new Vec3(10, 10, 10))
-    )
-  );
+  const geometry = icosahedronGeometry(0.75, 5, true);
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
@@ -45,10 +35,15 @@ async function init(): Promise<void> {
     vertexSource,
     fragmentSource
   );
+  const albedoMap = await fetchTexImage2D(
+    context,
+    '/assets/textures/planets/jupiter_2k.jpg'
+  );
+
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
-    worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
     viewToClip: mat4PerspectiveFov(
       25,
       0.1,
@@ -58,13 +53,13 @@ async function init(): Promise<void> {
     ),
 
     // lights
-    pointLightViewPosition: Vec3.Zero,
-    pointLightIntensity: color3MultiplyByScalar(Color3.White, 30),
+    pointLightViewPosition: new Vec3(1, 0, -0.5),
+    pointLightIntensity: color3MultiplyByScalar(Color3.White, 40),
     pointLightRange: 6,
 
     // materials
-    sheenColor: new Color3(0.3, 0.3, 1),
-    sheenRoughness: 0.5
+    albedoModulator: Color3.White,
+    albedoMap: albedoMap
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
@@ -75,7 +70,6 @@ async function init(): Promise<void> {
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
       uniforms.localToWorld
     );
-    uniforms.sheenRoughness = Math.cos(now * 0.0003) * 0.5 + 0.5;
     uniforms.pointLightViewPosition = new Vec3(
       Math.cos(now * 0.001) * 3,
       2,
@@ -83,6 +77,7 @@ async function init(): Promise<void> {
     );
 
     canvasFramebuffer.clear();
+
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
