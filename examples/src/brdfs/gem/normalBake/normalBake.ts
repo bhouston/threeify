@@ -52,7 +52,7 @@ export async function renderGeometryNormalsIntoCubeMap(
 
           console.log(uniforms.worldToView);
           uniforms.debugColor = cubeFaceDebugColor[index];
-          //uniforms.debugColor = new Color3();
+          uniforms.debugColor = new Color3();
 
           renderBufferGeometry({
             framebuffer,
