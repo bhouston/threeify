@@ -1,29 +1,36 @@
 import {
   AbbeConstants,
+  BlendState,
   createRenderingContext,
+  CubeMapTexture,
+  CullingState,
+  DepthTestState,
   equirectangularTextureToCubeMap,
   fetchHDR,
   fetchOBJ,
   geometryToBufferGeometry,
   InternalFormat,
   IORConstants,
+  Orbit,
   renderBufferGeometry,
   shaderSourceToProgram,
   Texture,
-  TextureEncoding
+  TextureEncoding,
+  TextureFilter,
+  textureToTexImage2D
 } from '@threeify/core';
 import {
-  Euler3,
   euler3ToMat4,
-  EulerOrder3,
   Mat4,
   mat4PerspectiveFov,
   translation3ToMat4,
+  Vec2,
   Vec3
 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
+import { renderGeometryNormalsIntoCubeMap } from './normalBake/normalBake';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
@@ -31,10 +38,14 @@ async function init(): Promise<void> {
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
-  const { canvasFramebuffer } = context;
+  const { canvasFramebuffer, canvas } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderSourceToProgram(
+  const orbitController = new Orbit(canvas);
+  orbitController.zoom = 1.5;
+  orbitController.zoomMax = 9;
+
+  const mainProgram = await shaderSourceToProgram(
     context,
     'index',
     vertexSource,
@@ -52,15 +63,39 @@ async function init(): Promise<void> {
     InternalFormat.RGBA16F
   );
 
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+
+  const imageSize = new Vec2(512, 512);
+  const normalCubeTexture = new CubeMapTexture([
+    imageSize,
+    imageSize,
+    imageSize,
+    imageSize,
+    imageSize,
+    imageSize
+  ]);
+  normalCubeTexture.minFilter = TextureFilter.Linear;
+  normalCubeTexture.generateMipmaps = false;
+  const normalCubeMap = textureToTexImage2D(context, normalCubeTexture);
+
+  // render into the cube map
+  await renderGeometryNormalsIntoCubeMap(
+    context,
+    bufferGeometry,
+    normalCubeMap
+  );
+
   const uniforms = {
     // ibl
     iblMapTexture: cubeMap,
     iblMapIntensity: 1,
     iblMapMaxLod: cubeMap.mipCount,
 
+    internalNormalMap: normalCubeMap,
+
     // vertices
     localToWorld: new Mat4(),
-    worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
+    worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
     viewToClip: mat4PerspectiveFov(
       25,
       0.1,
@@ -77,23 +112,22 @@ async function init(): Promise<void> {
     abbeNumber: AbbeConstants.Diamond
   };
 
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
-
   function animate(): void {
     const now = Date.now();
+    orbitController.update();
 
-    uniforms.localToWorld = euler3ToMat4(
-      new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
-      uniforms.localToWorld
-    );
+    uniforms.localToWorld = euler3ToMat4(orbitController.euler);
 
     canvasFramebuffer.clear();
 
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program,
+      program: mainProgram,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
+      depthTestState: DepthTestState.Less,
+      cullingState: CullingState.Back,
+      blendState: BlendState.PremultipliedOver
     });
 
     requestAnimationFrame(animate);

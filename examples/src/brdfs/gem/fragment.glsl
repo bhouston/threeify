@@ -24,7 +24,7 @@ uniform vec3 attenuationColor;
 uniform float abbeNumber;
 
 // internal gem geometry
-uniform sampler2D internalNormalMap;
+uniform samplerCube internalNormalMap;
 uniform vec3 internalNormalMapScale;
 
 #pragma import "@threeify/core/dist/shaders/math.glsl"
@@ -32,6 +32,8 @@ uniform vec3 internalNormalMapScale;
 #pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
 #pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
 #pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_ibl.glsl"
+
+#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
 
 vec3 getIBLSample(vec3 sampleDir, float roughness) {
@@ -45,6 +47,13 @@ void main() {
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
   vec3 viewDirection = normalize(-v_viewSurfacePosition);
   vec3 halfVector = normalize(viewDirection + viewSurfaceNormal);
+
+  vec3 localOrigin = vec3( 0.0 );
+  mat4 localToView = worldToView * localToWorld;
+ 
+  vec3 viewLocalOrigin = mat4TransformPosition(localToView, localOrigin);
+  vec3 viewDirectionFromLocalOrigin = normalize( viewSurfacePosition - viewLocalOrigin );
+  vec3 localDirection = mat4UntransformDirection( localToView, viewDirectionFromLocalOrigin );
 
   float VdotH = saturate(dot(viewDirection, halfVector));
 
@@ -60,7 +69,7 @@ void main() {
   vec3 F90 = vec3(1.0);
 
   // trace ray into gem
-  vec3 internalRadiance = vec3(0.0);
+  vec3 internalRadiance = texture( internalNormalMap, localDirection, 0.0 ).rgb;
 
   // calculate surface reflectivity
   vec3 surfaceReflectivity = BRDF_Specular_GGX_IBL(
@@ -81,6 +90,7 @@ void main() {
     surfaceReflectivity * iblSample
   );
 
+    
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));
   outputColor.a = 1.0;
 
