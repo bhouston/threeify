@@ -13,7 +13,7 @@ import {
   TexImage2D,
   using
 } from '@threeify/core';
-import { Mat4, mat4PerspectiveFov, Vec3 } from '@threeify/math';
+import { Color3, Mat4, mat4PerspectiveFov, Vec3 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -35,7 +35,8 @@ export async function renderGeometryNormalsIntoCubeMap(
         const uniforms = {
           localToWorld: new Mat4(),
           worldToView: new Mat4(),
-          viewToClip: mat4PerspectiveFov(45, 0.01, 2, 1, 1) // 90 degree FOV with a square aspect ratio.
+          viewToClip: mat4PerspectiveFov(45, 0.01, 2, 1, 1), // 90 degree FOV with a square aspect ratio.
+          debugColor: new Color3()
         };
 
         cubeFaceTargets.forEach((target, index) => {
@@ -48,6 +49,7 @@ export async function renderGeometryNormalsIntoCubeMap(
             index,
             uniforms.worldToView
           );
+          //uniforms.debugColor = cubeFaceDebugColor[index];
 
           renderBufferGeometry({
             framebuffer,

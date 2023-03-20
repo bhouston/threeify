@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/math';
+import { Color3, Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/math';
 
 import { DataType } from '../renderers/webgl/textures/DataType.js';
 import { InternalFormat } from '../renderers/webgl/textures/InternalFormat.js';
@@ -71,7 +71,7 @@ export const cubeFaceTargets = [
 export const cubeFaceLooks = [
   new Vec3(1, 0, 0),
   new Vec3(-1, 0, 0),
-  new Vec3(0, 1, 0),
+  new Vec3(0, -1, 0),
   new Vec3(0, -1, 0),
   new Vec3(0, 0, 1),
   new Vec3(0, 0, -1)
@@ -80,10 +80,19 @@ export const cubeFaceLooks = [
 export const cubeFaceUps = [
   new Vec3(0, -1, 0),
   new Vec3(0, -1, 0),
-  new Vec3(0, 0, 1),
+  new Vec3(0, 0, -1),
   new Vec3(0, 0, -1),
   new Vec3(0, 1, 0),
   new Vec3(0, -1, 0)
+];
+
+export const cubeFaceDebugColor = [
+  Color3.Red,
+  Color3.Green,
+  Color3.Blue,
+  Color3.Yellow,
+  Color3.Cyan,
+  Color3.Magenta
 ];
 
 export function makeMat4CubeMapTransform(
