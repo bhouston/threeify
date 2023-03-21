@@ -47,8 +47,8 @@ vec3 getIBLSample(vec3 worldDirection, float roughness) {
 void main() {
   vec3 viewSurfacePosition = v_viewSurfacePosition;
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
-  vec3 viewDirection = normalize(-v_viewSurfacePosition);
-  vec3 halfVector = normalize(viewDirection + viewSurfaceNormal);
+  vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
+  vec3 halfVector = normalize(viewViewDirection + viewSurfaceNormal);
 
   mat4 viewToLocal = worldToLocal * viewToWorld;
   vec3 localSurfaceNormal = mat4TransformDirection(viewToLocal, viewSurfaceNormal);
@@ -61,13 +61,11 @@ void main() {
   Sphere sphere = Sphere(vec3(0.0), 0.5);
   vec3 gemTransmission = rayTraceTransmission( ray, localSurfaceNormal, ior, localToView, iblWorldMap );
 
+  vec3 outgoingRadiance;
 
-   vec3 outgoingRadiance;
-  
-
-  float VdotH = saturate(dot(viewDirection, halfVector));
+  float VdotH = saturate(dot(viewViewDirection, halfVector));
   // reflect view direction off of surface normal
-  vec3 reflectDir = reflect(viewDirection, viewSurfaceNormal);
+  vec3 reflectDir = reflect(viewViewDirection, viewSurfaceNormal);
 
   // sample IBL
   float defaultRoughness = 0.003;
@@ -81,20 +79,24 @@ void main() {
   // calculate surface reflectivity
   vec3 surfaceReflectivity = BRDF_Specular_GGX_IBL(
     viewSurfaceNormal,
-    viewDirection,
+    viewViewDirection,
     F0,
     F90,
     defaultRoughness
   );
 
+ 
+outgoingRadiance += gemTransmission * attenuationColor;
+outgoingRadiance += surfaceReflectivity * iblSample;
+/*
   outgoingRadiance += fresnelMix(
     F0,
     F90,
     VdotH,
     1.0,
-    gemTransmission* vec3( 0., 0., 1. ),
-    surfaceReflectivity * iblSample * vec3( 0., 1., 0. )
-  );
+    gemTransmission,
+    surfaceReflectivity * iblSample
+  );*/
 
 
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));

@@ -4,13 +4,13 @@ vec3 specularIntensityToF0(vec3 specularIntensity) {
   return specularIntensity * specularIntensity * 0.16;
 }
 
-vec3 F_Schlick(const vec3 specularColor, const float LdotH) {
+vec3 F_Schlick(const vec3 specularColor, const float VdotH) {
   // Original approximation by Christophe Schlick '94
   // float fresnel = pow( 1. - LdotH, 5. );
 
   // Optimized variant (presented by Epic at SIGGRAPH '13)
   // https://cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf
-  float fresnel = exp2((-5.55473 * LdotH - 6.98316) * LdotH);
+  float fresnel = exp2((-5.55473 * VdotH - 6.98316) * VdotH);
   return (1.0 - specularColor) * fresnel + specularColor;
 
 } // validated
@@ -24,11 +24,11 @@ vec3 F_Schlick_2(vec3 f0, vec3 f90, float VdotH) {
 // Q: Where is this from?  Should we use it?
 vec3 F_Schlick_RoughnessDependent(
   const vec3 F0,
-  const float NdotV,
+  const float VdotH,
   const float roughness
 ) {
   // See F_Schlick
-  float fresnel = exp2((-5.55473 * NdotV - 6.98316) * NdotV);
+  float fresnel = exp2((-5.55473 * VdotH - 6.98316) * VdotH);
   vec3 Fr = max(vec3(1.0 - roughness), F0) - F0;
 
   return Fr * fresnel + F0;
@@ -50,5 +50,6 @@ vec3 fresnelMix(
   const vec3 layer
 ) {
   vec3 fresnelWeight = F_Schlick_2(f0, f90, VdotH);
-  return (1.0 - weight * fresnelWeight) * base + weight * fresnelWeight * layer;
+  vec3 t = weight * fresnelWeight;
+  return mix( base, layer, t );
 }

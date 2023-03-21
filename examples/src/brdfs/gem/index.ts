@@ -1,6 +1,7 @@
 import {
   AbbeConstants,
   BlendState,
+  createCubemapBackground,
   createNormalCube,
   createRenderingContext,
   CubeMapTexture,
@@ -38,7 +39,7 @@ async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
   const sphereGeometry = icosahedronGeometry(0.75, 5, true);
 
-  const geometry = sphereGeometry;
+  const geometry = gemGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -48,6 +49,8 @@ async function init(): Promise<void> {
   const orbitController = new Orbit(canvas);
   orbitController.zoom = 1.5;
   orbitController.zoomMax = 9;
+
+  const cubemapBackground = await createCubemapBackground(context);
 
   const mainProgram = await shaderSourceToProgram(
     context,
@@ -66,7 +69,7 @@ async function init(): Promise<void> {
   const cubeMap = await equirectangularTextureToCubeMap(
     context,
     latLongTexture,
-    TextureEncoding.RGBE,
+    TextureEncoding.Linear,
     1024,
     InternalFormat.RGBA16F
   );
@@ -115,7 +118,7 @@ async function init(): Promise<void> {
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
     attenuationDistance: 0.5,
-    attenuationColor: new Vec3(1, 1, 1),
+    attenuationColor: new Vec3(0, 0, 1),
     abbeNumber: AbbeConstants.Diamond
   };
 
@@ -127,6 +130,15 @@ async function init(): Promise<void> {
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
 
     canvasFramebuffer.clear();
+
+    cubemapBackground.exec({
+      cubeMapTexImage2D: uniforms.iblWorldMap,
+      cubeMapIntensity: 1,
+      targetFramebuffer: canvasFramebuffer,
+      viewToWorld: uniforms.viewToWorld,
+
+      clipToView: mat4Inverse(uniforms.viewToClip)
+    });
 
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,

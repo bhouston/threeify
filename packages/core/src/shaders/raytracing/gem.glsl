@@ -6,7 +6,6 @@
 #pragma import "../microgeometry/normalPacking.glsl"
 #pragma import "../math/mat4.glsl"
 
-localToWorld
 
 float fresnelReflection( vec3 incidentRay, vec3 surfaceNormal, float eta ) {
     float cosTheta = dot( incidentRay, surfaceNormal );

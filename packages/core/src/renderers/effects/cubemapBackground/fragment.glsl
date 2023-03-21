@@ -12,8 +12,8 @@ out vec4 outputColor;
 
 void main() {
   // step one, convert from screen space to ray.
-  vec4 viewPosition = viewToWorld * clipToView * v_homogeneousVertexPosition;
-  vec3 viewDirection = normalize(viewPosition.xyz);
+  vec4 worldPosition = viewToWorld * clipToView * v_homogeneousVertexPosition;
+  vec3 worldNormal = normalize(worldPosition.xyz);
 
-  outputColor = texture(cubeMap, -viewDirection) * cubeMapIntensity;
+  outputColor = texture(cubeMap, worldNormal) * cubeMapIntensity;
 }
