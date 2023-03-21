@@ -4,6 +4,18 @@ mat3 mat3Identity() {
   return mat3(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
 }
 
+mat3 mat3Transpose(const mat3 m) {
+  vec3 i0 = m[0];
+  vec3 i1 = m[1];
+  vec3 i2 = m[2];
+
+  return mat3(
+    vec3(i0.x, i1.x, i2.x),
+    vec3(i0.y, i1.y, i2.y),
+    vec3(i0.z, i1.z, i2.z)
+  );
+}
+
 // validated against Three.js
 mat3 mat3RotateXDirection(const vec2 dir) {
   return mat3(

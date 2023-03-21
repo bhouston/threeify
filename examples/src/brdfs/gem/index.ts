@@ -9,6 +9,7 @@ import {
   fetchHDR,
   fetchOBJ,
   geometryToBufferGeometry,
+  icosahedronGeometry,
   InternalFormat,
   IORConstants,
   Orbit,
@@ -34,7 +35,10 @@ import { renderGeometryNormalsIntoCubeMap } from './normalBake/normalBake';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
-  const [geometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
+  const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
+const sphereGeometry = icosahedronGeometry(0.75, 5, true);
+
+const geometry = sphereGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');

@@ -69,7 +69,7 @@ export const cubeFaceTargets = [
 ];
 
 //github.com/mrdoob/three.js/blob/dev/src/cameras/CubeCamera.js#L18
-export const cubeFaceLooks = [
+export const cubeFaceForwards = [
   new Vec3(1, 0, 0),
   new Vec3(-1, 0, 0),
   new Vec3(0, 1, 0),
@@ -112,7 +112,7 @@ export function makeMat4CubeMapTransform(
 ): Mat4 {
   return mat4LookAt(
     new Vec3(0, 0, 0),
-    cubeFaceLooks[faceIndex],
+    cubeFaceForwards[faceIndex],
     cubeFaceUps[faceIndex],
     result
   );
