@@ -94,7 +94,7 @@ async function init(): Promise<void> {
     // ibl
     iblWorldMap: cubeMap,
     iblIntensity: 1,
-    iblWorldMapMaxLod: cubeMap.mipCount,
+    iblMipCount: cubeMap.mipCount,
 
     internalNormalMap: normalCubeMap,
 

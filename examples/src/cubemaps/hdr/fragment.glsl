@@ -3,9 +3,9 @@ precision highp float;
 in vec3 v_viewPosition;
 in vec3 v_viewNormal;
 
-uniform samplerCube cubeMap;
+uniform samplerCube iblWorldMap;
+uniform int iblMipCount;
 uniform float perceptualRoughness;
-uniform int mipCount;
 
 out vec4 outputColor;
 
@@ -14,12 +14,12 @@ out vec4 outputColor;
 void main() {
   vec3 reflectDir = reflect(normalize(v_viewPosition), normalize(v_viewNormal));
   float lod = clamp(
-    perceptualRoughness * float(mipCount),
+    perceptualRoughness * float(iblMipCount),
     0.0,
-    float(mipCount)
+    float(iblMipCount)
   );
   outputColor.rgb = pow(
-    rgbdToLinear(texture(cubeMap, reflectDir, lod), 16.0),
+    rgbdToLinear(texture(iblWorldMap, reflectDir, lod), 16.0),
     vec3(0.5)
   );
 

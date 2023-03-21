@@ -5,7 +5,7 @@
 
 uniform samplerCube iblWorldMap;
 uniform vec3 iblIntensity;
-uniform int iblWorldMapMaxLod;
+uniform int iblMipCount;
 
 uniform int numPunctualLights;
 

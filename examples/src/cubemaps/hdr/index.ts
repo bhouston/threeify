@@ -48,8 +48,8 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     ),
     perceptualRoughness: 0,
-    mipCount: cubeTexture.mipCount,
-    cubeMap: textureToTexImage2D(context, cubeTexture)
+    iblMipCount: cubeTexture.mipCount,
+    iblWorldMap: textureToTexImage2D(context, cubeTexture)
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 

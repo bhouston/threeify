@@ -238,7 +238,7 @@ function updateLightUniforms(
       light.intensity
     );
     if (lightUniforms.iblWorldMap !== undefined) {
-      lightUniforms.iblWorldMapMaxLod = lightUniforms.iblWorldMap.mipCount;
+      lightUniforms.iblMipCount = lightUniforms.iblWorldMap.mipCount;
     }
     return;
   }

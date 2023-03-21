@@ -19,7 +19,7 @@ float convertSpecularRoughnessToGlossyExponent(const float specularRoughness) {
 
 float getMipLevelForSpecularRoughness(
   const float specularRoughness,
-  const int iblWorldMapMaxLod
+  const int iblMipCount
 ) {
   float glossyExponent = convertSpecularRoughnessToGlossyExponent(
     specularRoughness
@@ -27,7 +27,7 @@ float getMipLevelForSpecularRoughness(
   // From McGuire paper on phong cubemap IBL.
   // https://casual-effects.com/research/McGuire2013CubeMap/index.html
   float MIPlevel =
-    log2(pow(2.0, float(iblWorldMapMaxLod)) * sqrt(3.0)) -
+    log2(pow(2.0, float(iblMipCount)) * sqrt(3.0)) -
     0.5 * log2(glossyExponent + 1.0);
 
   return MIPlevel;
@@ -36,7 +36,7 @@ float getMipLevelForSpecularRoughness(
 vec3 sampleIBLIrradiance(
   const samplerCube iblWorldMap,
   const vec3 iblIntensity,
-  const int iblWorldMapMaxLod,
+  const int iblMipCount,
   const vec3 viewNormal,
   const mat4 worldToView
 ) {
@@ -45,7 +45,7 @@ vec3 sampleIBLIrradiance(
   vec3 iblColor = textureLod(
     iblWorldMap,
     worldNormal,
-    float(iblWorldMapMaxLod)
+    float(iblMipCount)
   ).rgb;
   return iblColor * iblIntensity;
 }
@@ -53,7 +53,7 @@ vec3 sampleIBLIrradiance(
 vec3 sampleIBLRadiance(
   const samplerCube iblWorldMap,
   const vec3 iblIntensity,
-  const int iblWorldMapMaxLod,
+  const int iblMipCount,
   const vec3 viewNormal,
   const vec3 viewDirection,
   const mat4 worldToView,
@@ -74,7 +74,7 @@ vec3 sampleIBLRadiance(
   // TODO: get the correct level from McGuire paper on phone cubemap IBL.
   float mipLevel = getMipLevelForSpecularRoughness(
     specularRoughness,
-    iblWorldMapMaxLod
+    iblMipCount
   );
   vec3 iblColor = textureLod(
     iblWorldMap,

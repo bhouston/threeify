@@ -16,7 +16,7 @@ uniform mat4 viewToClip;
 // environmental lighting
 uniform samplerCube iblWorldMap;
 uniform float iblIntensity;
-uniform int iblWorldMapMaxLod;
+uniform int iblMipCount;
 
 // material properties, a subset of glTF Physical material
 uniform float ior;
@@ -39,7 +39,7 @@ uniform vec3 internalNormalMapScale;
 
 
 vec3 getIBLSample(vec3 sampleDir, float roughness) {
-  float mipCount = float(iblWorldMapMaxLod);
+  float mipCount = float(iblMipCount);
   float lod = clamp(roughness * mipCount, 0.0, mipCount);
   return texture(iblWorldMap, sampleDir, 0.0).rgb * iblIntensity;
 }

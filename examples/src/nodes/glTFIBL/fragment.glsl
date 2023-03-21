@@ -202,7 +202,7 @@ void main() {
     vec3 iblIrradiance = sampleIBLIrradiance(
       iblWorldMap,
       iblIntensity,
-      iblWorldMapMaxLod,
+      iblMipCount,
       viewNormal,
       worldToView
     );
@@ -211,7 +211,7 @@ void main() {
     vec3 iblRadiance = sampleIBLRadiance(
       iblWorldMap,
       iblIntensity,
-      iblWorldMapMaxLod,
+      iblMipCount,
       viewNormal,
       viewViewDirection,
       worldToView,
@@ -222,7 +222,7 @@ void main() {
     vec3 iblClearcoatRadiance = sampleIBLRadiance(
       iblWorldMap,
       iblIntensity,
-      iblWorldMapMaxLod,
+      iblMipCount,
       viewClearcoatNormal,
       viewViewDirection,
       worldToView,
