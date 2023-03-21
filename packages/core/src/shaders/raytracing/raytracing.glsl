@@ -6,7 +6,7 @@ struct Ray {
 };
 
 struct Hit {
-    float t;
+    float distance;
     vec3 position;
     vec3 normal;
 };

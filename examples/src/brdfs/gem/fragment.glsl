@@ -26,8 +26,7 @@ uniform vec3 attenuationColor;
 uniform float abbeNumber;
 
 // internal gem geometry
-uniform samplerCube internalNormalMap;
-uniform vec3 internalNormalMapScale;
+uniform samplerCube gemLocalNormalMap;
 
 #pragma import "@threeify/core/dist/shaders/math.glsl"
 #pragma import "@threeify/core/dist/shaders/brdfs/specular/fresnel.glsl"
@@ -57,9 +56,11 @@ void main() {
   vec3 localViewToPositionDirection = normalize( localPosition - localViewOrigin );
   mat4 localToView = worldToView * localToWorld;
 
-  Ray ray = Ray(localViewOrigin, localViewToPositionDirection);
+  Ray localIncidentRay = Ray(localViewOrigin, localViewToPositionDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);
-  vec3 gemTransmission = rayTraceTransmission( ray, localSurfaceNormal, ior, localToView, iblWorldMap );
+  Hit localSurfaceHit = Hit( 0., localPosition, localSurfaceNormal );
+
+  vec3 gemTransmission = rayTraceTransmission( localIncidentRay, localSurfaceHit, sphere, ior, localToView, attenuationColor, gemLocalNormalMap, iblWorldMap );
 
   vec3 outgoingRadiance;
 
@@ -72,7 +73,7 @@ void main() {
   vec3 iblSample = getIBLSample(-reflectDir, defaultRoughness);
 
   // given ior calculate F0
-  vec3 F0 = vec3(iorToF0(ior));
+  vec3 F0 = vec3(0.04);
   vec3 F90 = vec3(1.0);
 
 
@@ -86,8 +87,8 @@ void main() {
   );
 
  
-outgoingRadiance += gemTransmission * attenuationColor;
-outgoingRadiance += surfaceReflectivity * iblSample;
+outgoingRadiance += gemTransmission; // * attenuationColor;
+//outgoingRadiance += surfaceReflectivity * iblSample;
 /*
   outgoingRadiance += fresnelMix(
     F0,

@@ -8,7 +8,7 @@ import {
   CullingState,
   DepthTestState,
   equirectangularTextureToCubeMap,
-  fetchImage,
+  fetchHDR,
   fetchOBJ,
   geometryToBufferGeometry,
   icosahedronGeometry,
@@ -32,14 +32,15 @@ import {
   Vec3
 } from '@threeify/math';
 
+import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-  const sphereGeometry = icosahedronGeometry(0.75, 5, true);
+  const sphereGeometry = icosahedronGeometry(0.5, 2, false);
 
-  const geometry = gemGeometry;
+  const geometry = sphereGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -59,17 +60,16 @@ async function init(): Promise<void> {
     fragmentSource
   );
 
-  const latLongTexture = new Texture(
-    await fetchImage('/assets/textures/cube/debug/latLong.png')
-  );
   /*const latLongTexture = new Texture(
-    await fetchHDR('./assets/textures/cube/debug/latLong.png')
-      getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+    await fetchImage('/assets/textures/cube/debug/latLong.png')
   );*/
+  const latLongTexture = new Texture(
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+  );
   const cubeMap = await equirectangularTextureToCubeMap(
     context,
     latLongTexture,
-    TextureEncoding.Linear,
+    TextureEncoding.RGBE,
     1024,
     InternalFormat.RGBA16F
   );
@@ -85,13 +85,13 @@ async function init(): Promise<void> {
     imageSize,
     imageSize
   ]);
-  normalCubeTexture.minFilter = TextureFilter.Linear;
+  normalCubeTexture.minFilter = TextureFilter.Nearest;
   normalCubeTexture.generateMipmaps = false;
-  const normalCubeMap = textureToTexImage2D(context, normalCubeTexture);
+  const gemLocalNormalMap = textureToTexImage2D(context, normalCubeTexture);
 
   // render into the cube map
   const normalCube = await createNormalCube(context);
-  normalCube.exec({ bufferGeometry, cubeMap: normalCubeMap });
+  normalCube.exec({ bufferGeometry, cubeMap: gemLocalNormalMap });
 
   const uniforms = {
     // ibl
@@ -99,7 +99,7 @@ async function init(): Promise<void> {
     iblIntensity: 1,
     iblMipCount: cubeMap.mipCount,
 
-    internalNormalMap: normalCubeMap,
+    gemLocalNormalMap: gemLocalNormalMap,
 
     // vertices
     localToWorld: new Mat4(),
@@ -118,7 +118,7 @@ async function init(): Promise<void> {
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
     attenuationDistance: 0.5,
-    attenuationColor: new Vec3(0, 0, 1),
+    attenuationColor: new Vec3(1, 0.8, 0.8),
     abbeNumber: AbbeConstants.Diamond
   };
 
@@ -128,6 +128,14 @@ async function init(): Promise<void> {
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
+
+    uniforms.viewToClip = mat4PerspectiveFov(
+      25,
+      0.1,
+      4,
+      orbitController.zoom,
+      canvasFramebuffer.aspectRatio
+    );
 
     canvasFramebuffer.clear();
 
