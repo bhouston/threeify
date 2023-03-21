@@ -38,10 +38,10 @@ uniform vec3 internalNormalMapScale;
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
 
 
-vec3 getIBLSample(vec3 sampleDir, float roughness) {
+vec3 getIBLSample(vec3 worldDirection, float roughness) {
   float mipCount = float(iblMipCount);
   float lod = clamp(roughness * mipCount, 0.0, mipCount);
-  return texture(iblWorldMap, sampleDir, 0.0).rgb * iblIntensity;
+  return texture(iblWorldMap, worldDirection, 0.0).rgb * iblIntensity;
 }
 
 void main() {

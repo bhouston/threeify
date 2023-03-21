@@ -11,12 +11,12 @@ uniform int iblMipCount;
 out vec4 outputColor;
 
 void main() {
-  vec3 reflectDir = v_localNormal; //reflect( normalize( v_viewPosition ),normalize(v_viewNormal) );
+  vec3 localDirection = v_localNormal; //reflect( normalize( v_viewPosition ),normalize(v_viewNormal) );
   float lod = clamp(
     perceptualRoughness * float(iblMipCount),
     0.0,
     float(mipCount)
   );
-  outputColor = texture(iblWorldMap, reflectDir, lod);
+  outputColor = texture(iblWorldMap, localDirection, lod);
 
 }

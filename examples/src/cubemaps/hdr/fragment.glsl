@@ -12,14 +12,14 @@ out vec4 outputColor;
 #pragma import "@threeify/core/dist/shaders/color/encodings/rgbd.glsl"
 
 void main() {
-  vec3 reflectDir = reflect(normalize(v_viewPosition), normalize(v_viewNormal));
+  vec3 viewReflectDirection = reflect(normalize(v_viewPosition), normalize(v_viewNormal));
   float lod = clamp(
     perceptualRoughness * float(iblMipCount),
     0.0,
     float(iblMipCount)
   );
   outputColor.rgb = pow(
-    rgbdToLinear(texture(iblWorldMap, reflectDir, lod), 16.0),
+    rgbdToLinear(texture(iblWorldMap, viewReflectDirection, lod), 16.0),
     vec3(0.5)
   );
 
