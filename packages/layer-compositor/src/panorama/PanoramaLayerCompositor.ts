@@ -2,11 +2,12 @@ import {
   BufferGeometry,
   ClearState,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   octahedronGeometry,
   Program,
   renderBufferGeometry,
+  RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TextureWrap,
   transformGeometry,
   UniformValueMap
@@ -24,23 +25,57 @@ import {
   Vec3
 } from '@threeify/math';
 
+import fragmentSource from '../fragment.glsl';
 import { copySourceBlendState } from '../Layer';
 import {
   ImageFitMode,
   LayerCompositor,
   makeColorMipmapAttachment
 } from '../LayerCompositor';
+import vertexSource from '../vertex.glsl';
 import fragment from './fragment.glsl';
 import vertex from './vertex.glsl';
+
+export async function createPanoramaLayerCompositor( // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+  canvas: HTMLCanvasElement
+): Promise<PanoramaLayerCompositor> {
+  const context = new RenderingContext(canvas, {
+    alpha: true,
+    antialias: false,
+    depth: false,
+    premultipliedAlpha: true,
+    stencil: false,
+    preserveDrawingBuffer: true
+  });
+  const program = await shaderMaterialToProgram(
+    context,
+    new ShaderMaterial('layerComposite', vertexSource, fragmentSource)
+  );
+  const sphereProgram = await shaderMaterialToProgram(
+    context,
+    new ShaderMaterial('panoramicLayerCompositor', vertex, fragment)
+  );
+  const layerCompositor = new PanoramaLayerCompositor(
+    canvas,
+    context,
+    program,
+    sphereProgram
+  );
+  return layerCompositor;
+}
 
 export class PanoramaLayerCompositor extends LayerCompositor {
   public angle = new Euler3(0, 0, 0, EulerOrder3.ZYX);
   public fov = 90;
   #sphereGeometry: BufferGeometry;
-  #sphereProgram: Program;
 
-  constructor(canvas: HTMLCanvasElement) {
-    super(canvas);
+  constructor(
+    canvas: HTMLCanvasElement,
+    context: RenderingContext,
+    program: Program,
+    private readonly sphereProgram: Program
+  ) {
+    super(canvas, context, program);
     const sphere = octahedronGeometry(1, 6); // artefacts are visible at detail=4 but not 5
     transformGeometry(
       sphere,
@@ -50,10 +85,6 @@ export class PanoramaLayerCompositor extends LayerCompositor {
       )
     );
     this.#sphereGeometry = geometryToBufferGeometry(this.context, sphere);
-    this.#sphereProgram = await shaderMaterialToProgram(
-      this.context,
-      new ShaderMaterial('panoramicLayerCompositor', vertex, fragment)
-    );
   }
 
   render(): void {
@@ -97,7 +128,7 @@ export class PanoramaLayerCompositor extends LayerCompositor {
     //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program: this.#sphereProgram,
+      program: this.sphereProgram,
       uniforms,
       bufferGeometry: this.#sphereGeometry,
       blendState: copySourceBlendState

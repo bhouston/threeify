@@ -81,17 +81,16 @@ async function main() {
     }, 0);
 
     watch.watchTree(rootDir, (f, curr, prev) => {
-      if (
-        f.includes('.glsl') &&
-        !f.includes('.glsl.ts') &&
-        !f.includes('.glsl.js') &&
-        !f.includes('.glsl.d.ts')
-      ) {
+      if (typeof f === 'string' && isExtensionAllowed(f)) {
         console.log('glsl-transpiler - recompile on changes', f);
         trottleRecompiler();
       }
     });
   }
+}
+
+function isExtensionAllowed(file: string) {
+  return file.endsWith('.glsl');
 }
 
 main();

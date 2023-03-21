@@ -4,7 +4,7 @@
 #pragma import "./refraction.glsl"
 #pragma import "./sphere.glsl"
 #pragma import "../microgeometry/normalPacking.glsl"
-#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
+#pragma import "../math/mat4.glsl"
 
 localToWorld
 

@@ -5,19 +5,19 @@ import {
   DataType,
   fetchImage,
   Framebuffer,
+  geometryToBufferGeometry,
   IDisposable,
   InternalFormat,
   isImageBitmapSupported,
   isiOS,
   isMacOS,
-  geometryToBufferGeometry,
-  shaderMaterialToProgram,
   PixelFormat,
   planeGeometry,
   Program,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TexImage2D,
   TexParameters,
   Texture,
@@ -114,12 +114,28 @@ export enum ImageFitMode {
   FitHeight
 }
 
+export async function createLayerCompositor( // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+  canvas: HTMLCanvasElement
+): Promise<LayerCompositor> {
+  const context = new RenderingContext(canvas, {
+    alpha: true,
+    antialias: false,
+    depth: false,
+    premultipliedAlpha: true,
+    stencil: false,
+    preserveDrawingBuffer: true
+  });
+  const program = await shaderMaterialToProgram(
+    context,
+    new ShaderMaterial('layerComposite', vertexSource, fragmentSource)
+  );
+  const layerCompositor = new LayerCompositor(canvas, context, program);
+  return layerCompositor;
+}
 export class LayerCompositor {
-  context: RenderingContext;
   layerImageCache: LayerImageMap = {};
   texImage2DPromiseCache: TexImage2DPromiseMap = {};
   #bufferGeometry: BufferGeometry;
-  #program: Program;
   imageSize = new Vec2(0, 0);
   imageFitMode: ImageFitMode = ImageFitMode.FitHeight;
   zoomScale = 1; // no zoom
@@ -137,24 +153,16 @@ export class LayerCompositor {
   renderId = 0;
   autoDiscard = false;
 
-  constructor(canvas: HTMLCanvasElement) {
-    this.context = new RenderingContext(canvas, {
-      alpha: true,
-      antialias: false,
-      depth: false,
-      premultipliedAlpha: true,
-      stencil: false,
-      preserveDrawingBuffer: true
-    });
+  constructor(
+    canvas: HTMLCanvasElement,
+    public readonly context: RenderingContext,
+    private readonly program: Program
+  ) {
     this.context.canvasFramebuffer.devicePixelRatio = window.devicePixelRatio;
     this.context.canvasFramebuffer.resize();
     const plane = planeGeometry(1, 1, 1, 1);
     transformGeometry(plane, translation3ToMat4(new Vec3(0.5, 0.5, 0)));
     this.#bufferGeometry = geometryToBufferGeometry(this.context, plane);
-    this.#program = shaderMaterialToProgram(
-      this.context,
-      new ShaderMaterial('layerComposite', vertexSource, fragmentSource)
-    );
   }
 
   snapshot(mimeFormat = 'image/jpeg', quality = 1): string {
@@ -403,7 +411,7 @@ export class LayerCompositor {
     //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program: this.#program,
+      program: this.program,
       uniforms,
       bufferGeometry: this.#bufferGeometry,
       blendState: copySourceBlendState
@@ -504,7 +512,7 @@ export class LayerCompositor {
 
         renderBufferGeometry({
           framebuffer: this.offscreenReadFramebuffer!,
-          program: this.#program,
+          program: this.program,
           uniforms,
           bufferGeometry: this.#bufferGeometry,
           blendState: copySourceBlendState
@@ -542,7 +550,7 @@ export class LayerCompositor {
         // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
         renderBufferGeometry({
           framebuffer: this.offscreenWriteFramebuffer!,
-          program: this.#program,
+          program: this.program,
           uniforms,
           bufferGeometry: this.#bufferGeometry,
           blendState: layer.blendModeBlendState
