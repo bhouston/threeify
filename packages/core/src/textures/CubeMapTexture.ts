@@ -82,9 +82,9 @@ export const cubeFaceForwards = [
 export const cubeFaceUps = [
   new Vec3(0, -1, 0),
   new Vec3(0, -1, 0),
-  new Vec3(0, 0, +1),
+  new Vec3(0, 0, 1),
   new Vec3(0, 0, -1),
-  new Vec3(0, -1, 0),
+  new Vec3(0, 1, 0),
   new Vec3(0, -1, 0)
 ];
 
@@ -110,10 +110,11 @@ export function makeMat4CubeMapTransform(
   faceIndex: number,
   result = new Mat4()
 ): Mat4 {
+  //console.log('faceIndex', faceIndex);
   return mat4LookAt(
     new Vec3(0, 0, 0),
-    cubeFaceForwards[faceIndex],
-    cubeFaceUps[faceIndex],
+    cubeFaceForwards[faceIndex].clone(),
+    cubeFaceUps[faceIndex].clone(),
     result
   );
 }

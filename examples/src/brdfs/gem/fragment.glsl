@@ -8,7 +8,9 @@ out vec4 outputColor;
 
 // transforms
 uniform mat4 localToWorld;
+uniform mat4 worldToLocal;
 uniform mat4 worldToView;
+uniform mat4 viewToWorld;
 uniform mat4 viewToClip;
 
 // environmental lighting
@@ -48,12 +50,8 @@ void main() {
   vec3 viewDirection = normalize(-v_viewSurfacePosition);
   vec3 halfVector = normalize(viewDirection + viewSurfaceNormal);
 
-  vec3 localOrigin = vec3( 0.0 );
-  mat4 localToView = worldToView * localToWorld;
- 
-  vec3 viewLocalOrigin = mat4TransformPosition(localToView, localOrigin);
-  vec3 viewDirectionFromLocalOrigin = normalize( viewSurfacePosition - viewLocalOrigin );
-  vec3 localDirection = mat4UntransformDirection( localToView, viewDirectionFromLocalOrigin );
+mat4 viewToLocal = worldToLocal * viewToWorld;
+  vec3 localDirection = mat4TransformDirection( viewToLocal, viewSurfaceNormal );
 
   float VdotH = saturate(dot(viewDirection, halfVector));
 
