@@ -55,6 +55,7 @@ export * from './renderers/effects/combinePass/CombinePass.js';
 export * from './renderers/effects/nanDetector/NanDetector.js';
 export * from './renderers/effects/cubemapBackground/CubemapBackground.js';
 export * from './renderers/effects/IEffect';
+export * from './renderers/effects/normalCube/normalCube.js';
 
 export * from './renderers/utilities/equirectangular.js';
 export * from './renderers/utilities/TextureEncoding.js';

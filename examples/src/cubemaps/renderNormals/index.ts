@@ -1,22 +1,16 @@
 import {
-  AbbeConstants,
   BlendState,
+  createNormalCube,
   createRenderingContext,
   CubeMapTexture,
   CullingState,
   DepthTestState,
-  equirectangularTextureToCubeMap,
-  fetchHDR,
   fetchOBJ,
   geometryToBufferGeometry,
   icosahedronGeometry,
-  InternalFormat,
-  IORConstants,
   Orbit,
   renderBufferGeometry,
   shaderSourceToProgram,
-  Texture,
-  TextureEncoding,
   TextureFilter,
   textureToTexImage2D
 } from '@threeify/core';
@@ -30,16 +24,14 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
-import { renderGeometryNormalsIntoCubeMap } from './normalBake/normalBake';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-  const sphereGeometry = icosahedronGeometry(0.75, 5, true);
+  const sphereGeometry = icosahedronGeometry(0.75, 3, true);
 
-  const geometry = sphereGeometry;
+  const geometry = gemGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -73,11 +65,8 @@ async function init(): Promise<void> {
   const normalCubeMap = textureToTexImage2D(context, normalCubeTexture);
 
   // render into the cube map
-  await renderGeometryNormalsIntoCubeMap(
-    context,
-    bufferGeometry,
-    normalCubeMap
-  );
+  const normalCube = await createNormalCube(context);
+  normalCube.exec({ bufferGeometry, cubeMap: normalCubeMap });
 
   const uniforms = {
     normalCubeMap: normalCubeMap,
