@@ -92,9 +92,9 @@ async function init(): Promise<void> {
 
   const uniforms = {
     // ibl
-    iblMapTexture: cubeMap,
-    iblMapIntensity: 1,
-    iblMapMaxLod: cubeMap.mipCount,
+    iblWorldMap: cubeMap,
+    iblIntensity: 1,
+    iblWorldMapMaxLod: cubeMap.mipCount,
 
     internalNormalMap: normalCubeMap,
 

@@ -14,9 +14,9 @@ uniform mat4 viewToWorld;
 uniform mat4 viewToClip;
 
 // environmental lighting
-uniform samplerCube iblMapTexture;
-uniform float iblMapIntensity;
-uniform int iblMapMaxLod;
+uniform samplerCube iblWorldMap;
+uniform float iblIntensity;
+uniform int iblWorldMapMaxLod;
 
 // material properties, a subset of glTF Physical material
 uniform float ior;
@@ -39,9 +39,9 @@ uniform vec3 internalNormalMapScale;
 
 
 vec3 getIBLSample(vec3 sampleDir, float roughness) {
-  float mipCount = float(iblMapMaxLod);
+  float mipCount = float(iblWorldMapMaxLod);
   float lod = clamp(roughness * mipCount, 0.0, mipCount);
-  return texture(iblMapTexture, sampleDir, 0.0).rgb * iblMapIntensity;
+  return texture(iblWorldMap, sampleDir, 0.0).rgb * iblIntensity;
 }
 
 void main() {
@@ -59,7 +59,7 @@ void main() {
 
   Ray ray = Ray(localViewOrigin, localViewToPositionDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);
-  vec3 gemTransmission = rayTraceTransmission( ray, localSurfaceNormal, ior, localToView, iblMapTexture );
+  vec3 gemTransmission = rayTraceTransmission( ray, localSurfaceNormal, ior, localToView, iblWorldMap );
 
 
    vec3 outgoingRadiance;

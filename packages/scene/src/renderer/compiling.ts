@@ -227,18 +227,18 @@ function updateLightUniforms(
   let lightOuterCos = -1;
 
   if (light instanceof DomeLight) {
-    lightUniforms.iblMapTexture =
+    lightUniforms.iblWorldMap =
       light.cubeMap !== undefined
         ? light.cubeMap instanceof CubeMapTexture
           ? textureToTexImage2D(context, light.cubeMap)
           : light.cubeMap
         : undefined;
-    lightUniforms.iblMapIntensity = color3MultiplyByScalar(
+    lightUniforms.iblIntensity = color3MultiplyByScalar(
       light.color,
       light.intensity
     );
-    if (lightUniforms.iblMapTexture !== undefined) {
-      lightUniforms.iblMapMaxLod = lightUniforms.iblMapTexture.mipCount;
+    if (lightUniforms.iblWorldMap !== undefined) {
+      lightUniforms.iblWorldMapMaxLod = lightUniforms.iblWorldMap.mipCount;
     }
     return;
   }

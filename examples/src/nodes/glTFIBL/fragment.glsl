@@ -188,7 +188,7 @@ void main() {
     DEBUG_OUTPUT(42, transmission_btdf);
   }
 
-  if (iblMapIntensity == vec3(0.0)) {
+  if (iblIntensity == vec3(0.0)) {
     outgoingRadiance += transmission_btdf * material.transmission;
   } else {
     //vec3 lightDirection = viewNormal;
@@ -200,18 +200,18 @@ void main() {
     );
 
     vec3 iblIrradiance = sampleIBLIrradiance(
-      iblMapTexture,
-      iblMapIntensity,
-      iblMapMaxLod,
+      iblWorldMap,
+      iblIntensity,
+      iblWorldMapMaxLod,
       viewNormal,
       worldToView
     );
     DEBUG_OUTPUT(43, iblIrradiance);
 
     vec3 iblRadiance = sampleIBLRadiance(
-      iblMapTexture,
-      iblMapIntensity,
-      iblMapMaxLod,
+      iblWorldMap,
+      iblIntensity,
+      iblWorldMapMaxLod,
       viewNormal,
       viewViewDirection,
       worldToView,
@@ -220,9 +220,9 @@ void main() {
     DEBUG_OUTPUT(44, iblRadiance);
 
     vec3 iblClearcoatRadiance = sampleIBLRadiance(
-      iblMapTexture,
-      iblMapIntensity,
-      iblMapMaxLod,
+      iblWorldMap,
+      iblIntensity,
+      iblWorldMapMaxLod,
       viewClearcoatNormal,
       viewViewDirection,
       worldToView,

@@ -3,9 +3,9 @@
 #pragma import "./punctual.glsl"
 #pragma import "../ibl/ibl.glsl"
 
-uniform samplerCube iblMapTexture;
-uniform vec3 iblMapIntensity;
-uniform int iblMapMaxLod;
+uniform samplerCube iblWorldMap;
+uniform vec3 iblIntensity;
+uniform int iblWorldMapMaxLod;
 
 uniform int numPunctualLights;
 
