@@ -37,9 +37,9 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-const sphereGeometry = icosahedronGeometry(0.75, 5, true);
+  const sphereGeometry = icosahedronGeometry(0.75, 5, true);
 
-const geometry = sphereGeometry;
+  const geometry = sphereGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -124,7 +124,7 @@ const geometry = sphereGeometry;
     orbitController.update();
 
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
-    uniforms.worldToLocal = mat4Inverse( uniforms.localToWorld);
+    uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
 
     canvasFramebuffer.clear();

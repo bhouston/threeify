@@ -70,7 +70,7 @@ async function init(): Promise<void> {
   ) as TexImage2D;
 
   const whiteTexture = SolidTextures.White;
-  const whiteMap = textureToTexImage2D( context, whiteTexture );
+  const whiteMap = textureToTexImage2D(context, whiteTexture);
 
   const program = await shaderSourceToProgram(
     context,
@@ -127,7 +127,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms: {
-        mode: ( (Date.now() / 1000 ) % 7 ),
+        mode: (Date.now() / 1000) % 7,
         depthMap: depthMap,
         ...uniforms
       },

@@ -59,10 +59,9 @@ export async function renderGeometryNormalsIntoCubeMap(
           //return;
           //}
 
-         // framebuffer.clear();
+          // framebuffer.clear();
 
-           console.log(
-            `target: ${TextureTarget[target]} index: ${index}` );
+          console.log(`target: ${TextureTarget[target]} index: ${index}`);
 
           console.log(TextureTarget[target], index);
           console.log(
@@ -73,11 +72,9 @@ export async function renderGeometryNormalsIntoCubeMap(
             )}`
           );
 
-          uniforms.worldToView = makeMat4CubeMapTransform(
-            index
-          );
-          uniforms.viewToWorld = mat4Inverse( uniforms.worldToView );
-          uniforms.worldToLocal = mat4Inverse( uniforms.localToWorld );
+          uniforms.worldToView = makeMat4CubeMapTransform(index);
+          uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
+          uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
           console.log(`camera: ${mat4ToString(uniforms.worldToView)}`);
 
           console.log(uniforms.worldToView);

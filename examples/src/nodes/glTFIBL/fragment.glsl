@@ -96,12 +96,11 @@ void main() {
   );
   DEBUG_OUTPUT(31, normalToColor(viewClearcoatNormal));
 
-  if((outputTransformFlags & 0x8) != 0) {
-    if( material.clearcoatFactor > 0.0 ) {
-      outputColor.rgb = normalToColor( viewClearcoatNormal );
-    }
-    else {
-      outputColor.rgb = normalToColor( viewNormal );
+  if ((outputTransformFlags & 0x8) != 0) {
+    if (material.clearcoatFactor > 0.0) {
+      outputColor.rgb = normalToColor(viewClearcoatNormal);
+    } else {
+      outputColor.rgb = normalToColor(viewNormal);
     }
     outputColor.a = 1.0;
     return;
@@ -129,17 +128,17 @@ void main() {
 
   vec3 transmission_btdf = vec3(0.0);
 
-  if (material.transmission > 0. || true ) {
+  if (material.transmission > 0.0 || true) {
     DEBUG_OUTPUT(35, normalToColor(viewViewDirection));
     vec3 worldViewDirection = mat4TransformDirection(
       viewToWorld,
       viewViewDirection
     );
-  
+
     DEBUG_OUTPUT(36, normalToColor(worldViewDirection));
 
     vec3 worldNormal = mat4TransformDirection(viewToWorld, viewNormal);
-    
+
     vec3 transmissionRay = getVolumeTransmissionRay(
       worldNormal,
       worldViewDirection,
@@ -325,7 +324,7 @@ void main() {
 
     outgoingRadiance += indirect_brdf;
   }
-   
+
   DEBUG_OUTPUT(70, outgoingRadiance);
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
@@ -395,7 +394,6 @@ void main() {
     );
     DEBUG_OUTPUT(59, direct_brdf);
 
-
     // sheen
     //  if (material.sheenColor != vec3(0.)) {
     vec3 sheen_brdf =
@@ -446,7 +444,6 @@ void main() {
     outgoingRadiance += direct_brdf;
   }
 
-
   DEBUG_OUTPUT(64, outgoingRadiance);
   vec3 emissive_brdf = material.emissive;
 
@@ -475,11 +472,9 @@ void main() {
 
   DEBUG_OUTPUT(69, material.alpha);
 
-
-  DEBUG_OUTPUT(0, premultipliedAlpha );
+  DEBUG_OUTPUT(0, premultipliedAlpha);
 
   outputColor.rgb = premultipliedAlpha;
   outputColor.a = material.alpha;
-
 
 }

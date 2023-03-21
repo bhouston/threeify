@@ -18,13 +18,15 @@ uniform samplerCube normalCubeMap;
 #pragma import "@threeify/core/dist/shaders/math.glsl"
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
-
 void main() {
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
 
   mat4 viewToLocal = worldToLocal * viewToWorld;
-  vec3 localSurfaceNormal = mat4TransformDirection( viewToLocal, viewSurfaceNormal );
+  vec3 localSurfaceNormal = mat4TransformDirection(
+    viewToLocal,
+    viewSurfaceNormal
+  );
 
   // trace ray into gem
-  outputColor = texture( normalCubeMap, localSurfaceNormal, 0.0 );
+  outputColor = texture(normalCubeMap, localSurfaceNormal, 0.0);
 }

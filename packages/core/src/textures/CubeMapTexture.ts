@@ -112,8 +112,8 @@ export function makeMat4CubeMapTransform(
 ): Mat4 {
   return mat4LookAt(
     new Vec3(0, 0, 0),
-    cubeFaceForwards[faceIndex],
-    cubeFaceUps[faceIndex],
+    cubeFaceForwards[faceIndex].clone(),
+    cubeFaceUps[faceIndex].clone(),
     result
   );
 }

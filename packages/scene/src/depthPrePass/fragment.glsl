@@ -55,14 +55,14 @@ void main() {
     v_uv0
   );
   viewNormal = adjustNormal(tangentToView, material.normal);
-  outputColor.rgb = normalToColor( viewNormal );
+  outputColor.rgb = normalToColor(viewNormal);
 
-  if( material.clearcoat > 0.0 ) {
+  if (material.clearcoat > 0.0) {
     vec3 viewClearcoatNormal = adjustNormal(
       tangentToView,
       material.clearcoatNormal
     );
-    outputColor.rgb = normalToColor( viewClearcoatNormal );
+    outputColor.rgb = normalToColor(viewClearcoatNormal);
   }
 
   outputColor.a = 1;

@@ -11,7 +11,6 @@ out vec4 outputColor;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
 void main() {
-
   outputColor.rgb = normalToColor(v_cubeSurfaceNormal * 0.5);
   if (length(debugColor) > 0.0) {
     outputColor.rgb = debugColor;

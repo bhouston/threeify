@@ -10,7 +10,10 @@ import { Vec2 } from '@threeify/math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
 import { ArrayImage } from '../../../textures/ArrayBufferImage.js';
-import { cubeFaceTargets, CubeMapTexture } from '../../../textures/CubeMapTexture.js';
+import {
+  cubeFaceTargets,
+  CubeMapTexture
+} from '../../../textures/CubeMapTexture.js';
 import { fetchTexture, Texture } from '../../../textures/Texture.js';
 import { TextureSource } from '../../../textures/VirtualTexture.js';
 import { GL } from '../GL.js';
@@ -128,11 +131,7 @@ export class TexImage2D implements IResource {
         for (let face = 0; face < 6; face++) {
           const imageIndex = level * 6 + face;
           const image = images[imageIndex];
-          this.loadImage(
-            image,
-            cubeFaceTargets[face],
-            level
-          );
+          this.loadImage(image, cubeFaceTargets[face], level);
         }
       }
     } else {
