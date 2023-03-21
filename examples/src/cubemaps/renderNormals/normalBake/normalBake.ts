@@ -18,7 +18,6 @@ import {
   Mat4,
   mat4Inverse,
   mat4PerspectiveFov,
-  mat4ToString,
   Vec3
 } from '@threeify/math';
 
@@ -52,11 +51,6 @@ export async function renderGeometryNormalsIntoCubeMap(
 
     uniforms.worldToView = makeMat4CubeMapTransform(index);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
-    console.log(
-      `w2V: ${mat4ToString(uniforms.worldToView)} v2W:  ${mat4ToString(
-        uniforms.viewToWorld
-      )}`
-    );
 
     uniforms.debugColor = cubeFaceDebugColor[index];
     uniforms.debugColor = new Color3();

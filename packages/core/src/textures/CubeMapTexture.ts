@@ -72,8 +72,8 @@ export const cubeFaceTargets = [
 export const cubeFaceForwards = [
   new Vec3(1, 0, 0),
   new Vec3(-1, 0, 0),
-  new Vec3(0, 1, 0),
-  new Vec3(0, -1, 0), // wrong
+  new Vec3(0, -1, 0),
+  new Vec3(0, 1, 0), // wrong
   new Vec3(0, 0, 1),
   new Vec3(0, 0, -1) // wrong
 ];
@@ -82,8 +82,8 @@ export const cubeFaceForwards = [
 export const cubeFaceUps = [
   new Vec3(0, -1, 0),
   new Vec3(0, -1, 0),
-  new Vec3(0, 0, +1),
   new Vec3(0, 0, -1),
+  new Vec3(0, 0, 1),
   new Vec3(0, -1, 0),
   new Vec3(0, -1, 0)
 ];
