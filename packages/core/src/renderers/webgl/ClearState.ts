@@ -12,6 +12,8 @@ import { ICloneable, IEquatable } from '../../core/types.js';
 export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>
 {
+  static Default = new ClearState();
+  
   constructor(
     public color = Color3.Black,
     public alpha = 1,
