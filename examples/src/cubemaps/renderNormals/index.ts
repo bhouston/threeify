@@ -37,9 +37,9 @@ import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-const sphereGeometry = icosahedronGeometry(0.75, 5, true);
+  const sphereGeometry = icosahedronGeometry(0.75, 5, true);
 
-const geometry = sphereGeometry;
+  const geometry = sphereGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -55,17 +55,6 @@ const geometry = sphereGeometry;
     'index',
     vertexSource,
     fragmentSource
-  );
-
-  const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
-  );
-  const cubeMap = await equirectangularTextureToCubeMap(
-    context,
-    latLongTexture,
-    TextureEncoding.RGBE,
-    1024,
-    InternalFormat.RGBA16F
   );
 
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
@@ -91,12 +80,7 @@ const geometry = sphereGeometry;
   );
 
   const uniforms = {
-    // ibl
-    iblMapTexture: cubeMap,
-    iblMapIntensity: 1,
-    iblMapMaxLod: cubeMap.mipCount,
-
-    internalNormalMap: normalCubeMap,
+    normalCubeMap: normalCubeMap,
 
     // vertices
     localToWorld: new Mat4(),
@@ -109,14 +93,7 @@ const geometry = sphereGeometry;
       canvasFramebuffer.aspectRatio
     ),
     worldToLocal: new Mat4(),
-    viewToWorld: new Mat4(),
-
-    // material
-    ior: IORConstants.Diamond,
-    transmissionFactor: 0.5,
-    attenuationDistance: 0.5,
-    attenuationColor: new Vec3(1, 1, 1),
-    abbeNumber: AbbeConstants.Diamond
+    viewToWorld: new Mat4()
   };
 
   function animate(): void {
@@ -124,7 +101,7 @@ const geometry = sphereGeometry;
     orbitController.update();
 
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
-    uniforms.worldToLocal = mat4Inverse( uniforms.localToWorld);
+    uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
 
     canvasFramebuffer.clear();

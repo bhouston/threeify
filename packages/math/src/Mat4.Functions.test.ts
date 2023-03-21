@@ -441,8 +441,8 @@ describe('Mat4 Functions', () => {
     ];
 
     for (let i = 0; i < 6; i++) {
-      const forward = cubeFaceLooks[i];
-      const up = cubeFaceUps[i];
+      const forward = cubeFaceLooks[i].clone();
+      const up = cubeFaceUps[i].clone();
       const lookAt = mat4LookAt(new Vec3(0, 0, 0), forward, up);
       const tjMat4 = new THREE.Matrix4();
       tjMat4.lookAt(
