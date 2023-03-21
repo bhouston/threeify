@@ -34,8 +34,9 @@ uniform vec3 internalNormalMapScale;
 #pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
 #pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
 #pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_ibl.glsl"
-
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
+
 
 vec3 getIBLSample(vec3 sampleDir, float roughness) {
   float mipCount = float(iblMapMaxLod);
@@ -50,23 +51,32 @@ void main() {
   vec3 halfVector = normalize(viewDirection + viewSurfaceNormal);
 
   mat4 viewToLocal = worldToLocal * viewToWorld;
-  vec3 localDirection = mat4TransformDirection(viewToLocal, viewSurfaceNormal);
+  vec3 localSurfaceNormal = mat4TransformDirection(viewToLocal, viewSurfaceNormal);
+  vec3 localViewOrigin = mat4TransformPosition(viewToLocal, vec3( 0.0 ));
+  vec3 localPosition = mat4TransformPosition(viewToLocal, v_viewSurfacePosition);
+  vec3 localViewToPositionDirection = normalize( localPosition - localViewOrigin );
+  mat4 localToView = worldToView * localToWorld;
+
+  Ray ray = Ray(localViewOrigin, localViewToPositionDirection);
+  Sphere sphere = Sphere(vec3(0.0), 0.5);
+  vec3 gemTransmission = rayTraceTransmission( ray, localSurfaceNormal, ior, localToView, iblMapTexture );
+
+
+   vec3 outgoingRadiance;
+  
 
   float VdotH = saturate(dot(viewDirection, halfVector));
-
   // reflect view direction off of surface normal
   vec3 reflectDir = reflect(viewDirection, viewSurfaceNormal);
 
   // sample IBL
   float defaultRoughness = 0.003;
-  vec3 iblSample = getIBLSample(reflectDir, defaultRoughness);
+  vec3 iblSample = getIBLSample(-reflectDir, defaultRoughness);
 
   // given ior calculate F0
   vec3 F0 = vec3(iorToF0(ior));
   vec3 F90 = vec3(1.0);
 
-  // trace ray into gem
-  vec3 internalRadiance = texture(internalNormalMap, localDirection, 0.0).rgb;
 
   // calculate surface reflectivity
   vec3 surfaceReflectivity = BRDF_Specular_GGX_IBL(
@@ -77,15 +87,15 @@ void main() {
     defaultRoughness
   );
 
-  vec3 outgoingRadiance;
   outgoingRadiance += fresnelMix(
     F0,
     F90,
     VdotH,
     1.0,
-    internalRadiance,
-    surfaceReflectivity * iblSample
+    gemTransmission* vec3( 0., 0., 1. ),
+    surfaceReflectivity * iblSample * vec3( 0., 1., 0. )
   );
+
 
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));
   outputColor.a = 1.0;

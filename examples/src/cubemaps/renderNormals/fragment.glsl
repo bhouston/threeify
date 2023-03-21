@@ -6,17 +6,15 @@ in vec3 v_viewSurfaceNormal;
 out vec4 outputColor;
 
 // transforms
-uniform mat4 localToWorld;
 uniform mat4 worldToLocal;
-uniform mat4 worldToView;
 uniform mat4 viewToWorld;
-uniform mat4 viewToClip;
 
 // internal gem geometry
 uniform samplerCube normalCubeMap;
 
 #pragma import "@threeify/core/dist/shaders/math.glsl"
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/normalPacking.glsl"
 
 void main() {
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
@@ -28,5 +26,7 @@ void main() {
   );
 
   // trace ray into gem
-  outputColor = texture(normalCubeMap, localSurfaceNormal, 0.0);
+  //outputColor.rgb = normalToColor( localSurfaceNormal );
+  outputColor.rgb = texture(normalCubeMap, normalize( viewSurfaceNormal ), 0.0).rgb;
+  outputColor.a = 1.0;
 }

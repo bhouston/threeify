@@ -1,10 +1,7 @@
 import {
-  BlendState,
   createNormalCube,
   createRenderingContext,
   CubeMapTexture,
-  CullingState,
-  DepthTestState,
   fetchOBJ,
   geometryToBufferGeometry,
   icosahedronGeometry,
@@ -31,7 +28,7 @@ async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
   const sphereGeometry = icosahedronGeometry(0.75, 3, true);
 
-  const geometry = gemGeometry;
+  const geometry = sphereGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -42,7 +39,7 @@ async function init(): Promise<void> {
   orbitController.zoom = 1.5;
   orbitController.zoomMax = 9;
 
-  const mainProgram = await shaderSourceToProgram(
+  const program = await shaderSourceToProgram(
     context,
     'index',
     vertexSource,
@@ -69,7 +66,7 @@ async function init(): Promise<void> {
   normalCube.exec({ bufferGeometry, cubeMap: normalCubeMap });
 
   const uniforms = {
-    normalCubeMap: normalCubeMap,
+    normalCubeMap,
 
     // vertices
     localToWorld: new Mat4(),
@@ -84,24 +81,21 @@ async function init(): Promise<void> {
     worldToLocal: new Mat4(),
     viewToWorld: new Mat4()
   };
+  uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
 
   function animate(): void {
     orbitController.update();
 
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
-    uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
 
     canvasFramebuffer.clear();
 
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program: mainProgram,
+      program,
       uniforms,
-      bufferGeometry,
-      depthTestState: DepthTestState.Less,
-      cullingState: CullingState.Back,
-      blendState: BlendState.PremultipliedOver
+      bufferGeometry
     });
 
     requestAnimationFrame(animate);

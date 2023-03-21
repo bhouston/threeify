@@ -50,6 +50,8 @@ async function init(): Promise<void> {
     const duplicateIds = [];
     let compileError;
 
+    console.log(glslUnitTest.name);
+
     try {
       const passMaterial = new ShaderMaterial(
         'index',
@@ -122,6 +124,7 @@ async function init(): Promise<void> {
   if (textElement !== null) {
     textElement.innerHTML = output.join('<br/>');
   }
+  console.log(output.join('\n'));
 }
-
+console.log('running tests');
 init();

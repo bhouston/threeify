@@ -7,7 +7,7 @@ import {
   CullingState,
   DepthTestState,
   equirectangularTextureToCubeMap,
-  fetchHDR,
+  fetchImage,
   fetchOBJ,
   geometryToBufferGeometry,
   icosahedronGeometry,
@@ -31,15 +31,14 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-  const sphereGeometry = icosahedronGeometry(0.75, 2, true);
+  const sphereGeometry = icosahedronGeometry(0.75, 5, true);
 
-  const geometry = gemGeometry;
+  const geometry = sphereGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -58,8 +57,12 @@ async function init(): Promise<void> {
   );
 
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+    await fetchImage('/assets/textures/cube/debug/latLong.png')
   );
+  /*const latLongTexture = new Texture(
+    await fetchHDR('./assets/textures/cube/debug/latLong.png')
+      getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+  );*/
   const cubeMap = await equirectangularTextureToCubeMap(
     context,
     latLongTexture,
