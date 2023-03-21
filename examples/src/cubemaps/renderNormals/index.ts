@@ -86,7 +86,6 @@ async function init(): Promise<void> {
   };
 
   function animate(): void {
-    const now = Date.now();
     orbitController.update();
 
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);

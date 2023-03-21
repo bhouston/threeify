@@ -1,6 +1,7 @@
 import {
   AbbeConstants,
   BlendState,
+  createNormalCube,
   createRenderingContext,
   CubeMapTexture,
   CullingState,
@@ -32,14 +33,13 @@ import {
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
-import { renderGeometryNormalsIntoCubeMap } from './normalBake/normalBake';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {
   const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-  const sphereGeometry = icosahedronGeometry(0.75, 5, true);
+  const sphereGeometry = icosahedronGeometry(0.75, 2, true);
 
-  const geometry = sphereGeometry;
+  const geometry = gemGeometry;
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -84,11 +84,8 @@ async function init(): Promise<void> {
   const normalCubeMap = textureToTexImage2D(context, normalCubeTexture);
 
   // render into the cube map
-  await renderGeometryNormalsIntoCubeMap(
-    context,
-    bufferGeometry,
-    normalCubeMap
-  );
+  const normalCube = await createNormalCube(context);
+  normalCube.exec({ bufferGeometry, cubeMap: normalCubeMap });
 
   const uniforms = {
     // ibl
@@ -120,7 +117,6 @@ async function init(): Promise<void> {
   };
 
   function animate(): void {
-    const now = Date.now();
     orbitController.update();
 
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);

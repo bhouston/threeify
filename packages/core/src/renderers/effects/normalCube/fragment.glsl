@@ -5,8 +5,8 @@ in vec3 v_cubeSurfaceNormal;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/dist/shaders/microgeometry/normalPacking.glsl"
-#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
+#pragma import "../../../shaders/microgeometry/normalPacking.glsl"
+#pragma import "../../../shaders/math/mat4.glsl"
 
 void main() {
   vec3 cubeSurfaceNormal = normalize(v_cubeSurfaceNormal);

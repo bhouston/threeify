@@ -1,18 +1,18 @@
-import {
-  Attachment,
-  BufferGeometry,
-  cubeFaceTargets,
-  Framebuffer,
-  IEffect,
-  makeMat4CubeMapTransform,
-  renderBufferGeometry,
-  RenderingContext,
-  ShaderMaterial,
-  shaderMaterialToProgram,
-  TexImage2D
-} from '@threeify/core';
 import { Mat4, mat4PerspectiveFov } from '@threeify/math';
 
+import { ShaderMaterial } from '../../../materials/ShaderMaterial';
+import {
+  cubeFaceTargets,
+  makeMat4CubeMapTransform
+} from '../../../textures/CubeMapTexture';
+import { BufferGeometry } from '../../webgl/buffers/BufferGeometry';
+import { Attachment } from '../../webgl/framebuffers/Attachment';
+import { Framebuffer } from '../../webgl/framebuffers/Framebuffer';
+import { renderBufferGeometry } from '../../webgl/framebuffers/VirtualFramebuffer';
+import { shaderMaterialToProgram } from '../../webgl/programs/Program';
+import { RenderingContext } from '../../webgl/RenderingContext';
+import { TexImage2D } from '../../webgl/textures/TexImage2D';
+import { IEffect } from '../IEffect';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

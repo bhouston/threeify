@@ -81,7 +81,12 @@ async function main() {
     }, 0);
 
     watch.watchTree(rootDir, (f, curr, prev) => {
-      if (f.endsWith('.glsl')) {
+      if (
+        f.includes('.glsl') &&
+        !f.includes('.glsl.ts') &&
+        !f.includes('.glsl.js') &&
+        !f.includes('.glsl.d.ts')
+      ) {
         console.log('glsl-transpiler - recompile on changes', f);
         trottleRecompiler();
       }
