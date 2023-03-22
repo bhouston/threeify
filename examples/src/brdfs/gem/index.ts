@@ -21,6 +21,7 @@ import {
   Orbit,
   renderBufferGeometry,
   shaderSourceToProgram,
+  TexImage2D,
   Texture,
   TextureEncoding,
   TextureFilter,
@@ -46,22 +47,23 @@ let gemIndex = 0;
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      ior += 0.1;
+      ior += 0.05;
       break;
     case 'ArrowDown':
-      ior -= 0.1;
+      ior -= 0.05;
       break;
     case 'ArrowLeft':
-      gemIndex++;
+      gemIndex--;
       break;
     case 'ArrowRight':
-      gemIndex--;
+      gemIndex++;
       break;
     case 'Escape':
       ior = IORConstants.Diamond;
+      gemIndex = 0;
       break;
   }
-  ior = Math.max(1, Math.min(3, ior));
+  ior = Math.max(1, Math.min(5, ior));
 });
 
 async function init(): Promise<void> {
@@ -111,24 +113,33 @@ async function init(): Promise<void> {
   for (const geometry of gemGeometries) {
     bufferGeometries.push(geometryToBufferGeometry(context, geometry));
   }
-
-  const imageSize = new Vec2(512, 512);
-  const normalCubeTexture = new CubeMapTexture([
-    imageSize,
-    imageSize,
-    imageSize,
-    imageSize,
-    imageSize,
-    imageSize
-  ]);
-  normalCubeTexture.minFilter = TextureFilter.Nearest;
-  normalCubeTexture.generateMipmaps = false;
-  const gemLocalNormalMap = textureToTexImage2D(context, normalCubeTexture);
-
-  let lastGemIndex = -1;
-
   // render into the cube map
   const normalCube = await createNormalCube(context);
+
+  const gemLocalNormalMaps: TexImage2D[] = [];
+  for (const bufferGeometry of bufferGeometries) {
+    const imageSize = new Vec2(512, 512);
+    const normalCubeTexture = new CubeMapTexture([
+      imageSize,
+      imageSize,
+      imageSize,
+      imageSize,
+      imageSize,
+      imageSize
+    ]);
+    normalCubeTexture.minFilter = TextureFilter.Nearest;
+    normalCubeTexture.generateMipmaps = false;
+    const gemLocalNormalMap = textureToTexImage2D(context, normalCubeTexture);
+
+    normalCube.exec({
+      cubeMap: gemLocalNormalMap,
+      bufferGeometry
+    });
+
+    gemLocalNormalMaps.push(gemLocalNormalMap);
+  }
+
+  let lastGemIndex = -1;
 
   const uniforms = {
     // ibl
@@ -136,7 +147,7 @@ async function init(): Promise<void> {
     iblIntensity: 1,
     iblMipCount: cubeMap.mipCount,
 
-    gemLocalNormalMap: gemLocalNormalMap,
+    gemLocalNormalMap: gemLocalNormalMaps[gemIndex],
 
     // vertices
     localToWorld: new Mat4(),
@@ -162,21 +173,17 @@ async function init(): Promise<void> {
   function animate(): void {
     orbitController.update();
 
+    console.log('ior', ior, 'gemIndex', gemIndex, 'lastGemIndex', lastGemIndex);
     if (lastGemIndex !== gemIndex) {
       gemIndex = (gemIndex + bufferGeometries.length) % bufferGeometries.length;
       lastGemIndex = gemIndex;
-      const bufferGeometry =
-        bufferGeometries[gemIndex % bufferGeometries.length];
-      normalCube.exec({
-        cubeMap: gemLocalNormalMap,
-        bufferGeometry
-      });
+      console.log('updating cubemap');
     }
 
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
-
+    uniforms.gemLocalNormalMap = gemLocalNormalMaps[gemIndex];
     uniforms.viewToClip = mat4PerspectiveFov(
       25,
       0.1,

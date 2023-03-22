@@ -1,4 +1,4 @@
-import { Mat4, mat4PerspectiveFov } from '@threeify/math';
+import { Color3, Mat4, mat4PerspectiveFov } from '@threeify/math';
 
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
 import {
@@ -6,6 +6,7 @@ import {
   makeMat4CubeMapTransform
 } from '../../../textures/CubeMapTexture';
 import { BufferGeometry } from '../../webgl/buffers/BufferGeometry';
+import { ClearState } from '../../webgl/ClearState';
 import { Attachment } from '../../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../../webgl/framebuffers/Framebuffer';
 import { renderBufferGeometry } from '../../webgl/framebuffers/VirtualFramebuffer';
@@ -33,7 +34,6 @@ export async function createNormalCube(
     return shaderMaterialToProgram(context, material);
   });
   const program = await programRef.promise;
-  const framebuffer = new Framebuffer(context);
 
   return {
     exec: (props: INormalCubeProps) => {
@@ -45,6 +45,7 @@ export async function createNormalCube(
         worldToLocal: new Mat4(),
         viewToClip: mat4PerspectiveFov(45, 0.01, 2, 1, 1) // 90 degree FOV with a square aspect ratio.
       };
+      const framebuffer = new Framebuffer(context);
 
       for (let index = 0; index < cubeFaceTargets.length; index++) {
         const target = cubeFaceTargets[index];
@@ -52,21 +53,19 @@ export async function createNormalCube(
         uniforms.worldToView = makeMat4CubeMapTransform(index);
 
         framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
+        framebuffer.clearState = new ClearState(Color3.Black, 0);
         framebuffer.clear();
         renderBufferGeometry({
           framebuffer,
           bufferGeometry,
           program,
           uniforms
-          /*    depthTestState: DepthTestState.Less,
-          blendState: BlendState.PremultipliedOver,
-          cullingState: CullingState.Front*/
         });
       }
+      framebuffer.dispose();
     },
 
     dispose: () => {
-      framebuffer.dispose();
       programRef.dispose();
     }
   };
