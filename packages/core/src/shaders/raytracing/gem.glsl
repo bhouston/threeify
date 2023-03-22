@@ -25,6 +25,7 @@ float fresnelReflection( vec3 incidentRay, vec3 surfaceNormal, float eta ) {
     return ( rParallel * rParallel + rPerpendicular * rPerpendicular ) / 2.0;
 }
 
+#define MANUAL_ATTENUATION (1.0)
 #define MAX_RAY_BOUNCES (20)
 
 vec3 rayTraceTransmission( Ray localIncidentRay, Hit localSurfaceHit, Sphere gemLocalSphere, float gemIOR, mat4 localToWorld, vec3 attenuationCoefficient, samplerCube gemLocalNormalMap, samplerCube iblWorldMap ) {
@@ -43,8 +44,8 @@ vec3 rayTraceTransmission( Ray localIncidentRay, Hit localSurfaceHit, Sphere gem
     vec3 externalWorldReflection = mat4TransformDirection(localToWorld, externalGemReflection);
     vec3 externalColor = texture( iblWorldMap, externalWorldReflection, 0.0 ).rgb;
 
-    vec3 accumulatedRadiance = externalReflectionCoefficient * externalColor * 0.04;
-    vec3 accumulatedAttenuation = attenuationCoefficient * 0.9; // vec3( externalTransmissionCoefficient );
+    vec3 accumulatedRadiance = externalReflectionCoefficient * externalColor * MANUAL_ATTENUATION;
+    vec3 accumulatedAttenuation = attenuationCoefficient * MANUAL_ATTENUATION; // vec3( externalTransmissionCoefficient );
 
     for( int bounce = 0; bounce < MAX_RAY_BOUNCES; bounce ++ ) {
         Hit internalSphereHit;
@@ -73,7 +74,7 @@ vec3 rayTraceTransmission( Ray localIncidentRay, Hit localSurfaceHit, Sphere gem
         float internalTransmissionCoefficient = saturate( 1.0 - internalFresnel );
 
         externalColor = texture( iblWorldMap, externalWorldRefraction, 0.0 ).rgb;
-        accumulatedAttenuation *= 0.9; // internalReflectionCoefficient;
+        accumulatedAttenuation *= MANUAL_ATTENUATION; // internalReflectionCoefficient;
         accumulatedRadiance += accumulatedAttenuation * internalTransmissionCoefficient * externalColor;
    
         // update internal ray for next boundce
