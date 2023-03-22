@@ -52,6 +52,7 @@ export async function createNormalCube(
         uniforms.worldToView = makeMat4CubeMapTransform(index);
 
         framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
+        framebuffer.clear();
         renderBufferGeometry({
           framebuffer,
           bufferGeometry,

@@ -1,15 +1,19 @@
 import {
   AbbeConstants,
   BlendState,
+  boxGeometry,
+  BufferGeometry,
   createCubemapBackground,
   createNormalCube,
   createRenderingContext,
   CubeMapTexture,
   CullingState,
+  cylinderGeometry,
   DepthTestState,
   equirectangularTextureToCubeMap,
   fetchHDR,
   fetchOBJ,
+  Geometry,
   geometryToBufferGeometry,
   icosahedronGeometry,
   InternalFormat,
@@ -36,11 +40,40 @@ import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
-async function init(): Promise<void> {
-  const [gemGeometry] = await fetchOBJ('/assets/models/gems/gemStone.obj');
-  const sphereGeometry = icosahedronGeometry(0.5, 2, false);
+let ior = IORConstants.Diamond;
+let gemIndex = 0;
 
-  const geometry = sphereGeometry;
+document.addEventListener('keydown', (event) => {
+  switch (event.key) {
+    case 'ArrowUp':
+      ior += 0.1;
+      break;
+    case 'ArrowDown':
+      ior -= 0.1;
+      break;
+    case 'ArrowLeft':
+      gemIndex++;
+      break;
+    case 'ArrowRight':
+      gemIndex--;
+      break;
+    case 'Escape':
+      ior = IORConstants.Diamond;
+      break;
+  }
+  ior = Math.max(1, Math.min(3, ior));
+});
+
+async function init(): Promise<void> {
+  const gemGeometries: Geometry[] = [];
+  gemGeometries.push(
+    icosahedronGeometry(0.25, 2, false),
+    boxGeometry(0.25, 0.25, 0.25),
+    cylinderGeometry(0.25, 0.25, 36)
+  );
+  for (let i = 1; i < 14; i++) {
+    gemGeometries.push(...(await fetchOBJ(`/assets/models/gems/gem${i}.obj`)));
+  }
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -74,7 +107,10 @@ async function init(): Promise<void> {
     InternalFormat.RGBA16F
   );
 
-  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+  const bufferGeometries: BufferGeometry[] = [];
+  for (const geometry of gemGeometries) {
+    bufferGeometries.push(geometryToBufferGeometry(context, geometry));
+  }
 
   const imageSize = new Vec2(512, 512);
   const normalCubeTexture = new CubeMapTexture([
@@ -89,9 +125,10 @@ async function init(): Promise<void> {
   normalCubeTexture.generateMipmaps = false;
   const gemLocalNormalMap = textureToTexImage2D(context, normalCubeTexture);
 
+  let lastGemIndex = -1;
+
   // render into the cube map
   const normalCube = await createNormalCube(context);
-  normalCube.exec({ bufferGeometry, cubeMap: gemLocalNormalMap });
 
   const uniforms = {
     // ibl
@@ -125,6 +162,17 @@ async function init(): Promise<void> {
   function animate(): void {
     orbitController.update();
 
+    if (lastGemIndex !== gemIndex) {
+      gemIndex = (gemIndex + bufferGeometries.length) % bufferGeometries.length;
+      lastGemIndex = gemIndex;
+      const bufferGeometry =
+        bufferGeometries[gemIndex % bufferGeometries.length];
+      normalCube.exec({
+        cubeMap: gemLocalNormalMap,
+        bufferGeometry
+      });
+    }
+
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
@@ -148,11 +196,13 @@ async function init(): Promise<void> {
       clipToView: mat4Inverse(uniforms.viewToClip)
     });
 
+    uniforms.ior = ior;
+
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program: mainProgram,
       uniforms,
-      bufferGeometry,
+      bufferGeometry: bufferGeometries[gemIndex],
       depthTestState: DepthTestState.Less,
       cullingState: CullingState.Back,
       blendState: BlendState.PremultipliedOver

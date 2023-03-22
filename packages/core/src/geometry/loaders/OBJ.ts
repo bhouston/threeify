@@ -119,16 +119,18 @@ export function parseOBJ(text: string, source: string): Geometry[] {
           return;
         }
         case 'f': {
-          const fMatch = content.match(faceRegexp);
-          if (fMatch === null) throw new Error(`invalid f line: ${line}`);
+          const points = content.split(' ');
           const startVertex = positions.length / 3;
-          let numVertices = 3;
-          if (fMatch[13] !== undefined) {
-            numVertices++;
-          }
+          const numVertices = points.length;
+
           let baseOffset = 2;
-          for (let v = 0; v < numVertices; v++) {
-            let pi = (Number.parseInt(fMatch[baseOffset + 0]) - 1) * 3;
+          for (let vertex = 0; vertex < numVertices; vertex++) {
+            const dataIndices = points[vertex].split('/');
+            const v = Number.parseInt(dataIndices[0]);
+            const vt = Number.parseInt(dataIndices[1]);
+            const vn = Number.parseInt(dataIndices[2]);
+
+            let pi = (v - 1) * 3;
             if (pi < 0) {
               pi += workingPositions.length / 3;
             }
@@ -137,17 +139,15 @@ export function parseOBJ(text: string, source: string): Geometry[] {
               workingPositions[pi + 1],
               workingPositions[pi + 2]
             );
-            const uvIndexToken = fMatch[baseOffset + 1];
-            if (uvIndexToken.length > 0) {
-              let uvi = (Number.parseInt(uvIndexToken) - 1) * 2;
+            if (!Number.isNaN(vt)) {
+              let uvi = (vt - 1) * 2;
               if (uvi < 0) {
                 uvi += workingUvs.length / 2;
               }
               uvs.push(workingUvs[uvi], workingUvs[uvi + 1]);
             }
-            const normalIndexToken = fMatch[baseOffset + 2];
-            if (normalIndexToken.length > 0) {
-              let ni = (Number.parseInt(normalIndexToken) - 1) * 3;
+            if (!Number.isNaN(vn)) {
+              let ni = (vn - 1) * 3;
               if (ni < 0) {
                 ni += workingNormals.length / 3;
               }
