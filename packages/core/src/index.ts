@@ -63,7 +63,7 @@ export * from './renderers/utilities/TextureEncoding.js';
 export * from './textures/loaders/HDR.js';
 export * from './textures/loaders/Image.js';
 
-export * from './loaders/OBJ.js';
+export * from './geometry/loaders/OBJ.js';
 
 export * from './materials/Blending.js';
 export * from './materials/OutputChannels.js';
