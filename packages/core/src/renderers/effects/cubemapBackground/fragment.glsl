@@ -1,19 +1,29 @@
 precision highp float;
 
-in vec4 v_homogeneousVertexPosition;
-
-uniform mat4 viewToWorld;
-uniform mat4 clipToView;
+in vec3 v_viewSurfaceNormal;
 
 uniform samplerCube cubeMap;
 uniform float cubeMapIntensity;
+uniform bool toneMapping;
+uniform float exposure;
+uniform bool sRGB;
+
+#pragma import "../../../shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "../../../shaders/color/spaces/srgb.glsl"
 
 out vec4 outputColor;
 
 void main() {
-  // step one, convert from screen space to ray.
-  vec4 worldPosition = viewToWorld * clipToView * v_homogeneousVertexPosition;
-  vec3 worldNormal = normalize(worldPosition.xyz);
+  vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
 
-  outputColor = texture(cubeMap, worldNormal) * cubeMapIntensity;
+  outputColor = texture(cubeMap, viewSurfaceNormal, 0.0) * cubeMapIntensity;
+
+  outputColor.rgb *= exposure;
+  if (toneMapping) {
+    outputColor.rgb = tonemappingACESFilmic(outputColor.rgb);
+  }
+  if (sRGB) {
+    outputColor.rgb = linearTosRGB(outputColor.rgb);
+  }
+  outputColor.a = 1.0;
 }

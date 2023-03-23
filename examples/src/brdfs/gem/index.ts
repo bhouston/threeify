@@ -207,9 +207,13 @@ async function init(): Promise<void> {
       cubeMapTexImage2D: uniforms.iblWorldMap,
       cubeMapIntensity: 1,
       targetFramebuffer: canvasFramebuffer,
-      viewToWorld: uniforms.viewToWorld,
-
-      clipToView: mat4Inverse(uniforms.viewToClip)
+      worldToView: uniforms.worldToView,
+      localToWorld: uniforms.localToWorld,
+      viewToClip: uniforms.viewToClip,
+      depth: 1,
+      toneMapping: true,
+      exposure: 1,
+      sRGB: true
     });
 
     uniforms.ior = ior;

@@ -32,7 +32,7 @@ float fresnelReflection(vec3 incidentRay, vec3 surfaceNormal, float eta) {
 }
 
 #define MANUAL_ATTENUATION (1.0)
-#define MAX_RAY_BOUNCES (6)
+#define MAX_RAY_BOUNCES (1)
 
 vec3 rayTraceTransmission(
   Ray localIncidentRay,
@@ -48,48 +48,93 @@ vec3 rayTraceTransmission(
   vec3 F0 = vec3(iorToF0(ior));
   vec3 F90 = vec3(1.0);
 
+  /*//this is correct
+  vec3 externalWorldRefraction = mat4TransformDirection(
+    localToWorld,
+    localIncidentRay.direction
+  );
+  vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
+  return externalRefractionColor;
+  */
+
+
   // external reflection
-  vec3 externalGemReflection = reflect(
+  vec3 externalLocalReflection = reflect(
     localIncidentRay.direction,
     localSurfaceHit.normal
   );
 
   // internal refraction
-  vec3 internalGemRefraction = refract(
+  vec3 internalLocalRefraction = refract(
     localIncidentRay.direction,
     localSurfaceHit.normal,
     1.0 / gemIOR
   );
   Ray internalRay = Ray(
-    localSurfaceHit.position + internalGemRefraction * 0.05,
-    internalGemRefraction
+    localSurfaceHit.position + internalLocalRefraction * 0.0001,
+    internalLocalRefraction
   );
 
+  /*
+
+  vec3 externalWorldRefraction = mat4TransformDirection(
+    localToWorld,
+    internalLocalRefraction
+  );
+  vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
+  return externalRefractionColor;
+*/
   //vec3 halfVector = normalize( localSurfaceHit.normal + -localIncidentRay.direction );
   //float VdotH = dot( -localIncidentRay.direction, localSurfaceHit.normal );
 
- //   vec3 externalFresnel = F_Schlick_2(F0, F90, VdotH); // This works!  Not black at ior 1 at edges.
+  //   vec3 externalFresnel = F_Schlick_2(F0, F90, VdotH); // This works!  Not black at ior 1 at edges.
 
   // calculate fresnel reflection and transmission
-  vec3 externalFresnel = vec3( fresnelReflection( // This works!  Black at ior 1 at edges.
-    -localIncidentRay.direction,
-    localSurfaceHit.normal,
-    1.0 / gemIOR
-  ) );
+  vec3 externalFresnel = vec3(
+    fresnelReflection( // This works!  Black at ior 1 at edges.
+      -localIncidentRay.direction,
+      localSurfaceHit.normal,
+      1.0 / gemIOR
+    )
+  );
   vec3 externalReflectionCoefficient = saturate(externalFresnel);
   vec3 externalTransmissionCoefficient = saturate(1.0 - externalFresnel);
 
   vec3 externalWorldReflection = mat4TransformDirection(
     localToWorld,
-    externalGemReflection
+    externalLocalReflection
   );
   vec3 externalColor = texture(iblWorldMap, externalWorldReflection, 0.0).rgb; // TODO: add a mip level here to add some roughness.
 
-  vec3 accumulatedRadiance = vec3( 0.0 );
-  vec3 accumulatedAttenuation = vec3( 1.0 );
-  
+  vec3 accumulatedRadiance = vec3(0.0);
+  vec3 accumulatedAttenuation = vec3(1.0);
+
+  accumulatedRadiance += externalColor * externalFresnel;
+
+ vec3 externalWorldRefraction = mat4TransformDirection(
+    localToWorld,
+    internalRay.direction
+  );
+  vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
+  accumulatedRadiance += externalRefractionColor;
+
+  return accumulatedRadiance;
+
+
+/*
+ vec3 externalWorldRefraction = mat4TransformDirection(
+    localToWorld,
+    internalLocalRefraction
+  );
+  vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
+
+  return externalRefractionColor;
+*/
+
   // external light bouncing of of the diamond.
-  accumulatedRadiance += externalColor * externalReflectionCoefficient; // this appears to be correct.
+
+  // TEMP disabling - accumulatedRadiance += externalColor * externalReflectionCoefficient; // this appears to be correct.
+
   // NOTE: there is no diminishing of outgoing light by the forward transmission, so do not decay attenuation here,
   // instead it is diminished by its transmission from inside to outside.
 
@@ -105,7 +150,7 @@ vec3 rayTraceTransmission(
       externalColor = texture(iblWorldMap, externalWorldReflection, 0.0).rgb;
       accumulatedRadiance +=
         accumulatedAttenuation * attenuationCoefficient * externalColor;*/
-      return accumulatedRadiance;
+      return vec3(1.0, 0.0, 0.0); // accumulatedRadiance;
     }
 
     accumulatedAttenuation *= attentuationOverDistance(
@@ -134,6 +179,7 @@ vec3 rayTraceTransmission(
       localToWorld,
       externalLocalRefraction
     );
+    externalWorldRefraction = externalLocalRefraction;
 
     // calculate fresnel reflection and transmission
     float internalFresnel = fresnelReflection(
@@ -144,6 +190,8 @@ vec3 rayTraceTransmission(
     float internalReflectionCoefficient = saturate(internalFresnel);
     float internalTransmissionCoefficient = saturate(1.0 - internalFresnel);
 
+    externalWorldRefraction.xy *= -1.0;
+
     externalColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb;
     accumulatedAttenuation *= MANUAL_ATTENUATION; // internalReflectionCoefficient;
     accumulatedRadiance +=
@@ -151,7 +199,7 @@ vec3 rayTraceTransmission(
 
     // update internal ray for next boundce
     internalRay = Ray(
-      internalSphereHit.position + internalGemReflection * 0.05,
+      internalSphereHit.position + internalGemReflection * 0.0001,
       internalGemReflection
     );
   }

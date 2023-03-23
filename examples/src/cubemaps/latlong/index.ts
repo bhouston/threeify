@@ -9,12 +9,7 @@ import {
   Texture,
   TextureEncoding
 } from '@threeify/core';
-import {
-  mat4Compose,
-  mat4Inverse,
-  mat4PerspectiveFov,
-  Vec3
-} from '@threeify/math';
+import { Mat4, mat4Compose, mat4PerspectiveFov, Vec3 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 
@@ -76,8 +71,13 @@ async function init(): Promise<void> {
         Math.sin(now * 0.002) > 0 ? latLongCubeMap : ennisCubeMap,
       cubeMapIntensity: 1,
       targetFramebuffer: canvasFramebuffer,
-      viewToWorld: mat4Inverse(worldToView),
-      clipToView: mat4Inverse(viewToClip)
+      localToWorld: new Mat4(),
+      worldToView: worldToView,
+      viewToClip,
+      depth: 1,
+      toneMapping: true,
+      exposure: 1,
+      sRGB: true
     });
   }
 

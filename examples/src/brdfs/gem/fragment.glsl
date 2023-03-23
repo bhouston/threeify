@@ -58,12 +58,17 @@ void main() {
     viewToLocal,
     v_viewSurfacePosition
   );
+    vec3 localViewDirection = mat4TransformDirection(
+    viewToLocal,
+    viewViewDirection
+  );
+
   vec3 localViewToPositionDirection = normalize(
     localPosition - localViewOrigin
   );
   mat4 localToView = worldToView * localToWorld;
 
-  Ray localIncidentRay = Ray(localViewOrigin, localViewToPositionDirection);
+  Ray localIncidentRay = Ray(localViewOrigin, -localViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5001);
   Hit localSurfaceHit = Hit(0.0, localPosition, localSurfaceNormal);
 
@@ -72,7 +77,7 @@ void main() {
     localSurfaceHit,
     sphere,
     ior,
-    localToView,
+    localToWorld,
     attenuationColor,
     gemLocalNormalMap,
     iblWorldMap

@@ -16,7 +16,6 @@ import {
   euler3ToMat4,
   hslToColor3,
   Mat4,
-  mat4Inverse,
   mat4PerspectiveFov,
   translation3ToMat4,
   Vec2,
@@ -97,8 +96,13 @@ async function init(): Promise<void> {
       cubeMapTexImage2D: cubeMap,
       cubeMapIntensity: 1,
       targetFramebuffer: canvasFramebuffer,
-      viewToWorld: uniforms.localToWorld,
-      clipToView: mat4Inverse(uniforms.viewToClip)
+      localToWorld: uniforms.localToWorld,
+      worldToView: uniforms.worldToView,
+      viewToClip: uniforms.viewToClip,
+      depth: 1,
+      toneMapping: true,
+      exposure: 1,
+      sRGB: true
     });
   }
 

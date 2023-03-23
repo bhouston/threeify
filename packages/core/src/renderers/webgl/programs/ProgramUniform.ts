@@ -177,6 +177,18 @@ export class ProgramUniform {
       // case UniformType.IntVec2:
       // case UniformType.IntVec3:
       // case UniformType.IntVec4:
+      case UniformType.Bool:
+        if (typeof value === 'boolean') {
+          //if (value !== this.valueHashCode) {
+          gl.uniform1i(this.glLocation, value ? 1 : 0);
+          //this.valueHashCode = value;
+          //}
+          return this;
+        }
+        break;
+      // case UniformType.IntVec2:
+      // case UniformType.IntVec3:
+      // case UniformType.IntVec4:
       case UniformType.Float:
         if (typeof value === 'number') {
           //if (value !== this.valueHashCode) {

@@ -1,10 +1,13 @@
 import { Mat4 } from '@threeify/math';
 
 import { assert } from '../../../core/assert';
+import { icosahedronGeometry } from '../../../geometry/primitives/polyhedronGeometry';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
+import { geometryToBufferGeometry } from '../../webgl/buffers/BufferGeometry';
+import { CullingState } from '../../webgl/CullingState';
 import { DepthTestState } from '../../webgl/DepthTestState';
 import {
-  renderPass,
+  renderBufferGeometry,
   VirtualFramebuffer
 } from '../../webgl/framebuffers/VirtualFramebuffer';
 import { shaderMaterialToProgram } from '../../webgl/programs/Program';
@@ -17,8 +20,13 @@ import vertexSource from './vertex.glsl';
 export interface ICubemapBackgroundProps {
   cubeMapTexImage2D: TexImage2D;
   cubeMapIntensity: number;
-  viewToWorld: Mat4;
-  clipToView: Mat4;
+  localToWorld: Mat4;
+  worldToView: Mat4;
+  viewToClip: Mat4;
+  depth: number;
+  toneMapping: boolean;
+  exposure: number;
+  sRGB: boolean;
   targetFramebuffer: VirtualFramebuffer;
 }
 
@@ -38,14 +46,22 @@ export async function createCubemapBackground(
   );
   const program = await programRef.promise;
 
+  const geometry = icosahedronGeometry(1, 5, true);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+
   return {
     exec: (props: ICubemapBackgroundProps) => {
       const {
         cubeMapTexImage2D,
         cubeMapIntensity,
         targetFramebuffer,
-        viewToWorld,
-        clipToView
+        localToWorld,
+        worldToView,
+        viewToClip,
+        depth,
+        toneMapping,
+        exposure,
+        sRGB
       } = props;
 
       assert(cubeMapIntensity > 0);
@@ -53,15 +69,22 @@ export async function createCubemapBackground(
       const uniforms = {
         cubeMap: cubeMapTexImage2D,
         cubeMapIntensity,
-        viewToWorld,
-        clipToView
+        localToWorld,
+        worldToView,
+        depth,
+        viewToClip,
+        exposure,
+        toneMapping,
+        sRGB
       };
 
-      renderPass({
+      renderBufferGeometry({
         framebuffer: targetFramebuffer,
+        bufferGeometry,
         program,
         uniforms,
-        depthTestState: DepthTestState.Less
+        depthTestState: DepthTestState.None,
+        cullingState: CullingState.Front
       });
     },
     dispose: () => {
