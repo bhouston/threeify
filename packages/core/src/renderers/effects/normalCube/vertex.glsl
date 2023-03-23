@@ -15,7 +15,7 @@ out vec2 v_uv0;
 
 void main() {
   mat4 localToView = worldToView * localToWorld;
-  v_cubeSurfaceNormal = mat4TransformDirection(worldToLocal, normalize(normal));
+  v_cubeSurfaceNormal = normalize(mat4TransformDirection(worldToLocal, normal));
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv0;
 

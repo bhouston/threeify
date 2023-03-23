@@ -68,14 +68,15 @@ document.addEventListener('keydown', (event) => {
 
 async function init(): Promise<void> {
   const gemGeometries: Geometry[] = [];
-  gemGeometries.push(
-    icosahedronGeometry(0.25, 2, false),
-    boxGeometry(0.25, 0.25, 0.25),
-    cylinderGeometry(0.25, 0.25, 36)
-  );
   for (let i = 1; i < 14; i++) {
     gemGeometries.push(...(await fetchOBJ(`/assets/models/gems/gem${i}.obj`)));
   }
+  gemGeometries.push(
+    boxGeometry(0.25, 0.25, 0.25),
+    cylinderGeometry(0.25, 0.25, 36),
+    icosahedronGeometry(0.25, 2, false),
+    icosahedronGeometry(0.25, 5, true)
+  );
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');
@@ -118,7 +119,7 @@ async function init(): Promise<void> {
 
   const gemLocalNormalMaps: TexImage2D[] = [];
   for (const bufferGeometry of bufferGeometries) {
-    const imageSize = new Vec2(512, 512);
+    const imageSize = new Vec2(1024, 1024);
     const normalCubeTexture = new CubeMapTexture([
       imageSize,
       imageSize,
@@ -128,6 +129,8 @@ async function init(): Promise<void> {
       imageSize
     ]);
     normalCubeTexture.minFilter = TextureFilter.Nearest;
+    normalCubeTexture.magFilter = TextureFilter.Nearest;
+    normalCubeTexture.anisotropicLevels = 0;
     normalCubeTexture.generateMipmaps = false;
     const gemLocalNormalMap = textureToTexImage2D(context, normalCubeTexture);
 
