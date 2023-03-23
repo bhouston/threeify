@@ -40,6 +40,11 @@ float iorToF0(const float ior) {
   return pow2((ior - 1.0) / (ior + 1.0));
 }
 
+vec3 iorAndSpecularIntensityToF0(const float ior, vec3 specularIntensity) {
+  return specularIntensity * specularIntensity * iorToF0( ior );
+}
+
+
 // validated from KHR_material_specular, https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_specular/README.md
 vec3 fresnelMix(
   const vec3 f0,

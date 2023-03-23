@@ -47,10 +47,10 @@ let gemIndex = 0;
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      ior += 0.05;
+      ior += 0.25;
       break;
     case 'ArrowDown':
-      ior -= 0.05;
+      ior -= 0.25;
       break;
     case 'ArrowLeft':
       gemIndex--;
@@ -64,6 +64,8 @@ document.addEventListener('keydown', (event) => {
       break;
   }
   ior = Math.max(1, Math.min(5, ior));
+
+  console.log('ior', ior, 'gemIndex', gemIndex);
 });
 
 async function init(): Promise<void> {
@@ -176,7 +178,6 @@ async function init(): Promise<void> {
   function animate(): void {
     orbitController.update();
 
-    console.log('ior', ior, 'gemIndex', gemIndex, 'lastGemIndex', lastGemIndex);
     if (lastGemIndex !== gemIndex) {
       gemIndex = (gemIndex + bufferGeometries.length) % bufferGeometries.length;
       lastGemIndex = gemIndex;

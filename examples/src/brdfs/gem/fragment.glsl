@@ -36,7 +36,6 @@ uniform samplerCube gemLocalNormalMap;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
 
-
 vec3 getIBLSample(vec3 worldDirection, float roughness) {
   float mipCount = float(iblMipCount);
   float lod = clamp(roughness * mipCount, 0.0, mipCount);
@@ -50,17 +49,34 @@ void main() {
   vec3 halfVector = normalize(viewViewDirection + viewSurfaceNormal);
 
   mat4 viewToLocal = worldToLocal * viewToWorld;
-  vec3 localSurfaceNormal = mat4TransformDirection(viewToLocal, viewSurfaceNormal);
-  vec3 localViewOrigin = mat4TransformPosition(viewToLocal, vec3( 0.0 ));
-  vec3 localPosition = mat4TransformPosition(viewToLocal, v_viewSurfacePosition);
-  vec3 localViewToPositionDirection = normalize( localPosition - localViewOrigin );
+  vec3 localSurfaceNormal = mat4TransformDirection(
+    viewToLocal,
+    viewSurfaceNormal
+  );
+  vec3 localViewOrigin = mat4TransformPosition(viewToLocal, vec3(0.0));
+  vec3 localPosition = mat4TransformPosition(
+    viewToLocal,
+    v_viewSurfacePosition
+  );
+  vec3 localViewToPositionDirection = normalize(
+    localPosition - localViewOrigin
+  );
   mat4 localToView = worldToView * localToWorld;
 
   Ray localIncidentRay = Ray(localViewOrigin, localViewToPositionDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);
-  Hit localSurfaceHit = Hit( 0., localPosition, localSurfaceNormal );
+  Hit localSurfaceHit = Hit(0.0, localPosition, localSurfaceNormal);
 
-  vec3 gemTransmission = rayTraceTransmission( localIncidentRay, localSurfaceHit, sphere, ior, localToView, attenuationColor, gemLocalNormalMap, iblWorldMap );
+  vec3 gemTransmission = rayTraceTransmission(
+    localIncidentRay,
+    localSurfaceHit,
+    sphere,
+    ior,
+    localToView,
+    attenuationColor,
+    gemLocalNormalMap,
+    iblWorldMap
+  );
 
   vec3 outgoingRadiance;
 
@@ -73,9 +89,8 @@ void main() {
   vec3 iblSample = getIBLSample(-reflectDir, defaultRoughness);
 
   // given ior calculate F0
-  vec3 F0 = vec3(0.04);
+  vec3 F0 = vec3(iorToF0(ior));
   vec3 F90 = vec3(1.0);
-
 
   // calculate surface reflectivity
   vec3 surfaceReflectivity = BRDF_Specular_GGX_IBL(
@@ -86,10 +101,9 @@ void main() {
     defaultRoughness
   );
 
- 
-outgoingRadiance += gemTransmission; // * attenuationColor;
-//outgoingRadiance += surfaceReflectivity * iblSample;
-/*
+  outgoingRadiance += gemTransmission; // * attenuationColor;
+  //outgoingRadiance += surfaceReflectivity * iblSample;
+  /*
   outgoingRadiance += fresnelMix(
     F0,
     F90,
@@ -98,7 +112,6 @@ outgoingRadiance += gemTransmission; // * attenuationColor;
     gemTransmission,
     surfaceReflectivity * iblSample
   );*/
-
 
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));
   outputColor.a = 1.0;
