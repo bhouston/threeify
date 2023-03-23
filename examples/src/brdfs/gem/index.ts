@@ -25,7 +25,8 @@ import {
   Texture,
   TextureEncoding,
   TextureFilter,
-  textureToTexImage2D
+  textureToTexImage2D,
+  transformGeometryToUnitSphere
 } from '@threeify/core';
 import {
   euler3ToMat4,
@@ -79,6 +80,10 @@ async function init(): Promise<void> {
     icosahedronGeometry(0.25, 2, false),
     icosahedronGeometry(0.25, 5, true)
   );
+
+  for (let i = 0; i < gemGeometries.length; i++) {
+    transformGeometryToUnitSphere(gemGeometries[i]);
+  }
 
   //outputDebugInfo(geometry);
   const context = createRenderingContext(document, 'framebuffer');

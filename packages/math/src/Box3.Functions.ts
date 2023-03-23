@@ -150,7 +150,7 @@ export function box3FromCenterAndSize(
   return result;
 }
 
-export function box3FromSphere(s: Sphere, result = new Box3()): Box3 {
+export function sphereToBox3(s: Sphere, result = new Box3()): Box3 {
   if (sphereIsEmpty(s)) {
     return box3Empty(result);
   }

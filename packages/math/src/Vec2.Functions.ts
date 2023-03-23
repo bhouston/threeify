@@ -48,6 +48,13 @@ export function vec2Length(a: Vec2): number {
   return Math.sqrt(vec2Dot(a, a));
 }
 
+export function vec2MinComponent(a: Vec2): number {
+  return Math.min(a.x, a.y);
+}
+export function vec2MaxComponent(a: Vec2): number {
+  return Math.max(a.x, a.y);
+}
+
 export function vec2Min(a: Vec2, b: Vec2, result: Vec2 = new Vec2()): Vec2 {
   return result.set(Math.min(a.x, b.x), Math.min(a.y, b.y));
 }

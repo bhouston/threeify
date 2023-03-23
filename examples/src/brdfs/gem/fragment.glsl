@@ -64,7 +64,7 @@ void main() {
   mat4 localToView = worldToView * localToWorld;
 
   Ray localIncidentRay = Ray(localViewOrigin, localViewToPositionDirection);
-  Sphere sphere = Sphere(vec3(0.0), 0.5);
+  Sphere sphere = Sphere(vec3(0.0), 0.5001);
   Hit localSurfaceHit = Hit(0.0, localPosition, localSurfaceNormal);
 
   vec3 gemTransmission = rayTraceTransmission(

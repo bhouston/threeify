@@ -63,6 +63,13 @@ export function vec4Normalize(a: Vec4, result = new Vec4()): Vec4 {
   return vec4MultiplyByScalar(a, 1 / length, result);
 }
 
+export function vec4MinComponent(a: Vec4): number {
+  return Math.min(a.x, a.y, a.z, a.w);
+}
+export function vec4MaxComponent(a: Vec4): number {
+  return Math.max(a.x, a.y, a.z, a.w);
+}
+
 export function vec4Min(a: Vec4, b: Vec4, result = new Vec4()): Vec4 {
   return result.set(
     Math.min(a.x, b.x),

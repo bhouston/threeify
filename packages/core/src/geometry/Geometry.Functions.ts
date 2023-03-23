@@ -1,16 +1,28 @@
 import {
   Box3,
+  box3Center,
   box3Empty,
   box3ExpandByPoint3,
+  box3Size,
   makeVec3View,
   Mat4,
+  mat4Multiply,
   mat4TransformNormal3,
   mat4TransformVec3,
   PrimitiveView,
+  scale3ToMat4,
+  Sphere,
+  sphereToBox3,
+  translation3ToMat4,
   Vec3,
   vec3Add,
   vec3Cross,
+  vec3DistanceSq,
+  vec3MaxComponent,
+  vec3MultiplyByScalar,
+  vec3Negate,
   vec3Normalize,
+  vec3Reciprocal,
   vec3Subtract
 } from '@threeify/math';
 
@@ -215,22 +227,129 @@ export function positionAttributeToBoundingBox(
   }
   const positions = makeVec3ViewFromAttribute(positionAttribute);
 
-  box3Empty(result);
-  const v = new Vec3();
-  for (let i = 0; i < positions.count; i++) {
-    box3ExpandByPoint3(result, positions.get(i, v), result);
+  return vec3ViewBoundingBox(positions);
+}
+
+export function positionAttributeToBoundingSphere(
+  positionAttribute?: Attribute,
+  result = new Sphere()
+): Sphere {
+  if (positionAttribute === undefined) {
+    throw new Error('missing position attribute');
   }
+  const positions = makeVec3ViewFromAttribute(positionAttribute);
+
+  const average = vec3ViewAverage(positions);
+  const maxDistance = vec3ViewMaxDistance(positions, average);
+
+  result.center.copy(average);
+  result.radius = maxDistance;
   return result;
 }
 
 export function geometryToBoundingBox(geometry: Geometry): Box3 {
   return positionAttributeToBoundingBox(geometry.attributes.position);
 }
+export function geometryToBoundingSphere(geometry: Geometry): Sphere {
+  return positionAttributeToBoundingSphere(geometry.attributes.position);
+}
 
-function makeVec3ViewFromAttribute(attribute: Attribute): PrimitiveView<Vec3> {
+export function transformGeometryToUnitBox(geometry: Geometry) {
+  const boundingBox = geometryToBoundingBox(geometry);
+
+  const translation = box3Center(boundingBox);
+
+  const scale = box3Size(boundingBox);
+  const maxScale = vec3MaxComponent(scale);
+  const uniformScale = new Vec3(maxScale, maxScale, maxScale);
+
+  const transform = new Mat4();
+  mat4Multiply(
+    transform,
+    scale3ToMat4(vec3Reciprocal(uniformScale)),
+    transform
+  );
+  mat4Multiply(
+    transform,
+    translation3ToMat4(vec3Negate(translation)),
+    transform
+  );
+
+  transformGeometry(geometry, transform);
+}
+
+export function transformGeometryToUnitSphere(geometry: Geometry) {
+  const boundingSphere = geometryToBoundingSphere(geometry);
+  console.log('boudningShpere', boundingSphere);
+
+  const boundingBox = sphereToBox3(boundingSphere);
+
+  const translation = box3Center(boundingBox);
+
+  const scale = box3Size(boundingBox);
+  const maxScale = vec3MaxComponent(scale);
+  const uniformScale = new Vec3(maxScale, maxScale, maxScale);
+
+  const transform = new Mat4();
+  mat4Multiply(
+    transform,
+    scale3ToMat4(vec3Reciprocal(uniformScale)),
+    transform
+  );
+  mat4Multiply(
+    transform,
+    translation3ToMat4(vec3Negate(translation)),
+    transform
+  );
+
+  transformGeometry(geometry, transform);
+}
+
+export function makeVec3ViewFromAttribute(
+  attribute: Attribute
+): PrimitiveView<Vec3> {
   return makeVec3View(
     attribute.attributeData.arrayBuffer,
     attribute.bytesPerVertex / 4,
     attribute.byteOffset / 4
   );
+}
+
+export function vec3ViewBoundingBox(
+  positions: PrimitiveView<Vec3>,
+  result = new Box3()
+): Box3 {
+  box3Empty(result);
+  const tempPosition = new Vec3();
+  for (let i = 0; i < positions.count; i++) {
+    box3ExpandByPoint3(result, positions.get(i, tempPosition), result);
+  }
+  return result;
+}
+
+export function vec3ViewAverage(
+  positions: PrimitiveView<Vec3>,
+  average = new Vec3()
+): Vec3 {
+  // TODO: replace with a reduce for better accuracy, any time you do a linear additiona like this, it can be very inaccurate for large numbers.
+  const sumOfPositions = new Vec3();
+  const tempPosition = new Vec3();
+  for (let i = 0; i < positions.count; i++) {
+    vec3Add(sumOfPositions, positions.get(i, tempPosition), sumOfPositions);
+  }
+  vec3MultiplyByScalar(sumOfPositions, 1 / positions.count, average);
+  return average;
+}
+
+export function vec3ViewMaxDistance(
+  positions: PrimitiveView<Vec3>,
+  point: Vec3
+): number {
+  let maxDistanceSq = 0;
+  const tempPosition = new Vec3();
+  for (let i = 0; i < positions.count; i++) {
+    const distanceSq = vec3DistanceSq(positions.get(i, tempPosition), point);
+    maxDistanceSq = Math.max(distanceSq, maxDistanceSq);
+  }
+  return Math.sqrt(maxDistanceSq);
 }

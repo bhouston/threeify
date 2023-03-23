@@ -59,6 +59,14 @@ export function vec3DistanceSq(a: Vec3, b: Vec3): number {
   // TODO: optimize this by breaking it apart
   return vec3LengthSq(vec3Subtract(a, b));
 }
+
+export function vec3MinComponent(a: Vec3): number {
+  return Math.min(a.x, a.y, a.z);
+}
+export function vec3MaxComponent(a: Vec3): number {
+  return Math.max(a.x, a.y, a.z);
+}
+
 export function vec3Min(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
   return result.set(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
 }

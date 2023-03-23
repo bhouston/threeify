@@ -32,7 +32,7 @@ float fresnelReflection(vec3 incidentRay, vec3 surfaceNormal, float eta) {
 }
 
 #define MANUAL_ATTENUATION (1.0)
-#define MAX_RAY_BOUNCES (20)
+#define MAX_RAY_BOUNCES (6)
 
 vec3 rayTraceTransmission(
   Ray localIncidentRay,
@@ -83,25 +83,28 @@ vec3 rayTraceTransmission(
     localToWorld,
     externalGemReflection
   );
-  vec3 externalColor = texture(iblWorldMap, externalWorldReflection, 0.0).rgb;
+  vec3 externalColor = texture(iblWorldMap, externalWorldReflection, 0.0).rgb; // TODO: add a mip level here to add some roughness.
 
-  vec3 accumulatedRadiance = externalColor * externalReflectionCoefficient; // this appears to be correct.
-  vec3 accumulatedAttenuation = vec3(externalTransmissionCoefficient);
-
-  return accumulatedRadiance;
+  vec3 accumulatedRadiance = vec3( 0.0 );
+  vec3 accumulatedAttenuation = vec3( 1.0 );
+  
+  // external light bouncing of of the diamond.
+  accumulatedRadiance += externalColor * externalReflectionCoefficient; // this appears to be correct.
+  // NOTE: there is no diminishing of outgoing light by the forward transmission, so do not decay attenuation here,
+  // instead it is diminished by its transmission from inside to outside.
 
   for (int bounce = 0; bounce < MAX_RAY_BOUNCES; bounce++) {
     Hit internalSphereHit;
     if (
       !sphereRayIntersection(internalRay, gemLocalSphere, internalSphereHit)
     ) {
-      externalWorldReflection = mat4TransformDirection(
+      /*externalWorldReflection = mat4TransformDirection(
         localToWorld,
         internalRay.direction
       );
       externalColor = texture(iblWorldMap, externalWorldReflection, 0.0).rgb;
       accumulatedRadiance +=
-        accumulatedAttenuation * attenuationCoefficient * externalColor;
+        accumulatedAttenuation * attenuationCoefficient * externalColor;*/
       return accumulatedRadiance;
     }
 
