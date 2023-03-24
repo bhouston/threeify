@@ -100,14 +100,15 @@ vec3 rayTraceTransmission(
     if (
       !sphereRayIntersection(internalRay, gemSphere, sphereHit)
     ) {
-      //accumulatedRadiance += vec3( 1., 0., 0. ); // * accumulatedAttenuation;
+      accumulatedColor += vec3( 1., 0., 0. ); // * accumulatedAttenuation;
       break;
     }
     
-    transmission *= attentuationOverDistance(
+    vec3 attentuationCoefficient = attentuationOverDistance(
       attenuationCoefficient,
       sphereHit.distance
-    );
+    ); 
+    transmission *= attentuationCoefficient;
 
     // map sphere normal to gem normal - appers to be correct.
     sphereHit.normal = colorToNormal(
@@ -145,11 +146,11 @@ vec3 rayTraceTransmission(
         accumulatedColor += transmission * transmissionCoefficient * iblColor;
     }
     
-     if( reflectionCoefficient == 1.0 ) { 
-     // accumulatedColor += vec3( 0., 0., 1. ) * 0.25;
+    if( reflectionCoefficient == 1.0 ) { 
+      accumulatedColor += vec3( 0., 0., 1. ) * 0.25;
     }
     if( reflectionCoefficient == 0.0 ) { // this is happening a lot.
-    //  accumulatedColor += vec3( 1., 0., 0. ) * 0.25;
+      accumulatedColor += vec3( 1., 0., 0. ) * 0.25;
     }
     if( isnan( reflectionCoefficient ) ) {
       return vec3( 1., 0., 1. );
