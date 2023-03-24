@@ -18,6 +18,8 @@ uniform samplerCube iblWorldMap;
 uniform float iblIntensity;
 uniform int iblMipCount;
 
+uniform int bounce;
+
 // material properties, a subset of glTF Physical material
 uniform float ior;
 uniform float transmissionFactor;
@@ -69,10 +71,12 @@ void main() {
   mat4 localToView = worldToView * localToWorld;
 
   Ray localIncidentRay = Ray(localViewOrigin, -localViewDirection);
-  Sphere sphere = Sphere(vec3(0.0), 0.5001);
+  Sphere sphere = Sphere(vec3(0.0), 0.5);
   Hit localSurfaceHit = Hit(0.0, localPosition, localSurfaceNormal);
 
-  vec3 gemTransmission = rayTraceTransmission(
+  vec3 outgoingRadiance;
+
+  outgoingRadiance += rayTraceTransmission(
     localIncidentRay,
     localSurfaceHit,
     sphere,
@@ -80,43 +84,9 @@ void main() {
     localToWorld,
     attenuationColor,
     gemLocalNormalMap,
-    iblWorldMap
+    iblWorldMap,
+    bounce
   );
-
-  vec3 outgoingRadiance;
-
-  float VdotH = saturate(dot(viewViewDirection, halfVector));
-  // reflect view direction off of surface normal
-  vec3 reflectDir = reflect(viewViewDirection, viewSurfaceNormal);
-
-  // sample IBL
-  float defaultRoughness = 0.003;
-  vec3 iblSample = getIBLSample(-reflectDir, defaultRoughness);
-
-  // given ior calculate F0
-  vec3 F0 = vec3(iorToF0(ior));
-  vec3 F90 = vec3(1.0);
-
-  // calculate surface reflectivity
-  vec3 surfaceReflectivity = BRDF_Specular_GGX_IBL(
-    viewSurfaceNormal,
-    viewViewDirection,
-    F0,
-    F90,
-    defaultRoughness
-  );
-
-  outgoingRadiance += gemTransmission; // * attenuationColor;
-  //outgoingRadiance += surfaceReflectivity * iblSample;
-  /*
-  outgoingRadiance += fresnelMix(
-    F0,
-    F90,
-    VdotH,
-    1.0,
-    gemTransmission,
-    surfaceReflectivity * iblSample
-  );*/
 
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));
   outputColor.a = 1.0;

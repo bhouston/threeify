@@ -43,15 +43,22 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 let ior = IORConstants.Diamond;
-let gemIndex = 0;
+let gemIndex = 13;
+let bounce = 1;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
+    case ',':
+      bounce -= 1;
+      break;
+    case '.':
+      bounce += 1;
+      break;
     case 'ArrowUp':
-      ior += 0.25;
+      ior *= 1.025;
       break;
     case 'ArrowDown':
-      ior -= 0.25;
+      ior /= 1.025;
       break;
     case 'ArrowLeft':
       gemIndex--;
@@ -65,8 +72,9 @@ document.addEventListener('keydown', (event) => {
       break;
   }
   ior = Math.max(1, Math.min(5, ior));
+  bounce = Math.max(-1, Math.min(30, bounce));
 
-  console.log('ior', ior, 'gemIndex', gemIndex);
+  console.log('ior', ior, 'gemIndex', gemIndex, 'bounce', bounce);
 });
 
 async function init(): Promise<void> {
@@ -157,6 +165,8 @@ async function init(): Promise<void> {
     iblIntensity: 1,
     iblMipCount: cubeMap.mipCount,
 
+    bounce,
+
     gemLocalNormalMap: gemLocalNormalMaps[gemIndex],
 
     // vertices
@@ -189,6 +199,7 @@ async function init(): Promise<void> {
       console.log('updating cubemap');
     }
 
+    uniforms.bounce = bounce;
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);

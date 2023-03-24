@@ -13,31 +13,18 @@ bool sphereRayIntersection(Ray ray, Sphere sphere, out Hit hit) {
   float c = dot(oc, oc) - sphere.radius * sphere.radius;
   float discriminant = b * b - 4.0 * a * c;
 
-  if (discriminant < 0.0) {
+  if (discriminant < 0.0) { // no intersection
     return false;
   }
 
   float sqrtDiscriminant = sqrt(discriminant);
   float t1 = (-b - sqrtDiscriminant) / (2.0 * a);
   float t2 = (-b + sqrtDiscriminant) / (2.0 * a);
+  float t = (t1 > t2) ? t1 : t2;
 
-  if (t1 > t2) {
-    float temp = t1;
-    t1 = t2;
-    t2 = temp;
-  }
-
-  float t = t1 < 0.0 ? t2 : t1;
   hit.distance = t;
-  if (t < 0.0) {
-    return false;
-  }
-
-  vec3 hitPosition = ray.origin + t * ray.direction;
-  vec3 hitNormal = normalize(hitPosition - sphere.origin);
-
-  hit.position = hitPosition;
-  hit.normal = hitNormal;
+  hit.position = ray.origin + t * ray.direction;
+  hit.normal = normalize(hit.position - sphere.origin);
 
   return true;
 }
