@@ -20,6 +20,8 @@ bool sphereRayIntersection(Ray ray, Sphere sphere, out Hit hit) {
   float sqrtDiscriminant = sqrt(discriminant);
   float t1 = (-b - sqrtDiscriminant) / (2.0 * a);
   float t2 = (-b + sqrtDiscriminant) / (2.0 * a);
+  
+  // if there are two intersections, we want the one that is further away
   float t = (t1 > t2) ? t1 : t2;
 
   hit.distance = t;

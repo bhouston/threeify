@@ -114,7 +114,7 @@ vec3 rayTraceTransmission(
 
     // calculate fresnel reflection and transmission
     reflection = fresnelReflection(
-      internalRay.direction, // validated
+      -internalRay.direction, // validated
       -internalSphereHit.normal, // validated
       gemIOR / 1.0 // validated
     );
@@ -134,18 +134,30 @@ vec3 rayTraceTransmission(
         gemIOR / 1.0 // validated
       );
 
-      accumulatedRadiance += vec3( 0.5, 1., 1. ) * accumulatedAttenuation * ( 1.0 - reflection ) * localDirectionToIBLSample( externalLocalRefraction, localToWorld, iblWorldMap );
+      accumulatedRadiance += accumulatedAttenuation * ( 1.0 - reflection ) * localDirectionToIBLSample( externalLocalRefraction, localToWorld, iblWorldMap );
     }
     else {
-      reflection = 1.0;
+      //reflection = 1.0;
      if( bounce == ( MAX_RAY_BOUNCES - 1 ) || bounce == ( maxBounces - 1 ) ) {
-        accumulatedRadiance += accumulatedAttenuation * localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
+    //    accumulatedRadiance += accumulatedAttenuation * localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
       }
       else {
-           accumulatedRadiance += accumulatedAttenuation * localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
+      //     accumulatedRadiance += accumulatedAttenuation * localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
       }
     }
-
+    // if( reflection == 1.0 ) { 
+    //  accumulatedRadiance += vec3( 0., 0., 1. ) * 0.25;
+    //}
+    if( reflection == 0.0 ) { // this is happening a lot.
+      accumulatedRadiance += vec3( 1., 0., 0. ) * 0.25;
+    }
+    if( isnan( reflection ) ) {
+      return vec3( 1., 0., 1. );
+    }
+    // check for inf
+    if( reflection == 1.0 / 0.0 ) {
+      return vec3( 0., 1., 1. );
+    }
     accumulatedAttenuation *= reflection;
 
     // update internal ray for next boundce
