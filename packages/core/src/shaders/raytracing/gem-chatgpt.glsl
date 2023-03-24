@@ -40,8 +40,8 @@ vec3 rayTraceTransmission(
   samplerCube gemLocalNormalMap,
   samplerCube iblWorldMap
 ) {
-  vec3 accumulatedColor = vec3(0.0);
-  vec3 transmission = vec3(1.0);
+  vec3 accumulatedColor = vec3(0.0); // adopted
+  vec3 transmission = vec3(1.0);// adopted
 
   Ray currentRay = localIncidentRay;
   Hit currentHit = localSurfaceHit;
@@ -55,16 +55,16 @@ vec3 rayTraceTransmission(
       localNormal,
       gemIOR
     );
-    float transmissionCoefficient = 1.0 - reflectionCoefficient;
+    float transmissionCoefficient = 1.0 - reflectionCoefficient; // adopted
 
     // Update accumulated transmission
-    transmission *= transmissionCoefficient;
+    transmission *= transmissionCoefficient; // adopted
 
     // Refract the ray
     vec3 refractedRayDirection = refract(
-      currentRay.direction,
-      localNormal,
-      1.0 / gemIOR
+      currentRay.direction, // adopted
+      localNormal, // adopted
+      1.0 / gemIOR // adopted
     );
 
     // Calculate new ray origin on the sphere boundary

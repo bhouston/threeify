@@ -44,127 +44,123 @@ vec3 localDirectionToIBLSample(
   return texture(iblWorldMap, worldDirection, 0.0).rgb;
 }
 
-#define MANUAL_ATTENUATION (1.0)
-#define MAX_RAY_BOUNCES (30)
-
 vec3 rayTraceTransmission(
-  Ray localIncidentRay,
-  Hit localSurfaceHit,
-  Sphere gemLocalSphere,
+  Ray incidentRay, // local 
+  Hit surfaceHit, // local
+  Sphere gemSphere, // local
   float gemIOR,
   mat4 localToWorld,
   vec3 attenuationCoefficient,
-  samplerCube gemLocalNormalMap,
-  samplerCube iblWorldMap,
+  samplerCube gemNormalMap, // local
+  samplerCube iblWorldMap, // world
   int maxBounces
 ) {
-  // external reflection
-  vec3 externalLocalReflection = reflect(
-    localIncidentRay.direction,
-    localSurfaceHit.normal
+
+  vec3 accumulatedColor = vec3(0.0);
+  vec3 transmission = vec3(1.0);
+
+  vec3 reflectedRayDirection = reflect(
+    incidentRay.direction,
+    surfaceHit.normal
   );
-  // internal reflection
-  vec3 internalLocalRefraction = refract(
-    localIncidentRay.direction,
-    localSurfaceHit.normal,
+  Ray reflectedRay = Ray(surfaceHit.position, reflectedRayDirection);
+
+  vec3 refractedRayDirection = refract(
+    incidentRay.direction,
+    surfaceHit.normal,
     1.0 / gemIOR
   );
-  Ray internalRay = Ray(localSurfaceHit.position, internalLocalRefraction);
+  Ray refractedRay = Ray(surfaceHit.position, refractedRayDirection);
 
   // calculate fresnel reflection and transmission
-  float reflection = 
+  float reflectionCoefficient = 
     fresnelReflection( // This works!  Black at ior 1 at edges.
-      -localIncidentRay.direction,
-      localSurfaceHit.normal,
+      -incidentRay.direction,
+      surfaceHit.normal,
       1.0 / gemIOR
     );
 
-  vec3 externalColor = localDirectionToIBLSample( externalLocalReflection, localToWorld, iblWorldMap );
+  vec3 iblColor = localDirectionToIBLSample( reflectedRayDirection, localToWorld, iblWorldMap );
 
-  vec3 accumulatedRadiance = vec3(0.0);
-  vec3 accumulatedAttenuation = vec3(1.0);
+  accumulatedColor += reflectionCoefficient * iblColor;
+  
+  float transmissionCoefficient = 1.0 - reflectionCoefficient;
+  transmission *= transmissionCoefficient;
 
-  accumulatedRadiance += externalColor * reflection;
+  // internally the refracted ray is now the reflected one.
+  reflectedRay = refractedRay;
 
-  // NOTE: there is no diminishing of outgoing light by the forward transmission, so do not decay attenuation here,
-  // instead it is diminished by its transmission from inside to outside.
-  // accumulatedAttenuation *= fresnel.transmission;
-
-  for (int bounce = 0; bounce < MAX_RAY_BOUNCES; bounce++) {
-    if (maxBounces != -1 && bounce >= maxBounces) {
-      break;
-    }
-    Hit internalSphereHit;
+  for (int bounce = 0; bounce < maxBounces; bounce++) {
+    Hit sphereHit;
     if (
-      !sphereRayIntersection(internalRay, gemLocalSphere, internalSphereHit)
+      !sphereRayIntersection(reflectedRay, gemSphere, sphereHit)
     ) {
       //accumulatedRadiance += vec3( 1., 0., 0. ); // * accumulatedAttenuation;
       break;
     }
 
-    accumulatedAttenuation *= attentuationOverDistance(
+    /*accumulatedAttenuation *= attentuationOverDistance(
       attenuationCoefficient,
       internalSphereHit.distance
-    );
+    );*/
 
     // map sphere normal to gem normal - appers to be correct.
-    internalSphereHit.normal = colorToNormal(
-      texture(gemLocalNormalMap, internalSphereHit.normal, 0.0).rgb
+    sphereHit.normal = colorToNormal(
+      texture(gemNormalMap, sphereHit.normal, 0.0).rgb
     );
 
     // calculate fresnel reflection and transmission
-    reflection = fresnelReflection(
-      -internalRay.direction, // validated
-      -internalSphereHit.normal, // validated
-      gemIOR / 1.0 // validated
+    reflectionCoefficient = fresnelReflection(
+      reflectedRay.direction, // validated
+      sphereHit.normal, // validated
+      1.0 / gemIOR // validated
     );
+    transmission *= reflectionCoefficient;
 
     // internal reflection
-    vec3 internalGemReflection = reflect(
-      internalRay.direction, // validated
-      -internalSphereHit.normal // validated
+    reflectedRayDirection = reflect(
+      reflectedRay.direction, // validated
+      sphereHit.normal // validated
     );
 
-    vec3 externalLocalRefraction = internalRay.direction;
-    if( reflection >= 0.0 && reflection <= 0.99 ) {
-      // interal->external reflection
-      externalLocalRefraction = refract(
-        internalRay.direction, // validated
-        -internalSphereHit.normal, // validated
-        gemIOR / 1.0 // validated
+    // interal->external reflection
+    refractedRayDirection = refract(
+        reflectedRay.direction, // validated
+        sphereHit.normal, // validated
+        1.0 / gemIOR // validated
       );
 
-      accumulatedRadiance += accumulatedAttenuation * ( 1.0 - reflection ) * localDirectionToIBLSample( externalLocalRefraction, localToWorld, iblWorldMap );
+    transmissionCoefficient = 1.0 - reflectionCoefficient;
+    transmission *= transmissionCoefficient;
+
+    if( transmissionCoefficient >= 0.0 ) {
+        vec3 iblColor = localDirectionToIBLSample( refractedRayDirection, localToWorld, iblWorldMap );
+        accumulatedColor += transmission * iblColor;
     }
-    else {
-      //reflection = 1.0;
-     if( bounce == ( MAX_RAY_BOUNCES - 1 ) || bounce == ( maxBounces - 1 ) ) {
-    //    accumulatedRadiance += accumulatedAttenuation * localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
-      }
-      else {
-      //     accumulatedRadiance += accumulatedAttenuation * localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
-      }
+    
+     if( reflectionCoefficient == 1.0 ) { 
+      accumulatedColor += vec3( 0., 0., 1. ) * 0.25;
     }
-    // if( reflection == 1.0 ) { 
-    //  accumulatedRadiance += vec3( 0., 0., 1. ) * 0.25;
-    //}
-    if( reflection == 0.0 ) { // this is happening a lot.
-      accumulatedRadiance += vec3( 1., 0., 0. ) * 0.25;
+    if( reflectionCoefficient == 0.0 ) { // this is happening a lot.
+      accumulatedColor += vec3( 1., 0., 0. ) * 0.25;
     }
-    if( isnan( reflection ) ) {
+    if( isnan( reflectionCoefficient ) ) {
       return vec3( 1., 0., 1. );
     }
     // check for inf
-    if( reflection == 1.0 / 0.0 ) {
+    if( reflectionCoefficient == 1.0 / 0.0 ) {
       return vec3( 0., 1., 1. );
     }
-    accumulatedAttenuation *= reflection;
+
+    // Apply absorption and update accumulated transmission
+    float distance = length(sphereHit.position - reflectedRay.origin);
+    transmission *= exp(-distance * attenuationCoefficient);
 
     // update internal ray for next boundce
-    internalRay = Ray(internalSphereHit.position, internalGemReflection);
+    reflectedRay = Ray(sphereHit.position, reflectedRayDirection);
   }
 
-  return accumulatedRadiance;
+  return accumulatedColor;
 }
 
 /*
