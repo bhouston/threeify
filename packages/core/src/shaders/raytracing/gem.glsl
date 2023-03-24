@@ -44,7 +44,8 @@ vec3 localDirectionToIBLSample(
   return texture(iblWorldMap, worldDirection, 0.0).rgb;
 }
 
-#define DEBUG
+//#define DEBUG_FIRST_BOUNCE
+
 vec3 rayTraceTransmission(
   Ray incidentRay, // local 
   Hit surfaceHit, // local
@@ -86,13 +87,13 @@ vec3 rayTraceTransmission(
   accumulatedColor += reflectionCoefficient * iblColor;
   
   float transmissionCoefficient = 1.0 - reflectionCoefficient;
-  //transmission *= transmissionCoefficient;
+  transmission *= transmissionCoefficient;
 
-#ifdef DEBUG
+#ifdef DEBUG_FIRST_BOUNCE
   iblColor = localDirectionToIBLSample( refractedRayDirection, localToWorld, iblWorldMap );
-  accumulatedColor += transmissionCoefficient * iblColor;
+  accumulatedColor += transmission * iblColor;
   return accumulatedColor;
-#endif DEBUG
+#endif DEBUG_FIRST_BOUNCE
 
   for (int bounce = 0; bounce < maxBounces; bounce++) {
     Hit sphereHit;
