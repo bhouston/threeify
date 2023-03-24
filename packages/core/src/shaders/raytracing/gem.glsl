@@ -32,7 +32,7 @@ float fresnelReflection(vec3 incidentRay, vec3 surfaceNormal, float eta) {
 }
 
 #define MANUAL_ATTENUATION (1.0)
-#define MAX_RAY_BOUNCES (1)
+#define MAX_RAY_BOUNCES (10)
 
 vec3 rayTraceTransmission(
   Ray localIncidentRay,
@@ -76,7 +76,6 @@ vec3 rayTraceTransmission(
   );
 
   /*
-
   vec3 externalWorldRefraction = mat4TransformDirection(
     localToWorld,
     internalLocalRefraction
@@ -84,10 +83,10 @@ vec3 rayTraceTransmission(
   vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
   return externalRefractionColor;
 */
+
   //vec3 halfVector = normalize( localSurfaceHit.normal + -localIncidentRay.direction );
   //float VdotH = dot( -localIncidentRay.direction, localSurfaceHit.normal );
-
-  //   vec3 externalFresnel = F_Schlick_2(F0, F90, VdotH); // This works!  Not black at ior 1 at edges.
+  //vec3 externalFresnel = F_Schlick_2(F0, F90, VdotH); // This works!  Not black at ior 1 at edges.
 
   // calculate fresnel reflection and transmission
   vec3 externalFresnel = vec3(
@@ -100,6 +99,10 @@ vec3 rayTraceTransmission(
   vec3 externalReflectionCoefficient = saturate(externalFresnel);
   vec3 externalTransmissionCoefficient = saturate(1.0 - externalFresnel);
 
+  //externalLocalReflection = colorToNormal(
+  //    texture(gemLocalNormalMap, externalLocalReflection, 0.0).rgb
+  //  );
+
   vec3 externalWorldReflection = mat4TransformDirection(
     localToWorld,
     externalLocalReflection
@@ -109,31 +112,17 @@ vec3 rayTraceTransmission(
   vec3 accumulatedRadiance = vec3(0.0);
   vec3 accumulatedAttenuation = vec3(1.0);
 
-  accumulatedRadiance += externalColor * externalFresnel;
+  // front reflection
+  accumulatedRadiance += externalColor * externalReflectionCoefficient;
 
- vec3 externalWorldRefraction = mat4TransformDirection(
-    localToWorld,
-    internalRay.direction
-  );
-  vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
-  accumulatedRadiance += externalRefractionColor;
+  //vec3 externalWorldRefraction = mat4TransformDirection(
+  //  localToWorld,
+  //  internalRay.direction
+  //);
+  //vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
+  //accumulatedRadiance += externalRefractionColor;
 
-  return accumulatedRadiance;
-
-
-/*
- vec3 externalWorldRefraction = mat4TransformDirection(
-    localToWorld,
-    internalLocalRefraction
-  );
-  vec3 externalRefractionColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb; // TODO: add a mip level here to add some roughness.
-
-  return externalRefractionColor;
-*/
-
-  // external light bouncing of of the diamond.
-
-  // TEMP disabling - accumulatedRadiance += externalColor * externalReflectionCoefficient; // this appears to be correct.
+  accumulatedAttenuation *= externalTransmissionCoefficient;
 
   // NOTE: there is no diminishing of outgoing light by the forward transmission, so do not decay attenuation here,
   // instead it is diminished by its transmission from inside to outside.
@@ -143,20 +132,20 @@ vec3 rayTraceTransmission(
     if (
       !sphereRayIntersection(internalRay, gemLocalSphere, internalSphereHit)
     ) {
-      /*externalWorldReflection = mat4TransformDirection(
+      externalWorldReflection = mat4TransformDirection(
         localToWorld,
         internalRay.direction
       );
       externalColor = texture(iblWorldMap, externalWorldReflection, 0.0).rgb;
-      accumulatedRadiance +=
-        accumulatedAttenuation * attenuationCoefficient * externalColor;*/
-      return vec3(1.0, 0.0, 0.0); // accumulatedRadiance;
+      accumulatedRadiance += vec3( float( MAX_RAY_BOUNCES - bounce ) / float( MAX_RAY_BOUNCES),0.,0.);
+   
+      return accumulatedRadiance;;
     }
 
-    accumulatedAttenuation *= attentuationOverDistance(
+    /*accumulatedAttenuation *= attentuationOverDistance(
       attenuationCoefficient,
       internalSphereHit.distance
-    );
+    );*/
 
     // map sphere normal to gem normal
     internalSphereHit.normal = colorToNormal(
@@ -166,40 +155,37 @@ vec3 rayTraceTransmission(
     // internal reflection
     vec3 internalGemReflection = reflect(
       internalRay.direction,
-      internalSphereHit.normal
+      -internalSphereHit.normal
     );
 
     // interal->external refraction
     vec3 externalLocalRefraction = refract(
-      internalRay.direction,
-      internalSphereHit.normal,
+      internalRay.direction, // not sure if these vectors are correct
+      -internalSphereHit.normal, // not sure if these vectors are correct
       gemIOR / 1.0
-    ); // Is this the right ETA?
+    ); 
+
     vec3 externalWorldRefraction = mat4TransformDirection(
       localToWorld,
       externalLocalRefraction
     );
-    externalWorldRefraction = externalLocalRefraction;
-
     // calculate fresnel reflection and transmission
     float internalFresnel = fresnelReflection(
-      internalRay.direction,
-      internalSphereHit.normal,
+      internalRay.direction, // not sure if these vectors are correct
+      internalSphereHit.normal, // not sure if these vectors are correct
       gemIOR / 1.0
     ); // Is this the right ETA?
     float internalReflectionCoefficient = saturate(internalFresnel);
     float internalTransmissionCoefficient = saturate(1.0 - internalFresnel);
 
-    externalWorldRefraction.xy *= -1.0;
-
     externalColor = texture(iblWorldMap, externalWorldRefraction, 0.0).rgb;
-    accumulatedAttenuation *= MANUAL_ATTENUATION; // internalReflectionCoefficient;
     accumulatedRadiance +=
       accumulatedAttenuation * internalTransmissionCoefficient * externalColor;
-
+    accumulatedAttenuation *= internalReflectionCoefficient;
+ 
     // update internal ray for next boundce
     internalRay = Ray(
-      internalSphereHit.position + internalGemReflection * 0.0001,
+      internalSphereHit.position * 0.9,
       internalGemReflection
     );
   }

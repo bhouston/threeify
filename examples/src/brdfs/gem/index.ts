@@ -48,10 +48,10 @@ let gemIndex = 0;
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      ior += 0.25;
+      ior += 0.05;
       break;
     case 'ArrowDown':
-      ior -= 0.25;
+      ior -= 0.05;
       break;
     case 'ArrowLeft':
       gemIndex--;
@@ -176,7 +176,7 @@ async function init(): Promise<void> {
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
     attenuationDistance: 0.5,
-    attenuationColor: new Vec3(1, 0.8, 0.8),
+    attenuationColor: new Vec3(1, 0.3, 0.3),
     abbeNumber: AbbeConstants.Diamond
   };
 
