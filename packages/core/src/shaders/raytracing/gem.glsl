@@ -51,6 +51,7 @@ vec3 localDirectionToIBLSample(
 #define DEBUG_INTERNAL_ATTENUATION
 #define DEBUG_USE_CUBEMAP_NORMALS
 //#define DEBUG_OUTPUT_COLORS
+#define DEBUG_BOOST
 
 vec3 rayTraceTransmission(
   Ray incidentRay, // local 
@@ -164,8 +165,16 @@ vec3 rayTraceTransmission(
    
     if( transmissionCoefficient >= 0.0001 ) {
         vec3 iblColor = localDirectionToIBLSample( refractedRayDirection, localToWorld, iblWorldMap );
+//#ifdef DEBUG_BOOST
+//        iblColor *= 4.0;
+//#endif 
         accumulatedColor += transmission * transmissionCoefficient * iblColor;
     }
+     /* if( reflectionCoefficient >= 0.0001 ) {
+        vec3 iblColor = localDirectionToIBLSample( normalize( reflectedRayDirection + refractedRayDirection ), localToWorld, iblWorldMap );
+        accumulatedColor += transmission * reflectionCoefficient * iblColor;
+    }*/
+
     
 #ifdef DEBUG_OUTPUT_COLORS
     if( reflectionCoefficient == 1.0 ) { 
@@ -184,7 +193,7 @@ vec3 rayTraceTransmission(
       return vec3( 0., 1., 1. );
     }
 
-    transmission *= reflectionCoefficient;
+    transmission *= sqrt( reflectionCoefficient );
    
     // update internal ray for next boundce
     internalRay = Ray(sphereHit.position, reflectedRayDirection);

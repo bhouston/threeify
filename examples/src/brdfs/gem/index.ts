@@ -196,7 +196,7 @@ async function init(): Promise<void> {
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
     attenuationDistance: 0.1,
-    attenuationColor: new Vec3(1, 1, 0.8),
+    attenuationColor: new Vec3(0, 0, 0),
     abbeNumber: AbbeConstants.Diamond
   };
 
