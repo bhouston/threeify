@@ -58,11 +58,12 @@ vec3 rayTraceTransmission(
   Hit surfaceHit, // local
   Sphere gemSphere, // local
   float gemIOR,
-  mat4 localToWorld,
   vec3 attenuationCoefficient,
-  samplerCube gemNormalMap, // local
-  samplerCube iblWorldMap, // world
-  int maxBounces
+  samplerCube gemNormalCubeMap, // local
+  vec3 squishFactor,
+  int maxBounces,
+  mat4 localToWorld,
+  samplerCube iblWorldMap // world
 ) {
 
   vec3 accumulatedColor = vec3(0.0);
@@ -114,10 +115,6 @@ vec3 rayTraceTransmission(
     if (
       !sphereRayIntersection(internalRay, gemSphere, sphereHit) || sphereHit.distance <= 0.0001
     ) {
-       //vec3 iblColor = localDirectionToIBLSample( internalRay.direction, localToWorld, iblWorldMap );
-       //accumulatedColor += transmission * iblColor;
-  
-      //accumulatedColor += vec3( 1., 0., 1. ); // * accumulatedAttenuation;
       break;
     }
     
@@ -130,7 +127,7 @@ vec3 rayTraceTransmission(
 #ifdef DEBUG_USE_CUBEMAP_NORMALS
     // map sphere normal to gem normal - appers to be correct.
     sphereHit.normal = colorToNormal(
-      texture(gemNormalMap, normalize( sphereHit.normal * vec3( 1., .75, 1. ) ), 0.0).rgb
+      texture(gemNormalCubeMap, normalize( sphereHit.normal * squishFactor), 0.0).rgb
     );
 #endif DEBUG_USE_CUBEMAP_NORMALS
 
@@ -165,15 +162,8 @@ vec3 rayTraceTransmission(
    
     if( transmissionCoefficient >= 0.0001 ) {
         vec3 iblColor = localDirectionToIBLSample( refractedRayDirection, localToWorld, iblWorldMap );
-//#ifdef DEBUG_BOOST
-//        iblColor *= 4.0;
-//#endif 
         accumulatedColor += transmission * transmissionCoefficient * iblColor;
     }
-     /* if( reflectionCoefficient >= 0.0001 ) {
-        vec3 iblColor = localDirectionToIBLSample( normalize( reflectedRayDirection + refractedRayDirection ), localToWorld, iblWorldMap );
-        accumulatedColor += transmission * reflectionCoefficient * iblColor;
-    }*/
 
     
 #ifdef DEBUG_OUTPUT_COLORS
@@ -181,8 +171,8 @@ vec3 rayTraceTransmission(
       accumulatedColor += vec3( 0., 0., 1. ) * 0.25;
     }
     if( reflectionCoefficient == 0.0 ) { // this is happening a lot.
-      break;
       //accumulatedColor += vec3( 1., 0., 0. ) * 0.25;
+      break;
     }
 #endif DEBUG_OUTPUT_COLORS
     if( isnan( reflectionCoefficient ) ) {

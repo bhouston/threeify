@@ -43,18 +43,25 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 let ior = IORConstants.Diamond;
-let gemIndex = 13;
-let bounce = 5;
+let gemIndex = 0;
+let maxBounces = 5;
 
-const gemNames: string[] = [];
+type Gem = {
+  geometry: Geometry;
+  squishFactor: Vec3;
+  bufferGeometry?: BufferGeometry;
+  normalCubeMap?: TexImage2D;
+  smoothNormals: boolean;
+};
+const gems: Gem[] = [];
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case ',':
-      bounce -= 1;
+      maxBounces -= 1;
       break;
     case '.':
-      bounce += 1;
+      maxBounces += 1;
       break;
     case 'ArrowUp':
       ior *= 1.025;
@@ -74,33 +81,52 @@ document.addEventListener('keydown', (event) => {
       break;
   }
   ior = Math.max(1, Math.min(5, ior));
-  bounce = Math.max(-1, Math.min(30, bounce));
+  maxBounces = Math.max(-1, Math.min(30, maxBounces));
+  gemIndex = (gemIndex + gems.length) % gems.length;
 
   console.log(
     'ior',
     Math.round(ior * 100) / 100,
     'gem',
-    gemNames[(gemIndex + gemNames.length) % gemNames.length],
+    gems[gemIndex].geometry.name,
     'bounces',
-    bounce
+    maxBounces
   );
 });
 
 async function init(): Promise<void> {
-  const gemGeometries: Geometry[] = [];
   for (let i = 1; i < 14; i++) {
-    gemGeometries.push(...(await fetchOBJ(`/assets/models/gems/gem${i}.obj`)));
+    gems.push({
+      geometry: (await fetchOBJ(`/assets/models/gems/gem${i}.obj`))[0],
+      squishFactor: new Vec3(1, 0.5, 1),
+      smoothNormals: false
+    });
   }
-  gemGeometries.push(
-    boxGeometry(0.25, 0.25, 0.25),
-    cylinderGeometry(0.25, 0.25, 36),
-    icosahedronGeometry(0.25, 2, false),
-    icosahedronGeometry(0.25, 5, true)
+  gems.push(
+    {
+      geometry: boxGeometry(0.25, 0.25, 0.25),
+      squishFactor: new Vec3(1, 1, 1),
+      smoothNormals: false
+    },
+    {
+      geometry: cylinderGeometry(0.25, 0.25, 36),
+      squishFactor: new Vec3(1, 1, 1),
+      smoothNormals: false
+    },
+    {
+      geometry: icosahedronGeometry(0.25, 2, false),
+      squishFactor: new Vec3(1, 1, 1),
+      smoothNormals: false
+    },
+    {
+      geometry: icosahedronGeometry(0.25, 6, true),
+      squishFactor: new Vec3(1, 1, 1),
+      smoothNormals: true
+    }
   );
 
-  for (let i = 0; i < gemGeometries.length; i++) {
-    transformGeometryToUnitSphere(gemGeometries[i]);
-    gemNames.push(gemGeometries[i].name);
+  for (let i = 0; i < gems.length; i++) {
+    transformGeometryToUnitSphere(gems[i].geometry);
   }
 
   //outputDebugInfo(geometry);
@@ -125,7 +151,7 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/cube/debug/latLong.png')
   );*/
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k))
   );
   const cubeMap = await equirectangularTextureToCubeMap(
     context,
@@ -135,15 +161,16 @@ async function init(): Promise<void> {
     InternalFormat.RGBA16F
   );
 
-  const bufferGeometries: BufferGeometry[] = [];
-  for (const geometry of gemGeometries) {
-    bufferGeometries.push(geometryToBufferGeometry(context, geometry));
+  for (const gem of gems) {
+    gem.bufferGeometry = geometryToBufferGeometry(context, gem.geometry);
   }
   // render into the cube map
   const normalCube = await createNormalCube(context);
 
-  const gemLocalNormalMaps: TexImage2D[] = [];
-  for (const bufferGeometry of bufferGeometries) {
+  for (const gem of gems) {
+    const { bufferGeometry, smoothNormals } = gem;
+    if (bufferGeometry === undefined)
+      throw new Error('bufferGeometry is undefined');
     const imageSize = new Vec2(1024, 1024);
     const normalCubeTexture = new CubeMapTexture([
       imageSize,
@@ -153,21 +180,25 @@ async function init(): Promise<void> {
       imageSize,
       imageSize
     ]);
-    normalCubeTexture.minFilter = TextureFilter.Nearest;
-    normalCubeTexture.magFilter = TextureFilter.Nearest;
+    normalCubeTexture.minFilter = smoothNormals
+      ? TextureFilter.Linear
+      : TextureFilter.Nearest;
+    normalCubeTexture.magFilter = smoothNormals
+      ? TextureFilter.Linear
+      : TextureFilter.Nearest;
     normalCubeTexture.anisotropicLevels = 0;
     normalCubeTexture.generateMipmaps = false;
-    const gemLocalNormalMap = textureToTexImage2D(context, normalCubeTexture);
+    const normalCubeMap = textureToTexImage2D(context, normalCubeTexture);
 
     normalCube.exec({
-      cubeMap: gemLocalNormalMap,
+      cubeMap: normalCubeMap,
       bufferGeometry
     });
 
-    gemLocalNormalMaps.push(gemLocalNormalMap);
+    gem.normalCubeMap = normalCubeMap;
   }
 
-  let lastGemIndex = -1;
+  const initGem = gems[0];
 
   const uniforms = {
     // ibl
@@ -175,9 +206,7 @@ async function init(): Promise<void> {
     iblIntensity: 1,
     iblMipCount: cubeMap.mipCount,
 
-    bounce,
-
-    gemLocalNormalMap: gemLocalNormalMaps[gemIndex],
+    maxBounces: maxBounces,
 
     // vertices
     localToWorld: new Mat4(),
@@ -196,23 +225,26 @@ async function init(): Promise<void> {
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
     attenuationDistance: 0.1,
-    attenuationColor: new Vec3(0, 0, 0),
-    abbeNumber: AbbeConstants.Diamond
+    attenuationColor: new Vec3(0.3, 0.3, 0.5),
+    abbeNumber: AbbeConstants.Diamond,
+    gemNormalCubeMap: initGem.normalCubeMap,
+    squishFactor: initGem.squishFactor
   };
 
   function animate(): void {
     orbitController.update();
 
-    if (lastGemIndex !== gemIndex) {
-      gemIndex = (gemIndex + bufferGeometries.length) % bufferGeometries.length;
-      lastGemIndex = gemIndex;
-    }
+    const gem = gems[gemIndex];
+    if (gem.bufferGeometry === undefined)
+      throw new Error('gem.bufferGeometry is undefined');
 
-    uniforms.bounce = bounce;
+    uniforms.maxBounces = maxBounces;
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
-    uniforms.gemLocalNormalMap = gemLocalNormalMaps[gemIndex];
+    uniforms.gemNormalCubeMap = gem.normalCubeMap;
+    uniforms.squishFactor = gem.squishFactor;
+
     uniforms.viewToClip = mat4PerspectiveFov(
       25,
       0.1,
@@ -242,7 +274,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program: mainProgram,
       uniforms,
-      bufferGeometry: bufferGeometries[gemIndex],
+      bufferGeometry: gem.bufferGeometry,
       depthTestState: DepthTestState.Less,
       cullingState: CullingState.Back,
       blendState: BlendState.PremultipliedOver

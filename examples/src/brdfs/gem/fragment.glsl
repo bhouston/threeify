@@ -18,17 +18,18 @@ uniform samplerCube iblWorldMap;
 uniform float iblIntensity;
 uniform int iblMipCount;
 
-uniform int bounce;
+uniform int maxBounces;
 
 // material properties, a subset of glTF Physical material
 uniform float ior;
+uniform vec3 squishFactor;
 uniform float transmissionFactor;
 uniform float attenuationDistance;
 uniform vec3 attenuationColor;
 uniform float abbeNumber;
 
 // internal gem geometry
-uniform samplerCube gemLocalNormalMap;
+uniform samplerCube gemNormalCubeMap;
 
 #pragma import "@threeify/core/dist/shaders/math.glsl"
 #pragma import "@threeify/core/dist/shaders/brdfs/specular/fresnel.glsl"
@@ -81,11 +82,12 @@ void main() {
     localSurfaceHit,
     sphere,
     ior,
-    localToWorld,
     attenuationColor,
-    gemLocalNormalMap,
-    iblWorldMap,
-    bounce
+    gemNormalCubeMap,
+    squishFactor,
+    maxBounces,
+    localToWorld,
+    iblWorldMap
   );
 
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));

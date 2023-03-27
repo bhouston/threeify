@@ -5,8 +5,11 @@ import {
   cubeFaceTargets,
   makeMat4CubeMapTransform
 } from '../../../textures/CubeMapTexture';
+import { BlendState } from '../../webgl/BlendState';
 import { BufferGeometry } from '../../webgl/buffers/BufferGeometry';
 import { ClearState } from '../../webgl/ClearState';
+import { CullingState } from '../../webgl/CullingState';
+import { DepthTestState } from '../../webgl/DepthTestState';
 import { Attachment } from '../../webgl/framebuffers/Attachment';
 import { Framebuffer } from '../../webgl/framebuffers/Framebuffer';
 import { renderBufferGeometry } from '../../webgl/framebuffers/VirtualFramebuffer';
@@ -59,7 +62,10 @@ export async function createNormalCube(
           framebuffer,
           bufferGeometry,
           program,
-          uniforms
+          uniforms,
+          depthTestState: DepthTestState.Less,
+          blendState: BlendState.None,
+          cullingState: CullingState.Front
         });
       }
       framebuffer.dispose();
