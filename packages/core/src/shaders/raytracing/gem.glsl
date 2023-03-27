@@ -35,6 +35,7 @@ float fresnelReflection(vec3 incidentRay, vec3 surfaceNormal, float eta) {
   return clamp( (rParallel * rParallel + rPerpendicular * rPerpendicular) / 2.0, 0.0, 1.0 );
 }
 
+
 vec3 localDirectionToIBLSample(
   vec3 localDirection,
   mat4 localToWorld,
@@ -44,7 +45,11 @@ vec3 localDirectionToIBLSample(
   return texture(iblWorldMap, worldDirection, 0.0).rgb;
 }
 
-//#define DEBUG_FIRST_BOUNCE
+//#define DEBUG_EXTERNAL_REFLECTION
+//#define DEBUG_EXTERNAL_REFRACTION
+//#define DEBUG_OUTPUT_FIRST_BOUNCE
+//#define DEBUG_INTERNAL_ATTENUATION
+#define DEBUG_USE_CUBEMAP_NORMALS
 
 vec3 rayTraceTransmission(
   Ray incidentRay, // local 
@@ -84,16 +89,23 @@ vec3 rayTraceTransmission(
 
   vec3 iblColor = localDirectionToIBLSample( reflectedRayDirection, localToWorld, iblWorldMap );
 
+#ifdef DEBUG_EXTERNAL_REFLECTION
+
   accumulatedColor += reflectionCoefficient * iblColor;
-  
+
+#endif DEBUG_EXTERNAL_REFLECTION
+
   float transmissionCoefficient = 1.0 - reflectionCoefficient;
   transmission *= transmissionCoefficient;
 
-#ifdef DEBUG_FIRST_BOUNCE
+#ifdef DEBUG_EXTERNAL_REFRACTION
   iblColor = localDirectionToIBLSample( refractedRayDirection, localToWorld, iblWorldMap );
   accumulatedColor += transmission * iblColor;
+#endif DEBUG_EXTERNAL_REFRACTION
+
+#ifdef DEBUG_OUTPUT_FIRST_BOUNCE
   return accumulatedColor;
-#endif DEBUG_FIRST_BOUNCE
+#endif DEBUG_OUTPUT_FIRST_BOUNCE
 
   for (int bounce = 0; bounce < maxBounces; bounce++) {
     Hit sphereHit;
@@ -110,14 +122,18 @@ vec3 rayTraceTransmission(
     ); 
     transmission *= attentuationCoefficient;
 
+#ifdef DEBUG_USE_CUBEMAP_NORMALS
     // map sphere normal to gem normal - appers to be correct.
     sphereHit.normal = colorToNormal(
       texture(gemNormalMap, normalize( sphereHit.normal * vec3( 1., 1., 1. ) ), 0.0).rgb
     );
+#endif DEBUG_USE_CUBEMAP_NORMALS
 
+#ifdef DEBUG_INTERNAL_ATTENUATION
     // Apply absorption and update accumulated transmission
     float distance = length(sphereHit.position - internalRay.origin);
-   // transmission *= exp(-distance * attenuationCoefficient);
+    transmission *= exp(-distance * attenuationCoefficient);
+#endif DEBUG_INTERNAL_ATTENUATION
 
     // calculate fresnel reflection and transmission
     reflectionCoefficient = fresnelReflection(
@@ -127,17 +143,18 @@ vec3 rayTraceTransmission(
     );
 
     // internal reflection
-    reflectedRayDirection = reflect(
+    reflectedRayDirection = -reflect(
       internalRay.direction, // validated
-      sphereHit.normal // validated
+      -sphereHit.normal // validated
     );
 
     // interal->external reflection
     refractedRayDirection = refract(
         internalRay.direction, // validated
-        sphereHit.normal, // validated
+        -sphereHit.normal, // validated
         1.0 / gemIOR // validated
       );
+      //refractedRayDirection = internalRay.direction;
 
     transmissionCoefficient = 1.0 - reflectionCoefficient;
    

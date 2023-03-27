@@ -44,7 +44,7 @@ import vertexSource from './vertex.glsl';
 
 let ior = IORConstants.Diamond;
 let gemIndex = 13;
-let bounce = 5;
+let bounce = 1;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
