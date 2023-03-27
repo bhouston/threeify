@@ -35,7 +35,8 @@ import {
   mat4PerspectiveFov,
   translation3ToMat4,
   Vec2,
-  Vec3
+  Vec3,
+  vec3Lerp
 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
@@ -45,7 +46,8 @@ import vertexSource from './vertex.glsl';
 let ior = IORConstants.Diamond;
 let gemIndex = 0;
 let maxBounces = 5;
-let boostFactor = 0;
+let boostFactor = 1;
+let squishRatio = 0.5;
 
 type Gem = {
   geometry: Geometry;
@@ -70,6 +72,12 @@ document.addEventListener('keydown', (event) => {
     case 'w':
       boostFactor += 0.25;
       break;
+    case 'a':
+      squishRatio -= 0.1;
+      break;
+    case 's':
+      squishRatio += 0.1;
+      break;
     case 'ArrowUp':
       ior *= 1.025;
       break;
@@ -91,6 +99,7 @@ document.addEventListener('keydown', (event) => {
   maxBounces = Math.max(-1, Math.min(30, maxBounces));
   gemIndex = (gemIndex + gems.length) % gems.length;
   boostFactor = Math.max(0, Math.min(boostFactor, 10));
+  squishRatio = Math.max(0, Math.min(squishRatio, 1));
 
   console.log(
     'ior',
@@ -100,7 +109,9 @@ document.addEventListener('keydown', (event) => {
     'bounces',
     maxBounces,
     'boostFactor',
-    boostFactor
+    boostFactor,
+    'squishRatio',
+    squishRatio
   );
 });
 
@@ -108,7 +119,7 @@ async function init(): Promise<void> {
   for (let i = 1; i < 14; i++) {
     gems.push({
       geometry: (await fetchOBJ(`/assets/models/gems/gem${i}.obj`))[0],
-      squishFactor: new Vec3(1, 0.5, 1),
+      squishFactor: new Vec3(1, 0.25, 1),
       smoothNormals: false
     });
   }
@@ -255,7 +266,11 @@ async function init(): Promise<void> {
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
     uniforms.gemNormalCubeMap = gem.normalCubeMap;
-    uniforms.squishFactor = gem.squishFactor;
+    uniforms.squishFactor = vec3Lerp(
+      new Vec3(1, 1, 1),
+      gem.squishFactor,
+      squishRatio
+    );
 
     uniforms.viewToClip = mat4PerspectiveFov(
       25,
