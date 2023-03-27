@@ -45,6 +45,7 @@ import vertexSource from './vertex.glsl';
 let ior = IORConstants.Diamond;
 let gemIndex = 0;
 let maxBounces = 5;
+let boostFactor = 0;
 
 type Gem = {
   geometry: Geometry;
@@ -62,6 +63,12 @@ document.addEventListener('keydown', (event) => {
       break;
     case '.':
       maxBounces += 1;
+      break;
+    case 'q':
+      boostFactor -= 0.25;
+      break;
+    case 'w':
+      boostFactor += 0.25;
       break;
     case 'ArrowUp':
       ior *= 1.025;
@@ -83,6 +90,7 @@ document.addEventListener('keydown', (event) => {
   ior = Math.max(1, Math.min(5, ior));
   maxBounces = Math.max(-1, Math.min(30, maxBounces));
   gemIndex = (gemIndex + gems.length) % gems.length;
+  boostFactor = Math.max(0, Math.min(boostFactor, 10));
 
   console.log(
     'ior',
@@ -90,7 +98,9 @@ document.addEventListener('keydown', (event) => {
     'gem',
     gems[gemIndex].geometry.name,
     'bounces',
-    maxBounces
+    maxBounces,
+    'boostFactor',
+    boostFactor
   );
 });
 
@@ -228,7 +238,8 @@ async function init(): Promise<void> {
     attenuationColor: new Vec3(0.3, 0.3, 0.5),
     abbeNumber: AbbeConstants.Diamond,
     gemNormalCubeMap: initGem.normalCubeMap,
-    squishFactor: initGem.squishFactor
+    squishFactor: initGem.squishFactor,
+    boostFactor: boostFactor
   };
 
   function animate(): void {
@@ -239,6 +250,7 @@ async function init(): Promise<void> {
       throw new Error('gem.bufferGeometry is undefined');
 
     uniforms.maxBounces = maxBounces;
+    uniforms.boostFactor = boostFactor;
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);

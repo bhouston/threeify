@@ -27,6 +27,7 @@ uniform float transmissionFactor;
 uniform float attenuationDistance;
 uniform vec3 attenuationColor;
 uniform float abbeNumber;
+uniform float boostFactor;
 
 // internal gem geometry
 uniform samplerCube gemNormalCubeMap;
@@ -85,6 +86,7 @@ void main() {
     attenuationColor,
     gemNormalCubeMap,
     squishFactor,
+    boostFactor,
     maxBounces,
     localToWorld,
     iblWorldMap

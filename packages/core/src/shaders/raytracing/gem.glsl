@@ -61,6 +61,7 @@ vec3 rayTraceTransmission(
   vec3 attenuationCoefficient,
   samplerCube gemNormalCubeMap, // local
   vec3 squishFactor,
+  float boostFactor,
   int maxBounces,
   mat4 localToWorld,
   samplerCube iblWorldMap // world
@@ -183,7 +184,7 @@ vec3 rayTraceTransmission(
       return vec3( 0., 1., 1. );
     }
 
-    transmission *= sqrt( reflectionCoefficient );
+    transmission *= pow( reflectionCoefficient, 1.0 / ( 1.0 + boostFactor ) );
    
     // update internal ray for next boundce
     internalRay = Ray(sphereHit.position, reflectedRayDirection);
