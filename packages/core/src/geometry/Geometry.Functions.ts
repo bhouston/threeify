@@ -280,10 +280,7 @@ export function transformGeometryToUnitBox(geometry: Geometry) {
 
 export function transformGeometryToUnitSphere(geometry: Geometry) {
   const boundingSphere = geometryToBoundingSphere(geometry);
-  console.log('boudningShpere', boundingSphere);
-
   const boundingBox = sphereToBox3(boundingSphere);
-
   const translation = box3Center(boundingBox);
 
   const scale = box3Size(boundingBox);

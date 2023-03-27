@@ -175,6 +175,7 @@ export function boxGeometry(
   // build geometry
 
   const geometry = new Geometry();
+  geometry.name = 'box';
   geometry.indices = makeUint32Attribute(indices);
   geometry.attributes.position = makeFloat32Attribute(vertices, 3);
   geometry.attributes.normal = makeFloat32Attribute(normals, 3);

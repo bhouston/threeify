@@ -117,6 +117,7 @@ export function cylinderGeometry(
   // build geometry
 
   const geometry = new Geometry();
+  geometry.name = 'cylinder';
   geometry.indices = makeUint32Attribute(
     indicesTop.concat(indicesBottom).concat(indicesSide)
   );

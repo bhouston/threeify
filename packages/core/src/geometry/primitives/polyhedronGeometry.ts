@@ -36,7 +36,16 @@ export function octahedronGeometry(
     0, 2, 4, 0, 4, 3, 0, 3, 5, 0, 5, 2, 1, 2, 5, 1, 5, 3, 1, 3, 4, 1, 4, 2
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, detail, smoothNormals);
+  const geometry = polyhedronGeometry(
+    vertices,
+    indices,
+    radius,
+    detail,
+    smoothNormals
+  );
+
+  geometry.name = 'octahedron';
+  return geometry;
 }
 
 export function icosahedronGeometry(
@@ -91,7 +100,15 @@ export function icosahedronGeometry(
     2, 4, 11, 6, 2, 10, 8, 6, 7, 9, 8, 1
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, detail, smoothNormals);
+  const geometry = polyhedronGeometry(
+    vertices,
+    indices,
+    radius,
+    detail,
+    smoothNormals
+  );
+  geometry.name = 'icosahedron';
+  return geometry;
 }
 export function dodecahedronGeometry(
   radius = 1,
@@ -179,7 +196,16 @@ export function dodecahedronGeometry(
     19, 7, 19, 5, 14, 19, 14, 4, 19, 4, 17, 1, 12, 14, 1, 14, 5, 1, 5, 9
   ];
 
-  return polyhedronGeometry(vertices, indices, radius, detail, smoothNormals);
+  const geometry = polyhedronGeometry(
+    vertices,
+    indices,
+    radius,
+    detail,
+    smoothNormals
+  );
+
+  geometry.name = 'dodecahedron';
+  return geometry;
 }
 
 export function polyhedronGeometry(
@@ -434,6 +460,8 @@ export function polyhedronGeometry(
       Math.sqrt(vector.x * vector.x + vector.z * vector.z)
     );
   }
+
+  geometry.name = 'polyhedron';
 
   return geometry;
 }

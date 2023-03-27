@@ -44,7 +44,9 @@ import vertexSource from './vertex.glsl';
 
 let ior = IORConstants.Diamond;
 let gemIndex = 13;
-let bounce = 1;
+let bounce = 5;
+
+const gemNames: string[] = [];
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
@@ -74,7 +76,14 @@ document.addEventListener('keydown', (event) => {
   ior = Math.max(1, Math.min(5, ior));
   bounce = Math.max(-1, Math.min(30, bounce));
 
-  console.log('ior', ior, 'gemIndex', gemIndex, 'bounce', bounce);
+  console.log(
+    'ior',
+    Math.round(ior * 100) / 100,
+    'gem',
+    gemNames[(gemIndex + gemNames.length) % gemNames.length],
+    'bounces',
+    bounce
+  );
 });
 
 async function init(): Promise<void> {
@@ -91,6 +100,7 @@ async function init(): Promise<void> {
 
   for (let i = 0; i < gemGeometries.length; i++) {
     transformGeometryToUnitSphere(gemGeometries[i]);
+    gemNames.push(gemGeometries[i].name);
   }
 
   //outputDebugInfo(geometry);
@@ -185,8 +195,8 @@ async function init(): Promise<void> {
     // material
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
-    attenuationDistance: 0.5,
-    attenuationColor: new Vec3(1, 0.8, 0.8),
+    attenuationDistance: 0.1,
+    attenuationColor: new Vec3(1, 1, 0.8),
     abbeNumber: AbbeConstants.Diamond
   };
 
@@ -196,7 +206,6 @@ async function init(): Promise<void> {
     if (lastGemIndex !== gemIndex) {
       gemIndex = (gemIndex + bufferGeometries.length) % bufferGeometries.length;
       lastGemIndex = gemIndex;
-      console.log('updating cubemap');
     }
 
     uniforms.bounce = bounce;
