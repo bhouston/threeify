@@ -1,3 +1,5 @@
+import { ShaderType } from './ShaderType';
+
 interface CompilerOutput {
   type: string;
   lineNumber: number;
@@ -50,13 +52,19 @@ export function addErrorSnippetsToCompilerOutput(
   }
 }
 
-export function insertLineNumbers(source: string): string {
+export function insertLineNumbers(
+  source: string,
+  shaderName: string,
+  shaderType: ShaderType
+): string {
   const inputLines = source.split('\n');
   const outputLines = ['\n'];
   const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
   for (let l = 0; l < inputLines.length; l++) {
     const lAsString = `000000${l + 1}`.slice(-maxLineCharacters - 1);
-    outputLines.push(`${lAsString}: ${inputLines[l]}`);
+    outputLines.push(
+      `${name}:${ShaderType[shaderType]}:${lAsString}: ${inputLines[l]}`
+    );
   }
   return outputLines.join('\n');
 }

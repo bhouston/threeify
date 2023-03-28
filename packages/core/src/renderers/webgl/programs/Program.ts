@@ -62,12 +62,14 @@ export class Program implements IResource {
 
     this.vertexShader = new Shader(
       this.context,
+      this.name,
       vertexShaderCode,
       ShaderType.Vertex,
       localShaderDefines
     );
     this.fragmentShader = new Shader(
       this.context,
+      this.name,
       fragmentShaderCode,
       ShaderType.Fragment,
       localShaderDefines

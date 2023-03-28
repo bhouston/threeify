@@ -27,6 +27,7 @@ export class Shader implements IResource {
 
   constructor(
     public readonly context: RenderingContext,
+    public readonly name: string,
     public readonly source: string,
     public readonly shaderType: ShaderType,
     public readonly shaderDefines: ShaderDefines = {}
@@ -89,7 +90,11 @@ export class Shader implements IResource {
       const infoLog = gl.getShaderInfoLog(this.glShader);
       const errorMessage = `could not compile shader:\n${infoLog}`;
       const compilerOutput = parseCompilerOutput(errorMessage);
-      const shaderSourceWithLineNumbers = insertLineNumbers(this.finalSource);
+      const shaderSourceWithLineNumbers = insertLineNumbers(
+        this.finalSource,
+        this.name,
+        this.shaderType
+      );
       addErrorSnippetsToCompilerOutput(
         compilerOutput,
         shaderSourceWithLineNumbers
