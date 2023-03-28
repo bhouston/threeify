@@ -10,72 +10,13 @@ import { GL } from '../GL.js';
 import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { ShaderDefines } from './ShaderDefines.js';
+import {
+  addErrorSnippetsToCompilerOutput,
+  insertLineNumbers,
+  parseCompilerOutput,
+  removeDeadCode
+} from './ShaderSourceTools.js';
 import { ShaderType } from './ShaderType.js';
-
-function insertLineNumbers(source: string): string {
-  const inputLines = source.split('\n');
-  const outputLines = ['\n'];
-  const maxLineCharacters = Math.floor(Math.log10(inputLines.length));
-  for (let l = 0; l < inputLines.length; l++) {
-    const lAsString = `000000${l + 1}`.slice(-maxLineCharacters - 1);
-    outputLines.push(`${lAsString}: ${inputLines[l]}`);
-  }
-  return outputLines.join('\n');
-}
-
-// This reduces the code bulk when debugging shaders
-function removeDeadCode(source: string): string {
-  const defineRegexp = /^#define +(\w+)/;
-  const undefRegexp = /^#undef +(\w+)/;
-  const ifdefRegexp = /^#ifdef +(\w+)/;
-  const ifndefRegexp = /^#ifndef +(\w+)/;
-  const endifRegexp = /^#endif.* /;
-
-  // state management
-  let defines: string[] = [];
-  const liveCodeStack: boolean[] = [true];
-
-  const outputLines: string[] = [];
-  source.split('\n').forEach((line) => {
-    const isLive = liveCodeStack.at(-1);
-
-    if (isLive) {
-      const defineMatch = line.match(defineRegexp);
-      if (defineMatch !== null) {
-        defines.push(defineMatch[1]);
-      }
-      const undefMatch = line.match(undefRegexp);
-      if (undefMatch !== null) {
-        const indexOfDefine = defines.indexOf(undefMatch[1]);
-        if (indexOfDefine >= 0) {
-          defines = defines.splice(indexOfDefine, 1);
-        }
-      }
-      const ifdefMatch = line.match(ifdefRegexp);
-      if (ifdefMatch !== null) {
-        liveCodeStack.push(defines.includes(ifdefMatch[1]));
-        return;
-      }
-      const ifndefMatch = line.match(ifndefRegexp);
-      if (ifndefMatch !== null) {
-        liveCodeStack.push(!defines.includes(ifndefMatch[1]));
-        return;
-      }
-    }
-    const endifMatch = line.match(endifRegexp);
-    if (endifMatch !== null) {
-      liveCodeStack.pop();
-      return;
-    }
-    if (isLive) {
-      outputLines.push(line);
-    }
-  });
-  return outputLines
-    .join('\n')
-    .replace(/\/\*[\S\s]*?\*\/|([^:\\]|^)\/\/.*$/gm, '')
-    .replace(/[\n\r]+/g, '\n');
-}
 
 export class Shader implements IResource {
   public readonly id = generateUUID();
@@ -147,8 +88,21 @@ export class Shader implements IResource {
       // Something went wrong during compilation; get the error
       const infoLog = gl.getShaderInfoLog(this.glShader);
       const errorMessage = `could not compile shader:\n${infoLog}`;
-      console.error(errorMessage);
-      console.error(insertLineNumbers(this.finalSource));
+      const compilerOutput = parseCompilerOutput(errorMessage);
+      const shaderSourceWithLineNumbers = insertLineNumbers(this.finalSource);
+      addErrorSnippetsToCompilerOutput(
+        compilerOutput,
+        shaderSourceWithLineNumbers
+      );
+      for (const output of compilerOutput) {
+        if (output.type === 'WARNING') {
+          console.warn(output.codeSnippet);
+        } else if (output.type === 'ERROR') {
+          console.error(output.codeSnippet);
+        } else {
+          console.log(output.message);
+        }
+      }
       resources.unregister(this);
       this.disposed = true;
       throw new Error(errorMessage);
