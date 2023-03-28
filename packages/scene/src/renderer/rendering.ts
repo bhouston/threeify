@@ -235,6 +235,8 @@ export function renderMeshes(
     if (extraUniforms !== undefined) {
       uniforms.push(extraUniforms);
     }
+    //console.log('program', program.name);
+    //console.log('uniforms', uniforms);
     renderBufferGeometry({
       framebuffer,
       program,

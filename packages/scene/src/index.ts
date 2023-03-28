@@ -28,5 +28,6 @@ export * from './materials/PhysicalMaterial.js';
 export * from './materials/MaterialParameters.js';
 export * from './materials/TextureAccessor.js';
 export * from './materials/GemMaterial.js';
+export * from './materials/RenderLayer.js';
 
 export * from './loaders/glTF.js';

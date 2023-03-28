@@ -29,6 +29,9 @@ uniform float abbeNumber;
 uniform float gemBoostFactor;
 uniform int gemMaxBounces;
 
+uniform mat4 localToGem;
+uniform mat4 gemToLocal;
+
 // internal gem geometry
 uniform samplerCube gemNormalCubeMap;
 
@@ -50,20 +53,15 @@ vec3 getIBLSample(vec3 worldDirection, float roughness) {
 
 void main() {
 
-  outputColor.rgb = vec3( 1., 0., 0. );
-  outputColor.a = 1.;
-  return;
-  
-  vec3 viewSurfacePosition = v_viewSurfacePosition;
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
-  vec3 halfVector = normalize(viewViewDirection + viewSurfaceNormal);
-
+  
   mat4 viewToLocal = worldToLocal * viewToWorld;
   vec3 localSurfaceNormal = mat4TransformDirection(
     viewToLocal,
     viewSurfaceNormal
   );
+
   vec3 localViewOrigin = mat4TransformPosition(viewToLocal, vec3(0.0));
   vec3 localPosition = mat4TransformPosition(
     viewToLocal,
@@ -74,28 +72,32 @@ void main() {
     viewViewDirection
   );
 
-  vec3 localViewToPositionDirection = normalize(
-    localPosition - localViewOrigin
-  );
-  mat4 localToView = worldToView * localToWorld;
+  vec3 gemViewOrigin = mat4TransformPosition(localToGem, localViewOrigin);
+  vec3 gemViewDirection = mat4TransformDirection(localToGem, localViewDirection);
 
-  Ray localIncidentRay = Ray(localViewOrigin, -localViewDirection);
+  vec3 gemPosition = mat4TransformPosition(localToGem, localPosition);
+  vec3 gemSurfaceNormal = mat4TransformDirection(localToGem, localSurfaceNormal);
+ 
+  Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);
-  Hit localSurfaceHit = Hit(0.0, localPosition, localSurfaceNormal);
+  Hit gemSurfaceHit = Hit(0.0, gemPosition, gemSurfaceNormal);
 
+  mat4 gemToWorld = localToWorld * gemToLocal;
+
+  gemMaxBounces = 5;
   vec3 outgoingRadiance;
 
   outgoingRadiance += rayTraceTransmission(
-    localIncidentRay,
-    localSurfaceHit,
+    gemIncidentRay,
+    gemSurfaceHit,
     sphere,
     ior,
     attenuationColor,
     gemNormalCubeMap,
     gemSquishFactor,
     gemBoostFactor,
-    maxBounces,
-    localToWorld,
+    gemMaxBounces,
+    gemToWorld,
     iblWorldMap
   );
 
@@ -111,7 +113,7 @@ void main() {
 
   vec3 premultipliedAlpha =
     (outputTransformFlags & 0x4) != 0
-      ? sRGB * material.alpha
+      ? sRGB * 1.0
       : sRGB;
 
   outputColor.rgb = premultipliedAlpha;

@@ -227,7 +227,7 @@ async function init(): Promise<void> {
     iblIntensity: 1,
     iblMipCount: cubeMap.mipCount,
 
-    maxBounces: maxBounces,
+    gemMaxBounces: maxBounces,
 
     // vertices
     localToWorld: new Mat4(),
@@ -242,6 +242,9 @@ async function init(): Promise<void> {
     worldToLocal: new Mat4(),
     viewToWorld: new Mat4(),
 
+    gemToLocal: new Mat4(),
+    localToGem: new Mat4(),
+
     // material
     ior: IORConstants.Diamond,
     transmissionFactor: 0.5,
@@ -249,8 +252,8 @@ async function init(): Promise<void> {
     attenuationColor: new Vec3(0.3, 0.3, 0.5),
     abbeNumber: AbbeConstants.Diamond,
     gemNormalCubeMap: initGem.normalCubeMap,
-    squishFactor: initGem.squishFactor,
-    boostFactor: boostFactor
+    gemSquishFactor: initGem.squishFactor,
+    gemBoostFactor: boostFactor
   };
 
   function animate(): void {
@@ -260,13 +263,13 @@ async function init(): Promise<void> {
     if (gem.bufferGeometry === undefined)
       throw new Error('gem.bufferGeometry is undefined');
 
-    uniforms.maxBounces = maxBounces;
-    uniforms.boostFactor = boostFactor;
+    uniforms.gemMaxBounces = maxBounces;
+    uniforms.gemBoostFactor = boostFactor;
     uniforms.localToWorld = euler3ToMat4(orbitController.euler);
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
     uniforms.gemNormalCubeMap = gem.normalCubeMap;
-    uniforms.squishFactor = vec3Lerp(
+    uniforms.gemSquishFactor = vec3Lerp(
       new Vec3(1, 1, 1),
       gem.squishFactor,
       squishRatio

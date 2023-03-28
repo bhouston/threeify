@@ -17,6 +17,8 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
+  Mat4,
+  mat4Inverse,
   Vec3,
   vec3Negate
 } from '@threeify/math';
@@ -45,6 +47,8 @@ import {
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
+import gemFragmentSource from './gems/fragment.glsl';
+import gemVertexSource from './gems/vertex.glsl';
 import { ShaderOutputs } from './ShaderOutputs';
 import vertexSource from './vertex.glsl';
 
@@ -90,8 +94,8 @@ async function init(): Promise<void> {
 
   const gemShaderMaterial = new ShaderMaterial(
     'gem',
-    vertexSource,
-    fragmentSource
+    gemVertexSource,
+    gemFragmentSource
   );
   //console.time('fetchHDR');
   const hdrPromise = fetchHDR(
@@ -160,6 +164,8 @@ async function init(): Promise<void> {
         //      console.log('node.name', node.name);
         const physicalMaterial = node.material as PhysicalMaterial;
         const gemMaterial = physicalToGemMaterial(physicalMaterial);
+        gemMaterial.localToGem = new Mat4();
+        mat4Inverse(gemMaterial.localToGem, gemMaterial.gemToLocal);
         gemMaterial.gemSquishFactor = new Vec3(1, 1, 0.5);
         gemMaterial.gemBoostFactor = 1;
         gemMaterial.gemNormalCubeMapId = node.name.includes('0') ? 1 : 0;

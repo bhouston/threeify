@@ -3,6 +3,7 @@ import { Color3, color3MultiplyByScalar, Vec2, Vec3 } from '@threeify/math';
 
 import { Material } from './Material.js';
 import { MaterialParameters } from './MaterialParameters.js';
+import { RenderLayer } from './RenderLayer.js';
 import { TextureAccessor } from './TextureAccessor.js';
 
 // Based on the Khronos PBR material.
@@ -248,6 +249,13 @@ export class PhysicalMaterial extends Material {
       this.gemBoostFactor = props.gemBoostFactor;
     if (props.gemNormalCubeMapId !== undefined)
       this.gemNormalCubeMapId = props.gemNormalCubeMapId;*/
+  }
+
+  getRenderLayer(): RenderLayer {
+    if (this.alphaMode === AlphaMode.Blend || this.transmissionFactor > 0) {
+      return RenderLayer.Transparent;
+    }
+    return RenderLayer.Opaque;
   }
 
   getParameters(): MaterialParameters {

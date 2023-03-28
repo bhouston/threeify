@@ -10,6 +10,7 @@ import {
   IMaterialParameterProvider,
   MaterialParameters
 } from './MaterialParameters';
+import { RenderLayer } from './RenderLayer';
 
 export interface IMaterialProps {
   id?: string;
@@ -33,6 +34,13 @@ export class Material
     this.shaderName = props.shaderName;
     this.shaderDefines = props.shaderDefines || this.shaderDefines;
     this.name = props.name || this.name;
+  }
+
+  getRenderLayer(): RenderLayer {
+    if (this.alphaMode !== AlphaMode.Opaque) {
+      return RenderLayer.Transparent;
+    }
+    return RenderLayer.Opaque;
   }
 
   getParameters(): MaterialParameters {

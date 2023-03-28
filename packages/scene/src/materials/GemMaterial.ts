@@ -1,9 +1,10 @@
 import { SolidTextures } from '@threeify/core';
-import { Color3, Vec2, Vec3 } from '@threeify/math';
+import { Color3, Mat4, Vec2, Vec3 } from '@threeify/math';
 
 import { Material } from './Material.js';
 import { MaterialParameters } from './MaterialParameters.js';
 import { PhysicalMaterial } from './PhysicalMaterial.js';
+import { RenderLayer } from './RenderLayer.js';
 import { TextureAccessor } from './TextureAccessor.js';
 
 // Based on the Khronos PBR material.
@@ -30,6 +31,9 @@ export interface IGemMaterialProps {
   gemSquishFactor?: Vec3;
   gemBoostFactor?: number;
   gemNormalCubeMapId?: number;
+
+  localToGem?: Mat4;
+  gemToLocal?: Mat4;
 }
 
 export class GemMaterial extends Material {
@@ -49,6 +53,8 @@ export class GemMaterial extends Material {
   public gemSquishFactor = new Vec3(1, 1, 1);
   public gemBoostFactor = 0;
   public gemNormalCubeMapId = -1;
+  public localToGem = new Mat4();
+  public gemToLocal = new Mat4();
 
   constructor(props: IGemMaterialProps) {
     super({
@@ -76,6 +82,13 @@ export class GemMaterial extends Material {
       this.gemBoostFactor = props.gemBoostFactor;
     if (props.gemNormalCubeMapId !== undefined)
       this.gemNormalCubeMapId = props.gemNormalCubeMapId;
+
+    if (props.localToGem !== undefined) this.localToGem.copy(props.localToGem);
+    if (props.gemToLocal !== undefined) this.gemToLocal.copy(props.gemToLocal);
+  }
+
+  getRenderLayer(): RenderLayer {
+    return RenderLayer.Opaque;
   }
 
   getParameters(): MaterialParameters {
@@ -97,7 +110,9 @@ export class GemMaterial extends Material {
 
       gemSquishFactor: this.gemSquishFactor,
       gemBoostFActory: this.gemBoostFactor,
-      gemNormalCubeMapId: this.gemNormalCubeMapId
+      gemNormalCubeMapId: this.gemNormalCubeMapId,
+      localToGem: this.localToGem,
+      gemToLocal: this.gemToLocal
     };
   }
 }

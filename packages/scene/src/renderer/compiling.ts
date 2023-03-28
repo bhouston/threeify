@@ -1,5 +1,4 @@
 import {
-  AlphaMode,
   CubeMapTexture,
   geometryToBufferGeometry,
   Program,
@@ -20,7 +19,7 @@ import {
 } from '@threeify/math';
 
 import { MaterialParameters } from '../materials/MaterialParameters';
-import { PhysicalMaterial } from '../materials/PhysicalMaterial';
+import { RenderLayer } from '../materials/RenderLayer';
 import { CameraNode } from '../scene/cameras/CameraNode';
 import { DirectionalLight } from '../scene/lights/DirectionalLight';
 import { DomeLight } from '../scene/lights/DomeLight';
@@ -81,6 +80,8 @@ export function updateRenderCache(
 
     const nodeUniforms = new NodeUniforms();
     nodeUniforms.localToWorld.copy(node.localToWorld);
+    nodeUniforms.worldToLocal.copy(node.worldToLocal);
+
     nodeIdToUniforms.set(node.id, nodeUniforms);
 
     nodeIdToVersion.set(node.id, node.version);
@@ -177,6 +178,7 @@ function meshToSceneCache(
     const materialParameters = flattenMaterialParameters(
       material.getParameters()
     );
+    console.log('material parameters', materialParameters);
     const materialUniforms: UniformValueMap = {};
     for (const uniformName of Object.keys(materialParameters)) {
       const uniformValue = materialParameters[uniformName];
@@ -295,7 +297,7 @@ function createMeshBatches(renderCache: RenderCache) {
         throw new Error('Buffer Geometry not found');
 
       // get shader program
-      const material = mesh.material as PhysicalMaterial;
+      const material = mesh.material;
       const program = shaderNameToProgram.get(material.shaderName);
       if (program === undefined) throw new Error('Program not found');
 
@@ -323,14 +325,12 @@ function createMeshBatches(renderCache: RenderCache) {
       const materialUniforms = materialIdToUniforms.get(material.id);
       if (materialUniforms === undefined)
         throw new Error('Material Uniforms not found');
-
       uniformValueMaps.push(
         filterUniforms(
           materialUniforms as unknown as UniformValueMap,
           Object.values(program.uniforms)
         )
       );
-      //}
 
       // create mesh batch
       const meshBatch = new MeshBatch(
@@ -338,12 +338,8 @@ function createMeshBatches(renderCache: RenderCache) {
         bufferGeometry,
         programVertexArray,
         uniformValueMaps
-        //    uniformBufferMap
       );
-      if (
-        material.alphaMode === AlphaMode.Blend ||
-        material.transmissionFactor > 0
-      ) {
+      if (material.getRenderLayer() === RenderLayer.Transparent) {
         blendMeshBatches.push(meshBatch);
       } else {
         opaqueMeshBatches.push(meshBatch);

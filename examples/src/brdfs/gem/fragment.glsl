@@ -12,22 +12,24 @@ uniform mat4 worldToLocal;
 uniform mat4 worldToView;
 uniform mat4 viewToWorld;
 uniform mat4 viewToClip;
+uniform mat4 gemToLocal;
+uniform mat4 localToGem;
 
 // environmental lighting
 uniform samplerCube iblWorldMap;
 uniform float iblIntensity;
 uniform int iblMipCount;
 
-uniform int maxBounces;
+uniform int gemMaxBounces;
 
 // material properties, a subset of glTF Physical material
 uniform float ior;
-uniform vec3 squishFactor;
+uniform vec3 gemSquishFactor;
 uniform float transmissionFactor;
 uniform float attenuationDistance;
 uniform vec3 attenuationColor;
 uniform float abbeNumber;
-uniform float boostFactor;
+uniform float gemBoostFactor;
 
 // internal gem geometry
 uniform samplerCube gemNormalCubeMap;
@@ -40,23 +42,18 @@ uniform samplerCube gemNormalCubeMap;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
 
-vec3 getIBLSample(vec3 worldDirection, float roughness) {
-  float mipCount = float(iblMipCount);
-  float lod = clamp(roughness * mipCount, 0.0, mipCount);
-  return texture(iblWorldMap, worldDirection, 0.0).rgb * iblIntensity;
-}
-
 void main() {
-  vec3 viewSurfacePosition = v_viewSurfacePosition;
+
+
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
-  vec3 halfVector = normalize(viewViewDirection + viewSurfaceNormal);
-
+  
   mat4 viewToLocal = worldToLocal * viewToWorld;
   vec3 localSurfaceNormal = mat4TransformDirection(
     viewToLocal,
     viewSurfaceNormal
   );
+
   vec3 localViewOrigin = mat4TransformPosition(viewToLocal, vec3(0.0));
   vec3 localPosition = mat4TransformPosition(
     viewToLocal,
@@ -67,28 +64,31 @@ void main() {
     viewViewDirection
   );
 
-  vec3 localViewToPositionDirection = normalize(
-    localPosition - localViewOrigin
-  );
-  mat4 localToView = worldToView * localToWorld;
+  vec3 gemViewOrigin = mat4TransformPosition(localToGem, localViewOrigin);
+  vec3 gemViewDirection = mat4TransformDirection(localToGem, localViewDirection);
 
-  Ray localIncidentRay = Ray(localViewOrigin, -localViewDirection);
+  vec3 gemPosition = mat4TransformPosition(localToGem, localPosition);
+  vec3 gemSurfaceNormal = mat4TransformDirection(localToGem, localSurfaceNormal);
+ 
+  Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);
-  Hit localSurfaceHit = Hit(0.0, localPosition, localSurfaceNormal);
+  Hit gemSurfaceHit = Hit(0.0, gemPosition, gemSurfaceNormal);
+
+  mat4 gemToWorld = localToWorld * gemToLocal;
 
   vec3 outgoingRadiance;
 
   outgoingRadiance += rayTraceTransmission(
-    localIncidentRay,
-    localSurfaceHit,
+    gemIncidentRay,
+    gemSurfaceHit,
     sphere,
     ior,
     attenuationColor,
     gemNormalCubeMap,
-    squishFactor,
-    boostFactor,
-    maxBounces,
-    localToWorld,
+    gemSquishFactor,
+    gemBoostFactor,
+    gemMaxBounces,
+    gemToWorld,
     iblWorldMap
   );
 
