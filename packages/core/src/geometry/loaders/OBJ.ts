@@ -54,7 +54,6 @@ export function parseOBJ(text: string, source: string): Geometry[] {
       name = source;
     }
     geometry.name = name;
-    console.log('geometry.name', geometry.name);
 
     geometry.indices = makeUint32Attribute(indices);
     indices = [];
