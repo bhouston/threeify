@@ -76,6 +76,13 @@ uniform float iridescenceThicknessMaximum;
 uniform TextureAccessor iridescenceFactorThicknessTextureAccessor;
 #endif
 
+#if defined(GEM)
+uniform vec3 gemSquishFactor;
+uniform float gemBoostFactor;
+uniform int gemMaxBounces;
+uniform samplerCube gemNormalCubeMap;
+#endif
+
 #pragma import "../microgeometry/normalPacking.glsl"
 #pragma import "../color/spaces/srgb.glsl"
 #pragma import "../microgeometry/normalMapping.glsl"
@@ -108,13 +115,13 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.emissive = vec3(0.0);
   #endif
 
-  //#if defined(NORMAL)
-  //material.normal =
-  //  vec3(normalScale, 1.0) *
-  //  colorToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
-  //#else
+  #if defined(NORMAL)
+  material.normal =
+    vec3(normalScale, 1.0) *
+    colorToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
+  #else
   material.normal = vec3(0.0, 0.0, 1.0);
-  //#endif
+  #endif
 
   #if defined(OCCLUSION)
   material.occlusion =
@@ -223,6 +230,13 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.iridescenceIor = 1.5;
   material.iridescenceThickness = 400.0;
   #endif
+
+  #if defined(GEM)
+  material.gemSquishFactor = gemSquishFactor;
+  material.gemBoostFactor = gemBoostFactor;
+  material.gemMaxBounces = gemMaxBounces;
+  #endif
+
 
   return material;
 }

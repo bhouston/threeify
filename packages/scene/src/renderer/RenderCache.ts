@@ -1,5 +1,4 @@
 import {
-  Buffer,
   BufferGeometry,
   CopyPass,
   Framebuffer,
@@ -39,12 +38,12 @@ export class RenderCache {
   // cameraCache
   public activeCamera?: CameraNode;
   public cameraUniforms = new CameraUniforms();
-  public shaderNameToCameraUniformBuffers: Map<string, Buffer> = new Map();
+  //public shaderNameToCameraUniformBuffers: Map<string, Buffer> = new Map();
 
   // lightCache
   public lightParameters = new LightParameters();
 
-  public shaderNameToLightingUniformBuffers: Map<string, Buffer> = new Map();
+  //public shaderNameToLightingUniformBuffers: Map<string, Buffer> = new Map();
   public shaderNameToLightingUniforms: Map<string, UniformValueMap> = new Map();
 
   // nodeCache
@@ -62,7 +61,7 @@ export class RenderCache {
   // materialCache
   public materialIdToMaterial: Map<string, Material> = new Map();
   public materialIdToUniforms: Map<string, UniformValueMap> = new Map();
-  public materialIdToMaterialUniformBuffers: Map<string, Buffer> = new Map();
+  //public materialIdToMaterialUniformBuffers: Map<string, Buffer> = new Map();
   public textureIdToTexImage2D: Map<string, TexImage2D> = new Map();
 
   // mesh batches - separate.

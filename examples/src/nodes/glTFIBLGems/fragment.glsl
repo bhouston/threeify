@@ -13,6 +13,7 @@ precision highp float;
 #define TRANMISSION (1)
 #define VOLUME (1)
 //#define IRIDESCENCE (1)
+//##define GEM (1)
 
 in vec3 v_worldSurfacePosition;
 in vec3 v_worldSurfaceNormal;

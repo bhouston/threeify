@@ -75,6 +75,10 @@ export interface IPhysicalMaterialProps {
   iridescenceThicknessMinimum?: number;
   iridescenceThicknessMaximum?: number;
   iridescenceFactorThicknessTextureAccessor?: TextureAccessor;
+
+  /*gemSquishFactor: Vec3;
+  gemBoostFactor: number;
+  gemNormalCubeMapId: -1;*/
 }
 
 export class PhysicalMaterial extends Material {
@@ -141,6 +145,12 @@ export class PhysicalMaterial extends Material {
   public iridescenceThicknessMinimum = 0;
   public iridescenceThicknessMaximum = 0;
   public iridescenceFactorThicknessTextureAccessor?: TextureAccessor;
+
+  /*
+  public gemSquishFactor = new Vec3(1, 1, 1);
+  public gemBoostFactor = 0;
+  public gemNormalCubeMapId = -1;
+  */
 
   constructor(props: IPhysicalMaterialProps) {
     super({
@@ -231,6 +241,13 @@ export class PhysicalMaterial extends Material {
     if (props.attenuationDistance !== undefined)
       this.attenuationDistance = props.attenuationDistance;
     this.attenuationColor.copy(props.attenuationColor || this.attenuationColor);
+
+    /*if (props.gemSquishFactor !== undefined)
+      this.gemSquishFactor = props.gemSquishFactor;
+    if (props.gemBoostFactor !== undefined)
+      this.gemBoostFactor = props.gemBoostFactor;
+    if (props.gemNormalCubeMapId !== undefined)
+      this.gemNormalCubeMapId = props.gemNormalCubeMapId;*/
   }
 
   getParameters(): MaterialParameters {
@@ -321,6 +338,10 @@ export class PhysicalMaterial extends Material {
       iridescenceFactorThicknessTextureAccessor:
         this.iridescenceFactorThicknessTextureAccessor ||
         new TextureAccessor(SolidTextures.White)
+
+      /*gemSquishFactor: this.gemSquishFactor,
+      gemBoostFactor: this.gemBoostFactor,
+      gemNormalCubeMapId: this.gemNormalCubeMapId*/
     };
   }
 }

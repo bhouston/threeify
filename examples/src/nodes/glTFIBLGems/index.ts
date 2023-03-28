@@ -20,7 +20,13 @@ import {
   Vec3,
   vec3Negate
 } from '@threeify/math';
-import { renderScene, sceneNodeToJson } from '@threeify/scene';
+import {
+  depthFirstVisitor,
+  MeshNode,
+  PhysicalMaterial,
+  physicalToGemMaterial,
+  renderScene
+} from '@threeify/scene';
 import {
   createRenderCache,
   DomeLight,
@@ -41,6 +47,7 @@ import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import { ShaderOutputs } from './ShaderOutputs';
 import vertexSource from './vertex.glsl';
+
 const stats = new Stats();
 
 const maxDebugOutputs = 71;
@@ -77,6 +84,12 @@ async function init(): Promise<void> {
 
   const shaderMaterial = new ShaderMaterial(
     'index',
+    vertexSource,
+    fragmentSource
+  );
+
+  const gemShaderMaterial = new ShaderMaterial(
+    'gem',
     vertexSource,
     fragmentSource
   );
@@ -121,6 +134,7 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const programPromise = shaderMaterialToProgram(context, shaderMaterial);
+  const gemProgramPromise = shaderMaterialToProgram(context, gemShaderMaterial);
   const gpuRender = new GPUTimerPanel(context);
   stats.addPanel(gpuRender);
 
@@ -137,8 +151,22 @@ async function init(): Promise<void> {
 
   const glTFModel = await glTFModelPromise;
 
-  console.log('hello world!');
-  console.log(JSON.stringify(sceneNodeToJson(glTFModel), null, 2));
+  //console.log(JSON.stringify(sceneNodeToJson(glTFModel), null, 2));
+
+  depthFirstVisitor(glTFModel, (node) => {
+    //    console.log('node.type', node.constructor.name);
+    if (node instanceof MeshNode) {
+      if (node.name.includes('dia')) {
+        //      console.log('node.name', node.name);
+        const physicalMaterial = node.material as PhysicalMaterial;
+        const gemMaterial = physicalToGemMaterial(physicalMaterial);
+        gemMaterial.gemSquishFactor = new Vec3(1, 1, 0.5);
+        gemMaterial.gemBoostFactor = 1;
+        gemMaterial.gemNormalCubeMapId = node.name.includes('0') ? 1 : 0;
+        node.material = gemMaterial;
+      }
+    }
+  });
 
   //console.time('updateNodeTree');
   updateNodeTree(glTFModel, sceneTreeCache);
@@ -211,13 +239,14 @@ async function init(): Promise<void> {
 
   //console.time('updateRenderCache');
   const program = await programPromise;
+  const gemProgram = await gemProgramPromise;
   const renderCache = await createRenderCache(context);
   updateRenderCache(
     context,
     root,
     camera,
-    () => {
-      return program;
+    (shaderName: string) => {
+      return shaderName === 'gem' ? gemProgram : program;
     },
     sceneTreeCache,
     renderCache

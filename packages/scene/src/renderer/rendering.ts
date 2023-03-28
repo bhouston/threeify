@@ -220,47 +220,25 @@ export function renderMeshes(
   blendState?: BlendState,
   cullingState?: CullingState
 ) {
-  const {
-    cameraUniforms,
-    lightParameters,
-    shaderNameToLightingUniformBuffers,
-    shaderNameToCameraUniformBuffers,
-    userUniforms
-  } = renderCache;
+  const { cameraUniforms, lightParameters } = renderCache;
 
   for (const meshBatch of meshBatches) {
-    const {
-      program,
-      uniformsArray,
-      bufferGeometry,
-      programVertexArray,
-      uniformBuffers
-    } = meshBatch;
+    const { program, uniformsArray, bufferGeometry, programVertexArray } =
+      meshBatch;
 
     const uniforms = [...uniformsArray] as UniformValueMap[];
 
-    const lightingBuffer = shaderNameToLightingUniformBuffers.get(program.name);
-    if (uniformBuffers !== undefined && lightingBuffer !== undefined) {
-      uniformBuffers['Lighting'] = lightingBuffer;
-    } else {
-      uniforms.push(lightParameters as unknown as UniformValueMap);
-    }
-    const cameraBuffer = shaderNameToCameraUniformBuffers.get(program.name);
-    if (uniformBuffers !== undefined && cameraBuffer !== undefined) {
-      uniformBuffers['Camera'] = cameraBuffer;
-    } else {
-      uniforms.push(cameraUniforms as unknown as UniformValueMap);
-    }
+    uniforms.push(
+      lightParameters as unknown as UniformValueMap,
+      cameraUniforms as unknown as UniformValueMap
+    );
     if (extraUniforms !== undefined) {
       uniforms.push(extraUniforms);
     }
-    // uniforms.push(userUniforms);
-
     renderBufferGeometry({
       framebuffer,
       program,
       uniforms,
-      uniformBuffers,
       bufferGeometry,
       programVertexArray,
       depthTestState,
