@@ -2,7 +2,7 @@ import { Box3 } from './Box3.js';
 import { Mat4 } from './Mat4.js';
 import { sphereIsEmpty } from './Sphere.Functions.js';
 import { Sphere } from './Sphere.js';
-import { mat4TransformVec3 } from './Vec3.Functions.js';
+import { mat4TransformVec3, vec3ToString } from './Vec3.Functions.js';
 import {
   vec3Add,
   vec3Clamp,
@@ -303,4 +303,8 @@ export function box3ExpandByPoint3(
   result.max.y = Math.max(b.max.y, p.y);
   result.max.z = Math.max(b.max.z, p.z);
   return result;
+}
+
+export function box3ToString(b: Box3): string {
+  return `(min: ${vec3ToString(b.min)}, max: ${vec3ToString(b.max)})`;
 }

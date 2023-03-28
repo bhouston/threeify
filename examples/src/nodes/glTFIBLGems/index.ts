@@ -20,7 +20,7 @@ import {
   Vec3,
   vec3Negate
 } from '@threeify/math';
-import { renderScene } from '@threeify/scene';
+import { renderScene, sceneNodeToJson } from '@threeify/scene';
 import {
   createRenderCache,
   DomeLight,
@@ -136,6 +136,9 @@ async function init(): Promise<void> {
   //console.time('glTFToSceneNode');
 
   const glTFModel = await glTFModelPromise;
+
+  console.log('hello world!');
+  console.log(JSON.stringify(sceneNodeToJson(glTFModel), null, 2));
 
   //console.time('updateNodeTree');
   updateNodeTree(glTFModel, sceneTreeCache);

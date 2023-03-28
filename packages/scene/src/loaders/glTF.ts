@@ -130,7 +130,7 @@ export async function glTFToSceneNode(
   const glTFRoot = document.getRoot();
   const glTFScene = glTFRoot.listScenes()[0];
 
-  const rootNode = new SceneNode({ name: 'glTF' });
+  const rootNode = new SceneNode({ name: url });
 
   const childrenPromises: Promise<SceneNode>[] = [];
   for (const glTFChildNode of glTFScene.listChildren()) {
@@ -144,18 +144,19 @@ async function translateNode(
   glTFNode: Node,
   textureCache: TextureCache
 ): Promise<SceneNode> {
+  const name = glTFNode.getName();
   const translation = toVec3(glTFNode.getTranslation());
   const rotation = toQuat(glTFNode.getRotation());
   const scale = toVec3(glTFNode.getScale());
 
-  const sceneNode = new SceneNode({ translation, scale, rotation });
+  const sceneNode = new SceneNode({ name, translation, scale, rotation });
 
   const glTFMesh: Mesh | null = glTFNode.getMesh();
 
   const childrenPromises: Promise<SceneNode>[] = [];
 
   if (glTFMesh !== null) {
-    childrenPromises.push(...translateMeshes(glTFMesh, textureCache));
+    childrenPromises.push(...translateMeshes(glTFMesh, textureCache, name));
   }
 
   for (const glTFChildNode of glTFNode.listChildren()) {
@@ -204,11 +205,14 @@ async function getTextureAccessor(
 
 function translateMeshes(
   glTFMesh: Mesh,
-  textureCache: TextureCache
+  textureCache: TextureCache,
+  nodeName: string
 ): Promise<MeshNode>[] {
   const meshNodePromises: Promise<MeshNode>[] = [];
 
   glTFMesh.listPrimitives().forEach((primitive) => {
+    const primitiveName =
+      primitive.getName().length > 0 ? primitive.getName() : 'mesh';
     const geometry = new Geometry();
     geometry.primitive = primitive.getMode();
     const indices = primitive.getIndices();
@@ -508,6 +512,7 @@ function translateMeshes(
 
           return resolve(
             new MeshNode({
+              name: nodeName + ':' + primitiveName,
               geometry,
               material: physicalMaterial
             })

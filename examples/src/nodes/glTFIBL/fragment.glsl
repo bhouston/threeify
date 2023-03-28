@@ -1,7 +1,18 @@
 precision highp float;
 
-//#define DEBUG_OUTPUTS (1)
+#define DEBUG_OUTPUTS (1)
 #define NUM_UV_CHANNELS (3)
+
+#define EMISSIVE (1)
+#define NORMAL (1)
+#define OCCLUSION (1)
+#define IOR (1)
+#define SPECULAR (1)
+#define CLEARCOAT (1)
+#define SHEEN (1)
+#define TRANMISSION (1)
+//#define VOLUME (1)
+//#define IRIDESCENCE (1)
 
 in vec3 v_worldSurfacePosition;
 in vec3 v_worldSurfaceNormal;

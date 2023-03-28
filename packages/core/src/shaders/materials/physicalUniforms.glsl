@@ -3,16 +3,7 @@
 #pragma import "../materials/physical.glsl"
 #pragma import "../textures/textureAccessors.glsl"
 
-#define EMISSIVE (1)
-#define NORMAL (1)
-#define OCCLUSION (1)
-#define IOR (1)
-#define SPECULAR (1)
-#define CLEARCOAT (1)
-#define SHEEN (1)
-#define TRANMISSION (1)
-#define VOLUME (1)
-#define IRIDESCENCE (1)
+
 
 uniform int alphaMode;
 uniform float alphaCutoff;
@@ -72,6 +63,7 @@ uniform float thicknessFactor;
 uniform vec3 attenuationColor;
 uniform float attenuationDistance;
 #endif
+
 #if defined(TRANSMISSION) || defined(VOLUME)
 uniform TextureAccessor transmissionFactorThicknessTextureAccessor;
 #endif
@@ -116,13 +108,13 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.emissive = vec3(0.0);
   #endif
 
-  #if defined(NORMAL)
-  material.normal =
-    vec3(normalScale, 1.0) *
-    colorToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
-  #else
+  //#if defined(NORMAL)
+  //material.normal =
+  //  vec3(normalScale, 1.0) *
+  //  colorToNormal(sampleTexture(normalTextureAccessor, uvs).rgb);
+  //#else
   material.normal = vec3(0.0, 0.0, 1.0);
-  #endif
+  //#endif
 
   #if defined(OCCLUSION)
   material.occlusion =

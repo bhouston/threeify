@@ -4,6 +4,7 @@ export * from './scene/SceneNode.js';
 export * from './scene/Mesh.js';
 export * from './scene/Generators.js';
 export * from './scene/Visitors.js';
+export * from './scene/sceneNodeToString.js';
 
 export * from './scene/lights/DirectionalLight.js';
 export * from './scene/lights/SpotLight.js';
