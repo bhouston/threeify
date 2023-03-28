@@ -1,4 +1,3 @@
-import { hashFloat2 } from './utils/hash.js';
 import { Vec3 } from './Vec3.js';
 
 export class Ray3 {
@@ -6,10 +5,6 @@ export class Ray3 {
     public readonly origin = new Vec3(),
     public readonly direction = new Vec3(0, 0, -1)
   ) {}
-
-  getHashCode(): number {
-    return hashFloat2(this.origin.getHashCode(), this.direction.getHashCode());
-  }
 
   set(origin: Vec3, direction: Vec3): this {
     origin.clone(this.origin);

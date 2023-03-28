@@ -6,8 +6,6 @@
 // where elements 3, 7, 11 would be translation in 3D, as they would multiplied
 // by the last virtual element of the 3D vector.
 
-import { hashFloatArray } from './utils/hash';
-
 export type Mat4JSON = number[];
 
 export class Mat4 {
@@ -23,10 +21,6 @@ export class Mat4 {
         `elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`
       );
     }
-  }
-
-  getHashCode(): number {
-    return hashFloatArray(this.elements);
   }
 
   clone(result = new Mat4()): Mat4 {

@@ -1,5 +1,3 @@
-import { hashFloat3 } from './utils/hash';
-
 export class Color3 {
   static readonly NUM_COMPONENTS = 3;
 
@@ -31,10 +29,6 @@ export class Color3 {
   }
 
   constructor(public r = 0, public g = 0, public b = 0) {}
-
-  getHashCode(): number {
-    return hashFloat3(this.r, this.g, this.b);
-  }
 
   clone(result = new Color3()): Color3 {
     return result.set(this.r, this.g, this.b);

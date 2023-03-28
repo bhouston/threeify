@@ -11,11 +11,6 @@ describe('Plane', () => {
     expect(a.constant).toBe(0);
   });
 
-  test('getHashCode', () => {
-    const a = new Plane();
-    expect(a.getHashCode()).toBe(-109051904);
-  });
-
   test('set', () => {
     const a = new Plane();
     a.set(new Vec3(1, 2, 3), 4);
