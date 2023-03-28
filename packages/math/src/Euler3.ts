@@ -1,5 +1,3 @@
-import { hashFloat4 } from './utils/hash.js';
-
 export enum EulerOrder3 {
   XYZ,
   XZY,
@@ -13,16 +11,14 @@ export enum EulerOrder3 {
 export type Euler3JSON = number[];
 
 export class Euler3 {
+  static readonly NUM_COMPONENTS = 4;
+
   constructor(
     public x = 0,
     public y = 0,
     public z = 0,
     public order: EulerOrder3 = EulerOrder3.XYZ
   ) {}
-
-  getHashCode(): number {
-    return hashFloat4(this.x, this.y, this.z, this.order as number);
-  }
 
   clone(result = new Euler3()): Euler3 {
     return result.set(this.x, this.y, this.z, this.order);
@@ -51,6 +47,9 @@ export class Euler3 {
       case 2:
         this.z = value;
         break;
+      case 3:
+        this.order = value as EulerOrder3;
+        break;
       default:
         throw new Error(`index is out of range: ${index}`);
     }
@@ -65,6 +64,8 @@ export class Euler3 {
         return this.y;
       case 2:
         return this.z;
+      case 3:
+        return this.order as number;
       default:
         throw new Error(`index is out of range: ${index}`);
     }

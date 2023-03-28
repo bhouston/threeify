@@ -1,5 +1,5 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import { clamp, delta } from './Functions.js';
+import { clamp, delta, parseSafeFloats, toSafeString } from './Functions.js';
 import { mat4ToMat3, quatToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
@@ -129,4 +129,35 @@ export function quatToEuler3(
 ): Euler3 {
   const m = quatToMat3(q);
   return mat3ToEuler3(m, order, result);
+}
+
+export function arrayToEuler3(
+  array: Float32Array | number[],
+  offset = 0,
+  result = new Euler3()
+): Euler3 {
+  return result.set(
+    array[offset + 0],
+    array[offset + 1],
+    array[offset + 2],
+    array[offset + 3] as EulerOrder3
+  );
+}
+export function euler33ToArray(
+  a: Euler3,
+  array: Float32Array | number[],
+  offset = 0
+): void {
+  array[offset + 0] = a.x;
+  array[offset + 1] = a.y;
+  array[offset + 2] = a.z;
+  array[offset + 2] = a.order as number;
+}
+
+export function euler3ToString(e: Euler3): string {
+  return toSafeString([e.x, e.y, e.z, e.order]);
+}
+
+export function stringToEuler3(text: string, result = new Euler3()): Euler3 {
+  return arrayToEuler3(parseSafeFloats(text), 0, result);
 }

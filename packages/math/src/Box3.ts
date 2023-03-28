@@ -1,4 +1,3 @@
-import { hashFloat2 } from './utils/hash.js';
 import { Vec3 } from './Vec3.js';
 
 export class Box3 {
@@ -32,10 +31,6 @@ export class Box3 {
   }
   get depth(): number {
     return this.max.z - this.min.z;
-  }
-
-  getHashCode(): number {
-    return hashFloat2(this.min.getHashCode(), this.max.getHashCode());
   }
 
   set(min: Vec3, max: Vec3): this {

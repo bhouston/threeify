@@ -13,11 +13,6 @@ describe('Ray3', () => {
     expect(a.direction.z).toBe(-1);
   });
 
-  test('getHashCode', () => {
-    const a = new Ray3();
-    expect(a.getHashCode()).toBe(-830406656);
-  });
-
   test('set', () => {
     const a = new Ray3();
     a.set(new Vec3(1, 2, 3), new Vec3(4, 5, 6));

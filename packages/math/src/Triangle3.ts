@@ -1,4 +1,3 @@
-import { hashFloat3 } from './utils/hash.js';
 import { Vec3 } from './Vec3.js';
 
 export class Triangle3 {
@@ -7,14 +6,6 @@ export class Triangle3 {
     public readonly b = new Vec3(),
     public readonly c = new Vec3()
   ) {}
-
-  getHashCode(): number {
-    return hashFloat3(
-      this.a.getHashCode(),
-      this.b.getHashCode(),
-      this.c.getHashCode()
-    );
-  }
 
   set(a: Vec3, b: Vec3, c: Vec3): this {
     this.a.copy(a);

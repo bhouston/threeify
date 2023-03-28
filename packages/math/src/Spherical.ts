@@ -5,14 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from './utils/hash.js';
-
 export class Spherical {
   constructor(public radius = 1, public phi = 0, public theta = 0) {}
-
-  getHashCode(): number {
-    return hashFloat3(this.radius, this.phi, this.theta);
-  }
 
   set(radius: number, phi: number, theta: number): this {
     this.radius = radius;

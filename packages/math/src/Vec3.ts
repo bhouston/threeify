@@ -1,5 +1,3 @@
-import { hashFloat3 } from './utils/hash';
-
 export class Vec3 {
   static readonly NUM_COMPONENTS = 3;
 
@@ -10,10 +8,6 @@ export class Vec3 {
   }
 
   constructor(public x = 0, public y = 0, public z = 0) {}
-
-  getHashCode(): number {
-    return hashFloat3(this.x, this.y, this.z);
-  }
 
   clone(result = new Vec3()): Vec3 {
     return result.set(this.x, this.y, this.z);

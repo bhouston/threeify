@@ -34,10 +34,6 @@ export interface IVersionable {
   dirty(): void;
 }
 
-export interface IHashable {
-  getHashCode(): number;
-}
-
 export interface IArrayable {
   setFromArray(floatArray: Float32Array, offset: number): void;
   toArray(floatArray: Float32Array, offset: number): void;
