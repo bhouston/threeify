@@ -278,7 +278,7 @@ export function transformGeometryToUnitBox(geometry: Geometry) {
   transformGeometry(geometry, transform);
 }
 
-export function transformGeometryToUnitSphere(geometry: Geometry) {
+export function getTransformToUnitSphere(geometry: Geometry) {
   const boundingSphere = geometryToBoundingSphere(geometry);
   const boundingBox = sphereToBox3(boundingSphere);
   const translation = box3Center(boundingBox);
@@ -298,8 +298,7 @@ export function transformGeometryToUnitSphere(geometry: Geometry) {
     translation3ToMat4(vec3Negate(translation)),
     transform
   );
-
-  transformGeometry(geometry, transform);
+  return transform;
 }
 
 export function makeVec3ViewFromAttribute(

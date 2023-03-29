@@ -1,23 +1,30 @@
 import {
+  BufferGeometry,
   CubeMapTexture,
   geometryToBufferGeometry,
+  NormalCube,
   Program,
   ProgramUniform,
   ProgramVertexArray,
   RenderingContext,
+  TexImage2D,
   Texture,
+  TextureFilter,
   textureToTexImage2D,
   UniformValueMap,
   VirtualFramebuffer
 } from '@threeify/core';
 import {
   color3MultiplyByScalar,
+  Mat4,
   mat4Inverse,
   mat4TransformNormal3,
   mat4TransformVec3,
+  Vec2,
   Vec3
 } from '@threeify/math';
 
+import { GemMaterial } from '../materials/GemMaterial';
 import { MaterialParameters } from '../materials/MaterialParameters';
 import { RenderLayer } from '../materials/RenderLayer';
 import { CameraNode } from '../scene/cameras/CameraNode';
@@ -173,6 +180,18 @@ function meshToSceneCache(
     shaderNameToProgram.set(material.shaderName, program);
   }
 
+  let gemNormalCubeMap: TexImage2D | undefined = undefined;
+  if (material instanceof GemMaterial) {
+    const bufferGeometry = geometryIdToBufferGeometry.get(geometry.id);
+    if (bufferGeometry === undefined)
+      throw new Error('buffer geometry not found');
+    gemNormalCubeMap = createGemNormalCubeMap(
+      renderCache,
+      bufferGeometry,
+      material
+    );
+  }
+
   // make material uniforms
   if (!materialIdToUniforms.has(material.id)) {
     const materialParameters = flattenMaterialParameters(
@@ -180,6 +199,9 @@ function meshToSceneCache(
     );
     console.log('material parameters', materialParameters);
     const materialUniforms: UniformValueMap = {};
+    if (gemNormalCubeMap !== undefined) {
+      materialUniforms['gemNormalCubeMap'] = gemNormalCubeMap;
+    }
     for (const uniformName of Object.keys(materialParameters)) {
       const uniformValue = materialParameters[uniformName];
       // convert from Parameters to Uniforms
@@ -360,4 +382,62 @@ function filterUniforms(
     }
   }
   return filteredUniforms;
+}
+
+function createGemNormalCubeMap(
+  renderCache: RenderCache,
+  bufferGeometry: BufferGeometry,
+  gemMaterial: GemMaterial
+) {
+  const { gemIdToNormalCubeMap, context, normalCube } = renderCache;
+  const smoothNormals = false;
+  const gemId = gemMaterial.gemNormalCubeMapId;
+
+  let normalCubeMap = gemIdToNormalCubeMap.get(gemId);
+  if (normalCubeMap === undefined) {
+    normalCubeMap = getGemNormalCubeMap(
+      bufferGeometry,
+      smoothNormals,
+      normalCube,
+      gemMaterial.localToGem,
+      context
+    );
+    gemIdToNormalCubeMap.set(gemId, normalCubeMap);
+  }
+  return normalCubeMap;
+}
+
+function getGemNormalCubeMap(
+  bufferGeometry: BufferGeometry,
+  smoothNormals: boolean,
+  normalCube: NormalCube,
+  localToGem: Mat4,
+  context: RenderingContext
+): TexImage2D {
+  const imageSize = new Vec2(1024, 1024);
+  const normalCubeTexture = new CubeMapTexture([
+    imageSize,
+    imageSize,
+    imageSize,
+    imageSize,
+    imageSize,
+    imageSize
+  ]);
+  normalCubeTexture.minFilter = smoothNormals
+    ? TextureFilter.Linear
+    : TextureFilter.Nearest;
+  normalCubeTexture.magFilter = smoothNormals
+    ? TextureFilter.Linear
+    : TextureFilter.Nearest;
+  normalCubeTexture.anisotropicLevels = 0;
+  normalCubeTexture.generateMipmaps = false;
+  const normalCubeMap = textureToTexImage2D(context, normalCubeTexture);
+
+  normalCube.exec({
+    cubeMap: normalCubeMap,
+    localToGem,
+    bufferGeometry
+  });
+
+  return normalCubeMap;
 }

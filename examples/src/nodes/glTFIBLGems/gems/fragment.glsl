@@ -45,12 +45,6 @@ uniform int outputTransformFlags;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
 
-vec3 getIBLSample(vec3 worldDirection, float roughness) {
-  float mipCount = float(iblMipCount);
-  float lod = clamp(roughness * mipCount, 0.0, mipCount);
-  return texture(iblWorldMap, worldDirection, 0.0).rgb * iblIntensity;
-}
-
 void main() {
 
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
@@ -84,9 +78,11 @@ void main() {
 
   mat4 gemToWorld = localToWorld * gemToLocal;
 
-  gemMaxBounces = 5;
+
   vec3 outgoingRadiance;
 
+// outgoingRadiance = texture( gemNormalCubeMap, gemIncidentRay.direction, 0.0 ).rgb;
+ 
   outgoingRadiance += rayTraceTransmission(
     gemIncidentRay,
     gemSurfaceHit,
@@ -96,7 +92,7 @@ void main() {
     gemNormalCubeMap,
     gemSquishFactor,
     gemBoostFactor,
-    gemMaxBounces,
+    5,
     gemToWorld,
     iblWorldMap
   );

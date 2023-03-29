@@ -41,10 +41,18 @@ export function addErrorSnippetsToCompilerOutput(
     const { lineNumber, message } = compileResult;
     if (lineNumber < 0) continue;
 
-    const snippetStart = Math.max(0, lineNumber - 6); // include 5 lines before the error
+    const snippetStart = Math.max(0, lineNumber - 4); // include 5 lines before the error
     const snippetEnd = lineNumber + 5; // include 5 lines after the error
 
-    const snippetLines = shaderCode.split('\n').slice(snippetStart, snippetEnd);
+    const splitCode = shaderCode.split('\n').splice(2);
+
+    const snippetLines = [
+      ...splitCode.slice(snippetStart, lineNumber - 1),
+      '',
+      splitCode[lineNumber - 1],
+      '',
+      ...splitCode.slice(lineNumber, snippetEnd)
+    ];
     const formattedSnippet = `${
       compileResult.type
     } (${lineNumber}): ${message}\n${snippetLines.join('\n')}\n`;

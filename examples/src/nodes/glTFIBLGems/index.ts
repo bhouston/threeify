@@ -3,6 +3,7 @@ import {
   blendModeToBlendState,
   equirectangularTextureToCubeMap,
   fetchHDR,
+  getTransformToUnitSphere,
   InternalFormat,
   Orbit,
   PhysicalMaterialOutputs,
@@ -155,8 +156,6 @@ async function init(): Promise<void> {
 
   const glTFModel = await glTFModelPromise;
 
-  //console.log(JSON.stringify(sceneNodeToJson(glTFModel), null, 2));
-
   depthFirstVisitor(glTFModel, (node) => {
     //    console.log('node.type', node.constructor.name);
     if (node instanceof MeshNode) {
@@ -170,6 +169,12 @@ async function init(): Promise<void> {
         gemMaterial.gemBoostFactor = 1;
         gemMaterial.gemNormalCubeMapId = node.name.includes('0') ? 1 : 0;
         node.material = gemMaterial;
+
+        gemMaterial.localToGem = getTransformToUnitSphere(node.geometry);
+        gemMaterial.gemToLocal = mat4Inverse(
+          gemMaterial.localToGem,
+          gemMaterial.gemToLocal
+        );
       }
     }
   });

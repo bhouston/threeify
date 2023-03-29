@@ -1,4 +1,4 @@
-import { Color3, Mat4, mat4PerspectiveFov } from '@threeify/math';
+import { Color3, Mat4, mat4Inverse, mat4PerspectiveFov } from '@threeify/math';
 
 import { ShaderMaterial } from '../../../materials/ShaderMaterial';
 import {
@@ -22,6 +22,7 @@ import vertexSource from './vertex.glsl';
 
 export interface INormalCubeProps {
   bufferGeometry: BufferGeometry;
+  localToGem?: Mat4;
   cubeMap: TexImage2D;
 }
 
@@ -40,12 +41,13 @@ export async function createNormalCube(
 
   return {
     exec: (props: INormalCubeProps) => {
-      const { bufferGeometry, cubeMap } = props;
+      const { bufferGeometry, cubeMap, localToGem } = props;
 
       const uniforms = {
-        localToWorld: new Mat4(),
+        localToWorld:
+          localToGem !== undefined ? mat4Inverse(localToGem) : new Mat4(),
+        worldToLocal: localToGem !== undefined ? localToGem : new Mat4(),
         worldToView: new Mat4(),
-        worldToLocal: new Mat4(),
         viewToClip: mat4PerspectiveFov(45, 0.01, 2, 1, 1) // 90 degree FOV with a square aspect ratio.
       };
       const framebuffer = new Framebuffer(context);

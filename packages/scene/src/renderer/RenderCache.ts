@@ -4,6 +4,7 @@ import {
   Framebuffer,
   GaussianBlur,
   InternalFormat,
+  NormalCube,
   Program,
   ProgramVertexArray,
   RenderingContext,
@@ -25,13 +26,16 @@ export class RenderCache {
     public context: RenderingContext,
     public copyPass: CopyPass,
     public gaussianBlur: GaussianBlur,
-    public toneMapper: ToneMapper
+    public toneMapper: ToneMapper,
+    public normalCube: NormalCube
   ) {}
 
   public renderInternalFormat = InternalFormat.RGBA16F; // alternative is: RGBA8
   public numMSAASamples = 4;
   public isBloom = true;
   public isTransmission = true;
+
+  public gemIdToNormalCubeMap = new Map<number, TexImage2D>();
 
   public breathFirstNodes: SceneNode[] = [];
 

@@ -109,8 +109,9 @@ export class GemMaterial extends Material {
       attenuationColor: this.attenuationColor,
 
       gemSquishFactor: this.gemSquishFactor,
-      gemBoostFActory: this.gemBoostFactor,
-      gemNormalCubeMapId: this.gemNormalCubeMapId,
+      gemBoostFactor: this.gemBoostFactor,
+      //gemNormalCubeMapId: this.gemNormalCubeMapId,
+
       localToGem: this.localToGem,
       gemToLocal: this.gemToLocal
     };

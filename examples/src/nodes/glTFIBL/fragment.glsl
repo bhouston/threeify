@@ -11,8 +11,9 @@ precision highp float;
 #define CLEARCOAT (1)
 #define SHEEN (1)
 #define TRANMISSION (1)
-//#define VOLUME (1)
+#define VOLUME (1)
 //#define IRIDESCENCE (1)
+//##define GEM (1)
 
 in vec3 v_worldSurfacePosition;
 in vec3 v_worldSurfaceNormal;

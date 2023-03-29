@@ -15,6 +15,7 @@ import {
   fetchOBJ,
   Geometry,
   geometryToBufferGeometry,
+  getTransformToUnitSphere,
   icosahedronGeometry,
   InternalFormat,
   IORConstants,
@@ -26,7 +27,7 @@ import {
   TextureEncoding,
   TextureFilter,
   textureToTexImage2D,
-  transformGeometryToUnitSphere
+  transformGeometry
 } from '@threeify/core';
 import {
   euler3ToMat4,
@@ -147,7 +148,8 @@ async function init(): Promise<void> {
   );
 
   for (let i = 0; i < gems.length; i++) {
-    transformGeometryToUnitSphere(gems[i].geometry);
+    const localToGem = getTransformToUnitSphere(gems[i].geometry);
+    transformGeometry(gems[i].geometry, localToGem);
   }
 
   //outputDebugInfo(geometry);

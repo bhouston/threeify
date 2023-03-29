@@ -7,6 +7,7 @@ import {
   ClearState,
   createCopyPass,
   createGaussianBlur,
+  createNormalCube,
   createToneMapper,
   CullingState,
   DepthTestState,
@@ -27,12 +28,19 @@ import { MeshBatch } from './MeshBatch';
 import { RenderCache } from './RenderCache';
 
 export async function createRenderCache(context: RenderingContext) {
-  const [copyPass, gaussianBlur, toneMapper] = await Promise.all([
+  const [copyPass, gaussianBlur, toneMapper, normalCube] = await Promise.all([
     createCopyPass(context),
     createGaussianBlur(context),
-    createToneMapper(context)
+    createToneMapper(context),
+    createNormalCube(context)
   ]);
-  return new RenderCache(context, copyPass, gaussianBlur, toneMapper);
+  return new RenderCache(
+    context,
+    copyPass,
+    gaussianBlur,
+    toneMapper,
+    normalCube
+  );
 }
 
 export function updateFramebuffers(
