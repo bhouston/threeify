@@ -8,10 +8,11 @@ out vec4 outputColor;
 
 // transforms
 uniform mat4 localToWorld;
-uniform mat4 worldToLocal;
+//uniform mat4 worldToLocal;
 uniform mat4 worldToView;
 uniform mat4 viewToWorld;
 uniform mat4 viewToClip;
+
 
 // environmental lighting
 uniform samplerCube iblWorldMap;
@@ -45,7 +46,13 @@ uniform int outputTransformFlags;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
 
+//#define DEBUG_NORMAL_CUBE_MAP (1)
+
+
 void main() {
+
+
+  mat4 worldToLocal = inverse( localToWorld );
 
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
@@ -78,6 +85,11 @@ void main() {
 
   mat4 gemToWorld = localToWorld * gemToLocal;
 
+#if defined(DEBUG_NORMAL_CUBE_MAP)
+  outputColor.rgb = texture(gemNormalCubeMap, gemSurfaceNormal, 0.0 ).rgb;
+  outputColor.a = 1.0;
+  return;
+#endif
 
   vec3 outgoingRadiance;
 

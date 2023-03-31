@@ -1,7 +1,9 @@
 import {
   BufferGeometry,
   CubeMapTexture,
+  Geometry,
   geometryToBufferGeometry,
+  getTransformToUnitSphere,
   NormalCube,
   Program,
   ProgramUniform,
@@ -121,6 +123,7 @@ function updateCameraUniforms(
 ) {
   cameraUniforms.viewToClip.copy(camera.getViewToClipProjection()); // TODO, use a dynamic aspect ratio
   cameraUniforms.worldToView.copy(camera.worldToView);
+  cameraUniforms.viewToWorld.copy(camera.viewToWorld);
   mat4Inverse(cameraUniforms.worldToView, cameraUniforms.viewToWorld);
 }
 
@@ -187,6 +190,7 @@ function meshToSceneCache(
       throw new Error('buffer geometry not found');
     gemNormalCubeMap = createGemNormalCubeMap(
       renderCache,
+      geometry,
       bufferGeometry,
       material
     );
@@ -386,12 +390,17 @@ function filterUniforms(
 
 function createGemNormalCubeMap(
   renderCache: RenderCache,
+  geometry: Geometry,
   bufferGeometry: BufferGeometry,
   gemMaterial: GemMaterial
 ) {
   const { gemIdToNormalCubeMap, context, normalCube } = renderCache;
   const smoothNormals = false;
   const gemId = gemMaterial.gemNormalCubeMapId;
+
+  const localToGem = getTransformToUnitSphere(geometry);
+  gemMaterial.localToGem.copy(localToGem);
+  gemMaterial.gemToLocal.copy(mat4Inverse(localToGem));
 
   let normalCubeMap = gemIdToNormalCubeMap.get(gemId);
   if (normalCubeMap === undefined) {

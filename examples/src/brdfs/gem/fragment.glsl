@@ -79,7 +79,7 @@ void main() {
   mat4 gemToWorld = localToWorld * gemToLocal;
 
 #if defined(DEBUG_NORMAL_CUBE_MAP)
-  outputColor.rgb = texture(gemNormalCubeMap, gemPosition, 0.0 ).rgb;
+  outputColor.rgb = texture(gemNormalCubeMap, gemSurfaceNormal, 0.0 ).rgb;
   outputColor.a = 1.0;
   return;
 #endif

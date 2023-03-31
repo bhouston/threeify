@@ -8,6 +8,7 @@ uniform mat4 cubeToView;
 uniform mat4 viewToClip;
 
 out vec3 v_viewSurfacePosition;
+out vec3 v_cubeSurfacePosition;
 out vec3 v_cubeSurfaceNormal;
 out vec2 v_uv0;
 
@@ -16,6 +17,7 @@ out vec2 v_uv0;
 void main() {
   mat4 localToView = cubeToView * localToCube;
   v_cubeSurfaceNormal = normalize(mat4TransformDirection(cubeToLocal, normal));
+  v_cubeSurfacePosition = mat4TransformPosition(localToCube, position);
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv0;
 

@@ -107,8 +107,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
 }
 
 export function computeVertexNormals(geometry: Geometry): void {
-  const indicesAttribute = geometry.indices;
-  const { attributes } = geometry;
+  const { indices: indicesAttribute, attributes } = geometry;
 
   const positionAttribute = attributes.position;
   if (positionAttribute === undefined) {
@@ -120,7 +119,7 @@ export function computeVertexNormals(geometry: Geometry): void {
       new Float32Array(positionAttribute.count * 3),
       3
     );
-    geometry.attributes.normal = normalAttribute;
+    attributes.normal = normalAttribute;
   }
 
   // reset existing normals to zero
@@ -229,7 +228,7 @@ export function positionAttributeToBoundingBox(
   }
   const positions = makeVec3ViewFromAttribute(positionAttribute);
 
-  return vec3ViewBoundingBox(positions);
+  return vec3ViewBoundingBox(positions, result);
 }
 
 export function positionAttributeToBoundingSphere(

@@ -100,7 +100,7 @@ async function init(): Promise<void> {
   );
   //console.time('fetchHDR');
   const hdrPromise = fetchHDR(
-    getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
+    getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k)
   );
   const latLongTexturePromise = hdrPromise.then((hdr) => {
     return new Texture(hdr);
@@ -152,7 +152,6 @@ async function init(): Promise<void> {
   const sceneTreeCache = new SceneTreeCache();
 
   const root = new SceneNode({ name: 'root' });
-  //console.time('glTFToSceneNode');
 
   const glTFModel = await glTFModelPromise;
 
@@ -165,8 +164,8 @@ async function init(): Promise<void> {
         const gemMaterial = physicalToGemMaterial(physicalMaterial);
         gemMaterial.localToGem = new Mat4();
         mat4Inverse(gemMaterial.localToGem, gemMaterial.gemToLocal);
-        gemMaterial.gemSquishFactor = new Vec3(1, 1, 0.5);
-        gemMaterial.gemBoostFactor = 1;
+        gemMaterial.gemSquishFactor = new Vec3(1, 0.75, 1);
+        gemMaterial.gemBoostFactor = 3;
         gemMaterial.gemNormalCubeMapId = node.name.includes('0') ? 1 : 0;
         node.material = gemMaterial;
 
@@ -175,6 +174,10 @@ async function init(): Promise<void> {
           gemMaterial.localToGem,
           gemMaterial.gemToLocal
         );
+      }
+      if (node.name.includes('Ringsolialliance')) {
+        const physicalMaterial = node.material as PhysicalMaterial;
+        physicalMaterial.albedoFactor.set(0.9, 0.8, 0.7);
       }
     }
   });
