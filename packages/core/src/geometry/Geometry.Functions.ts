@@ -285,7 +285,7 @@ export function getTransformToUnitSphere(geometry: Geometry) {
   const translation = box3Center(boundingBox);
 
   const scale = box3Size(boundingBox);
-  const maxScale = vec3MaxComponent(scale);
+  const maxScale = vec3MaxComponent(scale) * 1.733; // convert from box to sphere.
   const uniformScale = new Vec3(maxScale, maxScale, maxScale);
 
   const transform = new Mat4();

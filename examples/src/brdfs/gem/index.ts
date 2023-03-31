@@ -65,6 +65,7 @@ type Gem = {
 const gems: Gem[] = [];
 
 const maxOffset = 0;
+let hitRefines = 1;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
@@ -85,6 +86,12 @@ document.addEventListener('keydown', (event) => {
       break;
     case 's':
       squishRatio += 0.1;
+      break;
+    case 'z':
+      hitRefines--;
+      break;
+    case 'x':
+      hitRefines++;
       break;
     case 'ArrowUp':
       ior *= 1.025;
@@ -109,7 +116,8 @@ document.addEventListener('keydown', (event) => {
   }
 
   ior = Math.max(1, Math.min(5, ior));
-  maxBounces = Math.max(-1, Math.min(30, maxBounces));
+  hitRefines = Math.max(0, Math.min(10, hitRefines));
+  maxBounces = Math.max(0, Math.min(30, maxBounces));
   gemIndex = (gemIndex + gems.length) % gems.length;
   boostFactor = Math.max(0, Math.min(boostFactor, 10));
   squishRatio = Math.max(0, Math.min(squishRatio, 1));
@@ -117,6 +125,8 @@ document.addEventListener('keydown', (event) => {
   console.log(
     'ior',
     Math.round(ior * 100) / 100,
+    'hitRefines',
+    hitRefines,
     'gem',
     gems[gemIndex].geometry.name,
     'bounces',
@@ -142,7 +152,7 @@ async function init(): Promise<void> {
         )
       ),
       squishFactor: new Vec3(1, 0.25, 1),
-      smoothNormals: false,
+      smoothNormals: true,
       localToGem: new Mat4(),
       gemToLocal: new Mat4()
     });
@@ -317,7 +327,8 @@ async function init(): Promise<void> {
     abbeNumber: AbbeConstants.Diamond,
     gemNormalCubeMap: initGem.normalCubeMap,
     gemSquishFactor: initGem.squishFactor,
-    gemBoostFactor: boostFactor
+    gemBoostFactor: boostFactor,
+    hitRefines: hitRefines
   };
 
   function animate(): void {
@@ -340,6 +351,7 @@ async function init(): Promise<void> {
     uniforms.gemNormalCubeMap = gem.normalCubeMap;
     uniforms.gemToLocal = localGem ? gem.gemToLocal : new Mat4();
     uniforms.localToGem = localGem ? gem.localToGem : new Mat4();
+    uniforms.hitRefines = hitRefines;
     uniforms.gemSquishFactor = vec3Lerp(
       new Vec3(1, 1, 1),
       gem.squishFactor,

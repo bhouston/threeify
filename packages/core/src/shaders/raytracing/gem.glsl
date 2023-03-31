@@ -36,17 +36,21 @@ float fresnelReflection(vec3 incidentRay, vec3 surfaceNormal, float eta) {
   return clamp( (rParallel * rParallel + rPerpendicular * rPerpendicular) / 2.0, 0.0, 1.0 );
 }
 
-Hit sphereHitToGeoHit( Ray incidentRay, Hit sphereHit, vec3 squishFactor, samplerCube normalCubeMap ) {
+Hit sphereHitToGeoHit( Ray incidentRay, Hit sphereHit, vec3 squishFactor, samplerCube normalCubeMap, int hitRefines ) {
   Hit bestHit = sphereHit;
-  for( int i = 0; i < 3; i ++ ) {
+  if( hitRefines == 0 ) {
+     vec4 cubeSample = texture(normalCubeMap, normalize( bestHit.position ), 0.0);
+    bestHit.normal = colorToNormal(cubeSample.rgb);
+    return bestHit;
+  }
+
+  for( int i = 0; i < hitRefines; i ++ ) {
     // using the location of the hit on the sphere, get the geometry normal + distance from the cube mpa
     vec4 cubeSample = texture(normalCubeMap, normalize( bestHit.position ), 0.0);
     float facetDistanceFromSphere = cubeSample.a;
     vec3 facetNormal = colorToNormal(cubeSample.rgb);
-    if( i == 0 ) {
-      bestHit.normal = facetNormal;
-    }
-    vec3 facetPosition = facetNormal * ( facetDistanceFromSphere * 0.5 );
+
+    vec3 facetPosition = facetNormal * facetDistanceFromSphere;
   
     // create a plane from the normal and distance
     Plane facetPlane = Plane(facetPosition, facetNormal);
@@ -56,8 +60,7 @@ Hit sphereHitToGeoHit( Ray incidentRay, Hit sphereHit, vec3 squishFactor, sample
       return bestHit;
     }
 
-    float facetDistance = dot( facetHit.position - incidentRay.origin, incidentRay.direction );
-    if( facetHit.distance < 0.0001 || facetHit.distance >= bestHit.distance ) {
+    if( facetHit.distance < 0.0001 || facetHit.distance > bestHit.distance ) {
       return bestHit;
     }
     
@@ -86,6 +89,7 @@ vec3 localDirectionToIBLSample(
 //#define DEBUG_OUTPUT_COLORS
 #define DEBUG_BOOST
 #define DEBUG_FACET_HIT_CORRECTION
+//#define DEBUG_OUTPUT_HIT_NORMALS
 
 vec3 rayTraceTransmission(
   Ray incidentRay, // local 
@@ -97,6 +101,7 @@ vec3 rayTraceTransmission(
   vec3 squishFactor,
   float boostFactor,
   int maxBounces,
+  int hitRefines,
   mat4 localToWorld,
   samplerCube iblWorldMap // world
 ) {
@@ -155,28 +160,34 @@ vec3 rayTraceTransmission(
 
     Hit facetHit = sphereHit;
 #ifdef DEBUG_FACET_HIT_CORRECTION
-    facetHit = sphereHitToGeoHit(internalRay, sphereHit, squishFactor, gemNormalCubeMap);
+    facetHit = sphereHitToGeoHit(internalRay, sphereHit, squishFactor, gemNormalCubeMap, hitRefines);
+
+    /*// map sphere normal to gem normal - appers to be correct.
+    facetHit.normal = colorToNormal(
+      texture(gemNormalCubeMap, normalize( facetHit.normal ), 0.0).rgb
+    );*/
 
 #endif DEBUG_FACET_HIT_CORRECTION
 
+#ifdef DEBUG_OUTPUT_HIT_NORMALS
+    if( bounce == (maxBounces - 1 ) ) {
+      return normalToColor( facetHit.normal );
+    }
+#endif DEBUG_OUTPUT_HIT_NORMALS
+
+/*
 #ifdef DEBUG_USE_CUBEMAP_NORMALS
     // map sphere normal to gem normal - appers to be correct.
     facetHit.normal = colorToNormal(
       texture(gemNormalCubeMap, normalize( facetHit.normal * squishFactor), 0.0).rgb
     );
 #endif DEBUG_USE_CUBEMAP_NORMALS
-
-
-    vec3 attentuationCoefficient = attentuationOverDistance(
-      attenuationCoefficient,
-      facetHit.distance
-    ); 
-    transmission *= attentuationCoefficient;
+*/
 
 #ifdef DEBUG_INTERNAL_ATTENUATION
     // Apply absorption and update accumulated transmission
-    float distance = length(facetHit.position - internalRay.origin);
-    transmission *= exp(-distance * attenuationCoefficient);
+    //float distance = length(facetHit.position - internalRay.origin);
+    transmission *= exp(-facetHit.distance * attenuationCoefficient);
 #endif DEBUG_INTERNAL_ATTENUATION
 
     // calculate fresnel reflection and transmission
@@ -196,7 +207,7 @@ vec3 rayTraceTransmission(
     refractedRayDirection = refract(
         internalRay.direction, // validated
         -facetHit.normal, // validated
-        1.0 / gemIOR // validated
+        gemIOR / 1.0 // validated
       );
       //refractedRayDirection = internalRay.direction;
 

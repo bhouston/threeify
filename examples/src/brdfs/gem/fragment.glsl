@@ -21,6 +21,7 @@ uniform float iblIntensity;
 uniform int iblMipCount;
 
 uniform int gemMaxBounces;
+uniform int hitRefines;
 
 // material properties, a subset of glTF Physical material
 uniform float ior;
@@ -73,7 +74,7 @@ void main() {
   vec3 gemSurfaceNormal = mat4TransformDirection(localToGem, localSurfaceNormal);
  
   Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
-  Sphere sphere = Sphere(vec3(0.0), 0.5);
+  Sphere sphere = Sphere(vec3(0.0), 1.0);
   Hit gemSurfaceHit = Hit(0.0, gemPosition, gemSurfaceNormal);
 
   mat4 gemToWorld = localToWorld * gemToLocal;
@@ -96,6 +97,7 @@ void main() {
     gemSquishFactor,
     gemBoostFactor,
     gemMaxBounces,
+    hitRefines,
     gemToWorld,
     iblWorldMap
   );
