@@ -21,4 +21,11 @@ export class AttributeData implements IIdentifiable, IVersionable {
   dirty() {
     this.version++;
   }
+
+  clone(shallow = false): AttributeData {
+    return new AttributeData(
+      shallow ? this.arrayBuffer : this.arrayBuffer.slice(0),
+      this.target
+    );
+  }
 }

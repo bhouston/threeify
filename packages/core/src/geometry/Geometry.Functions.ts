@@ -193,7 +193,7 @@ export function computeVertexNormals(geometry: Geometry): void {
   }
 }
 
-export function transformGeometry(geometry: Geometry, m: Mat4): void {
+export function transformGeometry(geometry: Geometry, m: Mat4): Geometry {
   const positionAttribute = geometry.attributes.position;
   if (positionAttribute === undefined) {
     throw new Error('missing position attribute');
@@ -216,6 +216,8 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
       normals.set(i, v);
     }
   }
+
+  return geometry;
 }
 
 export function positionAttributeToBoundingBox(

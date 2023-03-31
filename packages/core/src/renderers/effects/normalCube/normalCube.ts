@@ -22,7 +22,7 @@ import vertexSource from './vertex.glsl';
 
 export interface INormalCubeProps {
   bufferGeometry: BufferGeometry;
-  localToGem?: Mat4;
+  localToCube: Mat4;
   cubeMap: TexImage2D;
 }
 
@@ -41,13 +41,12 @@ export async function createNormalCube(
 
   return {
     exec: (props: INormalCubeProps) => {
-      const { bufferGeometry, cubeMap, localToGem } = props;
+      const { bufferGeometry, cubeMap, localToCube } = props;
 
       const uniforms = {
-        localToWorld:
-          localToGem !== undefined ? mat4Inverse(localToGem) : new Mat4(),
-        worldToLocal: localToGem !== undefined ? localToGem : new Mat4(),
-        worldToView: new Mat4(),
+        localToCube,
+        cubeToLocal: mat4Inverse(localToCube),
+        cubeToView: new Mat4(),
         viewToClip: mat4PerspectiveFov(45, 0.01, 2, 1, 1) // 90 degree FOV with a square aspect ratio.
       };
       const framebuffer = new Framebuffer(context);
@@ -55,7 +54,7 @@ export async function createNormalCube(
       for (let index = 0; index < cubeFaceTargets.length; index++) {
         const target = cubeFaceTargets[index];
 
-        uniforms.worldToView = makeMat4CubeMapTransform(index);
+        uniforms.cubeToView = makeMat4CubeMapTransform(index);
 
         framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
         framebuffer.clearState = new ClearState(Color3.Black, 0);

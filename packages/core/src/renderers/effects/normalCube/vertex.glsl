@@ -2,9 +2,9 @@ in vec3 position;
 in vec3 normal;
 in vec2 uv0;
 
-uniform mat4 localToWorld;
-uniform mat4 worldToLocal;
-uniform mat4 worldToView;
+uniform mat4 localToCube;
+uniform mat4 cubeToLocal;
+uniform mat4 cubeToView;
 uniform mat4 viewToClip;
 
 out vec3 v_viewSurfacePosition;
@@ -14,8 +14,8 @@ out vec2 v_uv0;
 #pragma import "../../../shaders/math/mat4.glsl"
 
 void main() {
-  mat4 localToView = worldToView * localToWorld;
-  v_cubeSurfaceNormal = normalize(mat4TransformDirection(worldToLocal, normal));
+  mat4 localToView = cubeToView * localToCube;
+  v_cubeSurfaceNormal = normalize(mat4TransformDirection(cubeToLocal, normal));
   v_viewSurfacePosition = mat4TransformPosition(localToView, position);
   v_uv0 = uv0;
 

@@ -42,6 +42,8 @@ uniform samplerCube gemNormalCubeMap;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
 
+//#define DEBUG_NORMAL_CUBE_MAP (1)
+
 void main() {
 
 
@@ -75,6 +77,12 @@ void main() {
   Hit gemSurfaceHit = Hit(0.0, gemPosition, gemSurfaceNormal);
 
   mat4 gemToWorld = localToWorld * gemToLocal;
+
+#if defined(DEBUG_NORMAL_CUBE_MAP)
+  outputColor.rgb = texture(gemNormalCubeMap, gemPosition, 0.0 ).rgb;
+  outputColor.a = 1.0;
+  return;
+#endif
 
   vec3 outgoingRadiance;
 

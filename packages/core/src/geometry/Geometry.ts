@@ -34,4 +34,19 @@ export class Geometry {
     }
     return this.#boundingBox;
   }
+
+  clone(shallow = false): Geometry {
+    const clone = new Geometry();
+    clone.name = this.name + '.clone';
+    clone.primitive = this.primitive;
+    if (this.indices !== undefined) {
+      clone.indices = shallow ? this.indices : this.indices.clone();
+    }
+    for (const name in this.attributes) {
+      const attribute = this.attributes[name];
+      if (attribute === undefined) continue;
+      clone.attributes[name] = shallow ? attribute : attribute.clone();
+    }
+    return clone;
+  }
 }

@@ -63,7 +63,11 @@ async function init(): Promise<void> {
 
   // render into the cube map
   const normalCube = await createNormalCube(context);
-  normalCube.exec({ bufferGeometry, cubeMap: normalCubeMap });
+  normalCube.exec({
+    bufferGeometry,
+    cubeMap: normalCubeMap,
+    localToCube: new Mat4()
+  });
 
   const uniforms = {
     normalCubeMap,

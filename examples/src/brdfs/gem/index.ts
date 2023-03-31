@@ -49,13 +49,18 @@ let gemIndex = 0;
 let maxBounces = 5;
 let boostFactor = 1;
 let squishRatio = 0.5;
+let localGem = true;
 
 type Gem = {
   geometry: Geometry;
+  localGeometry?: Geometry;
   squishFactor: Vec3;
   bufferGeometry?: BufferGeometry;
+  localBufferGeometry?: BufferGeometry;
   normalCubeMap?: TexImage2D;
   smoothNormals: boolean;
+  localToGem: Mat4;
+  gemToLocal: Mat4;
 };
 const gems: Gem[] = [];
 
@@ -88,6 +93,10 @@ document.addEventListener('keydown', (event) => {
     case 'ArrowLeft':
       gemIndex--;
       break;
+    // space bar
+    case ' ':
+      localGem = !localGem;
+      break;
     case 'ArrowRight':
       gemIndex++;
       break;
@@ -96,6 +105,7 @@ document.addEventListener('keydown', (event) => {
       gemIndex = 0;
       break;
   }
+
   ior = Math.max(1, Math.min(5, ior));
   maxBounces = Math.max(-1, Math.min(30, maxBounces));
   gemIndex = (gemIndex + gems.length) % gems.length;
@@ -119,37 +129,67 @@ document.addEventListener('keydown', (event) => {
 async function init(): Promise<void> {
   for (let i = 1; i < 14; i++) {
     gems.push({
-      geometry: (await fetchOBJ(`/assets/models/gems/gem${i}.obj`))[0],
+      geometry: transformGeometry(
+        (await fetchOBJ(`/assets/models/gems/gem${i}.obj`))[0],
+        translation3ToMat4(
+          new Vec3(
+            0.4 * Math.random() - 0.2,
+            0.4 * Math.random() - 0.2,
+            0.4 * Math.random() - 0.2
+          )
+        )
+      ),
       squishFactor: new Vec3(1, 0.25, 1),
-      smoothNormals: false
+      smoothNormals: false,
+      localToGem: new Mat4(),
+      gemToLocal: new Mat4()
     });
   }
   gems.push(
     {
-      geometry: boxGeometry(0.25, 0.25, 0.25),
+      geometry: transformGeometry(
+        boxGeometry(0.25, 0.25, 0.25),
+        translation3ToMat4(new Vec3(0, 0.25, 0))
+      ),
       squishFactor: new Vec3(1, 1, 1),
-      smoothNormals: false
+      smoothNormals: false,
+      localToGem: new Mat4(),
+      gemToLocal: new Mat4()
     },
     {
-      geometry: cylinderGeometry(0.25, 0.25, 36),
+      geometry: transformGeometry(
+        cylinderGeometry(0.25, 0.25, 36),
+        translation3ToMat4(new Vec3(-0.5, -0.25, 0))
+      ),
       squishFactor: new Vec3(1, 1, 1),
-      smoothNormals: false
+      smoothNormals: false,
+      localToGem: new Mat4(),
+      gemToLocal: new Mat4()
     },
     {
       geometry: icosahedronGeometry(0.25, 2, false),
       squishFactor: new Vec3(1, 1, 1),
-      smoothNormals: false
+      smoothNormals: false,
+      localToGem: new Mat4(),
+      gemToLocal: new Mat4()
     },
     {
       geometry: icosahedronGeometry(0.25, 6, true),
       squishFactor: new Vec3(1, 1, 1),
-      smoothNormals: true
+      smoothNormals: true,
+      localToGem: new Mat4(),
+      gemToLocal: new Mat4()
     }
   );
 
   for (let i = 0; i < gems.length; i++) {
     const localToGem = getTransformToUnitSphere(gems[i].geometry);
-    transformGeometry(gems[i].geometry, localToGem);
+    gems[i].localToGem.copy(localToGem);
+    gems[i].gemToLocal.copy(mat4Inverse(localToGem));
+
+    const localGeometry = gems[i].geometry.clone();
+    transformGeometry(localGeometry, localToGem);
+    gems[i].localGeometry = localGeometry;
   }
 
   //outputDebugInfo(geometry);
@@ -186,12 +226,19 @@ async function init(): Promise<void> {
 
   for (const gem of gems) {
     gem.bufferGeometry = geometryToBufferGeometry(context, gem.geometry);
+    const localGeometry = gem.localGeometry;
+    if (localGeometry !== undefined) {
+      gem.localBufferGeometry = geometryToBufferGeometry(
+        context,
+        localGeometry
+      );
+    }
   }
   // render into the cube map
   const normalCube = await createNormalCube(context);
 
   for (const gem of gems) {
-    const { bufferGeometry, smoothNormals } = gem;
+    const { bufferGeometry, smoothNormals, localToGem } = gem;
     if (bufferGeometry === undefined)
       throw new Error('bufferGeometry is undefined');
     const imageSize = new Vec2(1024, 1024);
@@ -215,7 +262,8 @@ async function init(): Promise<void> {
 
     normalCube.exec({
       cubeMap: normalCubeMap,
-      bufferGeometry
+      bufferGeometry,
+      localToCube: localToGem
     });
 
     gem.normalCubeMap = normalCubeMap;
@@ -262,8 +310,13 @@ async function init(): Promise<void> {
     orbitController.update();
 
     const gem = gems[gemIndex];
-    if (gem.bufferGeometry === undefined)
-      throw new Error('gem.bufferGeometry is undefined');
+
+    const bufferGeometry = localGem
+      ? gem.bufferGeometry
+      : gem.localBufferGeometry;
+
+    if (bufferGeometry === undefined)
+      throw new Error('bufferGeometry is undefined');
 
     uniforms.gemMaxBounces = maxBounces;
     uniforms.gemBoostFactor = boostFactor;
@@ -271,6 +324,8 @@ async function init(): Promise<void> {
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
     uniforms.gemNormalCubeMap = gem.normalCubeMap;
+    uniforms.gemToLocal = localGem ? gem.gemToLocal : new Mat4();
+    uniforms.localToGem = localGem ? gem.localToGem : new Mat4();
     uniforms.gemSquishFactor = vec3Lerp(
       new Vec3(1, 1, 1),
       gem.squishFactor,
@@ -306,7 +361,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program: mainProgram,
       uniforms,
-      bufferGeometry: gem.bufferGeometry,
+      bufferGeometry,
       depthTestState: DepthTestState.Less,
       cullingState: CullingState.Back,
       blendState: BlendState.PremultipliedOver

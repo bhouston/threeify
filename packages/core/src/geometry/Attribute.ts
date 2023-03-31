@@ -33,6 +33,17 @@ export class Attribute {
     // this.minExtent = minExtent;
     // this.maxExtent = maxExtent;
   }
+
+  clone(shallow = false): Attribute {
+    return new Attribute(
+      shallow ? this.attributeData : this.attributeData.clone(),
+      this.componentsPerVertex,
+      this.componentType,
+      this.vertexStride,
+      this.byteOffset,
+      this.normalized
+    );
+  }
 }
 
 // TODO: Could one have these also take a number?  And it would allocate the array?

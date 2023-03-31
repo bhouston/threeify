@@ -435,7 +435,7 @@ function getGemNormalCubeMap(
 
   normalCube.exec({
     cubeMap: normalCubeMap,
-    localToGem,
+    localToCube: localToGem,
     bufferGeometry
   });
 
