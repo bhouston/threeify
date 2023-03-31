@@ -10,3 +10,4 @@ struct Hit {
     vec3 position;
     vec3 normal;
 };
+

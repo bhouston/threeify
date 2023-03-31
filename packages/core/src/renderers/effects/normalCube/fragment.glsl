@@ -13,5 +13,5 @@ void main() {
   vec3 cubeSurfaceNormal = normalize(v_cubeSurfaceNormal);
 
   outputColor.rgb = normalToColor(cubeSurfaceNormal);
-  outputColor.a = abs( cubeSurfacePosition.z ); // 0.0 - 1.0
+  outputColor.a = length( cubeSurfacePosition ) * 2.; // length(cubeSurfacePosition) should be in the range of 0. to 0.5
 }

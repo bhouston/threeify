@@ -45,10 +45,10 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 let ior = IORConstants.Diamond;
-let gemIndex = 0;
+let gemIndex = 13;
 let maxBounces = 5;
 let boostFactor = 1;
-let squishRatio = 0.5;
+let squishRatio = 0;
 let localGem = true;
 
 type Gem = {
@@ -63,6 +63,8 @@ type Gem = {
   gemToLocal: Mat4;
 };
 const gems: Gem[] = [];
+
+const maxOffset = 0;
 
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
@@ -133,9 +135,9 @@ async function init(): Promise<void> {
         (await fetchOBJ(`/assets/models/gems/gem${i}.obj`))[0],
         translation3ToMat4(
           new Vec3(
-            0.4 * Math.random() - 0.2,
-            0.4 * Math.random() - 0.2,
-            0.4 * Math.random() - 0.2
+            maxOffset * Math.random() - maxOffset * 0.5,
+            maxOffset * Math.random() - maxOffset * 0.5,
+            maxOffset * Math.random() - maxOffset * 0.5
           )
         )
       ),
@@ -149,7 +151,13 @@ async function init(): Promise<void> {
     {
       geometry: transformGeometry(
         boxGeometry(0.25, 0.25, 0.25),
-        translation3ToMat4(new Vec3(0, 0.25, 0))
+        translation3ToMat4(
+          new Vec3(
+            maxOffset * Math.random() - maxOffset * 0.5,
+            maxOffset * Math.random() - maxOffset * 0.5,
+            maxOffset * Math.random() - maxOffset * 0.5
+          )
+        )
       ),
       squishFactor: new Vec3(1, 1, 1),
       smoothNormals: false,
@@ -159,7 +167,13 @@ async function init(): Promise<void> {
     {
       geometry: transformGeometry(
         cylinderGeometry(0.25, 0.25, 36),
-        translation3ToMat4(new Vec3(-0.5, -0.25, 0))
+        translation3ToMat4(
+          new Vec3(
+            maxOffset * Math.random() - maxOffset * 0.5,
+            maxOffset * Math.random() - maxOffset * 0.5,
+            maxOffset * Math.random() - maxOffset * 0.5
+          )
+        )
       ),
       squishFactor: new Vec3(1, 1, 1),
       smoothNormals: false,

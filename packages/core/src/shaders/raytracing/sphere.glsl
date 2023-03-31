@@ -6,7 +6,7 @@ struct Sphere {
   float radius;
 };
 
-bool sphereRayIntersection(Ray ray, Sphere sphere, out Hit hit) {
+bool raySphereIntersection(Ray ray, Sphere sphere, out Hit hit) {
   vec3 oc = ray.origin - sphere.origin; // origin to center vector
   float a = dot(ray.direction, ray.direction);
   float b = 2.0 * dot(ray.direction, oc);

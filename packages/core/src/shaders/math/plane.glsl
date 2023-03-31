@@ -1,22 +1,19 @@
 #pragma once
 
-vec3 projectOnPlane(vec3 point, vec3 pointOnPlane, vec3 planeNormal) {
-  float distance = dot(planeNormal, point - pointOnPlane);
-  return -distance * planeNormal + point;
+// Plane constructor
+struct Plane {
+  vec3 pointOnPlane;
+  vec3 planeNormal;
+};
+
+
+
+// Project point onto plane
+vec3 projectPointOnPlane(vec3 point, Plane plane) {
+  return point - dot(point - plane.pointOnPlane, plane.planeNormal) * plane.planeNormal;
 }
 
-float sideOfPlane(vec3 point, vec3 pointOnPlane, vec3 planeNormal) {
-  return sign(dot(point - pointOnPlane, planeNormal));
+float sideOfPlane(vec3 point, Plane plane) {
+  return sign(dot(point - plane.pointOnPlane, plane.planeNormal));
 }
 
-vec3 linePlaneIntersect(
-  vec3 pointOnLine,
-  vec3 lineDirection,
-  vec3 pointOnPlane,
-  vec3 planeNormal
-) {
-  return lineDirection *
-    (dot(planeNormal, pointOnPlane - pointOnLine) /
-      dot(planeNormal, lineDirection)) +
-  pointOnLine;
-}

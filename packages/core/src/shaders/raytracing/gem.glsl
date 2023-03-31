@@ -6,6 +6,7 @@
 #pragma import "../microgeometry/normalPacking.glsl"
 #pragma import "../math/mat4.glsl"
 #pragma import "../brdfs/specular/fresnel.glsl"
+#pragma import "./plane.glsl"
 
 // https://github.com/KhronosGroup/glTF/blob/main/extensions/2.0/Khronos/KHR_materials_volume/README.md
 vec3 attentuationCoefficient(
@@ -35,6 +36,38 @@ float fresnelReflection(vec3 incidentRay, vec3 surfaceNormal, float eta) {
   return clamp( (rParallel * rParallel + rPerpendicular * rPerpendicular) / 2.0, 0.0, 1.0 );
 }
 
+Hit sphereHitToGeoHit( Ray incidentRay, Hit sphereHit, vec3 squishFactor, samplerCube normalCubeMap ) {
+  Hit bestHit = sphereHit;
+  for( int i = 0; i < 3; i ++ ) {
+    // using the location of the hit on the sphere, get the geometry normal + distance from the cube mpa
+    vec4 cubeSample = texture(normalCubeMap, normalize( bestHit.position ), 0.0);
+    float facetDistanceFromSphere = cubeSample.a;
+    vec3 facetNormal = colorToNormal(cubeSample.rgb);
+    if( i == 0 ) {
+      bestHit.normal = facetNormal;
+    }
+    vec3 facetPosition = facetNormal * ( facetDistanceFromSphere * 0.5 );
+  
+    // create a plane from the normal and distance
+    Plane facetPlane = Plane(facetPosition, facetNormal);
+
+    Hit facetHit;
+    if( ! rayPlaneIntersection(incidentRay, facetPlane, facetHit) ) {
+      return bestHit;
+    }
+
+    float facetDistance = dot( facetHit.position - incidentRay.origin, incidentRay.direction );
+    if( facetHit.distance < 0.0001 || facetHit.distance >= bestHit.distance ) {
+      return bestHit;
+    }
+    
+    // if the ray hits the plane, adjust the ray to the hit location
+    bestHit = facetHit;
+  }
+
+  return bestHit;
+}
+
 
 vec3 localDirectionToIBLSample(
   vec3 localDirection,
@@ -49,9 +82,10 @@ vec3 localDirectionToIBLSample(
 #define DEBUG_EXTERNAL_REFRACTION
 //#define DEBUG_OUTPUT_FIRST_BOUNCE
 #define DEBUG_INTERNAL_ATTENUATION
-#define DEBUG_USE_CUBEMAP_NORMALS
+//#define DEBUG_USE_CUBEMAP_NORMALS
 //#define DEBUG_OUTPUT_COLORS
 #define DEBUG_BOOST
+#define DEBUG_FACET_HIT_CORRECTION
 
 vec3 rayTraceTransmission(
   Ray incidentRay, // local 
@@ -114,47 +148,54 @@ vec3 rayTraceTransmission(
   for (int bounce = 0; bounce < maxBounces; bounce++) {
     Hit sphereHit;
     if (
-      !sphereRayIntersection(internalRay, gemSphere, sphereHit) || sphereHit.distance <= 0.0001
+      !raySphereIntersection(internalRay, gemSphere, sphereHit) || sphereHit.distance <= 0.0001
     ) {
       break;
     }
-    
-    vec3 attentuationCoefficient = attentuationOverDistance(
-      attenuationCoefficient,
-      sphereHit.distance
-    ); 
-    transmission *= attentuationCoefficient;
+
+    Hit facetHit = sphereHit;
+#ifdef DEBUG_FACET_HIT_CORRECTION
+    facetHit = sphereHitToGeoHit(internalRay, sphereHit, squishFactor, gemNormalCubeMap);
+
+#endif DEBUG_FACET_HIT_CORRECTION
 
 #ifdef DEBUG_USE_CUBEMAP_NORMALS
     // map sphere normal to gem normal - appers to be correct.
-    sphereHit.normal = colorToNormal(
-      texture(gemNormalCubeMap, normalize( sphereHit.normal * squishFactor), 0.0).rgb
+    facetHit.normal = colorToNormal(
+      texture(gemNormalCubeMap, normalize( facetHit.normal * squishFactor), 0.0).rgb
     );
 #endif DEBUG_USE_CUBEMAP_NORMALS
 
+
+    vec3 attentuationCoefficient = attentuationOverDistance(
+      attenuationCoefficient,
+      facetHit.distance
+    ); 
+    transmission *= attentuationCoefficient;
+
 #ifdef DEBUG_INTERNAL_ATTENUATION
     // Apply absorption and update accumulated transmission
-    float distance = length(sphereHit.position - internalRay.origin);
+    float distance = length(facetHit.position - internalRay.origin);
     transmission *= exp(-distance * attenuationCoefficient);
 #endif DEBUG_INTERNAL_ATTENUATION
 
     // calculate fresnel reflection and transmission
     reflectionCoefficient = fresnelReflection(
       internalRay.direction, // validated
-      sphereHit.normal, // validated
+      facetHit.normal, // validated
       1.0 / gemIOR // validated
     );
 
     // internal reflection
     reflectedRayDirection = reflect(
       internalRay.direction, // validated
-      -sphereHit.normal // validated
+      -facetHit.normal // validated
     );
 
     // interal->external reflection
     refractedRayDirection = refract(
         internalRay.direction, // validated
-        -sphereHit.normal, // validated
+        -facetHit.normal, // validated
         1.0 / gemIOR // validated
       );
       //refractedRayDirection = internalRay.direction;
@@ -187,7 +228,7 @@ vec3 rayTraceTransmission(
     transmission *= pow( reflectionCoefficient, 1.0 / ( 1.0 + boostFactor ) );
    
     // update internal ray for next boundce
-    internalRay = Ray(sphereHit.position, reflectedRayDirection);
+    internalRay = Ray(facetHit.position, reflectedRayDirection);
   }
 
   return accumulatedColor;
