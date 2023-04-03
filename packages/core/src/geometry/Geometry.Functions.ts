@@ -306,7 +306,7 @@ export function getTransformToUnitSphere(geometry: Geometry) {
 }
 
 export function getPlanesFromGeometry(geometry: Geometry): Plane[] {
-  const indicesAttribute = geometry.attributes.indices;
+  const indicesAttribute = geometry.indices;
   const indices =
     indicesAttribute === undefined
       ? undefined
