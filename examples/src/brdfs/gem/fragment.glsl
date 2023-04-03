@@ -32,6 +32,8 @@ uniform vec3 attenuationColor;
 uniform float abbeNumber;
 uniform float gemBoostFactor;
 
+uniform bool usePlanes;
+
 // internal gem geometry
 uniform samplerCube gemNormalCubeMap;
 
@@ -42,15 +44,24 @@ uniform samplerCube gemNormalCubeMap;
 #pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_ibl.glsl"
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 #pragma import "@threeify/core/dist/shaders/raytracing/gem.glsl"
+#pragma import "@threeify/core/dist/shaders/raytracing/gem_planes.glsl"
+
+uniform vec3 pointOnPlanes[NUM_PLANES];
+uniform vec3 planeNormals[NUM_PLANES];
+uniform int numPlanes;
+
+
+Plane[NUM_PLANES] planes;
 
 //#define DEBUG_NORMAL_CUBE_MAP (1)
 
 void main() {
-
+  
+  toPlanes(pointOnPlanes, planeNormals, planes);
 
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
-  
+
   mat4 viewToLocal = worldToLocal * viewToWorld;
   vec3 localSurfaceNormal = mat4TransformDirection(
     viewToLocal,
@@ -62,45 +73,69 @@ void main() {
     viewToLocal,
     v_viewSurfacePosition
   );
-    vec3 localViewDirection = mat4TransformDirection(
+  vec3 localViewDirection = mat4TransformDirection(
     viewToLocal,
     viewViewDirection
   );
 
   vec3 gemViewOrigin = mat4TransformPosition(localToGem, localViewOrigin);
-  vec3 gemViewDirection = mat4TransformDirection(localToGem, localViewDirection);
+  vec3 gemViewDirection = mat4TransformDirection(
+    localToGem,
+    localViewDirection
+  );
 
   vec3 gemPosition = mat4TransformPosition(localToGem, localPosition);
-  vec3 gemSurfaceNormal = mat4TransformDirection(localToGem, localSurfaceNormal);
- 
+  vec3 gemSurfaceNormal = mat4TransformDirection(
+    localToGem,
+    localSurfaceNormal
+  );
+
   Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 1.0);
   Hit gemSurfaceHit = Hit(0.0, gemPosition, gemSurfaceNormal);
 
   mat4 gemToWorld = localToWorld * gemToLocal;
 
-#if defined(DEBUG_NORMAL_CUBE_MAP)
-  outputColor.rgb = texture(gemNormalCubeMap, gemSurfaceNormal, 0.0 ).rgb;
+  #if defined(DEBUG_NORMAL_CUBE_MAP)
+  outputColor.rgb = texture(gemNormalCubeMap, gemSurfaceNormal, 0.0).rgb;
   outputColor.a = 1.0;
   return;
-#endif
+  #endif
 
   vec3 outgoingRadiance;
 
-  outgoingRadiance += rayTraceTransmission(
-    gemIncidentRay,
-    gemSurfaceHit,
-    sphere,
-    ior,
-    attenuationColor,
-    gemNormalCubeMap,
-    gemSquishFactor,
-    gemBoostFactor,
-    gemMaxBounces,
-    hitRefines,
-    gemToWorld,
-    iblWorldMap
-  );
+  if (!usePlanes) {
+    outgoingRadiance += rayTraceTransmission(
+      gemIncidentRay,
+      gemSurfaceHit,
+      sphere,
+      ior,
+      attenuationColor,
+      gemNormalCubeMap,
+      gemSquishFactor,
+      gemBoostFactor,
+      gemMaxBounces,
+      hitRefines,
+      gemToWorld,
+      iblWorldMap
+    );
+  } else {
+    outgoingRadiance += rayTraceTransmission_Planes(
+      gemIncidentRay,
+      gemSurfaceHit,
+      sphere,
+      ior,
+      attenuationColor,
+      planes,
+      numPlanes,
+      gemSquishFactor,
+      gemBoostFactor,
+      gemMaxBounces,
+      hitRefines,
+      gemToWorld,
+      iblWorldMap
+    );
+  }
 
   outputColor.rgb = linearTosRGB(tonemappingACESFilmic(outgoingRadiance));
   outputColor.a = 1.0;

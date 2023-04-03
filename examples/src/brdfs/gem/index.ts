@@ -15,6 +15,7 @@ import {
   fetchOBJ,
   Geometry,
   geometryToBufferGeometry,
+  getPlanesFromGeometry,
   getTransformToUnitSphere,
   icosahedronGeometry,
   InternalFormat,
@@ -37,19 +38,25 @@ import {
   translation3ToMat4,
   Vec2,
   Vec3,
-  vec3Lerp
+  vec3Lerp,
+  vec3MultiplyByScalar
 } from '@threeify/math';
 
 import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
+enum GeoMode {
+  Unit,
+  Local,
+  LocalPlanes
+}
 let ior = IORConstants.Diamond;
 let gemIndex = 13;
 let maxBounces = 5;
 let boostFactor = 1;
 let squishRatio = 0;
-let localGem = true;
+let geoMode = GeoMode.Local;
 
 type Gem = {
   geometry: Geometry;
@@ -61,6 +68,8 @@ type Gem = {
   smoothNormals: boolean;
   localToGem: Mat4;
   gemToLocal: Mat4;
+  pointOnPlanes: Vec3[];
+  planeNormals: Vec3[];
 };
 const gems: Gem[] = [];
 
@@ -104,7 +113,7 @@ document.addEventListener('keydown', (event) => {
       break;
     // space bar
     case ' ':
-      localGem = !localGem;
+      geoMode = (geoMode + 1) % 3;
       break;
     case 'ArrowRight':
       gemIndex++;
@@ -134,12 +143,14 @@ document.addEventListener('keydown', (event) => {
     'boostFactor',
     boostFactor,
     'squishRatio',
-    squishRatio
+    squishRatio,
+    'geoMode',
+    GeoMode[geoMode]
   );
 });
 
 async function init(): Promise<void> {
-  for (let i = 1; i < 14; i++) {
+  for (let i = 1; i < 15; i++) {
     gems.push({
       geometry: transformGeometry(
         (await fetchOBJ(`/assets/models/gems/gem${i}.obj`))[0],
@@ -154,7 +165,9 @@ async function init(): Promise<void> {
       squishFactor: new Vec3(1, 0.25, 1),
       smoothNormals: true,
       localToGem: new Mat4(),
-      gemToLocal: new Mat4()
+      gemToLocal: new Mat4(),
+      pointOnPlanes: [],
+      planeNormals: []
     });
   }
   gems.push(
@@ -172,7 +185,9 @@ async function init(): Promise<void> {
       squishFactor: new Vec3(1, 1, 1),
       smoothNormals: false,
       localToGem: new Mat4(),
-      gemToLocal: new Mat4()
+      gemToLocal: new Mat4(),
+      pointOnPlanes: [],
+      planeNormals: []
     },
     {
       geometry: transformGeometry(
@@ -188,21 +203,27 @@ async function init(): Promise<void> {
       squishFactor: new Vec3(1, 1, 1),
       smoothNormals: false,
       localToGem: new Mat4(),
-      gemToLocal: new Mat4()
+      gemToLocal: new Mat4(),
+      pointOnPlanes: [],
+      planeNormals: []
     },
     {
       geometry: icosahedronGeometry(0.25, 2, false),
       squishFactor: new Vec3(1, 1, 1),
       smoothNormals: false,
       localToGem: new Mat4(),
-      gemToLocal: new Mat4()
+      gemToLocal: new Mat4(),
+      pointOnPlanes: [],
+      planeNormals: []
     },
     {
       geometry: icosahedronGeometry(0.25, 6, true),
       squishFactor: new Vec3(1, 1, 1),
       smoothNormals: true,
       localToGem: new Mat4(),
-      gemToLocal: new Mat4()
+      gemToLocal: new Mat4(),
+      pointOnPlanes: [],
+      planeNormals: []
     }
   );
 
@@ -214,6 +235,24 @@ async function init(): Promise<void> {
     const localGeometry = gems[i].geometry.clone();
     transformGeometry(localGeometry, localToGem);
     gems[i].localGeometry = localGeometry;
+    if (localGeometry.indices !== undefined) {
+      console.log(
+        'face count',
+        localGeometry.name,
+        localGeometry.indices.count / 3
+      );
+    }
+
+    const planes = getPlanesFromGeometry(localGeometry);
+    const pointsOnPlanes: Vec3[] = [];
+    const planeNormals: Vec3[] = [];
+    for (let j = 0; j < Math.min(planes.length, 40); j++) {
+      const plane = planes[j];
+      pointsOnPlanes.push(vec3MultiplyByScalar(plane.normal, -plane.constant));
+      planeNormals.push(plane.normal);
+    }
+    gems[i].pointOnPlanes = pointsOnPlanes;
+    gems[i].planeNormals = planeNormals;
   }
 
   //outputDebugInfo(geometry);
@@ -328,15 +367,21 @@ async function init(): Promise<void> {
     gemNormalCubeMap: initGem.normalCubeMap,
     gemSquishFactor: initGem.squishFactor,
     gemBoostFactor: boostFactor,
-    hitRefines: hitRefines
+    hitRefines: hitRefines,
+
+    planeNormals: initGem.planeNormals,
+    numPlanes: initGem.planeNormals.length,
+    pointOnPlanes: initGem.pointOnPlanes,
+    usePlanes: geoMode === GeoMode.LocalPlanes
   };
 
   function animate(): void {
     orbitController.update();
 
     const gem = gems[gemIndex];
-
-    const bufferGeometry = localGem
+    const gemLocal =
+      geoMode === GeoMode.Local || geoMode === GeoMode.LocalPlanes;
+    const bufferGeometry = gemLocal
       ? gem.bufferGeometry
       : gem.localBufferGeometry;
 
@@ -349,8 +394,16 @@ async function init(): Promise<void> {
     uniforms.worldToLocal = mat4Inverse(uniforms.localToWorld);
     uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
     uniforms.gemNormalCubeMap = gem.normalCubeMap;
-    uniforms.gemToLocal = localGem ? gem.gemToLocal : new Mat4();
-    uniforms.localToGem = localGem ? gem.localToGem : new Mat4();
+    uniforms.gemToLocal = gemLocal ? gem.gemToLocal : new Mat4();
+    uniforms.localToGem = gemLocal ? gem.localToGem : new Mat4();
+    uniforms.planeNormals = gem.planeNormals;
+    uniforms.pointOnPlanes = gem.pointOnPlanes;
+    uniforms.usePlanes = geoMode === GeoMode.LocalPlanes;
+    uniforms.numPlanes = gem.planeNormals.length;
+
+    uniforms.gemMaxBounces = maxBounces;
+    uniforms.gemBoostFactor = boostFactor;
+
     uniforms.hitRefines = hitRefines;
     uniforms.gemSquishFactor = vec3Lerp(
       new Vec3(1, 1, 1),

@@ -4,11 +4,13 @@ import {
   box3Empty,
   box3ExpandByPoint3,
   box3Size,
+  coplanarPointsToPlane,
   makeVec3View,
   Mat4,
   mat4Multiply,
   mat4TransformNormal3,
   mat4TransformVec3,
+  Plane,
   PrimitiveView,
   scale3ToMat4,
   Sphere,
@@ -26,6 +28,7 @@ import {
   vec3Subtract
 } from '@threeify/math';
 
+import { PrimitiveType } from '../renderers/webgl/buffers/PrimitiveType.js';
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
 import { AttributeData } from './AttributeData.js';
 import { Geometry } from './Geometry.js';
@@ -300,6 +303,50 @@ export function getTransformToUnitSphere(geometry: Geometry) {
     transform
   );
   return transform;
+}
+
+export function getPlanesFromGeometry(geometry: Geometry): Plane[] {
+  const indicesAttribute = geometry.attributes.indices;
+  const indices =
+    indicesAttribute === undefined
+      ? undefined
+      : new Uint32Array(indicesAttribute.attributeData.arrayBuffer);
+
+  const positionAttribute = geometry.attributes.position;
+  if (positionAttribute === undefined) {
+    throw new Error('missing position attribute');
+  }
+  const positions = makeVec3ViewFromAttribute(positionAttribute);
+
+  console.log(
+    'indices',
+    indices,
+    'primitive',
+    PrimitiveType[geometry.primitive]
+  );
+
+  const numFaces =
+    indices === undefined ? positions.count / 3 : indices.length / 3;
+
+  const a = new Vec3(),
+    b = new Vec3(),
+    c = new Vec3();
+
+  const planes: Plane[] = [];
+
+  for (let f = 0; f < numFaces; f++) {
+    const ai = indices === undefined ? f * 3 : indices[f * 3];
+    const bi = indices === undefined ? f * 3 + 1 : indices[f * 3 + 1];
+    const ci = indices === undefined ? f * 3 + 2 : indices[f * 3 + 2];
+
+    positions.get(ai, a);
+    positions.get(bi, b);
+    positions.get(ci, c);
+
+    planes.push(coplanarPointsToPlane(a, b, c));
+  }
+
+  return planes;
 }
 
 export function makeVec3ViewFromAttribute(
