@@ -41,9 +41,8 @@ float iorToF0(const float ior) {
 }
 
 vec3 iorAndSpecularIntensityToF0(const float ior, vec3 specularIntensity) {
-  return specularIntensity * specularIntensity * iorToF0( ior );
+  return specularIntensity * specularIntensity * iorToF0(ior);
 }
-
 
 // validated from KHR_material_specular, https://github.com/KhronosGroup/glTF/blob/main/extensions/2./Khronos/KHR_materials_specular/README.md
 vec3 fresnelMix(
@@ -56,5 +55,5 @@ vec3 fresnelMix(
 ) {
   vec3 fresnelWeight = F_Schlick_2(f0, f90, VdotH);
   vec3 t = weight * fresnelWeight;
-  return mix( base, layer, t );
+  return mix(base, layer, t);
 }

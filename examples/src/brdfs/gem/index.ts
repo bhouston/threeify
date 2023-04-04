@@ -35,11 +35,11 @@ import {
   Mat4,
   mat4Inverse,
   mat4PerspectiveFov,
+  planeProjectPointOnPlane,
   translation3ToMat4,
   Vec2,
   Vec3,
-  vec3Lerp,
-  vec3MultiplyByScalar
+  vec3Lerp
 } from '@threeify/math';
 
 import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
@@ -248,7 +248,7 @@ async function init(): Promise<void> {
     const planeNormals: Vec3[] = [];
     for (let j = 0; j < Math.min(planes.length, 40); j++) {
       const plane = planes[j];
-      pointsOnPlanes.push(vec3MultiplyByScalar(plane.normal, -plane.constant));
+      pointsOnPlanes.push(planeProjectPointOnPlane(plane, new Vec3(0, 0, 0)));
       planeNormals.push(plane.normal);
     }
     gems[i].pointOnPlanes = pointsOnPlanes;

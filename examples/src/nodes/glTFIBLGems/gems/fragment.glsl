@@ -13,7 +13,6 @@ uniform mat4 worldToView;
 uniform mat4 viewToWorld;
 uniform mat4 viewToClip;
 
-
 // environmental lighting
 uniform samplerCube iblWorldMap;
 uniform float iblIntensity;
@@ -48,15 +47,12 @@ uniform int outputTransformFlags;
 
 //#define DEBUG_NORMAL_CUBE_MAP (1)
 
-
 void main() {
-
-
-  mat4 worldToLocal = inverse( localToWorld );
+  mat4 worldToLocal = inverse(localToWorld);
 
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
-  
+
   mat4 viewToLocal = worldToLocal * viewToWorld;
   vec3 localSurfaceNormal = mat4TransformNormal3(
     viewToLocal,
@@ -68,7 +64,7 @@ void main() {
     viewToLocal,
     v_viewSurfacePosition
   );
-    vec3 localViewDirection = mat4TransformNormal3(
+  vec3 localViewDirection = mat4TransformNormal3(
     viewToLocal,
     viewViewDirection
   );
@@ -78,23 +74,23 @@ void main() {
 
   vec3 gemPosition = mat4TransformPosition3(localToGem, localPosition);
   vec3 gemSurfaceNormal = mat4TransformNormal3(localToGem, localSurfaceNormal);
- 
+
   Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);
   Hit gemSurfaceHit = Hit(0.0, gemPosition, gemSurfaceNormal);
 
   mat4 gemToWorld = localToWorld * gemToLocal;
 
-#if defined(DEBUG_NORMAL_CUBE_MAP)
-  outputColor.rgb = texture(gemNormalCubeMap, gemSurfaceNormal, 0.0 ).rgb;
+  #if defined(DEBUG_NORMAL_CUBE_MAP)
+  outputColor.rgb = texture(gemNormalCubeMap, gemSurfaceNormal, 0.0).rgb;
   outputColor.a = 1.0;
   return;
-#endif
+  #endif
 
   vec3 outgoingRadiance;
 
-// outgoingRadiance = texture( gemNormalCubeMap, gemIncidentRay.direction, 0.0 ).rgb;
- 
+  // outgoingRadiance = texture( gemNormalCubeMap, gemIncidentRay.direction, 0.0 ).rgb;
+
   outgoingRadiance += rayTraceTransmission(
     gemIncidentRay,
     gemSurfaceHit,
@@ -113,7 +109,7 @@ void main() {
     (outputTransformFlags & 0x1) != 0
       ? tonemappingACESFilmic(outgoingRadiance)
       : outgoingRadiance;
-  
+
   vec3 sRGB =
     (outputTransformFlags & 0x2) != 0
       ? linearTosRGB(tonemapped)

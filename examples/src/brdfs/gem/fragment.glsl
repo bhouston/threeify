@@ -50,13 +50,11 @@ uniform vec3 pointOnPlanes[NUM_PLANES];
 uniform vec3 planeNormals[NUM_PLANES];
 uniform int numPlanes;
 
-
 Plane[NUM_PLANES] planes;
 
 //#define DEBUG_NORMAL_CUBE_MAP (1)
 
 void main() {
-  
   toPlanes(pointOnPlanes, planeNormals, planes);
 
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
@@ -79,16 +77,10 @@ void main() {
   );
 
   vec3 gemViewOrigin = mat4TransformPosition3(localToGem, localViewOrigin);
-  vec3 gemViewDirection = mat4TransformNormal3(
-    localToGem,
-    localViewDirection
-  );
+  vec3 gemViewDirection = mat4TransformNormal3(localToGem, localViewDirection);
 
   vec3 gemPosition = mat4TransformPosition3(localToGem, localPosition);
-  vec3 gemSurfaceNormal = mat4TransformNormal3(
-    localToGem,
-    localSurfaceNormal
-  );
+  vec3 gemSurfaceNormal = mat4TransformNormal3(localToGem, localSurfaceNormal);
 
   Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 1.0);

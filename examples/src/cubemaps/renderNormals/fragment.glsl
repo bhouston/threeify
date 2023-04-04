@@ -27,6 +27,10 @@ void main() {
 
   // trace ray into gem
   //outputColor.rgb = normalToColor( localSurfaceNormal );
-  outputColor.rgb = texture(normalCubeMap, normalize( viewSurfaceNormal ), 0.0).rgb;
+  outputColor.rgb = texture(
+    normalCubeMap,
+    normalize(viewSurfaceNormal),
+    0.0
+  ).rgb;
   outputColor.a = 1.0;
 }

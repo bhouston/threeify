@@ -28,8 +28,6 @@ out vec4 outputColor;
 #pragma import "@threeify/core/dist/shaders/raytracing/plane.glsl"
 #pragma import "@threeify/core/dist/shaders/microgeometry/normalPacking.glsl"
 
-
- 
 void main() {
   // convert from screen space to ray.
   vec3 viewPosition = (viewToWorld *
@@ -44,45 +42,39 @@ void main() {
   float hitDistance = -1000.0;
   vec3 hitNormal = vec3(0.0);
 
-  Plane plane = Plane( vec3( 0.0, 0.0, -1.0 ), 0.0 );
-  Sphere sphere = Sphere( vec3( 0.0 ), sphereRadius);
+  Plane plane = Plane(vec3(0.0, 0.0, -1.0), 0.0);
+  Sphere sphere = Sphere(vec3(0.0), sphereRadius);
 
   Hit hit;
 
-
-
   // does it hit the sphere?
-  Ray sphereRay = mat4TransformRay( worldToSphere * viewToWorld, viewRay );
-  if( raySphereIntersection( sphereRay, sphere, hit) ) {
-    hit = mat4TransformHit( worldToView * sphereToWorld, hit );
-    if( hit.distance > hitDistance ) {
+  Ray sphereRay = mat4TransformRay(worldToSphere * viewToWorld, viewRay);
+  if (raySphereIntersection(sphereRay, sphere, hit)) {
+    hit = mat4TransformHit(worldToView * sphereToWorld, hit);
+    if (hit.distance > hitDistance) {
       hitAledo = sphereAlbedo;
       hitDistance = hit.distance;
       hitNormal = hit.normal;
     }
   }
 
-
   // does it hit the sphere?
-  Ray planeRay = mat4TransformRay(worldToPlane * viewToWorld, viewRay );
-  if( rayPlaneIntersection( planeRay, plane, hit) ) {
-    hit = mat4TransformHit( worldToView * planeToWorld, hit );
-    if( hit.distance > hitDistance ) {
+  Ray planeRay = mat4TransformRay(worldToPlane * viewToWorld, viewRay);
+  if (rayPlaneIntersection(planeRay, plane, hit)) {
+    hit = mat4TransformHit(worldToView * planeToWorld, hit);
+    if (hit.distance > hitDistance) {
       hitAledo = planeAlbedo;
       hitDistance = hit.distance;
       hitNormal = hit.normal;
     }
   }
 
-
-
-  if( debugOutput == 0 ) {
-      outputColor.rgb = hitAledo;
-  } else if( debugOutput == 1 ) {
-    outputColor.rgb = normalToColor( hitNormal );
-  }
-  else if( debugOutput == 2 ) {
-    outputColor.rgb = vec3( -hitDistance * 0.2 );
+  if (debugOutput == 0) {
+    outputColor.rgb = hitAledo;
+  } else if (debugOutput == 1) {
+    outputColor.rgb = normalToColor(hitNormal);
+  } else if (debugOutput == 2) {
+    outputColor.rgb = vec3(-hitDistance * 0.2);
   }
   outputColor.a = 1.0;
   return;

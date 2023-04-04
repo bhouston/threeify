@@ -42,11 +42,7 @@ vec3 sampleIBLIrradiance(
 ) {
   // convert to world
   vec3 worldNormal = mat4UntransformNormal3(worldToView, viewNormal);
-  vec3 iblColor = textureLod(
-    iblWorldMap,
-    worldNormal,
-    float(iblMipCount)
-  ).rgb;
+  vec3 iblColor = textureLod(iblWorldMap, worldNormal, float(iblMipCount)).rgb;
   return iblColor * iblIntensity;
 }
 
@@ -76,10 +72,6 @@ vec3 sampleIBLRadiance(
     specularRoughness,
     iblMipCount
   );
-  vec3 iblColor = textureLod(
-    iblWorldMap,
-    worldReflectDirection,
-    mipLevel
-  ).rgb;
+  vec3 iblColor = textureLod(iblWorldMap, worldReflectDirection, mipLevel).rgb;
   return iblColor * iblIntensity;
 }

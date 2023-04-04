@@ -3,8 +3,6 @@
 #pragma import "../materials/physical.glsl"
 #pragma import "../textures/textureAccessors.glsl"
 
-
-
 uniform int alphaMode;
 uniform float alphaCutoff;
 uniform float alpha;
@@ -236,7 +234,6 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   material.gemBoostFactor = gemBoostFactor;
   material.gemMaxBounces = gemMaxBounces;
   #endif
-
 
   return material;
 }
