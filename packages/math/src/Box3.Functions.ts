@@ -27,6 +27,14 @@ export function box3Empty(result = new Box3()): Box3 {
   return result;
 }
 
+export function box3RandomSample(b: Box3, result = new Vec3()): Vec3 {
+  return result.set(
+    Math.random() * (b.max.x - b.min.x) + b.min.x,
+    Math.random() * (b.max.y - b.min.y) + b.min.y,
+    Math.random() * (b.max.z - b.min.z) + b.min.z
+  );
+}
+
 export function box3IsEmpty(b: Box3): boolean {
   return b.max.x < b.min.x || b.max.y < b.min.y || b.max.z < b.min.z;
 }

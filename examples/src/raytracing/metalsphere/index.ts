@@ -1,10 +1,14 @@
 import {
   createRenderingContext,
+  CullingState,
+  DepthTestState,
   equirectangularTextureToCubeMap,
   fetchHDR,
+  geometryToBufferGeometry,
+  icosahedronGeometry,
   InternalFormat,
   Orbit,
-  renderPass,
+  renderBufferGeometry,
   ShaderMaterial,
   shaderMaterialToProgram,
   Texture,
@@ -14,9 +18,9 @@ import {
   Color3,
   Mat4,
   mat4Inverse,
-  mat4Multiply,
   mat4PerspectiveFov,
-  quatToMat4,
+  Sphere,
+  sphereRandomSample,
   translation3ToMat4,
   Vec3
 } from '@threeify/math';
@@ -50,6 +54,9 @@ async function init(): Promise<void> {
 
   const context = createRenderingContext(document, 'framebuffer');
 
+  const geometry = icosahedronGeometry(1, 5, true);
+  const bufferGeometry = geometryToBufferGeometry(context, geometry);
+
   const latLongTexture = new Texture(
     await fetchHDR(getThreeJsHdriUrl(ThreeJsHrdi.san_giuseppe_bridge_2k))
   );
@@ -66,31 +73,29 @@ async function init(): Promise<void> {
 
   const orbit = new Orbit(canvas);
 
-  const passProgram = await shaderMaterialToProgram(context, passMaterial);
+  const program = await shaderMaterialToProgram(context, passMaterial);
 
+  const sphereOrigins: Vec3[] = [];
   const sphereToWorlds: Mat4[] = [];
   const worldToSpheres: Mat4[] = [];
   const sphereRadii: number[] = [];
   const sphereAlbedos: Color3[] = [];
+  const sphereSampler = new Sphere(new Vec3(0, 0, 0), 0.25);
   for (let i = 0; i < 10; i++) {
-    sphereToWorlds.push(
-      translation3ToMat4(
-        new Vec3(
-          (Math.random() * 0.3, Math.random() * 0.3, Math.random() * 0.3)
-        )
-      )
-    );
+    sphereOrigins.push(sphereRandomSample(sphereSampler));
+    sphereToWorlds.push(translation3ToMat4(sphereOrigins[i]));
     worldToSpheres.push(mat4Inverse(sphereToWorlds[i]));
     sphereRadii.push(0.05);
     sphereAlbedos.push(new Color3(Math.random(), Math.random(), Math.random()));
   }
 
-  const passUniforms = {
+  const uniforms = {
     viewToWorld: translation3ToMat4(new Vec3(0, 0, -2)),
     worldToView: new Mat4(),
     clipToView: mat4Inverse(
-      mat4PerspectiveFov(45, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
+      mat4PerspectiveFov(45, 0.1, 10, 1, canvasFramebuffer.aspectRatio)
     ),
+    sphereOrigins,
     sphereToWorlds,
     worldToSpheres,
     sphereRadii,
@@ -102,20 +107,20 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    passUniforms.viewToWorld = mat4Multiply(
-      translation3ToMat4(new Vec3(0, 0.25, -2)),
-      mat4Inverse(quatToMat4(orbit.rotation))
+    uniforms.viewToWorld = translation3ToMat4(new Vec3(0, 0.25, -2));
+    uniforms.worldToView = mat4Inverse(uniforms.viewToWorld);
+    uniforms.clipToView = mat4Inverse(
+      mat4PerspectiveFov(45, 0.1, 10, orbit.zoom, canvasFramebuffer.aspectRatio)
     );
-    passUniforms.worldToView = mat4Inverse(passUniforms.viewToWorld);
-    passUniforms.clipToView = mat4Inverse(
-      mat4PerspectiveFov(45, 0.1, 4, orbit.zoom, canvasFramebuffer.aspectRatio)
-    );
-    passUniforms.debugOutput = debugOutput;
+    uniforms.debugOutput = debugOutput;
 
-    renderPass({
+    renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program: passProgram,
-      uniforms: passUniforms
+      bufferGeometry,
+      program,
+      uniforms,
+      depthTestState: DepthTestState.None,
+      cullingState: CullingState.None
     });
 
     orbit.update();

@@ -9,6 +9,7 @@ import {
   vec3Distance,
   vec3DistanceSq,
   vec3Equals,
+  vec3LengthSq,
   vec3MultiplyByScalar,
   vec3Normalize,
   vec3Subtract
@@ -26,6 +27,13 @@ export function sphereEmpty(result = new Sphere()): Sphere {
   return result;
 }
 
+export function sphereRandomSample(a: Sphere, result = new Vec3()): Vec3 {
+  const v = new Vec3();
+  do {
+    v.set(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
+  } while (vec3LengthSq(v) > 1);
+  return vec3Add(a.center, vec3MultiplyByScalar(v, a.radius, result), result);
+}
 export function sphereEquals(a: Sphere, b: Sphere): boolean {
   return vec3Equals(a.center, b.center) && a.radius === b.radius;
 }

@@ -12,6 +12,7 @@ import structsTests from '@threeify/core/dist/shaders/math/structs.test.glsl';
 import unitIntervalPackingTests from '@threeify/core/dist/shaders/math/unitIntervalPacking.test.glsl';
 import normalPackingTests from '@threeify/core/dist/shaders/microgeometry/normalPacking.test.glsl';
 import refractionTests from '@threeify/core/dist/shaders/raytracing/refraction.test.glsl';
+import sphereTests from '@threeify/core/dist/shaders/raytracing/sphere.test.glsl';
 
 type GLSLTestSuite = {
   name: string;
@@ -74,5 +75,9 @@ export const glslTestSuites: Array<GLSLTestSuite> = [
   {
     name: 'refraction',
     source: refractionTests
+  },
+  {
+    name: 'sphere',
+    source: sphereTests
   }
 ];

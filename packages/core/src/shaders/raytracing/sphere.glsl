@@ -19,11 +19,47 @@ bool raySphereIntersection(Ray ray, Sphere sphere, out Hit hit) {
   float t1 = (-b - sqrtDiscriminant) / (2.0 * a);
   float t2 = (-b + sqrtDiscriminant) / (2.0 * a);
 
-  // if there are two intersections, we want the one that is further away
-  float t = t1 > t2 ? t1 : t2;
+  if (t1 < 0.0) {
+    t1 = t2;
+    if (t2 < 0.0) {
+      return false;
+    }
+  }
 
-  hit.distance = t;
-  hit.position = ray.origin + t * ray.direction;
+  hit.distance = t1;
+  hit.position = ray.origin + t1 * ray.direction;
+  hit.normal = normalize(hit.position - sphere.origin);
+
+  return true;
+}
+
+
+bool raySphereIntersection_V1(Ray ray, Sphere sphere, out Hit hit) {
+ vec3 L = sphere.origin - ray.origin;
+  float tca = dot(L, ray.direction);
+  float d2 = dot(L, L) - tca * tca;
+  float radius2 = sphere.radius * sphere.radius;
+  if (d2 > radius2) {
+    return false;
+  }
+  float thc = sqrt(radius2 - d2);
+  float t0 = tca - thc;
+  float t1 = tca + thc;
+  if (t0 > t1) {
+    float temp = t0;
+    t0 = t1;
+    t1 = temp;
+  }
+
+  if (t0 < 0.0) {
+    t0 = t1;
+    if (t0 < 0.0) {
+      return false;
+    }
+  }
+
+  hit.distance = t0;
+  hit.position = ray.origin + t0 * ray.direction;
   hit.normal = normalize(hit.position - sphere.origin);
 
   return true;
