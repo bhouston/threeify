@@ -32,9 +32,7 @@ describe('Box2 Functions', () => {
   });
 
   test('box2IsEmpty', () => {
-    console.log('unit', unit);
     expect(box2IsEmpty(unit)).toBe(false);
-    console.log('empty', empty);
     expect(box2IsEmpty(empty)).toBe(true);
   });
 

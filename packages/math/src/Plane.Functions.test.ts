@@ -69,7 +69,7 @@ describe('Plane Functions', () => {
     const v2 = new Vec3(2, -0.5, 1.25);
     const v3 = new Vec3(2, -3.5, 2.2);
     const normal = new Vec3(1, 0, 0);
-    const constant = -2;
+    const constant = 2;
 
     const a = coplanarPointsToPlane(v1, v2, v3);
 

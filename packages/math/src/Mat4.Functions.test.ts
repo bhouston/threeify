@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { EPSILON } from './Functions.js';
 import { mat3Equals, mat4ToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
+import { Mat4 } from './Mat4';
 import {
   basis3ToMat4,
   mat4Add,
@@ -26,11 +27,10 @@ import {
   scale3ToMat4,
   translation3ToMat4
 } from './Mat4.Functions';
-import { Mat4 } from './Mat4.js';
-import { quatNormalize } from './Quat.Functions.js';
-import { Quat } from './Quat.js';
-import { mat4TransformVec3 } from './Vec3.Functions.js';
-import { Vec3 } from './Vec3.js';
+import { Quat } from './Quat';
+import { quatNormalize } from './Quat.Functions';
+import { Vec3 } from './Vec3';
+import { mat4TransformPosition3 } from './Vec3.Functions';
 
 describe('Mat4 Functions', () => {
   test('mat4Zero', () => {
@@ -96,7 +96,7 @@ describe('Mat4 Functions', () => {
     // get the basis out the hard war
     for (let j = 0; j < identityBasis.length; j++) {
       outBasis[j].copy(identityBasis[j]);
-      mat4TransformVec3(b, outBasis[j], outBasis[j]);
+      mat4TransformPosition3(b, outBasis[j], outBasis[j]);
     }
 
     // did the multiply method of basis extraction work?

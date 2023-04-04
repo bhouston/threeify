@@ -48,9 +48,7 @@ export function ray3DistanceToPlane(ray: Ray3, plane: Plane): number {
     return Number.NaN;
   }
 
-  const t = planePointDistance(plane, ray.origin) / denominator;
-  // Return if the ray never intersects the plane
-  return t >= 0 ? t : Number.NaN;
+  return -planePointDistance(plane, ray.origin) / denominator;
 }
 
 export function ray3Negate(r: Ray3, result = new Ray3()): Ray3 {

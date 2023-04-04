@@ -259,18 +259,17 @@ export function vec3Reflect(
   normal: Vec3,
   result = new Vec3()
 ): Vec3 {
-  const dot = vec3Dot(incident, normal);
   return vec3Subtract(
     incident,
-    vec3MultiplyByScalar(normal, 2 * dot, result),
+    vec3MultiplyByScalar(vec3Project(incident, normal, result), 2, result),
     result
   );
 }
 
 // project vector onto another vector
-export function vec3Project(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
-  const dot = vec3Dot(a, b);
-  return vec3MultiplyByScalar(b, dot / vec3Dot(b, b), result);
+export function vec3Project(a: Vec3, target: Vec3, result = new Vec3()): Vec3 {
+  const dot = vec3Dot(a, target);
+  return vec3MultiplyByScalar(target, dot / vec3Dot(target, target), result);
 }
 
 // determine angle between two vectors

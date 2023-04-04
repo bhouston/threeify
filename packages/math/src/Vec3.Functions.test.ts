@@ -91,12 +91,12 @@ describe('Vec3 Functions', () => {
     expect(c.z).toBe(0);
   });
   test('vec3Reflect', () => {
-    const a = new Vec3(1, 2, 3);
-    const b = new Vec3(4, 5, 6);
-    const c = vec3Reflect(a, b);
-    expect(c.x).toBe(-3);
-    expect(c.y).toBe(-3);
-    expect(c.z).toBe(-3);
+    const a = new Vec3(0, 0, 1);
+    const b = new Vec3(0, 0, -1);
+    const c = vec3Reflect(b, a);
+    expect(c.x).toBe(0);
+    expect(c.y).toBe(0);
+    expect(c.z).toBe(1);
   });
   test('vec3Angle', () => {
     const a = new Vec3(1, 2, 3);

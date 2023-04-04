@@ -34,7 +34,7 @@ describe('Ray3 Functions', () => {
   });
   test('ray3DistanceToPlane', () => {
     const a = new Ray3(new Vec3(1, 2, 3), new Vec3(1, 0, 0));
-    const b = new Plane(new Vec3(1, 0, 0), -4);
+    const b = new Plane(new Vec3(1, 0, 0), 4);
     expect(ray3DistanceToPlane(a, b)).toEqual(3);
   });
   test('ray3Negate', () => {
@@ -46,7 +46,7 @@ describe('Ray3 Functions', () => {
 
   test('ray3IntersectPlane', () => {
     const a = new Ray3(new Vec3(1, 2, 3), new Vec3(1, 0, 0));
-    const b = new Plane(new Vec3(1, 0, 0), -4);
+    const b = new Plane(new Vec3(1, 0, 0), 4);
     expect(ray3IntersectPlane(a, b)).toEqual(new Vec3(4, 2, 3));
   });
 

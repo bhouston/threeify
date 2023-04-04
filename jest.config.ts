@@ -1,22 +1,8 @@
-export default {
-  projects: [
-    {
-      name: 'core',
-      displayName: '@threeify/core',
-      preset: 'ts-jest',
-      testEnvironment: 'node',
-      rootDir: './',
-      resolver: 'ts-jest-resolver',
-      testMatch: ['<rootDir>/packages/core/src/**/*.test.ts']
-    },
-    {
-      name: 'scene',
-      displayName: '@threeify/scene',
-      preset: 'ts-jest',
-      testEnvironment: 'node',
-      rootDir: './',
-      resolver: 'ts-jest-resolver',
-      testMatch: ['<rootDir>/packages/scene/src/**/*.test.ts']
-    }
-  ]
+module.exports = {
+  roots: ['<rootDir>/packages/math/src', '<rootDir>/packages/core/src'],
+  testMatch: ['**/?(*.)+(spec|test).+(ts|js)'],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest'
+  },
+  resolver: 'ts-jest-resolver'
 };

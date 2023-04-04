@@ -8,7 +8,7 @@ describe('Plane', () => {
     expect(a.normal.x).toBe(0);
     expect(a.normal.y).toBe(0);
     expect(a.normal.z).toBe(-1);
-    expect(a.constant).toBe(0);
+    expect(a.distance).toBe(0);
   });
 
   test('set', () => {
@@ -17,7 +17,7 @@ describe('Plane', () => {
     expect(a.normal.x).toBe(1);
     expect(a.normal.y).toBe(2);
     expect(a.normal.z).toBe(3);
-    expect(a.constant).toBe(4);
+    expect(a.distance).toBe(4);
   });
 
   test('clone', () => {
@@ -26,6 +26,6 @@ describe('Plane', () => {
     expect(b.normal.x).toBe(1);
     expect(b.normal.y).toBe(2);
     expect(b.normal.z).toBe(3);
-    expect(b.constant).toBe(4);
+    expect(b.distance).toBe(4);
   });
 });
