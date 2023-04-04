@@ -42,7 +42,7 @@ import {
   vec3MultiplyByScalar
 } from '@threeify/math';
 
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
@@ -277,7 +277,7 @@ async function init(): Promise<void> {
     await fetchImage('/assets/textures/cube/debug/latLong.png')
   );*/
   const latLongTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k))
+    await fetchHDR(getThreeJsHdriUrl(ThreeJsHdri.san_giuseppe_bridge_2k))
   );
   const cubeMap = await equirectangularTextureToCubeMap(
     context,

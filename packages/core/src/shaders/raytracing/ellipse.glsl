@@ -1,5 +1,5 @@
 #pragma once
-#pragma import "./raytracing.glsl"
+#pragma import "./ray.glsl"
 
 struct Ellipse {
   vec3 origin;

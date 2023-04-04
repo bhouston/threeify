@@ -65,7 +65,7 @@ export enum KhronosModel {
   TransmissionRoughnessTest
 }
 
-export enum GLTFFormat {
+export enum GltfFormat {
   glTF,
   glTFBinary,
   glTFDraco,
@@ -73,22 +73,22 @@ export enum GLTFFormat {
 }
 
 const glTFFormatToFolder = {
-  [GLTFFormat.glTF]: 'glTF',
-  [GLTFFormat.glTFBinary]: 'glTF-Binary',
-  [GLTFFormat.glTFDraco]: 'glTF-Draco',
-  [GLTFFormat.glTFEmbedded]: 'glTF-Embedded'
+  [GltfFormat.glTF]: 'glTF',
+  [GltfFormat.glTFBinary]: 'glTF-Binary',
+  [GltfFormat.glTFDraco]: 'glTF-Draco',
+  [GltfFormat.glTFEmbedded]: 'glTF-Embedded'
 };
 
 const glTFFormatToExtension = {
-  [GLTFFormat.glTF]: 'gltf',
-  [GLTFFormat.glTFBinary]: 'glb',
-  [GLTFFormat.glTFDraco]: 'gltf',
-  [GLTFFormat.glTFEmbedded]: 'gltf'
+  [GltfFormat.glTF]: 'gltf',
+  [GltfFormat.glTFBinary]: 'glb',
+  [GltfFormat.glTFDraco]: 'gltf',
+  [GltfFormat.glTFEmbedded]: 'gltf'
 };
 
-export function getKhronosGlTFUrl(
+export function getKhronosGltfUrl(
   model: KhronosModel,
-  format: GLTFFormat
+  format: GltfFormat
 ): string {
   const modelName = KhronosModel[model];
   const formatFolder = glTFFormatToFolder[format];

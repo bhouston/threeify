@@ -1,11 +1,7 @@
 #pragma once
-#pragma import "./raytracing.glsl"
 #pragma import "../math.glsl"
-
-struct Sphere {
-  vec3 origin;
-  float radius;
-};
+#pragma import "./ray.glsl"
+#pragma import "../math/sphere.glsl"
 
 bool raySphereIntersection(Ray ray, Sphere sphere, out Hit hit) {
   vec3 oc = ray.origin - sphere.origin; // origin to center vector

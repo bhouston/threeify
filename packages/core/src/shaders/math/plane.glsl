@@ -1,19 +1,21 @@
 #pragma once
 
-// Plane constructor
+
 struct Plane {
-  vec3 pointOnPlane;
-  vec3 planeNormal;
+  vec3 normal;
+  float constant;
 };
 
 
+float planeDistanceToPoint( Plane plane, vec3 point ) {
+  return dot(point, plane.normal) + plane.constant;
+}
 
 // Project point onto plane
-vec3 projectPointOnPlane(vec3 point, Plane plane) {
-  return point - dot(point - plane.pointOnPlane, plane.planeNormal) * plane.planeNormal;
+vec3 planeProjectPoint(vec3 point, Plane plane) {
+  return point - plane.normal * dot(point, plane.normal);
 }
 
-float sideOfPlane(vec3 point, Plane plane) {
-  return sign(dot(point - plane.pointOnPlane, plane.planeNormal));
+float planeSignOfPoint(Plane plane, vec3 point ) {
+  return sign( planeDistanceToPoint( plane, point ) );
 }
-

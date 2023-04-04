@@ -1,4 +1,4 @@
-export enum ThreeJSGLTF {
+export enum ThreeJsGltf {
   coffeemat,
   facecap,
   ferrari,
@@ -14,8 +14,8 @@ export enum ThreeJSGLTF {
   Xbot
 }
 
-export function getThreeJSGLTFUrl(gltf: ThreeJSGLTF): string {
-  const gltfName = ThreeJSGLTF[gltf];
+export function getThreeJsGltfUrl(gltf: ThreeJsGltf): string {
+  const gltfName = ThreeJsGltf[gltf];
   const extension = 'glb';
   return `https://raw.githubusercontent.com/mrdoob/three.js/master/examples/models/gltf/${gltfName}.${extension}`;
 }

@@ -17,7 +17,7 @@ import {
   textureToTexImage2D
 } from '@threeify/core';
 
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
 
 let blurRadius = 4.5;
 
@@ -47,7 +47,7 @@ async function init(): Promise<void> {
   const context = createRenderingContext(document, 'framebuffer');
 
   const hdrPromise = fetchHDR(
-    getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
+    getThreeJsHdriUrl(ThreeJsHdri.royal_esplanade_1k)
   );
   const latLongTexturePromise = hdrPromise.then((hdr) => {
     return new Texture(hdr);

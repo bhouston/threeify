@@ -13,8 +13,7 @@ import { ShaderDefines } from './ShaderDefines.js';
 import {
   addErrorSnippetsToCompilerOutput,
   insertLineNumbers,
-  parseCompilerOutput,
-  removeDeadCode
+  parseCompilerOutput
 } from './ShaderSourceTools.js';
 import { ShaderType } from './ShaderType.js';
 
@@ -53,7 +52,8 @@ export class Shader implements IResource {
 
     const combinedSource = `${prefix.join('\n')}\n${source}`;
 
-    this.finalSource = removeDeadCode(combinedSource);
+    //this.finalSource = removeDeadCode(combinedSource);
+    this.finalSource = combinedSource;
 
     // Set the shader source code.
     gl.shaderSource(this.glShader, this.finalSource);
@@ -108,6 +108,7 @@ export class Shader implements IResource {
           console.log(output.message);
         }
       }
+      console.log('Whole Source Code:\n', this.finalSource);
       resources.unregister(this);
       this.disposed = true;
       throw new Error(errorMessage);

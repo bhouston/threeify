@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma import "./raytracing.glsl"
+#pragma import "./ray.glsl"
 #pragma import "./refraction.glsl"
 #pragma import "./sphere.glsl"
 #pragma import "../microgeometry/normalPacking.glsl"

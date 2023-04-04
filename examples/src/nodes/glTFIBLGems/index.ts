@@ -46,7 +46,7 @@ import {
 } from '@threeify/scene';
 
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
 import fragmentSource from './fragment.glsl';
 import gemFragmentSource from './gems/fragment.glsl';
 import gemVertexSource from './gems/vertex.glsl';
@@ -100,7 +100,7 @@ async function init(): Promise<void> {
   );
   //console.time('fetchHDR');
   const hdrPromise = fetchHDR(
-    getThreeJSHDRIUrl(ThreeJSHRDI.san_giuseppe_bridge_2k)
+    getThreeJsHdriUrl(ThreeJsHdri.san_giuseppe_bridge_2k)
   );
   const latLongTexturePromise = hdrPromise.then((hdr) => {
     return new Texture(hdr);

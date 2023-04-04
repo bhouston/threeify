@@ -27,8 +27,8 @@ import {
 } from '@threeify/scene';
 
 import {
-  getKhronosGlTFUrl,
-  GLTFFormat,
+  getKhronosGltfUrl,
+  GltfFormat,
   KhronosModel
 } from '../../utilities/khronosModels';
 import fragmentSource from './fragment.glsl';
@@ -61,9 +61,9 @@ async function init(): Promise<void> {
   //console.time('glTFToSceneNode');
   const textureCache = new TextureCache();
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(
+    getKhronosGltfUrl(
       sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
-      GLTFFormat.glTF
+      GltfFormat.glTF
     ),
     textureCache
   );

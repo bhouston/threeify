@@ -11,14 +11,14 @@ import {
 } from '@threeify/core';
 import { Mat4, mat4Compose, mat4PerspectiveFov, Vec3 } from '@threeify/math';
 
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
 
 async function init(): Promise<void> {
   const latLongTexture = await fetchTexture(
     '/assets/textures/cube/debug/latLong.png'
   );
   const ennisTexture = new Texture(
-    await fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k))
+    await fetchHDR(getThreeJsHdriUrl(ThreeJsHdri.royal_esplanade_1k))
   );
 
   const context = createRenderingContext(document, 'framebuffer');

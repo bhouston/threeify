@@ -37,12 +37,12 @@ import {
 } from '@threeify/scene';
 
 import {
-  getKhronosGlTFUrl,
-  GLTFFormat,
+  getKhronosGltfUrl,
+  GltfFormat,
   KhronosModel
 } from '../../utilities/khronosModels';
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
 import fragmentSource from './fragment.glsl';
 import { ShaderOutputs } from './ShaderOutputs';
 import vertexSource from './vertex.glsl';
@@ -76,7 +76,7 @@ async function init(): Promise<void> {
   console.time('init');
   const textueCache = new TextureCache();
   const glTFModelPromise = glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF),
+    getKhronosGltfUrl(KhronosModel.DamagedHelmet, GltfFormat.glTF),
     textueCache
   );
 
@@ -87,7 +87,7 @@ async function init(): Promise<void> {
   );
   //console.time('fetchHDR');
   const hdrPromise = fetchHDR(
-    getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
+    getThreeJsHdriUrl(ThreeJsHdri.royal_esplanade_1k)
   );
   const latLongTexturePromise = hdrPromise.then((hdr) => {
     return new Texture(hdr);
