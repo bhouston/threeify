@@ -12,8 +12,6 @@ import {
 } from '@threeify/core';
 import {
   Color3,
-  Euler3,
-  euler3ToMat4,
   Mat4,
   mat4Inverse,
   mat4Multiply,
@@ -70,23 +68,33 @@ async function init(): Promise<void> {
 
   const passProgram = await shaderMaterialToProgram(context, passMaterial);
 
+  const sphereToWorlds: Mat4[] = [];
+  const worldToSpheres: Mat4[] = [];
+  const sphereRadii: number[] = [];
+  const sphereAlbedos: Color3[] = [];
+  for (let i = 0; i < 10; i++) {
+    sphereToWorlds.push(
+      translation3ToMat4(
+        new Vec3(
+          (Math.random() * 0.3, Math.random() * 0.3, Math.random() * 0.3)
+        )
+      )
+    );
+    worldToSpheres.push(mat4Inverse(sphereToWorlds[i]));
+    sphereRadii.push(0.05);
+    sphereAlbedos.push(new Color3(Math.random(), Math.random(), Math.random()));
+  }
+
   const passUniforms = {
     viewToWorld: translation3ToMat4(new Vec3(0, 0, -2)),
     worldToView: new Mat4(),
     clipToView: mat4Inverse(
       mat4PerspectiveFov(45, 0.1, 4, 1, canvasFramebuffer.aspectRatio)
     ),
-    planeToWorld: mat4Multiply(
-      translation3ToMat4(new Vec3(0, 0, -0.125)),
-      euler3ToMat4(new Euler3(Math.PI * 0.5, 0, 0))
-    ),
-    worldToPlane: new Mat4(),
-    planeAlbedo: new Color3(0.5, 0.5, 0),
-    sphereToWorld: translation3ToMat4(new Vec3(0, 0, 0)),
-    worldToSphere: new Mat4(),
-    sphereRadius: 0.125,
-    sphereRoughness: 0,
-    sphereAlbedo: new Color3(0.5, 0.5, 0.5),
+    sphereToWorlds,
+    worldToSpheres,
+    sphereRadii,
+    sphereAlbedos,
     iblWorldMap: cubeMap,
     debugOutput: debugOutput
   };
@@ -95,15 +103,13 @@ async function init(): Promise<void> {
     requestAnimationFrame(animate);
 
     passUniforms.viewToWorld = mat4Multiply(
-      translation3ToMat4(new Vec3(0, 0, -2)),
+      translation3ToMat4(new Vec3(0, 0.25, -2)),
       mat4Inverse(quatToMat4(orbit.rotation))
     );
     passUniforms.worldToView = mat4Inverse(passUniforms.viewToWorld);
     passUniforms.clipToView = mat4Inverse(
       mat4PerspectiveFov(45, 0.1, 4, orbit.zoom, canvasFramebuffer.aspectRatio)
     );
-    passUniforms.worldToPlane = mat4Inverse(passUniforms.planeToWorld);
-    passUniforms.worldToSphere = mat4Inverse(passUniforms.sphereToWorld);
     passUniforms.debugOutput = debugOutput;
 
     renderPass({

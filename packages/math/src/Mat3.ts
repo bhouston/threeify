@@ -1,8 +1,8 @@
 // uses OpenGL matrix layout where each column is specified subsequently in order from left to right.
-// ( x, y, 1 ) x [ 0  3  6 ] = ( x', y', 1 )
-//               [ 1  4  7 ]
-//               [ 2  5  8 ]
-// where elements 2 and 5 would be translation in 2D, as they would multiplied
+// [ 0  3  6 ] x ( x, y, 1 )= ( x', y', 1 )
+// [ 1  4  7 ]
+// [ 2  5  8 ]
+// where elements 6 and 7 would be translation in 2D, as they would multiplied
 // by the last virtual element of the 2D vector.
 
 export type Mat3JSON = number[];

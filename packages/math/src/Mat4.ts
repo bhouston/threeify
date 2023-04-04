@@ -1,9 +1,9 @@
 // uses OpenGL matrix layout where each column is specified subsequently in order from left to right.
-// ( x, y, z, 1 ) x [ 0  4   8  12] = ( x', y', z', 1 )
-//                  [ 1  5   9  13]
-//                  [ 2  6  10  14]
-//                  [ 3  7  11  15]
-// where elements 3, 7, 11 would be translation in 3D, as they would multiplied
+// [ 0  4   8  12] x ( x, y, z, 1 ) = ( x', y', z', 1 )
+// [ 1  5   9  13]
+// [ 2  6  10  14]
+// [ 3  7  11  15]
+// where elements 12, 13, and 14 would be translation in 3D, as they would multiplied
 // by the last virtual element of the 3D vector.
 
 export type Mat4JSON = number[];
