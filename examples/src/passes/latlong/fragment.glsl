@@ -16,7 +16,7 @@ void main() {
   // step one, convert from screen space to ray.
   vec3 viewPosition = (viewToWorld *
     clipToView *
-    v_homogeneousVertexPosition).xyz;
+    v_homogeneousVertexPosition).xyz;  /// HOMOGENEOUS COORDINATE STUFF IS SUPER WRONG!
   vec3 viewDirection = normalize(viewPosition);
 
   vec2 equirectangularUv = directionToLatLongUV(viewDirection);

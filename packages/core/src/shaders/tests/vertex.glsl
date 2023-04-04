@@ -1,7 +1,7 @@
 in vec3 position;
 in vec2 uv0;
 
-out vec4 v_homogeneousVertexPosition;
+out vec4 v_homogeneousVertexPosition;   /// HOMOGENEOUS COORDINATE STUFF IS SUPER WRONG!
 out vec2 v_uv;
 
 void main() {
@@ -12,6 +12,6 @@ void main() {
   gl_Position.z = -1.0; // position at near clipping plane.  (set to 1. for far clipping plane.)
   gl_Position.w = 1.0; // nortmalized
 
-  v_homogeneousVertexPosition = gl_Position;
+  v_homogeneousVertexPosition = gl_Position;   /// HOMOGENEOUS COORDINATE STUFF IS SUPER WRONG!
 
 }

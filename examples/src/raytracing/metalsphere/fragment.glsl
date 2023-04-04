@@ -37,15 +37,11 @@ vec3 localDirectionToIBLSample(
   return texture(iblWorldMap, worldDirection, 0.0).rgb;
 }
 
-#define MAX_BOUNCES (1)
+#define MAX_BOUNCES (5)
 
 void main() {
   // convert from screen space to ray.
-
   vec3 viewDirection = normalize(v_viewSurfaceNormal);
-  outputColor.rgb = normalToColor( viewDirection );
-  outputColor.a = 1.0;
-  return;
   
   // create ray
   Ray viewRay = Ray(vec3(0.0), viewDirection);
@@ -61,11 +57,11 @@ void main() {
     for (int i = 0; i < MAX_SPHERES; i++) {
       Sphere worldSphere = Sphere(sphereOrigins[i], sphereRadii[i]);
       if (raySphereIntersection(worldRay, worldSphere, hit)) {
-        //if (hit.distance > 0.0 && hit.distance < hitDistance) {
-        hitAlbedo = sphereAlbedos[i];
-        hitDistance = hit.distance;
-        hitNormal = hit.normal;
-        //}
+        if (hit.distance > 0.0 && hit.distance < hitDistance && (dot( hit.normal, worldRay.direction ) < 0. ) ) {
+          hitAlbedo = sphereAlbedos[i];
+          hitDistance = hit.distance;
+          hitNormal = hit.normal;
+        }
       }
     }
     if (debugOutput == 1) {

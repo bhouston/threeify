@@ -80,20 +80,24 @@ async function init(): Promise<void> {
   const worldToSpheres: Mat4[] = [];
   const sphereRadii: number[] = [];
   const sphereAlbedos: Color3[] = [];
-  const sphereSampler = new Sphere(new Vec3(0, 0, 0), 0.25);
+  const sphereSampler = new Sphere(new Vec3(0, 0, 0), 1);
   for (let i = 0; i < 10; i++) {
     sphereOrigins.push(sphereRandomSample(sphereSampler));
     sphereToWorlds.push(translation3ToMat4(sphereOrigins[i]));
     worldToSpheres.push(mat4Inverse(sphereToWorlds[i]));
-    sphereRadii.push(0.05);
+    sphereRadii.push(0.25);
     sphereAlbedos.push(new Color3(Math.random(), Math.random(), Math.random()));
   }
 
   const uniforms = {
-    viewToWorld: translation3ToMat4(new Vec3(0, 0, -2)),
+    viewToWorld: translation3ToMat4(new Vec3(0, 0, 2)),
     worldToView: new Mat4(),
-    clipToView: mat4Inverse(
-      mat4PerspectiveFov(45, 0.1, 10, 1, canvasFramebuffer.aspectRatio)
+    viewToClip: mat4PerspectiveFov(
+      45,
+      0.1,
+      10,
+      1,
+      canvasFramebuffer.aspectRatio
     ),
     sphereOrigins,
     sphereToWorlds,
@@ -107,10 +111,14 @@ async function init(): Promise<void> {
   function animate(): void {
     requestAnimationFrame(animate);
 
-    uniforms.viewToWorld = translation3ToMat4(new Vec3(0, 0.25, -2));
+    uniforms.viewToWorld = translation3ToMat4(new Vec3(0, 0.25, 2));
     uniforms.worldToView = mat4Inverse(uniforms.viewToWorld);
-    uniforms.clipToView = mat4Inverse(
-      mat4PerspectiveFov(45, 0.1, 10, orbit.zoom, canvasFramebuffer.aspectRatio)
+    uniforms.viewToClip = mat4PerspectiveFov(
+      45,
+      0.1,
+      10,
+      orbit.zoom,
+      canvasFramebuffer.aspectRatio
     );
     uniforms.debugOutput = debugOutput;
 

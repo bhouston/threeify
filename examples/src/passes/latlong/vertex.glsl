@@ -1,6 +1,6 @@
 in vec3 position;
 
-out vec4 v_homogeneousVertexPosition;
+out vec4 v_homogeneousVertexPosition;   /// HOMOGENEOUS COORDINATE STUFF IS SUPER WRONG!
 
 void main() {
   // homogeneous vertex position
