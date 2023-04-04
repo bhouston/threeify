@@ -16,7 +16,7 @@ out vec2 v_uv0;
 
 void main() {
   v_worldSurfaceNormal = normalize(normal);
-  v_viewSurfaceNormal = mat4TransformDirection(worldToView, normalize(normal)); // IBL normal is in world space
+  v_viewSurfaceNormal = mat4TransformNormal3(worldToView, normalize(normal)); // IBL normal is in world space
   v_viewSurfacePosition = position * depth;  // IBL origin of the sphere is in view space
   v_uv0 = uv0;
 

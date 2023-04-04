@@ -19,14 +19,14 @@ out vec2 v_uv2;
 #pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
 
 void main() {
-  v_worldSurfaceNormal = mat4TransformDirection(
+  v_worldSurfaceNormal = mat4TransformNormal3(
     localToWorld,
     normalize(normal)
   );
-  v_worldSurfacePosition = mat4TransformPosition(localToWorld, position);
+  v_worldSurfacePosition = mat4TransformPosition3(localToWorld, position);
   mat4 localToView = worldToView * localToWorld;
-  v_viewSurfaceNormal = mat4TransformDirection(localToView, normalize(normal));
-  v_viewSurfacePosition = mat4TransformPosition(localToView, position);
+  v_viewSurfaceNormal = mat4TransformNormal3(localToView, normalize(normal));
+  v_viewSurfacePosition = mat4TransformPosition3(localToView, position);
   v_uv0 = uv0;
   v_uv1 = uv1;
   v_uv1 = uv2;

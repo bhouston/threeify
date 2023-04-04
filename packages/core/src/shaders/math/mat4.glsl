@@ -84,15 +84,15 @@ mat4 scale3ToMat4(const vec3 scale) {
   );
 }
 
-vec3 mat4TransformPosition(const mat4 m, const vec3 p) {
+vec3 mat4TransformPosition3(const mat4 m, const vec3 p) {
   return (m * vec4(p, 1.0)).xyz;
 }
 
-vec3 mat4TransformDirection(const mat4 m, const vec3 dir) {
+vec3 mat4TransformNormal3(const mat4 m, const vec3 dir) {
   return normalize((m * vec4(dir, 0.0)).xyz);
 }
 
-vec3 mat4UntransformDirection(const mat4 m, const vec3 dir) {
+vec3 mat4UntransformNormal3(const mat4 m, const vec3 dir) {
   // dir can be either a direction vector or a normal vector
   // upper-left 3x3 of matrix is assumed to be orthogonal
   return normalize((vec4(dir, 0.0) * m).xyz);

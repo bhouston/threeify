@@ -142,14 +142,14 @@ void main() {
 
   if (material.transmission > 0.0 || true) {
     DEBUG_OUTPUT(35, normalToColor(viewViewDirection));
-    vec3 worldViewDirection = mat4TransformDirection(
+    vec3 worldViewDirection = mat4TransformNormal3(
       viewToWorld,
       viewViewDirection
     );
 
     DEBUG_OUTPUT(36, normalToColor(worldViewDirection));
 
-    vec3 worldNormal = mat4TransformDirection(viewToWorld, viewNormal);
+    vec3 worldNormal = mat4TransformNormal3(viewToWorld, viewNormal);
 
     vec3 transmissionRay = getVolumeTransmissionRay(
       worldNormal,

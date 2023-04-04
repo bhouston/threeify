@@ -21,7 +21,7 @@ import {
   Mat4,
   mat4Inverse,
   mat4TransformNormal3,
-  mat4TransformVec3,
+  mat4TransformPosition3,
   Vec2,
   Vec3
 } from '@threeify/math';
@@ -240,7 +240,10 @@ function updateLightUniforms(
   lightUniforms: LightParameters,
   context: RenderingContext
 ) {
-  const lightWorldPosition = mat4TransformVec3(light.localToWorld, Vec3.Zero);
+  const lightWorldPosition = mat4TransformPosition3(
+    light.localToWorld,
+    Vec3.Zero
+  );
   const lightIntensity = color3MultiplyByScalar(light.color, light.intensity);
 
   let lightType = LightType.Directional;

@@ -25,11 +25,11 @@ PunctualLight readPunctualLightFromUniforms(int lightIndex, mat4 worldToView) {
   PunctualLight punctualLight;
   #if MAX_PUNCTUAL_LIGHTS > 0
   punctualLight.type = punctualLightType[lightIndex];
-  punctualLight.position = mat4TransformPosition(
+  punctualLight.position = mat4TransformPosition3(
     worldToView,
     punctualLightWorldPosition[lightIndex]
   );
-  punctualLight.direction = mat4TransformDirection(
+  punctualLight.direction = mat4TransformNormal3(
     worldToView,
     punctualLightWorldDirection[lightIndex]
   );

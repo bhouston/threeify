@@ -20,7 +20,7 @@ void main() {
   vec3 viewSurfaceNormal = normalize(v_viewSurfaceNormal);
 
   mat4 viewToLocal = worldToLocal * viewToWorld;
-  vec3 localSurfaceNormal = mat4TransformDirection(
+  vec3 localSurfaceNormal = mat4TransformNormal3(
     viewToLocal,
     viewSurfaceNormal
   );

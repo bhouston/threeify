@@ -3,7 +3,7 @@ import { Line3 } from './Line3';
 import { Mat4 } from './Mat4';
 import { Vec3 } from './Vec3';
 import {
-  mat4TransformVec3,
+  mat4TransformPosition3,
   vec3Delta,
   vec3Distance,
   vec3DistanceSq,
@@ -78,7 +78,7 @@ export function mat4TransformLine3(
   l: Line3,
   result = new Line3()
 ): Line3 {
-  mat4TransformVec3(m, l.start, result.start);
-  mat4TransformVec3(m, l.end, result.end);
+  mat4TransformPosition3(m, l.start, result.start);
+  mat4TransformPosition3(m, l.end, result.end);
   return result;
 }

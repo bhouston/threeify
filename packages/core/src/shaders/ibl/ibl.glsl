@@ -41,7 +41,7 @@ vec3 sampleIBLIrradiance(
   const mat4 worldToView
 ) {
   // convert to world
-  vec3 worldNormal = mat4UntransformDirection(worldToView, viewNormal);
+  vec3 worldNormal = mat4UntransformNormal3(worldToView, viewNormal);
   vec3 iblColor = textureLod(
     iblWorldMap,
     worldNormal,
@@ -66,7 +66,7 @@ vec3 sampleIBLRadiance(
   );
 
   // convert to world
-  vec3 worldReflectDirection = mat4UntransformDirection(
+  vec3 worldReflectDirection = mat4UntransformNormal3(
     worldToView,
     reflectDirection
   );

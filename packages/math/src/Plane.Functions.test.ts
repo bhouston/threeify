@@ -1,17 +1,67 @@
+import { Plane } from './Plane';
 import {
   coplanarPointsToPlane,
-  normalAndCoplanarPointToPlane
+  normalAndCoplanarPointToPlane,
+  planePointDistance,
+  planeProjectPointOnPlane
 } from './Plane.Functions';
 import { Vec3 } from './Vec3';
 import { vec3Delta, vec3Normalize } from './Vec3.Functions';
 
 describe('Plane Functions', () => {
+  test('planePointDistance', () => {
+    const planeAtOrigin = new Plane(new Vec3(0, 0, 1), 0);
+    const planeAtZ1 = new Plane(new Vec3(0, 0, 1), 1);
+
+    expect(planePointDistance(planeAtOrigin, new Vec3(0, 0, 0))).toBeCloseTo(0);
+    expect(planePointDistance(planeAtOrigin, new Vec3(10, 10, 0))).toBeCloseTo(
+      0
+    );
+
+    expect(planePointDistance(planeAtZ1, new Vec3(0, 0, 0))).toBeCloseTo(-1);
+    expect(planePointDistance(planeAtZ1, new Vec3(10, 10, 0))).toBeCloseTo(-1);
+
+    expect(planePointDistance(planeAtZ1, new Vec3(0, 0, 2))).toBeCloseTo(1);
+    expect(planePointDistance(planeAtZ1, new Vec3(-10, -10, 2))).toBeCloseTo(1);
+  });
+
+  test('planeProjectPointOnPlane', () => {
+    const planeAtOrigin = new Plane(new Vec3(0, 0, 1), 0);
+    const planeAtZ1 = new Plane(new Vec3(0, 0, 1), 1);
+
+    expect(
+      planePointDistance(
+        planeAtOrigin,
+        planeProjectPointOnPlane( planeAtOrigin, new Vec3(0, 0, 0))
+      )
+    ).toBeCloseTo(0);
+    expect(
+      planePointDistance(
+        planeAtOrigin,
+        planeProjectPointOnPlane( planeAtOrigin, new Vec3(10, 10, 0))
+      )
+    ).toBeCloseTo(0);
+        
+    expect(
+      planePointDistance(
+        planeAtZ1,
+         planeProjectPointOnPlane( planeAtZ1,new Vec3(0, 0, 0))
+      )
+    ).toBeCloseTo(0);
+    expect(
+      planePointDistance(
+        planeAtZ1,
+         planeProjectPointOnPlane( planeAtZ1,new Vec3(10, 10, 0))
+      )
+    ).toBeCloseTo(0);
+
+
   test('setFromNormalAndCoplanarPoint', () => {
     const normal = vec3Normalize(new Vec3(1, 1, 1));
     const a = normalAndCoplanarPointToPlane(normal, new Vec3());
 
     expect(vec3Delta(a.normal, normal)).toBeCloseTo(0);
-    expect(a.constant).toBeCloseTo(0);
+    expect(a.distance).toBeCloseTo(0);
   });
 
   test('setFromCoplanarPoints', () => {
@@ -24,6 +74,6 @@ describe('Plane Functions', () => {
     const a = coplanarPointsToPlane(v1, v2, v3);
 
     expect(vec3Delta(a.normal, normal)).toBeCloseTo(0);
-    expect(a.constant).toBeCloseTo(constant);
+    expect(a.distance).toBeCloseTo(constant);
   });
 });

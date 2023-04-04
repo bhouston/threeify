@@ -40,11 +40,11 @@ void main() {
   for (int i = 0; i < numPunctualLights; i++) {
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
-    punctualLight.position = mat4TransformPosition(
+    punctualLight.position = mat4TransformPosition3(
       worldToView,
       punctualLightWorldPosition[i]
     );
-    punctualLight.direction = mat4TransformDirection(
+    punctualLight.direction = mat4TransformNormal3(
       worldToView,
       punctualLightWorldDirection[i]
     );

@@ -222,7 +222,11 @@ export function barycoordWeightsToVec3(
   );
 }
 
-export function mat4TransformVec3(m: Mat4, v: Vec3, result = new Vec3()): Vec3 {
+export function mat4TransformPosition3(
+  m: Mat4,
+  v: Vec3,
+  result = new Vec3()
+): Vec3 {
   const { x, y, z } = v;
   const e = m.elements;
 

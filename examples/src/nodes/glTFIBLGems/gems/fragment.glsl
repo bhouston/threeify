@@ -58,26 +58,26 @@ void main() {
   vec3 viewViewDirection = normalize(-v_viewSurfacePosition);
   
   mat4 viewToLocal = worldToLocal * viewToWorld;
-  vec3 localSurfaceNormal = mat4TransformDirection(
+  vec3 localSurfaceNormal = mat4TransformNormal3(
     viewToLocal,
     viewSurfaceNormal
   );
 
-  vec3 localViewOrigin = mat4TransformPosition(viewToLocal, vec3(0.0));
-  vec3 localPosition = mat4TransformPosition(
+  vec3 localViewOrigin = mat4TransformPosition3(viewToLocal, vec3(0.0));
+  vec3 localPosition = mat4TransformPosition3(
     viewToLocal,
     v_viewSurfacePosition
   );
-    vec3 localViewDirection = mat4TransformDirection(
+    vec3 localViewDirection = mat4TransformNormal3(
     viewToLocal,
     viewViewDirection
   );
 
-  vec3 gemViewOrigin = mat4TransformPosition(localToGem, localViewOrigin);
-  vec3 gemViewDirection = mat4TransformDirection(localToGem, localViewDirection);
+  vec3 gemViewOrigin = mat4TransformPosition3(localToGem, localViewOrigin);
+  vec3 gemViewDirection = mat4TransformNormal3(localToGem, localViewDirection);
 
-  vec3 gemPosition = mat4TransformPosition(localToGem, localPosition);
-  vec3 gemSurfaceNormal = mat4TransformDirection(localToGem, localSurfaceNormal);
+  vec3 gemPosition = mat4TransformPosition3(localToGem, localPosition);
+  vec3 gemSurfaceNormal = mat4TransformNormal3(localToGem, localSurfaceNormal);
  
   Ray gemIncidentRay = Ray(gemViewOrigin, -gemViewDirection);
   Sphere sphere = Sphere(vec3(0.0), 0.5);

@@ -4,7 +4,7 @@ import { mat4ToMaxAxisScale } from './Mat4.Functions.js';
 import { Mat4 } from './Mat4.js';
 import { Sphere } from './Sphere.js';
 import {
-  mat4TransformVec3,
+  mat4TransformPosition3,
   vec3Add,
   vec3Distance,
   vec3DistanceSq,
@@ -112,7 +112,7 @@ export function mat4TransformSphere(
   s: Sphere,
   result = new Sphere()
 ): Sphere {
-  mat4TransformVec3(m, s.center, result.center);
+  mat4TransformPosition3(m, s.center, result.center);
   result.radius = s.radius * mat4ToMaxAxisScale(m);
   return result;
 }

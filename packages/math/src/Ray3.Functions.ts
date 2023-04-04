@@ -4,11 +4,12 @@ import { Plane } from './Plane.js';
 import { Ray3 } from './Ray3.js';
 import {
   mat4TransformNormal3,
-  mat4TransformVec3,
+  mat4TransformPosition3,
   vec3Add,
   vec3Dot,
   vec3Equals,
   vec3MultiplyByScalar,
+  vec3Negate,
   vec3Normalize,
   vec3Subtract
 } from './Vec3.Functions.js';
@@ -47,14 +48,14 @@ export function ray3DistanceToPlane(ray: Ray3, plane: Plane): number {
     return Number.NaN;
   }
 
-  const t = -(vec3Dot(ray.origin, plane.normal) + plane.constant) / denominator;
+  const t = planePointDistance(plane, ray.origin) / denominator;
   // Return if the ray never intersects the plane
   return t >= 0 ? t : Number.NaN;
 }
 
 export function ray3Negate(r: Ray3, result = new Ray3()): Ray3 {
   result.origin.copy(r.origin);
-  vec3MultiplyByScalar(r.direction, -1, result.direction);
+  vec3Negate(r.direction, result.direction);
   return result;
 }
 
@@ -68,7 +69,7 @@ export function ray3IntersectPlane(
 }
 
 export function mat4TransformRay3(m: Mat4, r: Ray3, result = new Ray3()): Ray3 {
-  mat4TransformVec3(m, r.origin, result.origin);
+  mat4TransformPosition3(m, r.origin, result.origin);
   mat4TransformNormal3(m, r.direction, result.direction);
   return result;
 }

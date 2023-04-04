@@ -51,11 +51,11 @@ void main() {
 
     PunctualLight punctualLight;
     punctualLight.type = punctualLightType[i];
-    punctualLight.position = mat4TransformPosition(
+    punctualLight.position = mat4TransformPosition3(
       worldToView,
       vec3(0.0, 0.0, 2)
     ); // punctualLightWorldPosition[i] );
-    punctualLight.direction = mat4TransformDirection(
+    punctualLight.direction = mat4TransformNormal3(
       worldToView,
       punctualLightWorldDirection[i]
     );

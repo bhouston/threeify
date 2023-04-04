@@ -77,7 +77,7 @@ vec3 localDirectionToIBLSample(
   mat4 localToWorld,
   samplerCube iblWorldMap
 ) {
-  vec3 worldDirection = mat4TransformDirection(localToWorld, localDirection);
+  vec3 worldDirection = mat4TransformNormal3(localToWorld, localDirection);
   return texture(iblWorldMap, worldDirection, 0.0).rgb;
 }
 

@@ -18,8 +18,8 @@ out vec2 v_uv0;
 
 void main() {
   mat4 localToView = worldToView * localToWorld;
-  v_viewSurfaceNormal = mat4TransformDirection(localToView, normal);
-  v_viewSurfacePosition = mat4TransformPosition(localToView, position);
+  v_viewSurfaceNormal = mat4TransformNormal3(localToView, normal);
+  v_viewSurfacePosition = mat4TransformPosition3(localToView, position);
   v_uv0 = uv0;
 
   float displacementAmount =

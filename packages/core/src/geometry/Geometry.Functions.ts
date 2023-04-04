@@ -9,7 +9,7 @@ import {
   Mat4,
   mat4Multiply,
   mat4TransformNormal3,
-  mat4TransformVec3,
+  mat4TransformPosition3,
   Plane,
   PrimitiveView,
   scale3ToMat4,
@@ -205,7 +205,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): Geometry {
   const v = new Vec3();
   for (let i = 0; i < positions.count; i++) {
     positions.get(i, v);
-    mat4TransformVec3(m, v, v);
+    mat4TransformPosition3(m, v, v);
     positions.set(i, v);
   }
 

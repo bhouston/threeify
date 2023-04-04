@@ -5,12 +5,12 @@ export class Plane {
 
   constructor(
     public readonly normal = new Vec3(0, 0, -1),
-    public constant = 0
+    public distance = 0 // distance of plane from origin in the normal direction, this is -1* the Three.js plane constant
   ) {}
 
-  set(normal: Vec3, constant: number): this {
+  set(normal: Vec3, distance: number): this {
     normal.clone(this.normal);
-    this.constant = constant;
+    this.distance = distance;
 
     return this;
   }
@@ -21,7 +21,7 @@ export class Plane {
 
   copy(plane: Plane): this {
     plane.normal.clone(this.normal);
-    this.constant = plane.constant;
+    this.distance = plane.distance;
 
     return this;
   }

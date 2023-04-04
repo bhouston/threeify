@@ -16,26 +16,26 @@ import {
 import { Vec3 } from './Vec3.js';
 
 export function planeDelta(a: Plane, b: Plane): number {
-  return vec3Delta(a.normal, b.normal) + delta(a.constant, b.constant);
+  return vec3Delta(a.normal, b.normal) + delta(a.distance, b.distance);
 }
 
 export function planeNormalize(p: Plane, result = new Plane()): Plane {
   // Note: will lead to a divide by zero if the plane is invalid.
   const inverseNormalLength = 1 / vec3Length(p.normal);
   vec3MultiplyByScalar(p.normal, inverseNormalLength, result.normal);
-  result.constant = p.constant * inverseNormalLength;
+  result.distance = p.distance * inverseNormalLength;
 
   return result;
 }
 export function planeInvert(p: Plane, result = new Plane()): Plane {
-  result.constant = p.constant * -1;
+  result.distance = p.distance * -1;
   vec3Negate(p.normal, result.normal);
 
   return result;
 }
 
 export function planeEquals(a: Plane, b: Plane): boolean {
-  return vec3Equals(a.normal, b.normal) && a.constant === b.constant;
+  return vec3Equals(a.normal, b.normal) && a.distance === b.distance;
 }
 
 export function coplanarPointsToPlane(
@@ -59,12 +59,12 @@ export function normalAndCoplanarPointToPlane(
   result: Plane = new Plane()
 ): Plane {
   normal.clone(result.normal);
-  result.constant = -vec3Dot(point, normal);
+  result.distance = vec3Dot(point, normal);
   return result;
 }
 
 export function planePointDistance(plane: Plane, point: Vec3): number {
-  return vec3Dot(plane.normal, point) + plane.constant;
+  return vec3Dot(plane.normal, point) - plane.distance;
 }
 
 // TODO: organize the function naming always in alphabetical if equivalent
@@ -72,9 +72,9 @@ export function planeSphereDistance(plane: Plane, sphere: Sphere): number {
   return planePointDistance(plane, sphere.center) - sphere.radius;
 }
 
-export function projectPointOntoPlane(
-  point: Vec3,
+export function planeProjectPointOnPlane(
   plane: Plane,
+  point: Vec3,
   result: Vec3 = new Vec3()
 ): Vec3 {
   // TODO: Determine if this is even correct
