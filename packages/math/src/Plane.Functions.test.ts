@@ -32,29 +32,29 @@ describe('Plane Functions', () => {
     expect(
       planePointDistance(
         planeAtOrigin,
-        planeProjectPointOnPlane( planeAtOrigin, new Vec3(0, 0, 0))
+        planeProjectPointOnPlane(planeAtOrigin, new Vec3(0, 0, 0))
       )
     ).toBeCloseTo(0);
     expect(
       planePointDistance(
         planeAtOrigin,
-        planeProjectPointOnPlane( planeAtOrigin, new Vec3(10, 10, 0))
-      )
-    ).toBeCloseTo(0);
-        
-    expect(
-      planePointDistance(
-        planeAtZ1,
-         planeProjectPointOnPlane( planeAtZ1,new Vec3(0, 0, 0))
-      )
-    ).toBeCloseTo(0);
-    expect(
-      planePointDistance(
-        planeAtZ1,
-         planeProjectPointOnPlane( planeAtZ1,new Vec3(10, 10, 0))
+        planeProjectPointOnPlane(planeAtOrigin, new Vec3(10, 10, 0))
       )
     ).toBeCloseTo(0);
 
+    expect(
+      planePointDistance(
+        planeAtZ1,
+        planeProjectPointOnPlane(planeAtZ1, new Vec3(0, 0, 0))
+      )
+    ).toBeCloseTo(0);
+    expect(
+      planePointDistance(
+        planeAtZ1,
+        planeProjectPointOnPlane(planeAtZ1, new Vec3(10, 10, 0))
+      )
+    ).toBeCloseTo(0);
+  });
 
   test('setFromNormalAndCoplanarPoint', () => {
     const normal = vec3Normalize(new Vec3(1, 1, 1));
