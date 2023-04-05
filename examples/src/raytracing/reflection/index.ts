@@ -16,8 +16,10 @@ import {
 } from '@threeify/core';
 import {
   Color3,
+  euler3ToMat4,
   Mat4,
   mat4Inverse,
+  mat4Multiply,
   mat4PerspectiveFov,
   Sphere,
   sphereRandomSample,
@@ -33,16 +35,22 @@ import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
 let debugOutput = 0;
-
+let numBounces = 12;
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     // space bar
     case ' ':
       debugOutput = (debugOutput + 1) % 3;
       break;
+    case 'ArrowUp':
+      numBounces = Math.min(numBounces + 1, 6);
+      break;
+    case 'ArrowDown':
+      numBounces = Math.max(numBounces - 1, 0);
+      break;
   }
 
-  console.log('debugOutput', debugOutput);
+  console.log('debugOutput', debugOutput, 'numBounces', numBounces);
 });
 
 async function init(): Promise<void> {
@@ -81,17 +89,19 @@ async function init(): Promise<void> {
   const sphereRadii: number[] = [];
   const sphereAlbedos: Color3[] = [];
   const sphereSampler = new Sphere(new Vec3(0, 0, 0), 1);
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 40; i++) {
     sphereOrigins.push(sphereRandomSample(sphereSampler));
     sphereToWorlds.push(translation3ToMat4(sphereOrigins[i]));
     worldToSpheres.push(mat4Inverse(sphereToWorlds[i]));
     sphereRadii.push(0.25);
-    sphereAlbedos.push(new Color3(Math.random(), Math.random(), Math.random()));
+    sphereAlbedos.push(
+      new Color3(Math.random() * 0.9, Math.random() * 0.9, Math.random() * 0.9)
+    );
   }
 
   const uniforms = {
-    viewToWorld: translation3ToMat4(new Vec3(0, 0, 2)),
-    worldToView: new Mat4(),
+    viewToWorld: new Mat4(),
+    worldToView: translation3ToMat4(new Vec3(0, 0, 2)),
     viewToClip: mat4PerspectiveFov(
       45,
       0.1,
@@ -105,14 +115,18 @@ async function init(): Promise<void> {
     sphereRadii,
     sphereAlbedos,
     iblWorldMap: cubeMap,
-    debugOutput: debugOutput
+    debugOutput: debugOutput,
+    numBounces
   };
 
   function animate(): void {
     requestAnimationFrame(animate);
 
-    uniforms.viewToWorld = translation3ToMat4(new Vec3(0, 0.25, 2));
-    uniforms.worldToView = mat4Inverse(uniforms.viewToWorld);
+    uniforms.worldToView = mat4Multiply(
+      translation3ToMat4(new Vec3(0, 0.25, -2)),
+      euler3ToMat4(orbit.euler)
+    );
+    uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
     uniforms.viewToClip = mat4PerspectiveFov(
       45,
       0.1,
@@ -121,6 +135,7 @@ async function init(): Promise<void> {
       canvasFramebuffer.aspectRatio
     );
     uniforms.debugOutput = debugOutput;
+    uniforms.numBounces = numBounces;
 
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,

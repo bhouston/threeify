@@ -6,7 +6,7 @@ uniform mat4 viewToWorld;
 uniform mat4 worldToView;
 uniform mat4 clipToView;
 
-#define MAX_SPHERES (10)
+#define MAX_SPHERES (40)
 
 uniform vec3 sphereOrigins[MAX_SPHERES];
 uniform mat4 sphereToWorlds[MAX_SPHERES];
@@ -15,6 +15,7 @@ uniform float sphereRadii[MAX_SPHERES];
 uniform vec3 sphereAlbedos[MAX_SPHERES];
 
 uniform int debugOutput;
+uniform int numBounces;
 
 uniform samplerCube iblWorldMap;
 
@@ -37,7 +38,7 @@ vec3 localDirectionToIBLSample(
   return texture(iblWorldMap, worldDirection, 0.0).rgb;
 }
 
-#define MAX_BOUNCES (5)
+#define MAX_BOUNCES (12)
 
 void main() {
   // convert from screen space to ray.
@@ -46,49 +47,50 @@ void main() {
   // create ray
   Ray viewRay = Ray(vec3(0.0), viewDirection);
   Ray worldRay = mat4TransformRay(viewToWorld, viewRay);
+  vec3 reflection = vec3(1.0);
 
-  for (int b = 0; b < MAX_BOUNCES; b++) {
-    vec3 hitAlbedo = vec3(0.0);
-    float hitDistance = 1000.0;
-    vec3 hitNormal = vec3(0.0);
+  for (int b = 0; b < numBounces; b++) {
+    vec3 hitAlbedo = vec3(1.0);
 
-    Hit hit;
+    Hit bestHit = Hit(1000.0, vec3(0.0), vec3(0.0));
 
     for (int i = 0; i < MAX_SPHERES; i++) {
       Sphere worldSphere = Sphere(sphereOrigins[i], sphereRadii[i]);
+      Hit hit;
       if (raySphereIntersection(worldRay, worldSphere, hit)) {
-        if (hit.distance > 0.0 && hit.distance < hitDistance && (dot( hit.normal, worldRay.direction ) < 0. ) ) {
+        if (hit.distance > 0.0 && hit.distance < bestHit.distance && (dot( hit.normal, worldRay.direction ) <= 0. ) ) {
           hitAlbedo = sphereAlbedos[i];
-          hitDistance = hit.distance;
-          hitNormal = hit.normal;
+          bestHit = hit;
         }
       }
     }
+
     if (debugOutput == 1) {
       outputColor.rgb = hitAlbedo;
       outputColor.a = 1.0;
       return;
     } else if (debugOutput == 2) {
-      outputColor.rgb = normalToColor(hitNormal);
+      outputColor.rgb = normalToColor(bestHit.normal);
       outputColor.a = 1.0;
       return;
     } else if (debugOutput == 3) {
-      outputColor.rgb = vec3(-hitDistance * 0.4);
+      outputColor.rgb = vec3(-bestHit.distance * 0.4);
       outputColor.a = 1.0;
       return;
     }
 
-    if (hitDistance < 1000.0) {
-      worldRay.origin = hit.position + hit.normal * 0.001;
-      worldRay.direction = reflect(worldRay.direction, hit.normal);
+    if (bestHit.distance < 1000.0) {
+      reflection *= hitAlbedo;
+      worldRay.origin = bestHit.position + bestHit.normal * 0.001;
+      worldRay.direction = reflect(worldRay.direction, bestHit.normal);
     } else {
       break;
     }
   }
 
   vec3 iblColor = texture(iblWorldMap, worldRay.direction, 0.0).rgb;
-
-  outputColor.rgb = linearTosRGB(tonemappingACESFilmic(iblColor));
+  vec3 reflectedColor = reflection * iblColor;
+  outputColor.rgb = linearTosRGB(tonemappingACESFilmic(reflectedColor));
   outputColor.a = 1.0;
   return;
 }
