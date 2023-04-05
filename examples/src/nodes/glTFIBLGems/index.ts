@@ -46,7 +46,7 @@ import {
 } from '@threeify/scene';
 
 import { GPUTimerPanel, Stats } from '../../utilities/Stats';
-import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeHdris';
 import fragmentSource from './fragment.glsl';
 import gemFragmentSource from './gems/fragment.glsl';
 import gemVertexSource from './gems/vertex.glsl';

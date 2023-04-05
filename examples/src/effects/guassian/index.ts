@@ -17,7 +17,7 @@ import {
   textureToTexImage2D
 } from '@threeify/core';
 
-import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeHdris';
 
 let blurRadius = 4.5;
 

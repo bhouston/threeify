@@ -11,7 +11,7 @@ import {
 } from '@threeify/core';
 import { Mat4, mat4Compose, mat4PerspectiveFov, Vec3 } from '@threeify/math';
 
-import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeHdris';
 
 async function init(): Promise<void> {
   const latLongTexture = await fetchTexture(

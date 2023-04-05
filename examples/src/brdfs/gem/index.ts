@@ -42,7 +42,7 @@ import {
   vec3Lerp
 } from '@threeify/math';
 
-import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeJsHdris';
+import { getThreeJsHdriUrl, ThreeJsHdri } from '../../utilities/threeHdris';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 

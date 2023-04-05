@@ -28,7 +28,7 @@ import {
 import {
   getThreeJsHdriUrl as getThreeJsHdriUrl,
   ThreeJsHdri as ThreeJsHrdi
-} from '../../utilities/threeJsHdris';
+} from '../../utilities/threeHdris';
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
 
