@@ -62,7 +62,7 @@ async function init(): Promise<void> {
 
   const context = createRenderingContext(document, 'framebuffer');
 
-  const geometry = icosahedronGeometry(1, 5, true);
+  const geometry = icosahedronGeometry(8, 5, true);
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   const latLongTexture = new Texture(
@@ -124,9 +124,14 @@ async function init(): Promise<void> {
 
     uniforms.worldToView = mat4Multiply(
       translation3ToMat4(new Vec3(0, 0.25, -2)),
-      euler3ToMat4(orbit.euler)
+      euler3ToMat4(orbit.euler),
+      uniforms.worldToView
     );
-    uniforms.viewToWorld = mat4Inverse(uniforms.worldToView);
+    //console.log(mat4ToString(uniforms.worldToView));
+    uniforms.viewToWorld = mat4Inverse(
+      uniforms.worldToView,
+      uniforms.viewToWorld
+    );
     uniforms.viewToClip = mat4PerspectiveFov(
       45,
       0.1,
@@ -143,7 +148,7 @@ async function init(): Promise<void> {
       program,
       uniforms,
       depthTestState: DepthTestState.None,
-      cullingState: CullingState.None
+      cullingState: CullingState.Front
     });
 
     orbit.update();
