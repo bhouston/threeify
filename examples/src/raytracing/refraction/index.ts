@@ -34,6 +34,7 @@ import vertexSource from './vertex.glsl';
 
 let debugOutput = 0;
 let numBounces = 12;
+let ior = 1.5;
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     // space bar
@@ -46,9 +47,18 @@ document.addEventListener('keydown', (event) => {
     case 'ArrowDown':
       numBounces = Math.max(numBounces - 1, 0);
       break;
+    case 'a':
+      ior *= 1.025;
+      break;
+    case 's':
+      ior /= 1.025;
+      break;
   }
 
-  console.log('debugOutput', debugOutput, 'numBounces', numBounces);
+  ior = Math.max(ior, 1);
+  ior = Math.min(ior, 4);
+
+  console.log('debugOutput', debugOutput, 'numBounces', numBounces, 'ior', ior);
 });
 
 async function init(): Promise<void> {
@@ -97,7 +107,7 @@ async function init(): Promise<void> {
     sphereRadius: 0.25,
     sphereAttenuationColor: new Color3(1, 1, 1),
     sphereAttenuationDistance: 1,
-    s: 1.5,
+    sphereIor: ior,
     iblWorldMap: cubeMap,
     debugOutput: debugOutput,
     numBounces
@@ -125,6 +135,7 @@ async function init(): Promise<void> {
     );
     uniforms.debugOutput = debugOutput;
     uniforms.numBounces = numBounces;
+    uniforms.sphereIor = ior;
 
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,

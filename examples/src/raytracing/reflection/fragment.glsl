@@ -81,7 +81,7 @@ void main() {
 
     if (bestHit.distance < 1000.0) {
       reflection *= hitAlbedo;
-      worldRay.origin = bestHit.position + bestHit.normal * 0.001;
+      worldRay.origin = bestHit.position + bestHit.normal * 0.0001;
       worldRay.direction = reflect(worldRay.direction, bestHit.normal);
     } else {
       break;

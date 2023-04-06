@@ -93,7 +93,7 @@ async function init(): Promise<void> {
     sphereOrigins.push(sphereRandomSample(sphereSampler));
     sphereToWorlds.push(translation3ToMat4(sphereOrigins[i]));
     worldToSpheres.push(mat4Inverse(sphereToWorlds[i]));
-    sphereRadii.push(0.25);
+    sphereRadii.push(0.3 * Math.random() + 0.05);
     sphereAlbedos.push(
       new Color3(Math.random() * 0.9, Math.random() * 0.9, Math.random() * 0.9)
     );
