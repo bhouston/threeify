@@ -48,6 +48,20 @@ export function color3Normalize(a: Color3, result = new Color3()): Color3 {
 export function color3Dot(a: Color3, b: Color3): number {
   return a.r * b.r + a.g * b.g + a.b * b.b;
 }
+
+export function color3Min(a: Color3, b: Color3, result = new Color3()): Color3 {
+  return result.set(Math.min(a.r, b.r), Math.min(a.g, b.g), Math.min(a.b, b.b));
+}
+export function color3Max(a: Color3, b: Color3, result = new Color3()): Color3 {
+  return result.set(Math.max(a.r, b.r), Math.max(a.g, b.g), Math.max(a.b, b.b));
+}
+export function color3MaxComponent(a: Color3): number {
+  return Math.max(a.r, a.g, a.b);
+}
+export function color3MinComponent(a: Color3): number {
+  return Math.min(a.r, a.g, a.b);
+}
+
 export function color3Lerp(
   a: Color3,
   b: Color3,
