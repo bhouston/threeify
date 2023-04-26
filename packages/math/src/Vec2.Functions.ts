@@ -55,6 +55,12 @@ export function vec2Min(a: Vec2, b: Vec2, result: Vec2 = new Vec2()): Vec2 {
 export function vec2Max(a: Vec2, b: Vec2, result: Vec2 = new Vec2()): Vec2 {
   return result.set(Math.max(a.x, b.x), Math.max(a.y, b.y));
 }
+export function vec2MaxComponent(a: Vec2): number {
+  return Math.max(a.x, a.y);
+}
+export function vec2MinComponent(a: Vec2): number {
+  return Math.min(a.x, a.y);
+}
 export function vec2Ceil(a: Vec2, result: Vec2 = new Vec2()): Vec2 {
   return result.set(Math.ceil(a.x), Math.ceil(a.y));
 }

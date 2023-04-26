@@ -79,6 +79,12 @@ export function vec4Max(a: Vec4, b: Vec4, result = new Vec4()): Vec4 {
     Math.max(a.w, b.w)
   );
 }
+export function vec4MaxComponent(a: Vec4): number {
+  return Math.max(a.x, a.y, a.z, a.w);
+}
+export function vec4MinComponent(a: Vec4): number {
+  return Math.min(a.x, a.y, a.z, a.w);
+}
 export function vec4Ceil(a: Vec4, result = new Vec4()): Vec4 {
   return result.set(
     Math.ceil(a.x),
