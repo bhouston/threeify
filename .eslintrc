@@ -17,7 +17,7 @@
     "prettier"
   ],
   "rules": {
-    "no-console": 1,
+    "no-console": "warn",
     "prettier/prettier": 2,
     "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
@@ -34,7 +34,6 @@
     "promise/always-return": "error",
     "promise/no-return-wrap": "error",
     "promise/param-names": "error",
-    "promise/catch-or-return": "error",
     "promise/no-native": "off",
     "promise/no-nesting": "warn",
     "promise/no-promise-in-callback": "warn",
