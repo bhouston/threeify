@@ -76,7 +76,7 @@ async function init(): Promise<void> {
   console.time('init');
   const textueCache = new TextureCache();
   const glTFModelPromise = glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF),
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF),
     textueCache
   );
 
