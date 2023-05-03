@@ -12,6 +12,8 @@ package-lock.json
 # docker environment variables
 .env
 
+.yarn
+
 bundle*.js
 bundle*.js.zip
 bundle.terserjs.zip
