@@ -21,6 +21,7 @@ import {
   Vec2,
   Vec3
 } from '@threeify/math';
+import { ColorHSL } from '@threeify/math/src/ColorHSL';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -35,11 +36,15 @@ function updateCanvas(
   const grd = ctx.createLinearGradient(0, 0, 256, frameNumber % 256);
   grd.addColorStop(
     0,
-    `#${color3ToHexString(hslToColor3(new Vec3(frameNumber / 256, 0.5, 0.5)))}`
+    `#${color3ToHexString(
+      hslToColor3(new ColorHSL(frameNumber / 256, 0.5, 0.5))
+    )}`
   );
   grd.addColorStop(
     1,
-    `#${color3ToHexString(hslToColor3(new Vec3(frameNumber / 193, 0.5, 0.5)))}`
+    `#${color3ToHexString(
+      hslToColor3(new ColorHSL(frameNumber / 193, 0.5, 0.5))
+    )}`
   );
 
   ctx.fillStyle = grd;

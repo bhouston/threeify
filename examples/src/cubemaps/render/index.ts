@@ -22,6 +22,7 @@ import {
   Vec2,
   Vec3
 } from '@threeify/math';
+import { ColorHSL } from '@threeify/math/src/ColorHSL.js';
 
 import { patternMaterial } from './pattern/PatternMaterial.js';
 
@@ -78,7 +79,7 @@ async function init(): Promise<void> {
     cubeFaceTargets.forEach((target, index) => {
       framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
       patternUniforms.color = hslToColor3(
-        new Vec3(index / 6 + now * 0.0001, 0.5, 0.5)
+        new ColorHSL(index / 6 + now * 0.0001, 0.5, 0.5)
       );
 
       renderPass({
