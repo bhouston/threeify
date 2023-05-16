@@ -1,11 +1,13 @@
 import { Color3 } from './Color3.js';
+import { ColorHSL } from './ColorHSL.js';
+import { ColorHSV } from './ColorHSV.js';
 import {
+  clamp,
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
 } from './Functions.js';
-import { Vec3 } from './Vec3.js';
 
 export function color3Equals(
   a: Color3,
@@ -101,7 +103,87 @@ makeMat3Concatenation
 	},
 */
 
-export function hslToColor3(hsl: Vec3, result = new Color3()): Color3 {
+export function hsvToColor3(hsv: ColorHSV, result = new Color3()): Color3 {
+  const h = hsv.h % 1;
+  const s = clamp(hsv.s, 0, 1);
+  const v = clamp(hsv.v, 0, 1);
+
+  if (s === 0) {
+    return result.set(v, v, v);
+  }
+
+  const i = Math.floor(h * 6);
+  const f = h * 6 - i;
+  const p = v * (1 - s);
+  const q = v * (1 - f * s);
+  const t = v * (1 - (1 - f) * s);
+
+  switch (i % 6) {
+    case 0:
+      return result.set(v, t, p);
+    case 1:
+      return result.set(q, v, p);
+    case 2:
+      return result.set(p, v, t);
+    case 3:
+      return result.set(p, q, v);
+    case 4:
+      return result.set(t, p, v);
+    case 5:
+      return result.set(v, p, q);
+    default:
+      return result.set(v, t, p);
+  }
+}
+
+export function color3ToHsv(color: Color3, result = new ColorHSV()): ColorHSV {
+  const { r, g, b } = color;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+
+  let h = 0;
+  let s = 0;
+  const v = max;
+
+  const delta = max - min;
+
+  if (delta !== 0) {
+    s = delta / max;
+
+    const deltaR = ((max - r) / 6 + delta / 2) / delta;
+    const deltaG = ((max - g) / 6 + delta / 2) / delta;
+    const deltaB = ((max - b) / 6 + delta / 2) / delta;
+
+    switch (max) {
+      case r: {
+        h = deltaB - deltaG;
+        break;
+      }
+      case g: {
+        h = 1 / 3 + deltaR - deltaB;
+        break;
+      }
+      case b: {
+        h = 2 / 3 + deltaG - deltaR;
+        break;
+      }
+      // No default
+    }
+
+    if (h < 0) {
+      h += 1;
+    }
+
+    if (h > 1) {
+      h -= 1;
+    }
+  }
+
+  return result.set(h, s, v);
+}
+
+export function hslToColor3(hsl: ColorHSL, result = new Color3()): Color3 {
   function hue2rgb(p: number, q: number, t: number): number {
     if (t < 0) {
       t += 1;
@@ -123,9 +205,9 @@ export function hslToColor3(hsl: Vec3, result = new Color3()): Color3 {
   }
 
   // h,s,l ranges are in 0.0 - 1.0
-  const h = ((hsl.x % 1) + 1) % 1; // euclidean modulo
-  const s = Math.min(Math.max(hsl.y, 0), 1);
-  const l = Math.min(Math.max(hsl.z, 0), 1);
+  const h = ((hsl.h % 1) + 1) % 1; // euclidean modulo
+  const s = clamp(hsl.s, 0, 1);
+  const l = clamp(hsl.l, 0, 1);
 
   if (s === 0) {
     return result.set(1, 1, 1);
@@ -141,42 +223,41 @@ export function hslToColor3(hsl: Vec3, result = new Color3()): Color3 {
   );
 }
 
-export function color3ToHSL(rgb: Color3, result = new Vec3()): Vec3 {
+export function color3ToHSL(rgb: Color3, result = new ColorHSL()): ColorHSL {
   // h,s,l ranges are in 0.0 - 1.0
   const { r, g, b } = rgb;
 
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
 
-  let hue = 0;
-  let saturation = 0;
-  const lightness = (min + max) / 2;
+  let h = 0;
+  let s = 0;
+  const l = (min + max) / 2;
 
   if (min === max) {
-    hue = 0;
-    saturation = 0;
+    h = 0;
+    s = 0;
   } else {
     const delta = max - min;
 
-    saturation =
-      lightness <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
+    s = l <= 0.5 ? delta / (max + min) : delta / (2 - max - min);
 
     switch (max) {
       case r:
-        hue = (g - b) / delta + (g < b ? 6 : 0);
+        h = (g - b) / delta + (g < b ? 6 : 0);
         break;
       case g:
-        hue = (b - r) / delta + 2;
+        h = (b - r) / delta + 2;
         break;
       case b:
-        hue = (r - g) / delta + 4;
+        h = (r - g) / delta + 4;
         break;
     }
 
-    hue /= 6;
+    h /= 6;
   }
 
-  return result.set(hue, saturation, lightness);
+  return result.set(h, s, l);
 }
 
 export function hexToColor3(hex: number, result = new Color3()): Color3 {

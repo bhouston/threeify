@@ -1,4 +1,5 @@
 import {
+  clamp,
   delta,
   EPSILON,
   equalsTolerance,
@@ -67,10 +68,7 @@ export function vec2Clamp(
   max: Vec2,
   result: Vec2 = new Vec2()
 ): Vec2 {
-  return result.set(
-    Math.min(Math.max(a.x, min.x), max.x),
-    Math.min(Math.max(a.y, min.y), max.y)
-  );
+  return result.set(clamp(a.x, min.x, max.x), clamp(a.y, min.y, max.y));
 }
 
 export function vec2Distance(a: Vec2, b: Vec2): number {
