@@ -47,7 +47,6 @@ export class ProgramUniform {
   public readonly numElements: number;
   public readonly glType: number;
   public readonly sizeInBytes: number;
-  valueHashCode = 982345792759832448; // large random hashcode so to never get a hit
   textureUnit = -1;
 
   constructor(
@@ -167,10 +166,7 @@ export class ProgramUniform {
       // case UniformType.BoolVec4:
       case UniformType.Int:
         if (typeof value === 'number') {
-          //if (value !== this.valueHashCode) {
           gl.uniform1i(this.glLocation, value);
-          //this.valueHashCode = value;
-          //}
           return this;
         }
         break;
@@ -179,10 +175,7 @@ export class ProgramUniform {
       // case UniformType.IntVec4:
       case UniformType.Bool:
         if (typeof value === 'boolean') {
-          //if (value !== this.valueHashCode) {
           gl.uniform1i(this.glLocation, value ? 1 : 0);
-          //this.valueHashCode = value;
-          //}
           return this;
         }
         break;
@@ -191,57 +184,36 @@ export class ProgramUniform {
       // case UniformType.IntVec4:
       case UniformType.Float:
         if (typeof value === 'number') {
-          //if (value !== this.valueHashCode) {
           gl.uniform1f(this.glLocation, value);
-          //this.valueHashCode = value;
-          //}
           return this;
         }
         break;
       case UniformType.FloatVec2:
         if (value instanceof Vec2) {
-          //const hashCode = value.getHashCode();
-          //if (hashCode !== this.valueHashCode) {
           gl.uniform2f(this.glLocation, value.x, value.y);
-          //this.valueHashCode = hashCode;
-          //}
+
           return this;
         }
         break;
       case UniformType.FloatVec3:
         if (value instanceof Vec3) {
-          //const hashCode = value.getHashCode();
-          //if (hashCode !== this.valueHashCode) {
           gl.uniform3f(this.glLocation, value.x, value.y, value.z);
-          //this.valueHashCode = hashCode;
-          //}
+
           return this;
         }
         if (value instanceof Color3) {
-          //const hashCode = value.getHashCode();
-          //if (hashCode !== this.valueHashCode) {
           gl.uniform3f(this.glLocation, value.r, value.g, value.b);
-          //this.valueHashCode = hashCode;
-          //}
+
           return this;
         }
         break;
       case UniformType.FloatVec4:
         if (value instanceof Vec4) {
-          //const hashCode = value.getHashCode();
-          //if (hashCode !== this.valueHashCode) {
           gl.uniform4f(this.glLocation, value.x, value.y, value.z, value.w);
-          //this.valueHashCode = hashCode;
-          //}
           return this;
         }
         if (value instanceof Color4) {
-          //const hashCode = value.getHashCode();
-          //if (hashCode !== this.valueHashCode) {
           gl.uniform4f(this.glLocation, value.r, value.g, value.b, value.a);
-          //this.valueHashCode = hashCode;
-          //}
-          //return this;
         }
         break;
       // case UniformType.FloatVec4:
@@ -251,11 +223,7 @@ export class ProgramUniform {
       // case UniformType.FloatMat3x2:
       case UniformType.FloatMat3:
         if (value instanceof Mat3) {
-          //const hashCode = value.getHashCode();
-          // if (hashCode !== this.valueHashCode) {
           gl.uniformMatrix3fv(this.glLocation, false, value.elements);
-          //  this.valueHashCode = hashCode;
-          // }
           return this;
         }
         break;
@@ -264,11 +232,7 @@ export class ProgramUniform {
       // case UniformType.FloatMat4x3:
       case UniformType.FloatMat4:
         if (value instanceof Mat4) {
-          //const hashCode = value.getHashCode();
-          //if (hashCode !== this.valueHashCode) {
           gl.uniformMatrix4fv(this.glLocation, false, value.elements);
-          //  this.valueHashCode = hashCode;
-          //}
           return this;
         }
         break;
@@ -331,9 +295,7 @@ export class ProgramUniform {
       // case UniformType.BoolVec4:
       case UniformType.Int:
         if (typeof firstElement === 'number') {
-          // const array = linearizeNumberInt32Array(value as number[]);
           gl.uniform1iv(this.glLocation, value as number[]);
-          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -342,9 +304,7 @@ export class ProgramUniform {
       // case UniformType.IntVec4:
       case UniformType.Float:
         if (typeof firstElement === 'number') {
-          // const array = linearizeNumberFloatArray(value as number[]);
           gl.uniform1fv(this.glLocation, value as number[]);
-          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -352,7 +312,6 @@ export class ProgramUniform {
         if (firstElement instanceof Vec2) {
           const array = vec2ArrayToFloat32Array(value as Vec2[]);
           gl.uniform2fv(this.glLocation, array);
-          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -360,13 +319,11 @@ export class ProgramUniform {
         if (firstElement instanceof Vec3) {
           const array = vec3ArrayToFloat32Array(value as Vec3[]);
           gl.uniform3fv(this.glLocation, array);
-          this.valueHashCode = -1;
           return this;
         }
         if (firstElement instanceof Color3) {
           const array = color3ArrayToFloat32Array(value as Color3[]);
           gl.uniform3fv(this.glLocation, array);
-          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -374,13 +331,11 @@ export class ProgramUniform {
         if (firstElement instanceof Vec4) {
           const array = vec4ArrayToFloat32Array(value as Vec4[]);
           gl.uniform4fv(this.glLocation, array);
-          this.valueHashCode = -1;
           return this;
         }
         if (firstElement instanceof Color4) {
           const array = color4ArrayToFloat32Array(value as Color4[]);
           gl.uniform4fv(this.glLocation, array);
-          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -393,7 +348,6 @@ export class ProgramUniform {
         if (firstElement instanceof Mat3) {
           const array = mat3ArrayToFloat32Array(value as Mat3[]);
           gl.uniformMatrix3fv(this.glLocation, false, array);
-          this.valueHashCode = -1;
           return this;
         }
         break;
@@ -404,7 +358,6 @@ export class ProgramUniform {
         if (firstElement instanceof Mat4) {
           const array = mat4ArrayToFloat32Array(value as Mat4[]);
           gl.uniformMatrix4fv(this.glLocation, false, array);
-          this.valueHashCode = -1;
           return this;
         }
         break;

@@ -1,13 +1,7 @@
-import { hashFloat3 } from './utils/hash';
-
 export class ColorHSL {
   static readonly NUM_COMPONENTS = 3;
 
   constructor(public h = 0, public s = 0, public l = 0) {}
-
-  getHashCode(): number {
-    return hashFloat3(this.h, this.s, this.l);
-  }
 
   clone(result = new ColorHSL()): ColorHSL {
     return result.set(this.h, this.s, this.l);
