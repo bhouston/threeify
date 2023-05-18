@@ -1,6 +1,6 @@
 {
   "name": "threeify",
-  "version": "2.1.0",
+  "version": "4.0.2",
   "private": true,
   "description": "Typescript 3D Library loosely based on three.js",
   "keywords": [

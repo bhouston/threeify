@@ -1,6 +1,11 @@
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
+
+export function saturate(value: number) {
+  return clamp(value, 0, 1);
+}
+
 // euclidean modulo, works with negative numbers
 // https://stackoverflow.com/a/17323608/1314762
 export function positiveModulo(value: number, period: number) {

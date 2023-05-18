@@ -1,7 +1,7 @@
 {
   "name": "@threeify/math",
   "description": "Computer graphics oriented, High performance, tree-shakeable, TypeScript 3D vector math library.",
-  "version": "3.0.0",
+  "version": "4.0.3",
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
   ],
   "keywords": [
     "threeify",
-    "computer graphocs",
+    "computer graphics",
     "graphics",
     "3D",
     "math",

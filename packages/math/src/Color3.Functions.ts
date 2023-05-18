@@ -3,8 +3,10 @@ import {
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
+  saturate,
   toSafeString
 } from './Functions.js';
+import { Vec3 } from './Vec3.js';
 
 export function color3Equals(
   a: Color3,
@@ -98,4 +100,26 @@ export function color3ToHexString(rgb: Color3): string {
 
 export function hexStringToColor3(hex: string, result = new Color3()): Color3 {
   return hexToColor3(Number.parseInt(hex.replace(/^#/, ''), 16), result);
+}
+
+export function color3Saturate(color: Color3, result = new Color3()): Color3 {
+  return result.set(saturate(color.r), saturate(color.g), saturate(color.b));
+}
+
+// vec3 rgbToNormal(const vec3 rgb) {
+//  return 2.0 * rgb.xyz - 1.0;
+// }
+export function color3ToNormal(color: Color3, result = new Vec3()): Vec3 {
+  return result.set(2 * color.r - 1, 2 * color.g - 1, 2 * color.b - 1);
+}
+
+//vec3 normalToRgb(const vec3 normal) {
+//  return normalize(normal) * 0.5 + 0.5;
+//}
+export function normalToColor3(normal: Vec3, result = new Color3()): Color3 {
+  return result.set(
+    0.5 * (normal.x + 1),
+    0.5 * (normal.y + 1),
+    0.5 * (normal.z + 1)
+  );
 }
