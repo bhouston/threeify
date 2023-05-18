@@ -9,7 +9,8 @@ import {
   renderBufferGeometry,
   shaderSourceToProgram
 } from '@threeify/core';
-import { Color3, hslToColor3, Vec3 } from '@threeify/math';
+import { Color3, hslToColor3 } from '@threeify/math';
+import { ColorHSL } from '@threeify/math/src/ColorHSL';
 
 import fragmentSource from './fragment.glsl';
 import vertexSource from './vertex.glsl';
@@ -51,7 +52,7 @@ async function init() {
     uniforms.scale = 0.6 + 0.4 * Math.cos(Date.now() * 0.001);
 
     materialUniforms.color = hslToColor3(
-      new Vec3(Date.now() * 0.001, 1, 0.5),
+      new ColorHSL(Date.now() * 0.001, 1, 0.5),
       materialUniforms.color
     );
     materialUniformBlock.setUniformsIntoBuffer(

@@ -17,6 +17,7 @@ import {
   box3Center,
   box3MaxSize,
   Color3,
+  positiveModulo,
   Vec3,
   vec3Negate
 } from '@threeify/math';
@@ -54,11 +55,10 @@ let debugOutputIndex = 0;
 document.addEventListener('keydown', (event) => {
   switch (event.key) {
     case 'ArrowUp':
-      debugOutputIndex = (debugOutputIndex + 1) % maxDebugOutputs;
+      debugOutputIndex = positiveModulo(debugOutputIndex + 1, maxDebugOutputs);
       break;
     case 'ArrowDown':
-      debugOutputIndex =
-        (debugOutputIndex + maxDebugOutputs - 1) % maxDebugOutputs;
+      debugOutputIndex = positiveModulo(debugOutputIndex - 1, maxDebugOutputs);
       break;
     case 'Escape':
       debugOutputIndex = 0;
@@ -76,7 +76,7 @@ async function init(): Promise<void> {
   console.time('init');
   const textueCache = new TextureCache();
   const glTFModelPromise = glTFToSceneNode(
-    getKhronosGlTFUrl(KhronosModel.DamagedHelmet, GLTFFormat.glTF),
+    getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF),
     textueCache
   );
 
