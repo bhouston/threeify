@@ -1,6 +1,11 @@
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
+// euclidean modulo, works with negative numbers
+// https://stackoverflow.com/a/17323608/1314762
+export function positiveModulo(value: number, period: number) {
+  return ((value % period) + period) % period;
+}
 export function lerp(a: number, b: number, t: number): number {
   return (1 - t) * a + t * b;
 }
