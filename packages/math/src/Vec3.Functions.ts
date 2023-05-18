@@ -73,6 +73,12 @@ export function vec3Min(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
 export function vec3Max(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
   return result.set(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
 }
+export function vec3MaxComponent(a: Vec3): number {
+  return Math.max(a.x, a.y, a.z);
+}
+export function vec3MinComponent(a: Vec3): number {
+  return Math.min(a.x, a.y, a.z);
+}
 export function vec3Ceil(a: Vec3, result = new Vec3()): Vec3 {
   return result.set(Math.ceil(a.x), Math.ceil(a.y), Math.ceil(a.z));
 }

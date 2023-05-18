@@ -45,7 +45,8 @@
     "build": "glsl-transpiler && tsc --build",
     "watch": "glsl-transpiler --watch && tsc --build  --watch --preserveWatchOutput",
     "docs": "typedoc",
-    "test": "jest ./src"
+    "test": "jest ./src",
+    "rollup": "rollup -c ./rollup.config.js ./dist/nodes/glTFIBL/index.js --file ./dist/nodes/glTFIBL/index.js"
   },
   "dependencies": {
     "@threeify/core": "*",
