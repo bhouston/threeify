@@ -31,7 +31,6 @@ describe('ColorHSV Functions', () => {
     ];
     for (const pair of pairs) {
       const { hsv, color } = pair;
-      console.log(hsv, color);
       const color2 = hsvToColor3(hsv);
       expect(color2.r).toBeCloseTo(color.r);
       expect(color2.g).toBeCloseTo(color.g);
