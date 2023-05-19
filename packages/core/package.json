@@ -3,26 +3,31 @@
   "description": "Typescript 3D Library loosely based on three.js",
   "version": "4.0.2",
   "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
+  "exports": {
+    "types": "./dist/core.d.ts",
+    "require": "./dist/core.cjs",
+    "default": "./dist/core.modern.js"
+  },
+  "types": "./dist/core.d.ts",
+  "main": "./dist/core.cjs",
+  "module": "./dist/core.modern.js",
+  "source": "./src/core.ts",
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "node >= 14"
   ],
+  "scripts": {
+    "build": "glsl-transpiler && microbundle --format modern,cjs --define PACKAGE_VERSION=$npm_package_version",
+    "watch": "glsl-transpiler --watch & microbundle watch --format modern,cjs --define PACKAGE_VERSION=$npm_package_version",
+    "watch:debug": "glsl-transpiler --watch & microbundle watch --format modern,cjs --define PACKAGE_VERSION=$npm_package_version --no-compress"
+  },
   "keywords": [
     "threeify",
     "webgl",
     "webgpu",
     "3D"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
-    },
-    "./dist/*": "./dist/*",
-    "./shaders/*": "./dist/shaders/*"
-  },
   "homepage": "http://bhouston.github.com/threeify",
   "author": "threeify authors",
   "bugs": {
@@ -41,11 +46,6 @@
     "ts-jest": "^29.0.3",
     "ts-jest-resolver": "^2.0.0",
     "typescript": "4.8.4"
-  },
-  "scripts": {
-    "build": "glsl-transpiler && tsc --build",
-    "watch": "glsl-transpiler --watch & tsc --build  --watch --preserveWatchOutput",
-    "test": "jest ./src"
   },
   "dependencies": {
 

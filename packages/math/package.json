@@ -3,12 +3,26 @@
   "description": "Computer graphics oriented, High performance, tree-shakeable, TypeScript 3D vector math library.",
   "version": "4.0.3",
   "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
+  "sideEffects": false,
+  "exports": {
+    "types": "./dist/math.d.ts",
+    "require": "./dist/math.cjs",
+    "default": "./dist/math.modern.js"
+  },
+  "types": "./dist/math.d.ts",
+  "main": "./dist/math.cjs",
+  "module": "./dist/math.modern.js",
+  "source": "./src/math.ts",
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "node >= 14"
   ],
+  "scripts": {
+    "build": "glsl-transpiler && microbundle --format modern,cjs --define PACKAGE_VERSION=$npm_package_version",
+    "watch": "glsl-transpiler --watch & microbundle watch --format modern,cjs --define PACKAGE_VERSION=$npm_package_version",
+    "watch:debug": "glsl-transpiler --watch & microbundle watch --format modern,cjs --define PACKAGE_VERSION=$npm_package_version --no-compress"
+  },
   "keywords": [
     "threeify",
     "computer graphics",
@@ -26,11 +40,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/bhouston/threeify"
-  },
-  "scripts": {
-    "build": "tsc --build",
-    "watch": "tsc --build  --watch --preserveWatchOutput",
-    "test": "jest ./src"
   },
   "devDependencies": {
     "@types/jest": "^29.1.1",

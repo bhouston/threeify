@@ -1,6 +1,11 @@
 import { Color4 } from '@threeify/math';
 
-import { ArrayImage, DataType, PixelEncoding, Uint8ArrayImage } from '../..';
+import {
+  ArrayImage,
+  DataType,
+  PixelEncoding,
+  Uint8ArrayImage
+} from '../../core';
 
 export function createSolidColorImageData(
   color: Color4,
