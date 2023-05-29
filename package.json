@@ -50,7 +50,6 @@
     "@types/jest": "^29.1.1",
     "@types/offscreencanvas": "^2019.7.0",
     "@types/react-dom": "^18.0.10",
-    "@types/three": "^0.149.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -64,8 +63,7 @@
     "microbundle": "^0.15.1",
     "prettier": "^2.7.1",
     "prettier-plugin-glsl": "^0.0.8",
-    "three": "^0.150.1",
-    "ts-jest": "^29.1.0",
+    "ts-jest": "^29.0.3",
     "ts-jest-resolver": "^2.0.0",
     "typedoc": "^0.23.15",
     "vite": "^4.1.4"
