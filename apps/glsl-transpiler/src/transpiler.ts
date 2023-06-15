@@ -15,7 +15,7 @@ import { promises as fsPromises } from 'node:fs';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { Options } from './options.js';
+import { Options } from './options';
 
 // matches with //  #pragma import <es-module-path or local-file-path>
 const importRegex = /^#pragma import "(?<path>[^\n"]+)"$/gm;
@@ -31,17 +31,13 @@ function pathToVariableName(path: string): string {
   return variableName;
 }
 
-export async function transpile(
+export async function transpileSource(
+  rootDir: string,
   glslSourceFileName: string,
-  typeScriptOutputFileName: string,
-  options: Options
-): Promise<void> {
+  glslSource: string
+): Promise<string> {
   // create a list of imports
   const importNamesToPaths: Map<string, string> = new Map();
-
-  // read the glsl file
-  //console.log('reading glsl source file', glslSourceFileName);
-  let glslSource = await fsPromises.readFile(glslSourceFileName, 'utf-8');
 
   // for each match of the import regex, add the import to the list of imports, and remove the import from the glsl source
   // and insert the expected variable into the javascript literal.
@@ -69,7 +65,7 @@ export async function transpile(
   if (glslSource.includes('#pragma once')) {
     // convert the import path to a variable name
     const includeGuardName = pathToVariableName(
-      glslSourceFileName.replace(options.rootDir, '')
+      glslSourceFileName.replace(rootDir, '')
     );
 
     const includeGuardPrefix = `#ifndef ${includeGuardName}\n#define ${includeGuardName}\n`;
@@ -91,7 +87,7 @@ export async function transpile(
   // add the imports
   importNamesToPaths.forEach((importPath, importName) => {
     if (importPath.includes('/dist/') || importPath.includes('@')) {
-      importPath += '.js';
+      importPath += '';
     }
     tsSource += `import ${importName} from '${importPath}';\n`;
   });
@@ -100,6 +96,28 @@ export async function transpile(
 
   // add the export
   tsSource += 'export default ' + jsLiteral + ';';
+
+  // get path from filename
+  return tsSource;
+}
+
+export async function transpileFile(
+  rootDir: string,
+  glslSourceFileName: string,
+  typeScriptOutputFileName: string
+): Promise<void> {
+  // create a list of imports
+  const importNamesToPaths: Map<string, string> = new Map();
+
+  // read the glsl file
+  //console.log('reading glsl source file', glslSourceFileName);
+  let glslSource = await fsPromises.readFile(glslSourceFileName, 'utf-8');
+
+  const tsSource = await transpileSource(
+    rootDir,
+    glslSourceFileName,
+    glslSource
+  );
 
   // get path from filename
   const outDir = path.dirname(typeScriptOutputFileName);

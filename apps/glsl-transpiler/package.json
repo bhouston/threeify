@@ -1,0 +1,25 @@
+{
+  "name": "@threeify/glsl-transpiler",
+  "description": "A glsl to JS module transpiler.",
+  "version": "4.0.2",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "source": "./src/index.ts",
+  "bin": "./bin/cli.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --format=esm --platform=node --sourcemap --outfile=dist/index.js",
+    "dev": "esbuild src/index.ts --format=esm --platform=node --sourcemap --outfile=dist/index.js --watch",
+    "types": "tsc --noEmit --watch"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/watch": "^1.0.3"
+  },
+  "dependencies": {
+    "commander": "^9.5.0",
+    "glob": "^8.0.3",
+    "make-dir": "^3.1.0",
+    "watch": "^0.13.0"
+  }
+}

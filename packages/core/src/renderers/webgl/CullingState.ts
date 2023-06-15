@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { ICloneable, IEquatable } from '../../core/types.js';
-import { GL } from './GL.js';
+import { ICloneable, IEquatable } from '../../core/types';
+import { GL } from './GL';
 
 // set: void gl.frontFace(mode);
 export enum WindingOrder {

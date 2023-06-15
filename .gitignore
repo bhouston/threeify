@@ -1,39 +1,11 @@
 node_modules
-# build files
 dist
-package-lock.json
-
-*.tgz
-# IDE & Docker related exclusions
-# Theiaide
-.theia
-# WebStrom
-.idea
-# docker environment variables
 .env
 
-
-bundle*.js
-bundle*.js.zip
-bundle.terserjs.zip
-*.zip
-www
-output.txt
 .DS_Store
 *.tsbuildinfo
-output2.txt
-.turbo
 
 assets/gltf-Sample-Models
 assets/three.js
 *.glsl.ts
-
-
-
-# yarn recommendations from here: https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+*.js.test

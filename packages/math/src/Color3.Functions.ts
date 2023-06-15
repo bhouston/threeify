@@ -1,12 +1,12 @@
-import { Color3 } from './Color3.js';
+import { Color3 } from './Color3';
 import {
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   saturate,
   toSafeString
-} from './Functions.js';
-import { Vec3 } from './Vec3.js';
+} from './Functions';
+import { Vec3 } from './Vec3';
 
 export function color3Equals(
   a: Color3,

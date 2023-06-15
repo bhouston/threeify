@@ -1,10 +1,10 @@
 import { Vec2 } from '@threeify/math';
 
-import { generateUUID } from '../../../core/generateUuid.js';
-import { ClearState } from '../ClearState.js';
-import { IResource } from '../IResource.js';
-import { RenderingContext } from '../RenderingContext.js';
-import { InternalFormat } from '../textures/InternalFormat.js';
+import { generateUUID } from '../../../core/generateUuid';
+import { ClearState } from '../ClearState';
+import { IResource } from '../IResource';
+import { RenderingContext } from '../RenderingContext';
+import { InternalFormat } from '../textures/InternalFormat';
 
 export class Renderbuffer implements IResource {
   public readonly id = generateUUID();

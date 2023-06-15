@@ -1,4 +1,4 @@
-import { Triangle3 } from './Triangle3.js';
+import { Triangle3 } from './Triangle3';
 import {
   crossFromCoplanarPoints,
   pointToBarycoords,
@@ -6,8 +6,8 @@ import {
   vec3Equals,
   vec3Length,
   vec3Normalize
-} from './Vec3.Functions.js';
-import { Vec3 } from './Vec3.js';
+} from './Vec3.Functions';
+import { Vec3 } from './Vec3';
 
 export function triangleDelta(a: Triangle3, b: Triangle3): number {
   return vec3Delta(a.a, b.a) && vec3Delta(a.b, b.b) && vec3Delta(a.c, b.c);

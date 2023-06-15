@@ -6,11 +6,11 @@
 // * @bhouston
 //
 
-import { Attribute } from '../../../geometry/Attribute.js';
-import { RenderingContext } from '../RenderingContext.js';
-import { Buffer } from './Buffer.js';
-import { BufferTarget } from './BufferTarget.js';
-import { ComponentType } from './ComponentType.js';
+import { Attribute } from '../../../geometry/Attribute';
+import { RenderingContext } from '../RenderingContext';
+import { Buffer } from './Buffer';
+import { BufferTarget } from './BufferTarget';
+import { ComponentType } from './ComponentType';
 
 export class BufferAccessor {
   constructor(

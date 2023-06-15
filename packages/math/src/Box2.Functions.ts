@@ -1,4 +1,4 @@
-import { Box2 } from './Box2.js';
+import { Box2 } from './Box2';
 import {
   vec2Add,
   vec2Clamp,
@@ -6,8 +6,8 @@ import {
   vec2Equals,
   vec2Max,
   vec2Min
-} from './Vec2.Functions.js';
-import { Vec2 } from './Vec2.js';
+} from './Vec2.Functions';
+import { Vec2 } from './Vec2';
 
 export function box2Equals(a: Box2, b: Box2): boolean {
   return vec2Equals(a.min, b.min) && vec2Equals(a.max, b.max);

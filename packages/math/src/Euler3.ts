@@ -1,4 +1,4 @@
-import { hashFloat4 } from './utils/hash.js';
+import { hashFloat4 } from './utils/hash';
 
 export enum EulerOrder3 {
   XYZ,

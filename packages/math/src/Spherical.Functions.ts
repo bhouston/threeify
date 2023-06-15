@@ -1,7 +1,7 @@
-import { clamp } from './Functions.js';
-import { Spherical } from './Spherical.js';
-import { vec3Length } from './Vec3.Functions.js';
-import { Vec3 } from './Vec3.js';
+import { clamp } from './Functions';
+import { Spherical } from './Spherical';
+import { vec3Length } from './Vec3.Functions';
+import { Vec3 } from './Vec3';
 
 export function makeSphericalFromVec3(
   v: Vec3,

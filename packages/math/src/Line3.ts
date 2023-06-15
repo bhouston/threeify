@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { hashFloat2 } from './utils/hash.js';
-import { Vec3 } from './Vec3.js';
+import { hashFloat2 } from './utils/hash';
+import { Vec3 } from './Vec3';
 
 export class Line3 {
   constructor(

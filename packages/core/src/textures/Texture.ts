@@ -5,19 +5,19 @@
 // * @bhouston
 //
 
-import { DataType } from '../renderers/webgl/textures/DataType.js';
+import { DataType } from '../renderers/webgl/textures/DataType';
 import {
   InternalFormat,
   internalFormatToDataType
-} from '../renderers/webgl/textures/InternalFormat.js';
-import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
-import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
-import { fetchImage } from './loaders/Image.js';
+} from '../renderers/webgl/textures/InternalFormat';
+import { TextureFilter } from '../renderers/webgl/textures/TextureFilter';
+import { TextureWrap } from '../renderers/webgl/textures/TextureWrap';
+import { fetchImage } from './loaders/Image';
 import {
   getTextureSourceSize,
   TextureSource,
   VirtualTexture
-} from './VirtualTexture.js';
+} from './VirtualTexture';
 export class Texture extends VirtualTexture {
   constructor(
     public image: TextureSource,

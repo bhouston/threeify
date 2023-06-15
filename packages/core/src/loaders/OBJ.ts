@@ -1,8 +1,8 @@
 import {
   makeFloat32Attribute,
   makeUint32Attribute
-} from '../geometry/Attribute.js';
-import { Geometry } from '../geometry/Geometry.js';
+} from '../geometry/Attribute';
+import { Geometry } from '../geometry/Geometry';
 
 export async function fetchOBJ(url: string): Promise<Geometry[]> {
   const response = await fetch(url);

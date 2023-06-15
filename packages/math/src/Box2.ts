@@ -1,5 +1,5 @@
-import { hashFloat2 } from './utils/hash.js';
-import { Vec2 } from './Vec2.js';
+import { hashFloat2 } from './utils/hash';
+import { Vec2 } from './Vec2';
 
 export class Box2 {
   constructor(

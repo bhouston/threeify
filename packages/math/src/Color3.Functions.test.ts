@@ -1,5 +1,5 @@
-import { color3Add, color3Equals, hexToColor3 } from './Color3.Functions.js';
-import { Color3 } from './Color3.js';
+import { color3Add, color3Equals, hexToColor3 } from './Color3.Functions';
+import { Color3 } from './Color3';
 
 describe('Color Functions', () => {
   test('color3Equals', () => {

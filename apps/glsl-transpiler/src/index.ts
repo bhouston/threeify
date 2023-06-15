@@ -7,8 +7,8 @@ import path from 'node:path';
 import glob from 'glob';
 import watch from 'watch';
 
-import { getOptions } from './options.js';
-import { transpile } from './transpiler.js';
+import { getOptions } from './options';
+import { transpile, transpileFile } from './transpiler';
 
 function throttle<T extends (...args: any[]) => any>(
   callback: T,
@@ -76,7 +76,7 @@ async function main() {
         const src = path.join(rootDir, file);
         const dest = path.join(outDir, file) + '.ts';
         //console.log(`transpiling ${src} to ${dest}`);
-        transpile(src, dest, options);
+        transpileFile(options.rootDir, src, dest);
       }
     }, 0);
 
@@ -88,5 +88,3 @@ async function main() {
     });
   }
 }
-
-main();

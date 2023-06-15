@@ -9,7 +9,7 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { IDisposable } from '../core/types.js';
+import { IDisposable } from '../core/types';
 
 const zAxis = new Vec3(0, 0, 1);
 // - PI/2 around the x-axis

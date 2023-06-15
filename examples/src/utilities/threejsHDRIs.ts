@@ -14,6 +14,6 @@ export enum ThreeJSHRDI {
 export function getThreeJSHDRIUrl(image: ThreeJSHRDI): string {
   const imageName = ThreeJSHRDI[image];
   const rootPath = `https://raw.githubusercontent.com/mrdoob/three.js/master`;
-  //const rootPath = '/assets/three.js';
+  //const rootPath = '/assets/three';
   return `${rootPath}/examples/textures/equirectangular/${imageName}.hdr`;
 }

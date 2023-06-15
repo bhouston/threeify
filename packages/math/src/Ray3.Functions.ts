@@ -1,7 +1,7 @@
-import { Mat4 } from './Mat4.js';
-import { planePointDistance } from './Plane.Functions.js';
-import { Plane } from './Plane.js';
-import { Ray3 } from './Ray3.js';
+import { Mat4 } from './Mat4';
+import { planePointDistance } from './Plane.Functions';
+import { Plane } from './Plane';
+import { Ray3 } from './Ray3';
 import {
   mat4TransformNormal3,
   mat4TransformVec3,
@@ -11,8 +11,8 @@ import {
   vec3MultiplyByScalar,
   vec3Normalize,
   vec3Subtract
-} from './Vec3.Functions.js';
-import { Vec3 } from './Vec3.js';
+} from './Vec3.Functions';
+import { Vec3 } from './Vec3';
 
 export function ray3Equals(a: Ray3, b: Ray3): boolean {
   return vec3Equals(a.origin, b.origin) && vec3Equals(a.direction, b.direction);

@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { GL } from '../GL.js';
+import { GL } from '../GL';
 
 export enum TextureWrap {
   MirroredRepeat = GL.MIRRORED_REPEAT,
