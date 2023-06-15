@@ -7,8 +7,8 @@
   "module": "./dist/index.js",
   "source": "./src/index.ts",
   "scripts": {
-    "build": "node build.mjs",
-    "dev": "node dev.mjs",
+    "build": "tsc",
+    "dev": "tsc --watch",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
   "devDependencies": {
