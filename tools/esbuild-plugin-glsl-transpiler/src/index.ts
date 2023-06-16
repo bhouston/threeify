@@ -9,16 +9,12 @@ export const glslTranspiler = {
     build.onLoad(
       { filter: /\.glsl$/ },
       (args: esbuild.OnLoadArgs): esbuild.OnLoadResult => {
-        console.log('args.path', args.path);
-        const glslSource = fs.readFileSync(args.path, 'utf8');
-
-        const typescriptSource = transpileSource('', args.path, glslSource);
-
-        //fs.writeFileSync(args.path + '.js.test', typescriptSource, 'utf8');
-
         return {
-          // If you want TypeScript, change `contents` to: `export default \`${shaderSource}\`;`
-          contents: typescriptSource,
+          contents: transpileSource(
+            '',
+            args.path,
+            fs.readFileSync(args.path, 'utf8')
+          ),
           loader: 'js'
         };
       }
