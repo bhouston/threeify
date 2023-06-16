@@ -11,11 +11,11 @@ in vec2 v_uv0;
 in vec2 v_uv1;
 in vec2 v_uv2;
 
-#pragma import "@threeify/core/dist/shaders/debug/nanDetector.glsl"
+#pragma import "@threeify/core/src/shaders/debug/nanDetector.glsl"
 
 #define MAX_PUNCTUAL_LIGHTS (3)
-#pragma import "@threeify/core/dist/shaders/lighting/punctualUniforms.glsl"
-#pragma import "@threeify/core/dist/shaders/materials/physicalUniforms.glsl"
+#pragma import "@threeify/core/src/shaders/lighting/punctualUniforms.glsl"
+#pragma import "@threeify/core/src/shaders/materials/physicalUniforms.glsl"
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
@@ -31,23 +31,23 @@ uniform float exposure;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/src/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/diffuse/lambert.glsl"
 
-#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/specular/fresnel.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_ibl.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie_ibl.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/sheen/sheenMix.glsl"
-#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
-#pragma import "@threeify/core/dist/shaders/ao/ao.glsl"
-#pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
-#pragma import "@threeify/core/dist/shaders/materials/alpha_mode.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/transmission/transmission.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/specular/fresnel.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx_ibl.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/sheen/charlie_ibl.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/sheen/charlie.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/sheen/sheenMix.glsl"
+#pragma import "@threeify/core/src/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/src/shaders/ao/ao.glsl"
+#pragma import "@threeify/core/src/shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "@threeify/core/src/shaders/materials/alpha_mode.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/transmission/transmission.glsl"
 
-#pragma import "@threeify/core/dist/shaders/materials/debugOutputs.glsl"
-#pragma import "@threeify/core/dist/shaders/materials/physicalDebugOutputs.glsl"
+#pragma import "@threeify/core/src/shaders/materials/debugOutputs.glsl"
+#pragma import "@threeify/core/src/shaders/materials/physicalDebugOutputs.glsl"
 
 void main() {
   vec2 uvs[NUM_UV_CHANNELS];
@@ -96,12 +96,11 @@ void main() {
   );
   DEBUG_OUTPUT(31, normalToRgb(viewClearcoatNormal));
 
-  if((outputTransformFlags & 0x8) != 0) {
-    if( material.clearcoatFactor > 0.0 ) {
-      outputColor.rgb = normalToRgb( viewClearcoatNormal );
-    }
-    else {
-      outputColor.rgb = normalToRgb( viewNormal );
+  if ((outputTransformFlags & 0x8) != 0) {
+    if (material.clearcoatFactor > 0.0) {
+      outputColor.rgb = normalToRgb(viewClearcoatNormal);
+    } else {
+      outputColor.rgb = normalToRgb(viewNormal);
     }
     outputColor.a = 1.0;
     return;
@@ -129,17 +128,17 @@ void main() {
 
   vec3 transmission_btdf = vec3(0.0);
 
-  if (material.transmission > 0. || true ) {
+  if (material.transmission > 0.0 || true) {
     DEBUG_OUTPUT(35, normalToRgb(viewViewDirection));
     vec3 worldViewDirection = mat4TransformDirection(
       viewToWorld,
       viewViewDirection
     );
-  
+
     DEBUG_OUTPUT(36, normalToRgb(worldViewDirection));
 
     vec3 worldNormal = mat4TransformDirection(viewToWorld, viewNormal);
-    
+
     vec3 transmissionRay = getVolumeTransmissionRay(
       worldNormal,
       worldViewDirection,
@@ -325,7 +324,7 @@ void main() {
 
     outgoingRadiance += indirect_brdf;
   }
-   
+
   DEBUG_OUTPUT(70, outgoingRadiance);
 
   // note: this for loop pattern is faster than using numPunctualLights as a loop condition
@@ -395,7 +394,6 @@ void main() {
     );
     DEBUG_OUTPUT(59, direct_brdf);
 
-
     // sheen
     //  if (material.sheenColor != vec3(0.)) {
     vec3 sheen_brdf =
@@ -446,7 +444,6 @@ void main() {
     outgoingRadiance += direct_brdf;
   }
 
-
   DEBUG_OUTPUT(64, outgoingRadiance);
   vec3 emissive_brdf = material.emissive;
 
@@ -475,11 +472,9 @@ void main() {
 
   DEBUG_OUTPUT(69, material.alpha);
 
-
-  DEBUG_OUTPUT(0, premultipliedAlpha );
+  DEBUG_OUTPUT(0, premultipliedAlpha);
 
   outputColor.rgb = premultipliedAlpha;
   outputColor.a = material.alpha;
-
 
 }

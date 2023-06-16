@@ -6,8 +6,8 @@ in vec2 v_uv;
 uniform samplerCube envCubeMap;
 uniform int faceIndex;
 
-#pragma import "@threeify/core/dist/shaders/cubemaps/cubeFaces.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambertSampler.glsl"
+#pragma import "@threeify/core/src/shaders/cubemaps/cubeFaces.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/diffuse/lambertSampler.glsl"
 
 out vec4 outputColor;
 

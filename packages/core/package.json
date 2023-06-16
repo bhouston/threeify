@@ -10,15 +10,16 @@
     ".": {
       "import": "./dist/index.js"
     },
-    "./dist/*": "./src/*"
+    "./dist/*": "./dist/*",
+    "./src/*": "./src/*"
   },
   "files": [
     "dist",
     "src"
   ],
   "scripts": {
-    "build": "builder src/index.ts",
-    "dev": "builder src/index.ts --watch",
+    "build": "builder src/index.ts --bundle",
+    "dev": "builder src/index.ts --bundle --watch",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
   "dependencies": {

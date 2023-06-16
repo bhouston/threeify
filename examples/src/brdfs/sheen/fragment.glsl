@@ -13,13 +13,13 @@ uniform float sheenRoughness;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/dist/shaders/lighting/punctual.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/ambient/basic.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx.glsl"
-#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie.glsl"
-#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/src/shaders/lighting/punctual.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/ambient/basic.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx.glsl"
+#pragma import "@threeify/core/src/shaders/brdfs/sheen/charlie.glsl"
+#pragma import "@threeify/core/src/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/src/shaders/microgeometry/tangentSpace.glsl"
 
 void main() {
   vec3 albedo = vec3(0.0, 0.0, 1.0);
