@@ -29,8 +29,8 @@
     "test": "jest"
   },
   "workspaces": [
+    "tools/*",
     "packages/*",
-    "apps/*",
     "examples"
   ],
   "dependencies": {

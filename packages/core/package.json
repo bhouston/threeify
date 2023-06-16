@@ -6,12 +6,19 @@
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
   "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./dist/*": "./src/*"
+  },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "node ../../tools/scripts/build.mjs src/index.ts",
+    "dev": "node ../../tools/scripts/dev.mjs src/index.ts",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
   "dependencies": {
