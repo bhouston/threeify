@@ -7,8 +7,8 @@
   "module": "./dist/index.js",
   "source": "./src/index.ts",
   "scripts": {
-    "build": "builder src/index.ts --bundle",
-    "dev": "builder src/index.ts --bundle --watch",
+    "build": "threeify-build src/index.ts --bundle",
+    "dev": "threeify-build src/index.ts --bundle --watch",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
   "dependencies": {
@@ -16,6 +16,6 @@
     "@threeify/math": "*"
   },
   "devDependencies": {
-    "builder": "*"
+    "@threeify/build": "*"
   }
 }

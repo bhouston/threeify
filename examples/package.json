@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "builder src/**/index.ts --bundle --iife",
-    "dev": "builder src/**/index.ts --bundle --serve --iife",
+    "build": "threeify-build src/**/index.ts --bundle --optimize",
+    "dev": "threeify-build src/**/index.ts --bundle --serve",
     "types": "tsc --noEmit --watch"
   },
   "dependencies": {
@@ -18,6 +18,6 @@
     "@threeify/scene": "*"
   },
   "devDependencies": {
-    "builder": "*"
+    "@threeify/build": "*"
   }
 }
