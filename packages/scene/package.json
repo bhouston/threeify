@@ -7,13 +7,12 @@
   "module": "./dist/index.js",
   "source": "./src/index.ts",
   "scripts": {
-    "build": "esbuild src/index.ts --format=esm --bundle --sourcemap --outfile=dist/index.js",
-    "dev": "esbuild src/index.ts --format=esm --bundle --sourcemap --outfile=dist/index.js --watch",
+    "build": "tsc",
+    "dev": "tsc --watch",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
   "devDependencies": {
-    "@types/draco3dgltf": "^1.4.0",
-    "@threeify/esbuild-plugin-glsl-transpiler": "*"
+    "@types/draco3dgltf": "^1.4.0"
   },
   "dependencies": {
     "@threeify/core": "*",

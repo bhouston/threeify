@@ -8,8 +8,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "glsl-transpiler && tsc --build",
-    "watch": "glsl-transpiler --watch && tsc --build  --watch --preserveWatchOutput"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "types": "tsc --noEmit --watch"
   },
   "dependencies": {
     "@threeify/core": "*",

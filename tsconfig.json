@@ -16,6 +16,7 @@
     "stripInternal": true,
     "typeRoots": ["node_modules/@types"],
     "resolveJsonModule": true,
+    "sourceMap": true,
 
     // Components of "strict" mode.
     "alwaysStrict": true,

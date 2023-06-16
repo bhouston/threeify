@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "dev": "lerna run watch --parallel --stream",
+    "dev": "lerna run dev --parallel --stream",
+    "types": "lerna run types --parallel --stream",
     "format": "prettier \"examples/{src,glsl}/**/*.{ts,json,glsl}\" \"packages/*/{src,glsl}/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest"
@@ -37,6 +38,7 @@
     "@gltf-transform/extensions": "^2.5.1",
     "@threeify/glsl-transpiler": "*",
     "@threeify/esbuild-plugin-glsl-transpiler": "*",
+    "@threeify/typescript-plugin-glsl-transpiler": "*",
     "typescript": "^4.9.5"
   },
   "devDependencies": {

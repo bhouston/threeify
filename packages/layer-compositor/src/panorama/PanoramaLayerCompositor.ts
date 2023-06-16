@@ -37,7 +37,7 @@ export class PanoramaLayerCompositor extends LayerCompositor {
   public angle = new Euler3(0, 0, 0, EulerOrder3.ZYX);
   public fov = 90;
   #sphereGeometry: BufferGeometry;
-  #sphereProgram: Program;
+  #sphereProgram: Program | undefined = undefined;
 
   constructor(canvas: HTMLCanvasElement) {
     super(canvas);
@@ -50,13 +50,19 @@ export class PanoramaLayerCompositor extends LayerCompositor {
       )
     );
     this.#sphereGeometry = geometryToBufferGeometry(this.context, sphere);
+  }
+
+  async init() {
     this.#sphereProgram = await shaderMaterialToProgram(
       this.context,
       new ShaderMaterial('panoramicLayerCompositor', vertex, fragment)
     );
   }
-
   render(): void {
+    const sphereProgram = this.#sphereProgram;
+    if (sphereProgram === undefined)
+      throw new Error('sphereProgram is undefined');
+
     this.renderId++;
     // console.log(`render id: ${this.renderId}`);
 
@@ -97,7 +103,7 @@ export class PanoramaLayerCompositor extends LayerCompositor {
     //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program: this.#sphereProgram,
+      program: sphereProgram,
       uniforms,
       bufferGeometry: this.#sphereGeometry,
       blendState: copySourceBlendState

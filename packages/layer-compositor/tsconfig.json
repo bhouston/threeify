@@ -3,6 +3,11 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "baseUrl": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "plugins": [
+      {
+        "transform": "@threeify/typescript-plugin-glsl-transpiler"
+      }
+    ]
   }
 }
