@@ -24,6 +24,7 @@
     "build": "lerna run build",
     "dev": "lerna run dev --parallel --stream",
     "types": "lerna run types --parallel --stream",
+    "clean": "rm -rf node_modules packages/*/node_modules examples/node_modules packages/*/dist examples/dist",
     "format": "prettier \"examples/{src,glsl}/**/*.{ts,json,glsl}\" \"packages/*/{src,glsl}/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest"
