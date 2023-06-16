@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "builder src/**/index.ts",
-    "dev": "builder src/**/index.ts --watch",
+    "build": "builder src/**/index.ts --bundle --iife",
+    "dev": "builder src/**/index.ts --bundle --serve --iife",
     "types": "tsc --noEmit --watch"
   },
   "dependencies": {
