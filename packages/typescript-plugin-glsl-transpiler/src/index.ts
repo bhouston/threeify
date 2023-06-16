@@ -19,15 +19,14 @@ function glslTransformer(context: ts.TransformationContext) {
         '_glsl.ts'
       );
       console.log('transpiling', sourceFile.fileName, 'to', newSourceFileName);
-      sourceFile.text = typescriptSource;
-      /*
+
       const transformedSourceFile = ts.createSourceFile(
         newSourceFileName,
         typescriptSource,
         ts.ScriptTarget.Latest,
         true
-      );*/
-      return sourceFile;
+      );
+      return transformedSourceFile;
     }
     return sourceFile;
   };
