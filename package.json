@@ -36,9 +36,6 @@
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
     "@gltf-transform/extensions": "^2.5.1",
-    "@threeify/glsl-transpiler": "*",
-    "@threeify/esbuild-plugin-glsl-transpiler": "*",
-    "@threeify/typescript-plugin-glsl-transpiler": "*",
     "typescript": "^4.9.5"
   },
   "devDependencies": {

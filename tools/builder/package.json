@@ -1,0 +1,19 @@
+{
+  "name": "builder",
+  "version": "4.0.2",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "bin": "./bin/cli.js",
+  "scripts": {
+    "build": "esbuild src/index.ts  --platform=node --format=esm --sourcemap --outfile=dist/index.js",
+    "dev": "esbuild src/index.ts --platform=node --format=esm --sourcemap --outfile=dist/index.js --watch",
+    "types": "tsc --emitDeclarationOnly --outDir dist --watch"
+  },
+  "devDependencies": {
+    "@threeify/esbuild-plugin-glsl-transpiler": "*",
+    "glob": "^10.2.7"
+  }
+}

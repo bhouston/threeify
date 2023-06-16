@@ -8,13 +8,16 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ../tools/scripts/build.mjs src/**/index.ts",
-    "dev": "node ../tools/scripts/dev.mjs src/**/index.ts",
+    "build": "builder src/**/index.ts",
+    "dev": "builder src/**/index.ts --watch",
     "types": "tsc --noEmit --watch"
   },
   "dependencies": {
     "@threeify/core": "*",
     "@threeify/math": "*",
     "@threeify/scene": "*"
+  },
+  "devDependencies": {
+    "builder": "*"
   }
 }
