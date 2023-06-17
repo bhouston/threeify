@@ -1,9 +1,8 @@
 {
   "slug": "directional_light",
   "theme": "dark",
-  "en": {
-    "name": "Directional Light",
-    "description": "A directional light is represented by a direction and an irradiance",
-    "keywords": ["light", "directional", "punctual"]
-  }
+
+  "name": "Directional Light",
+  "description": "A directional light is represented by a direction and an irradiance",
+  "keywords": ["light", "directional", "punctual"]
 }

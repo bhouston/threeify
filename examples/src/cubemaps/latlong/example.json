@@ -1,9 +1,8 @@
 {
   "slug": "cubemap_latlong",
   "extensions": ["EXT_shader_texture_lod"],
-  "en": {
-    "name": "Cube Map from Equirectangular Map",
-    "description": "This loads a latlong map (AKA lat-long map) and renders it to the faces of a cube map.",
-    "keywords": ["render-to-texture", "cubemap", "latlong"]
-  }
+
+  "name": "Cube Map from Equirectangular Map",
+  "description": "This loads a latlong map (AKA lat-long map) and renders it to the faces of a cube map.",
+  "keywords": ["render-to-texture", "cubemap", "latlong"]
 }

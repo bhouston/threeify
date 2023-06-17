@@ -1,8 +1,7 @@
 {
   "slug": "depth_texture",
-  "en": {
-    "name": "Depth Texture",
-    "description": "A simple test of rendering to a depth texture framebuffer attachment and then accessing that texture (as an albedo map on geometry which is then rendered to screen.)",
-    "keywords": ["basics", "render-to-texture", "depth-texture", "framebuffer"]
-  }
+
+  "name": "Depth Texture",
+  "description": "A simple test of rendering to a depth texture framebuffer attachment and then accessing that texture (as an albedo map on geometry which is then rendered to screen.)",
+  "keywords": ["basics", "render-to-texture", "depth-texture", "framebuffer"]
 }

@@ -1,8 +1,7 @@
 {
   "slug": "interaction_device_orientation",
-  "en": {
-    "name": "Device Orientation",
-    "description": "Click once on the screen to active.  The cube moves based on your devices orientation.",
-    "keywords": ["interaction", "deviceorientation", "orientation"]
-  }
+
+  "name": "Device Orientation",
+  "description": "Click once on the screen to active.  The cube moves based on your devices orientation.",
+  "keywords": ["interaction", "deviceorientation", "orientation"]
 }

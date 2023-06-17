@@ -1,8 +1,7 @@
 {
   "slug": "animated_uniforms",
-  "en": {
-    "name": "Animated Uniforms",
-    "description": "A simple test of animated uniforms.",
-    "keywords": ["basics", "uniforms", "direct"]
-  }
+
+  "name": "Animated Uniforms",
+  "description": "A simple test of animated uniforms.",
+  "keywords": ["basics", "uniforms", "direct"]
 }

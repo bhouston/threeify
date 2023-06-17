@@ -1,8 +1,7 @@
 {
   "slug": "cubemap_render",
-  "en": {
-    "name": "Render to Cube Map Textures",
-    "description": "Rendering to the faces of a cube map on each frame.",
-    "keywords": ["render-to-texture", "cubemap"]
-  }
+
+  "name": "Render to Cube Map Textures",
+  "description": "Rendering to the faces of a cube map on each frame.",
+  "keywords": ["render-to-texture", "cubemap"]
 }

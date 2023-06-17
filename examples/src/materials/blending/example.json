@@ -1,8 +1,7 @@
 {
   "slug": "material_blend_states",
-  "en": {
-    "name": "Blend States & Premultiplied Alpha",
-    "description": "Columns are blend states, rows are premultipled alpha.",
-    "keywords": ["material", "premultiplied-alpha", "blending"]
-  }
+
+  "name": "Blend States & Premultiplied Alpha",
+  "description": "Columns are blend states, rows are premultipled alpha.",
+  "keywords": ["material", "premultiplied-alpha", "blending"]
 }

@@ -1,9 +1,8 @@
 {
   "slug": "glsl_unit_tests",
   "thumbnail": "manual",
-  "en": {
-    "name": "GLSL Unit Test Runner",
-    "description": "Runs all the glsl unit tests.",
-    "keywords": ["unit", "test", "glsl"]
-  }
+
+  "name": "GLSL Unit Test Runner",
+  "description": "Runs all the glsl unit tests.",
+  "keywords": ["unit", "test", "glsl"]
 }

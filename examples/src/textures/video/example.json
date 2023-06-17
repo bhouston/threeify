@@ -1,8 +1,7 @@
 {
   "slug": "video_texture",
-  "en": {
-    "name": "Getting Started - Video Texture",
-    "description": "Rendering a playing video into a texture.",
-    "keywords": ["basics", "video", "texture", "framebuffer"]
-  }
+
+  "name": "Getting Started - Video Texture",
+  "description": "Rendering a playing video into a texture.",
+  "keywords": ["basics", "video", "texture", "framebuffer"]
 }
