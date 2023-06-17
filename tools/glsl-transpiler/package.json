@@ -1,0 +1,23 @@
+{
+  "name": "@threeify/glsl-transpiler",
+  "version": "4.0.2",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "bin": {
+    "glsl-transpiler": "./bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/watch": "^1.0.3"
+  },
+  "dependencies": {
+    "commander": "^9.5.0",
+    "glob": "^8.0.3",
+    "make-dir": "^3.1.0",
+    "watch": "^0.13.0"
+  }
+}

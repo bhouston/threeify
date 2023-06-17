@@ -7,3 +7,4 @@ dist
 
 assets/gltf-Sample-Models
 assets/three.js
+*.glsl.ts

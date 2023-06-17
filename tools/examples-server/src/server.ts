@@ -11,7 +11,7 @@ import compress from 'koa-compress';
 import staticCache from 'koa-static-cache';
 
 import { HOST, PORT, EXAMPLES_ROOT, ASSETS_ROOT } from './config';
-import { getExampleDescriptions } from 'getExampleDescriptions';
+import { getExampleDescriptions } from './getExampleDescriptions';
 
 console.log('EXAMPLES_ROOT', EXAMPLES_ROOT);
 console.log('ASSETS_ROOT', ASSETS_ROOT);

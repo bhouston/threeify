@@ -3,6 +3,8 @@
   "include": ["src/**/*"],
   "compilerOptions": {
     "baseUrl": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "module": "commonjs",
+    "target": "es2016"
   }
 }

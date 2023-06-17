@@ -7,11 +7,11 @@
   "module": "./dist/index.js",
   "source": "./src/index.ts",
   "scripts": {
-    "build": "threeify-build src/index.ts",
-    "dev": "threeify-build src/index.ts --watch",
-    "types": "tsc --emitDeclarationOnly --outDir dist --watch"
+    "build": "glsl-transpiler && tsc",
+    "dev": "glsl-transpiler  -r src -o dist --watch & tsc --watch"
   },
   "devDependencies": {
-    "@threeify/build": "*"
+    "@threeify/build": "*",
+    "@threeify/glsl-transpiler": "*"
   }
 }
