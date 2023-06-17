@@ -7,8 +7,8 @@
 
 import { Vec2 } from '@threeify/math';
 
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
-import { Geometry } from '../Geometry.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
+import { Geometry } from '../Geometry';
 
 export function passGeometry(): Geometry {
   const min = new Vec2(-1, -1);

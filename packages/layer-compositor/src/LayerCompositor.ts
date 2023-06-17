@@ -119,7 +119,7 @@ export class LayerCompositor {
   layerImageCache: LayerImageMap = {};
   texImage2DPromiseCache: TexImage2DPromiseMap = {};
   #bufferGeometry: BufferGeometry;
-  #program: Program;
+  #program?: Program;
   imageSize = new Vec2(0, 0);
   imageFitMode: ImageFitMode = ImageFitMode.FitHeight;
   zoomScale = 1; // no zoom
@@ -151,7 +151,10 @@ export class LayerCompositor {
     const plane = planeGeometry(1, 1, 1, 1);
     transformGeometry(plane, translation3ToMat4(new Vec3(0.5, 0.5, 0)));
     this.#bufferGeometry = geometryToBufferGeometry(this.context, plane);
-    this.#program = shaderMaterialToProgram(
+  }
+
+  async init() {
+    this.#program = await shaderMaterialToProgram(
       this.context,
       new ShaderMaterial('layerComposite', vertexSource, fragmentSource)
     );
@@ -403,7 +406,7 @@ export class LayerCompositor {
     //console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
-      program: this.#program,
+      program: this.#program!,
       uniforms,
       bufferGeometry: this.#bufferGeometry,
       blendState: copySourceBlendState
@@ -504,7 +507,7 @@ export class LayerCompositor {
 
         renderBufferGeometry({
           framebuffer: this.offscreenReadFramebuffer!,
-          program: this.#program,
+          program: this.#program!,
           uniforms,
           bufferGeometry: this.#bufferGeometry,
           blendState: copySourceBlendState
@@ -542,7 +545,7 @@ export class LayerCompositor {
         // console.log(`drawing layer #${index}: ${layer.url} at ${layer.offset.x}, ${layer.offset.y}`);
         renderBufferGeometry({
           framebuffer: this.offscreenWriteFramebuffer!,
-          program: this.#program,
+          program: this.#program!,
           uniforms,
           bufferGeometry: this.#bufferGeometry,
           blendState: layer.blendModeBlendState

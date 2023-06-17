@@ -5,12 +5,12 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../../../core/generateUuid.js';
-import { GL } from '../GL.js';
-import { IResource } from '../IResource.js';
-import { RenderingContext } from '../RenderingContext.js';
-import { ShaderDefines } from './ShaderDefines.js';
-import { ShaderType } from './ShaderType.js';
+import { generateUUID } from '../../../core/generateUuid';
+import { GL } from '../GL';
+import { IResource } from '../IResource';
+import { RenderingContext } from '../RenderingContext';
+import { ShaderDefines } from './ShaderDefines';
+import { ShaderType } from './ShaderType';
 
 function insertLineNumbers(source: string): string {
   const inputLines = source.split('\n');

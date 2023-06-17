@@ -7,8 +7,8 @@
 
 import { Vec2 } from '@threeify/math';
 
-import { RenderingContext } from '../RenderingContext.js';
-import { VirtualFramebuffer } from './VirtualFramebuffer.js';
+import { RenderingContext } from '../RenderingContext';
+import { VirtualFramebuffer } from './VirtualFramebuffer';
 
 export class CanvasFramebuffer extends VirtualFramebuffer {
   public readonly canvas: HTMLCanvasElement | OffscreenCanvas;

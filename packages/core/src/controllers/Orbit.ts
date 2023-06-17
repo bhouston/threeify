@@ -1,6 +1,6 @@
 import { Euler3, euler3ToQuat, Quat, Vec2, vec2Subtract } from '@threeify/math';
 
-import { IDisposable } from '../core/types.js';
+import { IDisposable } from '../core/types';
 
 export class Orbit implements IDisposable {
   public lastPointerClient = new Vec2();

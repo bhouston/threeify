@@ -1,4 +1,4 @@
-import { Quat } from './Quat.js';
+import { Quat } from './Quat';
 
 describe('Quat', () => {
   test('constructor defaults', () => {

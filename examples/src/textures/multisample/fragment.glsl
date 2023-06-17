@@ -7,7 +7,7 @@ in vec2 v_uv;
 uniform sampler2D map;
 uniform vec3 viewLightPosition;
 
-#pragma import "@threeify/core/dist/shaders/math.glsl"
+#pragma import "@threeify/core/src/shaders/math.glsl"
 
 out vec4 outputColor;
 

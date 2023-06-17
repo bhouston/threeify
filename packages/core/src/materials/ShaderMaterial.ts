@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../core/generateUuid.js';
-import { IDisposable, IIdentifiable } from '../core/types.js';
+import { generateUUID } from '../core/generateUuid';
+import { IDisposable, IIdentifiable } from '../core/types';
 
 export class ShaderMaterial implements IIdentifiable, IDisposable {
   public readonly id: string = generateUUID();

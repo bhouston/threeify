@@ -169,7 +169,7 @@ export function uniformValueArrayToArrayBuffer(
     // case UniformType.FloatMat2x4:
     // case UniformType.FloatMat3x2:
     case UniformType.FloatMat3:
-      if (firstElement instanceof Mat4) {
+      if (firstElement instanceof Mat3) {
         return mat3ArrayToFloat32Array(value as Mat3[]);
       }
       break;

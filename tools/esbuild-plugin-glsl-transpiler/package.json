@@ -1,0 +1,11 @@
+{
+  "name": "@threeify/esbuild-plugin-glsl-transpiler",
+  "version": "4.0.2",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "types": "tsc --emitDeclarationOnly --outDir dist --watch"
+  }
+}

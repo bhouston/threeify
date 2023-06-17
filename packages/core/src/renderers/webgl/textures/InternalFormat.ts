@@ -1,6 +1,6 @@
-import { GL } from '../GL.js';
-import { DataType } from './DataType.js';
-import { PixelFormat } from './PixelFormat.js';
+import { GL } from '../GL';
+import { DataType } from './DataType';
+import { PixelFormat } from './PixelFormat';
 
 export enum InternalFormat {
   R8 = GL.R8,

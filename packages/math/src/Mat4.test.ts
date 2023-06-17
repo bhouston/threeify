@@ -1,6 +1,6 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the class Mat4
 
-import { Mat4 } from './Mat4.js';
+import { Mat4 } from './Mat4';
 
 describe('Mat4', () => {
   test('constructor', () => {

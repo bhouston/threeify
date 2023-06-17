@@ -28,7 +28,7 @@ import {
 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl';
-import { samplerMaterial } from './sampler/SamplerMaterial.js';
+import { samplerMaterial } from './sampler/SamplerMaterial';
 import vertexSource from './vertex.glsl';
 
 async function init(): Promise<void> {

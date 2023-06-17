@@ -7,15 +7,15 @@
 
 import { Vec2 } from '@threeify/math';
 
-import { generateUUID } from '../../../core/generateUuid.js';
-import { GL } from '../GL.js';
-import { IResource } from '../IResource.js';
-import { Renderbuffer } from '../renderbuffers/Renderbuffer.js';
-import { RenderingContext } from '../RenderingContext.js';
-import { TexImage2D } from '../textures/TexImage2D.js';
-import { TextureTarget } from '../textures/TextureTarget.js';
-import { Attachment } from './Attachment.js';
-import { VirtualFramebuffer } from './VirtualFramebuffer.js';
+import { generateUUID } from '../../../core/generateUuid';
+import { GL } from '../GL';
+import { IResource } from '../IResource';
+import { Renderbuffer } from '../renderbuffers/Renderbuffer';
+import { RenderingContext } from '../RenderingContext';
+import { TexImage2D } from '../textures/TexImage2D';
+import { TextureTarget } from '../textures/TextureTarget';
+import { Attachment } from './Attachment';
+import { VirtualFramebuffer } from './VirtualFramebuffer';
 
 export type AttachmentMap = {
   [point: number]: TexImage2D | Renderbuffer | undefined;

@@ -5,8 +5,8 @@
 // * @bhouston
 //
 
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
-import { Geometry } from '../Geometry.js';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
+import { Geometry } from '../Geometry';
 
 export function planeGeometry(
   width = 1,

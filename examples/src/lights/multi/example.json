@@ -1,9 +1,8 @@
 {
   "slug": "multi_light",
   "theme": "dark",
-  "en": {
-    "name": "Multiple Punctual Lights",
-    "description": "Multiple punctual lights are used: spot, point and directional.",
-    "keywords": ["light", "directional", "spot", "point", "punctual"]
-  }
+
+  "name": "Multiple Punctual Lights",
+  "description": "Multiple punctual lights are used: spot, point and directional.",
+  "keywords": ["light", "directional", "spot", "point", "punctual"]
 }

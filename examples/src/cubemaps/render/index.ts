@@ -22,9 +22,9 @@ import {
   Vec2,
   Vec3
 } from '@threeify/math';
-import { ColorHSL } from '@threeify/math/src/ColorHSL.js';
+import { ColorHSL } from '@threeify/math/src/ColorHSL';
 
-import { patternMaterial } from './pattern/PatternMaterial.js';
+import { patternMaterial } from './pattern/PatternMaterial';
 
 async function init(): Promise<void> {
   // TODO: Required because of a timing error on Threeify.org website.  Fix this.

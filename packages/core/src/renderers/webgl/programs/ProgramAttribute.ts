@@ -5,10 +5,10 @@
 // * @bhouston
 //
 
-import { BufferAccessor } from '../buffers/BufferAccessor.js';
-import { BufferTarget } from '../buffers/BufferTarget.js';
-import { GL } from '../GL.js';
-import { Program } from './Program.js';
+import { BufferAccessor } from '../buffers/BufferAccessor';
+import { BufferTarget } from '../buffers/BufferTarget';
+import { GL } from '../GL';
+import { Program } from './Program';
 
 export class ProgramAttribute {
   name: string;

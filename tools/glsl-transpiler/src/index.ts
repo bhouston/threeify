@@ -26,7 +26,7 @@ function throttle<T extends (...args: any[]) => any>(
   } as T;
 }
 
-async function main() {
+export async function main() {
   const options = await getOptions();
 
   options.projectDir = path.resolve(options.projectDir);
@@ -88,5 +88,3 @@ async function main() {
     });
   }
 }
-
-main();

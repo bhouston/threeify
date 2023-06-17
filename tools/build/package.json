@@ -1,0 +1,17 @@
+{
+  "name": "@threeify/build",
+  "version": "4.0.2",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "bin": {
+    "threeify-build": "./bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "@threeify/esbuild-plugin-glsl-transpiler": "*",
+    "glob": "^10.2.7"
+  }
+}

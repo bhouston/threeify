@@ -1,5 +1,5 @@
-import { RenderingContext } from '../RenderingContext.js';
-import { TexImage2D } from './TexImage2D.js';
+import { RenderingContext } from '../RenderingContext';
+import { TexImage2D } from './TexImage2D';
 
 export class TextureBindings {
   public texImage2DToUnitMap = new Map<string, number>();

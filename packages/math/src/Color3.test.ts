@@ -1,4 +1,4 @@
-import { Color3 } from './Color3.js';
+import { Color3 } from './Color3';
 
 describe('Color3', () => {
   test('constructor defaults', () => {

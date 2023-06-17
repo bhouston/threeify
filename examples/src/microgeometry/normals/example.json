@@ -1,9 +1,8 @@
 {
   "slug": "normal_map_microgeometry",
   "theme": "dark",
-  "en": {
-    "name": "Normal Map Microgeometry",
-    "description": "A normal map is used to simulate microgeometry that is not represented in the mesh.  This is a smooth sphere where the normal map adds the golf ball dimples.",
-    "keywords": ["microgeometry", "normal", "map", "perturbation", "mapping"]
-  }
+
+  "name": "Normal Map Microgeometry",
+  "description": "A normal map is used to simulate microgeometry that is not represented in the mesh.  This is a smooth sphere where the normal map adds the golf ball dimples.",
+  "keywords": ["microgeometry", "normal", "map", "perturbation", "mapping"]
 }

@@ -1,13 +1,13 @@
-import { arrayToMat3, mat3ToArray } from '../Mat3.Functions.js';
-import { Mat3 } from '../Mat3.js';
-import { arrayToMat4, mat4ToArray } from '../Mat4.Functions.js';
-import { Mat4 } from '../Mat4.js';
-import { arrayToQuat, quatToArray } from '../Quat.Functions.js';
-import { Quat } from '../Quat.js';
-import { arrayToVec2, vec2ToArray } from '../Vec2.Functions.js';
-import { Vec2 } from '../Vec2.js';
-import { arrayToVec3, vec3ToArray } from '../Vec3.Functions.js';
-import { Vec3 } from '../Vec3.js';
+import { arrayToMat3, mat3ToArray } from '../Mat3.Functions';
+import { Mat3 } from '../Mat3';
+import { arrayToMat4, mat4ToArray } from '../Mat4.Functions';
+import { Mat4 } from '../Mat4';
+import { arrayToQuat, quatToArray } from '../Quat.Functions';
+import { Quat } from '../Quat';
+import { arrayToVec2, vec2ToArray } from '../Vec2.Functions';
+import { Vec2 } from '../Vec2';
+import { arrayToVec3, vec3ToArray } from '../Vec3.Functions';
+import { Vec3 } from '../Vec3';
 
 type DataArray = ArrayBuffer | Float32Array;
 

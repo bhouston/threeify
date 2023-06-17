@@ -7,28 +7,28 @@
 
 import { Box2 } from '@threeify/math';
 
-import { PassGeometry } from '../../geometry/primitives/passGeometry.js';
-import { BlendState } from './BlendState.js';
+import { PassGeometry } from '../../geometry/primitives/passGeometry';
+import { BlendState } from './BlendState';
 import {
   BufferGeometry,
   geometryToBufferGeometry
-} from './buffers/BufferGeometry.js';
-import { BufferGeometryCache } from './caches/BufferGeometryCache.js';
-import { ProgramCache } from './caches/ProgramCache.js';
-import { TexImage2DCache } from './caches/TexImage2DCache.js';
-import { ClearState } from './ClearState.js';
-import { CullingState } from './CullingState.js';
-import { DepthTestState } from './DepthTestState.js';
-import { Extensions } from './extensions/Extensions.js';
-import { OptionalExtensions } from './extensions/OptionalExtensions.js';
-import { CanvasFramebuffer } from './framebuffers/CanvasFramebuffer.js';
-import { Framebuffer } from './framebuffers/Framebuffer.js';
-import { VirtualFramebuffer } from './framebuffers/VirtualFramebuffer.js';
-import { GL } from './GL.js';
-import { MaskState } from './MaskState.js';
-import { getParameterAsString } from './Parameters.js';
-import { Program } from './programs/Program.js';
-import { Resources } from './Resources.js';
+} from './buffers/BufferGeometry';
+import { BufferGeometryCache } from './caches/BufferGeometryCache';
+import { ProgramCache } from './caches/ProgramCache';
+import { TexImage2DCache } from './caches/TexImage2DCache';
+import { ClearState } from './ClearState';
+import { CullingState } from './CullingState';
+import { DepthTestState } from './DepthTestState';
+import { Extensions } from './extensions/Extensions';
+import { OptionalExtensions } from './extensions/OptionalExtensions';
+import { CanvasFramebuffer } from './framebuffers/CanvasFramebuffer';
+import { Framebuffer } from './framebuffers/Framebuffer';
+import { VirtualFramebuffer } from './framebuffers/VirtualFramebuffer';
+import { GL } from './GL';
+import { MaskState } from './MaskState';
+import { getParameterAsString } from './Parameters';
+import { Program } from './programs/Program';
+import { Resources } from './Resources';
 
 export class RenderingContext {
   public readonly gl: WebGL2RenderingContext;

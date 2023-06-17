@@ -1,8 +1,8 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the Mat4 function helpers
 
-import { EPSILON } from './Functions.js';
-import { mat3Equals, mat4ToMat3 } from './Mat3.Functions.js';
-import { Mat3 } from './Mat3.js';
+import { EPSILON } from './Functions';
+import { mat3Equals, mat4ToMat3 } from './Mat3.Functions';
+import { Mat3 } from './Mat3';
 import {
   basis3ToMat4,
   mat4Add,
@@ -23,11 +23,11 @@ import {
   scale3ToMat4,
   translation3ToMat4
 } from './Mat4.Functions';
-import { Mat4 } from './Mat4.js';
-import { quatNormalize } from './Quat.Functions.js';
-import { Quat } from './Quat.js';
-import { mat4TransformVec3 } from './Vec3.Functions.js';
-import { Vec3 } from './Vec3.js';
+import { Mat4 } from './Mat4';
+import { quatNormalize } from './Quat.Functions';
+import { Quat } from './Quat';
+import { mat4TransformVec3 } from './Vec3.Functions';
+import { Vec3 } from './Vec3';
 
 describe('Mat4 Functions', () => {
   test('mat4Zero', () => {

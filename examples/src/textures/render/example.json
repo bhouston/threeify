@@ -1,8 +1,7 @@
 {
   "slug": "render_to_texture",
-  "en": {
-    "name": "Render to Texture",
-    "description": "A simple test of rendering to a texture, and then using that texture as an albedo map on another geometry and writing that to screen.",
-    "keywords": ["basics", "render-to-texture", "framebuffer"]
-  }
+
+  "name": "Render to Texture",
+  "description": "A simple test of rendering to a texture, and then using that texture as an albedo map on another geometry and writing that to screen.",
+  "keywords": ["basics", "render-to-texture", "framebuffer"]
 }

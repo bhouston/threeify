@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import { promises as fsPromises } from 'node:fs';
 import path from 'node:path';
 import process, { exit } from 'node:process';
+import ts from 'typescript';
 
 import { Command } from 'commander';
 

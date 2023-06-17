@@ -9,7 +9,7 @@ uniform int mipCount;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/dist/shaders/color/encodings/rgbd.glsl"
+#pragma import "@threeify/core/src/shaders/color/encodings/rgbd.glsl"
 
 void main() {
   vec3 reflectDir = reflect(normalize(v_viewPosition), normalize(v_viewNormal));

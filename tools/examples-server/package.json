@@ -1,0 +1,36 @@
+{
+  "name": "@threeify/example-server",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "nodemon --exec 'npm run build && npm run start'"
+  },
+  "devDependencies": {
+    "@types/hapi__joi": "^17.1.9",
+    "@types/koa__cors": "^4.0.0",
+    "@types/koa__router": "^12.0.0",
+    "@types/koa-cache-control": "^2.0.3",
+    "@types/koa-cash": "^4.1.0",
+    "@types/koa-compress": "^4.0.3",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-mount": "^4.0.2",
+    "@types/koa-static": "^4.0.2",
+    "@types/koa-static-cache": "^5.1.1",
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@koa/router": "^12.0.0",
+    "dotenv": "^16.0.3",
+    "joi": "^17.9.2",
+    "koa": "^2.14.2",
+    "koa-compress": "^5.1.1",
+    "koa-logger": "^3.2.1",
+    "koa-mount": "^4.0.0",
+    "koa-proxies": "^0.12.3",
+    "koa-static": "^5.0.0",
+    "koa-static-cache": "^5.1.4"
+  }
+}

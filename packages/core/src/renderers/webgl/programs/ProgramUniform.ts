@@ -15,15 +15,15 @@ import {
   vec4ArrayToFloat32Array
 } from '@threeify/math';
 
-import { Buffer } from '../buffers/Buffer.js';
-import { RenderingContext } from '../RenderingContext.js';
-import { TexImage2D } from '../textures/TexImage2D.js';
-import { TextureBindings } from '../textures/TextureBindings.js';
-import { Program } from './Program.js';
-import { ProgramUniformBlock } from './ProgramUniformBlock.js';
-import { UniformType, uniformTypeInfo } from './UniformType.js';
-import { uniformValueToArrayBuffer } from './UniformValue.js';
-import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
+import { Buffer } from '../buffers/Buffer';
+import { RenderingContext } from '../RenderingContext';
+import { TexImage2D } from '../textures/TexImage2D';
+import { TextureBindings } from '../textures/TextureBindings';
+import { Program } from './Program';
+import { ProgramUniformBlock } from './ProgramUniformBlock';
+import { UniformType, uniformTypeInfo } from './UniformType';
+import { uniformValueToArrayBuffer } from './UniformValue';
+import { UniformPrimitiveValue, UniformValue } from './UniformValueMap';
 
 const regexUniformParser =
   /^((?<struct>\w+)(\[(?<structIndexer>\d+)])?\.)?(?<variable>\w+)(\[(?<variableIndexer>\d+)])?$/;
@@ -47,7 +47,7 @@ export class ProgramUniform {
   public readonly numElements: number;
   public readonly glType: number;
   public readonly sizeInBytes: number;
-  valueHashCode = 982345792759832448; // large random hashcode so to never get a hit
+  valueHashCode = 2345792759832448; // large random hash so to never get a hit
   textureUnit = -1;
 
   constructor(
@@ -188,47 +188,27 @@ export class ProgramUniform {
         break;
       case UniformType.FloatVec2:
         if (value instanceof Vec2) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform2f(this.glLocation, value.x, value.y);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniform2f(this.glLocation, value.x, value.y);
           return this;
         }
         break;
       case UniformType.FloatVec3:
         if (value instanceof Vec3) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform3f(this.glLocation, value.x, value.y, value.z);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniform3f(this.glLocation, value.x, value.y, value.z);
           return this;
         }
         if (value instanceof Color3) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform3f(this.glLocation, value.r, value.g, value.b);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniform3f(this.glLocation, value.r, value.g, value.b);
           return this;
         }
         break;
       case UniformType.FloatVec4:
         if (value instanceof Vec4) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform4f(this.glLocation, value.x, value.y, value.z, value.w);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniform4f(this.glLocation, value.x, value.y, value.z, value.w);
           return this;
         }
         if (value instanceof Color4) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniform4f(this.glLocation, value.r, value.g, value.b, value.a);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniform4f(this.glLocation, value.r, value.g, value.b, value.a);
           return this;
         }
         break;
@@ -239,11 +219,7 @@ export class ProgramUniform {
       // case UniformType.FloatMat3x2:
       case UniformType.FloatMat3:
         if (value instanceof Mat3) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniformMatrix3fv(this.glLocation, false, value.elements);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniformMatrix3fv(this.glLocation, false, value.elements);
           return this;
         }
         break;
@@ -252,11 +228,7 @@ export class ProgramUniform {
       // case UniformType.FloatMat4x3:
       case UniformType.FloatMat4:
         if (value instanceof Mat4) {
-          const hashCode = value.getHashCode();
-          if (hashCode !== this.valueHashCode) {
-            gl.uniformMatrix4fv(this.glLocation, false, value.elements);
-            this.valueHashCode = hashCode;
-          }
+          gl.uniformMatrix4fv(this.glLocation, false, value.elements);
           return this;
         }
         break;
@@ -294,7 +266,9 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.variableName}'`
+      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(
+        value
+      )}`
     );
   }
 
@@ -419,7 +393,9 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.variableName}'`
+      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(
+        value
+      )}`
     );
   }
 }

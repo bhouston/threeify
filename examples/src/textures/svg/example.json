@@ -1,8 +1,7 @@
 {
   "slug": "svg_textures",
-  "en": {
-    "name": "SVG Textures",
-    "description": "A simple test of rendering an svg file as texture.",
-    "keywords": ["basics", "textures", "direct", "svg"]
-  }
+
+  "name": "SVG Textures",
+  "description": "A simple test of rendering an svg file as texture.",
+  "keywords": ["basics", "textures", "direct", "svg"]
 }

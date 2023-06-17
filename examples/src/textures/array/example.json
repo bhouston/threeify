@@ -1,8 +1,7 @@
 {
   "slug": "arrays",
-  "en": {
-    "name": "Texture Arrays",
-    "description": "A simple test of texture arrays.",
-    "keywords": ["basics", "textures", "direct"]
-  }
+
+  "name": "Texture Arrays",
+  "description": "A simple test of texture arrays.",
+  "keywords": ["basics", "textures", "direct"]
 }

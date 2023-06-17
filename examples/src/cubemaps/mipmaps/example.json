@@ -1,9 +1,8 @@
 {
   "slug": "cubemap_mipmaps",
   "requiredExtensions": ["EXT_shader_texture_lod"],
-  "en": {
-    "name": "Cube Map Manual Mipmap Textures",
-    "description": "Load manually generated mipmaps into the cubemap.",
-    "keywords": ["texture", "cubemap", "mipmaps"]
-  }
+
+  "name": "Cube Map Manual Mipmap Textures",
+  "description": "Load manually generated mipmaps into the cubemap.",
+  "keywords": ["texture", "cubemap", "mipmaps"]
 }

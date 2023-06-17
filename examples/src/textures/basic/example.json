@@ -1,8 +1,7 @@
 {
   "slug": "textures",
-  "en": {
-    "name": "Textures",
-    "description": "A simple test of rendering a texture.",
-    "keywords": ["basics", "textures", "direct"]
-  }
+
+  "name": "Textures",
+  "description": "A simple test of rendering a texture.",
+  "keywords": ["basics", "textures", "direct"]
 }

@@ -5,30 +5,25 @@
       "@threeify/math": ["./packages/math/"],
       "@threeify/core": ["./packages/core/"],
       "@threeify/scene": ["./packages/scene/"],
-      "@threeify/layer-compositor": ["./packages//layer-compositor/"]
+      "@threeify/layer-compositor": ["./packages/layer-compositor/"]
     },
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
     "lib": ["es2020", "dom"],
-    "target": "es2020",
     "module": "ESNext",
+    "target": "ESNext",
     "declaration": true,
     "stripInternal": true,
     "typeRoots": ["node_modules/@types"],
+    "resolveJsonModule": true,
+    "sourceMap": true,
 
     // Components of "strict" mode.
     "alwaysStrict": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
-    "noImplicitThis": true
-
-    // Certain rules (noImplicitAny, strictNullChecks, strictPropertyInitialization)
-    // are tightend by sub-package tsconfig. Global tsconfig affects unit tests, and
-    // I consider those rules too strict for unit tests.
-  },
-  "include": [
-    "packages/*/src/**/*.ts",
-    // Included to allow TypeDoc to find `pages.ts` content.
-    "docs/*.ts"
-  ]
+    "noImplicitThis": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
+  }
 }
