@@ -3,38 +3,18 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "dev",
-          "types"
-        ]
+        "cacheableOperations": ["build", "types"]
       }
     }
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ]
-    },
-    "dev": {
-      "dependsOn": [
-        "^dev"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "types": {
-      "dependsOn": [
-        "^types"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ]
+      "dependsOn": ["^types"],
+      "outputs": ["{projectRoot}/dist"]
     }
   }
 }
