@@ -22,7 +22,8 @@ export const main = async () => {
     minify: optimize,
     format: format,
     treeShaking: optimize,
-    sourcemap: true,
+    target: 'esnext',
+    sourcemap: !optimize,
     outbase: 'src',
     outdir: 'dist',
     plugins: [glslTranspiler]

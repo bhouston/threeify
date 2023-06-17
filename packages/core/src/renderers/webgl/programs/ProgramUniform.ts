@@ -47,7 +47,7 @@ export class ProgramUniform {
   public readonly numElements: number;
   public readonly glType: number;
   public readonly sizeInBytes: number;
-  valueHashCode = 982345792759832448; // large random hashcode so to never get a hit
+  valueHashCode = 2345792759832448; // large random hash so to never get a hit
   textureUnit = -1;
 
   constructor(
@@ -266,7 +266,9 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.variableName}'`
+      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(
+        value
+      )}`
     );
   }
 
@@ -391,7 +393,9 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.variableName}'`
+      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(
+        value
+      )}`
     );
   }
 }
