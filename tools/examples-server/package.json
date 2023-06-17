@@ -1,5 +1,5 @@
 {
-  "name": "example-server",
+  "name": "@threeify/example-server",
   "version": "1.0.0",
   "main": "src/server.js",
   "scripts": {

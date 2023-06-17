@@ -31,7 +31,7 @@ export const main = async () => {
   if (serve) {
     const ctx = await esbuild.context(params);
     await ctx.serve({
-      port: 8000,
+      port: 8001,
       host: 'localhost',
       servedir: '.'
     } as esbuild.ServeOptions);

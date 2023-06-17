@@ -10,9 +10,11 @@ import mount from 'koa-mount';
 import compress from 'koa-compress';
 import staticCache from 'koa-static-cache';
 
-import { HOST, PORT, EXAMPLES_ROOT } from './config';
+import { HOST, PORT, EXAMPLES_ROOT, ASSETS_ROOT } from './config';
 import { getExampleDescriptions } from 'getExampleDescriptions';
 
+console.log('EXAMPLES_ROOT', EXAMPLES_ROOT);
+console.log('ASSETS_ROOT', ASSETS_ROOT);
 (async () => {
   console.log('Specifying Server...');
   const app = new Koa();
@@ -28,34 +30,18 @@ import { getExampleDescriptions } from 'getExampleDescriptions';
     })
   );
 
-  app.use(mount('/', serve(EXAMPLES_ROOT + '/public')));
+  app.use(mount('/assets', staticCache(ASSETS_ROOT, { maxAge: 60 })));
   app.use(mount('/js', serve(EXAMPLES_ROOT + '/dist')));
-  app.use(
-    mount('/assets', staticCache(EXAMPLES_ROOT + '../assets', { maxAge: 60 }))
-  );
+  app.use(mount('/', serve(EXAMPLES_ROOT + '/public')));
 
   router.get('/api/examples', async (ctx: Koa.Context) => {
-    const examples = await getExampleDescriptions('../../examples/src');
-    ctx.response.body = {
-      message: 'Hello World!',
-      random: crypto.randomBytes(16).toString('hex')
-    };
+    const examples = await getExampleDescriptions(EXAMPLES_ROOT + '/src');
+    ctx.response.body = examples;
     ctx.response.status = 200;
   });
 
   app.use(router.routes());
   app.use(router.allowedMethods());
-  app.use(serve('../../examples/public'));
-  if (process.env.NODE_ENV === 'production') {
-    app.use(serve('../../examples/public'));
-  } else {
-    app.use(
-      proxy('/', {
-        target: 'http://127.0.0.1:8001/',
-        changeOrigin: true
-      })
-    );
-  }
 
   console.log('Starting server...');
   const server = app.listen(PORT, () => {
