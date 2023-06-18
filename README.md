@@ -100,7 +100,7 @@ animate();
 
 ### Development
 
-#### Local
+#### Local Development Setup
 
 To run:
 
@@ -112,17 +112,27 @@ git clone git@github.com:bhouston/threeify.git
 
 Install dependencies
 
-```zsh
+```sh
 npm install
 ```
 
 Run in dev mode
 
-```zsh
+```sh
 npm run dev
 ```
 
-Load up the example server by visiting: http://localhost:8000
+Start example server
+
+```sh
+npm run start -w=examples-server
+```
+
+Build for production
+
+```sh
+npm run build
+```
 
 ## Contributors
 
