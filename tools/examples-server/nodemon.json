@@ -1,10 +1,9 @@
 {
   "verbose": true,
   "ignore": ["*.test.js"],
-  "watch": ["src/**/*"],
+  "watch": ["src/**/*", "dist/**/*"],
   "env": {
     "NODE_ENV": "development"
   },
-  "ext": "ts, js, json",
-  "delay": 500
+  "ext": "ts, js, json"
 }

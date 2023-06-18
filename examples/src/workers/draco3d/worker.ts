@@ -23,7 +23,7 @@ async function init() {
     'decode',
     (request: IBackgroundRequest): Promise<IBackgroundResponse> => {
       return new Promise<IBackgroundResponse>((resolve, reject) => {
-        const buffer = request.buffers[0];
+        // const buffer = request.buffers[0];
         /*  const decodeBuffer = new DracoDecoderModule.DecoderBuffer();
         decodeBuffer.Init(new Int8Array(buffer), buffer.byteLength);
         const geometryType = decoder.GetEncodedGeometryType(decodeBuffer);
