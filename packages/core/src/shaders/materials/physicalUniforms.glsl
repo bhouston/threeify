@@ -102,8 +102,10 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
     metallicSpecularRoughnessTextureAccessor,
     uvs
   );
-  material.specularRoughness =
-    max( specularRoughnessFactor * metallicSpecularRoughness.g, 0.03 );
+  material.specularRoughness = max(
+    specularRoughnessFactor * metallicSpecularRoughness.g,
+    0.03
+  );
   material.metallic = metallicFactor * metallicSpecularRoughness.b;
 
   #if defined(EMISSIVE)
@@ -156,8 +158,10 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
     uvs
   );
   material.clearcoatFactor = clearcoatFactor * clearcoatFactorRoughness.r;
-  material.clearcoatRoughness =
-    max( clearcoatRoughnessFactor * clearcoatFactorRoughness.g, 0.03 );
+  material.clearcoatRoughness = max(
+    clearcoatRoughnessFactor * clearcoatFactorRoughness.g,
+    0.03
+  );
   material.clearcoatNormal =
     vec3(clearcoatNormalScale, 1.0) *
     rgbToNormal(sampleTexture(clearcoatNormalTextureAccessor, uvs).rgb);
@@ -175,7 +179,10 @@ PhysicalMaterial readPhysicalMaterialFromUniforms(
   );
   material.sheenColor =
     sheenColorFactor * sRGBToLinear(sheenColorRoughness.rgb);
-  material.sheenRoughness = max( sheenRoughnessFactor * sheenColorRoughness.a, 0.03 );
+  material.sheenRoughness = max(
+    sheenRoughnessFactor * sheenColorRoughness.a,
+    0.03
+  );
   #else
   material.sheenColor = vec3(0.0);
   material.sheenRoughness = 0.5;
