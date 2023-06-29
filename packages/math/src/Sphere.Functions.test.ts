@@ -1,5 +1,4 @@
-import { Box3 } from './Box3';
-import { Sphere } from './Sphere';
+import { Box3 } from './Box3.js';
 import {
   box3ToSphere,
   sphereEmpty,
@@ -7,8 +6,9 @@ import {
   sphereScale,
   sphereTranslate,
   vec3ArrayToSphere
-} from './Sphere.Functions';
-import { Vec3 } from './Vec3';
+} from './Sphere.Functions.js';
+import { Sphere } from './Sphere.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Sphere Functions', () => {
   test('vec3ArrayToSphere', () => {

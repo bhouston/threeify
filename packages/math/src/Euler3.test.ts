@@ -1,7 +1,7 @@
-import { Euler3, EulerOrder3 } from './Euler3';
-import { euler3Delta, mat4ToEuler3, quatToEuler3 } from './Euler3.Functions';
-import { euler3ToMat4 } from './Mat4.Functions';
-import { euler3ToQuat } from './Quat.Functions';
+import { euler3Delta, mat4ToEuler3, quatToEuler3 } from './Euler3.Functions.js';
+import { Euler3, EulerOrder3 } from './Euler3.js';
+import { euler3ToMat4 } from './Mat4.Functions.js';
+import { euler3ToQuat } from './Quat.Functions.js';
 
 const testtestOrders = [
   EulerOrder3.XYZ,

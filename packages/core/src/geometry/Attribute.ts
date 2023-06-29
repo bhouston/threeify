@@ -8,8 +8,8 @@
 import {
   ComponentType,
   componentTypeSizeOf
-} from '../renderers/webgl/buffers/ComponentType';
-import { AttributeData } from './AttributeData';
+} from '../renderers/webgl/buffers/ComponentType.js';
+import { AttributeData } from './AttributeData.js';
 
 export class Attribute {
   public count: number;

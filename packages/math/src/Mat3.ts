@@ -5,7 +5,7 @@
 // where elements 2 and 5 would be translation in 2D, as they would multiplied
 // by the last virtual element of the 2D vector.
 
-import { hashFloatArray } from './utils/hash';
+import { hashFloatArray } from './utils/hash.js';
 
 export type Mat3JSON = number[];
 

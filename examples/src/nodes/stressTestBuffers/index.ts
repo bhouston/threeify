@@ -21,9 +21,9 @@ import {
   updateRenderCache
 } from '@threeify/scene';
 
-import { Stats } from '../../utilities/Stats';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+import { Stats } from '../../utilities/Stats.js';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 const stats = new Stats();
 

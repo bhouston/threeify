@@ -15,9 +15,9 @@ import {
   vec3Normalize
 } from '@threeify/math';
 
-import { makeFloat32Attribute } from '../Attribute';
-import { computeVertexNormals } from '../Geometry.Functions';
-import { Geometry } from '../Geometry';
+import { makeFloat32Attribute } from '../Attribute.js';
+import { computeVertexNormals } from '../Geometry.Functions.js';
+import { Geometry } from '../Geometry.js';
 
 export function tetrahedronGeometry(radius = 1, detail = 0): Geometry {
   const vertices = [1, 1, 1, -1, -1, 1, -1, 1, -1, 1, -1, -1];

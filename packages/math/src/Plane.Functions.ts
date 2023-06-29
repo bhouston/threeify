@@ -1,7 +1,7 @@
-import { delta } from './Functions';
-import { Plane } from './Plane';
-import { Sphere } from './Sphere';
-import { Triangle3 } from './Triangle3';
+import { delta } from './Functions.js';
+import { Plane } from './Plane.js';
+import { Sphere } from './Sphere.js';
+import { Triangle3 } from './Triangle3.js';
 import {
   crossFromCoplanarPoints as vec3CrossFromCoplanarPoints,
   vec3Add,
@@ -12,8 +12,8 @@ import {
   vec3MultiplyByScalar,
   vec3Negate,
   vec3Normalize
-} from './Vec3.Functions';
-import { Vec3 } from './Vec3';
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 export function planeDelta(a: Plane, b: Plane): number {
   return vec3Delta(a.normal, b.normal) + delta(a.constant, b.constant);

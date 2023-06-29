@@ -1,7 +1,6 @@
-import { clamp } from './Functions';
-import { Line3 } from './Line3';
-import { Mat4 } from './Mat4';
-import { Vec3 } from './Vec3';
+import { clamp } from './Functions.js';
+import { Line3 } from './Line3.js';
+import { Mat4 } from './Mat4.js';
 import {
   mat4TransformVec3,
   vec3Delta,
@@ -11,7 +10,8 @@ import {
   vec3Equals,
   vec3Lerp,
   vec3Subtract
-} from './Vec3.Functions';
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 export function line3Delta(a: Line3, b: Line3): number {
   return vec3Delta(a.start, b.start) + vec3Delta(a.end, b.end);

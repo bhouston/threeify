@@ -1,4 +1,3 @@
-import { Color4 } from './Color4';
 import {
   color4Add,
   color4Dot,
@@ -7,7 +6,8 @@ import {
   color4MultiplyByScalar,
   color4Negate,
   color4Subtract
-} from './Color4.Functions';
+} from './Color4.Functions.js';
+import { Color4 } from './Color4.js';
 
 const red = new Color4(1, 0, 0, 1);
 const blue = new Color4(0, 0, 1, 1);

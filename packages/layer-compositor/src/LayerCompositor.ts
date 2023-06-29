@@ -43,10 +43,10 @@ import {
   Vec3
 } from '@threeify/math';
 
-import fragmentSource from './fragment.glsl';
-import { copySourceBlendState, Layer } from './Layer';
-import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';
-import vertexSource from './vertex.glsl';
+import fragmentSource from './fragment.glsl.js';
+import { copySourceBlendState, Layer } from './Layer.js';
+import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv.js';
+import vertexSource from './vertex.glsl.js';
 
 function releaseImage(image: ImageBitmap | HTMLImageElement | undefined): void {
   if (isImageBitmapSupported() && image instanceof ImageBitmap) {

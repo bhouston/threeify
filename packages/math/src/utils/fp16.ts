@@ -1,7 +1,7 @@
 // from Three.js 2023-02-02
 // Fast Half Float Conversions, http://www.fox-toolkit.org/ftp/fasthalffloatconversion.pdf
 
-import { clamp } from '../Functions';
+import { clamp } from '../Functions.js';
 
 const lookupTables = (function () {
   // float32 to float16 helpers

@@ -9,7 +9,7 @@ import {
 import {
   IMaterialParameterProvider,
   MaterialParameters
-} from './MaterialParameters';
+} from './MaterialParameters.js';
 
 export interface IMaterialProps {
   id?: string;

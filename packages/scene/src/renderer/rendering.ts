@@ -23,8 +23,8 @@ import {
 } from '@threeify/core';
 import { Color3, vec2Ceil, vec2MultiplyByScalar } from '@threeify/math';
 
-import { MeshBatch } from './MeshBatch';
-import { RenderCache } from './RenderCache';
+import { MeshBatch } from './MeshBatch.js';
+import { RenderCache } from './RenderCache.js';
 
 export async function createRenderCache(context: RenderingContext) {
   const [copyPass, gaussianBlur, toneMapper] = await Promise.all([

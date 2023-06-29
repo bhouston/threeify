@@ -1,5 +1,5 @@
-import { Texture } from '../../textures/Texture';
-import { ResourceCache } from './ResourceCache';
+import { Texture } from '../../textures/Texture.js';
+import { ResourceCache } from './ResourceCache.js';
 
 export class TextureCache extends ResourceCache<Texture> {
   constructor() {

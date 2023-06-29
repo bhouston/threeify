@@ -1,31 +1,34 @@
 import { Vec2 } from '@threeify/math';
 
-import { ShaderMaterial } from '../../materials/ShaderMaterial';
-import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeMapTexture';
-import { Texture } from '../../textures/Texture';
-import { createCopyPass } from '../effects/copy/CopyPass';
-import { CullingState } from '../webgl/CullingState';
-import { Attachment } from '../webgl/framebuffers/Attachment';
-import { Framebuffer } from '../webgl/framebuffers/Framebuffer';
-import { renderPass } from '../webgl/framebuffers/VirtualFramebuffer';
-import { shaderMaterialToProgram } from '../webgl/programs/Program';
-import { RenderingContext } from '../webgl/RenderingContext';
+import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
+import {
+  cubeFaceTargets,
+  CubeMapTexture
+} from '../../textures/CubeMapTexture.js';
+import { Texture } from '../../textures/Texture.js';
+import { createCopyPass } from '../effects/copy/CopyPass.js';
+import { CullingState } from '../webgl/CullingState.js';
+import { Attachment } from '../webgl/framebuffers/Attachment.js';
+import { Framebuffer } from '../webgl/framebuffers/Framebuffer.js';
+import { renderPass } from '../webgl/framebuffers/VirtualFramebuffer.js';
+import { shaderMaterialToProgram } from '../webgl/programs/Program.js';
+import { RenderingContext } from '../webgl/RenderingContext.js';
 import {
   InternalFormat,
   internalFormatToDataType,
   internalFormatToPixelFormat
-} from '../webgl/textures/InternalFormat';
+} from '../webgl/textures/InternalFormat.js';
 import {
   TexImage2D,
   textureToTexImage2D as textureToTexImage2D
-} from '../webgl/textures/TexImage2D';
-import { TexParameters } from '../webgl/textures/TexParameters';
-import { TextureFilter } from '../webgl/textures/TextureFilter';
-import { TextureTarget } from '../webgl/textures/TextureTarget';
-import { TextureWrap } from '../webgl/textures/TextureWrap';
-import cubeFaceFragmentSource from './cubeFaces/fragment.glsl';
-import cubeFaceVertexSource from './cubeFaces/vertex.glsl';
-import { TextureEncoding } from './TextureEncoding';
+} from '../webgl/textures/TexImage2D.js';
+import { TexParameters } from '../webgl/textures/TexParameters.js';
+import { TextureFilter } from '../webgl/textures/TextureFilter.js';
+import { TextureTarget } from '../webgl/textures/TextureTarget.js';
+import { TextureWrap } from '../webgl/textures/TextureWrap.js';
+import cubeFaceFragmentSource from './cubeFaces/fragment.glsl.js';
+import cubeFaceVertexSource from './cubeFaces/vertex.glsl.js';
+import { TextureEncoding } from './TextureEncoding.js';
 
 export async function equirectangularTexImage2DToCubeMapTexImage2D(
   context: RenderingContext,

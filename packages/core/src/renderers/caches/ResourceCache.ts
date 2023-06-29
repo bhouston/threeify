@@ -1,6 +1,6 @@
-import { assert } from '../../core/assert';
-import { IDisposable } from '../../core/types';
-import { warnOnce } from '../../warnOnce';
+import { assert } from '../../core/assert.js';
+import { IDisposable } from '../../core/types.js';
+import { warnOnce } from '../../warnOnce.js';
 
 export class ResourceCacheEntry<T extends IDisposable> {
   constructor(public readonly promise: Promise<T>, public referenceCount = 0) {}

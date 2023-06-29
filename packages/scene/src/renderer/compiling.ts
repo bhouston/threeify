@@ -20,24 +20,24 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { MaterialParameters } from '../materials/MaterialParameters';
-import { PhysicalMaterial } from '../materials/PhysicalMaterial';
-import { CameraNode } from '../scene/cameras/CameraNode';
-import { DirectionalLight } from '../scene/lights/DirectionalLight';
-import { DomeLight } from '../scene/lights/DomeLight';
-import { Light } from '../scene/lights/Light';
-import { LightType } from '../scene/lights/LightType';
-import { PointLight } from '../scene/lights/PointLight';
-import { SpotLight } from '../scene/lights/SpotLight';
-import { MeshNode } from '../scene/Mesh';
-import { SceneNode } from '../scene/SceneNode';
-import { breadthFirstVisitor } from '../scene/Visitors';
-import { CameraUniforms } from './CameraUniforms';
-import { LightParameters } from './LightParameters';
-import { MeshBatch } from './MeshBatch';
-import { NodeUniforms } from './NodeUniforms';
-import { RenderCache } from './RenderCache';
-import { SceneTreeCache } from './SceneTreeCache';
+import { MaterialParameters } from '../materials/MaterialParameters.js';
+import { PhysicalMaterial } from '../materials/PhysicalMaterial.js';
+import { CameraNode } from '../scene/cameras/CameraNode.js';
+import { DirectionalLight } from '../scene/lights/DirectionalLight.js';
+import { DomeLight } from '../scene/lights/DomeLight.js';
+import { Light } from '../scene/lights/Light.js';
+import { LightType } from '../scene/lights/LightType.js';
+import { PointLight } from '../scene/lights/PointLight.js';
+import { SpotLight } from '../scene/lights/SpotLight.js';
+import { MeshNode } from '../scene/Mesh.js';
+import { SceneNode } from '../scene/SceneNode.js';
+import { breadthFirstVisitor } from '../scene/Visitors.js';
+import { CameraUniforms } from './CameraUniforms.js';
+import { LightParameters } from './LightParameters.js';
+import { MeshBatch } from './MeshBatch.js';
+import { NodeUniforms } from './NodeUniforms.js';
+import { RenderCache } from './RenderCache.js';
+import { SceneTreeCache } from './SceneTreeCache.js';
 
 export function updateDirtyNodes(
   sceneTreeCache: SceneTreeCache,

@@ -15,9 +15,9 @@ import {
   vec4ArrayToFloat32Array
 } from '@threeify/math';
 
-import { TexImage2D } from '../textures/TexImage2D';
-import { UniformType } from './UniformType';
-import { UniformPrimitiveValue, UniformValue } from './UniformValueMap';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { UniformType } from './UniformType.js';
+import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
 export function uniformValueToArrayBuffer(
   type: UniformType,

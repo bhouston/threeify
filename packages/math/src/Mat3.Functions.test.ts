@@ -1,4 +1,3 @@
-import { Mat3 } from './Mat3';
 import {
   basis3ToMat3,
   mat3Add,
@@ -12,10 +11,11 @@ import {
   mat3ToBasis3,
   mat3TransformPoint3,
   mat3Zero
-} from './Mat3.Functions';
-import { Mat4 } from './Mat4';
-import { mat3ToMat4, mat4Equals } from './Mat4.Functions';
-import { Vec3 } from './Vec3';
+} from './Mat3.Functions.js';
+import { Mat3 } from './Mat3.js';
+import { mat3ToMat4, mat4Equals } from './Mat4.Functions.js';
+import { Mat4 } from './Mat4.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Mat3 Functions', () => {
   test('mat3Zero', () => {

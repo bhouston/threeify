@@ -1,4 +1,4 @@
-import { hashFloat2 } from './utils/hash';
+import { hashFloat2 } from './utils/hash.js';
 
 export class Vec2 {
   static readonly NUM_COMPONENTS = 2;

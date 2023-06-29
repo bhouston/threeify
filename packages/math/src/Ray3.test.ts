@@ -1,5 +1,5 @@
-import { Ray3 } from './Ray3';
-import { Vec3 } from './Vec3';
+import { Ray3 } from './Ray3.js';
+import { Vec3 } from './Vec3.js';
 
 // test all functions on the Ray3 class
 describe('Ray3', () => {

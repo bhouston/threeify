@@ -5,7 +5,7 @@ import {
   sleep
 } from '@threeify/core';
 
-//import { DracoDecoderModule } from './draco3dgltf/draco_decoder';
+//import { DracoDecoderModule } from './draco3dgltf/draco_decoder.js';
 
 const backgroundWorker = new BackgroundWorker();
 

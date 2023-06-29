@@ -1,6 +1,6 @@
-import { Color3 } from './Color3';
-import { ColorHSV } from './ColorHSV';
-import { clamp, positiveModulo } from './Functions';
+import { Color3 } from './Color3.js';
+import { ColorHSV } from './ColorHSV.js';
+import { clamp, positiveModulo } from './Functions.js';
 
 export function hsvToColor3(hsv: ColorHSV, result = new Color3()): Color3 {
   const h = positiveModulo(hsv.h, 1);

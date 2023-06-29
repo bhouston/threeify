@@ -1,4 +1,3 @@
-import { Vec3 } from './Vec3';
 import {
   vec3Add,
   vec3Delta,
@@ -15,7 +14,8 @@ import {
   vec3Negate,
   vec3Normalize,
   vec3Subtract
-} from './Vec3.Functions';
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Vec3 Functions', () => {
   test('vec3Add', () => {

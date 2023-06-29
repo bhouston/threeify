@@ -11,11 +11,11 @@ in vec2 v_uv0;
 in vec2 v_uv1;
 in vec2 v_uv2;
 
-#pragma import "@threeify/core/src/shaders/debug/nanDetector.glsl"
+#pragma import "@threeify/core/dist/shaders/debug/nanDetector.glsl"
 
 #define MAX_PUNCTUAL_LIGHTS (3)
-#pragma import "@threeify/core/src/shaders/lighting/punctualUniforms.glsl"
-#pragma import "@threeify/core/src/shaders/materials/physicalUniforms.glsl"
+#pragma import "@threeify/core/dist/shaders/lighting/punctualUniforms.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/physicalUniforms.glsl"
 
 uniform mat4 localToWorld;
 uniform mat4 worldToView;
@@ -31,23 +31,23 @@ uniform float exposure;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/src/shaders/microgeometry/tangentSpace.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
 
-#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/specular/fresnel.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx_ibl.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/sheen/charlie_ibl.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/sheen/charlie.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/sheen/sheenMix.glsl"
-#pragma import "@threeify/core/src/shaders/math/mat4.glsl"
-#pragma import "@threeify/core/src/shaders/ao/ao.glsl"
-#pragma import "@threeify/core/src/shaders/color/tonemapping/acesfilmic.glsl"
-#pragma import "@threeify/core/src/shaders/materials/alpha_mode.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/transmission/transmission.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/fresnel.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_ibl.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie_ibl.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/sheen/charlie.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/sheen/sheenMix.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat4.glsl"
+#pragma import "@threeify/core/dist/shaders/ao/ao.glsl"
+#pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/alpha_mode.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/transmission/transmission.glsl"
 
-#pragma import "@threeify/core/src/shaders/materials/debugOutputs.glsl"
-#pragma import "@threeify/core/src/shaders/materials/physicalDebugOutputs.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/debugOutputs.glsl"
+#pragma import "@threeify/core/dist/shaders/materials/physicalDebugOutputs.glsl"
 
 void main() {
   vec2 uvs[NUM_UV_CHANNELS];

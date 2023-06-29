@@ -1,4 +1,4 @@
-import { hashFloat3 } from './utils/hash';
+import { hashFloat3 } from './utils/hash.js';
 
 export class Color3 {
   static readonly NUM_COMPONENTS = 3;

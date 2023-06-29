@@ -1,8 +1,8 @@
-import { Box3 } from './Box3';
-import { Mat4 } from './Mat4';
-import { sphereIsEmpty } from './Sphere.Functions';
-import { Sphere } from './Sphere';
-import { mat4TransformVec3 } from './Vec3.Functions';
+import { Box3 } from './Box3.js';
+import { Mat4 } from './Mat4.js';
+import { sphereIsEmpty } from './Sphere.Functions.js';
+import { Sphere } from './Sphere.js';
+import { mat4TransformVec3 } from './Vec3.Functions.js';
 import {
   vec3Add,
   vec3Clamp,
@@ -11,8 +11,8 @@ import {
   vec3Max,
   vec3Min,
   vec3Subtract
-} from './Vec3.Functions';
-import { Vec3 } from './Vec3';
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 /**
  * Calculates and returns the center point of the given box.

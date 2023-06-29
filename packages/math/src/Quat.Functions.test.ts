@@ -1,12 +1,12 @@
-import { Euler3, EulerOrder3 } from './Euler3';
-import { quatToEuler3 } from './Euler3.Functions';
+import { Euler3, EulerOrder3 } from './Euler3.js';
+import { quatToEuler3 } from './Euler3.Functions.js';
 import {
   euler3ToMat4,
   mat4Delta,
   mat4Multiply,
   quatToMat4
-} from './Mat4.Functions';
-import { Quat } from './Quat';
+} from './Mat4.Functions.js';
+import { Quat } from './Quat.js';
 import {
   euler3ToQuat,
   mat4ToQuat,
@@ -25,10 +25,10 @@ import {
   quatRotateTowards,
   quatSlerp,
   quatTransformPoint3 as quatTransformVec3
-} from './Quat.Functions';
-import { Vec3 } from './Vec3';
-import { mat4TransformVec3, vec3Delta } from './Vec3.Functions';
-import { Vec4 } from './Vec4';
+} from './Quat.Functions.js';
+import { Vec3 } from './Vec3.js';
+import { mat4TransformVec3, vec3Delta } from './Vec3.Functions.js';
+import { Vec4 } from './Vec4.js';
 
 const qX = quatNormalize(new Quat(1, 0, 0));
 const qY = quatNormalize(new Quat(0, 1, 0));

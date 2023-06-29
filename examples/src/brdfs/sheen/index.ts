@@ -20,8 +20,8 @@ import {
   Vec3
 } from '@threeify/math';
 
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 async function init(): Promise<void> {
   const [geometry] = await fetchOBJ('/assets/models/cloth/cloth.obj');

@@ -4,13 +4,13 @@ import {
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Functions';
-import { Mat3 } from './Mat3';
-import { Mat4 } from './Mat4';
-import { Quat } from './Quat';
-import { vec2Length } from './Vec2.Functions';
-import { Vec2 } from './Vec2';
-import { Vec3 } from './Vec3';
+} from './Functions.js';
+import { Mat3 } from './Mat3.js';
+import { Mat4 } from './Mat4.js';
+import { Quat } from './Quat.js';
+import { vec2Length } from './Vec2.Functions.js';
+import { Vec2 } from './Vec2.js';
+import { Vec3 } from './Vec3.js';
 
 export function mat3Delta(a: Mat3, b: Mat3): number {
   let deltaSum = 0;

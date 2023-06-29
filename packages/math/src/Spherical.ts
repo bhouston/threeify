@@ -5,7 +5,7 @@
 // * @bhouston
 //
 
-import { hashFloat3 } from './utils/hash';
+import { hashFloat3 } from './utils/hash.js';
 
 export class Spherical {
   constructor(public radius = 1, public phi = 0, public theta = 0) {}

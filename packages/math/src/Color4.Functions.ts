@@ -1,11 +1,11 @@
-import { Color4 } from './Color4';
+import { Color4 } from './Color4.js';
 import {
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Functions';
-import { clamp } from './Functions';
+} from './Functions.js';
+import { clamp } from './Functions.js';
 
 export function color4Equals(
   a: Color4,

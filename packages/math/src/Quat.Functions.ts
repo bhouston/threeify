@@ -1,16 +1,16 @@
-import { Euler3, EulerOrder3 } from './Euler3';
+import { Euler3, EulerOrder3 } from './Euler3.js';
 import {
   delta,
   EPSILON,
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Functions';
-import { mat4ToMat3 } from './Mat3.Functions';
-import { Mat3 } from './Mat3';
-import { Mat4 } from './Mat4';
-import { Quat } from './Quat';
-import { Vec3 } from './Vec3';
+} from './Functions.js';
+import { mat4ToMat3 } from './Mat3.Functions.js';
+import { Mat3 } from './Mat3.js';
+import { Mat4 } from './Mat4.js';
+import { Quat } from './Quat.js';
+import { Vec3 } from './Vec3.js';
 
 export function quatDelta(a: Quat, b: Quat): number {
   return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z) + delta(a.w, b.w);

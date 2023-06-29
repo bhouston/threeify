@@ -1,4 +1,3 @@
-import { Vec2 } from './Vec2';
 import {
   makeVec2Fill,
   makeVec2Fit,
@@ -17,7 +16,8 @@ import {
   vec2MultiplyByScalar,
   vec2Normalize,
   vec2Subtract
-} from './Vec2.Functions';
+} from './Vec2.Functions.js';
+import { Vec2 } from './Vec2.js';
 
 describe('Vec2 Functions', () => {
   test('vec2Delta', () => {

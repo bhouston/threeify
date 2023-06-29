@@ -13,13 +13,13 @@ import {
   UniformValueMap
 } from '@threeify/core';
 
-import { Material } from '../materials/Material';
-import { CameraNode } from '../scene/cameras/CameraNode';
-import { SceneNode } from '../scene/SceneNode';
-import { CameraUniforms } from './CameraUniforms';
-import { LightParameters } from './LightParameters';
-import { MeshBatch } from './MeshBatch';
-import { NodeUniforms } from './NodeUniforms';
+import { Material } from '../materials/Material.js';
+import { CameraNode } from '../scene/cameras/CameraNode.js';
+import { SceneNode } from '../scene/SceneNode.js';
+import { CameraUniforms } from './CameraUniforms.js';
+import { LightParameters } from './LightParameters.js';
+import { MeshBatch } from './MeshBatch.js';
+import { NodeUniforms } from './NodeUniforms.js';
 
 export class RenderCache {
   constructor(

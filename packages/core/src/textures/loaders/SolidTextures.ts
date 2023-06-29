@@ -1,7 +1,7 @@
 import { Color4 } from '@threeify/math';
 
-import { Texture } from '../Texture';
-import { createSolidColorImageData } from './ImageData';
+import { Texture } from '../Texture.js';
+import { createSolidColorImageData } from './ImageData.js';
 
 export class SolidTextures {
   // color

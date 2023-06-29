@@ -1,14 +1,14 @@
 import { CubeMapTexture, TexImage2D } from '@threeify/core';
 import { Color3, color3MultiplyByScalar, Vec3 } from '@threeify/math';
 
-import { DirectionalLight } from '../scene/lights/DirectionalLight';
-import { DomeLight } from '../scene/lights/DomeLight';
-import { Light } from '../scene/lights/Light';
-import { LightType } from '../scene/lights/LightType';
-import { PointLight } from '../scene/lights/PointLight';
-import { SpotLight } from '../scene/lights/SpotLight';
-import { SceneNode } from '../scene/SceneNode';
-import { depthFirstVisitor } from '../scene/Visitors';
+import { DirectionalLight } from '../scene/lights/DirectionalLight.js';
+import { DomeLight } from '../scene/lights/DomeLight.js';
+import { Light } from '../scene/lights/Light.js';
+import { LightType } from '../scene/lights/LightType.js';
+import { PointLight } from '../scene/lights/PointLight.js';
+import { SpotLight } from '../scene/lights/SpotLight.js';
+import { SceneNode } from '../scene/SceneNode.js';
+import { depthFirstVisitor } from '../scene/Visitors.js';
 
 export class PunctualLightUniforms {
   domeCubeMap?: CubeMapTexture | TexImage2D;

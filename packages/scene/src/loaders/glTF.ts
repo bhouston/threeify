@@ -36,10 +36,10 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { PhysicalMaterial } from '../materials/PhysicalMaterial';
-import { TextureAccessor } from '../materials/TextureAccessor';
-import { MeshNode } from '../scene/Mesh';
-import { SceneNode } from '../scene/SceneNode';
+import { PhysicalMaterial } from '../materials/PhysicalMaterial.js';
+import { TextureAccessor } from '../materials/TextureAccessor.js';
+import { MeshNode } from '../scene/Mesh.js';
+import { SceneNode } from '../scene/SceneNode.js';
 
 const semanticToThreeifyName: { [key: string]: string } = {
   POSITION: 'position',

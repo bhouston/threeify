@@ -13,14 +13,14 @@ uniform sampler2D specularAnisotropicFlowMap;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/src/shaders/lighting/punctual.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/diffuse/lambert.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx_anisotropic.glsl"
-#pragma import "@threeify/core/src/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/src/shaders/microgeometry/tangentSpace.glsl"
-#pragma import "@threeify/core/src/shaders/math/mat2.glsl"
-#pragma import "@threeify/core/src/shaders/math/mat3.glsl"
-#pragma import "@threeify/core/src/shaders/math/vectorMath.glsl"
+#pragma import "@threeify/core/dist/shaders/lighting/punctual.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx_anisotropic.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat2.glsl"
+#pragma import "@threeify/core/dist/shaders/math/mat3.glsl"
+#pragma import "@threeify/core/dist/shaders/math/vectorMath.glsl"
 
 void main() {
   vec3 albedo = texture(specularAnisotropicFlowMap, v_uv0).rgb;

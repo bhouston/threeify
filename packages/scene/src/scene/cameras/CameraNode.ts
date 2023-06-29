@@ -1,6 +1,6 @@
 import { Mat4 } from '@threeify/math';
 
-import { ISceneNodeProps, SceneNode } from '../SceneNode';
+import { ISceneNodeProps, SceneNode } from '../SceneNode.js';
 
 export interface ICameraProps extends ISceneNodeProps {
   near?: number;

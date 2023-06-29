@@ -12,10 +12,10 @@ import {
   ShaderMaterial,
   shaderMaterialToProgram
 } from '@threeify/core';
-import vertexSource from '@threeify/core/src/shaders/tests/vertex.glsl';
+import vertexSource from '@threeify/core/dist/shaders/tests/vertex.glsl.js';
 import { Color3, Vec2 } from '@threeify/math';
 
-import { glslTestSuites } from './testSuites';
+import { glslTestSuites } from './testSuites.js';
 
 async function init(): Promise<void> {
   const context = createRenderingContext(document, 'framebuffer');

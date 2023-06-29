@@ -1,4 +1,3 @@
-import { Box3 } from './Box3';
 import {
   box3Center,
   box3ContainsBox3,
@@ -14,9 +13,10 @@ import {
   box3Size,
   box3Translate,
   vec3ClampToBox3
-} from './Box3.Functions';
-import { Vec3 } from './Vec3';
-import { vec3Equals } from './Vec3.Functions';
+} from './Box3.Functions.js';
+import { Box3 } from './Box3.js';
+import { vec3Equals } from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 const unit = new Box3(new Vec3(0, 0), new Vec3(1, 1, 1));
 const empty = new Box3();
