@@ -10,8 +10,8 @@ import mount from 'koa-mount';
 import compress from 'koa-compress';
 import staticCache from 'koa-static-cache';
 
-import { HOST, PORT, EXAMPLES_ROOT, ASSETS_ROOT } from './config';
-import { getExampleDescriptions } from './getExampleDescriptions';
+import { HOST, PORT, EXAMPLES_ROOT, ASSETS_ROOT } from './config.js';
+import { getExampleDescriptions } from './getExampleDescriptions.js';
 
 console.log('EXAMPLES_ROOT', EXAMPLES_ROOT);
 console.log('ASSETS_ROOT', ASSETS_ROOT);

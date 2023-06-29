@@ -92,7 +92,10 @@ export async function transpile(
   importNamesToPaths.forEach((importPath, importName) => {
     if (importPath.includes('/dist/') || importPath.includes('@')) {
       importPath += '.js';
+    } else if (options.jsExtension) {
+      importPath += '.js';
     }
+
     tsSource += `import ${importName} from '${importPath}';\n`;
   });
 
