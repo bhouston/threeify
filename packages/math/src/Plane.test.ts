@@ -1,5 +1,5 @@
-import { Plane } from './Plane';
-import { Vec3 } from './Vec3';
+import { Plane } from './Plane.js';
+import { Vec3 } from './Vec3.js';
 
 // test all functions on the Plane class
 describe('Plane', () => {

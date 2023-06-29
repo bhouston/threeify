@@ -7,8 +7,8 @@
 
 import { Vec2, Vec3 } from '@threeify/math';
 
-import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute';
-import { Geometry } from '../Geometry';
+import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
+import { Geometry } from '../Geometry.js';
 
 export function diskGeometry(
   radius = 0.5,

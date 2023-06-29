@@ -1,4 +1,4 @@
-import { Vec3 } from './Vec3';
+import { Vec3 } from './Vec3.js';
 
 export class Sphere {
   constructor(public readonly center = new Vec3(), public radius = -1) {}

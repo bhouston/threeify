@@ -1,6 +1,6 @@
 import { Color3 } from '@threeify/math';
 
-import { ISceneNodeProps, SceneNode } from '../SceneNode';
+import { ISceneNodeProps, SceneNode } from '../SceneNode.js';
 
 export interface ILight extends ISceneNodeProps {
   color?: Color3;

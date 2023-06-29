@@ -7,7 +7,7 @@
 
 import { Color3, color3Equals } from '@threeify/math';
 
-import { ICloneable, IEquatable } from '../../core/types';
+import { ICloneable, IEquatable } from '../../core/types.js';
 
 export class ClearState
   implements ICloneable<ClearState>, IEquatable<ClearState>

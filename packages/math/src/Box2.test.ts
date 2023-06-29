@@ -1,7 +1,7 @@
 // a set of ts-jest unit tests that ensure the correct functionality of the class Box2
 
-import { Box2 } from './Box2';
-import { Vec2 } from './Vec2';
+import { Box2 } from './Box2.js';
+import { Vec2 } from './Vec2.js';
 
 describe('Box2', () => {
   test('constructor', () => {

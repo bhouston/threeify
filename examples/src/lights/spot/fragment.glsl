@@ -15,13 +15,13 @@ uniform sampler2D albedoMap;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/src/shaders/lighting/punctual.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/ambient/basic.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/diffuse/lambert.glsl"
-#pragma import "@threeify/core/src/shaders/brdfs/specular/ggx.glsl"
-#pragma import "@threeify/core/src/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/src/shaders/microgeometry/normalPacking.glsl"
-#pragma import "@threeify/core/src/shaders/microgeometry/tangentSpace.glsl"
+#pragma import "@threeify/core/dist/shaders/lighting/punctual.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/ambient/basic.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/diffuse/lambert.glsl"
+#pragma import "@threeify/core/dist/shaders/brdfs/specular/ggx.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/normalPacking.glsl"
+#pragma import "@threeify/core/dist/shaders/microgeometry/tangentSpace.glsl"
 
 void main() {
   vec3 albedo = sRGBToLinear(texture(albedoMap, v_uv0).rgb);

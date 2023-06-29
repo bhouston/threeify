@@ -1,4 +1,4 @@
-import { Vec3 } from './Vec3';
+import { Vec3 } from './Vec3.js';
 
 describe('Vec3', () => {
   test('constructor defaults', () => {

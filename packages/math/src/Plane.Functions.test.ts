@@ -1,9 +1,9 @@
 import {
   coplanarPointsToPlane,
   normalAndCoplanarPointToPlane
-} from './Plane.Functions';
-import { Vec3 } from './Vec3';
-import { vec3Delta, vec3Normalize } from './Vec3.Functions';
+} from './Plane.Functions.js';
+import { vec3Delta, vec3Normalize } from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Plane Functions', () => {
   test('setFromNormalAndCoplanarPoint', () => {

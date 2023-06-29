@@ -1,29 +1,25 @@
 {
   "compilerOptions": {
-    "baseUrl": "./packages",
     "paths": {
       "@threeify/math": ["./packages/math/"],
       "@threeify/core": ["./packages/core/"],
       "@threeify/scene": ["./packages/scene/"],
       "@threeify/layer-compositor": ["./packages/layer-compositor/"]
     },
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "lib": ["es2020", "dom"],
-    "module": "ESNext",
+    "outDir": "dist",
     "target": "ESNext",
-    "declaration": true,
-    "stripInternal": true,
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["es2020", "dom"],
     "typeRoots": ["node_modules/@types"],
-    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": false, // causes problems by hoisting json files, and src to the root of the dist folder
+    "declaration": true,
     "sourceMap": true,
-
-    // Components of "strict" mode.
-    "alwaysStrict": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "allowJs": true
   }
 }

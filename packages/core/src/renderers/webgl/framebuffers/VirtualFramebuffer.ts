@@ -7,26 +7,21 @@
 
 import { Box2, Vec2 } from '@threeify/math';
 
-import { IDisposable } from '../../../core/types';
-import { PassGeometry } from '../../../geometry/primitives/passGeometry';
-import { warnOnce } from '../../../warnOnce';
-import { ResourceRef } from '../../caches/ResourceCache';
-import { BlendState } from '../BlendState';
-import {
-  BufferGeometry,
-  geometryToBufferGeometry
-} from '../buffers/BufferGeometry';
-import { ClearState } from '../ClearState';
-import { CullingState } from '../CullingState';
-import { DepthTestState } from '../DepthTestState';
-import { MaskState } from '../MaskState';
-import { Program } from '../programs/Program';
-import { UniformBufferMap } from '../programs/ProgramUniformBlock';
-import { ProgramVertexArray } from '../programs/ProgramVertexArray';
-import { UniformValueMap } from '../programs/UniformValueMap';
-import { RenderingContext } from '../RenderingContext';
-import { bindTextures, TextureBindings } from '../textures/TextureBindings';
-import { BufferBit } from './BufferBit';
+import { IDisposable } from '../../../core/types.js';
+import { warnOnce } from '../../../warnOnce.js';
+import { BlendState } from '../BlendState.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { ClearState } from '../ClearState.js';
+import { CullingState } from '../CullingState.js';
+import { DepthTestState } from '../DepthTestState.js';
+import { MaskState } from '../MaskState.js';
+import { Program } from '../programs/Program.js';
+import { UniformBufferMap } from '../programs/ProgramUniformBlock.js';
+import { ProgramVertexArray } from '../programs/ProgramVertexArray.js';
+import { UniformValueMap } from '../programs/UniformValueMap.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { bindTextures, TextureBindings } from '../textures/TextureBindings.js';
+import { BufferBit } from './BufferBit.js';
 
 export abstract class VirtualFramebuffer implements IDisposable {
   disposed = false;

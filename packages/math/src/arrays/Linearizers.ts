@@ -1,19 +1,19 @@
-import { color3ToArray } from '../Color3.Functions';
-import { Color3 } from '../Color3';
-import { color4ToArray } from '../Color4.Functions';
-import { Color4 } from '../Color4';
-import { mat3ToArray } from '../Mat3.Functions';
-import { Mat3 } from '../Mat3';
-import { mat4ToArray } from '../Mat4.Functions';
-import { Mat4 } from '../Mat4';
-import { quatToArray } from '../Quat.Functions';
-import { Quat } from '../Quat';
-import { vec2ToArray } from '../Vec2.Functions';
-import { Vec2 } from '../Vec2';
-import { vec3ToArray } from '../Vec3.Functions';
-import { Vec3 } from '../Vec3';
-import { vec4ToArray } from '../Vec4.Functions';
-import { Vec4 } from '../Vec4';
+import { color3ToArray } from '../Color3.Functions.js';
+import { Color3 } from '../Color3.js';
+import { color4ToArray } from '../Color4.Functions.js';
+import { Color4 } from '../Color4.js';
+import { mat3ToArray } from '../Mat3.Functions.js';
+import { Mat3 } from '../Mat3.js';
+import { mat4ToArray } from '../Mat4.Functions.js';
+import { Mat4 } from '../Mat4.js';
+import { quatToArray } from '../Quat.Functions.js';
+import { Quat } from '../Quat.js';
+import { vec2ToArray } from '../Vec2.Functions.js';
+import { Vec2 } from '../Vec2.js';
+import { vec3ToArray } from '../Vec3.Functions.js';
+import { Vec3 } from '../Vec3.js';
+import { vec4ToArray } from '../Vec4.Functions.js';
+import { Vec4 } from '../Vec4.js';
 
 function ensureFloat32ArrayLength(
   array: Float32Array | undefined,

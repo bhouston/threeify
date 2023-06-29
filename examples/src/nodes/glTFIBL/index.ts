@@ -41,12 +41,15 @@ import {
   getKhronosGlTFUrl,
   GLTFFormat,
   KhronosModel
-} from '../../utilities/khronosModels';
-import { GPUTimerPanel, Stats } from '../../utilities/Stats';
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
-import fragmentSource from './fragment.glsl';
-import { ShaderOutputs } from './ShaderOutputs';
-import vertexSource from './vertex.glsl';
+} from '../../utilities/khronosModels.js';
+import { GPUTimerPanel, Stats } from '../../utilities/Stats.js';
+import {
+  getThreeJSHDRIUrl,
+  ThreeJSHRDI
+} from '../../utilities/threejsHDRIs.js';
+import fragmentSource from './fragment.glsl.js';
+import { ShaderOutputs } from './ShaderOutputs.js';
+import vertexSource from './vertex.glsl.js';
 const stats = new Stats();
 
 const maxDebugOutputs = 71;

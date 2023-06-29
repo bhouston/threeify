@@ -1,6 +1,6 @@
 import { Vec3 } from '@threeify/math';
 
-import { ILight, Light } from './Light';
+import { ILight, Light } from './Light.js';
 
 export interface ISpotLight extends ILight {
   direction?: Vec3;

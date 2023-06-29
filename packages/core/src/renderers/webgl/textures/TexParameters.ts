@@ -1,5 +1,5 @@
-import { TextureFilter } from './TextureFilter';
-import { TextureWrap } from './TextureWrap';
+import { TextureFilter } from './TextureFilter.js';
+import { TextureWrap } from './TextureWrap.js';
 
 export class TexParameters {
   constructor(

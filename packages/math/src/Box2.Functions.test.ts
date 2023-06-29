@@ -1,4 +1,3 @@
-import { Box2 } from './Box2';
 import {
   box2Center,
   box2ContainsBox2,
@@ -14,9 +13,10 @@ import {
   box2Size,
   box2Translate,
   vec2ClampToBox2
-} from './Box2.Functions';
-import { Vec2 } from './Vec2';
-import { vec2Equals } from './Vec2.Functions';
+} from './Box2.Functions.js';
+import { Box2 } from './Box2.js';
+import { vec2Equals } from './Vec2.Functions.js';
+import { Vec2 } from './Vec2.js';
 
 const unit = new Box2(new Vec2(0, 0), new Vec2(1, 1));
 const empty = new Box2();

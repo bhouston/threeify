@@ -1,10 +1,10 @@
-import { Color4 } from '../Color4';
 import {
   arrayToColor4,
   color4ToArray,
   rgbeToLinear
-} from '../Color4.Functions';
-import { float32ToFloat16 } from '../utils/fp16';
+} from '../Color4.Functions.js';
+import { Color4 } from '../Color4.js';
+import { float32ToFloat16 } from '../utils/fp16.js';
 
 export function normalizedByteToFloat32s(
   sourceArray: Uint8Array,

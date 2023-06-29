@@ -9,8 +9,8 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { LayerCompositor } from './LayerCompositor';
-import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv';
+import { LayerCompositor } from './LayerCompositor.js';
+import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv.js';
 
 class LayerTexture {
   disposed = false;

@@ -1,19 +1,19 @@
 import { Vec2 } from '@threeify/math';
 
-import { generateUUID } from '../core/generateUuid';
-import { IDisposable, IIdentifiable, IVersionable } from '../core/types';
-import { DataType } from '../renderers/webgl/textures/DataType';
+import { generateUUID } from '../core/generateUuid.js';
+import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
+import { DataType } from '../renderers/webgl/textures/DataType.js';
 import {
   InternalFormat,
   internalFormatToPixelFormat
-} from '../renderers/webgl/textures/InternalFormat';
-import { PixelFormat } from '../renderers/webgl/textures/PixelFormat';
-import { TextureFilter } from '../renderers/webgl/textures/TextureFilter';
+} from '../renderers/webgl/textures/InternalFormat.js';
+import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
+import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import {
   Float16ArrayImage,
   Float32ArrayImage,
   Uint8ArrayImage
-} from './ArrayBufferImage';
+} from './ArrayBufferImage.js';
 export type TextureSource =
   | Float32ArrayImage
   | Uint8ArrayImage

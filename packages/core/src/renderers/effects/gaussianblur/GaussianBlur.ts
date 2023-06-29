@@ -1,22 +1,22 @@
 import { Color3, Vec2, vec2Equals, vec2ToString } from '@threeify/math';
 
-import { assert } from '../../../core/assert';
-import { using } from '../../../core/using';
-import { ShaderMaterial } from '../../../materials/ShaderMaterial';
-import { BlendState } from '../../webgl/BlendState';
-import { ClearState } from '../../webgl/ClearState';
-import { BufferBit } from '../../webgl/framebuffers/BufferBit';
+import { assert } from '../../../core/assert.js';
+import { using } from '../../../core/using.js';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
+import { BlendState } from '../../webgl/BlendState.js';
+import { ClearState } from '../../webgl/ClearState.js';
+import { BufferBit } from '../../webgl/framebuffers/BufferBit.js';
 import {
   colorAttachmentToFramebuffer,
   Framebuffer
-} from '../../webgl/framebuffers/Framebuffer';
-import { renderPass } from '../../webgl/framebuffers/VirtualFramebuffer';
-import { shaderMaterialToProgram } from '../../webgl/programs/Program';
-import { RenderingContext } from '../../webgl/RenderingContext';
-import { TexImage2D } from '../../webgl/textures/TexImage2D';
-import { IEffect } from '../IEffect';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+} from '../../webgl/framebuffers/Framebuffer.js';
+import { renderPass } from '../../webgl/framebuffers/VirtualFramebuffer.js';
+import { shaderMaterialToProgram } from '../../webgl/programs/Program.js';
+import { RenderingContext } from '../../webgl/RenderingContext.js';
+import { TexImage2D } from '../../webgl/textures/TexImage2D.js';
+import { IEffect } from '../IEffect.js';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 export interface IGaussianBlurProps {
   sourceTexImage2D: TexImage2D;

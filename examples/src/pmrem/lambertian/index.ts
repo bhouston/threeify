@@ -27,9 +27,9 @@ import {
   Vec3
 } from '@threeify/math';
 
-import fragmentSource from './fragment.glsl';
-import { samplerMaterial } from './sampler/SamplerMaterial';
-import vertexSource from './vertex.glsl';
+import fragmentSource from './fragment.glsl.js';
+import { samplerMaterial } from './sampler/SamplerMaterial.js';
+import vertexSource from './vertex.glsl.js';
 
 async function init(): Promise<void> {
   const geometry = icosahedronGeometry(0.75, 2, true);

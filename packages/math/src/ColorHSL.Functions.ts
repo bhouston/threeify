@@ -1,6 +1,6 @@
-import { Color3 } from './Color3';
-import { ColorHSL } from './ColorHSL';
-import { clamp, positiveModulo } from './Functions';
+import { Color3 } from './Color3.js';
+import { ColorHSL } from './ColorHSL.js';
+import { clamp, positiveModulo } from './Functions.js';
 
 function hue2rgb(p: number, q: number, t: number): number {
   if (t < 0) {

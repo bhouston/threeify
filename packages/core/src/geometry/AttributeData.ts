@@ -5,9 +5,9 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../core/generateUuid';
-import { IIdentifiable, IVersionable } from '../core/types';
-import { BufferTarget } from '../renderers/webgl/buffers/BufferTarget';
+import { generateUUID } from '../core/generateUuid.js';
+import { IIdentifiable, IVersionable } from '../core/types.js';
+import { BufferTarget } from '../renderers/webgl/buffers/BufferTarget.js';
 
 export class AttributeData implements IIdentifiable, IVersionable {
   public readonly id = generateUUID();

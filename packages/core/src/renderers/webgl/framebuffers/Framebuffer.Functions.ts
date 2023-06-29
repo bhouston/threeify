@@ -1,21 +1,24 @@
 import { Vec2 } from '@threeify/math';
 
-import { GL } from '../GL';
-import { RenderingContext } from '../RenderingContext';
-import { DataType, sizeOfDataType } from '../textures/DataType';
+import { GL } from '../GL.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { DataType, sizeOfDataType } from '../textures/DataType.js';
 import {
   InternalFormat,
   internalFormatToDataType,
   internalFormatToPixelFormat
-} from '../textures/InternalFormat';
-import { numPixelFormatComponents, PixelFormat } from '../textures/PixelFormat';
-import { TexImage2D } from '../textures/TexImage2D';
-import { TexParameters } from '../textures/TexParameters';
-import { TextureFilter } from '../textures/TextureFilter';
-import { TextureTarget } from '../textures/TextureTarget';
-import { TextureWrap } from '../textures/TextureWrap';
-import { Attachment } from './Attachment';
-import { Framebuffer } from './Framebuffer';
+} from '../textures/InternalFormat.js';
+import {
+  numPixelFormatComponents,
+  PixelFormat
+} from '../textures/PixelFormat.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { TexParameters } from '../textures/TexParameters.js';
+import { TextureFilter } from '../textures/TextureFilter.js';
+import { TextureTarget } from '../textures/TextureTarget.js';
+import { TextureWrap } from '../textures/TextureWrap.js';
+import { Attachment } from './Attachment.js';
+import { Framebuffer } from './Framebuffer.js';
 
 export function frameBufferToPixels(
   framebuffer: Framebuffer,

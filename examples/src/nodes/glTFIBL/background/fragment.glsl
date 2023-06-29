@@ -9,10 +9,10 @@ uniform samplerCube cubeMap;
 
 out vec4 outputColor;
 
-#pragma import "@threeify/core/src/shaders/color/spaces/srgb.glsl"
-#pragma import "@threeify/core/src/shaders/cubemaps/latLong.glsl"
-#pragma import "@threeify/core/src/shaders/color/encodings/rgbe.glsl"
-#pragma import "@threeify/core/src/shaders/color/tonemapping/acesfilmic.glsl"
+#pragma import "@threeify/core/dist/shaders/color/spaces/srgb.glsl"
+#pragma import "@threeify/core/dist/shaders/cubemaps/latLong.glsl"
+#pragma import "@threeify/core/dist/shaders/color/encodings/rgbe.glsl"
+#pragma import "@threeify/core/dist/shaders/color/tonemapping/acesfilmic.glsl"
 
 void main() {
   // step one, convert from screen space to ray.

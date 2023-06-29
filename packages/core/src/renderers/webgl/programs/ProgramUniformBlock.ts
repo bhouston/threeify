@@ -1,9 +1,9 @@
-import { Buffer } from '../buffers/Buffer';
-import { BufferTarget } from '../buffers/BufferTarget';
-import { BufferUsage } from '../buffers/BufferUsage';
-import { Program } from './Program';
-import { ProgramUniform } from './ProgramUniform';
-import { UniformValueMap } from './UniformValueMap';
+import { Buffer } from '../buffers/Buffer.js';
+import { BufferTarget } from '../buffers/BufferTarget.js';
+import { BufferUsage } from '../buffers/BufferUsage.js';
+import { Program } from './Program.js';
+import { ProgramUniform } from './ProgramUniform.js';
+import { UniformValueMap } from './UniformValueMap.js';
 
 // based on https://gist.github.com/jialiang/2880d4cc3364df117320e8cb324c2880
 export type UniformBufferMap = { [name: string]: Buffer };

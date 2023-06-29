@@ -1,6 +1,6 @@
 import { Mat4, mat4PerspectiveFov } from '@threeify/math';
 
-import { CameraNode, ICameraProps } from './CameraNode';
+import { CameraNode, ICameraProps } from './CameraNode.js';
 
 export interface IPerspectiveCameraProps extends ICameraProps {
   verticalFov?: number;

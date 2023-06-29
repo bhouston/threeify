@@ -9,10 +9,10 @@ import {
   mat4TransformBox3
 } from '@threeify/math';
 
-import { MeshNode } from '../scene/Mesh';
-import { SceneNode } from '../scene/SceneNode';
-import { breadthFirstVisitor } from '../scene/Visitors';
-import { SceneTreeCache } from './SceneTreeCache';
+import { MeshNode } from '../scene/Mesh.js';
+import { SceneNode } from '../scene/SceneNode.js';
+import { breadthFirstVisitor } from '../scene/Visitors.js';
+import { SceneTreeCache } from './SceneTreeCache.js';
 
 export function subTreeStats(node: SceneNode): {
   numPrimitives: number;

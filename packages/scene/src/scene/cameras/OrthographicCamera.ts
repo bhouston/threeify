@@ -1,6 +1,6 @@
 import { Mat4, mat4OrthographicSimple, Vec2 } from '@threeify/math';
 
-import { CameraNode, ICameraProps } from './CameraNode';
+import { CameraNode, ICameraProps } from './CameraNode.js';
 
 export interface IOrthographicCameraProps extends ICameraProps {
   height?: number;

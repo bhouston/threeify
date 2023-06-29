@@ -3,7 +3,6 @@ import fs from 'node:fs';
 import { promises as fsPromises } from 'node:fs';
 import path from 'node:path';
 import process, { exit } from 'node:process';
-import ts from 'typescript';
 
 import { Command } from 'commander';
 
@@ -14,6 +13,7 @@ export type Options = {
   watch: boolean;
   minify: boolean;
   verboseLevel: number;
+  jsExtension: boolean;
 };
 
 const configFileName = 'glsl-transpiler.json';
@@ -25,6 +25,7 @@ export type OptionsOverride = {
   watch?: boolean;
   minify?: boolean;
   verboseLevel?: number;
+  jsExtension?: boolean;
 };
 
 const defaultOptions = {
@@ -33,7 +34,8 @@ const defaultOptions = {
   outDir: 'src',
   watch: false,
   minify: false,
-  verboseLevel: 0
+  verboseLevel: 0,
+  jsExtension: true
 } as Options;
 
 export async function getOptions() {

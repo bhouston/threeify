@@ -4,7 +4,7 @@ import { Mat3 } from '@threeify/math';
 import {
   IMaterialParameterProvider,
   MaterialParameters
-} from './MaterialParameters';
+} from './MaterialParameters.js';
 
 export class TextureAccessor implements IMaterialParameterProvider {
   constructor(

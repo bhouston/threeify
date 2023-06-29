@@ -1,6 +1,6 @@
-import { Color3 } from './Color3';
-import { ColorHSV } from './ColorHSV';
-import { color3ToHsv, hsvToColor3 } from './ColorHSV.Functions';
+import { Color3 } from './Color3.js';
+import { color3ToHsv, hsvToColor3 } from './ColorHSV.Functions.js';
+import { ColorHSV } from './ColorHSV.js';
 
 describe('ColorHSV Functions', () => {
   test('hsvToColor3/color3ToHSV', () => {

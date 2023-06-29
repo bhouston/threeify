@@ -7,12 +7,12 @@
 
 import { Mat4, mat4LookAt, Vec2, Vec3, vec3Add } from '@threeify/math';
 
-import { DataType } from '../renderers/webgl/textures/DataType';
-import { InternalFormat } from '../renderers/webgl/textures/InternalFormat';
-import { TextureFilter } from '../renderers/webgl/textures/TextureFilter';
-import { TextureTarget } from '../renderers/webgl/textures/TextureTarget';
-import { fetchCubeMapImages } from './loaders/Image';
-import { TextureSource, VirtualTexture } from './VirtualTexture';
+import { DataType } from '../renderers/webgl/textures/DataType.js';
+import { InternalFormat } from '../renderers/webgl/textures/InternalFormat.js';
+import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
+import { TextureTarget } from '../renderers/webgl/textures/TextureTarget.js';
+import { fetchCubeMapImages } from './loaders/Image.js';
+import { TextureSource, VirtualTexture } from './VirtualTexture.js';
 
 export class CubeMapTexture extends VirtualTexture {
   constructor(

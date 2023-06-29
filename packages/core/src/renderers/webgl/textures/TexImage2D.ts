@@ -8,20 +8,20 @@
 
 import { Vec2 } from '@threeify/math';
 
-import { generateUUID } from '../../../core/generateUuid';
-import { ArrayImage } from '../../../textures/ArrayBufferImage';
-import { CubeMapTexture } from '../../../textures/CubeMapTexture';
-import { fetchTexture, Texture } from '../../../textures/Texture';
-import { TextureSource } from '../../../textures/VirtualTexture';
-import { GL } from '../GL';
-import { IResource } from '../IResource';
-import { RenderingContext } from '../RenderingContext';
-import { DataType } from './DataType';
-import { InternalFormat } from './InternalFormat';
-import { PixelFormat } from './PixelFormat';
-import { TexParameters } from './TexParameters';
-import { TextureTarget } from './TextureTarget';
-import { TextureWrap } from './TextureWrap';
+import { generateUUID } from '../../../core/generateUuid.js';
+import { ArrayImage } from '../../../textures/ArrayBufferImage.js';
+import { CubeMapTexture } from '../../../textures/CubeMapTexture.js';
+import { fetchTexture, Texture } from '../../../textures/Texture.js';
+import { TextureSource } from '../../../textures/VirtualTexture.js';
+import { GL } from '../GL.js';
+import { IResource } from '../IResource.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { DataType } from './DataType.js';
+import { InternalFormat } from './InternalFormat.js';
+import { PixelFormat } from './PixelFormat.js';
+import { TexParameters } from './TexParameters.js';
+import { TextureTarget } from './TextureTarget.js';
+import { TextureWrap } from './TextureWrap.js';
 
 let maxAllowableAnisotropy = -1;
 

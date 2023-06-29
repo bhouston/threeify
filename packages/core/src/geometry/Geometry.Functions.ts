@@ -14,9 +14,9 @@ import {
   vec3Subtract
 } from '@threeify/math';
 
-import { Attribute, makeFloat32Attribute } from './Attribute';
-import { AttributeData } from './AttributeData';
-import { Geometry } from './Geometry';
+import { Attribute, makeFloat32Attribute } from './Attribute.js';
+import { AttributeData } from './AttributeData.js';
+import { Geometry } from './Geometry.js';
 
 function copyBytesUsingStride(
   dest: ArrayBuffer,

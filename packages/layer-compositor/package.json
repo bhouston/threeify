@@ -4,7 +4,7 @@
   "version": "3.0.0",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "source": "./src/index.ts",
   "scripts": {
     "build": "glsl-transpiler  -r src -o src && tsc",

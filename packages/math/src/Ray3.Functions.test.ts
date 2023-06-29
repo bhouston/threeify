@@ -1,6 +1,6 @@
-import { Mat4 } from './Mat4';
-import { Plane } from './Plane';
-import { Ray3 } from './Ray3';
+import { Mat4 } from './Mat4.js';
+import { Plane } from './Plane.js';
+import { Ray3 } from './Ray3.js';
 import {
   mat4TransformRay3,
   ray3At,
@@ -9,9 +9,9 @@ import {
   ray3IntersectPlane,
   ray3LookAt,
   ray3Negate
-} from './Ray3.Functions';
-import { Vec3 } from './Vec3';
-import { vec3Normalize } from './Vec3.Functions';
+} from './Ray3.Functions.js';
+import { Vec3 } from './Vec3.js';
+import { vec3Normalize } from './Vec3.Functions.js';
 
 describe('Ray3 Functions', () => {
   test('ray3Equals', () => {

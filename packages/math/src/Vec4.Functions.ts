@@ -4,8 +4,8 @@ import {
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Functions';
-import { Vec4 } from './Vec4';
+} from './Functions.js';
+import { Vec4 } from './Vec4.js';
 
 export function vec4Delta(a: Vec4, b: Vec4): number {
   return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z) + delta(a.w, b.w);

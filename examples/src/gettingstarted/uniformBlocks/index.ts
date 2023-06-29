@@ -10,10 +10,10 @@ import {
   shaderSourceToProgram
 } from '@threeify/core';
 import { Color3, hslToColor3 } from '@threeify/math';
-import { ColorHSL } from '@threeify/math/src/ColorHSL';
+import { ColorHSL } from '@threeify/math/src/ColorHSL.js';
 
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 async function init() {
   const geometry = new Geometry();

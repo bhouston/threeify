@@ -7,10 +7,10 @@
 
 import { Box3, box3Empty } from '@threeify/math';
 
-import { generateUUID } from '../core/generateUuid';
-import { PrimitiveType } from '../renderers/webgl/buffers/PrimitiveType';
-import { Attribute } from './Attribute';
-import { positionAttributeToBoundingBox } from './Geometry.Functions';
+import { generateUUID } from '../core/generateUuid.js';
+import { PrimitiveType } from '../renderers/webgl/buffers/PrimitiveType.js';
+import { Attribute } from './Attribute.js';
+import { positionAttributeToBoundingBox } from './Geometry.Functions.js';
 
 export class Geometry {
   id: string = generateUUID();

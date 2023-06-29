@@ -1,6 +1,6 @@
 import { CubeMapTexture, TexImage2D } from '@threeify/core';
 
-import { ILight, Light } from './Light';
+import { ILight, Light } from './Light.js';
 
 export interface IDomeLight extends ILight {
   cubeMap?: CubeMapTexture | TexImage2D;

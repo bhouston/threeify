@@ -2,11 +2,11 @@ import {
   BufferGeometry,
   ClearState,
   geometryToBufferGeometry,
-  shaderMaterialToProgram,
   octahedronGeometry,
   Program,
   renderBufferGeometry,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TextureWrap,
   transformGeometry,
   UniformValueMap
@@ -24,14 +24,14 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { copySourceBlendState } from '../Layer';
+import { copySourceBlendState } from '../Layer.js';
 import {
   ImageFitMode,
   LayerCompositor,
   makeColorMipmapAttachment
-} from '../LayerCompositor';
-import fragment from './fragment.glsl';
-import vertex from './vertex.glsl';
+} from '../LayerCompositor.js';
+import fragment from './fragment.glsl.js';
+import vertex from './vertex.glsl.js';
 
 export class PanoramaLayerCompositor extends LayerCompositor {
   public angle = new Euler3(0, 0, 0, EulerOrder3.ZYX);

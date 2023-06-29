@@ -1,116 +1,116 @@
-export * from './warnOnce';
+export * from './warnOnce.js';
 
-export * from './core/assert';
-export * from './core/coords';
-export * from './core/generateUuid';
-export * from './core/types';
-export * from './core/sleep';
+export * from './core/assert.js';
+export * from './core/coords.js';
+export * from './core/generateUuid.js';
+export * from './core/types.js';
+export * from './core/sleep.js';
 
-export * from './platform/Detection';
+export * from './platform/Detection.js';
 
-export * from './controllers/DeviceOrientation';
-export * from './controllers/Orbit';
+export * from './controllers/DeviceOrientation.js';
+export * from './controllers/Orbit.js';
 
-export * from './renderers/caches/ResourceCache';
-export * from './renderers/webgl/buffers/Buffer';
-export * from './renderers/webgl/buffers/BufferAccessor';
-export * from './renderers/webgl/buffers/BufferGeometry';
-export * from './renderers/webgl/buffers/BufferTarget';
-export * from './renderers/webgl/buffers/BufferUsage';
-export * from './renderers/webgl/buffers/ComponentType';
-export * from './renderers/webgl/buffers/PrimitiveType';
+export * from './renderers/caches/ResourceCache.js';
+export * from './renderers/webgl/buffers/Buffer.js';
+export * from './renderers/webgl/buffers/BufferAccessor.js';
+export * from './renderers/webgl/buffers/BufferGeometry.js';
+export * from './renderers/webgl/buffers/BufferTarget.js';
+export * from './renderers/webgl/buffers/BufferUsage.js';
+export * from './renderers/webgl/buffers/ComponentType.js';
+export * from './renderers/webgl/buffers/PrimitiveType.js';
 
-export * from './renderers/webgl/extensions/Extensions';
-export * from './renderers/webgl/extensions/OptionalExtensions';
+export * from './renderers/webgl/extensions/Extensions.js';
+export * from './renderers/webgl/extensions/OptionalExtensions.js';
 
-export * from './renderers/webgl/framebuffers/Attachment';
-export * from './renderers/webgl/framebuffers/BufferBit';
-export * from './renderers/webgl/framebuffers/CanvasFramebuffer';
-export * from './renderers/webgl/framebuffers/Framebuffer';
-export * from './renderers/webgl/framebuffers/Framebuffer.Functions';
-export * from './renderers/webgl/framebuffers/VirtualFramebuffer';
+export * from './renderers/webgl/framebuffers/Attachment.js';
+export * from './renderers/webgl/framebuffers/BufferBit.js';
+export * from './renderers/webgl/framebuffers/CanvasFramebuffer.js';
+export * from './renderers/webgl/framebuffers/Framebuffer.js';
+export * from './renderers/webgl/framebuffers/Framebuffer.Functions.js';
+export * from './renderers/webgl/framebuffers/VirtualFramebuffer.js';
 
-export * from './renderers/webgl/programs/ProgramUniformBlock';
-export * from './renderers/webgl/programs/UniformValueMap';
+export * from './renderers/webgl/programs/ProgramUniformBlock.js';
+export * from './renderers/webgl/programs/UniformValueMap.js';
 
-export * from './geometry/Attribute';
-export * from './geometry/AttributeData';
-export * from './geometry/Geometry';
-export * from './geometry/Geometry.Functions';
+export * from './geometry/Attribute.js';
+export * from './geometry/AttributeData.js';
+export * from './geometry/Geometry.js';
+export * from './geometry/Geometry.Functions.js';
 
-export * from './geometry/primitives/boxGeometry';
-export * from './geometry/primitives/cylinderGeometry';
-export * from './geometry/primitives/diskGeometry';
-export * from './geometry/primitives/passGeometry';
-export * from './geometry/primitives/planeGeometry';
-export * from './geometry/primitives/polyhedronGeometry';
+export * from './geometry/primitives/boxGeometry.js';
+export * from './geometry/primitives/cylinderGeometry.js';
+export * from './geometry/primitives/diskGeometry.js';
+export * from './geometry/primitives/passGeometry.js';
+export * from './geometry/primitives/planeGeometry.js';
+export * from './geometry/primitives/polyhedronGeometry.js';
 
-export * from './worker/WorkerPool';
+export * from './worker/WorkerPool.js';
 
-export * from './renderers/effects/copy/CopyPass';
-export * from './renderers/effects/tonemapper/ToneMapper';
-export * from './renderers/effects/gaussianblur/GaussianBlur';
-export * from './renderers/effects/combinePass/CombinePass';
-export * from './renderers/effects/nanDetector/NanDetector';
-export * from './renderers/effects/cubemapBackground/CubemapBackground';
-export * from './renderers/effects/IEffect';
+export * from './renderers/effects/copy/CopyPass.js';
+export * from './renderers/effects/tonemapper/ToneMapper.js';
+export * from './renderers/effects/gaussianblur/GaussianBlur.js';
+export * from './renderers/effects/combinePass/CombinePass.js';
+export * from './renderers/effects/nanDetector/NanDetector.js';
+export * from './renderers/effects/cubemapBackground/CubemapBackground.js';
+export * from './renderers/effects/IEffect.js';
 
-export * from './renderers/utilities/equirectangular';
-export * from './renderers/utilities/TextureEncoding';
+export * from './renderers/utilities/equirectangular.js';
+export * from './renderers/utilities/TextureEncoding.js';
 
-export * from './textures/loaders/HDR';
-export * from './textures/loaders/Image';
+export * from './textures/loaders/HDR.js';
+export * from './textures/loaders/Image.js';
 
-export * from './loaders/OBJ';
+export * from './loaders/OBJ.js';
 
-export * from './materials/Blending';
-export * from './materials/OutputChannels';
-export * from './materials/ShaderMaterial';
-export * from './materials/AlphaMode';
+export * from './materials/Blending.js';
+export * from './materials/OutputChannels.js';
+export * from './materials/ShaderMaterial.js';
+export * from './materials/AlphaMode.js';
 
-export * from './renderers/webgl/programs/Program';
-export * from './renderers/webgl/programs/ProgramAttribute';
-export * from './renderers/webgl/programs/ProgramUniform';
-export * from './renderers/webgl/programs/UniformType';
+export * from './renderers/webgl/programs/Program.js';
+export * from './renderers/webgl/programs/ProgramAttribute.js';
+export * from './renderers/webgl/programs/ProgramUniform.js';
+export * from './renderers/webgl/programs/UniformType.js';
 
-export * from './renderers/webgl/BlendState';
-export * from './renderers/webgl/ClearState';
-export * from './renderers/webgl/CullingState';
-export * from './renderers/webgl/DepthTestState';
-export * from './renderers/webgl/GL';
-export * from './renderers/webgl/MaskState';
-export * from './renderers/webgl/Parameters';
-export * from './renderers/webgl/renderbuffers/Renderbuffer';
-export * from './renderers/webgl/RenderingContext';
-export * from './renderers/webgl/programs/ProgramVertexArray';
-export * from './renderers/webgl/textures/InternalFormat';
-export * from './renderers/webgl/textures/TextureBindings';
+export * from './renderers/webgl/BlendState.js';
+export * from './renderers/webgl/ClearState.js';
+export * from './renderers/webgl/CullingState.js';
+export * from './renderers/webgl/DepthTestState.js';
+export * from './renderers/webgl/GL.js';
+export * from './renderers/webgl/MaskState.js';
+export * from './renderers/webgl/Parameters.js';
+export * from './renderers/webgl/renderbuffers/Renderbuffer.js';
+export * from './renderers/webgl/RenderingContext.js';
+export * from './renderers/webgl/programs/ProgramVertexArray.js';
+export * from './renderers/webgl/textures/InternalFormat.js';
+export * from './renderers/webgl/textures/TextureBindings.js';
 
-export * from './renderers/webgl/shaders/Shader';
-export * from './renderers/webgl/shaders/ShaderType';
-export * from './renderers/webgl/shaders/ShaderDefines';
+export * from './renderers/webgl/shaders/Shader.js';
+export * from './renderers/webgl/shaders/ShaderType.js';
+export * from './renderers/webgl/shaders/ShaderDefines.js';
 
-export * from './worker/BackgroundWorker';
-export * from './worker/WorkerPool';
+export * from './worker/BackgroundWorker.js';
+export * from './worker/WorkerPool.js';
 
-export * from './renderers/webgl/textures/DataType';
-export * from './renderers/webgl/textures/PixelFormat';
-export * from './renderers/webgl/textures/TexImage2D';
-export * from './renderers/webgl/textures/TexParameters';
-export * from './renderers/webgl/textures/TextureFilter';
-export * from './renderers/webgl/textures/TextureSourceType';
-export * from './renderers/webgl/textures/TextureTarget';
-export * from './renderers/webgl/textures/TextureWrap';
+export * from './renderers/webgl/textures/DataType.js';
+export * from './renderers/webgl/textures/PixelFormat.js';
+export * from './renderers/webgl/textures/TexImage2D.js';
+export * from './renderers/webgl/textures/TexParameters.js';
+export * from './renderers/webgl/textures/TextureFilter.js';
+export * from './renderers/webgl/textures/TextureSourceType.js';
+export * from './renderers/webgl/textures/TextureTarget.js';
+export * from './renderers/webgl/textures/TextureWrap.js';
 
-export * from './textures/ArrayBufferImage';
-export * from './textures/CubeMapTexture';
-export * from './textures/PixelEncoding';
-export * from './textures/Texture';
-export * from './textures/VirtualTexture';
-export * from './textures/loaders/ImageData';
-export * from './textures/loaders/SolidTextures';
+export * from './textures/ArrayBufferImage.js';
+export * from './textures/CubeMapTexture.js';
+export * from './textures/PixelEncoding.js';
+export * from './textures/Texture.js';
+export * from './textures/VirtualTexture.js';
+export * from './textures/loaders/ImageData.js';
+export * from './textures/loaders/SolidTextures.js';
 
-export * from './materials/PhysicalMaterialOutputs';
+export * from './materials/PhysicalMaterialOutputs.js';
 
-export * from './renderers/caches/ResourceCache';
-export * from './renderers/caches/TextureCache';
+export * from './renderers/caches/ResourceCache.js';
+export * from './renderers/caches/TextureCache.js';

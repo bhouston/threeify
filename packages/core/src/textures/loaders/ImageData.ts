@@ -1,6 +1,8 @@
 import { Color4 } from '@threeify/math';
 
-import { ArrayImage, DataType, PixelEncoding, Uint8ArrayImage } from '../..';
+import { DataType } from '../../renderers/webgl/textures/DataType.js';
+import { ArrayImage, Uint8ArrayImage } from '../ArrayBufferImage.js';
+import { PixelEncoding } from '../PixelEncoding.js';
 
 export function createSolidColorImageData(
   color: Color4,

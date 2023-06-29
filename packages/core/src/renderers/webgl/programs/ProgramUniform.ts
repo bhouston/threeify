@@ -15,15 +15,15 @@ import {
   vec4ArrayToFloat32Array
 } from '@threeify/math';
 
-import { Buffer } from '../buffers/Buffer';
-import { RenderingContext } from '../RenderingContext';
-import { TexImage2D } from '../textures/TexImage2D';
-import { TextureBindings } from '../textures/TextureBindings';
-import { Program } from './Program';
-import { ProgramUniformBlock } from './ProgramUniformBlock';
-import { UniformType, uniformTypeInfo } from './UniformType';
-import { uniformValueToArrayBuffer } from './UniformValue';
-import { UniformPrimitiveValue, UniformValue } from './UniformValueMap';
+import { Buffer } from '../buffers/Buffer.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { TexImage2D } from '../textures/TexImage2D.js';
+import { TextureBindings } from '../textures/TextureBindings.js';
+import { Program } from './Program.js';
+import { ProgramUniformBlock } from './ProgramUniformBlock.js';
+import { UniformType, uniformTypeInfo } from './UniformType.js';
+import { uniformValueToArrayBuffer } from './UniformValue.js';
+import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
 const regexUniformParser =
   /^((?<struct>\w+)(\[(?<structIndexer>\d+)])?\.)?(?<variable>\w+)(\[(?<variableIndexer>\d+)])?$/;

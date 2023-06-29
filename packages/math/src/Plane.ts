@@ -1,5 +1,5 @@
-import { hashFloat4 } from './utils/hash';
-import { Vec3 } from './Vec3';
+import { hashFloat4 } from './utils/hash.js';
+import { Vec3 } from './Vec3.js';
 
 export class Plane {
   static readonly NUM_COMPONENTS = 4;

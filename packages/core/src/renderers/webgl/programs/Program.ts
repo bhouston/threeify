@@ -5,19 +5,19 @@
 // * @bhouston
 //
 
-import { generateUUID } from '../../../core/generateUuid';
-import { ShaderMaterial } from '../../../materials/ShaderMaterial';
-import { BufferGeometry } from '../buffers/BufferGeometry';
-import { IResource } from '../IResource';
-import { RenderingContext } from '../RenderingContext';
-import { Shader } from '../shaders/Shader';
-import { ShaderDefines } from '../shaders/ShaderDefines';
-import { ShaderType } from '../shaders/ShaderType';
-import { ProgramAttribute } from './ProgramAttribute';
-import { ProgramUniform } from './ProgramUniform';
-import { ProgramUniformBlock } from './ProgramUniformBlock';
-import { ProgramVertexArray } from './ProgramVertexArray';
-import { numTextureUnits } from './UniformType';
+import { generateUUID } from '../../../core/generateUuid.js';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
+import { BufferGeometry } from '../buffers/BufferGeometry.js';
+import { IResource } from '../IResource.js';
+import { RenderingContext } from '../RenderingContext.js';
+import { Shader } from '../shaders/Shader.js';
+import { ShaderDefines } from '../shaders/ShaderDefines.js';
+import { ShaderType } from '../shaders/ShaderType.js';
+import { ProgramAttribute } from './ProgramAttribute.js';
+import { ProgramUniform } from './ProgramUniform.js';
+import { ProgramUniformBlock } from './ProgramUniformBlock.js';
+import { ProgramVertexArray } from './ProgramVertexArray.js';
+import { numTextureUnits } from './UniformType.js';
 
 export type UniformMap = { [name: string]: ProgramUniform };
 export type UniformBlockMap = {

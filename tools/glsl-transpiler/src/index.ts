@@ -1,10 +1,8 @@
-#!/usr/bin/env -S node --experimental-modules
-
 /* eslint-disable no-console */
 import fs from 'node:fs';
 import path from 'node:path';
 
-import glob from 'glob';
+import glob from 'tiny-glob';
 import watch from 'watch';
 
 import { getOptions } from './options.js';
@@ -53,7 +51,7 @@ export async function main() {
   }
 
   // find all the glsl files in the root directory
-  const files = glob.sync('**/*.glsl', { cwd: rootDir });
+  const files = await glob('**/*.glsl', { cwd: rootDir });
 
   // transpile each file
   for (const file of files) {
@@ -67,9 +65,9 @@ export async function main() {
   if (options.watch) {
     console.log('glsl-transpiler - watching for changes');
 
-    const trottleRecompiler = throttle(() => {
+    const trottleRecompiler = throttle(async () => {
       // find all the glsl files in the root directory
-      const files = glob.sync('**/*.glsl', { cwd: rootDir });
+      const files = await glob('**/*.glsl', { cwd: rootDir });
 
       // transpile each file
       for (const file of files) {

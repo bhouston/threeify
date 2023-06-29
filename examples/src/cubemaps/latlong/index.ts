@@ -16,7 +16,10 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs';
+import {
+  getThreeJSHDRIUrl,
+  ThreeJSHRDI
+} from '../../utilities/threejsHDRIs.js';
 
 async function init(): Promise<void> {
   const latLongTexture = await fetchTexture(

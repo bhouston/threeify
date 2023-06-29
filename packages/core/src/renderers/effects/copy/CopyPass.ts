@@ -1,17 +1,17 @@
-import { ShaderMaterial } from '../../../materials/ShaderMaterial';
-import { TextureEncoding } from '../../utilities/TextureEncoding';
-import { Attachment } from '../../webgl/framebuffers/Attachment';
-import { Framebuffer } from '../../webgl/framebuffers/Framebuffer';
+import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
+import { TextureEncoding } from '../../utilities/TextureEncoding.js';
+import { Attachment } from '../../webgl/framebuffers/Attachment.js';
+import { Framebuffer } from '../../webgl/framebuffers/Framebuffer.js';
 import {
   renderPass,
   VirtualFramebuffer
-} from '../../webgl/framebuffers/VirtualFramebuffer';
-import { shaderMaterialToProgram } from '../../webgl/programs/Program';
-import { RenderingContext } from '../../webgl/RenderingContext';
-import { TexImage2D } from '../../webgl/textures/TexImage2D';
-import { IEffect } from '../IEffect';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+} from '../../webgl/framebuffers/VirtualFramebuffer.js';
+import { shaderMaterialToProgram } from '../../webgl/programs/Program.js';
+import { RenderingContext } from '../../webgl/RenderingContext.js';
+import { TexImage2D } from '../../webgl/textures/TexImage2D.js';
+import { IEffect } from '../IEffect.js';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 export interface ICopyPassProps {
   sourceTexImage2D: TexImage2D;

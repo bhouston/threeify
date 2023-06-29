@@ -31,9 +31,9 @@ import {
   Vec3
 } from '@threeify/math';
 
-import { GPUTimerPanel, Stats } from '../../utilities/Stats';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+import { GPUTimerPanel, Stats } from '../../utilities/Stats.js';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 const stats = new Stats();
 

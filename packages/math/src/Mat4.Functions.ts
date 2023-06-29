@@ -1,4 +1,4 @@
-import { Euler3, EulerOrder3 } from './Euler3';
+import { Euler3, EulerOrder3 } from './Euler3.js';
 import {
   degToRad,
   delta,
@@ -6,21 +6,21 @@ import {
   equalsTolerance,
   parseSafeFloats,
   toSafeString
-} from './Functions';
-import { Mat3 } from './Mat3';
-import { quatToMat3 } from './Mat3.Functions';
-import { Mat4 } from './Mat4';
-import { Quat } from './Quat';
-import { mat4ToQuat } from './Quat.Functions';
-import { Vec2 } from './Vec2';
-import { Vec3 } from './Vec3';
+} from './Functions.js';
+import { quatToMat3 } from './Mat3.Functions.js';
+import { Mat3 } from './Mat3.js';
+import { Mat4 } from './Mat4.js';
+import { mat4ToQuat } from './Quat.Functions.js';
+import { Quat } from './Quat.js';
+import { Vec2 } from './Vec2.js';
 import {
   vec3Cross,
   vec3Length,
   vec3MultiplyByScalar,
   vec3Normalize,
   vec3Subtract
-} from './Vec3.Functions';
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 export function mat4Delta(a: Mat4, b: Mat4): number {
   let deltaSum = 0;

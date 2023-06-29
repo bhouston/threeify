@@ -1,5 +1,5 @@
-import { Sphere } from './Sphere';
-import { Vec3 } from './Vec3';
+import { Sphere } from './Sphere.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Sphere', () => {
   test('constructor defaults', () => {

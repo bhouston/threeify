@@ -1,8 +1,8 @@
-import { box3Center, box3FromVec3s } from './Box3.Functions';
-import { Box3 } from './Box3';
-import { mat4ToMaxAxisScale } from './Mat4.Functions';
-import { Mat4 } from './Mat4';
-import { Sphere } from './Sphere';
+import { box3Center, box3FromVec3s } from './Box3.Functions.js';
+import { Box3 } from './Box3.js';
+import { mat4ToMaxAxisScale } from './Mat4.Functions.js';
+import { Mat4 } from './Mat4.js';
+import { Sphere } from './Sphere.js';
 import {
   mat4TransformVec3,
   vec3Add,
@@ -12,8 +12,8 @@ import {
   vec3MultiplyByScalar,
   vec3Normalize,
   vec3Subtract
-} from './Vec3.Functions';
-import { Vec3 } from './Vec3';
+} from './Vec3.Functions.js';
+import { Vec3 } from './Vec3.js';
 
 export function sphereIsEmpty(s: Sphere): boolean {
   return s.radius < 0;

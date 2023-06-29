@@ -1,4 +1,3 @@
-import { Line3 } from './Line3';
 import {
   line3At,
   line3ClosestPoint,
@@ -8,9 +7,10 @@ import {
   line3LengthSq,
   line3Midpoint,
   mat4TransformLine3
-} from './Line3.Functions';
-import { Mat4 } from './Mat4';
-import { Vec3 } from './Vec3';
+} from './Line3.Functions.js';
+import { Line3 } from './Line3.js';
+import { Mat4 } from './Mat4.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Line3 Functions', () => {
   test('line3Delta', () => {

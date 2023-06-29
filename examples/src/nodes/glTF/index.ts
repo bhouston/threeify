@@ -30,9 +30,9 @@ import {
   getKhronosGlTFUrl,
   GLTFFormat,
   KhronosModel
-} from '../../utilities/khronosModels';
-import fragmentSource from './fragment.glsl';
-import vertexSource from './vertex.glsl';
+} from '../../utilities/khronosModels.js';
+import fragmentSource from './fragment.glsl.js';
+import vertexSource from './vertex.glsl.js';
 
 //const stats = new Stats();
 

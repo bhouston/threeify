@@ -1,4 +1,4 @@
-import { Vec4 } from './Vec4';
+import { Vec4 } from './Vec4.js';
 import {
   vec4Add,
   vec4Delta,
@@ -15,7 +15,7 @@ import {
   vec4Negate,
   vec4Normalize,
   vec4Subtract
-} from './Vec4.Functions';
+} from './Vec4.Functions.js';
 
 describe('Vec4 Functions', () => {
   test('vec4Delta', () => {

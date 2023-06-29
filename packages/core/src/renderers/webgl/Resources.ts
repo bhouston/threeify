@@ -1,5 +1,5 @@
-import { IResource } from './IResource';
-import { RenderingContext } from './RenderingContext';
+import { IResource } from './IResource.js';
+import { RenderingContext } from './RenderingContext.js';
 
 export class Resources {
   private readonly map: { [id: string]: IResource } = {};

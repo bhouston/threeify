@@ -1,5 +1,5 @@
-import { Line3 } from './Line3';
-import { Vec3 } from './Vec3';
+import { Line3 } from './Line3.js';
+import { Vec3 } from './Vec3.js';
 
 describe('Line3', () => {
   test('constructor defaults', () => {
