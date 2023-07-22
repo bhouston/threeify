@@ -1,11 +1,5 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@threeify/math": ["./packages/math/"],
-      "@threeify/core": ["./packages/core/"],
-      "@threeify/scene": ["./packages/scene/"],
-      "@threeify/layer-compositor": ["./packages/layer-compositor/"]
-    },
     "outDir": "dist",
     "target": "ESNext",
     "module": "ESNext",
@@ -20,6 +14,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "allowJs": true
+    "allowJs": true,
+    "incremental": true
   }
 }
