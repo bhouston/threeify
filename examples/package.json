@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "glsl-transpiler -r src -o src && tsc --noEmit && threeify-build src/**/index.ts --bundle --optimize",
-    "dev": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
+    "build": "glsl-transpiler -r src -o src && bite build",
+    "dev": "glsl-transpiler -r src -o src --watch & vite --watch"
   },
   "dependencies": {
     "@threeify/core": "*",
@@ -17,6 +17,8 @@
     "@threeify/scene": "*"
   },
   "devDependencies": {
-    "@threeify/build": "*"
+    "@threeify/build": "*",
+    "vite": "^4.4.3",
+    "vite-tsconfig-paths": "^4.2.0"
   }
 }
