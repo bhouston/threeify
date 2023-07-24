@@ -15,8 +15,5 @@
     "@threeify/core": "*",
     "@threeify/math": "*",
     "@threeify/scene": "*"
-  },
-  "devDependencies": {
-    "@threeify/rollup-plugin-glsl-transpiler": "*"
   }
 }
