@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "glsl-transpiler -r src -o src && bite build",
-    "dev": "glsl-transpiler -r src -o src --watch & vite --watch"
+    "build": "glsl-transpiler -r src -o src && vite build",
+    "dev": "glsl-transpiler -r src -o src --watch & vite"
   },
   "dependencies": {
     "@threeify/core": "*",
@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@threeify/build": "*",
+    "@threeify/rollup-plugin-glsl-transpiler": "*",
     "vite": "^4.4.3",
     "vite-tsconfig-paths": "^4.2.0"
   }

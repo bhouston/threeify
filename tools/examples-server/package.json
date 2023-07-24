@@ -1,11 +1,9 @@
 {
   "name": "examples-server",
   "version": "1.0.0",
-  "main": "src/server.js",
   "scripts": {
-    "build": "tsc --noEmit && esbuild src/server.ts --format=cjs --platform=node --bundle --outfile=dist/server.js",
-    "dev": "tsc --noEmit --watch & esbuild src/server.ts --format=cjs --platform=node --bundle --sourcemap --outfile=dist/server.js --watch",
-    "start": "nodemon dist/server.js"
+    "build": "tsc",
+    "dev": "tsc --watch & nodemon dist/server.js"
   },
   "devDependencies": {
     "@types/hapi__joi": "^17.1.9",

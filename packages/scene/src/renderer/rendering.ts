@@ -1,6 +1,8 @@
 import {
   Attachment,
   biltFramebuffers,
+  Blending,
+  blendModeToBlendState,
   BlendState,
   BufferBit,
   CanvasFramebuffer,
@@ -140,7 +142,7 @@ export function renderScene(
       outputTransformFlags: 0x4
     },
     DepthTestState.LessOrEqual,
-    BlendState.PremultipliedOver,
+    blendModeToBlendState(Blending.Over, true),
     CullingState.Back
   );
 
@@ -166,7 +168,7 @@ export function renderScene(
       blendMeshBatches,
       blendUniforms,
       DepthTestState.Less,
-      BlendState.PremultipliedOver,
+      blendModeToBlendState(Blending.Over, true),
       CullingState.Front
     );
 
@@ -176,7 +178,7 @@ export function renderScene(
       blendMeshBatches,
       blendUniforms,
       DepthTestState.Less,
-      BlendState.PremultipliedOver,
+      blendModeToBlendState(Blending.Over, true),
       CullingState.Back
     );
   }

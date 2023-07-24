@@ -1,0 +1,18 @@
+{
+  "name": "@threeify/rollup-plugin-glsl-transpiler",
+  "version": "4.0.2",
+  "type": "module",
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "types": "tsc --emitDeclarationOnly --outDir dist --watch"
+  },
+  "devDependencies": {
+    "@types/rollup": "^0.54.0"
+  },
+  "dependencies": {
+    "rollup": "^3.26.3"
+  }
+}
