@@ -17,9 +17,6 @@
     "@threeify/scene": "*"
   },
   "devDependencies": {
-    "@threeify/build": "*",
-    "@threeify/rollup-plugin-glsl-transpiler": "*",
-    "vite": "^4.4.3",
-    "vite-tsconfig-paths": "^4.2.0"
+    "@threeify/rollup-plugin-glsl-transpiler": "*"
   }
 }

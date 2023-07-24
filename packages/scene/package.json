@@ -16,7 +16,6 @@
     "meshoptimizer": "^0.18.1"
   },
   "devDependencies": {
-    "@threeify/build": "*",
     "@threeify/glsl-transpiler": "*",
     "@types/draco3dgltf": "^1.4.0"
   }

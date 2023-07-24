@@ -8,5 +8,8 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
+  },
+  "dependencies": {
+    "esbuild": "0.18.3"
   }
 }

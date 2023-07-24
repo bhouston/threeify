@@ -9,9 +9,6 @@
     "dev": "tsc --watch",
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
-  "devDependencies": {
-    "@types/rollup": "^0.54.0"
-  },
   "dependencies": {
     "rollup": "^3.26.3"
   }

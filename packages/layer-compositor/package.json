@@ -15,7 +15,6 @@
     "@threeify/math": "*"
   },
   "devDependencies": {
-    "@threeify/build": "*",
     "@threeify/glsl-transpiler": "*"
   }
 }
