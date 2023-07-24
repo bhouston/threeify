@@ -1,5 +1,5 @@
 {
-  "name": "@threeify/esbuild-plugin-glsl-transpiler",
+  "name": "@threeify/rollup-plugin-glsl-transpiler",
   "version": "4.0.2",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,6 +10,6 @@
     "types": "tsc --emitDeclarationOnly --outDir dist --watch"
   },
   "dependencies": {
-    "esbuild": "0.18.3"
+    "rollup": "^3.26.3"
   }
 }

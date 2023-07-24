@@ -2,8 +2,9 @@ import { Color3, Vec2, vec2Equals, vec2ToString } from '@threeify/math';
 
 import { assert } from '../../../core/assert.js';
 import { using } from '../../../core/using.js';
+import { Blending } from '../../../index.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import { BlendState } from '../../webgl/BlendState.js';
+import { blendModeToBlendState, BlendState } from '../../webgl/BlendState.js';
 import { ClearState } from '../../webgl/ClearState.js';
 import { BufferBit } from '../../webgl/framebuffers/BufferBit.js';
 import {
@@ -101,7 +102,9 @@ export async function createGaussianBlur(
         program,
         uniforms,
         blendState:
-          targetAlpha < 1 ? BlendState.PremultipliedOver : BlendState.None
+          targetAlpha < 1
+            ? blendModeToBlendState(Blending.Over, true)
+            : BlendState.None
       });
     },
 

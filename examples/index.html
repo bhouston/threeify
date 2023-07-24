@@ -35,7 +35,7 @@
       let scriptUrl = urlParams.get('scriptUrl');
       const name = urlParams.get('name') || 'nodes/glTFIBL';
       if (name !== null) {
-        scriptUrl = `./js/${name}/index.js`;
+        scriptUrl = `./src/${name}/index.ts`;
       }
       var script = document.createElement('script');
       script.setAttribute('type', 'module');

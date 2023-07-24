@@ -8,15 +8,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "glsl-transpiler -r src -o src && tsc --noEmit && threeify-build src/**/index.ts --bundle --optimize",
-    "dev": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
+    "build": "glsl-transpiler -r src -o src && vite build",
+    "dev": "glsl-transpiler -r src -o src --watch & vite"
   },
   "dependencies": {
     "@threeify/core": "*",
     "@threeify/math": "*",
     "@threeify/scene": "*"
-  },
-  "devDependencies": {
-    "@threeify/build": "*"
   }
 }
