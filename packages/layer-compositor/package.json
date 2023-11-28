@@ -17,5 +17,6 @@
   "devDependencies": {
     "@threeify/build": "*",
     "@threeify/glsl-transpiler": "^4.0.3"
-  }
+  },
+  "gitHead": "90cd73e6dec2f5c0c91d28031c99e80919edfb2d"
 }

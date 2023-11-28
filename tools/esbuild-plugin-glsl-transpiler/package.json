@@ -6,7 +6,18 @@
   "source": "./src/index.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "types": "tsc --emitDeclarationOnly --outDir dist --watch"
-  }
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/watch": "^1.0.3"
+  },
+  "dependencies": {
+    "commander": "^9.5.0",
+    "glob": "^8.0.3",
+    "make-dir": "^3.1.0",
+    "tiny-glob": "^0.2.9",
+    "watch": "^0.13.0"
+  },
+  "gitHead": "90cd73e6dec2f5c0c91d28031c99e80919edfb2d"
 }
