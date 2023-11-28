@@ -23,10 +23,13 @@
   "scripts": {
     "build": "lerna run build",
     "dev": "lerna run dev --parallel --stream",
-    "clean": "rm -rf node_modules tools/*/node_modules packages/*/node_modules examples/node_modules tools/*/dist packages/*/dist examples/dist",
+    "clean:dist": "rm -rf packages/*/dist apps/*/dist",
+    "clean:node_modules": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
+    "clean": "npm run clean:dist && npm run clean:node_modules",
     "format": "prettier \"examples/{src,glsl}/**/*.{ts,json,glsl}\" \"packages/*/{src,glsl}/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/*.{ts,json}\" --fix",
     "docs": "typedoc",
-    "test": "jest"
+    "test": "jest",
+    "publish": "npm run clean:dist && npm run build && npm test && lerna publish --no-private"
   },
   "workspaces": [
     "tools/*",
