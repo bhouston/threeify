@@ -12,6 +12,6 @@
   },
   "devDependencies": {
     "@threeify/build": "*",
-    "@threeify/glsl-transpiler": "*"
+    "@threeify/glsl-transpiler": "^4.0.3"
   }
 }

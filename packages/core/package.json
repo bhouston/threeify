@@ -1,7 +1,7 @@
 {
   "name": "@threeify/core",
   "description": "Typescript 3D Library loosely based on three.js",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "type": "module",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -22,10 +22,10 @@
     "dev": "glsl-transpiler -r src -o src --watch & tsc --watch"
   },
   "dependencies": {
-    "@threeify/math": "*"
+    "@threeify/math": "^4.0.3"
   },
   "devDependencies": {
     "@threeify/build": "*",
-    "@threeify/glsl-transpiler": "*"
+    "@threeify/glsl-transpiler": "^4.0.3"
   }
 }
