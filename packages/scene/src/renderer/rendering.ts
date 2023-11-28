@@ -225,7 +225,7 @@ export function renderMeshes(
     lightParameters,
     shaderNameToLightingUniformBuffers,
     shaderNameToCameraUniformBuffers,
-    userUniforms
+    userUniforms: _userUniforms
   } = renderCache;
 
   for (const meshBatch of meshBatches) {

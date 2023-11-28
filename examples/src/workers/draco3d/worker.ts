@@ -1,8 +1,7 @@
 import {
   BackgroundWorker,
   IBackgroundRequest,
-  IBackgroundResponse,
-  sleep
+  IBackgroundResponse
 } from '@threeify/core';
 
 //import { DracoDecoderModule } from './draco3dgltf/draco_decoder.js';
@@ -22,7 +21,7 @@ async function init() {
   backgroundWorker.handlers.set(
     'decode',
     (request: IBackgroundRequest): Promise<IBackgroundResponse> => {
-      return new Promise<IBackgroundResponse>((resolve, reject) => {
+      return new Promise<IBackgroundResponse>((resolve, _reject) => {
         // const buffer = request.buffers[0];
         /*  const decodeBuffer = new DracoDecoderModule.DecoderBuffer();
         decodeBuffer.Init(new Int8Array(buffer), buffer.byteLength);

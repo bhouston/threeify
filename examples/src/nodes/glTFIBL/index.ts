@@ -30,7 +30,6 @@ import {
   PointLight,
   SceneNode,
   SceneTreeCache,
-  subTreeStats,
   updateDirtyNodes,
   updateFramebuffers,
   updateNodeTree,
@@ -113,7 +112,7 @@ async function init(): Promise<void> {
   //console.timeEnd('fetchHDR');
   const lightIntensity = 0;
   const domeLightIntensity = 1.5;
-  const transmissionMode = false;
+  //const transmissionMode = false;
 
   const canvasHtmlElement = document.getElementById(
     'framebuffer'
@@ -210,9 +209,9 @@ async function init(): Promise<void> {
 
   updateNodeTree(root, sceneTreeCache);
 
-  const treeStats = subTreeStats(root);
+  //const _treeStats = subTreeStats(root);
 
-  //console.log(`Subtree stats: ${JSON.stringify(treeStats, null, 2)}`);
+  //console.log(`Subtree stats: ${JSON.stringify(_treeStats, null, 2)}`);
 
   //console.time('updateRenderCache');
   const program = await programPromise;

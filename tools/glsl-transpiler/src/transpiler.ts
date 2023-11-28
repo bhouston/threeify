@@ -50,7 +50,7 @@ export async function transpile(
 
   glslSource = glslSource.replace(
     importRegex,
-    (match: string, importPath: string, other: string) => {
+    (_match: string, importPath: string, _other: string) => {
       // console.log(
       //   `replacement match:${match} importPath:${importPath} other:${other}`
       //  );

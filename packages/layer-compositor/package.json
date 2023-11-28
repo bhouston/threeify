@@ -2,6 +2,7 @@
   "name": "@threeify/layer-compositor",
   "description": "Typescript 3D Library loosely based on three.js",
   "version": "4.0.2",
+  "type": "module",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "source": "./src/index.ts",

@@ -5,19 +5,19 @@ import {
   DataType,
   fetchImage,
   Framebuffer,
+  geometryToBufferGeometry,
   IDisposable,
   InternalFormat,
   isImageBitmapSupported,
   isiOS,
   isMacOS,
-  geometryToBufferGeometry,
-  shaderMaterialToProgram,
   PixelFormat,
   planeGeometry,
   Program,
   renderBufferGeometry,
   RenderingContext,
   ShaderMaterial,
+  shaderMaterialToProgram,
   TexImage2D,
   TexParameters,
   Texture,
@@ -473,7 +473,7 @@ export class LayerCompositor {
       true
     );
 
-    this.#layers.forEach((layer, idx) => {
+    this.#layers.forEach((layer, _idx) => {
       const layerImage = this.layerImageCache[layer.url];
       if (layerImage !== undefined) {
         layerImage.renderId = this.renderId;

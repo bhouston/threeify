@@ -1,4 +1,4 @@
-import fs, { Dirent, promises as fsPromises } from 'fs';
+import fs, { promises as fsPromises } from 'fs';
 import path from 'path';
 
 export type ExampleDescription = {

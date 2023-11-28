@@ -401,7 +401,7 @@ describe('Mat4 Functions', () => {
 
   test('mat4Multiply-translation-scale', () => {
     const t1 = translation3ToMat4(new Vec3(1, 0, 0));
-    const t2 = translation3ToMat4(new Vec3(0, 1, 0));
+    //  const t2 = translation3ToMat4(new Vec3(0, 1, 0));
     const s1 = scale3ToMat4(new Vec3(2, 2, 2));
 
     // s1 happens first, then t1.

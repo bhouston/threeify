@@ -33,9 +33,9 @@ async function init(): Promise<void> {
   const flooringNormalTexture = await fetchTexture(
     '/assets/textures/metal_flooring_normals.jpg'
   );
-  const scratchesTexture = await fetchTexture(
-    '/assets/textures/golfball/scratches.png'
-  );
+  // const _scratchesTexture = await fetchTexture(
+  // '/assets/textures/golfball/scratches.png'
+  //);
   const golfballNormalTexture = await fetchTexture(
     '/assets/textures/golfball/normals2.jpg'
   );
