@@ -6,7 +6,7 @@
   "source": "./src/index.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "watch": "tsc --watch"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
