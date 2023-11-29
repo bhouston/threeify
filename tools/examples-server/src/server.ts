@@ -1,16 +1,13 @@
-import crypto from 'node:crypto';
-
 import cors from '@koa/cors';
 import Router from '@koa/router';
 import Koa from 'koa';
-import logger from 'koa-logger';
-import serve from 'koa-static';
-import proxy from 'koa-proxies';
-import mount from 'koa-mount';
 import compress from 'koa-compress';
+import logger from 'koa-logger';
+import mount from 'koa-mount';
+import serve from 'koa-static';
 import staticCache from 'koa-static-cache';
 
-import { HOST, PORT, EXAMPLES_ROOT, ASSETS_ROOT } from './config.js';
+import { ASSETS_ROOT, EXAMPLES_ROOT, HOST, PORT } from './config.js';
 import { getExampleDescriptions } from './getExampleDescriptions.js';
 
 console.log('EXAMPLES_ROOT', EXAMPLES_ROOT);

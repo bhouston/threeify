@@ -257,13 +257,13 @@ export function createRenderingContext(
   document: Document,
   elementId: string
 ): RenderingContext {
-  const element = document.getElementById('framebuffer');
+  const element = document.getElementById(elementId);
   if (element === null) {
-    throw new Error('Could not find element with id "framebuffer"');
+    throw new Error(`Could not find element with id "${elementId}"`);
   }
   if (!(element instanceof HTMLCanvasElement)) {
     throw new TypeError(
-      'Element with id "framebuffer" is not a canvas element'
+      `Element with id "${elementId}" is not a canvas element`
     );
   }
   return new RenderingContext(element);

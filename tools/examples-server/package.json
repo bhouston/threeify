@@ -1,6 +1,7 @@
 {
   "name": "examples-server",
-  "version": "1.0.0",
+  "version": "4.0.2",
+  "private": true,
   "main": "src/server.js",
   "scripts": {
     "build": "tsc --noEmit && esbuild src/server.ts --format=cjs --platform=node --bundle --outfile=dist/server.js",

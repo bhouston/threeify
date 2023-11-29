@@ -1,6 +1,7 @@
 import fs from 'node:fs';
-import path from 'node:path';
+
 import esbuild from 'esbuild';
+
 import { transpileSource } from './transpileSource.js';
 
 export const glslTranspiler = {

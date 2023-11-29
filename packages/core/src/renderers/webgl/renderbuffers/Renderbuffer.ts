@@ -1,7 +1,6 @@
 import { Vec2 } from '@threeify/math';
 
 import { generateUUID } from '../../../core/generateUuid.js';
-import { ClearState } from '../ClearState.js';
 import { IResource } from '../IResource.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { InternalFormat } from '../textures/InternalFormat.js';
@@ -10,7 +9,7 @@ export class Renderbuffer implements IResource {
   public readonly id = generateUUID();
   disposed = false;
   glRenderbuffer: WebGLRenderbuffer;
-  #clearState: ClearState = new ClearState();
+  // #clearState: ClearState = new ClearState();
 
   constructor(
     public context: RenderingContext,

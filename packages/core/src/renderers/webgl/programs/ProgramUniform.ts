@@ -128,7 +128,7 @@ export class ProgramUniform {
       );
     }
 
-    const { blockOffset, uniformType, numElements, bytesPerElement } = this;
+    const { blockOffset, uniformType, bytesPerElement } = this;
 
     const arrayBufferView = uniformValueToArrayBuffer(uniformType, value);
     //console.log('writing to buffer', arrayBufferView, blockOffset, numElements);

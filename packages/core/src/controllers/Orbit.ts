@@ -135,7 +135,7 @@ export class Orbit implements IDisposable {
     this.rotationVersion = this.version;
   }
 
-  onPointerCancel(pe: PointerEvent) {
+  onPointerCancel(_pe: PointerEvent) {
     // console.log("pointer cancel");
   }
 }

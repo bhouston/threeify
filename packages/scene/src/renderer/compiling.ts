@@ -40,7 +40,7 @@ import { RenderCache } from './RenderCache.js';
 import { SceneTreeCache } from './SceneTreeCache.js';
 
 export function updateDirtyNodes(
-  sceneTreeCache: SceneTreeCache,
+  _sceneTreeCache: SceneTreeCache,
   renderCache: RenderCache,
   framebuffer: VirtualFramebuffer | undefined = undefined
 ) {
@@ -66,7 +66,7 @@ export function updateRenderCache(
   rootNode: SceneNode,
   activeCamera: CameraNode | undefined,
   shaderResolver: (shaderName: string) => Program,
-  sceneTreeCache: SceneTreeCache,
+  _sceneTreeCache: SceneTreeCache,
   renderCache: RenderCache
 ) {
   const {

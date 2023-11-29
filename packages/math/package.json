@@ -1,7 +1,7 @@
 {
   "name": "@threeify/math",
   "description": "Computer graphics oriented, High performance, tree-shakeable, TypeScript 3D vector math library.",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "type": "module",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@threeify/build": "*",
-    "@threeify/glsl-transpiler": "*"
-  }
+    "@threeify/glsl-transpiler": "^4.0.4"
+  },
+  "gitHead": "e851f7c9ab6e9ce71a875d293e6318bf5c261bc0"
 }

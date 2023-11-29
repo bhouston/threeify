@@ -1,6 +1,6 @@
 {
   "name": "@threeify/scene",
-  "version": "3.0.0",
+  "version": "4.0.4",
   "type": "module",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -10,14 +10,15 @@
     "dev": "glsl-transpiler -r src -o src --watch & tsc --watch"
   },
   "dependencies": {
-    "@threeify/core": "*",
-    "@threeify/math": "*",
+    "@threeify/core": "^4.0.4",
+    "@threeify/math": "^4.0.4",
     "draco3dgltf": "^1.5.5",
     "meshoptimizer": "^0.18.1"
   },
   "devDependencies": {
     "@threeify/build": "*",
-    "@threeify/glsl-transpiler": "*",
+    "@threeify/glsl-transpiler": "^4.0.4",
     "@types/draco3dgltf": "^1.4.0"
-  }
+  },
+  "gitHead": "e851f7c9ab6e9ce71a875d293e6318bf5c261bc0"
 }

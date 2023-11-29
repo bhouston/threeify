@@ -1,6 +1,7 @@
 {
-  "name": "@threeify/build",
+  "name": "threeify-build",
   "version": "4.0.2",
+  "private": true,
   "type": "module",
   "main": "./dist/index.js",
   "source": "./src/index.ts",

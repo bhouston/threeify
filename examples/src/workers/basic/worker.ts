@@ -23,7 +23,7 @@ backgroundWorker.handlers.set('delay', (request: IBackgroundRequest) => {
 
 backgroundWorker.handlers.set('delay-async', (request: IBackgroundRequest) => {
   const delay = request.parameters.delay;
-  const promise = new Promise<IBackgroundResponse>((resolve, reject) => {
+  const promise = new Promise<IBackgroundResponse>((resolve, _reject) => {
     sleep(delay)
       .then(() => {
         //console.log(`handling processing id ${request.id}`);

@@ -163,8 +163,7 @@ export function renderPass(
     cullingState,
     program,
     uniforms,
-    uniformBuffers,
-    programVertexArray
+    uniformBuffers
   } = props;
 
   const { context } = framebuffer;

@@ -1,6 +1,6 @@
 {
   "name": "@threeify/glsl-transpiler",
-  "version": "4.0.2",
+  "version": "4.0.4",
   "type": "module",
   "main": "./dist/index.js",
   "source": "./src/index.ts",
@@ -21,5 +21,6 @@
     "make-dir": "^3.1.0",
     "tiny-glob": "^0.2.9",
     "watch": "^0.13.0"
-  }
+  },
+  "gitHead": "e851f7c9ab6e9ce71a875d293e6318bf5c261bc0"
 }

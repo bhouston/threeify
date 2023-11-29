@@ -110,7 +110,7 @@ export function postOrderUpdateNode(
 
 export function preOrderUpdateNode(
   node: SceneNode,
-  parentNode: SceneNode | undefined,
+  _parentNode: SceneNode | undefined,
   parentNodeChanged: boolean,
   sceneUpdateCache: SceneTreeCache
 ): boolean {
