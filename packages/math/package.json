@@ -14,5 +14,5 @@
     "@threeify/build": "*",
     "@threeify/glsl-transpiler": "^4.0.4"
   },
-  "gitHead": "90cd73e6dec2f5c0c91d28031c99e80919edfb2d"
+  "gitHead": "e851f7c9ab6e9ce71a875d293e6318bf5c261bc0"
 }
