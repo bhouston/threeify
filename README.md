@@ -116,7 +116,7 @@ Install dependencies
 npm install
 ```
 
-Run in dev mode
+Run in watch mode
 
 ```sh
 npm run dev

@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "glsl-transpiler -r src -o src && tsc --noEmit && threeify-build src/**/index.ts --bundle --optimize",
-    "dev": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
+    "watch": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
   },
   "dependencies": {
     "@threeify/core": "*",

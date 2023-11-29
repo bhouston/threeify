@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "watch": "tsc --watch"
   },
   "devDependencies": {
     "@threeify/esbuild-plugin-glsl-transpiler": "*",

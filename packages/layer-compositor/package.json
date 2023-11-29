@@ -8,7 +8,7 @@
   "source": "./src/index.ts",
   "scripts": {
     "build": "glsl-transpiler  -r src -o src && tsc",
-    "dev": "glsl-transpiler -r src -o src --watch & tsc --watch"
+    "watch": "glsl-transpiler -r src -o src --watch & tsc --watch"
   },
   "dependencies": {
     "@threeify/core": "^4.0.4",
