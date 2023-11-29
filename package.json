@@ -23,9 +23,9 @@
   "scripts": {
     "build": "lerna run build",
     "watch": "lerna run watch --parallel --stream",
-    "clean:dist": "rm -rf packages/*/dist apps/*/dist",
-    "clean:node_modules": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
-    "clean": "npm run clean:dist && npm run clean:node_modules",
+    "clean:node_modules": "node scripts/clean.js --node_modules",
+    "clean:dist": "node scripts/clean.js --dist",
+    "clean": "node scripts/clean.js --node_modules --dist",
     "format": "prettier \"examples/{src,glsl}/**/*.{ts,json,glsl}\" \"packages/*/{src,glsl}/**/*.{ts,json,glsl}\" --check --write && eslint \"examples/**/*.{ts,json}\" \"packages/*/*.{ts,json}\" --fix",
     "docs": "typedoc",
     "test": "jest",
