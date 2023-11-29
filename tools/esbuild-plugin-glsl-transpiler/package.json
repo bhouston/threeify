@@ -1,6 +1,6 @@
 {
   "name": "@threeify/esbuild-plugin-glsl-transpiler",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "type": "module",
   "main": "./dist/index.js",
   "source": "./src/index.ts",
