@@ -45,7 +45,6 @@ export async function main() {
   }
 
   const rootDir = path.join(options.projectDir, options.rootDir);
-  const outDir = path.join(options.projectDir, options.outDir);
 
   await transpileProject(options, options.projectDir, options.rootDir, options.outDir);
 

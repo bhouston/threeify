@@ -37,7 +37,9 @@ export function parseHDR(arrayBuffer: ArrayBuffer): ImageData {
   const header = readHeader(readBuffer);
   const pixelData = readRLEPixelData(readBuffer.data.subarray(readBuffer.position), header.width, header.height);
 
-  return new ImageData(pixelData, header.width, header.height);
+  // Force a non-shared backing buffer for strict DOM typings.
+  const normalizedPixelData = new Uint8ClampedArray(pixelData);
+  return new ImageData(normalizedPixelData, header.width, header.height);
 }
 
 function stringFromCharCodes(unicode: Uint16Array): string {

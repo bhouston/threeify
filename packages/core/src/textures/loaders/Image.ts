@@ -27,7 +27,10 @@ export function createImageBitmapFromArrayBuffer(
   arrayBufferView: ArrayBufferView,
   mimeType: string,
 ): Promise<ImageBitmap> {
-  const blob = new Blob([arrayBufferView], { type: mimeType });
+  // Create a copy backed by ArrayBuffer to satisfy strict BlobPart typing.
+  const bytes = new Uint8Array(arrayBufferView.byteLength);
+  bytes.set(new Uint8Array(arrayBufferView.buffer, arrayBufferView.byteOffset, arrayBufferView.byteLength));
+  const blob = new Blob([bytes], { type: mimeType });
   return createImageBitmap(blob);
 }
 

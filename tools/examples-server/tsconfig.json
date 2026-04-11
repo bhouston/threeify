@@ -7,7 +7,7 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo",
     "composite": true,
     "noEmit": true,
-    "module": "commonjs",
+    "module": "nodenext",
     "target": "es2016"
   }
 }
