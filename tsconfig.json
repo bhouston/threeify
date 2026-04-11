@@ -1,6 +1,19 @@
 {
+  "files": [],
+  "references": [
+    { "path": "./tools/glsl-transpiler" },
+    { "path": "./tools/esbuild-plugin-glsl-transpiler" },
+    { "path": "./tools/build" },
+    { "path": "./tools/examples-server" },
+    { "path": "./packages/math" },
+    { "path": "./packages/core" },
+    { "path": "./packages/scene" },
+    { "path": "./packages/layer-compositor" },
+    { "path": "./examples" }
+  ],
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "target": "es2022",
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -27,6 +40,7 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "allowJs": false,
-    "incremental": false
+    "incremental": true,
+    "composite": true
   }
 }

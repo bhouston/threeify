@@ -1,7 +1,15 @@
 {
   "extends": "../../tsconfig.json",
+  "references": [{ "path": "../math" }, { "path": "../core" }],
   "include": ["src"],
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "composite": true
+  },
+  "glslTranspiler": {
+    "rootDir": "src",
     "outDir": "dist"
   }
 }

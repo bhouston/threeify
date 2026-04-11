@@ -1,12 +1,21 @@
 {
   "extends": "../tsconfig.json",
+  "references": [{ "path": "../packages/math" }, { "path": "../packages/core" }, { "path": "../packages/scene" }],
   "include": ["src/**/*"],
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "composite": true,
+    "noEmit": true,
     "plugins": [
       {
         "transform": "@threeify/typescript-plugin-glsl-transpiler"
       }
     ]
+  },
+  "glslTranspiler": {
+    "rootDir": "src",
+    "outDir": "src"
   }
 }

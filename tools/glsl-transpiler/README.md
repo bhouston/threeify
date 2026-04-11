@@ -21,8 +21,10 @@ Usage: glsl-transpiler [options]
 Options:
   -V, --version               output the version number
   -p, --projectDir <dirpath>  the root of the project directory tree
+  -c, --tsconfigPath <filepath>  the tsconfig file to use in build mode
   -r, --rootDir <dirpath>     the root of the glsl directory tree
   -o, --outDir <dirpath>      the root of the output directory tree
+  -b, --buildMode             run for all referenced tsconfig projects
   -w, --watch                 watch and incremental transpile any changed files
   -m, --minify                reduce the size of the glsl code
   -v, --verboseLevel <level>  higher numbers means more output
@@ -49,6 +51,14 @@ glsl.js JavaScript modules in the output directory.
 
 ```
 npm run start -p ../threeify
+```
+
+### Build Mode
+
+Use build mode to process all projects reachable from a root tsconfig references graph.
+
+```
+glsl-transpiler -b -c tsconfig.json
 ```
 
 ### Watch

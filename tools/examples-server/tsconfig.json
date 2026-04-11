@@ -2,8 +2,11 @@
   "extends": "../../tsconfig.json",
   "include": ["src/**/*"],
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "dist",
-
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "composite": true,
+    "noEmit": true,
     "module": "commonjs",
     "target": "es2016"
   }

@@ -20,8 +20,11 @@
     "url": "https://github.com/bhouston/threeify.git"
   },
   "type": "module",
+  "engines": {
+    "node": ">=25"
+  },
   "scripts": {
-    "build": "pnpm -r run build",
+    "build": "glsl-transpiler -b -c tsconfig.json && tsgo -b",
     "watch": "pnpm -r --parallel run watch",
     "clean:node_modules": "node scripts/clean.js --node_modules",
     "clean:dist": "node scripts/clean.js --dist",

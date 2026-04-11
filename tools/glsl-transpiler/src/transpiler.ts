@@ -15,7 +15,7 @@ import { promises as fsPromises } from 'node:fs';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { Options } from './options.js';
+import type { Options } from './options.ts';
 
 // matches with //  #pragma import <es-module-path or local-file-path>
 const importRegex = /^#pragma import "(?<path>[^\n"]+)"$/gm;

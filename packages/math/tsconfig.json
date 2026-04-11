@@ -2,6 +2,13 @@
   "extends": "../../tsconfig.json",
   "include": ["src"],
   "compilerOptions": {
-    "outDir": "dist"
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "composite": true
+  },
+  "glslTranspiler": {
+    "rootDir": "src",
+    "outDir": "src"
   }
 }

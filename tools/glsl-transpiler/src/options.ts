@@ -8,8 +8,10 @@ import { Command } from 'commander';
 
 export type Options = {
   projectDir: string;
+  tsconfigPath: string;
   rootDir: string;
   outDir: string;
+  buildMode: boolean;
   watch: boolean;
   minify: boolean;
   verboseLevel: number;
@@ -20,8 +22,10 @@ const configFileName = 'glsl-transpiler.json';
 
 export type OptionsOverride = {
   projectDir?: string;
+  tsconfigPath?: string;
   rootDir?: string;
   outDir?: string;
+  buildMode?: boolean;
   watch?: boolean;
   minify?: boolean;
   verboseLevel?: number;
@@ -30,8 +34,10 @@ export type OptionsOverride = {
 
 const defaultOptions = {
   projectDir: process.cwd(),
+  tsconfigPath: 'tsconfig.json',
   rootDir: 'src',
   outDir: 'src',
+  buildMode: false,
   watch: false,
   minify: false,
   verboseLevel: 0,
@@ -47,8 +53,10 @@ export async function getOptions() {
     .name(packageJson.name)
     .version(packageJson.version)
     .option('-p, --projectDir <dirpath>', `the root of the project directory tree`)
+    .option('-c, --tsconfigPath <filepath>', `the tsconfig file to use in build mode`)
     .option('-r, --rootDir <dirpath>', `the root of the source directory tree`)
     .option('-o, --outDir <dirpath>', `the root of the output directory tree`)
+    .option('-b, --buildMode', `run for all referenced tsconfig projects`)
     .option('-w, --watch', `watch and incremental transpile any changed files`)
     .option('-m, --minify', `reduce the size of the glsl code`)
     .option('-v, --verboseLevel <level>', `higher numbers means more output`, Number.parseInt);
@@ -73,9 +81,21 @@ export async function getOptions() {
   }
 
   // combine the options in order of preference...
-  return {
+  const options = {
     ...defaultOptions,
     ...threeifyOptions,
     ...cmdLineOptions,
   } as Options;
+
+  if (options.buildMode && (cmdLineOptions.rootDir || cmdLineOptions.outDir)) {
+    console.error('--buildMode cannot be used with --rootDir or --outDir');
+    exit(1);
+  }
+
+  if (options.buildMode && options.watch) {
+    console.error('--buildMode cannot be used with --watch');
+    exit(1);
+  }
+
+  return options;
 }

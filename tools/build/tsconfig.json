@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.json",
+  "references": [{ "path": "../esbuild-plugin-glsl-transpiler" }],
   "include": ["src"],
   "compilerOptions": {
-    "outDir": "dist"
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "composite": true
   }
 }

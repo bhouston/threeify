@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
-import { main } from '../dist/index.js';
+const nodeMajorVersion = Number.parseInt(process.versions.node.split('.')[0], 10);
 
-main();
+if (nodeMajorVersion >= 24) {
+	await import('../src/cli.ts');
+} else {
+	await import('../dist/cli.js');
+}
