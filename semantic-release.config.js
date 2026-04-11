@@ -7,13 +7,7 @@ export default {
     [
       '@semantic-release/npm',
       {
-        npmPublish: false // Lerna will handle the publishing
-      }
-    ],
-    [
-      'semantic-release-lerna',
-      {
-        lernaCommand: 'npx lerna'
+        npmPublish: true
       }
     ],
     '@semantic-release/git'

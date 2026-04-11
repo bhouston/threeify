@@ -13,11 +13,11 @@
     "watch": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
   },
   "dependencies": {
-    "@threeify/core": "*",
-    "@threeify/math": "*",
-    "@threeify/scene": "*"
+    "@threeify/core": "workspace:*",
+    "@threeify/math": "workspace:*",
+    "@threeify/scene": "workspace:*"
   },
   "devDependencies": {
-    "@threeify/build": "*"
+    "@threeify/build": "workspace:*"
   }
 }
