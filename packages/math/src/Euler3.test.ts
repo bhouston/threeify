@@ -9,7 +9,7 @@ const testtestOrders = [
   EulerOrder3.ZXY,
   EulerOrder3.ZYX,
   EulerOrder3.YZX,
-  EulerOrder3.XZY
+  EulerOrder3.XZY,
 ];
 const e0 = new Euler3();
 const eX = new Euler3(1, 0, 0);

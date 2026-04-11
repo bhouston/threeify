@@ -3,20 +3,15 @@ import path from 'path';
 import process from 'process';
 import fs from 'fs';
 
-const rootPath = path.join(
-  path.dirname(import.meta.url.replace('file:/', '')),
-  '..'
-);
+const rootPath = path.join(path.dirname(import.meta.url.replace('file:/', '')), '..');
 
 const directoryNamesToClean = ['node_modules', 'dist'].filter((directoryName) =>
-  process.argv.includes(`--${directoryName}`)
+  process.argv.includes(`--${directoryName}`),
 );
 // remove subdirectories that don't exist.
-const projectPathsToClean = ['apps', 'examples', 'packages'].filter(
-  (projectPath) => {
-    return fs.existsSync(path.join(rootPath, projectPath));
-  }
-);
+const projectPathsToClean = ['apps', 'examples', 'packages'].filter((projectPath) => {
+  return fs.existsSync(path.join(rootPath, projectPath));
+});
 
 const getSubDirectories = async (directory) => {
   // get the subdirectories of the packages directory
@@ -48,11 +43,7 @@ const main = async () => {
   });
 
   // Run deletion operations in parallel
-  await Promise.all(
-    directoriesToDelete
-      .filter((directory) => fs.existsSync(directory))
-      .map(deleteDirectory)
-  );
+  await Promise.all(directoriesToDelete.filter((directory) => fs.existsSync(directory)).map(deleteDirectory));
 };
 
 main();

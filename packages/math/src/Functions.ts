@@ -60,11 +60,7 @@ export function toSafeString(elements: number[]): string {
 
 export const EPSILON = 0.000001; // chosen from gl-matrix
 
-export function equalsTolerance(
-  a: number,
-  b: number,
-  tolerance: number = EPSILON
-): boolean {
+export function equalsTolerance(a: number, b: number, tolerance: number = EPSILON): boolean {
   return Math.abs(a - b) < tolerance;
 }
 

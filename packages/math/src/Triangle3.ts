@@ -5,15 +5,11 @@ export class Triangle3 {
   constructor(
     public readonly a = new Vec3(),
     public readonly b = new Vec3(),
-    public readonly c = new Vec3()
+    public readonly c = new Vec3(),
   ) {}
 
   getHashCode(): number {
-    return hashFloat3(
-      this.a.getHashCode(),
-      this.b.getHashCode(),
-      this.c.getHashCode()
-    );
+    return hashFloat3(this.a.getHashCode(), this.b.getHashCode(), this.c.getHashCode());
   }
 
   set(a: Vec3, b: Vec3, c: Vec3): this {

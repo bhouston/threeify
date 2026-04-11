@@ -6,18 +6,11 @@
 //
 
 import { DataType } from '../renderers/webgl/textures/DataType.js';
-import {
-  InternalFormat,
-  internalFormatToDataType
-} from '../renderers/webgl/textures/InternalFormat.js';
+import { InternalFormat, internalFormatToDataType } from '../renderers/webgl/textures/InternalFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
 import { TextureWrap } from '../renderers/webgl/textures/TextureWrap.js';
 import { fetchImage } from './loaders/Image.js';
-import {
-  getTextureSourceSize,
-  TextureSource,
-  VirtualTexture
-} from './VirtualTexture.js';
+import { getTextureSourceSize, TextureSource, VirtualTexture } from './VirtualTexture.js';
 export class Texture extends VirtualTexture {
   constructor(
     public image: TextureSource,
@@ -29,17 +22,9 @@ export class Texture extends VirtualTexture {
     internalFormat = InternalFormat.RGBA8,
     dataType = internalFormatToDataType(internalFormat),
     generateMipmaps = true,
-    anisotropicLevels = 1
+    anisotropicLevels = 1,
   ) {
-    super(
-      level,
-      magFilter,
-      minFilter,
-      internalFormat,
-      dataType,
-      generateMipmaps,
-      anisotropicLevels
-    );
+    super(level, magFilter, minFilter, internalFormat, dataType, generateMipmaps, anisotropicLevels);
     this.size = getTextureSourceSize(image);
   }
 }
@@ -55,7 +40,7 @@ export function makeTextureFromVideoElement(video: HTMLVideoElement): Texture {
     InternalFormat.RGB8,
     DataType.UnsignedByte,
     false,
-    0
+    0,
   );
 }
 

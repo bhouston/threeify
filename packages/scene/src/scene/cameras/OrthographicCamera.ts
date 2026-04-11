@@ -25,7 +25,7 @@ export class OrthographicCamera extends CameraNode {
       this.far,
       this.zoom,
       this.pixelAspectRatio * this.viewAspectRatio,
-      result
+      result,
     );
   }
 }

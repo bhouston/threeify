@@ -23,11 +23,11 @@ export class WorkerPool {
 
   public constructor(
     public workerSourceUrl: string,
-    numWorkerThreads = navigator?.hardwareConcurrency || 4
+    numWorkerThreads = navigator?.hardwareConcurrency || 4,
   ) {
     for (let i = 0; i < numWorkerThreads; i++) {
       const worker = new Worker(workerSourceUrl, {
-        type: 'module'
+        type: 'module',
       });
       worker.onmessage = (event) => {
         this.onWorkerMessage(worker, event);
@@ -50,9 +50,7 @@ export class WorkerPool {
     //console.log(
     //  `WorkerQueue: received message from worker #${this.workerThreads.indexOf(worker)}, re: request ${response?.requestId}`
     //);
-    const request = this.processingRequests.find(
-      (request) => request.id === response.requestId
-    );
+    const request = this.processingRequests.find((request) => request.id === response.requestId);
     if (request === undefined) throw new Error('request is undefined');
 
     switch (response.type) {
@@ -71,11 +69,7 @@ export class WorkerPool {
   }
 
   // enqueue a task and return a promise that will be resolved when the task is completed
-  public enqueueRequest<T>(
-    type: string,
-    parameters: any,
-    buffers?: ArrayBuffer[]
-  ): Promise<T> {
+  public enqueueRequest<T>(type: string, parameters: any, buffers?: ArrayBuffer[]): Promise<T> {
     const id = this.nextRequestId++;
     //console.log(
     //  `WorkerQueue: enqueueing request ${type}, ${parameters.delay}, ${id}`
@@ -87,7 +81,7 @@ export class WorkerPool {
         parameters,
         buffers,
         resolve,
-        reject
+        reject,
       });
     });
 
@@ -109,10 +103,7 @@ export class WorkerPool {
       //console.log(
       //  `WorkerQueue: assigning request ${request.id} to worker #${this.workerThreads.indexOf(worker)}`
       //);
-      worker.postMessage(
-        { id: request.id, type: request.type, parameters: request.parameters },
-        request.buffers
-      );
+      worker.postMessage({ id: request.id, type: request.type, parameters: request.parameters }, request.buffers);
 
       this.processingRequests.push(request);
     }

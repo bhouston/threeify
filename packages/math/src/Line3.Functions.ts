@@ -9,7 +9,7 @@ import {
   vec3Dot,
   vec3Equals,
   vec3Lerp,
-  vec3Subtract
+  vec3Subtract,
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
@@ -18,10 +18,7 @@ export function line3Delta(a: Line3, b: Line3): number {
 }
 
 export function line3Equals(a: Line3, b: Line3, tolerance = 0): boolean {
-  return (
-    vec3Equals(a.start, b.start, tolerance) &&
-    vec3Equals(a.end, b.end, tolerance)
-  );
+  return vec3Equals(a.start, b.start, tolerance) && vec3Equals(a.end, b.end, tolerance);
 }
 
 export function line3Length(a: Line3): number {
@@ -43,11 +40,7 @@ export function line3Invert(a: Line3, result = new Line3()): Line3 {
   return result.set(a.end, a.start);
 }
 
-export function line3ClosestPointParameter(
-  a: Line3,
-  b: Vec3,
-  clampToLine = true
-): number {
+export function line3ClosestPointParameter(a: Line3, b: Vec3, clampToLine = true): number {
   const sb = vec3Subtract(b, a.start);
   const se = vec3Subtract(a.end, a.start);
   const se2 = vec3Dot(se, se);
@@ -63,21 +56,12 @@ export function line3ClosestPointParameter(
   return t;
 }
 
-export function line3ClosestPoint(
-  a: Line3,
-  b: Vec3,
-  clampToLine = true,
-  result = new Vec3()
-): Vec3 {
+export function line3ClosestPoint(a: Line3, b: Vec3, clampToLine = true, result = new Vec3()): Vec3 {
   const t = line3ClosestPointParameter(a, b, clampToLine);
   return line3At(a, t, result);
 }
 
-export function mat4TransformLine3(
-  m: Mat4,
-  l: Line3,
-  result = new Line3()
-): Line3 {
+export function mat4TransformLine3(m: Mat4, l: Line3, result = new Line3()): Line3 {
   mat4TransformVec3(m, l.start, result.start);
   mat4TransformVec3(m, l.end, result.end);
   return result;

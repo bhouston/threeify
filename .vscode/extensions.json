@@ -1,8 +1,8 @@
 {
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "orta.vscode-jest",
-        "esbenp.prettier-vscode",
-        "kisstkondoros.vscode-codemetrics"
-    ]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "orta.vscode-jest",
+    "esbenp.prettier-vscode",
+    "kisstkondoros.vscode-codemetrics"
+  ]
 }

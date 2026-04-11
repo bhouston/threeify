@@ -21,7 +21,7 @@ import {
   mat4Transpose,
   mat4Zero,
   scale3ToMat4,
-  translation3ToMat4
+  translation3ToMat4,
 } from './Mat4.Functions.js';
 import { Mat4 } from './Mat4.js';
 import { quatNormalize } from './Quat.Functions.js';
@@ -60,24 +60,12 @@ describe('Mat4 Functions', () => {
   });
 
   test('basis3ToMat4/mat4ToBasis3', () => {
-    const identityBasis = [
-      new Vec3(1, 0, 0),
-      new Vec3(0, 1, 0),
-      new Vec3(0, 0, 1)
-    ];
-    const a = basis3ToMat4(
-      identityBasis[0],
-      identityBasis[1],
-      identityBasis[2]
-    );
+    const identityBasis = [new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1)];
+    const a = basis3ToMat4(identityBasis[0], identityBasis[1], identityBasis[2]);
     const identity = new Mat4();
     expect(mat4Delta(a, identity)).toBe(0);
 
-    const testBases = [
-      new Vec3(0, 1, 0),
-      new Vec3(-1, 0, 0),
-      new Vec3(0, 0, 1)
-    ];
+    const testBases = [new Vec3(0, 1, 0), new Vec3(-1, 0, 0), new Vec3(0, 0, 1)];
 
     const b = basis3ToMat4(testBases[0], testBases[1], testBases[2]);
     const outBasis = [new Vec3(), new Vec3(), new Vec3()];
@@ -282,9 +270,8 @@ describe('Mat4 Functions', () => {
 
     test('explicit compose', () => {
       const m2 = new Mat4([
-        0.13333333333333353, -0.6666666666666666, -0.7333333333333332, 0,
-        1.8666666666666665, 0.666666666666667, -0.2666666666666667, 0,
-        0.9999999999999998, -1.9999999999999996, 2, 0, 1, 2, 3, 1
+        0.13333333333333353, -0.6666666666666666, -0.7333333333333332, 0, 1.8666666666666665, 0.666666666666667,
+        -0.2666666666666667, 0, 0.9999999999999998, -1.9999999999999996, 2, 0, 1, 2, 3, 1,
       ]);
       expect(m.elements[0]).toBeCloseTo(m2.elements[0], EPSILON);
       expect(m.elements[1]).toBeCloseTo(m2.elements[1], EPSILON);
@@ -304,11 +291,7 @@ describe('Mat4 Functions', () => {
       expect(m.elements[15]).toBeCloseTo(m2.elements[15], EPSILON);
     });
     test('mat4Compose/mat4Decompose', () => {
-      const {
-        translation: translation2,
-        rotation: rotation2,
-        scale: scale2
-      } = mat4Decompose(m);
+      const { translation: translation2, rotation: rotation2, scale: scale2 } = mat4Decompose(m);
       expect(translation2.x).toBeCloseTo(translation.x, EPSILON);
       expect(translation2.y).toBeCloseTo(translation.y, EPSILON);
       expect(translation2.z).toBeCloseTo(translation.z, EPSILON);
@@ -324,24 +307,7 @@ describe('Mat4 Functions', () => {
 
   test('mat4Perspective', () => {
     const m = mat4Perspective(-1, 1, -1, 1, 1, 100);
-    const m2 = new Mat4([
-      1,
-      0,
-      0,
-      0,
-      0,
-      -1,
-      0,
-      0,
-      0,
-      0,
-      -101 / 99,
-      -1,
-      0,
-      0,
-      -200 / 99,
-      0
-    ]);
+    const m2 = new Mat4([1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -101 / 99, -1, 0, 0, -200 / 99, 0]);
 
     expect(m.elements[0]).toBeCloseTo(m2.elements[0], EPSILON);
     expect(m.elements[1]).toBeCloseTo(m2.elements[1], EPSILON);
@@ -362,24 +328,7 @@ describe('Mat4 Functions', () => {
   });
   test('mat4Orthographic', () => {
     const m = mat4Orthographic(-1, 1, -1, 1, 1, 100);
-    const m2 = new Mat4([
-      1,
-      0,
-      0,
-      0,
-      0,
-      -1,
-      0,
-      0,
-      0,
-      0,
-      -2 / 99,
-      0,
-      0,
-      0,
-      -101 / 99,
-      1
-    ]);
+    const m2 = new Mat4([1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -2 / 99, 0, 0, 0, -101 / 99, 1]);
 
     expect(m.elements[0]).toBeCloseTo(m2.elements[0], EPSILON);
     expect(m.elements[1]).toBeCloseTo(m2.elements[1], EPSILON);

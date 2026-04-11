@@ -3,7 +3,7 @@ import {
   fetchTexture,
   icosahedronGeometry,
   ShaderMaterial,
-  shaderMaterialToProgram
+  shaderMaterialToProgram,
 } from '@threeify/core';
 import { Color3, Vec3 } from '@threeify/math';
 import {
@@ -17,18 +17,14 @@ import {
   SceneTreeCache,
   TextureAccessor,
   updateNodeTree,
-  updateRenderCache
+  updateRenderCache,
 } from '@threeify/scene';
 
 import fragmentSource from './fragment.glsl.js';
 import vertexSource from './vertex.glsl.js';
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const shaderMaterial = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
@@ -45,15 +41,15 @@ async function init(): Promise<void> {
       albedoFactor: Color3.White,
       albedoAlphaTextureAccessor: new TextureAccessor(texture),
       specularRoughnessFactor: 0,
-      metallicFactor: 1
-    })
+      metallicFactor: 1,
+    }),
   });
   root.children.push(sphereMesh);
   const pointLight = new PointLight({
     translation: new Vec3(2, 0, 2),
     color: Color3.White,
     intensity: 10,
-    range: 20
+    range: 20,
   });
 
   root.children.push(pointLight);
@@ -62,7 +58,7 @@ async function init(): Promise<void> {
     near: 0.1,
     far: 4,
     zoom: 1,
-    translation: new Vec3(0, 0, 3)
+    translation: new Vec3(0, 0, 3),
   });
   root.children.push(camera);
 
@@ -78,7 +74,7 @@ async function init(): Promise<void> {
       return program;
     },
     sceneTreeCache,
-    renderCache
+    renderCache,
   );
 
   function animate(): void {

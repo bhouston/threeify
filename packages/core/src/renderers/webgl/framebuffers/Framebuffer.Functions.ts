@@ -3,15 +3,8 @@ import { Vec2 } from '@threeify/math';
 import { GL } from '../GL.js';
 import { RenderingContext } from '../RenderingContext.js';
 import { DataType, sizeOfDataType } from '../textures/DataType.js';
-import {
-  InternalFormat,
-  internalFormatToDataType,
-  internalFormatToPixelFormat
-} from '../textures/InternalFormat.js';
-import {
-  numPixelFormatComponents,
-  PixelFormat
-} from '../textures/PixelFormat.js';
+import { InternalFormat, internalFormatToDataType, internalFormatToPixelFormat } from '../textures/InternalFormat.js';
+import { numPixelFormatComponents, PixelFormat } from '../textures/PixelFormat.js';
 import { TexImage2D } from '../textures/TexImage2D.js';
 import { TexParameters } from '../textures/TexParameters.js';
 import { TextureFilter } from '../textures/TextureFilter.js';
@@ -22,7 +15,7 @@ import { Framebuffer } from './Framebuffer.js';
 
 export function frameBufferToPixels(
   framebuffer: Framebuffer,
-  pixelBuffer: ArrayBufferView | undefined = undefined
+  pixelBuffer: ArrayBufferView | undefined = undefined,
 ): ArrayBufferView {
   const { context } = framebuffer;
   context.framebuffer = framebuffer;
@@ -45,20 +38,10 @@ export function frameBufferToPixels(
     pixelBuffer = new Uint8Array(pixelByteLength);
   }
   if (pixelBuffer.byteLength < pixelByteLength) {
-    throw new Error(
-      `pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`
-    );
+    throw new Error(`pixelBuffer too small: ${pixelBuffer.byteLength} < ${pixelByteLength}`);
   }
 
-  gl.readPixels(
-    0,
-    0,
-    texImage2D.size.x,
-    texImage2D.size.y,
-    texImage2D.pixelFormat,
-    texImage2D.dataType,
-    pixelBuffer
-  );
+  gl.readPixels(0, 0, texImage2D.size.x, texImage2D.size.y, texImage2D.pixelFormat, texImage2D.dataType, pixelBuffer);
 
   return pixelBuffer;
 }
@@ -68,7 +51,7 @@ export function makeColorAttachment(
   size: Vec2,
   internalFormat: InternalFormat = InternalFormat.RGBA8,
   magFilter: TextureFilter = TextureFilter.Linear,
-  minFilter: TextureFilter = TextureFilter.Linear
+  minFilter: TextureFilter = TextureFilter.Linear,
 ): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = false;
@@ -83,14 +66,11 @@ export function makeColorAttachment(
     internalFormatToDataType(internalFormat),
     internalFormatToPixelFormat(internalFormat),
     TextureTarget.Texture2D,
-    texParams
+    texParams,
   );
 }
 
-export function makeDepthAttachment(
-  context: RenderingContext,
-  size: Vec2
-): TexImage2D {
+export function makeDepthAttachment(context: RenderingContext, size: Vec2): TexImage2D {
   const texParams = new TexParameters();
   texParams.generateMipmaps = false;
   texParams.magFilter = TextureFilter.Nearest;
@@ -108,7 +88,7 @@ export function makeDepthAttachment(
     dataType,
     PixelFormat.DepthComponent,
     TextureTarget.Texture2D,
-    texParams
+    texParams,
   );
 }
 
@@ -131,6 +111,6 @@ export function biltFramebuffers(source: Framebuffer, dest: Framebuffer) {
     dest.size.x,
     dest.size.y,
     gl.COLOR_BUFFER_BIT,
-    gl.NEAREST
+    gl.NEAREST,
   );
 }

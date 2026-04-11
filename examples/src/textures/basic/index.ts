@@ -4,7 +4,7 @@ import {
   geometryToBufferGeometry,
   planeGeometry,
   renderBufferGeometry,
-  shaderSourceToProgram
+  shaderSourceToProgram,
 } from '@threeify/core';
 
 import fragmentSource from './fragment.glsl.js';
@@ -18,16 +18,8 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-  const texImage2D = await fetchTexImage2D(
-    context,
-    '/assets/textures/uv_grid_opengl.jpg'
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
+  const texImage2D = await fetchTexImage2D(context, '/assets/textures/uv_grid_opengl.jpg');
 
   const uniforms = { map: texImage2D };
 
@@ -35,7 +27,7 @@ async function init(): Promise<void> {
     framebuffer: canvasFramebuffer,
     program,
     uniforms,
-    bufferGeometry
+    bufferGeometry,
   });
 }
 

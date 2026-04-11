@@ -9,10 +9,7 @@ import { Box2 } from '@threeify/math';
 
 import { PassGeometry } from '../../geometry/primitives/passGeometry.js';
 import { BlendState } from './BlendState.js';
-import {
-  BufferGeometry,
-  geometryToBufferGeometry
-} from './buffers/BufferGeometry.js';
+import { BufferGeometry, geometryToBufferGeometry } from './buffers/BufferGeometry.js';
 import { BufferGeometryCache } from './caches/BufferGeometryCache.js';
 import { ProgramCache } from './caches/ProgramCache.js';
 import { TexImage2DCache } from './caches/TexImage2DCache.js';
@@ -54,7 +51,7 @@ export class RenderingContext {
 
   constructor(
     public canvas: HTMLCanvasElement,
-    attributes: WebGLContextAttributes | undefined = undefined
+    attributes: WebGLContextAttributes | undefined = undefined,
   ) {
     if (attributes === undefined) {
       attributes = {};
@@ -96,17 +93,13 @@ export class RenderingContext {
   get debugVendor(): string {
     // Note: this is a big performance hit to call, this only return if asked
     const dri = this.glxo.WEBGL_debug_renderer_info;
-    return dri !== null
-      ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL)
-      : '';
+    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_VENDOR_WEBGL) : '';
   }
 
   get debugRenderer(): string {
     // Note: this is a big performance hit to call, this only return if asked
     const dri = this.glxo.WEBGL_debug_renderer_info;
-    return dri !== null
-      ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL)
-      : '';
+    return dri !== null ? getParameterAsString(this.gl, dri.UNMASKED_RENDERER_WEBGL) : '';
   }
 
   set program(program: Program | undefined) {
@@ -176,12 +169,7 @@ export class RenderingContext {
 
     this.gl.enable(GL.BLEND);
     this.gl.blendEquation(bs.equation);
-    this.gl.blendFuncSeparate(
-      bs.sourceRGBFactor,
-      bs.destRGBFactor,
-      bs.sourceAlphaFactor,
-      bs.destAlphaFactor
-    );
+    this.gl.blendFuncSeparate(bs.sourceRGBFactor, bs.destRGBFactor, bs.sourceAlphaFactor, bs.destAlphaFactor);
     /* console.log(
         `Blend ${BlendEquation[bs.equation]} srcRGB ${BlendFunc[bs.sourceRGBFactor]} destRGB ${
           BlendFunc[bs.destRGBFactor]
@@ -253,18 +241,13 @@ export class RenderingContext {
   }
 }
 
-export function createRenderingContext(
-  document: Document,
-  elementId: string
-): RenderingContext {
+export function createRenderingContext(document: Document, elementId: string): RenderingContext {
   const element = document.getElementById(elementId);
   if (element === null) {
     throw new Error(`Could not find element with id "${elementId}"`);
   }
   if (!(element instanceof HTMLCanvasElement)) {
-    throw new TypeError(
-      `Element with id "${elementId}" is not a canvas element`
-    );
+    throw new TypeError(`Element with id "${elementId}" is not a canvas element`);
   }
   return new RenderingContext(element);
 }

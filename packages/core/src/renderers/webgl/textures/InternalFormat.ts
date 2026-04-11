@@ -45,12 +45,10 @@ export enum InternalFormat {
   RG16F = GL.RG16F,
   RG32F = GL.RG32F,
   RGBA16F = GL.RGBA16F,
-  RGBA32F = GL.RGBA32F
+  RGBA32F = GL.RGBA32F,
 }
 
-export function internalFormatToDataType(
-  internalFormat: InternalFormat
-): DataType {
+export function internalFormatToDataType(internalFormat: InternalFormat): DataType {
   switch (internalFormat) {
     case InternalFormat.RGBA8:
       return DataType.UnsignedByte;
@@ -69,9 +67,7 @@ export function internalFormatToDataType(
   }
 }
 
-export function internalFormatToPixelFormat(
-  internalFormat: InternalFormat
-): PixelFormat {
+export function internalFormatToPixelFormat(internalFormat: InternalFormat): PixelFormat {
   switch (internalFormat) {
     case InternalFormat.R8:
     case InternalFormat.R8I:

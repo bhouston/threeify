@@ -12,11 +12,7 @@ function pathToVariableName(path: string): string {
   return variableName;
 }
 
-export function transpileSource(
-  rootDir: string,
-  glslSourceFileName: string,
-  glslSource: string
-): string {
+export function transpileSource(rootDir: string, glslSourceFileName: string, glslSource: string): string {
   // create a list of imports
   const importNamesToPaths: Map<string, string> = new Map();
 
@@ -25,38 +21,29 @@ export function transpileSource(
   // the expected variable is the name of the file without the extension
   // for example, if the import is #pragma import './my-shader.glsl'
 
-  glslSource = glslSource.replace(
-    importRegex,
-    (_match: string, importPath: string, _other: string) => {
-      // console.log(
-      //   `replacement match:${match} importPath:${importPath} other:${other}`
-      //  );
+  glslSource = glslSource.replace(importRegex, (_match: string, importPath: string, _other: string) => {
+    // console.log(
+    //   `replacement match:${match} importPath:${importPath} other:${other}`
+    //  );
 
-      // convert the import path to a variable name
-      const importName = pathToVariableName(importPath);
+    // convert the import path to a variable name
+    const importName = pathToVariableName(importPath);
 
-      // add the import to the list of imports
-      importNamesToPaths.set(importName, importPath);
+    // add the import to the list of imports
+    importNamesToPaths.set(importName, importPath);
 
-      // replace the import from the glsl source with the expected import name
-      return '${' + importName + '}';
-    }
-  );
+    // replace the import from the glsl source with the expected import name
+    return '${' + importName + '}';
+  });
 
   if (glslSource.includes('#pragma once')) {
     // convert the import path to a variable name
-    const includeGuardName = pathToVariableName(
-      glslSourceFileName.replace(rootDir, '')
-    );
+    const includeGuardName = pathToVariableName(glslSourceFileName.replace(rootDir, ''));
 
     const includeGuardPrefix = `#ifndef ${includeGuardName}\n#define ${includeGuardName}\n`;
     const includeGuardPostfix = `\n\n#endif // end of include guard`;
 
-    glslSource =
-      includeGuardPrefix +
-      glslSource.replace(/#pragma once/gm, '') +
-      '\n' +
-      includeGuardPostfix;
+    glslSource = includeGuardPrefix + glslSource.replace(/#pragma once/gm, '') + '\n' + includeGuardPostfix;
   }
 
   // create the javascript literal

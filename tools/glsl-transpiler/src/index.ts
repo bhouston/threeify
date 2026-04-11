@@ -8,10 +8,7 @@ import watch from 'watch';
 import { getOptions } from './options.js';
 import { transpile } from './transpiler.js';
 
-function throttle<T extends (...args: any[]) => any>(
-  callback: T,
-  delay: number
-): T {
+function throttle<T extends (...args: any[]) => any>(callback: T, delay: number): T {
   let timer: NodeJS.Timer | null = null;
 
   return function (this: any, ...args: any[]) {

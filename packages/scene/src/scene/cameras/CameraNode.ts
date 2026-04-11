@@ -19,17 +19,11 @@ export abstract class CameraNode extends SceneNode {
 
   constructor(props: ICameraProps = {}) {
     super(props);
-    this.pixelAspectRatio =
-      props.pixelAspectRatio !== undefined
-        ? props.pixelAspectRatio
-        : this.pixelAspectRatio;
+    this.pixelAspectRatio = props.pixelAspectRatio !== undefined ? props.pixelAspectRatio : this.pixelAspectRatio;
     this.near = props.near !== undefined ? props.near : this.near;
     this.far = props.far !== undefined ? props.far : this.far;
     this.zoom = props.zoom !== undefined ? props.zoom : this.zoom;
-    this.viewAspectRatio =
-      props.viewAspectRatio !== undefined
-        ? props.viewAspectRatio
-        : this.viewAspectRatio;
+    this.viewAspectRatio = props.viewAspectRatio !== undefined ? props.viewAspectRatio : this.viewAspectRatio;
   }
 
   get worldToView(): Mat4 {

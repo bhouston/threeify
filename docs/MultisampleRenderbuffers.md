@@ -12,4 +12,3 @@ use the biltFramebuffer command to copy from the source frame buffer to another 
 one with an attached TexImage2D to the color0 point.
 
 Then you can use this TexImage2D as a texture for other operations.
-

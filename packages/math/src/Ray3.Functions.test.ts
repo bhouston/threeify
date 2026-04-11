@@ -8,7 +8,7 @@ import {
   ray3Equals,
   ray3IntersectPlane,
   ray3LookAt,
-  ray3Negate
+  ray3Negate,
 } from './Ray3.Functions.js';
 import { Vec3 } from './Vec3.js';
 import { vec3Normalize } from './Vec3.Functions.js';
@@ -28,9 +28,7 @@ describe('Ray3 Functions', () => {
   test('ray3LookAt', () => {
     const a = new Ray3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
     const b = new Vec3(1, 2, 4);
-    expect(ray3LookAt(a, b)).toEqual(
-      new Ray3(new Vec3(1, 2, 3), new Vec3(0, 0, 1))
-    );
+    expect(ray3LookAt(a, b)).toEqual(new Ray3(new Vec3(1, 2, 3), new Vec3(0, 0, 1)));
   });
   test('ray3DistanceToPlane', () => {
     const a = new Ray3(new Vec3(1, 2, 3), new Vec3(1, 0, 0));
@@ -39,9 +37,7 @@ describe('Ray3 Functions', () => {
   });
   test('ray3Negate', () => {
     const a = new Ray3(new Vec3(1, 2, 3), new Vec3(4, 5, 6));
-    expect(ray3Negate(a)).toEqual(
-      new Ray3(new Vec3(1, 2, 3), new Vec3(-4, -5, -6))
-    );
+    expect(ray3Negate(a)).toEqual(new Ray3(new Vec3(1, 2, 3), new Vec3(-4, -5, -6)));
   });
 
   test('ray3IntersectPlane', () => {

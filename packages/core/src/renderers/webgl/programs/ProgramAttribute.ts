@@ -16,7 +16,10 @@ export class ProgramAttribute {
   type: number;
   glLocation: number; // attributes are indexed
 
-  constructor(public program: Program, public index: number) {
+  constructor(
+    public program: Program,
+    public index: number,
+  ) {
     const { gl } = program.context;
 
     // look up uniform locations
@@ -40,8 +43,7 @@ export class ProgramAttribute {
   }
 
   setBuffer(bufferAccessor: BufferAccessor): this {
-    if (bufferAccessor.buffer.target !== BufferTarget.Array)
-      throw new Error('can only set array buffer');
+    if (bufferAccessor.buffer.target !== BufferTarget.Array) throw new Error('can only set array buffer');
 
     const { gl } = this.program.context;
 
@@ -56,7 +58,7 @@ export class ProgramAttribute {
       bufferAccessor.componentType,
       bufferAccessor.normalized,
       bufferAccessor.vertexStride,
-      bufferAccessor.byteOffset
+      bufferAccessor.byteOffset,
     );
     return this;
   }

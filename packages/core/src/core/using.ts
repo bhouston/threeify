@@ -1,7 +1,4 @@
-export function using<T extends { dispose(): void }>(
-  resource: T,
-  func: (resource: T) => void
-) {
+export function using<T extends { dispose(): void }>(resource: T, func: (resource: T) => void) {
   try {
     func(resource);
   } finally {

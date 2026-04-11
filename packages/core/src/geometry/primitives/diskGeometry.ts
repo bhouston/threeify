@@ -10,12 +10,7 @@ import { Vec2, Vec3 } from '@threeify/math';
 import { makeFloat32Attribute, makeUint32Attribute } from '../Attribute.js';
 import { Geometry } from '../Geometry.js';
 
-export function diskGeometry(
-  radius = 0.5,
-  segments = 8,
-  thetaStart = 0,
-  thetaLength = Math.PI * 2
-): Geometry {
+export function diskGeometry(radius = 0.5, segments = 8, thetaStart = 0, thetaLength = Math.PI * 2): Geometry {
   const indices: number[] = [];
   const vertices: number[] = [];
   const normals: number[] = [];

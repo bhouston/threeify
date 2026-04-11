@@ -1,10 +1,7 @@
 import { Vec2 } from '@threeify/math';
 
 import { ShaderMaterial } from '../../materials/ShaderMaterial.js';
-import {
-  cubeFaceTargets,
-  CubeMapTexture
-} from '../../textures/CubeMapTexture.js';
+import { cubeFaceTargets, CubeMapTexture } from '../../textures/CubeMapTexture.js';
 import { Texture } from '../../textures/Texture.js';
 import { createCopyPass } from '../effects/copy/CopyPass.js';
 import { CullingState } from '../webgl/CullingState.js';
@@ -16,12 +13,9 @@ import { RenderingContext } from '../webgl/RenderingContext.js';
 import {
   InternalFormat,
   internalFormatToDataType,
-  internalFormatToPixelFormat
+  internalFormatToPixelFormat,
 } from '../webgl/textures/InternalFormat.js';
-import {
-  TexImage2D,
-  textureToTexImage2D as textureToTexImage2D
-} from '../webgl/textures/TexImage2D.js';
+import { TexImage2D, textureToTexImage2D } from '../webgl/textures/TexImage2D.js';
 import { TexParameters } from '../webgl/textures/TexParameters.js';
 import { TextureFilter } from '../webgl/textures/TextureFilter.js';
 import { TextureTarget } from '../webgl/textures/TextureTarget.js';
@@ -35,7 +29,7 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
   latLongTexture: TexImage2D,
   faceWidth = 512,
   targetInternalFormat = InternalFormat.RGBA8,
-  generateMipmaps = true
+  generateMipmaps = true,
 ): Promise<TexImage2D> {
   const faceSize = new Vec2(faceWidth, faceWidth);
   const cubeTexture = new CubeMapTexture(
@@ -44,25 +38,18 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
     undefined,
     undefined,
     targetInternalFormat,
-    internalFormatToDataType(targetInternalFormat)
+    internalFormatToDataType(targetInternalFormat),
   );
   cubeTexture.generateMipmaps = generateMipmaps;
 
-  const cubeFaceMaterial = new ShaderMaterial(
-    'latLongToCubeMap',
-    cubeFaceVertexSource,
-    cubeFaceFragmentSource
-  );
-  const cubeFaceProgram = await shaderMaterialToProgram(
-    context,
-    cubeFaceMaterial
-  );
+  const cubeFaceMaterial = new ShaderMaterial('latLongToCubeMap', cubeFaceVertexSource, cubeFaceFragmentSource);
+  const cubeFaceProgram = await shaderMaterialToProgram(context, cubeFaceMaterial);
   const cubeMap = textureToTexImage2D(context, cubeTexture);
 
   const cubeFaceFramebuffer = new Framebuffer(context);
   const cubeFaceUniforms = {
     map: latLongTexture,
-    faceIndex: 0
+    faceIndex: 0,
   };
 
   const cullingState = new CullingState(false);
@@ -74,7 +61,7 @@ export async function equirectangularTexImage2DToCubeMapTexImage2D(
       framebuffer: cubeFaceFramebuffer,
       program: cubeFaceProgram,
       uniforms: cubeFaceUniforms,
-      cullingState
+      cullingState,
     });
   });
 
@@ -95,7 +82,7 @@ export async function equirectangularTextureToCubeMap(
   latLongTexture: Texture,
   sourceEncoding = TextureEncoding.Linear,
   faceWidth = 512,
-  targetInternalFormat = InternalFormat.RGBA8
+  targetInternalFormat = InternalFormat.RGBA8,
 ) {
   // convert to TexImage2D
   latLongTexture.wrapS = TextureWrap.Repeat;
@@ -114,12 +101,7 @@ export async function equirectangularTextureToCubeMap(
       internalFormatToDataType(targetInternalFormat),
       internalFormatToPixelFormat(targetInternalFormat),
       TextureTarget.Texture2D,
-      new TexParameters(
-        TextureFilter.Linear,
-        TextureFilter.Linear,
-        TextureWrap.Repeat,
-        TextureWrap.ClampToEdge
-      )
+      new TexParameters(TextureFilter.Linear, TextureFilter.Linear, TextureWrap.Repeat, TextureWrap.ClampToEdge),
     );
 
     const copyPass = await createCopyPass(context);
@@ -127,7 +109,7 @@ export async function equirectangularTextureToCubeMap(
       sourceTexImage2D: latLongMap,
       sourceEncoding: TextureEncoding.RGBE,
       targetFramebufferOrTexImage2D: linearLatLongMap,
-      targetEncoding: TextureEncoding.Linear
+      targetEncoding: TextureEncoding.Linear,
     });
 
     copyPass.dispose();
@@ -138,7 +120,7 @@ export async function equirectangularTextureToCubeMap(
     linearLatLongMap,
     faceWidth,
     targetInternalFormat,
-    true
+    true,
   );
 
   latLongMap.dispose();

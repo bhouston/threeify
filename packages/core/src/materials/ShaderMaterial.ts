@@ -16,7 +16,7 @@ export class ShaderMaterial implements IIdentifiable, IDisposable {
     public name: string,
     public vertexShaderCode: string,
     public fragmentShaderCode: string,
-    public glslVersion = 300
+    public glslVersion = 300,
   ) {}
 
   dispose(): void {

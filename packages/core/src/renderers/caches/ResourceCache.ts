@@ -3,7 +3,10 @@ import { IDisposable } from '../../core/types.js';
 import { warnOnce } from '../../warnOnce.js';
 
 export class ResourceCacheEntry<T extends IDisposable> {
-  constructor(public readonly promise: Promise<T>, public referenceCount = 0) {}
+  constructor(
+    public readonly promise: Promise<T>,
+    public referenceCount = 0,
+  ) {}
 }
 
 export class ResourceRef<T extends IDisposable> {
@@ -12,7 +15,7 @@ export class ResourceRef<T extends IDisposable> {
   constructor(
     public resourceCache: ResourceCache<T>,
     public readonly id: string,
-    public readonly promise: Promise<T>
+    public readonly promise: Promise<T>,
   ) {}
 
   dispose() {
@@ -58,7 +61,7 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
   release(id: string): boolean {
     assert(
       this.idToCacheEntryMap.has(id),
-      `ResourceCache[name=${this.name}].releaseRef( ${id} ) has no entry in the cache`
+      `ResourceCache[name=${this.name}].releaseRef( ${id} ) has no entry in the cache`,
     );
 
     const cacheEntry = this.idToCacheEntryMap.get(id);
@@ -77,10 +80,7 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
     return true;
   }
 
-  acquireRef(
-    id: string,
-    resourceCreator: (id: string) => Promise<T>
-  ): ResourceRef<T> {
+  acquireRef(id: string, resourceCreator: (id: string) => Promise<T>): ResourceRef<T> {
     const promise = this.acquire(id, resourceCreator);
     return new ResourceRef(this, id, promise);
   }
@@ -93,9 +93,7 @@ export class ResourceCache<T extends IDisposable> implements IDisposable {
     for (const id in this.idToCacheEntryMap) {
       const cacheEntry = this.idToCacheEntryMap.get(id);
       if (cacheEntry === undefined) throw new Error('cacheEntry is undefined ');
-      warnOnce(
-        `ResourceCache[name=${this.name}].dispose() - ${id} still has a count of ${cacheEntry.referenceCount}`
-      );
+      warnOnce(`ResourceCache[name=${this.name}].dispose() - ${id} still has a count of ${cacheEntry.referenceCount}`);
 
       cacheEntry.promise.then((resource) => {
         return resource.dispose();

@@ -8,7 +8,7 @@ export function createSolidColorImageData(
   color: Color4,
   width = 1,
   height = 1,
-  colorSpace: 'linear' | 'sRGB' = 'sRGB'
+  colorSpace: 'linear' | 'sRGB' = 'sRGB',
 ): Uint8ArrayImage {
   const data = new Uint8Array(width * height * 4);
   for (let i = 0; i < data.length; i += 4) {
@@ -23,6 +23,6 @@ export function createSolidColorImageData(
     width,
     height,
     DataType.UnsignedByte,
-    colorSpace === 'sRGB' ? PixelEncoding.sRGB : PixelEncoding.Linear
+    colorSpace === 'sRGB' ? PixelEncoding.sRGB : PixelEncoding.Linear,
   );
 }

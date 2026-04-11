@@ -1,25 +1,12 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import {
-  degToRad,
-  delta,
-  EPSILON,
-  equalsTolerance,
-  parseSafeFloats,
-  toSafeString
-} from './Functions.js';
+import { degToRad, delta, EPSILON, equalsTolerance, parseSafeFloats, toSafeString } from './Functions.js';
 import { quatToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
 import { mat4ToQuat } from './Quat.Functions.js';
 import { Quat } from './Quat.js';
 import { Vec2 } from './Vec2.js';
-import {
-  vec3Cross,
-  vec3Length,
-  vec3MultiplyByScalar,
-  vec3Normalize,
-  vec3Subtract
-} from './Vec3.Functions.js';
+import { vec3Cross, vec3Length, vec3MultiplyByScalar, vec3Normalize, vec3Subtract } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 export function mat4Delta(a: Mat4, b: Mat4): number {
@@ -38,12 +25,7 @@ export function mat4Identity(result = new Mat4()): Mat4 {
   return result.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
 }
 
-export function mat4SetColumn3(
-  m: Mat4,
-  index: number,
-  v: Vec3,
-  result = new Mat4()
-): Mat4 {
+export function mat4SetColumn3(m: Mat4, index: number, v: Vec3, result = new Mat4()): Mat4 {
   const re = result.set(m.elements).elements;
   const base = Number(index) * Mat4.NUM_ROWS;
   re[base + 0] = v.x;
@@ -52,25 +34,12 @@ export function mat4SetColumn3(
   return result;
 }
 
-export function mat4GetColumn3(
-  m: Mat4,
-  index: number,
-  result = new Vec3()
-): Vec3 {
+export function mat4GetColumn3(m: Mat4, index: number, result = new Vec3()): Vec3 {
   const base = index * Mat4.NUM_ROWS;
-  return result.set(
-    m.elements[base + 0],
-    m.elements[base + 1],
-    m.elements[base + 2]
-  );
+  return result.set(m.elements[base + 0], m.elements[base + 1], m.elements[base + 2]);
 }
 
-export function mat4SetRow3(
-  m: Mat4,
-  index: number,
-  v: Vec3,
-  result = new Mat4()
-): Mat4 {
+export function mat4SetRow3(m: Mat4, index: number, v: Vec3, result = new Mat4()): Mat4 {
   const re = result.set(m.elements).elements;
   const stride = Mat4.NUM_COLUMNS;
   re[index + stride * 0] = v.x;
@@ -81,19 +50,10 @@ export function mat4SetRow3(
 
 export function mat4GetRow3(m: Mat3, index: number, result = new Vec3()): Vec3 {
   const stride = Mat4.NUM_COLUMNS;
-  return result.set(
-    m.elements[index + stride * 0],
-    m.elements[index + stride * 1],
-    m.elements[index + stride * 2]
-  );
+  return result.set(m.elements[index + stride * 0], m.elements[index + stride * 1], m.elements[index + stride * 2]);
 }
 
-export function basis3ToMat4(
-  xAxis: Vec3,
-  yAxis: Vec3,
-  zAxis: Vec3,
-  result = new Mat4()
-): Mat4 {
+export function basis3ToMat4(xAxis: Vec3, yAxis: Vec3, zAxis: Vec3, result = new Mat4()): Mat4 {
   return result.set([
     xAxis.x,
     xAxis.y,
@@ -110,7 +70,7 @@ export function basis3ToMat4(
     0,
     0,
     0,
-    1
+    1,
   ]);
 }
 
@@ -118,7 +78,7 @@ export function mat4ToBasis3(
   m: Mat4,
   xAxis = new Vec3(),
   yAxis = new Vec3(),
-  zAxis = new Vec3()
+  zAxis = new Vec3(),
 ): { xAxis: Vec3; yAxis: Vec3; zAxis: Vec3 } {
   mat4GetColumn3(m, 0, xAxis);
   mat4GetColumn3(m, 1, yAxis);
@@ -126,11 +86,7 @@ export function mat4ToBasis3(
   return { xAxis, yAxis, zAxis };
 }
 
-export function mat4Equals(
-  a: Mat4,
-  b: Mat4,
-  tolerance: number = EPSILON
-): boolean {
+export function mat4Equals(a: Mat4, b: Mat4, tolerance: number = EPSILON): boolean {
   for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     if (!equalsTolerance(a.elements[i], b.elements[i], tolerance)) return false;
   }
@@ -143,22 +99,14 @@ export function mat4Add(a: Mat4, b: Mat4, result: Mat4 = new Mat4()): Mat4 {
   }
   return result;
 }
-export function mat4Subtract(
-  a: Mat4,
-  b: Mat4,
-  result: Mat4 = new Mat4()
-): Mat4 {
+export function mat4Subtract(a: Mat4, b: Mat4, result: Mat4 = new Mat4()): Mat4 {
   for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] - b.elements[i];
   }
   return result;
 }
 
-export function mat4MultiplyByScalar(
-  a: Mat4,
-  b: number,
-  result: Mat4 = new Mat4()
-): Mat4 {
+export function mat4MultiplyByScalar(a: Mat4, b: number, result: Mat4 = new Mat4()): Mat4 {
   for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * b;
   }
@@ -254,34 +202,10 @@ export function mat4Determinant(m: Mat4): number {
     n24 = me[13],
     n34 = me[14],
     n44 = me[15],
-    t11 =
-      n23 * n34 * n42 -
-      n24 * n33 * n42 +
-      n24 * n32 * n43 -
-      n22 * n34 * n43 -
-      n23 * n32 * n44 +
-      n22 * n33 * n44,
-    t12 =
-      n14 * n33 * n42 -
-      n13 * n34 * n42 -
-      n14 * n32 * n43 +
-      n12 * n34 * n43 +
-      n13 * n32 * n44 -
-      n12 * n33 * n44,
-    t13 =
-      n13 * n24 * n42 -
-      n14 * n23 * n42 +
-      n14 * n22 * n43 -
-      n12 * n24 * n43 -
-      n13 * n22 * n44 +
-      n12 * n23 * n44,
-    t14 =
-      n14 * n23 * n32 -
-      n13 * n24 * n32 -
-      n14 * n22 * n33 +
-      n12 * n24 * n33 +
-      n13 * n22 * n34 -
-      n12 * n23 * n34;
+    t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44,
+    t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44,
+    t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44,
+    t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
 
   return n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 }
@@ -385,34 +309,10 @@ export function mat4Inverse(m: Mat4, result = new Mat4()): Mat4 {
     n24 = me[13],
     n34 = me[14],
     n44 = me[15],
-    t11 =
-      n23 * n34 * n42 -
-      n24 * n33 * n42 +
-      n24 * n32 * n43 -
-      n22 * n34 * n43 -
-      n23 * n32 * n44 +
-      n22 * n33 * n44,
-    t12 =
-      n14 * n33 * n42 -
-      n13 * n34 * n42 -
-      n14 * n32 * n43 +
-      n12 * n34 * n43 +
-      n13 * n32 * n44 -
-      n12 * n33 * n44,
-    t13 =
-      n13 * n24 * n42 -
-      n14 * n23 * n42 +
-      n14 * n22 * n43 -
-      n12 * n24 * n43 -
-      n13 * n22 * n44 +
-      n12 * n23 * n44,
-    t14 =
-      n14 * n23 * n32 -
-      n13 * n24 * n32 -
-      n14 * n22 * n33 +
-      n12 * n24 * n33 +
-      n13 * n22 * n34 -
-      n12 * n23 * n34;
+    t11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44,
+    t12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44,
+    t13 = n13 * n24 * n42 - n14 * n23 * n42 + n14 * n22 * n43 - n12 * n24 * n43 - n13 * n22 * n44 + n12 * n23 * n44,
+    t14 = n14 * n23 * n32 - n13 * n24 * n32 - n14 * n22 * n33 + n12 * n24 * n33 + n13 * n22 * n34 - n12 * n23 * n34;
 
   const det = n11 * t11 + n21 * t12 + n31 * t13 + n41 * t14;
 
@@ -426,117 +326,52 @@ export function mat4Inverse(m: Mat4, result = new Mat4()): Mat4 {
   const re = result.elements;
   re[0] = t11 * detInv;
   re[1] =
-    (n24 * n33 * n41 -
-      n23 * n34 * n41 -
-      n24 * n31 * n43 +
-      n21 * n34 * n43 +
-      n23 * n31 * n44 -
-      n21 * n33 * n44) *
+    (n24 * n33 * n41 - n23 * n34 * n41 - n24 * n31 * n43 + n21 * n34 * n43 + n23 * n31 * n44 - n21 * n33 * n44) *
     detInv;
   re[2] =
-    (n22 * n34 * n41 -
-      n24 * n32 * n41 +
-      n24 * n31 * n42 -
-      n21 * n34 * n42 -
-      n22 * n31 * n44 +
-      n21 * n32 * n44) *
+    (n22 * n34 * n41 - n24 * n32 * n41 + n24 * n31 * n42 - n21 * n34 * n42 - n22 * n31 * n44 + n21 * n32 * n44) *
     detInv;
   re[3] =
-    (n23 * n32 * n41 -
-      n22 * n33 * n41 -
-      n23 * n31 * n42 +
-      n21 * n33 * n42 +
-      n22 * n31 * n43 -
-      n21 * n32 * n43) *
+    (n23 * n32 * n41 - n22 * n33 * n41 - n23 * n31 * n42 + n21 * n33 * n42 + n22 * n31 * n43 - n21 * n32 * n43) *
     detInv;
 
   re[4] = t12 * detInv;
   re[5] =
-    (n13 * n34 * n41 -
-      n14 * n33 * n41 +
-      n14 * n31 * n43 -
-      n11 * n34 * n43 -
-      n13 * n31 * n44 +
-      n11 * n33 * n44) *
+    (n13 * n34 * n41 - n14 * n33 * n41 + n14 * n31 * n43 - n11 * n34 * n43 - n13 * n31 * n44 + n11 * n33 * n44) *
     detInv;
   re[6] =
-    (n14 * n32 * n41 -
-      n12 * n34 * n41 -
-      n14 * n31 * n42 +
-      n11 * n34 * n42 +
-      n12 * n31 * n44 -
-      n11 * n32 * n44) *
+    (n14 * n32 * n41 - n12 * n34 * n41 - n14 * n31 * n42 + n11 * n34 * n42 + n12 * n31 * n44 - n11 * n32 * n44) *
     detInv;
   re[7] =
-    (n12 * n33 * n41 -
-      n13 * n32 * n41 +
-      n13 * n31 * n42 -
-      n11 * n33 * n42 -
-      n12 * n31 * n43 +
-      n11 * n32 * n43) *
+    (n12 * n33 * n41 - n13 * n32 * n41 + n13 * n31 * n42 - n11 * n33 * n42 - n12 * n31 * n43 + n11 * n32 * n43) *
     detInv;
 
   re[8] = t13 * detInv;
   re[9] =
-    (n14 * n23 * n41 -
-      n13 * n24 * n41 -
-      n14 * n21 * n43 +
-      n11 * n24 * n43 +
-      n13 * n21 * n44 -
-      n11 * n23 * n44) *
+    (n14 * n23 * n41 - n13 * n24 * n41 - n14 * n21 * n43 + n11 * n24 * n43 + n13 * n21 * n44 - n11 * n23 * n44) *
     detInv;
   re[10] =
-    (n12 * n24 * n41 -
-      n14 * n22 * n41 +
-      n14 * n21 * n42 -
-      n11 * n24 * n42 -
-      n12 * n21 * n44 +
-      n11 * n22 * n44) *
+    (n12 * n24 * n41 - n14 * n22 * n41 + n14 * n21 * n42 - n11 * n24 * n42 - n12 * n21 * n44 + n11 * n22 * n44) *
     detInv;
   re[11] =
-    (n13 * n22 * n41 -
-      n12 * n23 * n41 -
-      n13 * n21 * n42 +
-      n11 * n23 * n42 +
-      n12 * n21 * n43 -
-      n11 * n22 * n43) *
+    (n13 * n22 * n41 - n12 * n23 * n41 - n13 * n21 * n42 + n11 * n23 * n42 + n12 * n21 * n43 - n11 * n22 * n43) *
     detInv;
 
   re[12] = t14 * detInv;
   re[13] =
-    (n13 * n24 * n31 -
-      n14 * n23 * n31 +
-      n14 * n21 * n33 -
-      n11 * n24 * n33 -
-      n13 * n21 * n34 +
-      n11 * n23 * n34) *
+    (n13 * n24 * n31 - n14 * n23 * n31 + n14 * n21 * n33 - n11 * n24 * n33 - n13 * n21 * n34 + n11 * n23 * n34) *
     detInv;
   re[14] =
-    (n14 * n22 * n31 -
-      n12 * n24 * n31 -
-      n14 * n21 * n32 +
-      n11 * n24 * n32 +
-      n12 * n21 * n34 -
-      n11 * n22 * n34) *
+    (n14 * n22 * n31 - n12 * n24 * n31 - n14 * n21 * n32 + n11 * n24 * n32 + n12 * n21 * n34 - n11 * n22 * n34) *
     detInv;
   re[15] =
-    (n12 * n23 * n31 -
-      n13 * n22 * n31 +
-      n13 * n21 * n32 -
-      n11 * n23 * n32 -
-      n12 * n21 * n33 +
-      n11 * n22 * n33) *
+    (n12 * n23 * n31 - n13 * n22 * n31 + n13 * n21 * n32 - n11 * n23 * n32 - n12 * n21 * n33 + n11 * n22 * n33) *
     detInv;
 
   return result;
 }
 
-export function mat4Mix(
-  a: Mat4,
-  b: Mat4,
-  t: number,
-  result = new Mat4()
-): Mat4 {
+export function mat4Mix(a: Mat4, b: Mat4, t: number, result = new Mat4()): Mat4 {
   const s = 1 - t;
   for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * s + b.elements[i] * t;
@@ -544,22 +379,14 @@ export function mat4Mix(
   return result;
 }
 
-export function arrayToMat4(
-  array: Float32Array | number[],
-  offset = 0,
-  result: Mat4 = new Mat4()
-): Mat4 {
+export function arrayToMat4(array: Float32Array | number[], offset = 0, result: Mat4 = new Mat4()): Mat4 {
   for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     result.elements[i] = array[offset + i];
   }
   return result;
 }
 
-export function mat4ToArray(
-  a: Mat4,
-  array: Float32Array | number[],
-  offset = 0
-): void {
+export function mat4ToArray(a: Mat4, array: Float32Array | number[], offset = 0): void {
   for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
     array[offset + i] = a.elements[i];
   }
@@ -575,24 +402,7 @@ export function mat4Parse(text: string, result = new Mat4()): Mat4 {
 
 export function mat3ToMat4(a: Mat3, result = new Mat4()): Mat4 {
   const ae = a.elements;
-  return result.set([
-    ae[0],
-    ae[1],
-    ae[2],
-    0,
-    ae[3],
-    ae[4],
-    ae[5],
-    0,
-    ae[6],
-    ae[7],
-    ae[8],
-    0,
-    0,
-    0,
-    0,
-    1
-  ]);
+  return result.set([ae[0], ae[1], ae[2], 0, ae[3], ae[4], ae[5], 0, ae[6], ae[7], ae[8], 0, 0, 0, 0, 1]);
 }
 
 export function quatToMat4(q: Quat, result = new Mat4()): Mat4 {
@@ -618,7 +428,7 @@ export function mat4ToScale3(m: Mat4, result = new Vec3()): Vec3 {
   return result.set(
     Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13),
     Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23),
-    Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33)
+    Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33),
   );
 }
 
@@ -643,11 +453,7 @@ export function mat4Scale(m: Mat4, s: Vec3, result = new Mat4()): Mat4 {
 export function mat4RotateByQuat(m: Mat4, q: Quat, result = new Mat4()): Mat4 {
   return mat4Multiply(m, quatToMat4(q), result);
 }
-export function mat4RotateByEuler(
-  m: Mat4,
-  e: Euler3,
-  result = new Mat4()
-): Mat4 {
+export function mat4RotateByEuler(m: Mat4, e: Euler3, result = new Mat4()): Mat4 {
   return mat4Multiply(m, euler3ToMat4(e), result);
 }
 
@@ -658,7 +464,7 @@ export function mat4Perspective(
   bottom: number,
   near: number,
   far: number,
-  result = new Mat4()
+  result = new Mat4(),
 ): Mat4 {
   const x = (2 * near) / (right - left);
   const y = (2 * near) / (top - bottom);
@@ -677,7 +483,7 @@ export function mat4PerspectiveFov(
   far: number,
   zoom: number,
   aspectRatio: number,
-  result = new Mat4()
+  result = new Mat4(),
 ): Mat4 {
   const height = (2 * near * Math.tan(degToRad(verticalFovDegrees))) / zoom;
   const width = height * aspectRatio;
@@ -701,7 +507,7 @@ export function mat4PerspectiveFovSubview(
   aspectRatio: number,
   relativeOffset: Vec2,
   relativeView: Vec2,
-  result = new Mat4()
+  result = new Mat4(),
 ): Mat4 {
   let height = (2 * near * Math.tan(degToRad(verticalFovDegrees))) / zoom;
   let width = height * aspectRatio;
@@ -735,7 +541,7 @@ export function mat4Orthographic(
   bottom: number,
   near: number,
   far: number,
-  result = new Mat4()
+  result = new Mat4(),
 ): Mat4 {
   const w = 1 / (right - left);
   const h = 1 / (top - bottom);
@@ -763,7 +569,7 @@ export function mat4Orthographic(
     -x,
     -y,
     -z,
-    1
+    1,
   ]);
 }
 
@@ -774,7 +580,7 @@ export function mat4OrthographicSimple(
   far: number,
   zoom: number,
   aspectRatio = 1,
-  result = new Mat4()
+  result = new Mat4(),
 ): Mat4 {
   height /= zoom;
   const width = height * aspectRatio;
@@ -788,12 +594,7 @@ export function mat4OrthographicSimple(
   return mat4Orthographic(left, right, top, bottom, near, far, result);
 }
 
-export function mat4LookAt(
-  eye: Vec3,
-  target: Vec3,
-  up: Vec3,
-  result = new Mat4()
-): Mat4 {
+export function mat4LookAt(eye: Vec3, target: Vec3, up: Vec3, result = new Mat4()): Mat4 {
   const te = result.elements;
 
   const look = vec3Subtract(eye, target);
@@ -838,11 +639,7 @@ export function mat4LookAt(
   return result;
 }
 
-export function angleAxisToMat4(
-  axis: Vec3,
-  angle: number,
-  result = new Mat4()
-): Mat4 {
+export function angleAxisToMat4(axis: Vec3, angle: number, result = new Mat4()): Mat4 {
   // Based on http://www.gamedev.net/reference/articles/article1199.asp
 
   const c = Math.cos(angle);
@@ -868,7 +665,7 @@ export function angleAxisToMat4(
     0,
     0,
     0,
-    1
+    1,
   ]);
 }
 
@@ -1022,21 +819,11 @@ export function euler3ToMat4(euler: Euler3, result = new Mat4()): Mat4 {
   return result;
 }
 
-export function shearToMat4(
-  x: number,
-  y: number,
-  z: number,
-  result = new Mat4()
-): Mat4 {
+export function shearToMat4(x: number, y: number, z: number, result = new Mat4()): Mat4 {
   return result.set([1, y, z, 0, x, 1, z, 0, x, y, 1, 0, 0, 0, 0, 1]);
 }
 
-export function mat4Compose(
-  translation: Vec3,
-  rotation: Quat,
-  scale: Vec3,
-  result = new Mat4()
-): Mat4 {
+export function mat4Compose(translation: Vec3, rotation: Quat, scale: Vec3, result = new Mat4()): Mat4 {
   const { x, y, z, w } = rotation;
   const x2 = x + x;
   const y2 = y + y;
@@ -1071,7 +858,7 @@ export function mat4Compose(
     translation.x,
     translation.y,
     translation.z,
-    1
+    1,
   ]);
 }
 
@@ -1079,7 +866,7 @@ export function mat4Decompose(
   m: Mat4,
   translation = new Vec3(),
   rotation = new Quat(),
-  scale = new Vec3()
+  scale = new Vec3(),
 ): { translation: Vec3; rotation: Quat; scale: Vec3 } {
   const te = m.elements;
 

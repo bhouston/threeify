@@ -105,24 +105,21 @@ const lookupTables = (function () {
     shiftTable: shiftTable,
     mantissaTable: mantissaTable,
     exponentTable: exponentTable,
-    offsetTable: offsetTable
+    offsetTable: offsetTable,
   };
 })();
 
 // float32 to float16
 
 export function float32ToFloat16(value: number) {
-  if (Math.abs(value) > 65504)
-    console.warn('float32ToFloat16: Value out of range.');
+  if (Math.abs(value) > 65504) console.warn('float32ToFloat16: Value out of range.');
 
   value = clamp(value, -65504, 65504);
 
   lookupTables.floatView[0] = value;
   const f = lookupTables.uint32View[0];
   const e = (f >> 23) & 0x1ff;
-  return (
-    lookupTables.baseTable[e] + ((f & 0x007fffff) >> lookupTables.shiftTable[e])
-  );
+  return lookupTables.baseTable[e] + ((f & 0x007fffff) >> lookupTables.shiftTable[e]);
 }
 
 // float16 to float32
@@ -130,7 +127,6 @@ export function float32ToFloat16(value: number) {
 export function float16ToFloat32(value: number) {
   const m = value >> 10;
   lookupTables.uint32View[0] =
-    lookupTables.mantissaTable[lookupTables.offsetTable[m] + (value & 0x3ff)] +
-    lookupTables.exponentTable[m];
+    lookupTables.mantissaTable[lookupTables.offsetTable[m] + (value & 0x3ff)] + lookupTables.exponentTable[m];
   return lookupTables.floatView[0];
 }

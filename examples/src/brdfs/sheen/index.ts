@@ -4,7 +4,7 @@ import {
   geometryToBufferGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  transformGeometry
+  transformGeometry,
 } from '@threeify/core';
 import {
   Color3,
@@ -17,7 +17,7 @@ import {
   mat4PerspectiveFov,
   scale3ToMat4,
   translation3ToMat4,
-  Vec3
+  Vec3,
 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl.js';
@@ -27,33 +27,19 @@ async function init(): Promise<void> {
   const [geometry] = await fetchOBJ('/assets/models/cloth/cloth.obj');
   transformGeometry(
     geometry,
-    mat4Multiply(
-      translation3ToMat4(new Vec3(0, -0.5, 0)),
-      scale3ToMat4(new Vec3(10, 10, 10))
-    )
+    mat4Multiply(translation3ToMat4(new Vec3(0, -0.5, 0)), scale3ToMat4(new Vec3(10, 10, 10))),
   );
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
-    viewToClip: mat4PerspectiveFov(
-      25,
-      0.1,
-      4,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4PerspectiveFov(25, 0.1, 4, 1, canvasFramebuffer.aspectRatio),
 
     // lights
     pointLightViewPosition: Vec3.Zero,
@@ -62,7 +48,7 @@ async function init(): Promise<void> {
 
     // materials
     sheenColor: new Color3(0.3, 0.3, 1),
-    sheenRoughness: 0.5
+    sheenRoughness: 0.5,
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
@@ -71,21 +57,17 @@ async function init(): Promise<void> {
 
     uniforms.localToWorld = euler3ToMat4(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
-      uniforms.localToWorld
+      uniforms.localToWorld,
     );
     uniforms.sheenRoughness = Math.cos(now * 0.0003) * 0.5 + 0.5;
-    uniforms.pointLightViewPosition = new Vec3(
-      Math.cos(now * 0.001) * 3,
-      2,
-      0.5
-    );
+    uniforms.pointLightViewPosition = new Vec3(Math.cos(now * 0.001) * 3, 2, 0.5);
 
     canvasFramebuffer.clear();
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
     });
 
     requestAnimationFrame(animate);

@@ -1,10 +1,4 @@
-import {
-  BufferGeometry,
-  Program,
-  ProgramVertexArray,
-  UniformBufferMap,
-  UniformValueMap
-} from '@threeify/core';
+import { BufferGeometry, Program, ProgramVertexArray, UniformBufferMap, UniformValueMap } from '@threeify/core';
 
 export class MeshBatch {
   constructor(
@@ -12,6 +6,6 @@ export class MeshBatch {
     public bufferGeometry: BufferGeometry,
     public programVertexArray: ProgramVertexArray,
     public uniformsArray: UniformValueMap[],
-    public uniformBuffers: UniformBufferMap
+    public uniformBuffers: UniformBufferMap,
   ) {}
 }

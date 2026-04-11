@@ -3,26 +3,14 @@ import { Mat4 } from './Mat4.js';
 import { sphereIsEmpty } from './Sphere.Functions.js';
 import { Sphere } from './Sphere.js';
 import { mat4TransformVec3 } from './Vec3.Functions.js';
-import {
-  vec3Add,
-  vec3Clamp,
-  vec3Distance,
-  vec3Equals,
-  vec3Max,
-  vec3Min,
-  vec3Subtract
-} from './Vec3.Functions.js';
+import { vec3Add, vec3Clamp, vec3Distance, vec3Equals, vec3Max, vec3Min, vec3Subtract } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
 /**
  * Calculates and returns the center point of the given box.
  */
 export function box3Center(box: Box3, result = new Vec3()): Vec3 {
-  return result.set(
-    (box.min.x + box.max.x) * 0.5,
-    (box.min.y + box.max.y) * 0.5,
-    (box.min.z + box.max.z) * 0.5
-  );
+  return result.set((box.min.x + box.max.x) * 0.5, (box.min.y + box.max.y) * 0.5, (box.min.z + box.max.z) * 0.5);
 }
 
 /**
@@ -71,22 +59,14 @@ export function box3GrowByVec3(b: Box3, v: Vec3, result = new Box3()): Box3 {
 /**
  * Expands a box by a scalar and returns the result.
  */
-export function box3GrowByScalar(
-  b: Box3,
-  s: number,
-  result = new Box3()
-): Box3 {
+export function box3GrowByScalar(b: Box3, s: number, result = new Box3()): Box3 {
   return box3GrowByVec3(b, new Vec3(s, s, s), result);
 }
 
 /**
  * Calculates the intersection of two boxes and returns the result.
  */
-export function box3IntersectWithBox3(
-  a: Box3,
-  b: Box3,
-  result = new Box3()
-): Box3 {
+export function box3IntersectWithBox3(a: Box3, b: Box3, result = new Box3()): Box3 {
   vec3Max(a.min, b.min, result.min);
   vec3Min(a.max, b.max, result.max);
   return result;
@@ -95,11 +75,7 @@ export function box3IntersectWithBox3(
 /**
  * Translates a box by a Vec3 offset and returns the result.
  */
-export function box3Translate(
-  b: Box3,
-  offset: Vec3,
-  result = new Box3()
-): Box3 {
+export function box3Translate(b: Box3, offset: Vec3, result = new Box3()): Box3 {
   vec3Add(b.min, offset, result.min);
   vec3Add(b.max, offset, result.max);
   return result;
@@ -115,10 +91,7 @@ export function box3Equals(a: Box3, b: Box3): boolean {
 /**
  * Creates a Box3 from an array of Vec3 coordinates and returns the result.
  */
-export function box3FromVec3Array(
-  array: Float32Array,
-  result = new Box3()
-): Box3 {
+export function box3FromVec3Array(array: Float32Array, result = new Box3()): Box3 {
   let minX = +Number.POSITIVE_INFINITY;
   let minY = +Number.POSITIVE_INFINITY;
   let minZ = +Number.POSITIVE_INFINITY;
@@ -173,21 +146,9 @@ export function box3FromVec3s(points: Vec3[], result = new Box3()): Box3 {
 /**
  * Creates a Box3 from a center point and size vector and returns the result.
  */
-export function box3FromCenterAndSize(
-  center: Vec3,
-  size: Vec3,
-  result = new Box3()
-): Box3 {
-  result.min.set(
-    center.x - size.x * 0.5,
-    center.y - size.y * 0.5,
-    center.z - size.z * 0.5
-  );
-  result.max.set(
-    center.x + size.x * 0.5,
-    center.y + size.y * 0.5,
-    center.z + size.z * 0.5
-  );
+export function box3FromCenterAndSize(center: Vec3, size: Vec3, result = new Box3()): Box3 {
+  result.min.set(center.x - size.x * 0.5, center.y - size.y * 0.5, center.z - size.z * 0.5);
+  result.max.set(center.x + size.x * 0.5, center.y + size.y * 0.5, center.z + size.z * 0.5);
   return result;
 }
 
@@ -234,11 +195,7 @@ export function box3ContainsBox3(box: Box3, queryBox: Box3): boolean {
 /**
  * Clamps a Vec3 point to the boundaries of a Box3 and returns the result.
  */
-export function vec3ClampToBox3(
-  point: Vec3,
-  box: Box3,
-  result: Vec3 = new Vec3()
-): Vec3 {
+export function vec3ClampToBox3(point: Vec3, box: Box3, result: Vec3 = new Vec3()): Vec3 {
   return vec3Clamp(point, box.min, box.max, result);
 }
 
@@ -263,47 +220,15 @@ export function mat4TransformBox3(m: Mat4, b: Box3, result = new Box3()): Box3 {
   // NOTE: I am using a binary pattern to specify all 2^3 combinations below
   const v = new Vec3();
 
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.min.x, b.min.y, b.min.z), v),
-    result
-  );
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.min.x, b.min.y, b.max.z), v),
-    result
-  );
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.min.x, b.max.y, b.min.z), v),
-    result
-  );
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.min.x, b.max.y, b.max.z), v),
-    result
-  );
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.min.x, b.min.y, b.min.z), v), result);
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.min.x, b.min.y, b.max.z), v), result);
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.min.x, b.max.y, b.min.z), v), result);
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.min.x, b.max.y, b.max.z), v), result);
 
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.max.x, b.min.y, b.min.z), v),
-    result
-  );
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.max.x, b.min.y, b.max.z), v),
-    result
-  );
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.max.x, b.max.y, b.min.z), v),
-    result
-  );
-  box3ExpandByVec3(
-    result,
-    mat4TransformVec3(m, v.set(b.max.x, b.max.y, b.max.z), v),
-    result
-  );
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.max.x, b.min.y, b.min.z), v), result);
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.max.x, b.min.y, b.max.z), v), result);
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.max.x, b.max.y, b.min.z), v), result);
+  box3ExpandByVec3(result, mat4TransformVec3(m, v.set(b.max.x, b.max.y, b.max.z), v), result);
 
   return result;
 }
@@ -311,11 +236,7 @@ export function mat4TransformBox3(m: Mat4, b: Box3, result = new Box3()): Box3 {
 /**
  * Translates a Box3 by a Vec3 offset and returns the result.
  */
-export function translateBox3(
-  b: Box3,
-  offset: Vec3,
-  result = new Box3()
-): Box3 {
+export function translateBox3(b: Box3, offset: Vec3, result = new Box3()): Box3 {
   b.clone(result);
   vec3Add(result.min, offset, result.min);
   vec3Add(result.max, offset, result.max);
@@ -368,11 +289,7 @@ export function box3Scale(b: Box3, scale: Vec3, result = new Box3()): Box3 {
 /**
  * Expands a Box3 by a Vec3 point and returns the result.
  */
-export function box3ExpandByPoint3(
-  b: Box3,
-  p: Vec3,
-  result = new Box3()
-): Box3 {
+export function box3ExpandByPoint3(b: Box3, p: Vec3, result = new Box3()): Box3 {
   result.min.x = Math.min(b.min.x, p.x);
   result.min.y = Math.min(b.min.y, p.y);
   result.min.z = Math.min(b.min.z, p.z);

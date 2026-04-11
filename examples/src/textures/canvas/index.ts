@@ -7,7 +7,7 @@ import {
   renderBufferGeometry,
   shaderSourceToProgram,
   Texture,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
 import {
   Color3,
@@ -19,33 +19,20 @@ import {
   mat4OrthographicSimple,
   translation3ToMat4,
   Vec2,
-  Vec3
+  Vec3,
 } from '@threeify/math';
 import { ColorHSL } from '@threeify/math/src/ColorHSL.js';
 
 import fragmentSource from './fragment.glsl.js';
 import vertexSource from './vertex.glsl.js';
 
-function updateCanvas(
-  ctx: CanvasRenderingContext2D | null,
-  frameNumber: number
-): void {
+function updateCanvas(ctx: CanvasRenderingContext2D | null, frameNumber: number): void {
   if (ctx === null) {
     return;
   }
   const grd = ctx.createLinearGradient(0, 0, 256, frameNumber % 256);
-  grd.addColorStop(
-    0,
-    `#${color3ToHexString(
-      hslToColor3(new ColorHSL(frameNumber / 256, 0.5, 0.5))
-    )}`
-  );
-  grd.addColorStop(
-    1,
-    `#${color3ToHexString(
-      hslToColor3(new ColorHSL(frameNumber / 193, 0.5, 0.5))
-    )}`
-  );
+  grd.addColorStop(0, `#${color3ToHexString(hslToColor3(new ColorHSL(frameNumber / 256, 0.5, 0.5)))}`);
+  grd.addColorStop(1, `#${color3ToHexString(hslToColor3(new ColorHSL(frameNumber / 193, 0.5, 0.5)))}`);
 
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, 256, 256);
@@ -63,12 +50,7 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
 
   const canvas = document.createElement('canvas');
   canvas.width = 256;
@@ -82,16 +64,9 @@ async function init(): Promise<void> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToClip: mat4OrthographicSimple(
-      1.5,
-      new Vec2(),
-      0.1,
-      2,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4OrthographicSimple(1.5, new Vec2(), 0.1, 2, 1, canvasFramebuffer.aspectRatio),
     viewLightPosition: Vec3.Zero,
-    map: uvTestTexture
+    map: uvTestTexture,
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
@@ -101,10 +76,7 @@ async function init(): Promise<void> {
   function animate(): void {
     frameNumber++;
     const now = Date.now();
-    uniforms.localToWorld = euler3ToMat4(
-      new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
-      uniforms.localToWorld
-    );
+    uniforms.localToWorld = euler3ToMat4(new Euler3(now * 0.001, now * 0.0033, now * 0.00077), uniforms.localToWorld);
     updateCanvas(ctx, frameNumber);
     uvTestTexture.loadImages([canvas]);
     uniforms.map = uvTestTexture;
@@ -114,7 +86,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
     });
 
     requestAnimationFrame(animate);

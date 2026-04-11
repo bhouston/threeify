@@ -18,7 +18,7 @@ import {
   renderBufferGeometry,
   RenderingContext,
   shaderSourceToProgram,
-  TextureEncoding
+  TextureEncoding,
 } from '@threeify/core';
 import {
   Color3,
@@ -28,7 +28,7 @@ import {
   mat4OrthographicSimple,
   translation3ToMat4,
   Vec2,
-  Vec3
+  Vec3,
 } from '@threeify/math';
 
 import { GPUTimerPanel, Stats } from '../../utilities/Stats.js';
@@ -40,10 +40,9 @@ const stats = new Stats();
 async function init(): Promise<void> {
   const geometry = boxGeometry(0.75, 0.75, 0.75);
 
-  const context = new RenderingContext(
-    document.getElementById('framebuffer') as HTMLCanvasElement,
-    { antialias: false }
-  );
+  const context = new RenderingContext(document.getElementById('framebuffer') as HTMLCanvasElement, {
+    antialias: false,
+  });
 
   const { canvasFramebuffer } = context;
   canvasFramebuffer.devicePixelRatio = 1;
@@ -54,18 +53,8 @@ async function init(): Promise<void> {
 
   const colorInternalFormat = InternalFormat.RGBA16F;
   const framebufferSize = canvasFramebuffer.size;
-  const msaaColorRenderbuffer = new Renderbuffer(
-    context,
-    4,
-    colorInternalFormat,
-    framebufferSize
-  );
-  const msaaDepthRenderbuffer = new Renderbuffer(
-    context,
-    4,
-    InternalFormat.DepthComponent24,
-    framebufferSize
-  );
+  const msaaColorRenderbuffer = new Renderbuffer(context, 4, colorInternalFormat, framebufferSize);
+  const msaaDepthRenderbuffer = new Renderbuffer(context, 4, InternalFormat.DepthComponent24, framebufferSize);
   const multisampleFramebuffer = new Framebuffer(context);
 
   multisampleFramebuffer.attach(Attachment.Color0, msaaColorRenderbuffer);
@@ -75,38 +64,19 @@ async function init(): Promise<void> {
     makeDepthAttachment(context, framebufferSize)
   );*/
 
-  const colorAttachment = makeColorAttachment(
-    context,
-    framebufferSize,
-    colorInternalFormat
-  );
+  const colorAttachment = makeColorAttachment(context, framebufferSize, colorInternalFormat);
   const simpleFramebuffer = new Framebuffer(context);
   simpleFramebuffer.attach(Attachment.Color0, colorAttachment);
 
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-  const uvTestTexture = await fetchTexImage2D(
-    context,
-    '/assets/textures/uv_grid_opengl.jpg'
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
+  const uvTestTexture = await fetchTexImage2D(context, '/assets/textures/uv_grid_opengl.jpg');
 
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToClip: mat4OrthographicSimple(
-      1.5,
-      new Vec2(),
-      0.1,
-      4,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4OrthographicSimple(1.5, new Vec2(), 0.1, 4, 1, canvasFramebuffer.aspectRatio),
     viewLightPosition: new Vec3(0, 0, -2),
-    map: uvTestTexture
+    map: uvTestTexture,
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
   const whiteClearState = new ClearState(Color3.Black, 0);
@@ -121,7 +91,7 @@ async function init(): Promise<void> {
       const now = Date.now();
       uniforms.localToWorld = euler3ToMat4(
         new Euler3(now * 0.0001, now * 0.000033, now * 0.000077),
-        uniforms.localToWorld
+        uniforms.localToWorld,
       );
       uniforms.map = uvTestTexture;
 
@@ -134,7 +104,7 @@ async function init(): Promise<void> {
           bufferGeometry,
           depthTestState: normalDepthTesting,
           blendState: noBlending,
-          cullingState: noCulling
+          cullingState: noCulling,
         });
 
         biltFramebuffers(multisampleFramebuffer, simpleFramebuffer);
@@ -143,7 +113,7 @@ async function init(): Promise<void> {
           sourceTexImage2D: colorAttachment,
           sourceEncoding: TextureEncoding.Linear,
           targetFramebufferOrTexImage2D: canvasFramebuffer,
-          targetEncoding: TextureEncoding.Linear
+          targetEncoding: TextureEncoding.Linear,
         });
       });
     });

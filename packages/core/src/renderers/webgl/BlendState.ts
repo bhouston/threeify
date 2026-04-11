@@ -15,7 +15,7 @@ export enum BlendEquation {
   // source - destination
   Subtract = GL.FUNC_SUBTRACT,
   // destination - source
-  ReverseSubtract = GL.FUNC_REVERSE_SUBTRACT
+  ReverseSubtract = GL.FUNC_REVERSE_SUBTRACT,
 }
 
 export enum BlendFunc {
@@ -50,17 +50,12 @@ export enum BlendFunc {
   // Multiplies the RGB colors by the smaller of either the source alpha value
   // or the value of 1 minus the destination alpha value. The alpha value is
   // multiplied by 1.
-  SourceAlphaSaturate = GL.SRC_ALPHA_SATURATE
+  SourceAlphaSaturate = GL.SRC_ALPHA_SATURATE,
 }
 
-export class BlendState
-  implements ICloneable<BlendState>, IEquatable<BlendState>
-{
+export class BlendState implements ICloneable<BlendState>, IEquatable<BlendState> {
   static readonly None = new BlendState();
-  static readonly PremultipliedOver = blendModeToBlendState(
-    Blending.Over,
-    true
-  );
+  static readonly PremultipliedOver = blendModeToBlendState(Blending.Over, true);
 
   // TODO: Should be initialized to default WebGL states
   constructor(
@@ -68,7 +63,7 @@ export class BlendState
     public destRGBFactor = BlendFunc.Zero,
     public sourceAlphaFactor = BlendFunc.One,
     public destAlphaFactor = BlendFunc.Zero,
-    public equation = BlendEquation.Add
+    public equation = BlendEquation.Add,
   ) {}
 
   clone(): BlendState {
@@ -77,7 +72,7 @@ export class BlendState
       this.destRGBFactor,
       this.sourceAlphaFactor,
       this.destAlphaFactor,
-      this.equation
+      this.equation,
     );
   }
 
@@ -100,10 +95,7 @@ export class BlendState
   }
 }
 
-export function blendModeToBlendState(
-  blending: Blending,
-  premultiplied = true
-): BlendState {
+export function blendModeToBlendState(blending: Blending, premultiplied = true): BlendState {
   if (premultiplied) {
     switch (blending) {
       case Blending.Over:
@@ -111,29 +103,19 @@ export function blendModeToBlendState(
           BlendFunc.One,
           BlendFunc.OneMinusSourceAlpha,
           BlendFunc.One,
-          BlendFunc.OneMinusSourceAlpha
+          BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Add:
-        return new BlendState(
-          BlendFunc.One,
-          BlendFunc.One,
-          BlendFunc.One,
-          BlendFunc.One
-        );
+        return new BlendState(BlendFunc.One, BlendFunc.One, BlendFunc.One, BlendFunc.One);
       case Blending.Subtract:
         return new BlendState(
           BlendFunc.Zero,
           BlendFunc.OneMinusSourceAlpha,
           BlendFunc.Zero,
-          BlendFunc.OneMinusSourceAlpha
+          BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Multiply:
-        return new BlendState(
-          BlendFunc.Zero,
-          BlendFunc.SourceColor,
-          BlendFunc.Zero,
-          BlendFunc.SourceAlpha
-        );
+        return new BlendState(BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceAlpha);
     }
   } else {
     switch (blending) {
@@ -142,29 +124,19 @@ export function blendModeToBlendState(
           BlendFunc.SourceAlpha,
           BlendFunc.OneMinusSourceAlpha,
           BlendFunc.One,
-          BlendFunc.OneMinusSourceAlpha
+          BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Add:
-        return new BlendState(
-          BlendFunc.SourceAlpha,
-          BlendFunc.One,
-          BlendFunc.One,
-          BlendFunc.One
-        );
+        return new BlendState(BlendFunc.SourceAlpha, BlendFunc.One, BlendFunc.One, BlendFunc.One);
       case Blending.Subtract:
         return new BlendState(
           BlendFunc.Zero,
           BlendFunc.OneMinusSourceAlpha, // alpha only, as rgb + alpha can not be replicated across pre/post multiplied alpha.
           BlendFunc.Zero,
-          BlendFunc.OneMinusSourceAlpha
+          BlendFunc.OneMinusSourceAlpha,
         );
       case Blending.Multiply:
-        return new BlendState(
-          BlendFunc.Zero,
-          BlendFunc.SourceColor,
-          BlendFunc.Zero,
-          BlendFunc.SourceColor
-        );
+        return new BlendState(BlendFunc.Zero, BlendFunc.SourceColor, BlendFunc.Zero, BlendFunc.SourceColor);
     }
   }
 }

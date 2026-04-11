@@ -15,18 +15,11 @@ export class MaskState implements ICloneable<MaskState>, IEquatable<MaskState> {
     public blue = true,
     public alpha = true,
     public depth = true,
-    public stencil = 0
+    public stencil = 0,
   ) {}
 
   clone(): MaskState {
-    return new MaskState(
-      this.red,
-      this.green,
-      this.blue,
-      this.alpha,
-      this.depth,
-      this.stencil
-    );
+    return new MaskState(this.red, this.green, this.blue, this.alpha, this.depth, this.stencil);
   }
 
   copy(ms: MaskState): void {

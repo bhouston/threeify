@@ -1,11 +1,5 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
-import {
-  delta,
-  EPSILON,
-  equalsTolerance,
-  parseSafeFloats,
-  toSafeString
-} from './Functions.js';
+import { delta, EPSILON, equalsTolerance, parseSafeFloats, toSafeString } from './Functions.js';
 import { mat4ToMat3 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
@@ -29,19 +23,10 @@ export function quatRandomUnit(result = new Quat()): Quat {
 
   const u3 = 2 * Math.PI * Math.random();
 
-  return result.set(
-    sqrt1u1 * Math.cos(u2),
-    sqrtu1 * Math.sin(u3),
-    sqrtu1 * Math.cos(u3),
-    sqrt1u1 * Math.sin(u2)
-  );
+  return result.set(sqrt1u1 * Math.cos(u2), sqrtu1 * Math.sin(u3), sqrtu1 * Math.cos(u3), sqrt1u1 * Math.sin(u2));
 }
 
-export function quatEquals(
-  a: Quat,
-  b: Quat,
-  tolerance: number = EPSILON
-): boolean {
+export function quatEquals(a: Quat, b: Quat, tolerance: number = EPSILON): boolean {
   return (
     equalsTolerance(a.x, b.x, tolerance) &&
     equalsTolerance(a.y, b.y, tolerance) &&
@@ -55,11 +40,7 @@ export function quatAdd(a: Quat, b: Quat, result = new Quat()): Quat {
 export function quatSubtract(a: Quat, b: Quat, result = new Quat()): Quat {
   return result.set(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
-export function quatMultiplyByScalar(
-  a: Quat,
-  b: number,
-  result = new Quat()
-): Quat {
+export function quatMultiplyByScalar(a: Quat, b: number, result = new Quat()): Quat {
   return result.set(a.x * b, a.y * b, a.z * b, a.w * b);
 }
 export function quatNegate(a: Quat, result = new Quat()): Quat {
@@ -81,37 +62,14 @@ export function quatNormalize(a: Quat, result = new Quat()): Quat {
 export function quatDot(a: Quat, b: Quat): number {
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
-export function quatLerp(
-  a: Quat,
-  b: Quat,
-  t: number,
-  result = new Quat()
-): Quat {
+export function quatLerp(a: Quat, b: Quat, t: number, result = new Quat()): Quat {
   const s = 1 - t;
-  return result.set(
-    a.x * s + b.x * t,
-    a.y * s + b.y * t,
-    a.z * s + b.z * t,
-    a.w * s + b.w * t
-  );
+  return result.set(a.x * s + b.x * t, a.y * s + b.y * t, a.z * s + b.z * t, a.w * s + b.w * t);
 }
-export function arrayToQuat(
-  array: Float32Array | number[],
-  offset = 0,
-  result = new Quat()
-): Quat {
-  return result.set(
-    array[offset + 0],
-    array[offset + 1],
-    array[offset + 2],
-    array[offset + 3]
-  );
+export function arrayToQuat(array: Float32Array | number[], offset = 0, result = new Quat()): Quat {
+  return result.set(array[offset + 0], array[offset + 1], array[offset + 2], array[offset + 3]);
 }
-export function quatToArray(
-  a: Quat,
-  array: Float32Array | number[],
-  offset = 0
-): void {
+export function quatToArray(a: Quat, array: Float32Array | number[], offset = 0): void {
   array[offset + 0] = a.x;
   array[offset + 1] = a.y;
   array[offset + 2] = a.z;
@@ -142,48 +100,32 @@ export function quatMultiply(a: Quat, b: Quat, result = new Quat()): Quat {
     qax * qbw + qaw * qbx + qay * qbz - qaz * qby,
     qay * qbw + qaw * qby + qaz * qbx - qax * qbz,
     qaz * qbw + qaw * qbz + qax * qby - qay * qbx,
-    qaw * qbw - qax * qbx - qay * qby - qaz * qbz
+    qaw * qbw - qax * qbx - qay * qby - qaz * qbz,
   );
 }
 
-export function quatRotateX(
-  _q: Quat,
-  angle: number,
-  result = new Quat()
-): Quat {
+export function quatRotateX(_q: Quat, angle: number, result = new Quat()): Quat {
   throw new Error('q is never used');
   const halfAngle = angle * 0.5;
   const s = Math.sin(halfAngle);
   return result.set(s, 0, 0, Math.cos(halfAngle));
 }
 
-export function quatRotateY(
-  _q: Quat,
-  angle: number,
-  result = new Quat()
-): Quat {
+export function quatRotateY(_q: Quat, angle: number, result = new Quat()): Quat {
   throw new Error('q is never used');
   const halfAngle = angle * 0.5;
   const s = Math.sin(halfAngle);
   return result.set(0, s, 0, Math.cos(halfAngle));
 }
 
-export function quatRotateZ(
-  _q: Quat,
-  angle: number,
-  result = new Quat()
-): Quat {
+export function quatRotateZ(_q: Quat, angle: number, result = new Quat()): Quat {
   throw new Error('q is never used');
   const halfAngle = angle * 0.5;
   const s = Math.sin(halfAngle);
   return result.set(0, 0, s, Math.cos(halfAngle));
 }
 
-export function quatTransformPoint3(
-  q: Quat,
-  p: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function quatTransformPoint3(q: Quat, p: Vec3, result = new Vec3()): Vec3 {
   const { x, y, z } = p;
   const { x: qx, y: qy, z: qz, w: qw } = q;
 
@@ -199,16 +141,11 @@ export function quatTransformPoint3(
   return result.set(
     ix * qw + iw * -qx + iy * -qz - iz * -qy,
     iy * qw + iw * -qy + iz * -qx - ix * -qz,
-    iz * qw + iw * -qz + ix * -qy - iy * -qx
+    iz * qw + iw * -qz + ix * -qy - iy * -qx,
   );
 }
 
-export function quatSlerp(
-  a: Quat,
-  b: Quat,
-  t: number,
-  result = new Quat()
-): Quat {
+export function quatSlerp(a: Quat, b: Quat, t: number, result = new Quat()): Quat {
   if (t <= 0) return a.clone(result);
   if (t >= 1) return b.clone(result);
 
@@ -255,12 +192,7 @@ export function quatAngleTo(a: Quat, b: Quat): number {
   return Math.acos(2 * dot * dot - 1);
 }
 
-export function quatRotateTowards(
-  a: Quat,
-  b: Quat,
-  angle: number,
-  result = new Quat()
-): Quat {
+export function quatRotateTowards(a: Quat, b: Quat, angle: number, result = new Quat()): Quat {
   const angleTo = quatAngleTo(a, b);
   if (angleTo === 0) return a.clone(result);
   const t = Math.min(1, angle / angleTo);
@@ -291,12 +223,7 @@ export function quatLn(a: Quat, result = new Quat()): Quat {
   const r = Math.sqrt(x * x + y * y + z * z);
   const t = r > 0 ? Math.atan2(r, w) / r : 0;
 
-  return result.set(
-    x * t,
-    y * t,
-    z * t,
-    0.5 * Math.log(x * x + y * y + z * z + w * w)
-  );
+  return result.set(x * t, y * t, z * t, 0.5 * Math.log(x * x + y * y + z * z + w * w));
 }
 
 // from gl-matrix
@@ -307,11 +234,7 @@ export function quatPow(a: Quat, b: number, result = new Quat()): Quat {
   return result;
 }
 
-export function angleAxisToQuat(
-  angle: number,
-  axis: Vec3,
-  result = new Quat()
-): Quat {
+export function angleAxisToQuat(angle: number, axis: Vec3, result = new Quat()): Quat {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuat/index.htm
 
   // assumes axis is normalized
@@ -323,10 +246,7 @@ export function angleAxisToQuat(
 }
 
 // from gl-matrix
-export function quatToAngleAxis(
-  q: Quat,
-  result = new Vec3()
-): [angle: number, axis: Vec3] {
+export function quatToAngleAxis(q: Quat, result = new Vec3()): [angle: number, axis: Vec3] {
   const rad = Math.acos(q.w) * 2;
   const s = Math.sin(rad / 2);
   if (s > EPSILON) {
@@ -368,42 +288,22 @@ export function mat3ToQuat(m: Mat3, result = new Quat()): Quat {
   if (trace > 0) {
     const s = 0.5 / Math.sqrt(trace + 1);
 
-    return result.set(
-      (m32 - m23) * s,
-      (m13 - m31) * s,
-      (m21 - m12) * s,
-      0.25 / s
-    );
+    return result.set((m32 - m23) * s, (m13 - m31) * s, (m21 - m12) * s, 0.25 / s);
   }
   if (m11 > m22 && m11 > m33) {
     const s = 2 * Math.sqrt(1 + m11 - m22 - m33);
 
-    return result.set(
-      0.25 * s,
-      (m12 + m21) / s,
-      (m13 + m31) / s,
-      (m32 - m23) / s
-    );
+    return result.set(0.25 * s, (m12 + m21) / s, (m13 + m31) / s, (m32 - m23) / s);
   }
   if (m22 > m33) {
     const s = 2 * Math.sqrt(1 + m22 - m11 - m33);
 
-    return result.set(
-      (m12 + m21) / s,
-      0.25 * s,
-      (m23 + m32) / s,
-      (m13 - m31) / s
-    );
+    return result.set((m12 + m21) / s, 0.25 * s, (m23 + m32) / s, (m13 - m31) / s);
   }
 
   const s = 2 * Math.sqrt(1 + m33 - m11 - m22);
 
-  return result.set(
-    (m13 + m31) / s,
-    (m23 + m32) / s,
-    0.25 * s,
-    (m21 - m12) / s
-  );
+  return result.set((m13 + m31) / s, (m23 + m32) / s, 0.25 * s, (m21 - m12) / s);
 }
 
 export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
@@ -426,7 +326,7 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
         c1 * c2 * s3 + s1 * s2 * c3,
-        c1 * c2 * c3 - s1 * s2 * s3
+        c1 * c2 * c3 - s1 * s2 * s3,
       );
 
     case EulerOrder3.YXZ:
@@ -434,7 +334,7 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
         c1 * c2 * s3 - s1 * s2 * c3,
-        c1 * c2 * c3 + s1 * s2 * s3
+        c1 * c2 * c3 + s1 * s2 * s3,
       );
 
     case EulerOrder3.ZXY:
@@ -442,7 +342,7 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
         c1 * c2 * s3 + s1 * s2 * c3,
-        c1 * c2 * c3 - s1 * s2 * s3
+        c1 * c2 * c3 - s1 * s2 * s3,
       );
 
     case EulerOrder3.ZYX:
@@ -450,7 +350,7 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
         c1 * c2 * s3 - s1 * s2 * c3,
-        c1 * c2 * c3 + s1 * s2 * s3
+        c1 * c2 * c3 + s1 * s2 * s3,
       );
 
     case EulerOrder3.YZX:
@@ -458,7 +358,7 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
         s1 * c2 * c3 + c1 * s2 * s3,
         c1 * s2 * c3 + s1 * c2 * s3,
         c1 * c2 * s3 - s1 * s2 * c3,
-        c1 * c2 * c3 - s1 * s2 * s3
+        c1 * c2 * c3 - s1 * s2 * s3,
       );
 
     case EulerOrder3.XZY:
@@ -466,7 +366,7 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
         s1 * c2 * c3 - c1 * s2 * s3,
         c1 * s2 * c3 - s1 * c2 * s3,
         c1 * c2 * s3 + s1 * s2 * c3,
-        c1 * c2 * c3 + s1 * s2 * s3
+        c1 * c2 * c3 + s1 * s2 * s3,
       );
 
     default:
@@ -475,18 +375,12 @@ export function euler3ToQuat(e: Euler3, result = new Quat()): Quat {
 }
 
 // Ben asks in Jan 2023, where the heck is this used?  Where did it come from?
-export function barycoordWeightsToQuat(
-  baryCoord: Vec3,
-  a: Quat,
-  b: Quat,
-  c: Quat,
-  result = new Quat()
-): Quat {
+export function barycoordWeightsToQuat(baryCoord: Vec3, a: Quat, b: Quat, c: Quat, result = new Quat()): Quat {
   const v = baryCoord;
   return result.set(
     a.x * v.x + b.x * v.y + c.x * v.z,
     a.y * v.x + b.y * v.y + c.y * v.z,
     a.z * v.x + b.z * v.y + c.z * v.z,
-    a.w * v.x + b.w * v.y + c.w * v.z
+    a.w * v.x + b.w * v.y + c.w * v.z,
   );
 }

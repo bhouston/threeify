@@ -11,7 +11,7 @@ export enum ThreeJSGLTF {
   ShadowmappableMesh,
   Soldier,
   Stork,
-  Xbot
+  Xbot,
 }
 
 export function getThreeJSGLTFUrl(gltf: ThreeJSGLTF): string {

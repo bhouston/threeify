@@ -5,7 +5,7 @@ import {
   sphereIsEmpty,
   sphereScale,
   sphereTranslate,
-  vec3ArrayToSphere
+  vec3ArrayToSphere,
 } from './Sphere.Functions.js';
 import { Sphere } from './Sphere.js';
 import { Vec3 } from './Vec3.js';
@@ -18,7 +18,7 @@ describe('Sphere Functions', () => {
       new Vec3(0, 0, 1),
       new Vec3(0, 0, -1),
       new Vec3(0, -1, 0),
-      new Vec3(-1, 0, 0)
+      new Vec3(-1, 0, 0),
     ];
 
     const sphere = vec3ArrayToSphere(points);

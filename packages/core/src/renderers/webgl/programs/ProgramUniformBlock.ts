@@ -19,7 +19,7 @@ export class ProgramUniformBlock {
 
   constructor(
     public readonly program: Program,
-    public readonly blockIndex: number
+    public readonly blockIndex: number,
   ) {
     const { gl } = this.program.context;
     const { glProgram } = this.program;
@@ -34,11 +34,7 @@ export class ProgramUniformBlock {
       throw new Error('Uniform block index inconsistency.');
 
     // Get the size of the Uniform Block in bytes
-    this.blockSize = gl.getActiveUniformBlockParameter(
-      glProgram,
-      this.blockIndex,
-      gl.UNIFORM_BLOCK_DATA_SIZE
-    );
+    this.blockSize = gl.getActiveUniformBlockParameter(glProgram, this.blockIndex, gl.UNIFORM_BLOCK_DATA_SIZE);
   }
 
   allocateUniformBuffer(): Buffer {
@@ -46,7 +42,7 @@ export class ProgramUniformBlock {
       this.program.context,
       new ArrayBuffer(this.blockSize),
       BufferTarget.Uniform,
-      BufferUsage.DynamicDraw
+      BufferUsage.DynamicDraw,
     );
   }
 
@@ -68,10 +64,7 @@ export class ProgramUniformBlock {
     }
   }
 
-  setUniformsIntoBuffer(
-    uniformValueMap: UniformValueMap,
-    buffer: Buffer
-  ): this {
+  setUniformsIntoBuffer(uniformValueMap: UniformValueMap, buffer: Buffer): this {
     //console.log('setting uniforms into buffer', uniformValueMap);
     for (const uniformName in uniformValueMap) {
       const uniform = this.uniforms[uniformName];

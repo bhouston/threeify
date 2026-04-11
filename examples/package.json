@@ -2,12 +2,12 @@
   "name": "threeify-examples",
   "version": "2.1.0",
   "private": true,
-  "type": "module",
-  "main": "dist",
-  "types": "dist",
   "files": [
     "dist"
   ],
+  "type": "module",
+  "main": "dist",
+  "types": "dist",
   "scripts": {
     "build": "glsl-transpiler -r src -o src && tsc --noEmit && threeify-build src/**/index.ts --bundle --optimize",
     "watch": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"

@@ -9,25 +9,25 @@ describe('ColorHSV Functions', () => {
       { hsv: new ColorHSV(0, 1, 0.5), color: new Color3(0.5, 0, 0) },
       {
         hsv: new ColorHSV(1 / 6, 1, 0.5),
-        color: new Color3(0.5, 0.5, 0)
+        color: new Color3(0.5, 0.5, 0),
       },
       {
         hsv: new ColorHSV(1 / 3, 1, 0.5),
-        color: new Color3(0, 0.5, 0)
+        color: new Color3(0, 0.5, 0),
       },
       { hsv: new ColorHSV(1 / 2, 1, 0.5), color: new Color3(0, 0.5, 0.5) },
       {
         hsv: new ColorHSV(2 / 3, 1, 0.5),
-        color: new Color3(0, 0, 0.5)
+        color: new Color3(0, 0, 0.5),
       },
       {
         hsv: new ColorHSV(5 / 6, 1, 0.5),
-        color: new Color3(0.5, 0, 0.5)
+        color: new Color3(0.5, 0, 0.5),
       },
       { hsv: new ColorHSV(0, 0, 0.5), color: new Color3(0.5, 0.5, 0.5) },
       { hsv: new ColorHSV(0, 0, 0), color: new Color3(0, 0, 0) },
       { hsv: new ColorHSV(0, 1, 1), color: new Color3(1, 0, 0) },
-      { hsv: new ColorHSV(0, 0, 1), color: new Color3(1, 1, 1) }
+      { hsv: new ColorHSV(0, 0, 1), color: new Color3(1, 1, 1) },
     ];
     for (const pair of pairs) {
       const { hsv, color } = pair;

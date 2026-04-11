@@ -1,13 +1,4 @@
-import {
-  angleAxisToQuat,
-  degToRad,
-  Euler3,
-  euler3ToQuat,
-  EulerOrder3,
-  Quat,
-  quatMultiply,
-  Vec3
-} from '@threeify/math';
+import { angleAxisToQuat, degToRad, Euler3, euler3ToQuat, EulerOrder3, Quat, quatMultiply, Vec3 } from '@threeify/math';
 
 import { IDisposable } from '../core/types.js';
 
@@ -29,7 +20,7 @@ export class DeviceOrientation implements IDisposable {
         degToRad(event.beta ?? 0),
         degToRad(event.alpha ?? 0 - 180),
         -degToRad(event.gamma ?? 0),
-        EulerOrder3.YXZ
+        EulerOrder3.YXZ,
       );
     };
     const onOrientationChange = (): void => {
@@ -60,16 +51,8 @@ export class DeviceOrientation implements IDisposable {
     // }
 
     this.onDispose = (): void => {
-      window.removeEventListener(
-        'orientationchange',
-        onOrientationChange,
-        false
-      );
-      window.removeEventListener(
-        'deviceorientation',
-        onDeviceOrientation,
-        false
-      );
+      window.removeEventListener('orientationchange', onOrientationChange, false);
+      window.removeEventListener('deviceorientation', onDeviceOrientation, false);
     };
   }
 
@@ -78,11 +61,7 @@ export class DeviceOrientation implements IDisposable {
     // camera looks out the back of the device, not the top
     quatMultiply(result, q1, result);
     // adjust for screen orientation
-    quatMultiply(
-      result,
-      angleAxisToQuat(this.screenOrientation, zAxis, this.tempValue),
-      result
-    );
+    quatMultiply(result, angleAxisToQuat(this.screenOrientation, zAxis, this.tempValue), result);
 
     return result;
   }

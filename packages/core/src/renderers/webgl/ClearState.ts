@@ -9,14 +9,12 @@ import { Color3, color3Equals } from '@threeify/math';
 
 import { ICloneable, IEquatable } from '../../core/types.js';
 
-export class ClearState
-  implements ICloneable<ClearState>, IEquatable<ClearState>
-{
+export class ClearState implements ICloneable<ClearState>, IEquatable<ClearState> {
   constructor(
     public color = Color3.Black,
     public alpha = 1,
     public depth = 1,
-    public stencil = 0
+    public stencil = 0,
   ) {}
 
   clone(): ClearState {

@@ -15,7 +15,7 @@ export class AttributeData implements IIdentifiable, IVersionable {
 
   constructor(
     public arrayBuffer: ArrayBuffer,
-    public target: BufferTarget = BufferTarget.Array
+    public target: BufferTarget = BufferTarget.Array,
   ) {}
 
   dirty() {

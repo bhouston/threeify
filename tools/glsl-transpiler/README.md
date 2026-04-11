@@ -89,7 +89,7 @@ vec4 linearToRGBE( in vec4 value ) {
 Will be transformed into a `rgbe.glsl.js` JavaScript module:
 
 ```javascript
-import _renderers_webgl2_shaders_includes_math_math_glsl from "../../math/math.glsl.js";
+import _renderers_webgl2_shaders_includes_math_math_glsl from '../../math/math.glsl.js';
 
 export default /* glsl */ `
 #ifndef _renderers_webgl2_shaders_includes_color_spaces_rgbe_glsl // start of include guard
@@ -114,7 +114,7 @@ vec4 linearToRGBE( in vec4 value ) {
 Which you can use in your JavaScript code via:
 
 ```javascript
-import rgbe_code from "rgbe.glsl.js";
+import rgbe_code from 'rgbe.glsl.js';
 
 console.log(rgbe_cole);
 ```

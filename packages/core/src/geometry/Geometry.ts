@@ -27,9 +27,7 @@ export class Geometry {
       box3Empty(this.#boundingBox);
     } else if (this.#boundingBoxVersion < positions.attributeData.version) {
       this.#boundingBoxVersion = positions.attributeData.version;
-      this.#boundingBox = positionAttributeToBoundingBox(
-        this.attributes.positions
-      );
+      this.#boundingBox = positionAttributeToBoundingBox(this.attributes.positions);
     }
     return this.#boundingBox;
   }

@@ -14,13 +14,10 @@ import {
   Texture,
   TextureEncoding,
   TextureFilter,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
 
-import {
-  getThreeJSHDRIUrl,
-  ThreeJSHRDI
-} from '../../utilities/threejsHDRIs.js';
+import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs.js';
 
 let blurRadius = 4.5;
 
@@ -49,9 +46,7 @@ document.addEventListener('keydown', (event) => {
 async function init(): Promise<void> {
   const context = createRenderingContext(document, 'framebuffer');
 
-  const hdrPromise = fetchHDR(
-    getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
-  );
+  const hdrPromise = fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k));
   const latLongTexturePromise = hdrPromise.then((hdr) => {
     return new Texture(hdr);
   });
@@ -66,7 +61,7 @@ async function init(): Promise<void> {
     [rgbeTexImage2D.size],
     InternalFormat.RGBA16F,
     DataType.HalfFloat,
-    PixelFormat.RGBA
+    PixelFormat.RGBA,
   );
 
   const copyPass = await createCopyPass(context);
@@ -77,7 +72,7 @@ async function init(): Promise<void> {
     sourceTexImage2D: rgbeTexImage2D,
     sourceEncoding: TextureEncoding.RGBE,
     targetFramebufferOrTexImage2D: hdrTexImage2D,
-    targetEncoding: TextureEncoding.Linear
+    targetEncoding: TextureEncoding.Linear,
   });
 
   rgbeTexImage2D.dispose();
@@ -92,8 +87,8 @@ async function init(): Promise<void> {
       hdrTexImage2D.size,
       InternalFormat.RGBA16F,
       TextureFilter.Linear,
-      TextureFilter.Linear
-    )
+      TextureFilter.Linear,
+    ),
   );
 
   const vFramebuffer = new Framebuffer(context);
@@ -104,8 +99,8 @@ async function init(): Promise<void> {
       hdrTexImage2D.size,
       InternalFormat.RGBA16F,
       TextureFilter.Linear,
-      TextureFilter.Linear
-    )
+      TextureFilter.Linear,
+    ),
   );
 
   function animate(): void {
@@ -115,19 +110,15 @@ async function init(): Promise<void> {
       sourceTexImage2D: hdrTexImage2D,
       sourceLod: lodLevel,
       standardDeviationInTexels: blurRadius,
-      tempTexImage2D: hFramebuffer.getAttachment(
-        Attachment.Color0
-      ) as TexImage2D,
+      tempTexImage2D: hFramebuffer.getAttachment(Attachment.Color0) as TexImage2D,
       targetFramebuffer: vFramebuffer,
-      targetAlpha: 1
+      targetAlpha: 1,
     });
 
     toneMapper.exec({
-      sourceTexImage2D: vFramebuffer.getAttachment(
-        Attachment.Color0
-      ) as TexImage2D,
+      sourceTexImage2D: vFramebuffer.getAttachment(Attachment.Color0) as TexImage2D,
       exposure: 1,
-      targetFramebuffer: canvasFramebuffer
+      targetFramebuffer: canvasFramebuffer,
     });
   }
 

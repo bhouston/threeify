@@ -14,7 +14,7 @@ import {
   vec4MultiplyByScalar,
   vec4Negate,
   vec4Normalize,
-  vec4Subtract
+  vec4Subtract,
 } from './Vec4.Functions.js';
 
 describe('Vec4 Functions', () => {

@@ -1,14 +1,10 @@
-import {
-  arrayToColor4,
-  color4ToArray,
-  rgbeToLinear
-} from '../Color4.Functions.js';
+import { arrayToColor4, color4ToArray, rgbeToLinear } from '../Color4.Functions.js';
 import { Color4 } from '../Color4.js';
 import { float32ToFloat16 } from '../utils/fp16.js';
 
 export function normalizedByteToFloat32s(
   sourceArray: Uint8Array,
-  result: Float32Array | undefined = undefined
+  result: Float32Array | undefined = undefined,
 ): Float32Array {
   const scale = 1 / 255;
   if (result === undefined) {
@@ -21,7 +17,7 @@ export function normalizedByteToFloat32s(
 }
 export function float32sToNormalizedBytes(
   sourceArray: Float32Array,
-  result: Uint8Array | undefined = undefined
+  result: Uint8Array | undefined = undefined,
 ): Uint8Array {
   const scale = 255;
   if (result === undefined) {
@@ -35,7 +31,7 @@ export function float32sToNormalizedBytes(
 
 export function normalizedByteToFloat16s(
   sourceArray: Uint8Array,
-  result: Uint16Array | undefined = undefined
+  result: Uint16Array | undefined = undefined,
 ): Uint16Array {
   const scale = 1 / 255;
   if (result === undefined) {
@@ -49,7 +45,7 @@ export function normalizedByteToFloat16s(
 
 export function float32sToFloat16s(
   sourceArray: Float32Array,
-  result: Uint16Array | undefined = undefined
+  result: Uint16Array | undefined = undefined,
 ): Uint16Array {
   if (result === undefined) {
     result = new Uint16Array(sourceArray.length);
@@ -62,7 +58,7 @@ export function float32sToFloat16s(
 
 export function float32RGBEToFloat32Linear(
   sourceArray: Float32Array,
-  result: Float32Array | undefined = undefined
+  result: Float32Array | undefined = undefined,
 ): Float32Array {
   if (result === undefined) {
     result = new Float32Array(sourceArray.length);

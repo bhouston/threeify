@@ -8,18 +8,14 @@ export class Resources {
 
   register(resource: IResource): void {
     if (this.map[resource.id] !== undefined) {
-      throw new Error(
-        `Resource already registered: id=${resource.id}, type=${resource.constructor.name}`
-      );
+      throw new Error(`Resource already registered: id=${resource.id}, type=${resource.constructor.name}`);
     }
     this.map[resource.id] = resource;
   }
 
   unregister(resource: IResource): void {
     if (this.map[resource.id] !== resource) {
-      throw new Error(
-        `Resource not registered: id=${resource.id}, type=${resource.constructor.name}`
-      );
+      throw new Error(`Resource not registered: id=${resource.id}, type=${resource.constructor.name}`);
     }
     delete this.map[resource.id];
   }

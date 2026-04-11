@@ -10,17 +10,9 @@ import {
   shaderSourceToProgram,
   TexImage2D,
   Texture,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
-import {
-  Color3,
-  makeVec2View,
-  Mat4,
-  mat4OrthographicSimple,
-  translation3ToMat4,
-  Vec2,
-  Vec3
-} from '@threeify/math';
+import { Color3, makeVec2View, Mat4, mat4OrthographicSimple, translation3ToMat4, Vec2, Vec3 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl.js';
 import vertexSource from './vertex.glsl.js';
@@ -42,29 +34,14 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-  const clickToPlayMap = await fetchTexImage2D(
-    context,
-    '/assets/textures/videos/ClickToPlay.png'
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
+  const clickToPlayMap = await fetchTexImage2D(context, '/assets/textures/videos/ClickToPlay.png');
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -1)),
-    viewToClip: mat4OrthographicSimple(
-      1.5,
-      new Vec2(),
-      0.1,
-      2,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4OrthographicSimple(1.5, new Vec2(), 0.1, 2, 1, canvasFramebuffer.aspectRatio),
     viewLightPosition: Vec3.Zero,
-    map: clickToPlayMap
+    map: clickToPlayMap,
   };
 
   const video = document.createElement('video');
@@ -86,7 +63,7 @@ async function init(): Promise<void> {
         videoTexture = makeTextureFromVideoElement(video);
       }
     },
-    false
+    false,
   );
 
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
@@ -95,17 +72,10 @@ async function init(): Promise<void> {
   function animate(): void {
     const now = Date.now();
     uniforms.localToWorld = translation3ToMat4(
-      new Vec3(
-        Math.cos(now * 0.00077) * 0.25,
-        Math.sin(now * 0.001 + 0.4) * 0.25,
-        0
-      ),
-      uniforms.localToWorld
+      new Vec3(Math.cos(now * 0.00077) * 0.25, Math.sin(now * 0.001 + 0.4) * 0.25, 0),
+      uniforms.localToWorld,
     );
-    if (
-      videoTexture !== undefined &&
-      video.readyState >= video.HAVE_CURRENT_DATA
-    ) {
+    if (videoTexture !== undefined && video.readyState >= video.HAVE_CURRENT_DATA) {
       if (videoMap === undefined) {
         videoMap = textureToTexImage2D(context, videoTexture);
         uniforms.map = videoMap;
@@ -117,7 +87,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
     });
 
     requestAnimationFrame(animate);

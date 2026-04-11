@@ -24,9 +24,7 @@ export class PunctualLightUniforms {
   lightOuterConeCos: number[] = [];
 }
 
-export function punctualLightsTranslator(
-  rootNode: SceneNode
-): PunctualLightUniforms {
+export function punctualLightsTranslator(rootNode: SceneNode): PunctualLightUniforms {
   // create a list of uniforms for them.
   const result = new PunctualLightUniforms();
 
@@ -38,16 +36,11 @@ export function punctualLightsTranslator(
 
     if (light instanceof DomeLight) {
       result.domeCubeMap = light.cubeMap;
-      result.domeIntensity = color3MultiplyByScalar(
-        light.color,
-        light.intensity
-      );
+      result.domeIntensity = color3MultiplyByScalar(light.color, light.intensity);
     } else {
       result.numLights++;
       result.lightPositions.push(light.translation);
-      result.lightIntensity.push(
-        color3MultiplyByScalar(light.color, light.intensity)
-      );
+      result.lightIntensity.push(color3MultiplyByScalar(light.color, light.intensity));
 
       if (node instanceof PointLight) {
         result.lightTypes.push(LightType.Point);

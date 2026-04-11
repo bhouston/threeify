@@ -1,11 +1,6 @@
 import { Euler3, EulerOrder3 } from './Euler3.js';
 import { quatToEuler3 } from './Euler3.Functions.js';
-import {
-  euler3ToMat4,
-  mat4Delta,
-  mat4Multiply,
-  quatToMat4
-} from './Mat4.Functions.js';
+import { euler3ToMat4, mat4Delta, mat4Multiply, quatToMat4 } from './Mat4.Functions.js';
 import { Quat } from './Quat.js';
 import {
   euler3ToQuat,
@@ -24,7 +19,7 @@ import {
   quatPow,
   quatRotateTowards,
   quatSlerp,
-  quatTransformPoint3 as quatTransformVec3
+  quatTransformPoint3 as quatTransformVec3,
 } from './Quat.Functions.js';
 import { Vec3 } from './Vec3.js';
 import { mat4TransformVec3, vec3Delta } from './Vec3.Functions.js';
@@ -55,7 +50,7 @@ const testOrders = [
   EulerOrder3.ZXY,
   EulerOrder3.ZYX,
   EulerOrder3.YZX,
-  EulerOrder3.XZY
+  EulerOrder3.XZY,
 ];
 
 describe('Quat Functions', () => {
@@ -153,11 +148,7 @@ describe('Quat Functions', () => {
   });
 
   test('quatMultiply', () => {
-    const angles = [
-      new Euler3(1, 0, 0),
-      new Euler3(0, 1, 0),
-      new Euler3(0, 0, 1)
-    ];
+    const angles = [new Euler3(1, 0, 0), new Euler3(0, 1, 0), new Euler3(0, 0, 1)];
 
     const q1 = euler3ToQuat(changeEulerOrder(angles[0], EulerOrder3.XYZ));
     const q2 = euler3ToQuat(changeEulerOrder(angles[1], EulerOrder3.XYZ));
@@ -241,12 +232,7 @@ describe('Quat Functions', () => {
     // Ben: replicated from Three.js but I changed the sign of q, I think three.js's unit tests are wrong?
     const q = quatNormalize(new Quat(9, 2, -3, 4));
     const m = quatToMat4(q);
-    const expected = new Quat(
-      0.8581163303210332,
-      0.19069251784911848,
-      -0.2860387767736777,
-      0.38138503569823695
-    );
+    const expected = new Quat(0.8581163303210332, 0.19069251784911848, -0.2860387767736777, 0.38138503569823695);
     expect(q.x).toBeCloseTo(expected.x);
     expect(q.y).toBeCloseTo(expected.y);
     expect(q.z).toBeCloseTo(expected.z);
@@ -262,12 +248,7 @@ describe('Quat Functions', () => {
     // Ben: replicated from Three.js but I changed the sign of q, I think three.js's unit tests are wrong?
     const q = quatNormalize(new Quat(1, 2, -1, 1));
     const m = quatToMat4(q);
-    const expected = new Quat(
-      0.37796447300922714,
-      0.7559289460184544,
-      -0.37796447300922714,
-      0.37796447300922714
-    );
+    const expected = new Quat(0.37796447300922714, 0.7559289460184544, -0.37796447300922714, 0.37796447300922714);
     expect(q.x).toBeCloseTo(expected.x);
     expect(q.y).toBeCloseTo(expected.y);
     expect(q.z).toBeCloseTo(expected.z);
@@ -280,11 +261,7 @@ describe('Quat Functions', () => {
   });
 
   test('quatTransformPoint3', () => {
-    const angles = [
-      new Euler3(1, 0, 0),
-      new Euler3(0, 1, 0),
-      new Euler3(0, 0, 1)
-    ];
+    const angles = [new Euler3(1, 0, 0), new Euler3(0, 1, 0), new Euler3(0, 0, 1)];
 
     // ensure euler conversion for Quaternion matches that of Mat4
     for (let i = 0; i < testOrders.length; i++) {
@@ -304,20 +281,10 @@ describe('Quat Functions', () => {
 
 describe('Quat-Euler3', () => {
   test('Quat-Euler explicit 1', () => {
-    const e2 = new Euler3(
-      3.141592653589793,
-      0,
-      -3.141592653589793,
-      EulerOrder3.XYZ
-    );
+    const e2 = new Euler3(3.141592653589793, 0, -3.141592653589793, EulerOrder3.XYZ);
 
     // result from three.js
-    const q2 = new Quat(
-      6.123233995736766e-17,
-      1,
-      -6.123233995736766e-17,
-      3.749399456654644e-33
-    );
+    const q2 = new Quat(6.123233995736766e-17, 1, -6.123233995736766e-17, 3.749399456654644e-33);
     const q3 = euler3ToQuat(e2);
     expect(q3.x).toBeCloseTo(q2.x);
     expect(q3.y).toBeCloseTo(q2.y);
@@ -325,19 +292,9 @@ describe('Quat-Euler3', () => {
     expect(q3.w).toBeCloseTo(q2.w);
   });
   test('Quat-Euler explicit2', () => {
-    const e2 = new Euler3(
-      0,
-      -3.141592653589793,
-      3.141592653589793,
-      EulerOrder3.XYZ
-    );
+    const e2 = new Euler3(0, -3.141592653589793, 3.141592653589793, EulerOrder3.XYZ);
     // result from three.js
-    const q2 = new Quat(
-      -1,
-      -6.123233995736766e-17,
-      6.123233995736766e-17,
-      3.749399456654644e-33
-    );
+    const q2 = new Quat(-1, -6.123233995736766e-17, 6.123233995736766e-17, 3.749399456654644e-33);
     const q3 = euler3ToQuat(e2);
     expect(q2.x).toBeCloseTo(q3.x);
     expect(q2.y).toBeCloseTo(q3.y);
@@ -387,12 +344,7 @@ describe('Quat-Mat4', () => {
     const a = new Quat();
     const q = quatNormalize(new Quat(-9, -2, 3, -4));
     const m = quatToMat4(q);
-    const expected = new Vec4(
-      0.8581163303210332,
-      0.19069251784911848,
-      -0.2860387767736777,
-      0.38138503569823695
-    );
+    const expected = new Vec4(0.8581163303210332, 0.19069251784911848, -0.2860387767736777, 0.38138503569823695);
 
     mat4ToQuat(m, a);
 
@@ -403,12 +355,7 @@ describe('Quat-Mat4', () => {
     const a = new Quat();
     const q = quatNormalize(new Quat(-1, -2, 1, -1));
     const m = quatToMat4(q);
-    const expected = new Vec4(
-      0.37796447300922714,
-      0.7559289460184544,
-      -0.37796447300922714,
-      0.37796447300922714
-    );
+    const expected = new Vec4(0.37796447300922714, 0.7559289460184544, -0.37796447300922714, 0.37796447300922714);
 
     mat4ToQuat(m, a);
     expect(quatDelta(a, expected)).toBeCloseTo(0);

@@ -10,7 +10,7 @@ import {
   makeDepthAttachment,
   renderPass,
   ShaderMaterial,
-  shaderMaterialToProgram
+  shaderMaterialToProgram,
 } from '@threeify/core';
 import vertexSource from '@threeify/core/dist/shaders/tests/vertex.glsl.js';
 import { Color3, Vec2 } from '@threeify/math';
@@ -26,14 +26,8 @@ async function init(): Promise<void> {
 
   const framebufferSize = new Vec2(1024, 1);
   const framebuffer = new Framebuffer(context);
-  framebuffer.attach(
-    Attachment.Color0,
-    makeColorAttachment(context, framebufferSize)
-  );
-  framebuffer.attach(
-    Attachment.Depth,
-    makeDepthAttachment(context, framebufferSize)
-  );
+  framebuffer.attach(Attachment.Color0, makeColorAttachment(context, framebufferSize));
+  framebuffer.attach(Attachment.Depth, makeDepthAttachment(context, framebufferSize));
 
   framebuffer.clearState = new ClearState(new Color3(0.5, 0.5, 0.5), 0.5);
   framebuffer.depthTestState = DepthTestState.Less;
@@ -51,18 +45,14 @@ async function init(): Promise<void> {
     let compileError;
 
     try {
-      const passMaterial = new ShaderMaterial(
-        'index',
-        vertexSource,
-        glslUnitTest.source
-      );
+      const passMaterial = new ShaderMaterial('index', vertexSource, glslUnitTest.source);
       const unitProgram = await shaderMaterialToProgram(context, passMaterial);
 
       framebuffer.clear(BufferBit.All);
       renderPass({
         framebuffer,
         program: unitProgram,
-        uniforms: unitUniforms
+        uniforms: unitUniforms,
       });
 
       const result = frameBufferToPixels(framebuffer) as Uint8Array;
@@ -92,11 +82,7 @@ async function init(): Promise<void> {
     totalFailures += failureIds.length;
     totalDuplicates += duplicateIds.length;
 
-    output.push(
-      `${glslUnitTest.name}.test.glsl: ${
-        passIds.length + failureIds.length + duplicateIds.length
-      } tests`
-    );
+    output.push(`${glslUnitTest.name}.test.glsl: ${passIds.length + failureIds.length + duplicateIds.length} tests`);
     if (compileError !== undefined) {
       output.push(`  COMPILE FAILED: ${compileError}`);
     } else if (failureIds.length === 0 && duplicateIds.length === 0) {
@@ -106,17 +92,12 @@ async function init(): Promise<void> {
       output.push(`  ${failureIds.length} FAILED: ${failureIds.join(' ')}`);
     }
     if (duplicateIds.length > 0) {
-      output.push(
-        `  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(' ')}`
-      );
+      output.push(`  ${duplicateIds.length} DUPLICATE IDS: ${duplicateIds.join(' ')}`);
     }
     output.push('');
   }
 
-  output.push(
-    '',
-    `SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`
-  );
+  output.push('', `SUMMARY: ${totalPasses} PASSES, ${totalFailures} FAILS, ${totalDuplicates} DUPLICATE IDS`);
 
   const textElement = document.getElementById('text');
   if (textElement !== null) {

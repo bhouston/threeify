@@ -1,39 +1,19 @@
 import { Color3 } from './Color3.js';
-import {
-  EPSILON,
-  equalsTolerance,
-  parseSafeFloats,
-  saturate,
-  toSafeString
-} from './Functions.js';
+import { EPSILON, equalsTolerance, parseSafeFloats, saturate, toSafeString } from './Functions.js';
 import { Vec3 } from './Vec3.js';
 
-export function color3Equals(
-  a: Color3,
-  b: Color3,
-  tolerance: number = EPSILON
-): boolean {
+export function color3Equals(a: Color3, b: Color3, tolerance: number = EPSILON): boolean {
   return (
-    equalsTolerance(a.r, b.r, tolerance) &&
-    equalsTolerance(a.g, b.g, tolerance) &&
-    equalsTolerance(a.b, b.b, tolerance)
+    equalsTolerance(a.r, b.r, tolerance) && equalsTolerance(a.g, b.g, tolerance) && equalsTolerance(a.b, b.b, tolerance)
   );
 }
 export function color3Add(a: Color3, b: Color3, result = new Color3()): Color3 {
   return result.set(a.r + b.r, a.g + b.g, a.b + b.b);
 }
-export function color3Subtract(
-  a: Color3,
-  b: Color3,
-  result = new Color3()
-): Color3 {
+export function color3Subtract(a: Color3, b: Color3, result = new Color3()): Color3 {
   return result.set(a.r - b.r, a.g - b.g, a.b - b.b);
 }
-export function color3MultiplyByScalar(
-  a: Color3,
-  b: number,
-  result = new Color3()
-): Color3 {
+export function color3MultiplyByScalar(a: Color3, b: number, result = new Color3()): Color3 {
   return result.set(a.r * b, a.g * b, a.b * b);
 }
 export function color3Negate(a: Color3, result = new Color3()): Color3 {
@@ -49,27 +29,14 @@ export function color3Normalize(a: Color3, result = new Color3()): Color3 {
 export function color3Dot(a: Color3, b: Color3): number {
   return a.r * b.r + a.g * b.g + a.b * b.b;
 }
-export function color3Lerp(
-  a: Color3,
-  b: Color3,
-  t: number,
-  result = new Color3()
-): Color3 {
+export function color3Lerp(a: Color3, b: Color3, t: number, result = new Color3()): Color3 {
   const s = 1 - t;
   return result.set(a.r * s + b.r * t, a.g * s + b.g * t, a.b * s + b.b * t);
 }
-export function arrayToColor3(
-  array: Float32Array | number[],
-  offset = 0,
-  result = new Color3()
-): Color3 {
+export function arrayToColor3(array: Float32Array | number[], offset = 0, result = new Color3()): Color3 {
   return result.set(array[offset + 0], array[offset + 1], array[offset + 2]);
 }
-export function color3ToArray(
-  a: Color3,
-  array: Float32Array | number[],
-  offset = 0
-): void {
+export function color3ToArray(a: Color3, array: Float32Array | number[], offset = 0): void {
   array[offset + 0] = a.r;
   array[offset + 1] = a.g;
   array[offset + 2] = a.b;
@@ -83,11 +50,7 @@ export function color3Parse(text: string, result = new Color3()): Color3 {
 
 export function hexToColor3(hex: number, result = new Color3()): Color3 {
   hex = Math.floor(hex);
-  return result.set(
-    ((hex >> 16) & 255) / 255,
-    ((hex >> 8) & 255) / 255,
-    (hex & 255) / 255
-  );
+  return result.set(((hex >> 16) & 255) / 255, ((hex >> 8) & 255) / 255, (hex & 255) / 255);
 }
 
 export function color3ToHex(rgb: Color3): number {
@@ -117,9 +80,5 @@ export function color3ToNormal(color: Color3, result = new Vec3()): Vec3 {
 //  return normalize(normal) * 0.5 + 0.5;
 //}
 export function normalToColor3(normal: Vec3, result = new Color3()): Color3 {
-  return result.set(
-    0.5 * (normal.x + 1),
-    0.5 * (normal.y + 1),
-    0.5 * (normal.z + 1)
-  );
+  return result.set(0.5 * (normal.x + 1), 0.5 * (normal.y + 1), 0.5 * (normal.z + 1));
 }

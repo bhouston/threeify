@@ -35,11 +35,7 @@ export function hslToColor3(hsl: ColorHSL, result = new Color3()): Color3 {
   const p = l <= 0.5 ? l * (1 + s) : l + s - l * s;
   const q = 2 * l - p;
 
-  return result.set(
-    hue2rgb(q, p, h + 1 / 3),
-    hue2rgb(q, p, h),
-    hue2rgb(q, p, h - 1 / 3)
-  );
+  return result.set(hue2rgb(q, p, h + 1 / 3), hue2rgb(q, p, h), hue2rgb(q, p, h - 1 / 3));
 }
 
 export function color3ToHsl(rgb: Color3, result = new ColorHSL()): ColorHSL {

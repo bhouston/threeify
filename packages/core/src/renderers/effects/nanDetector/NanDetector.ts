@@ -1,8 +1,5 @@
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import {
-  renderPass,
-  VirtualFramebuffer
-} from '../../webgl/framebuffers/VirtualFramebuffer.js';
+import { renderPass, VirtualFramebuffer } from '../../webgl/framebuffers/VirtualFramebuffer.js';
 import { shaderMaterialToProgram } from '../../webgl/programs/Program.js';
 import { RenderingContext } from '../../webgl/RenderingContext.js';
 import { TexImage2D } from '../../webgl/textures/TexImage2D.js';
@@ -19,9 +16,7 @@ export interface NanDetector extends IEffect {
   exec(props: INanDetectorProps): void;
 }
 
-export async function createNanDetector(
-  context: RenderingContext
-): Promise<NanDetector> {
+export async function createNanDetector(context: RenderingContext): Promise<NanDetector> {
   const programRef = context.programCache.acquireRef('nanDetector', (name) => {
     const material = new ShaderMaterial(name, vertexSource, fragmentSource);
     return shaderMaterialToProgram(context, material);
@@ -33,18 +28,18 @@ export async function createNanDetector(
       const { sourceTexImage2D, targetFramebuffer } = props;
 
       const uniforms = {
-        sourceMap: sourceTexImage2D
+        sourceMap: sourceTexImage2D,
       };
 
       renderPass({
         framebuffer: targetFramebuffer,
         program,
-        uniforms
+        uniforms,
       });
     },
 
     dispose: () => {
       programRef.dispose();
-    }
+    },
   };
 }

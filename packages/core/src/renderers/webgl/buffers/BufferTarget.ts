@@ -25,7 +25,7 @@ export enum BufferTarget {
   /**
    * Buffer used for storing uniform blocks.
    */
-  Uniform = GL.UNIFORM_BUFFER
+  Uniform = GL.UNIFORM_BUFFER,
   /**
    * Buffer used for pixel transfer operations.
    */

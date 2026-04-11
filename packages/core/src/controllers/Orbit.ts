@@ -35,17 +35,13 @@ export class Orbit implements IDisposable {
 
     this.domElement.style.touchAction = 'none'; // disable touch scroll
     this.domElement.addEventListener('pointerdown', this.onPointerDownHandler, {
-      passive: true
+      passive: true,
     });
-    this.domElement.addEventListener(
-      'pointercancel',
-      this.onPointerCancelHandler,
-      {
-        passive: true
-      }
-    );
+    this.domElement.addEventListener('pointercancel', this.onPointerCancelHandler, {
+      passive: true,
+    });
     this.domElement.addEventListener('wheel', this.onMouseWheelHandler, {
-      passive: true
+      passive: true,
     });
   }
 
@@ -57,29 +53,15 @@ export class Orbit implements IDisposable {
     if (this.disposed) return;
 
     this.disposed = true;
-    this.domElement.removeEventListener(
-      'pointerdown',
-      this.onPointerDownHandler
-    );
-    this.domElement.removeEventListener(
-      'pointercancel',
-      this.onPointerCancelHandler
-    );
+    this.domElement.removeEventListener('pointerdown', this.onPointerDownHandler);
+    this.domElement.removeEventListener('pointercancel', this.onPointerCancelHandler);
   }
 
   onPointerDown(pe: PointerEvent) {
     //console.log('pointer down');
     this.domElement.setPointerCapture(pe.pointerId);
-    this.domElement.addEventListener(
-      'pointermove',
-      this.onPointerMoveHandler,
-      false
-    );
-    this.domElement.addEventListener(
-      'pointerup',
-      this.onPointerUpHandler,
-      false
-    );
+    this.domElement.addEventListener('pointermove', this.onPointerMoveHandler, false);
+    this.domElement.addEventListener('pointerup', this.onPointerUpHandler, false);
 
     this.lastPointerClient.set(pe.clientX, pe.clientY);
   }
@@ -87,10 +69,7 @@ export class Orbit implements IDisposable {
   onPointerUp(pe: PointerEvent) {
     //console.log('pointer up');
     this.domElement.releasePointerCapture(pe.pointerId);
-    this.domElement.removeEventListener(
-      'pointermove',
-      this.onPointerMoveHandler
-    );
+    this.domElement.removeEventListener('pointermove', this.onPointerMoveHandler);
     this.domElement.removeEventListener('pointerup', this.onPointerUpHandler);
   }
 
@@ -103,10 +82,7 @@ export class Orbit implements IDisposable {
   onPointerMove(pe: PointerEvent) {
     //console.log('pointer move', pe);
     const pointerClient = new Vec2(pe.clientX, pe.clientY);
-    const pointerClientDelta = vec2Subtract(
-      pointerClient,
-      this.lastPointerClient
-    );
+    const pointerClientDelta = vec2Subtract(pointerClient, this.lastPointerClient);
 
     // convert to relative
     pointerClientDelta.x /= this.domElement.clientWidth;

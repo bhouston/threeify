@@ -3,7 +3,7 @@ import {
   fetchTexture,
   icosahedronGeometry,
   ShaderMaterial,
-  shaderMaterialToProgram
+  shaderMaterialToProgram,
 } from '@threeify/core';
 import { Color3, Vec2, Vec3 } from '@threeify/math';
 import {
@@ -17,28 +17,20 @@ import {
   SceneTreeCache,
   TextureAccessor,
   updateNodeTree,
-  updateRenderCache
+  updateRenderCache,
 } from '@threeify/scene';
 
 import fragmentSource from './fragment.glsl.js';
 import vertexSource from './vertex.glsl.js';
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const shaderMaterial = new ShaderMaterial('index', vertexSource, fragmentSource);
   const texture = await fetchTexture('/assets/textures/planets/jupiter_2k.jpg');
-  const flooringNormalTexture = await fetchTexture(
-    '/assets/textures/metal_flooring_normals.jpg'
-  );
+  const flooringNormalTexture = await fetchTexture('/assets/textures/metal_flooring_normals.jpg');
   // const _scratchesTexture = await fetchTexture(
   // '/assets/textures/golfball/scratches.png'
   //);
-  const golfballNormalTexture = await fetchTexture(
-    '/assets/textures/golfball/normals2.jpg'
-  );
+  const golfballNormalTexture = await fetchTexture('/assets/textures/golfball/normals2.jpg');
 
   const context = createRenderingContext(document, 'framebuffer');
   const { canvasFramebuffer } = context;
@@ -62,27 +54,25 @@ async function init(): Promise<void> {
       metallicFactor: 0.5,
       clearcoatFactor: 0.5,
       clearcoatRoughnessFactor: 0.4,
-      clearcoatNormalTextureAccessor: new TextureAccessor(
-        golfballNormalTexture
-      ),
+      clearcoatNormalTextureAccessor: new TextureAccessor(golfballNormalTexture),
       clearcoatTint: new Color3(0.5, 0.2, 0),
       sheenColorFactor: new Color3(1, 0.2, 0.8),
-      sheenRoughnessFactor: 0.5
-    })
+      sheenRoughnessFactor: 0.5,
+    }),
   });
   root.children.push(sphereMesh);
   const pointLight = new PointLight({
     translation: new Vec3(2, 0, 2),
     color: Color3.White,
     intensity: 10,
-    range: 20
+    range: 20,
   });
   root.children.push(pointLight);
   const camera = new PerspectiveCamera({
     verticalFov: 25,
     near: 0.1,
     far: 4,
-    zoom: 1
+    zoom: 1,
   });
   camera.translation.set(0, 0, 3);
   root.children.push(camera);
@@ -98,7 +88,7 @@ async function init(): Promise<void> {
       return program;
     },
     sceneTreeCache,
-    renderCache
+    renderCache,
   );
 
   function animate(): void {

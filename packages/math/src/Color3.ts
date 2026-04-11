@@ -30,7 +30,11 @@ export class Color3 {
     return new Color3(0, 1, 1);
   }
 
-  constructor(public r = 0, public g = 0, public b = 0) {}
+  constructor(
+    public r = 0,
+    public g = 0,
+    public b = 0,
+  ) {}
 
   getHashCode(): number {
     return hashFloat3(this.r, this.g, this.b);

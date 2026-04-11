@@ -1,9 +1,6 @@
 import { assert } from '../../../core/assert.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import {
-  renderPass,
-  VirtualFramebuffer
-} from '../../webgl/framebuffers/VirtualFramebuffer.js';
+import { renderPass, VirtualFramebuffer } from '../../webgl/framebuffers/VirtualFramebuffer.js';
 import { shaderMaterialToProgram } from '../../webgl/programs/Program.js';
 import { RenderingContext } from '../../webgl/RenderingContext.js';
 import { TexImage2D } from '../../webgl/textures/TexImage2D.js';
@@ -21,9 +18,7 @@ export interface ToneMapper extends IEffect {
   exec(props: IToneMapperProps): void;
 }
 
-export async function createToneMapper(
-  context: RenderingContext
-): Promise<ToneMapper> {
+export async function createToneMapper(context: RenderingContext): Promise<ToneMapper> {
   const programRef = context.programCache.acquireRef('toneMapping', (name) => {
     const material = new ShaderMaterial(name, vertexSource, fragmentSource);
     return shaderMaterialToProgram(context, material);
@@ -38,18 +33,18 @@ export async function createToneMapper(
 
       const uniforms = {
         sourceMap: sourceTexImage2D,
-        exposure
+        exposure,
       };
 
       renderPass({
         framebuffer: targetFramebuffer,
         program,
-        uniforms
+        uniforms,
       });
     },
 
     dispose: () => {
       programRef.dispose();
-    }
+    },
   };
 }

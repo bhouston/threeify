@@ -24,5 +24,5 @@ export enum PhysicalMaterialOutputs {
   AttenuationColor,
   Iridescence,
   IridescenceIOR,
-  IridescenceThickness
+  IridescenceThickness,
 }

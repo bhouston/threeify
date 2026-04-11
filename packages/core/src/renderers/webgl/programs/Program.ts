@@ -47,31 +47,15 @@ export class Program implements IResource {
     shaderDefines?: ShaderDefines;
     name?: string;
   }) {
-    const {
-      context,
-      vertexShaderCode,
-      fragmentShaderCode,
-      shaderDefines,
-      name
-    } = props;
+    const { context, vertexShaderCode, fragmentShaderCode, shaderDefines, name } = props;
     this.context = context;
     this.name = name ?? '';
 
     const localShaderDefines = shaderDefines ?? {};
     //localShaderDefines['ID'] = this.id;
 
-    this.vertexShader = new Shader(
-      this.context,
-      vertexShaderCode,
-      ShaderType.Vertex,
-      localShaderDefines
-    );
-    this.fragmentShader = new Shader(
-      this.context,
-      fragmentShaderCode,
-      ShaderType.Fragment,
-      localShaderDefines
-    );
+    this.vertexShader = new Shader(this.context, vertexShaderCode, ShaderType.Vertex, localShaderDefines);
+    this.fragmentShader = new Shader(this.context, fragmentShaderCode, ShaderType.Fragment, localShaderDefines);
 
     const { gl, resources } = this.context;
 
@@ -112,10 +96,7 @@ export class Program implements IResource {
     const { glxo } = this.context;
     const { KHR_parallel_shader_compile } = glxo;
     if (KHR_parallel_shader_compile !== null) {
-      const isDone = gl.getProgramParameter(
-        this.glProgram,
-        KHR_parallel_shader_compile.COMPLETION_STATUS_KHR
-      );
+      const isDone = gl.getProgramParameter(this.glProgram, KHR_parallel_shader_compile.COMPLETION_STATUS_KHR);
       if (!isDone) {
         return false;
       }
@@ -142,21 +123,10 @@ export class Program implements IResource {
 
   initializeUniformsAndUniformBlocks(): void {
     const { gl } = this.context;
-    const numUniforms = gl.getProgramParameter(
-      this.glProgram,
-      gl.ACTIVE_UNIFORMS
-    );
+    const numUniforms = gl.getProgramParameter(this.glProgram, gl.ACTIVE_UNIFORMS);
     const indices = [...Array(numUniforms).keys()];
-    const blockIndices = gl.getActiveUniforms(
-      this.glProgram,
-      indices,
-      gl.UNIFORM_BLOCK_INDEX
-    );
-    const blockOffsets = gl.getActiveUniforms(
-      this.glProgram,
-      indices,
-      gl.UNIFORM_OFFSET
-    );
+    const blockIndices = gl.getActiveUniforms(this.glProgram, indices, gl.UNIFORM_BLOCK_INDEX);
+    const blockOffsets = gl.getActiveUniforms(this.glProgram, indices, gl.UNIFORM_OFFSET);
 
     let textureUnitCount = 0;
 
@@ -209,10 +179,7 @@ export class Program implements IResource {
   get attributes(): AttributeMap {
     if (!this.#attributesInitialized) {
       const { gl } = this.context;
-      const numActiveAttributes = gl.getProgramParameter(
-        this.glProgram,
-        gl.ACTIVE_ATTRIBUTES
-      );
+      const numActiveAttributes = gl.getProgramParameter(this.glProgram, gl.ACTIVE_ATTRIBUTES);
       for (let i = 0; i < numActiveAttributes; ++i) {
         const attribute = new ProgramAttribute(this, i);
         this.#attributes[attribute.name] = attribute;
@@ -238,10 +205,7 @@ export class Program implements IResource {
         }
       }
       if (bufferGeometry.indices !== undefined) {
-        gl.bindBuffer(
-          bufferGeometry.indices.buffer.target,
-          bufferGeometry.indices.buffer.glBuffer
-        );
+        gl.bindBuffer(bufferGeometry.indices.buffer.target, bufferGeometry.indices.buffer.glBuffer);
       }
     } else if (buffers instanceof ProgramVertexArray) {
       const vao = buffers as ProgramVertexArray;
@@ -268,14 +232,14 @@ export class Program implements IResource {
 export async function shaderMaterialToProgram(
   context: RenderingContext,
   shaderMaterial: ShaderMaterial,
-  shaderDefines: ShaderDefines = {}
+  shaderDefines: ShaderDefines = {},
 ): Promise<Program> {
   const program = new Program({
     context,
     vertexShaderCode: shaderMaterial.vertexShaderCode,
     fragmentShaderCode: shaderMaterial.fragmentShaderCode,
     shaderDefines,
-    name: shaderMaterial.name
+    name: shaderMaterial.name,
   });
   /*
   return new Promise<Program>((resolve) => {
@@ -297,13 +261,9 @@ export async function shaderSourceToProgram(
   name: string,
   vertexShaderCode: string,
   fragmentShaderCode: string,
-  shaderDefines: ShaderDefines = {}
+  shaderDefines: ShaderDefines = {},
 ) {
-  const material = new ShaderMaterial(
-    name,
-    vertexShaderCode,
-    fragmentShaderCode
-  );
+  const material = new ShaderMaterial(name, vertexShaderCode, fragmentShaderCode);
 
   return await shaderMaterialToProgram(context, material, shaderDefines);
 }

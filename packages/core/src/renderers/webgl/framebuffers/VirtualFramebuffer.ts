@@ -37,14 +37,11 @@ export abstract class VirtualFramebuffer implements IDisposable {
   abstract get size(): Vec2;
 
   clear(
-    attachmentBits: BufferBit = BufferBit.Color |
-      BufferBit.Depth |
-      BufferBit.Stencil,
-    clearState: ClearState | undefined = undefined
+    attachmentBits: BufferBit = BufferBit.Color | BufferBit.Depth | BufferBit.Stencil,
+    clearState: ClearState | undefined = undefined,
   ): void {
     this.context.framebuffer = this;
-    this.context.clearState =
-      clearState ?? this.clearState ?? this.context.clearState;
+    this.context.clearState = clearState ?? this.clearState ?? this.context.clearState;
     const { gl } = this.context;
     gl.clear(attachmentBits);
   }
@@ -82,7 +79,7 @@ export function renderBufferGeometry(props: {
     uniforms: uniformValueMaps,
     uniformBuffers: uniformBufferMap,
     bufferGeometry,
-    programVertexArray
+    programVertexArray,
   } = props;
   const { context, size } = framebuffer;
 
@@ -91,20 +88,12 @@ export function renderBufferGeometry(props: {
   context.framebuffer = framebuffer;
   context.program = program;
 
-  context.blendState =
-    blendState ?? framebuffer.blendState ?? context.blendState;
-  context.depthTestState =
-    depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
+  context.blendState = blendState ?? framebuffer.blendState ?? context.blendState;
+  context.depthTestState = depthTestState ?? framebuffer.depthTestState ?? context.depthTestState;
   context.maskState = maskState ?? framebuffer.maskState ?? context.maskState;
-  context.cullingState =
-    cullingState ?? framebuffer.cullingState ?? context.cullingState;
+  context.cullingState = cullingState ?? framebuffer.cullingState ?? context.cullingState;
 
-  setProgramUniforms(
-    context.program,
-    uniformValueMaps,
-    uniformBufferMap,
-    textureBindings
-  );
+  setProgramUniforms(context.program, uniformValueMaps, uniformBufferMap, textureBindings);
 
   if (textureBindings !== undefined) {
     bindTextures(context, textureBindings);
@@ -120,12 +109,7 @@ export function renderBufferGeometry(props: {
   // draw
   const { gl } = context;
   if (bufferGeometry.indices !== undefined) {
-    gl.drawElements(
-      bufferGeometry.primitive,
-      bufferGeometry.count,
-      bufferGeometry.indices.componentType,
-      0
-    );
+    gl.drawElements(bufferGeometry.primitive, bufferGeometry.count, bufferGeometry.indices.componentType, 0);
   } else {
     gl.drawArrays(bufferGeometry.primitive, 0, bufferGeometry.count);
   }
@@ -152,19 +136,10 @@ export function renderPass(
   props = {
     depthTestState: DepthTestState.None,
     blendState: BlendState.None,
-    cullingState: CullingState.None
-  } as IRenderPassProps
+    cullingState: CullingState.None,
+  } as IRenderPassProps,
 ): void {
-  const {
-    framebuffer,
-    blendState,
-    depthTestState,
-    maskState,
-    cullingState,
-    program,
-    uniforms,
-    uniformBuffers
-  } = props;
+  const { framebuffer, blendState, depthTestState, maskState, cullingState, program, uniforms, uniformBuffers } = props;
 
   const { context } = framebuffer;
   const { passGeometry } = context;
@@ -178,7 +153,7 @@ export function renderPass(
     blendState,
     depthTestState,
     maskState,
-    cullingState
+    cullingState,
   });
 }
 
@@ -186,11 +161,9 @@ function setProgramUniforms(
   program: Program,
   uniformValueMaps?: UniformValueMap | UniformValueMap[],
   uniformBufferMap?: UniformBufferMap,
-  textureBindings?: TextureBindings
+  textureBindings?: TextureBindings,
 ) {
-  for (const uniformValueMap of uniformValueMaps instanceof Array
-    ? uniformValueMaps
-    : [uniformValueMaps]) {
+  for (const uniformValueMap of uniformValueMaps instanceof Array ? uniformValueMaps : [uniformValueMaps]) {
     for (const uniformName in uniformValueMap) {
       const uniform = program.uniforms[uniformName];
       if (uniform !== undefined && uniform.block === undefined) {

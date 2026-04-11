@@ -3,12 +3,5 @@
 
   "name": "Equirectangular Background Pass",
   "description": "Uses a latlong image (AKA lat-long image) as a background without converting it to a cubemap.",
-  "keywords": [
-    "cubemap",
-    "pass",
-    "background",
-    "spherical",
-    "latlong",
-    "lat-long"
-  ]
+  "keywords": ["cubemap", "pass", "background", "spherical", "latlong", "lat-long"]
 }

@@ -1,7 +1,4 @@
-import {
-  coplanarPointsToPlane,
-  normalAndCoplanarPointToPlane
-} from './Plane.Functions.js';
+import { coplanarPointsToPlane, normalAndCoplanarPointToPlane } from './Plane.Functions.js';
 import { vec3Delta, vec3Normalize } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 

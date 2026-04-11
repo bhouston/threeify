@@ -3,17 +3,10 @@ import { Vec2 } from '@threeify/math';
 import { generateUUID } from '../core/generateUuid.js';
 import { IDisposable, IIdentifiable, IVersionable } from '../core/types.js';
 import { DataType } from '../renderers/webgl/textures/DataType.js';
-import {
-  InternalFormat,
-  internalFormatToPixelFormat
-} from '../renderers/webgl/textures/InternalFormat.js';
+import { InternalFormat, internalFormatToPixelFormat } from '../renderers/webgl/textures/InternalFormat.js';
 import { PixelFormat } from '../renderers/webgl/textures/PixelFormat.js';
 import { TextureFilter } from '../renderers/webgl/textures/TextureFilter.js';
-import {
-  Float16ArrayImage,
-  Float32ArrayImage,
-  Uint8ArrayImage
-} from './ArrayBufferImage.js';
+import { Float16ArrayImage, Float32ArrayImage, Uint8ArrayImage } from './ArrayBufferImage.js';
 export type TextureSource =
   | Float32ArrayImage
   | Uint8ArrayImage
@@ -33,9 +26,7 @@ export function getTextureSourceSize(textureSource: TextureSource): Vec2 {
   return new Vec2(textureSource.width, textureSource.height);
 }
 
-export class VirtualTexture
-  implements IDisposable, IIdentifiable, IVersionable
-{
+export class VirtualTexture implements IDisposable, IIdentifiable, IVersionable {
   public readonly id: string = generateUUID();
   public version = 0;
   public disposed = false;
@@ -50,7 +41,7 @@ export class VirtualTexture
     public internalFormat = InternalFormat.RGBA8,
     public dataType = DataType.UnsignedByte,
     public generateMipmaps = true,
-    public anisotropicLevels = 1
+    public anisotropicLevels = 1,
   ) {
     this.pixelFormat = internalFormatToPixelFormat(internalFormat);
   }

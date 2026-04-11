@@ -20,10 +20,8 @@ export class SpotLight extends Light {
     super(props);
     if (props.direction !== undefined) this.direction.copy(props.direction);
     if (props.range !== undefined) this.range = props.range;
-    if (props.innerConeAngle !== undefined)
-      this.innerConeAngle = props.innerConeAngle;
-    if (props.outerConeAngle !== undefined)
-      this.outerConeAngle = props.outerConeAngle;
+    if (props.innerConeAngle !== undefined) this.innerConeAngle = props.innerConeAngle;
+    if (props.outerConeAngle !== undefined) this.outerConeAngle = props.outerConeAngle;
     if (props.power !== undefined) this.power = props.power;
   }
 

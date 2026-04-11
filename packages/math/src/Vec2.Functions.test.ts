@@ -15,7 +15,7 @@ import {
   vec2Min,
   vec2MultiplyByScalar,
   vec2Normalize,
-  vec2Subtract
+  vec2Subtract,
 } from './Vec2.Functions.js';
 import { Vec2 } from './Vec2.js';
 

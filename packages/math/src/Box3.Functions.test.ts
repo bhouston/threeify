@@ -12,7 +12,7 @@ import {
   box3Scale,
   box3Size,
   box3Translate,
-  vec3ClampToBox3
+  vec3ClampToBox3,
 } from './Box3.Functions.js';
 import { Box3 } from './Box3.js';
 import { vec3Equals } from './Vec3.Functions.js';
@@ -37,21 +37,13 @@ describe('Box3 Functions', () => {
   });
 
   test('box3Translate', () => {
-    expect(
-      box3Equals(
-        box3Translate(unit, new Vec3(1, 1, 1)),
-        new Box3(new Vec3(1, 1, 1), new Vec3(2, 2, 2))
-      )
-    ).toBe(true);
+    expect(box3Equals(box3Translate(unit, new Vec3(1, 1, 1)), new Box3(new Vec3(1, 1, 1), new Vec3(2, 2, 2)))).toBe(
+      true,
+    );
   });
 
   test('box3Scale', () => {
-    expect(
-      box3Equals(
-        box3Scale(unit, new Vec3(2, 2, 2)),
-        new Box3(Vec3.Zero, new Vec3(2, 2, 2))
-      )
-    ).toBe(true);
+    expect(box3Equals(box3Scale(unit, new Vec3(2, 2, 2)), new Box3(Vec3.Zero, new Vec3(2, 2, 2)))).toBe(true);
   });
 
   test('box3Center', () => {
@@ -63,20 +55,15 @@ describe('Box3 Functions', () => {
   });
 
   test('box3ExpandByPoint3', () => {
-    expect(
-      box3Equals(
-        box3ExpandByPoint3(unit, new Vec3(2, 2, 2)),
-        new Box3(Vec3.Zero, new Vec3(2, 2, 2))
-      )
-    ).toBe(true);
+    expect(box3Equals(box3ExpandByPoint3(unit, new Vec3(2, 2, 2)), new Box3(Vec3.Zero, new Vec3(2, 2, 2)))).toBe(true);
   });
 
   test('box3ExpandByBox3', () => {
     expect(
       box3Equals(
         box3ExpandByBox3(unit, new Box3(new Vec3(2, 2, 2), new Vec3(3, 3, 3))),
-        new Box3(new Vec3(0, 0), new Vec3(3, 3, 3))
-      )
+        new Box3(new Vec3(0, 0), new Vec3(3, 3, 3)),
+      ),
     ).toBe(true);
     expect(box3Equals(box3ExpandByBox3(unit, empty), unit)).toBe(true);
     expect(box3Equals(box3ExpandByBox3(empty, unit), unit)).toBe(true);
@@ -88,27 +75,12 @@ describe('Box3 Functions', () => {
   });
 
   test('box3ContainsBox3', () => {
-    expect(
-      box3ContainsBox3(
-        unit,
-        new Box3(new Vec3(0.5, 0.5, 0.5), new Vec3(0.6, 0.6, 0.6))
-      )
-    ).toBe(true);
-    expect(
-      box3ContainsBox3(
-        unit,
-        new Box3(new Vec3(0.5, 0.5, 0.5), new Vec3(1.6, 0.6, 0.6))
-      )
-    ).toBe(false);
+    expect(box3ContainsBox3(unit, new Box3(new Vec3(0.5, 0.5, 0.5), new Vec3(0.6, 0.6, 0.6)))).toBe(true);
+    expect(box3ContainsBox3(unit, new Box3(new Vec3(0.5, 0.5, 0.5), new Vec3(1.6, 0.6, 0.6)))).toBe(false);
   });
 
   test('vec3ClampToBox3', () => {
-    expect(
-      vec3Equals(
-        vec3ClampToBox3(new Vec3(0.5, 0.5, 0.5), unit),
-        new Vec3(0.5, 0.5, 0.5)
-      )
-    ).toBe(true);
+    expect(vec3Equals(vec3ClampToBox3(new Vec3(0.5, 0.5, 0.5), unit), new Vec3(0.5, 0.5, 0.5))).toBe(true);
   });
 
   test('box3DistanceToVec3', () => {
@@ -117,20 +89,10 @@ describe('Box3 Functions', () => {
   });
 
   test('box3IntersectionBox3', () => {
-    expect(
-      box3IntersectsBox3(
-        unit,
-        new Box3(new Vec3(0.5, 0.5, 0.5), new Vec3(1.5, 1.5, 1.5))
-      )
-    ).toBe(true);
+    expect(box3IntersectsBox3(unit, new Box3(new Vec3(0.5, 0.5, 0.5), new Vec3(1.5, 1.5, 1.5)))).toBe(true);
   });
 
   test('box3ExpandByPoint3', () => {
-    expect(
-      box3Equals(
-        box3ExpandByPoint3(unit, new Vec3(2, 2, 2)),
-        new Box3(Vec3.Zero, new Vec3(2, 2, 2))
-      )
-    ).toBe(true);
+    expect(box3Equals(box3ExpandByPoint3(unit, new Vec3(2, 2, 2)), new Box3(Vec3.Zero, new Vec3(2, 2, 2)))).toBe(true);
   });
 });

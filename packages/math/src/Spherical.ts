@@ -8,7 +8,11 @@
 import { hashFloat3 } from './utils/hash.js';
 
 export class Spherical {
-  constructor(public radius = 1, public phi = 0, public theta = 0) {}
+  constructor(
+    public radius = 1,
+    public phi = 0,
+    public theta = 0,
+  ) {}
 
   getHashCode(): number {
     return hashFloat3(this.radius, this.phi, this.theta);
@@ -43,8 +47,6 @@ export class Spherical {
   }
 
   equals(s: Spherical): boolean {
-    return (
-      s.radius === this.radius && s.phi === this.phi && s.theta === this.theta
-    );
+    return s.radius === this.radius && s.phi === this.phi && s.theta === this.theta;
   }
 }

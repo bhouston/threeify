@@ -13,7 +13,7 @@ import {
   geometryToBufferGeometry,
   makeDepthAttachment,
   renderBufferGeometry,
-  shaderSourceToProgram
+  shaderSourceToProgram,
 } from '@threeify/core';
 import {
   Color3,
@@ -23,7 +23,7 @@ import {
   mat4OrthographicSimple,
   translation3ToMat4,
   Vec2,
-  Vec3
+  Vec3,
 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl.js';
@@ -36,30 +36,15 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
 
-  const uvTestTexture = await fetchTexImage2D(
-    context,
-    '/assets/textures/uv_grid_opengl.jpg'
-  );
+  const uvTestTexture = await fetchTexImage2D(context, '/assets/textures/uv_grid_opengl.jpg');
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -2)),
-    viewToClip: mat4OrthographicSimple(
-      1.5,
-      new Vec2(),
-      0.1,
-      5,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4OrthographicSimple(1.5, new Vec2(), 0.1, 5, 1, canvasFramebuffer.aspectRatio),
     viewLightPosition: new Vec3(0, 0, -2),
-    map: uvTestTexture
+    map: uvTestTexture,
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
@@ -75,10 +60,7 @@ async function init(): Promise<void> {
 
   function animate(): void {
     const now = Date.now();
-    uniforms.localToWorld = euler3ToMat4(
-      new Euler3(now * 0.001, now * 0.0033, now * 0.00077),
-      uniforms.localToWorld
-    );
+    uniforms.localToWorld = euler3ToMat4(new Euler3(now * 0.001, now * 0.0033, now * 0.00077), uniforms.localToWorld);
 
     uniforms.map = uvTestTexture;
     framebuffer.clear(BufferBit.All, whiteClearState);
@@ -88,7 +70,7 @@ async function init(): Promise<void> {
       uniforms,
       bufferGeometry,
       depthTestState,
-      blendState
+      blendState,
     });
 
     uniforms.map = depthAttachment;
@@ -99,7 +81,7 @@ async function init(): Promise<void> {
       uniforms,
       bufferGeometry,
       depthTestState,
-      blendState
+      blendState,
     });
 
     requestAnimationFrame(animate);

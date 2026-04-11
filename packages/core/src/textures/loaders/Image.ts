@@ -7,10 +7,7 @@
 
 import { Vec2 } from '@threeify/math';
 
-export function fetchImageElement(
-  url: string,
-  size = new Vec2()
-): Promise<HTMLImageElement> {
+export function fetchImageElement(url: string, size = new Vec2()): Promise<HTMLImageElement> {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
     if (size.x > 0 || size.y > 0) {
@@ -28,7 +25,7 @@ export function fetchImageElement(
 
 export function createImageBitmapFromArrayBuffer(
   arrayBufferView: ArrayBufferView,
-  mimeType: string
+  mimeType: string,
 ): Promise<ImageBitmap> {
   const blob = new Blob([arrayBufferView], { type: mimeType });
   return createImageBitmap(blob);
@@ -65,7 +62,7 @@ export function fetchImageBitmap(url: string): Promise<ImageBitmap> {
         },
         (err) => {
           reject(err);
-        }
+        },
       );
   });
 }

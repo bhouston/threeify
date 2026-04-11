@@ -15,7 +15,7 @@ export function cylinderGeometry(
   height = 1,
   segments = 8,
   thetaStart = 0,
-  thetaLength = Math.PI * 2
+  thetaLength = Math.PI * 2,
 ): Geometry {
   const indicesTop: number[] = [];
   const verticesTop: number[] = [];
@@ -58,28 +58,14 @@ export function cylinderGeometry(
     verticesTop.push(vertex.x, vertex.y, vertex.z + height * 0.5);
     verticesBottom.push(vertex.x, vertex.y, vertex.z - height * 0.5);
 
-    verticesSide.push(
-      vertex.x,
-      vertex.y,
-      vertex.z + height * 0.5,
-      vertex.x,
-      vertex.y,
-      vertex.z - height * 0.5
-    );
+    verticesSide.push(vertex.x, vertex.y, vertex.z + height * 0.5, vertex.x, vertex.y, vertex.z - height * 0.5);
 
     // normal
 
     normalsTop.push(0, 0, 1);
     normalsBottom.push(0, 0, -1);
 
-    normalsSide.push(
-      Math.cos(segment),
-      Math.sin(segment),
-      0,
-      Math.cos(segment),
-      Math.sin(segment),
-      0
-    );
+    normalsSide.push(Math.cos(segment), Math.sin(segment), 0, Math.cos(segment), Math.sin(segment), 0);
 
     // uvs
 
@@ -101,14 +87,7 @@ export function cylinderGeometry(
   }
   for (let i = 0; i < segments; i++) {
     const io = i * 2;
-    indicesSide.push(
-      so + io,
-      so + io + 1,
-      so + io + 3,
-      so + io,
-      so + io + 3,
-      so + io + 2
-    );
+    indicesSide.push(so + io, so + io + 1, so + io + 3, so + io, so + io + 3, so + io + 2);
   }
 
   indicesTop.push(indicesTop.at(-1) ?? 0, 1, 0);
@@ -117,21 +96,10 @@ export function cylinderGeometry(
   // build geometry
 
   const geometry = new Geometry();
-  geometry.indices = makeUint32Attribute(
-    indicesTop.concat(indicesBottom).concat(indicesSide)
-  );
-  geometry.attributes.position = makeFloat32Attribute(
-    verticesTop.concat(verticesBottom).concat(verticesSide),
-    3
-  );
-  geometry.attributes.normal = makeFloat32Attribute(
-    normalsTop.concat(normalsBottom).concat(normalsSide),
-    3
-  );
-  geometry.attributes.uv0 = makeFloat32Attribute(
-    uvsTop.concat(uvsBottom).concat(uvsSide),
-    2
-  );
+  geometry.indices = makeUint32Attribute(indicesTop.concat(indicesBottom).concat(indicesSide));
+  geometry.attributes.position = makeFloat32Attribute(verticesTop.concat(verticesBottom).concat(verticesSide), 3);
+  geometry.attributes.normal = makeFloat32Attribute(normalsTop.concat(normalsBottom).concat(normalsSide), 3);
+  geometry.attributes.uv0 = makeFloat32Attribute(uvsTop.concat(uvsBottom).concat(uvsSide), 2);
 
   return geometry;
 }

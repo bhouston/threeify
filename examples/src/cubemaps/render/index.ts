@@ -8,7 +8,7 @@ import {
   renderPass,
   shaderMaterialToProgram,
   TextureFilter,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
 import {
   Color3,
@@ -20,7 +20,7 @@ import {
   mat4PerspectiveFov,
   translation3ToMat4,
   Vec2,
-  Vec3
+  Vec3,
 } from '@threeify/math';
 import { ColorHSL } from '@threeify/math/src/ColorHSL.js';
 
@@ -31,14 +31,7 @@ async function init(): Promise<void> {
   // const texture = new Texture(await fetchImage("/assets/textures/uv_grid_opengl.jpg"));
 
   const imageSize = new Vec2(1024, 1024);
-  const cubeTexture = new CubeMapTexture([
-    imageSize,
-    imageSize,
-    imageSize,
-    imageSize,
-    imageSize,
-    imageSize
-  ]);
+  const cubeTexture = new CubeMapTexture([imageSize, imageSize, imageSize, imageSize, imageSize, imageSize]);
   cubeTexture.minFilter = TextureFilter.Linear;
   cubeTexture.generateMipmaps = false;
 
@@ -46,12 +39,9 @@ async function init(): Promise<void> {
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
-  const patternProgram = await shaderMaterialToProgram(
-    context,
-    patternMaterial
-  );
+  const patternProgram = await shaderMaterialToProgram(context, patternMaterial);
   const patternUniforms = {
-    color: new Color3(1, 0, 0)
+    color: new Color3(1, 0, 0),
   };
 
   const cubeMap = textureToTexImage2D(context, cubeTexture);
@@ -62,14 +52,8 @@ async function init(): Promise<void> {
   const uniforms = {
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToClip: mat4PerspectiveFov(
-      25,
-      0.1,
-      10,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
-    cubeMap: cubeMap
+    viewToClip: mat4PerspectiveFov(25, 0.1, 10, 1, canvasFramebuffer.aspectRatio),
+    cubeMap: cubeMap,
   };
 
   function animate(): void {
@@ -78,20 +62,18 @@ async function init(): Promise<void> {
 
     cubeFaceTargets.forEach((target, index) => {
       framebuffer.attach(Attachment.Color0, cubeMap, target, 0);
-      patternUniforms.color = hslToColor3(
-        new ColorHSL(index / 6 + now * 0.0001, 0.5, 0.5)
-      );
+      patternUniforms.color = hslToColor3(new ColorHSL(index / 6 + now * 0.0001, 0.5, 0.5));
 
       renderPass({
         framebuffer,
         program: patternProgram,
-        uniforms: patternUniforms
+        uniforms: patternUniforms,
       });
     });
 
     uniforms.localToWorld = euler3ToMat4(
       new Euler3(now * 0.0001, now * 0.00033, now * 0.000077),
-      uniforms.localToWorld
+      uniforms.localToWorld,
     );
 
     cubemapBackground.exec({
@@ -99,7 +81,7 @@ async function init(): Promise<void> {
       cubeMapIntensity: 1,
       targetFramebuffer: canvasFramebuffer,
       viewToWorld: uniforms.localToWorld,
-      clipToView: mat4Inverse(uniforms.viewToClip)
+      clipToView: mat4Inverse(uniforms.viewToClip),
     });
   }
 

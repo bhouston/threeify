@@ -5,7 +5,7 @@ import {
   planeGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
 import {
   Color3,
@@ -18,7 +18,7 @@ import {
   translation3ToMat4,
   Vec2,
   vec2MultiplyByScalar,
-  Vec3
+  Vec3,
 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl.js';
@@ -34,23 +34,12 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const normalsMap = textureToTexImage2D(context, normalsTexture);
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToClip: mat4PerspectiveFov(
-      25,
-      0.1,
-      4,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4PerspectiveFov(25, 0.1, 4, 1, canvasFramebuffer.aspectRatio),
 
     // lights
     pointLightViewPosition: Vec3.Zero,
@@ -59,34 +48,24 @@ async function init(): Promise<void> {
 
     // materials
     normalModulator: new Vec2(-1, 1),
-    normalMap: normalsMap
+    normalMap: normalsMap,
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
   function animate(): void {
     const now = Date.now();
 
-    uniforms.localToWorld = euler3ToMat4(
-      new Euler3(0, 0, now * 0.0002, EulerOrder3.XZY),
-      uniforms.localToWorld
-    );
+    uniforms.localToWorld = euler3ToMat4(new Euler3(0, 0, now * 0.0002, EulerOrder3.XZY), uniforms.localToWorld);
     // Q: Why is this one -1 required?  Is the tangent space from UV calculation incorrect?
-    uniforms.normalModulator = vec2MultiplyByScalar(
-      new Vec2(-1, 1),
-      Math.cos(now * 0.001) * 0.5 + 0.5
-    );
-    uniforms.pointLightViewPosition = new Vec3(
-      Math.cos(now * 0.001) * 3,
-      Math.sin(now * 0.003) * 3,
-      1.5
-    );
+    uniforms.normalModulator = vec2MultiplyByScalar(new Vec2(-1, 1), Math.cos(now * 0.001) * 0.5 + 0.5);
+    uniforms.pointLightViewPosition = new Vec3(Math.cos(now * 0.001) * 3, Math.sin(now * 0.003) * 3, 1.5);
 
     canvasFramebuffer.clear();
     renderBufferGeometry({
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
     });
 
     requestAnimationFrame(animate);

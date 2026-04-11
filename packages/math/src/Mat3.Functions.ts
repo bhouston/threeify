@@ -1,10 +1,4 @@
-import {
-  delta,
-  EPSILON,
-  equalsTolerance,
-  parseSafeFloats,
-  toSafeString
-} from './Functions.js';
+import { delta, EPSILON, equalsTolerance, parseSafeFloats, toSafeString } from './Functions.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
 import { Quat } from './Quat.js';
@@ -28,12 +22,7 @@ export function mat3Identity(result = new Mat3()): Mat3 {
   return result.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
 }
 
-export function mat3SetColumn3(
-  m: Mat3,
-  rowIndex: number,
-  row: Vec3,
-  result = new Mat3()
-): Mat3 {
+export function mat3SetColumn3(m: Mat3, rowIndex: number, row: Vec3, result = new Mat3()): Mat3 {
   const re = result.set(m.elements).elements;
   const base = rowIndex * Mat3.NUM_ROWS;
   re[base + 0] = row.x;
@@ -42,25 +31,12 @@ export function mat3SetColumn3(
   return result;
 }
 
-export function mat3GetColumn3(
-  m: Mat3,
-  rowIndex: number,
-  result = new Vec3()
-): Vec3 {
+export function mat3GetColumn3(m: Mat3, rowIndex: number, result = new Vec3()): Vec3 {
   const base = rowIndex * Mat3.NUM_ROWS;
-  return result.set(
-    m.elements[base + 0],
-    m.elements[base + 1],
-    m.elements[base + 2]
-  );
+  return result.set(m.elements[base + 0], m.elements[base + 1], m.elements[base + 2]);
 }
 
-export function mat3SetRow3(
-  m: Mat3,
-  columnIndex: number,
-  column: Vec3,
-  result = new Mat3()
-): Mat3 {
+export function mat3SetRow3(m: Mat3, columnIndex: number, column: Vec3, result = new Mat3()): Mat3 {
   const re = result.set(m.elements).elements;
   const stride = Mat3.NUM_COLUMNS;
   re[columnIndex + stride * 0] = column.x;
@@ -69,43 +45,24 @@ export function mat3SetRow3(
   return result;
 }
 
-export function mat3GetRow3(
-  m: Mat3,
-  columnIndex: number,
-  result = new Vec3()
-): Vec3 {
+export function mat3GetRow3(m: Mat3, columnIndex: number, result = new Vec3()): Vec3 {
   const stride = Mat3.NUM_COLUMNS;
   return result.set(
     m.elements[columnIndex + stride * 0],
     m.elements[columnIndex + stride * 1],
-    m.elements[columnIndex + stride * 2]
+    m.elements[columnIndex + stride * 2],
   );
 }
 
-export function basis3ToMat3(
-  xAxis: Vec3,
-  yAxis: Vec3,
-  zAxis: Vec3,
-  result = new Mat3()
-): Mat3 {
-  return result.set([
-    xAxis.x,
-    xAxis.y,
-    xAxis.z,
-    yAxis.x,
-    yAxis.y,
-    yAxis.z,
-    zAxis.x,
-    zAxis.y,
-    zAxis.z
-  ]);
+export function basis3ToMat3(xAxis: Vec3, yAxis: Vec3, zAxis: Vec3, result = new Mat3()): Mat3 {
+  return result.set([xAxis.x, xAxis.y, xAxis.z, yAxis.x, yAxis.y, yAxis.z, zAxis.x, zAxis.y, zAxis.z]);
 }
 
 export function mat3ToBasis3(
   m: Mat3,
   xAxis = new Vec3(),
   yAxis = new Vec3(),
-  zAxis = new Vec3()
+  zAxis = new Vec3(),
 ): { xAxis: Vec3; yAxis: Vec3; zAxis: Vec3 } {
   mat3GetColumn3(m, 0, xAxis);
   mat3GetColumn3(m, 1, yAxis);
@@ -125,21 +82,13 @@ export function mat3Add(a: Mat3, b: Mat3, result: Mat3 = new Mat3()): Mat3 {
   }
   return result;
 }
-export function mat3Subtract(
-  a: Mat3,
-  b: Mat3,
-  result: Mat3 = new Mat3()
-): Mat3 {
+export function mat3Subtract(a: Mat3, b: Mat3, result: Mat3 = new Mat3()): Mat3 {
   for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] - b.elements[i];
   }
   return result;
 }
-export function mat3MultiplyByScalar(
-  a: Mat3,
-  b: number,
-  result: Mat3 = new Mat3()
-): Mat3 {
+export function mat3MultiplyByScalar(a: Mat3, b: number, result: Mat3 = new Mat3()): Mat3 {
   for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * b;
   }
@@ -274,33 +223,20 @@ export function mat3Inverse(m: Mat3, result = new Mat3()): Mat3 {
   return result;
 }
 
-export function mat3Mix(
-  a: Mat3,
-  b: Mat3,
-  t: number,
-  result = new Mat3()
-): Mat3 {
+export function mat3Mix(a: Mat3, b: Mat3, t: number, result = new Mat3()): Mat3 {
   const s = 1 - t;
   for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = a.elements[i] * s + b.elements[i] * t;
   }
   return result;
 }
-export function arrayToMat3(
-  array: Float32Array | number[],
-  offset = 0,
-  result: Mat3 = new Mat3()
-): Mat3 {
+export function arrayToMat3(array: Float32Array | number[], offset = 0, result: Mat3 = new Mat3()): Mat3 {
   for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     result.elements[i] = array[offset + i];
   }
   return result;
 }
-export function mat3ToArray(
-  a: Mat3,
-  array: Float32Array | number[],
-  offset = 0
-): void {
+export function mat3ToArray(a: Mat3, array: Float32Array | number[], offset = 0): void {
   for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
     array[offset + i] = a.elements[i];
   }
@@ -313,19 +249,11 @@ export function mat3Parse(text: string, result = new Mat3()): Mat3 {
   return arrayToMat3(parseSafeFloats(text), 0, result);
 }
 
-export function mat3TransformPoint3(
-  m: Mat3,
-  v: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function mat3TransformPoint3(m: Mat3, v: Vec3, result = new Vec3()): Vec3 {
   const { x, y, z } = v;
   const e = m.elements;
 
-  return result.set(
-    e[0] * x + e[3] * y + e[6] * z,
-    e[1] * x + e[4] * y + e[7] * z,
-    e[2] * x + e[5] * y + e[8] * z
-  );
+  return result.set(e[0] * x + e[3] * y + e[6] * z, e[1] * x + e[4] * y + e[7] * z, e[2] * x + e[5] * y + e[8] * z);
 }
 
 export function quatToMat3(q: Quat, result = new Mat3()): Mat3 {
@@ -353,7 +281,7 @@ export function quatToMat3(q: Quat, result = new Mat3()): Mat3 {
     yz + wx,
     xz + wy,
     yz - wx,
-    1 - (xx + yy)
+    1 - (xx + yy),
   ]);
 }
 
@@ -368,10 +296,7 @@ export function mat3ToScale2(m: Mat4, result = new Vec2()): Vec2 {
   const m21 = mat[3];
   const m22 = mat[4];
 
-  return result.set(
-    Math.sqrt(m11 * m11 + m12 * m12),
-    Math.sqrt(m21 * m21 + m22 * m22)
-  );
+  return result.set(Math.sqrt(m11 * m11 + m12 * m12), Math.sqrt(m21 * m21 + m22 * m22));
 }
 
 export function translation2ToMat3(t: Vec2, result = new Mat3()): Mat3 {
@@ -400,29 +325,15 @@ export function mat3ToScale3(m: Mat4, result = new Vec3()): Vec3 {
   return result.set(
     Math.sqrt(m11 * m11 + m12 * m12 + m13 * m13),
     Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23),
-    Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33)
+    Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33),
   );
 }
 export function mat4ToMat3(a: Mat4, result = new Mat3()): Mat3 {
   const ae = a.elements;
-  return result.set([
-    ae[0],
-    ae[1],
-    ae[2],
-    ae[4],
-    ae[5],
-    ae[6],
-    ae[8],
-    ae[9],
-    ae[10]
-  ]);
+  return result.set([ae[0], ae[1], ae[2], ae[4], ae[5], ae[6], ae[8], ae[9], ae[10]]);
 }
 
-export function makeMat3Concatenation(
-  a: Mat3,
-  b: Mat3,
-  result = new Mat3()
-): Mat3 {
+export function makeMat3Concatenation(a: Mat3, b: Mat3, result = new Mat3()): Mat3 {
   const ae = a.elements;
   const be = b.elements;
   const te = result.elements;
@@ -528,12 +439,7 @@ export function angleXToMat3(angle: number, result = new Mat3()): Mat3 {
   return result.set([c, -s, 0, s, c, 0, 0, 0, 1]);
 }
 
-export function composeMat3(
-  translation: Vec2,
-  rotation: number,
-  scale: Vec2,
-  result = new Mat3()
-): Mat3 {
+export function composeMat3(translation: Vec2, rotation: number, scale: Vec2, result = new Mat3()): Mat3 {
   const te = result.elements;
 
   const c = Math.cos(rotation);
@@ -558,7 +464,7 @@ export function decomposeMat3(
   m: Mat3,
   translation = new Vec2(),
   rotation = 0,
-  scale = new Vec2()
+  scale = new Vec2(),
 ): { translation: Vec2; rotation: number; scale: Vec2 } {
   const te = m.elements;
 

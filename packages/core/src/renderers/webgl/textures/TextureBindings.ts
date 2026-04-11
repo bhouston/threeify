@@ -30,10 +30,7 @@ export class TextureBindings {
   }
 }
 
-export function bindTextures(
-  context: RenderingContext,
-  textureBindings: TextureBindings
-) {
+export function bindTextures(context: RenderingContext, textureBindings: TextureBindings) {
   const { gl } = context;
   for (const texImage2D of textureBindings.texImage2Ds) {
     const unitIndex = textureBindings.bind(texImage2D);

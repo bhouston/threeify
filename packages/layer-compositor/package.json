@@ -1,11 +1,12 @@
 {
   "name": "@threeify/layer-compositor",
-  "description": "Typescript 3D Library loosely based on three.js",
   "version": "4.0.4",
-  "type": "module",
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
+  "gitHead": "e851f7c9ab6e9ce71a875d293e6318bf5c261bc0",
+  "description": "Typescript 3D Library loosely based on three.js",
   "source": "./src/index.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "glsl-transpiler  -r src -o src && tsc",
     "watch": "glsl-transpiler -r src -o src --watch & tsc --watch"
@@ -17,6 +18,5 @@
   "devDependencies": {
     "@threeify/build": "workspace:*",
     "@threeify/glsl-transpiler": "workspace:*"
-  },
-  "gitHead": "e851f7c9ab6e9ce71a875d293e6318bf5c261bc0"
+  }
 }

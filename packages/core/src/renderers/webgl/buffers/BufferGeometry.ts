@@ -10,10 +10,7 @@ import { IDisposable } from '../../../core/types.js';
 import { Geometry } from '../../../geometry/Geometry.js';
 import { warnOnce } from '../../../warnOnce.js';
 import { RenderingContext } from '../RenderingContext.js';
-import {
-  BufferAccessor,
-  makeBufferAccessorFromAttribute
-} from './BufferAccessor.js';
+import { BufferAccessor, makeBufferAccessorFromAttribute } from './BufferAccessor.js';
 import { BufferTarget } from './BufferTarget.js';
 import { PrimitiveType } from './PrimitiveType.js';
 
@@ -29,9 +26,7 @@ export class BufferGeometry implements IDisposable {
   constructor(public context: RenderingContext) {}
 
   dispose(): void {
-    warnOnce(
-      'This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.'
-    );
+    warnOnce('This is not safe.  The buffers may be used by multiple bufferViews & bufferGeometries.');
     if (this.disposed) return;
 
     for (const name in this.bufferAccessors) {
@@ -49,9 +44,7 @@ export class BufferGeometry implements IDisposable {
 
 export function primitiveCount(target: BufferGeometry | Geometry): number {
   const count =
-    target instanceof Geometry
-      ? target.indices?.count ?? target.attributes.positions?.count ?? 0
-      : target.count;
+    target instanceof Geometry ? (target.indices?.count ?? target.attributes.positions?.count ?? 0) : target.count;
   const primitive = target.primitive;
   switch (primitive) {
     case PrimitiveType.Points:
@@ -72,27 +65,17 @@ export function primitiveCount(target: BufferGeometry | Geometry): number {
   }
 }
 
-export function geometryToBufferGeometry(
-  context: RenderingContext,
-  geometry: Geometry
-): BufferGeometry {
+export function geometryToBufferGeometry(context: RenderingContext, geometry: Geometry): BufferGeometry {
   const bufferGeometry = new BufferGeometry(context);
   if (geometry.indices !== undefined) {
-    bufferGeometry.indices = makeBufferAccessorFromAttribute(
-      context,
-      geometry.indices,
-      BufferTarget.ElementArray
-    );
+    bufferGeometry.indices = makeBufferAccessorFromAttribute(context, geometry.indices, BufferTarget.ElementArray);
     bufferGeometry.count = geometry.indices.count;
   }
 
   for (const name in geometry.attributes) {
     const attribute = geometry.attributes[name];
     if (attribute !== undefined) {
-      bufferGeometry.bufferAccessors[name] = makeBufferAccessorFromAttribute(
-        context,
-        attribute
-      );
+      bufferGeometry.bufferAccessors[name] = makeBufferAccessorFromAttribute(context, attribute);
       if (bufferGeometry.count === -1) {
         bufferGeometry.count = attribute.count;
       }

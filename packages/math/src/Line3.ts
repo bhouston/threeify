@@ -11,7 +11,7 @@ import { Vec3 } from './Vec3.js';
 export class Line3 {
   constructor(
     public readonly start = new Vec3(),
-    public readonly end = new Vec3()
+    public readonly end = new Vec3(),
   ) {}
 
   getHashCode(): number {

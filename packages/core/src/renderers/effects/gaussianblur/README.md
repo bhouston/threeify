@@ -4,6 +4,3 @@ Should take (1) a source, (2) source lod (-1 is auto), (3) an intermediate buffe
 The intermediate buffer and destination buffer must be the same size.
 
 It will query the center and the surrounding pixels exactly in the center via the textureLod() function.
-
-
-

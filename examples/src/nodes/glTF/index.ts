@@ -1,17 +1,5 @@
-import {
-  Orbit,
-  RenderingContext,
-  ShaderMaterial,
-  shaderMaterialToProgram,
-  TextureCache
-} from '@threeify/core';
-import {
-  box3Center,
-  box3MaxSize,
-  Color3,
-  Vec3,
-  vec3Negate
-} from '@threeify/math';
+import { Orbit, RenderingContext, ShaderMaterial, shaderMaterialToProgram, TextureCache } from '@threeify/core';
+import { box3Center, box3MaxSize, Color3, Vec3, vec3Negate } from '@threeify/math';
 import {
   createRenderCache,
   glTFToSceneNode,
@@ -22,28 +10,18 @@ import {
   SceneTreeCache,
   updateDirtyNodes,
   updateNodeTree,
-  updateRenderCache
+  updateRenderCache,
 } from '@threeify/scene';
 
-import {
-  getKhronosGlTFUrl,
-  GLTFFormat,
-  KhronosModel
-} from '../../utilities/khronosModels.js';
+import { getKhronosGlTFUrl, GLTFFormat, KhronosModel } from '../../utilities/khronosModels.js';
 import fragmentSource from './fragment.glsl.js';
 import vertexSource from './vertex.glsl.js';
 
 //const stats = new Stats();
 
 async function init(): Promise<void> {
-  const shaderMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
-  const canvasHtmlElement = document.getElementById(
-    'framebuffer'
-  ) as HTMLCanvasElement;
+  const shaderMaterial = new ShaderMaterial('index', vertexSource, fragmentSource);
+  const canvasHtmlElement = document.getElementById('framebuffer') as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement);
   const { canvasFramebuffer } = context;
   window.addEventListener('resize', () => canvasFramebuffer.resize());
@@ -60,11 +38,8 @@ async function init(): Promise<void> {
   //console.time('glTFToSceneNode');
   const textureCache = new TextureCache();
   const glTFModel = await glTFToSceneNode(
-    getKhronosGlTFUrl(
-      sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet,
-      GLTFFormat.glTF
-    ),
-    textureCache
+    getKhronosGlTFUrl(sheenChairMode ? KhronosModel.SheenChair : KhronosModel.SciFiHelmet, GLTFFormat.glTF),
+    textureCache,
   );
   //console.timeEnd('glTFToSceneNode');
 
@@ -80,7 +55,7 @@ async function init(): Promise<void> {
   const orbitNode = new SceneNode({
     name: 'orbit',
     translation: new Vec3(0, 0, -2),
-    scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize)
+    scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize),
   });
   orbitNode.children.push(glTFModel);
   root.children.push(orbitNode);
@@ -89,7 +64,7 @@ async function init(): Promise<void> {
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.6, 0.8, 1),
     intensity: lightIntensity * 1.5,
-    range: 1000
+    range: 1000,
   });
   root.children.push(pointLight1);
   const pointLight2 = new PointLight({
@@ -97,7 +72,7 @@ async function init(): Promise<void> {
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
     intensity: lightIntensity * 1.5,
-    range: 1000
+    range: 1000,
   });
   root.children.push(pointLight2);
   const pointLight3 = new PointLight({
@@ -105,7 +80,7 @@ async function init(): Promise<void> {
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
     intensity: lightIntensity * 2.5,
-    range: 1000
+    range: 1000,
   });
   //if (sheenChairMode) {
   root.children.push(pointLight3);
@@ -115,7 +90,7 @@ async function init(): Promise<void> {
     verticalFov: 25,
     near: 0.1,
     far: 1000,
-    translation: Vec3.Zero
+    translation: Vec3.Zero,
   });
   root.children.push(camera);
 
@@ -135,7 +110,7 @@ async function init(): Promise<void> {
       return program;
     },
     sceneTreeCache,
-    renderCache
+    renderCache,
   );
   //console.timeEnd('updateRenderCache');
 

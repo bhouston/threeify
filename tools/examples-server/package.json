@@ -8,19 +8,6 @@
     "watch": "tsc --noEmit --watch & esbuild src/server.ts --format=cjs --platform=node --bundle --sourcemap --outfile=dist/server.js --watch",
     "start": "nodemon dist/server.js"
   },
-  "devDependencies": {
-    "@types/hapi__joi": "^17.1.9",
-    "@types/koa__cors": "^4.0.0",
-    "@types/koa__router": "^12.0.0",
-    "@types/koa-cache-control": "^2.0.3",
-    "@types/koa-cash": "^4.1.0",
-    "@types/koa-compress": "^4.0.3",
-    "@types/koa-logger": "^3.1.2",
-    "@types/koa-mount": "^4.0.2",
-    "@types/koa-static": "^4.0.2",
-    "@types/koa-static-cache": "^5.1.1",
-    "nodemon": "^2.0.22"
-  },
   "dependencies": {
     "@koa/cors": "^4.0.0",
     "@koa/router": "^12.0.0",
@@ -33,5 +20,18 @@
     "koa-proxies": "^0.12.3",
     "koa-static": "^5.0.0",
     "koa-static-cache": "^5.1.4"
+  },
+  "devDependencies": {
+    "@types/hapi__joi": "^17.1.9",
+    "@types/koa-cache-control": "^2.0.3",
+    "@types/koa-cash": "^4.1.0",
+    "@types/koa-compress": "^4.0.3",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-mount": "^4.0.2",
+    "@types/koa-static": "^4.0.2",
+    "@types/koa-static-cache": "^5.1.1",
+    "@types/koa__cors": "^4.0.0",
+    "@types/koa__router": "^12.0.0",
+    "nodemon": "^2.0.22"
   }
 }

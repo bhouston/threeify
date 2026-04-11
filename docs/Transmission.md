@@ -1,4 +1,3 @@
-
 Should transmission be rendered with transparent or as a separate pass?
 
 I think that generally there is 3 render lists:
@@ -24,8 +23,8 @@ When rendering transmissive materials, Threej's uses a transmissionRenderTarget.
 - It is a EXT_color_buffer_half_float.
 - LinearMipmapLinearFilter.
 - samples: 4, MSAA buffer.
-- It is sized exactly to the back buffer size as this is allowed in WebGL2.  Done!
-- When rendering to it, no tone mapping is used.  But then is also sRGB transform skipped?  So it is in linear space?
+- It is sized exactly to the back buffer size as this is allowed in WebGL2. Done!
+- When rendering to it, no tone mapping is used. But then is also sRGB transform skipped? So it is in linear space?
 - Only opaque objects are rendered to it.
 
 Is the transmission material render a separate render from the main opaque render?
@@ -42,4 +41,3 @@ So in this scenario:
 - Bilt results to a non-MSAA float buffer texImage2D.
 
 - Read from the two float buffers, overlay then, do tone mapping and sRGB conversion and write to the canvasFramebuffer.
-

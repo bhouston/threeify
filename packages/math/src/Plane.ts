@@ -6,16 +6,11 @@ export class Plane {
 
   constructor(
     public readonly normal = new Vec3(0, 0, -1),
-    public constant = 0
+    public constant = 0,
   ) {}
 
   getHashCode(): number {
-    return hashFloat4(
-      this.normal.x,
-      this.normal.y,
-      this.normal.z,
-      this.constant
-    );
+    return hashFloat4(this.normal.x, this.normal.y, this.normal.z, this.constant);
   }
 
   set(normal: Vec3, constant: number): this {

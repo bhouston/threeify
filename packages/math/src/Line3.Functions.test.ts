@@ -6,7 +6,7 @@ import {
   line3Length,
   line3LengthSq,
   line3Midpoint,
-  mat4TransformLine3
+  mat4TransformLine3,
 } from './Line3.Functions.js';
 import { Line3 } from './Line3.js';
 import { Mat4 } from './Mat4.js';

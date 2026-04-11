@@ -13,16 +13,8 @@ export class Box3 {
    * @param max - The maximum point of the box, default to (-Infinity, -Infinity, -Infinity).
    */
   constructor(
-    public readonly min = new Vec3(
-      Number.POSITIVE_INFINITY,
-      Number.POSITIVE_INFINITY,
-      Number.POSITIVE_INFINITY
-    ),
-    public readonly max = new Vec3(
-      Number.NEGATIVE_INFINITY,
-      Number.NEGATIVE_INFINITY,
-      Number.NEGATIVE_INFINITY
-    )
+    public readonly min = new Vec3(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY),
+    public readonly max = new Vec3(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY),
   ) {}
 
   /** The x-coordinate of the minimum point of the box. */

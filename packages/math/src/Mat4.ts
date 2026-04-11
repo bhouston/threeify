@@ -15,13 +15,9 @@ export class Mat4 {
   static readonly NUM_COLUMNS = 4;
   static readonly NUM_COMPONENTS = Mat4.NUM_ROWS * Mat4.NUM_COLUMNS;
 
-  constructor(
-    public readonly elements = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-  ) {
+  constructor(public readonly elements = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]) {
     if (elements.length !== Mat4.NUM_COMPONENTS) {
-      throw new Error(
-        `elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`
-      );
+      throw new Error(`elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`);
     }
   }
 
@@ -34,9 +30,7 @@ export class Mat4 {
   }
   set(elements: number[]): this {
     if (elements.length !== Mat4.NUM_COMPONENTS) {
-      throw new Error(
-        `elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`
-      );
+      throw new Error(`elements must have length ${Mat4.NUM_COMPONENTS}, got ${elements.length}`);
     }
     for (let i = 0; i < Mat4.NUM_COMPONENTS; i++) {
       this.elements[i] = elements[i];

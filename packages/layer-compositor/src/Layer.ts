@@ -1,13 +1,5 @@
 import { BlendFunc, BlendState, TexImage2D } from '@threeify/core';
-import {
-  Mat3,
-  Mat4,
-  mat4Multiply,
-  scale3ToMat4,
-  translation3ToMat4,
-  Vec2,
-  Vec3
-} from '@threeify/math';
+import { Mat3, Mat4, mat4Multiply, scale3ToMat4, translation3ToMat4, Vec2, Vec3 } from '@threeify/math';
 
 import { LayerCompositor } from './LayerCompositor.js';
 import { viewToMat3LayerUv } from './makeMatrix3FromViewToLayerUv.js';
@@ -27,17 +19,13 @@ class LayerTexture {
     public texImage2D: TexImage2D,
     public offset: Vec2,
     public uvScaleFactor = new Vec2(1, -1),
-    public uvOffset = new Vec2(0, 1)
+    public uvOffset = new Vec2(0, 1),
   ) {
     // console.log(`Layer: size ( ${texImage2D.size.x}, ${texImage2D.size.y} ) `);
 
     // world space is assumed to be in layer pixel space
-    const planeToLayer = scale3ToMat4(
-      new Vec3(this.texImage2D.size.x, this.texImage2D.size.y, 1)
-    );
-    const layerToImage = translation3ToMat4(
-      new Vec3(this.offset.x, this.offset.y, 0)
-    );
+    const planeToLayer = scale3ToMat4(new Vec3(this.texImage2D.size.x, this.texImage2D.size.y, 1));
+    const layerToImage = translation3ToMat4(new Vec3(this.offset.x, this.offset.y, 0));
     this.planeToImage = mat4Multiply(layerToImage, planeToLayer);
 
     this.viewToLayerUv = viewToMat3LayerUv(this.size, this.offset, false);
@@ -49,7 +37,7 @@ export enum LayerMaskMode {
   Alpha = 1,
   Luminance = 2,
   InverseAlpha = 3,
-  InverseLuminance = 4
+  InverseLuminance = 4,
 }
 
 export enum LayerBlendMode {
@@ -81,17 +69,10 @@ export enum LayerBlendMode {
   Hue = 24,
   Saturation = 25,
   Color = 26,
-  Luminosity = 27
+  Luminosity = 27,
 }
 
-const {
-  Zero,
-  One,
-  SourceAlpha: SA,
-  DestAlpha: DA,
-  OneMinusSourceAlpha: InvSA,
-  OneMinusDestAlpha: InvDA
-} = BlendFunc;
+const { Zero, One, SourceAlpha: SA, DestAlpha: DA, OneMinusSourceAlpha: InvSA, OneMinusDestAlpha: InvDA } = BlendFunc;
 const layerBlendModeBlendState: { [mode in LayerBlendMode]?: BlendState } = {
   [LayerBlendMode.Clear]: new BlendState(Zero, Zero, Zero, Zero),
   [LayerBlendMode.Src]: new BlendState(One, Zero, One, Zero),
@@ -105,11 +86,10 @@ const layerBlendModeBlendState: { [mode in LayerBlendMode]?: BlendState } = {
   [LayerBlendMode.SrcAtop]: new BlendState(DA, InvSA, Zero, One),
   [LayerBlendMode.DstAtop]: new BlendState(InvDA, SA, One, Zero),
   [LayerBlendMode.Xor]: new BlendState(InvDA, InvSA, InvDA, InvSA),
-  [LayerBlendMode.Add]: new BlendState(One, One, One, One)
+  [LayerBlendMode.Add]: new BlendState(One, One, One, One),
 };
 
-export const copySourceBlendState =
-  layerBlendModeBlendState[LayerBlendMode.Src]!;
+export const copySourceBlendState = layerBlendModeBlendState[LayerBlendMode.Src]!;
 
 export class LayerMask extends LayerTexture {
   constructor(
@@ -119,7 +99,7 @@ export class LayerMask extends LayerTexture {
     offset: Vec2,
     public mode: LayerMaskMode = LayerMaskMode.Luminance,
     uvScaleFactor = new Vec2(1, -1),
-    uvOffset = new Vec2(0, 1)
+    uvOffset = new Vec2(0, 1),
   ) {
     super(compositor, url, texImage2D, offset, uvScaleFactor, uvOffset);
   }
@@ -134,7 +114,7 @@ export class Layer extends LayerTexture {
     public mask?: LayerMask,
     public blendMode: LayerBlendMode = LayerBlendMode.SrcOver,
     uvScaleFactor = new Vec2(1, -1),
-    uvOffset = new Vec2(0, 1)
+    uvOffset = new Vec2(0, 1),
   ) {
     super(compositor, url, texImage2D, offset, uvScaleFactor, uvOffset);
   }

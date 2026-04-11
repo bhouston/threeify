@@ -3,7 +3,12 @@ import { hashFloat4 } from './utils/hash.js';
 export class Quat {
   static readonly NUM_COMPONENTS = 4;
 
-  constructor(public x = 0, public y = 0, public z = 0, public w = 1) {}
+  constructor(
+    public x = 0,
+    public y = 0,
+    public z = 0,
+    public w = 1,
+  ) {}
 
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.w);

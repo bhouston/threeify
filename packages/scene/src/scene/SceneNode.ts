@@ -32,8 +32,7 @@ export class SceneNode implements IIdentifiable, IVersionable {
   constructor(props: ISceneNodeProps = {}) {
     this.id = props.id || generateUUID();
     this.name = props.name || this.name;
-    if (props.translation !== undefined)
-      this.translation.copy(props.translation);
+    if (props.translation !== undefined) this.translation.copy(props.translation);
     if (props.rotation !== undefined) this.rotation.copy(props.rotation);
     if (props.scale !== undefined) this.scale.copy(props.scale);
     this.visible = props.visible || this.visible;

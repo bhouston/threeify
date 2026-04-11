@@ -25,8 +25,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
   public readonly id = generateUUID();
   public readonly glFramebuffer: WebGLFramebuffer;
   public readonly size: Vec2 = new Vec2();
-  private readonly attachments: Map<number, TexImage2D | Renderbuffer> =
-    new Map();
+  private readonly attachments: Map<number, TexImage2D | Renderbuffer> = new Map();
 
   constructor(context: RenderingContext) {
     super(context);
@@ -49,7 +48,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
     attachmentPoint: Attachment,
     attachment: TexImage2D | Renderbuffer,
     target: TextureTarget | undefined = undefined,
-    level = 0
+    level = 0,
   ): this {
     const { gl } = this.context;
 
@@ -62,7 +61,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
         attachmentPoint,
         target ?? texImage2D.target,
         texImage2D.glTexture,
-        level
+        level,
       );
     } else if (attachment instanceof Renderbuffer) {
       const renderbuffer = attachment as Renderbuffer;
@@ -70,7 +69,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
         GL.FRAMEBUFFER,
         attachmentPoint,
         GL.RENDERBUFFER, // I copied this value from Three.js, but I am not sure it is correct?  But maybe?
-        renderbuffer.glRenderbuffer
+        renderbuffer.glRenderbuffer,
       );
     }
 
@@ -88,9 +87,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
   getAttachment(attachmentPoint: Attachment): TexImage2D | Renderbuffer {
     const attachment = this.attachments.get(attachmentPoint);
     if (attachment === undefined) {
-      throw new Error(
-        `Framebuffer does not have attachment ${attachmentPoint}`
-      );
+      throw new Error(`Framebuffer does not have attachment ${attachmentPoint}`);
     }
     return attachment;
   }
@@ -105,9 +102,7 @@ export class Framebuffer extends VirtualFramebuffer implements IResource {
   }
 }
 
-export function colorAttachmentToFramebuffer(
-  colorTexImage2D: TexImage2D
-): Framebuffer {
+export function colorAttachmentToFramebuffer(colorTexImage2D: TexImage2D): Framebuffer {
   const framebuffer = new Framebuffer(colorTexImage2D.context);
   framebuffer.attach(Attachment.Color0, colorTexImage2D);
   return framebuffer;
@@ -115,7 +110,7 @@ export function colorAttachmentToFramebuffer(
 
 export function colorAndDepthAttachmentToFramebuffer(
   colorTexImage2D: TexImage2D,
-  depthTexImage2D: TexImage2D
+  depthTexImage2D: TexImage2D,
 ): Framebuffer {
   const framebuffer = new Framebuffer(colorTexImage2D.context);
   framebuffer.attach(Attachment.Color0, colorTexImage2D);

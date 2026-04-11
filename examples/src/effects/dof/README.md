@@ -2,46 +2,43 @@ This is based on this document:
 
 https://catlikecoding.com/unity/tutorials/advanced-rendering/depth-of-field/
 
-
-
 How DOF should work:
 
 Inputs:
 
-* color buffer
-* depth buffer
-* focal distance
-* camera near/far
-(This doesn't seem sufficeint to calculate CoC.)
+- color buffer
+- depth buffer
+- focal distance
+- camera near/far
+  (This doesn't seem sufficeint to calculate CoC.)
 
 Maybe Threeify should introduce a physical camera that has all this stuff so everything is completely correct and consistent?
 
 Internal Buffers:
 
-* color downsample (half size)
-* coc downsample (half size)
-* dof blur (half size)
-* dot combine (full size)
+- color downsample (half size)
+- coc downsample (half size)
+- dof blur (half size)
+- dot combine (full size)
 
 (And some temp buffers for separable blur filters.)
 
-
 ==Downsample the Original texture==
 
-* create color downsample, nothing special, just copy it.
+- create color downsample, nothing special, just copy it.
 
 ==Create the coc material==
 
 Inputs:
 
-* depth texture
-* near/far blur scale
-* camera near/far
-* focal distance
+- depth texture
+- near/far blur scale
+- camera near/far
+- focal distance
 
 Outputs:
 
-* coc downsample
+- coc downsample
 
 ```glsl
 
@@ -69,8 +66,7 @@ void main() {
 
 == Dilate Near Coc Material ==
 
-This seems to use some clamping to get the smallest near by COC weighted by a guassian.  It is a separable filter for h and v.
-
+This seems to use some clamping to get the smallest near by COC weighted by a guassian. It is a separable filter for h and v.
 
 ```glsl
 varying vec2 vUv;\n\
@@ -180,11 +176,11 @@ void main() {\n\
 === DOR Combine Material ===
 
 Inputs:
-* coc texture
-* color
-* depth
-* blur color
 
+- coc texture
+- color
+- depth
+- blur color
 
 ```glsl
 varying vec2 vUv;\n\

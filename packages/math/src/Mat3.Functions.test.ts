@@ -10,7 +10,7 @@ import {
   mat3Subtract,
   mat3ToBasis3,
   mat3TransformPoint3,
-  mat3Zero
+  mat3Zero,
 } from './Mat3.Functions.js';
 import { Mat3 } from './Mat3.js';
 import { mat3ToMat4, mat4Equals } from './Mat4.Functions.js';
@@ -48,24 +48,12 @@ describe('Mat3 Functions', () => {
   });
 
   test('basis3ToMat3/mat3ToBasis3', () => {
-    const identityBasis = [
-      new Vec3(1, 0, 0),
-      new Vec3(0, 1, 0),
-      new Vec3(0, 0, 1)
-    ];
-    const a = basis3ToMat3(
-      identityBasis[0],
-      identityBasis[1],
-      identityBasis[2]
-    );
+    const identityBasis = [new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 1)];
+    const a = basis3ToMat3(identityBasis[0], identityBasis[1], identityBasis[2]);
     const identity = new Mat3();
     expect(mat3Delta(a, identity)).toBe(0);
 
-    const testBases = [
-      new Vec3(0, 2, 0),
-      new Vec3(-1, 0, 0),
-      new Vec3(0, 0, 3)
-    ];
+    const testBases = [new Vec3(0, 2, 0), new Vec3(-1, 0, 0), new Vec3(0, 0, 3)];
 
     const b = basis3ToMat3(testBases[0], testBases[1], testBases[2]);
     const outBasis = [new Vec3(), new Vec3(), new Vec3()];

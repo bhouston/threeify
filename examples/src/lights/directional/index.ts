@@ -5,7 +5,7 @@ import {
   icosahedronGeometry,
   renderBufferGeometry,
   shaderSourceToProgram,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
 import {
   Color3,
@@ -17,7 +17,7 @@ import {
   mat4PerspectiveFov,
   translation3ToMat4,
   Vec3,
-  vec3Normalize
+  vec3Normalize,
 } from '@threeify/math';
 
 import fragmentSource from './fragment.glsl.js';
@@ -32,30 +32,19 @@ async function init(): Promise<void> {
   window.addEventListener('resize', () => canvasFramebuffer.resize());
 
   const map = textureToTexImage2D(context, texture);
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
   const uniforms = {
     // vertices
     localToWorld: new Mat4(),
     worldToView: translation3ToMat4(new Vec3(0, 0, -3)),
-    viewToClip: mat4PerspectiveFov(
-      25,
-      0.1,
-      4,
-      1,
-      canvasFramebuffer.aspectRatio
-    ),
+    viewToClip: mat4PerspectiveFov(25, 0.1, 4, 1, canvasFramebuffer.aspectRatio),
 
     // lights
     directionalLightViewDirection: new Vec3(0, 0, -1),
     directionalLightColor: color3MultiplyByScalar(Color3.White, 5),
 
     // materials
-    albedoMap: map
+    albedoMap: map,
   };
   const bufferGeometry = geometryToBufferGeometry(context, geometry);
 
@@ -64,14 +53,10 @@ async function init(): Promise<void> {
 
     uniforms.localToWorld = euler3ToMat4(
       new Euler3(0.15 * Math.PI, now * 0.0002, 0, EulerOrder3.XZY),
-      uniforms.localToWorld
+      uniforms.localToWorld,
     );
     uniforms.directionalLightViewDirection = vec3Normalize(
-      new Vec3(
-        Math.cos(now * 0.001) * 0.5,
-        Math.cos(now * 0.00087) * 0.5,
-        Math.cos(now * 0.00045) * 0.5
-      )
+      new Vec3(Math.cos(now * 0.001) * 0.5, Math.cos(now * 0.00087) * 0.5, Math.cos(now * 0.00045) * 0.5),
     );
 
     canvasFramebuffer.clear();
@@ -79,7 +64,7 @@ async function init(): Promise<void> {
       framebuffer: canvasFramebuffer,
       program,
       uniforms,
-      bufferGeometry
+      bufferGeometry,
     });
 
     requestAnimationFrame(animate);

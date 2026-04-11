@@ -12,23 +12,16 @@ import {
   Vec3,
   vec3ArrayToFloat32Array,
   Vec4,
-  vec4ArrayToFloat32Array
+  vec4ArrayToFloat32Array,
 } from '@threeify/math';
 
 import { TexImage2D } from '../textures/TexImage2D.js';
 import { UniformType } from './UniformType.js';
 import { UniformPrimitiveValue, UniformValue } from './UniformValueMap.js';
 
-export function uniformValueToArrayBuffer(
-  type: UniformType,
-  value: UniformValue,
-  textureUnit = -1
-): ArrayBufferView {
+export function uniformValueToArrayBuffer(type: UniformType, value: UniformValue, textureUnit = -1): ArrayBufferView {
   if (value instanceof Array && value.length > 0) {
-    return uniformValueArrayToArrayBuffer(
-      type,
-      value as UniformPrimitiveValue[]
-    );
+    return uniformValueArrayToArrayBuffer(type, value as UniformPrimitiveValue[]);
   }
   switch (type) {
     // case UniformType.Bool:
@@ -95,9 +88,7 @@ export function uniformValueToArrayBuffer(
       if (value instanceof TexImage2D) {
         return new Int32Array([textureUnit as number]);
       } else {
-        throw new TypeError(
-          'expected number, did you forget to use a TextureBinding?'
-        );
+        throw new TypeError('expected number, did you forget to use a TextureBinding?');
       }
       break;
     case UniformType.SamplerCube:
@@ -105,21 +96,14 @@ export function uniformValueToArrayBuffer(
       if (value instanceof TexImage2D) {
         return new Int32Array([textureUnit as number]);
       } else {
-        throw new TypeError(
-          'expected number, did you forget to use a TextureBinding?'
-        );
+        throw new TypeError('expected number, did you forget to use a TextureBinding?');
       }
       break;
   }
-  throw new Error(
-    `unsupported uniform type - value mismatch: ${UniformType[type]}(${type}) on '${name}'`
-  );
+  throw new Error(`unsupported uniform type - value mismatch: ${UniformType[type]}(${type}) on '${name}'`);
 }
 
-export function uniformValueArrayToArrayBuffer(
-  type: UniformType,
-  value: UniformPrimitiveValue[]
-): ArrayBufferView {
+export function uniformValueArrayToArrayBuffer(type: UniformType, value: UniformPrimitiveValue[]): ArrayBufferView {
   if (value.length === 0) {
     throw new Error(`uniform value array must not be empty`);
   }
@@ -182,7 +166,5 @@ export function uniformValueArrayToArrayBuffer(
       }
       break;
   }
-  throw new Error(
-    `unsupported uniform type - value mismatch: ${UniformType[type]}(${type})`
-  );
+  throw new Error(`unsupported uniform type - value mismatch: ${UniformType[type]}(${type})`);
 }

@@ -37,7 +37,7 @@ export enum UniformType {
   // UnsignedIntSamplerCube = GL2.UNSIGNED_INT_SAMPLER_CUBE,
   // SamplerCubeShadow = GL2.SAMPLER_CUBE_SHADOW,
   // setValueT2DArray1
-  Sampler2DArray = GL.SAMPLER_2D_ARRAY
+  Sampler2DArray = GL.SAMPLER_2D_ARRAY,
   // IntSampler2DArray = GL2.INT_SAMPLER_2D_ARRAY,
   // UnsignedIntSampler2DArray = GL2.UNSIGNED_INT_SAMPLER_2D_ARRAY,
   // Sampler2DArrayShadow = GL2.SAMPLER_2D_ARRAY_SHADOW,
@@ -47,7 +47,7 @@ export class UniformTypeInfo {
   constructor(
     public readonly numElements: number,
     public readonly bytesPerElement: number,
-    public readonly glType: number
+    public readonly glType: number,
   ) {}
 }
 
@@ -69,7 +69,7 @@ const uniformTypeToInfo = new Map<UniformType, UniformTypeInfo>([
   [UniformType.FloatMat3, new UniformTypeInfo(9, 4, GL.FLOAT)],
   [UniformType.FloatMat4, new UniformTypeInfo(16, 4, GL.FLOAT)],
   [UniformType.Sampler2D, new UniformTypeInfo(1, 4, GL.SAMPLER_2D)],
-  [UniformType.SamplerCube, new UniformTypeInfo(1, 4, GL.SAMPLER_CUBE)]
+  [UniformType.SamplerCube, new UniformTypeInfo(1, 4, GL.SAMPLER_CUBE)],
 ]);
 
 export function uniformTypeInfo(uniformType: UniformType): UniformTypeInfo {

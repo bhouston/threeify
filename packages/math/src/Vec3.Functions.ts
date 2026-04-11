@@ -1,10 +1,4 @@
-import {
-  delta,
-  EPSILON,
-  equalsTolerance,
-  parseSafeFloats,
-  toSafeString
-} from './Functions.js';
+import { delta, EPSILON, equalsTolerance, parseSafeFloats, toSafeString } from './Functions.js';
 import { Mat4 } from './Mat4.js';
 import { Spherical } from './Spherical.js';
 import { Vec3 } from './Vec3.js';
@@ -13,15 +7,9 @@ export function vec3Delta(a: Vec3, b: Vec3): number {
   return delta(a.x, b.x) + delta(a.y, b.y) + delta(a.z, b.z);
 }
 
-export function vec3Equals(
-  a: Vec3,
-  b: Vec3,
-  tolerance: number = EPSILON
-): boolean {
+export function vec3Equals(a: Vec3, b: Vec3, tolerance: number = EPSILON): boolean {
   return (
-    equalsTolerance(a.x, b.x, tolerance) &&
-    equalsTolerance(a.y, b.y, tolerance) &&
-    equalsTolerance(a.z, b.z, tolerance)
+    equalsTolerance(a.x, b.x, tolerance) && equalsTolerance(a.y, b.y, tolerance) && equalsTolerance(a.z, b.z, tolerance)
   );
 }
 export function vec3Add(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
@@ -31,11 +19,7 @@ export function vec3Subtract(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
   return result.set(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
-export function vec3MultiplyByScalar(
-  a: Vec3,
-  b: number,
-  result = new Vec3()
-): Vec3 {
+export function vec3MultiplyByScalar(a: Vec3, b: number, result = new Vec3()): Vec3 {
   return result.set(a.x * b, a.y * b, a.z * b);
 }
 export function vec3Negate(a: Vec3, result = new Vec3()): Vec3 {
@@ -71,12 +55,7 @@ export function vec3Ceil(a: Vec3, result = new Vec3()): Vec3 {
 export function vec3Floor(a: Vec3, result = new Vec3()): Vec3 {
   return result.set(Math.floor(a.x), Math.floor(a.y), Math.floor(a.z));
 }
-export function vec3Clamp(
-  a: Vec3,
-  min: Vec3,
-  max: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function vec3Clamp(a: Vec3, min: Vec3, max: Vec3, result = new Vec3()): Vec3 {
   return vec3Max(min, vec3Min(max, a, result), result);
 }
 
@@ -100,27 +79,14 @@ export function vec3Cross(a: Vec3, b: Vec3, result = new Vec3()): Vec3 {
 
   return result.set(ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx);
 }
-export function vec3Lerp(
-  a: Vec3,
-  b: Vec3,
-  t: number,
-  result = new Vec3()
-): Vec3 {
+export function vec3Lerp(a: Vec3, b: Vec3, t: number, result = new Vec3()): Vec3 {
   const s = 1 - t;
   return result.set(a.x * s + b.x * t, a.y * s + b.y * t, a.z * s + b.z * t);
 }
-export function arrayToVec3(
-  array: Float32Array | number[],
-  offset = 0,
-  result = new Vec3()
-): Vec3 {
+export function arrayToVec3(array: Float32Array | number[], offset = 0, result = new Vec3()): Vec3 {
   return result.set(array[offset + 0], array[offset + 1], array[offset + 2]);
 }
-export function vec3ToArray(
-  a: Vec3,
-  array: Float32Array | number[],
-  offset = 0
-): void {
+export function vec3ToArray(a: Vec3, array: Float32Array | number[], offset = 0): void {
   array[offset + 0] = a.x;
   array[offset + 1] = a.y;
   array[offset + 2] = a.z;
@@ -132,12 +98,7 @@ export function stringToVec3(text: string, result = new Vec3()): Vec3 {
   return arrayToVec3(parseSafeFloats(text), 0, result);
 }
 
-export function crossFromCoplanarPoints(
-  a: Vec3,
-  b: Vec3,
-  c: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function crossFromCoplanarPoints(a: Vec3, b: Vec3, c: Vec3, result = new Vec3()): Vec3 {
   // TODO: replace with just number math, no classes?  Or just use temporary Vec3 objects
   vec3Subtract(c, b, result);
   const v = vec3Subtract(a, b);
@@ -148,29 +109,15 @@ export function sphericalToVec3(s: Spherical): Vec3 {
   return sphericalCoordToVec3(s.radius, s.phi, s.theta);
 }
 
-export function sphericalCoordToVec3(
-  radius: number,
-  phi: number,
-  theta: number
-): Vec3 {
+export function sphericalCoordToVec3(radius: number, phi: number, theta: number): Vec3 {
   const sinPhiRadius = Math.sin(phi) * radius;
 
-  return new Vec3(
-    sinPhiRadius * Math.sin(theta),
-    Math.cos(phi) * radius,
-    sinPhiRadius * Math.cos(theta)
-  );
+  return new Vec3(sinPhiRadius * Math.sin(theta), Math.cos(phi) * radius, sinPhiRadius * Math.cos(theta));
 }
 
 // static/instance method to calculate barycentric coordinates
 // based on: http://www.blackpawn.com/texts/pointinpoly/default.html
-export function pointToBarycoords(
-  a: Vec3,
-  b: Vec3,
-  c: Vec3,
-  point: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function pointToBarycoords(a: Vec3, b: Vec3, c: Vec3, point: Vec3, result = new Vec3()): Vec3 {
   const v0 = vec3Subtract(c, b);
   const v1 = vec3Subtract(b, a);
   const v2 = vec3Subtract(point, a);
@@ -199,18 +146,12 @@ export function pointToBarycoords(
 }
 
 // replace with just a linear weight function
-export function barycoordWeightsToVec3(
-  baryCoord: Vec3,
-  a: Vec3,
-  b: Vec3,
-  c: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function barycoordWeightsToVec3(baryCoord: Vec3, a: Vec3, b: Vec3, c: Vec3, result = new Vec3()): Vec3 {
   const v = baryCoord;
   return result.set(
     a.x * v.x + b.x * v.y + c.x * v.z,
     a.y * v.x + b.y * v.y + c.y * v.z,
-    a.z * v.x + b.z * v.y + c.z * v.z
+    a.z * v.x + b.z * v.y + c.z * v.z,
   );
 }
 
@@ -227,11 +168,7 @@ export function mat4TransformVec3(m: Mat4, v: Vec3, result = new Vec3()): Vec3 {
   return result;
 }
 
-export function mat4TransformNormal3(
-  m: Mat4,
-  v: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function mat4TransformNormal3(m: Mat4, v: Vec3, result = new Vec3()): Vec3 {
   const { x, y, z } = v;
   const e = m.elements;
 

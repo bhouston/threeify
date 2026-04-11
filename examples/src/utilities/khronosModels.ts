@@ -62,39 +62,35 @@ export enum KhronosModel {
   MetalRoughSpheres,
   BoxTexturedNonPowerOfTwo,
   TransmissionTest,
-  TransmissionRoughnessTest
+  TransmissionRoughnessTest,
 }
 
 export enum GLTFFormat {
   glTF,
   glTFBinary,
   glTFDraco,
-  glTFEmbedded
+  glTFEmbedded,
 }
 
 const glTFFormatToFolder = {
   [GLTFFormat.glTF]: 'glTF',
   [GLTFFormat.glTFBinary]: 'glTF-Binary',
   [GLTFFormat.glTFDraco]: 'glTF-Draco',
-  [GLTFFormat.glTFEmbedded]: 'glTF-Embedded'
+  [GLTFFormat.glTFEmbedded]: 'glTF-Embedded',
 };
 
 const glTFFormatToExtension = {
   [GLTFFormat.glTF]: 'gltf',
   [GLTFFormat.glTFBinary]: 'glb',
   [GLTFFormat.glTFDraco]: 'gltf',
-  [GLTFFormat.glTFEmbedded]: 'gltf'
+  [GLTFFormat.glTFEmbedded]: 'gltf',
 };
 
-export function getKhronosGlTFUrl(
-  model: KhronosModel,
-  format: GLTFFormat
-): string {
+export function getKhronosGlTFUrl(model: KhronosModel, format: GLTFFormat): string {
   const modelName = KhronosModel[model];
   const formatFolder = glTFFormatToFolder[format];
   const extension = glTFFormatToExtension[format];
-  const rootPath =
-    'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0';
+  const rootPath = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0';
   //const rootPath = '/assets/glTF-Sample-Models/2.0';
   return `${rootPath}/${modelName}/${formatFolder}/${modelName}.${extension}`;
 }

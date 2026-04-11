@@ -10,7 +10,7 @@ describe('ColorHSL Functions', () => {
       { hsl: new ColorHSL(2 / 6, 1, 0.5), color: new Color3(0, 1, 0) },
       { hsl: new ColorHSL(3 / 6, 1, 0.5), color: new Color3(0, 1, 1) },
       { hsl: new ColorHSL(4 / 6, 1, 0.5), color: new Color3(0, 0, 1) },
-      { hsl: new ColorHSL(5 / 6, 1, 0.5), color: new Color3(1, 0, 1) }
+      { hsl: new ColorHSL(5 / 6, 1, 0.5), color: new Color3(1, 0, 1) },
     ];
 
     for (const pair of pairs) {

@@ -43,5 +43,5 @@ export enum ShaderOutputs {
   ToneMapped = 67,
   sRGBColor = 68,
   Alpha = 69,
-  PrePunctual = 70
+  PrePunctual = 70,
 }

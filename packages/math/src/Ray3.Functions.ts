@@ -10,7 +10,7 @@ import {
   vec3Equals,
   vec3MultiplyByScalar,
   vec3Normalize,
-  vec3Subtract
+  vec3Subtract,
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
@@ -19,19 +19,12 @@ export function ray3Equals(a: Ray3, b: Ray3): boolean {
 }
 
 export function ray3At(r: Ray3, t: number, result = new Vec3()): Vec3 {
-  return vec3Add(
-    vec3MultiplyByScalar(r.direction.clone(result), t, result),
-    r.origin,
-    result
-  );
+  return vec3Add(vec3MultiplyByScalar(r.direction.clone(result), t, result), r.origin, result);
 }
 
 export function ray3LookAt(r: Ray3, v: Vec3, result = new Ray3()): Ray3 {
   result.origin.copy(r.origin);
-  vec3Normalize(
-    vec3Subtract(v.clone(result.direction), r.origin, result.direction),
-    result.direction
-  );
+  vec3Normalize(vec3Subtract(v.clone(result.direction), r.origin, result.direction), result.direction);
 
   return result;
 }
@@ -58,11 +51,7 @@ export function ray3Negate(r: Ray3, result = new Ray3()): Ray3 {
   return result;
 }
 
-export function ray3IntersectPlane(
-  ray: Ray3,
-  plane: Plane,
-  result = new Vec3()
-): Vec3 {
+export function ray3IntersectPlane(ray: Ray3, plane: Plane, result = new Vec3()): Vec3 {
   const t = ray3DistanceToPlane(ray, plane);
   return ray3At(ray, t, result);
 }

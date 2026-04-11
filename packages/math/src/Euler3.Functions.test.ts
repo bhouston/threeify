@@ -1,22 +1,10 @@
-import {
-  euler3Delta,
-  mat3ToEuler3,
-  mat4ToEuler3,
-  quatToEuler3
-} from './Euler3.Functions.js';
+import { euler3Delta, mat3ToEuler3, mat4ToEuler3, quatToEuler3 } from './Euler3.Functions.js';
 import { Euler3, EulerOrder3 } from './Euler3.js';
 import { Mat3 } from './Mat3.js';
 import { Mat4 } from './Mat4.js';
 import { Quat } from './Quat.js';
 
-const orders = [
-  EulerOrder3.XYZ,
-  EulerOrder3.XZY,
-  EulerOrder3.YXZ,
-  EulerOrder3.YZX,
-  EulerOrder3.ZXY,
-  EulerOrder3.ZYX
-];
+const orders = [EulerOrder3.XYZ, EulerOrder3.XZY, EulerOrder3.YXZ, EulerOrder3.YZX, EulerOrder3.ZXY, EulerOrder3.ZYX];
 describe('Euler Functions', () => {
   test('euler3Delta', () => {
     const a = new Euler3(1, 2, 3);

@@ -15,7 +15,7 @@ export class Buffer implements IResource {
     public context: RenderingContext,
     arrayBuffer: ArrayBuffer,
     public target: BufferTarget = BufferTarget.Array,
-    public usage: BufferUsage = BufferUsage.StaticDraw
+    public usage: BufferUsage = BufferUsage.StaticDraw,
   ) {
     const { gl, resources } = context;
     // Create a buffer and put three 2d clip space points in it
@@ -49,20 +49,14 @@ export class Buffer implements IResource {
     arrayBufferView: ArrayBufferView,
     writeOffsetInBytes: number,
     readOffsetInElements = 0,
-    sizeInElements: number
+    sizeInElements: number,
   ): void {
     const { gl } = this.context;
     // Bind the buffer to tell WebGL we are working on this buffer
     gl.bindBuffer(this.target, this.glBuffer);
 
     // Write data into the buffer
-    gl.bufferSubData(
-      gl.UNIFORM_BUFFER,
-      writeOffsetInBytes,
-      arrayBufferView,
-      readOffsetInElements,
-      sizeInElements
-    );
+    gl.bufferSubData(gl.UNIFORM_BUFFER, writeOffsetInBytes, arrayBufferView, readOffsetInElements, sizeInElements);
   }
 
   dispose(): void {

@@ -10,7 +10,7 @@ import {
   RenderingContext,
   TexImage2D,
   ToneMapper,
-  UniformValueMap
+  UniformValueMap,
 } from '@threeify/core';
 
 import { Material } from '../materials/Material.js';
@@ -26,7 +26,7 @@ export class RenderCache {
     public context: RenderingContext,
     public copyPass: CopyPass,
     public gaussianBlur: GaussianBlur,
-    public toneMapper: ToneMapper
+    public toneMapper: ToneMapper,
   ) {}
 
   public renderInternalFormat = InternalFormat.RGBA16F; // alternative is: RGBA8
@@ -53,8 +53,7 @@ export class RenderCache {
 
   // geometryCache
   public geometryIdToBufferGeometry: Map<string, BufferGeometry> = new Map();
-  public programGeometryToProgramVertexArray: Map<string, ProgramVertexArray> =
-    new Map();
+  public programGeometryToProgramVertexArray: Map<string, ProgramVertexArray> = new Map();
 
   // shaderCache
   public shaderNameToProgram: Map<string, Program> = new Map();

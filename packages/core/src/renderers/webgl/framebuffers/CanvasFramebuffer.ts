@@ -41,16 +41,11 @@ export class CanvasFramebuffer extends VirtualFramebuffer {
   }
 
   get size(): Vec2 {
-    return new Vec2(
-      this.context.gl.drawingBufferWidth,
-      this.context.gl.drawingBufferHeight
-    );
+    return new Vec2(this.context.gl.drawingBufferWidth, this.context.gl.drawingBufferHeight);
   }
 
   get aspectRatio(): number {
-    return (
-      this.context.gl.drawingBufferWidth / this.context.gl.drawingBufferHeight
-    );
+    return this.context.gl.drawingBufferWidth / this.context.gl.drawingBufferHeight;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

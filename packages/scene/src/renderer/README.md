@@ -11,7 +11,7 @@ engine.runRenderLoop(function () {
   scene.render();
 });
 // the canvas/window resize event handler
-window.addEventListener("resize", function () {
+window.addEventListener('resize', function () {
   engine.resize();
 });
 ```
@@ -26,14 +26,14 @@ app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
 app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
 // ensure canvas is resized when window changes size
-window.addEventListener("resize", () => app.resizeCanvas());
+window.addEventListener('resize', () => app.resizeCanvas());
 ```
 
 - PlayCanvas has a render loop that takes a deltaTime since the last render. :)
 
 ```javascript
 // rotate the box according to the delta time since the last frame
-app.on("update", (dt) => box.rotate(10 * dt, 20 * dt, 30 * dt));
+app.on('update', (dt) => box.rotate(10 * dt, 20 * dt, 30 * dt));
 ```
 
 ## Findings

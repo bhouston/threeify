@@ -88,7 +88,7 @@ export class Shader implements IResource {
     public readonly context: RenderingContext,
     public readonly source: string,
     public readonly shaderType: ShaderType,
-    public readonly shaderDefines: ShaderDefines = {}
+    public readonly shaderDefines: ShaderDefines = {},
   ) {
     const { gl, resources } = this.context;
 
@@ -138,10 +138,7 @@ export class Shader implements IResource {
     // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices#Compile_Shaders_and_Link_Programs_in_parallel
     const { gl, resources } = this.context;
     // Check if it compiled
-    const compileStatus = gl.getShaderParameter(
-      this.glShader,
-      GL.COMPILE_STATUS
-    );
+    const compileStatus = gl.getShaderParameter(this.glShader, GL.COMPILE_STATUS);
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!compileStatus) {
       // Something went wrong during compilation; get the error

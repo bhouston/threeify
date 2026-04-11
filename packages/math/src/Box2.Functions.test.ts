@@ -12,7 +12,7 @@ import {
   box2Scale,
   box2Size,
   box2Translate,
-  vec2ClampToBox2
+  vec2ClampToBox2,
 } from './Box2.Functions.js';
 import { Box2 } from './Box2.js';
 import { vec2Equals } from './Vec2.Functions.js';
@@ -39,21 +39,11 @@ describe('Box2 Functions', () => {
   });
 
   test('box2Translate', () => {
-    expect(
-      box2Equals(
-        box2Translate(unit, new Vec2(1, 1)),
-        new Box2(new Vec2(1, 1), new Vec2(2, 2))
-      )
-    ).toBe(true);
+    expect(box2Equals(box2Translate(unit, new Vec2(1, 1)), new Box2(new Vec2(1, 1), new Vec2(2, 2)))).toBe(true);
   });
 
   test('box2Scale', () => {
-    expect(
-      box2Equals(
-        box2Scale(unit, new Vec2(2, 2)),
-        new Box2(new Vec2(0, 0), new Vec2(2, 2))
-      )
-    ).toBe(true);
+    expect(box2Equals(box2Scale(unit, new Vec2(2, 2)), new Box2(new Vec2(0, 0), new Vec2(2, 2)))).toBe(true);
   });
 
   test('box2Center', () => {
@@ -65,20 +55,15 @@ describe('Box2 Functions', () => {
   });
 
   test('box2ExpandByPoint', () => {
-    expect(
-      box2Equals(
-        box2ExpandByPoint(unit, new Vec2(2, 2)),
-        new Box2(new Vec2(0, 0), new Vec2(2, 2))
-      )
-    ).toBe(true);
+    expect(box2Equals(box2ExpandByPoint(unit, new Vec2(2, 2)), new Box2(new Vec2(0, 0), new Vec2(2, 2)))).toBe(true);
   });
 
   test('box2ExpandByBox', () => {
     expect(
       box2Equals(
         box2ExpandByBox(unit, new Box2(new Vec2(2, 2), new Vec2(3, 3))),
-        new Box2(new Vec2(0, 0), new Vec2(3, 3))
-      )
+        new Box2(new Vec2(0, 0), new Vec2(3, 3)),
+      ),
     ).toBe(true);
     expect(box2Equals(box2ExpandByBox(unit, empty), unit)).toBe(true);
     expect(box2Equals(box2ExpandByBox(empty, unit), unit)).toBe(true);
@@ -90,18 +75,12 @@ describe('Box2 Functions', () => {
   });
 
   test('box2ContainsBox2', () => {
-    expect(
-      box2ContainsBox2(unit, new Box2(new Vec2(0.5, 0.5), new Vec2(0.6, 0.6)))
-    ).toBe(true);
-    expect(
-      box2ContainsBox2(unit, new Box2(new Vec2(0.5, 0.5), new Vec2(1.6, 0.6)))
-    ).toBe(false);
+    expect(box2ContainsBox2(unit, new Box2(new Vec2(0.5, 0.5), new Vec2(0.6, 0.6)))).toBe(true);
+    expect(box2ContainsBox2(unit, new Box2(new Vec2(0.5, 0.5), new Vec2(1.6, 0.6)))).toBe(false);
   });
 
   test('vec2ClampToBox2', () => {
-    expect(
-      vec2Equals(vec2ClampToBox2(new Vec2(0.5, 0.5), unit), new Vec2(0.5, 0.5))
-    ).toBe(true);
+    expect(vec2Equals(vec2ClampToBox2(new Vec2(0.5, 0.5), unit), new Vec2(0.5, 0.5))).toBe(true);
   });
 
   test('box2DistanceToVec2', () => {
@@ -110,8 +89,6 @@ describe('Box2 Functions', () => {
   });
 
   test('box2IntersectionBox2', () => {
-    expect(
-      box2IntersectsBox2(unit, new Box2(new Vec2(0.5, 0.5), new Vec2(1.5, 1.5)))
-    ).toBe(true);
+    expect(box2IntersectsBox2(unit, new Box2(new Vec2(0.5, 0.5), new Vec2(1.5, 1.5)))).toBe(true);
   });
 });

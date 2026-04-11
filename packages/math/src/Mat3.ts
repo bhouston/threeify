@@ -16,9 +16,7 @@ export class Mat3 {
 
   constructor(public readonly elements = [1, 0, 0, 0, 1, 0, 0, 0, 1]) {
     if (elements.length !== Mat3.NUM_COMPONENTS) {
-      throw new Error(
-        `elements must have length ${Mat3.NUM_COMPONENTS}, got ${elements.length}`
-      );
+      throw new Error(`elements must have length ${Mat3.NUM_COMPONENTS}, got ${elements.length}`);
     }
   }
 
@@ -31,9 +29,7 @@ export class Mat3 {
   }
   set(elements: number[]): this {
     if (elements.length !== Mat3.NUM_COMPONENTS) {
-      throw new Error(
-        `elements must have length ${Mat3.NUM_COMPONENTS}, got ${elements.length}`
-      );
+      throw new Error(`elements must have length ${Mat3.NUM_COMPONENTS}, got ${elements.length}`);
     }
     for (let i = 0; i < Mat3.NUM_COMPONENTS; i++) {
       this.elements[i] = elements[i];

@@ -11,16 +11,9 @@ import {
   shaderMaterialToProgram,
   Texture,
   TextureCache,
-  TextureEncoding
+  TextureEncoding,
 } from '@threeify/core';
-import {
-  box3Center,
-  box3MaxSize,
-  Color3,
-  positiveModulo,
-  Vec3,
-  vec3Negate
-} from '@threeify/math';
+import { box3Center, box3MaxSize, Color3, positiveModulo, Vec3, vec3Negate } from '@threeify/math';
 import { renderScene } from '@threeify/scene';
 import {
   createRenderCache,
@@ -33,19 +26,12 @@ import {
   updateDirtyNodes,
   updateFramebuffers,
   updateNodeTree,
-  updateRenderCache
+  updateRenderCache,
 } from '@threeify/scene';
 
-import {
-  getKhronosGlTFUrl,
-  GLTFFormat,
-  KhronosModel
-} from '../../utilities/khronosModels.js';
+import { getKhronosGlTFUrl, GLTFFormat, KhronosModel } from '../../utilities/khronosModels.js';
 import { GPUTimerPanel, Stats } from '../../utilities/Stats.js';
-import {
-  getThreeJSHDRIUrl,
-  ThreeJSHRDI
-} from '../../utilities/threejsHDRIs.js';
+import { getThreeJSHDRIUrl, ThreeJSHRDI } from '../../utilities/threejsHDRIs.js';
 import fragmentSource from './fragment.glsl.js';
 import { ShaderOutputs } from './ShaderOutputs.js';
 import vertexSource from './vertex.glsl.js';
@@ -68,9 +54,8 @@ document.addEventListener('keydown', (event) => {
   }
   console.log(
     `Debug Channel ${
-      PhysicalMaterialOutputs[debugOutputIndex] ||
-      ShaderOutputs[debugOutputIndex]
-    } (${debugOutputIndex})`
+      PhysicalMaterialOutputs[debugOutputIndex] || ShaderOutputs[debugOutputIndex]
+    } (${debugOutputIndex})`,
   );
 });
 
@@ -79,31 +64,19 @@ async function init(): Promise<void> {
   const textueCache = new TextureCache();
   const glTFModelPromise = glTFToSceneNode(
     getKhronosGlTFUrl(KhronosModel.TransmissionTest, GLTFFormat.glTF),
-    textueCache
+    textueCache,
   );
 
-  const shaderMaterial = new ShaderMaterial(
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const shaderMaterial = new ShaderMaterial('index', vertexSource, fragmentSource);
   //console.time('fetchHDR');
-  const hdrPromise = fetchHDR(
-    getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k)
-  );
+  const hdrPromise = fetchHDR(getThreeJSHDRIUrl(ThreeJSHRDI.royal_esplanade_1k));
   const latLongTexturePromise = hdrPromise.then((hdr) => {
     return new Texture(hdr);
   });
 
   //console.timeEnd('glTFToSceneNode');
   const cubeMapPromise = latLongTexturePromise.then((latLongTexture) =>
-    equirectangularTextureToCubeMap(
-      context,
-      latLongTexture,
-      TextureEncoding.RGBE,
-      1024,
-      InternalFormat.RGBA16F
-    )
+    equirectangularTextureToCubeMap(context, latLongTexture, TextureEncoding.RGBE, 1024, InternalFormat.RGBA16F),
   );
 
   /* const latLongTexture = new Texture(
@@ -114,13 +87,11 @@ async function init(): Promise<void> {
   const domeLightIntensity = 1.5;
   //const transmissionMode = false;
 
-  const canvasHtmlElement = document.getElementById(
-    'framebuffer'
-  ) as HTMLCanvasElement;
+  const canvasHtmlElement = document.getElementById('framebuffer') as HTMLCanvasElement;
   const context = new RenderingContext(canvasHtmlElement, {
     antialias: false,
     depth: false,
-    premultipliedAlpha: true
+    premultipliedAlpha: true,
   });
   const { canvasFramebuffer } = context;
   canvasFramebuffer.devicePixelRatio = 1;
@@ -155,12 +126,8 @@ async function init(): Promise<void> {
 
   const orbitNode = new SceneNode({
     name: 'orbit',
-    translation: new Vec3(
-      Math.random() * 0.25 - 0.125,
-      Math.random() * 0.25 - 0.125,
-      -2
-    ),
-    scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize)
+    translation: new Vec3(Math.random() * 0.25 - 0.125, Math.random() * 0.25 - 0.125, -2),
+    scale: new Vec3(1 / maxSize, 1 / maxSize, 1 / maxSize),
   });
 
   orbitController.rotation.copy(orbitNode.rotation);
@@ -171,7 +138,7 @@ async function init(): Promise<void> {
     translation: new Vec3(5, 0, 0),
     color: new Color3(0.6, 0.8, 1),
     intensity: lightIntensity * 50,
-    range: 1000
+    range: 1000,
   });
   root.children.push(pointLight1);
   const pointLight2 = new PointLight({
@@ -179,7 +146,7 @@ async function init(): Promise<void> {
     translation: new Vec3(-5, 0, 0),
     color: new Color3(1, 0.9, 0.7),
     intensity: lightIntensity * 50,
-    range: 1000
+    range: 1000,
   });
   root.children.push(pointLight2);
   const pointLight3 = new PointLight({
@@ -187,7 +154,7 @@ async function init(): Promise<void> {
     translation: new Vec3(0, 5, 0),
     color: new Color3(0.8, 1, 0.7),
     intensity: lightIntensity * 50,
-    range: 1000
+    range: 1000,
   });
   root.children.push(pointLight3);
   const camera = new PerspectiveCamera({
@@ -195,7 +162,7 @@ async function init(): Promise<void> {
     verticalFov: 25,
     near: 0.1,
     far: 1000,
-    translation: Vec3.Zero
+    translation: Vec3.Zero,
   });
   root.children.push(camera);
   const domeLight = new DomeLight({
@@ -203,7 +170,7 @@ async function init(): Promise<void> {
     cubeMap: await cubeMapPromise,
     translation: orbitNode.translation,
     color: Color3.White,
-    intensity: domeLightIntensity
+    intensity: domeLightIntensity,
   });
   root.children.push(domeLight);
 
@@ -224,7 +191,7 @@ async function init(): Promise<void> {
       return program;
     },
     sceneTreeCache,
-    renderCache
+    renderCache,
   );
   //console.timeEnd('updateRenderCache');
 

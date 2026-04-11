@@ -13,17 +13,12 @@ export interface IBackgroundResponse {
   buffers?: ArrayBuffer[];
 }
 
-export type WorkerRequestHandler = (
-  request: IBackgroundRequest
-) => IBackgroundResponse;
+export type WorkerRequestHandler = (request: IBackgroundRequest) => IBackgroundResponse;
 
 // self.onmessage = (event) => this.onMessage(event);
 
 export class BackgroundWorker {
-  public handlers = new Map<
-    string,
-    (request: IBackgroundRequest) => Promise<IBackgroundResponse>
-  >();
+  public handlers = new Map<string, (request: IBackgroundRequest) => Promise<IBackgroundResponse>>();
 
   constructor() {}
 
@@ -35,7 +30,7 @@ export class BackgroundWorker {
         const message = {
           type: 'completed',
           requestId: response.requestId,
-          result: response.result
+          result: response.result,
         };
         self.postMessage(message);
         //console.log('Worker: completed task', request.id);
@@ -46,15 +41,14 @@ export class BackgroundWorker {
         self.postMessage({
           type: 'error',
           requestId: request.id,
-          message: (error as Error).message || 'no message'
+          message: (error as Error).message || 'no message',
         });
       });
   }
 
   processRequest(request: IBackgroundRequest): Promise<IBackgroundResponse> {
     const handler = this.handlers.get(request.type);
-    if (handler === undefined)
-      throw new Error(`Unknown task type ${request.type}`);
+    if (handler === undefined) throw new Error(`Unknown task type ${request.type}`);
     return handler(request);
   }
 }

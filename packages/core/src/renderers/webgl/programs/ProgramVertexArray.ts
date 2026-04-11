@@ -21,7 +21,7 @@ export class ProgramVertexArray implements IResource {
 
   constructor(
     public readonly program: Program,
-    bufferGeometry: BufferGeometry
+    bufferGeometry: BufferGeometry,
   ) {
     this.primitive = bufferGeometry.primitive;
     this.count = bufferGeometry.count;

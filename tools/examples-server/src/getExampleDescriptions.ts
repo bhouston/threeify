@@ -20,7 +20,7 @@ export const getExampleDescriptions = async (rootPath: string) => {
   console.log('rootPath', rootPath);
   // this code scan all sub directories looking for files named example.json
   const dirEntries = await fsPromises.readdir(rootPath, {
-    withFileTypes: true
+    withFileTypes: true,
   });
   const examples: ExampleDescription[] = [];
   const files = dirEntries.filter((dirent) => dirent.isFile());
@@ -30,13 +30,11 @@ export const getExampleDescriptions = async (rootPath: string) => {
       const example: ExampleDescription = {
         name: file.name,
         path: file.path.replace(rootPath, '') + '/' + file.name,
-        keywords: []
+        keywords: [],
       };
       const jsonFile = path.join(file.path, 'example.json');
       if (fs.existsSync(jsonFile)) {
-        const json = JSON.parse(
-          fs.readFileSync(jsonFile, 'utf8')
-        ) as ExampleJSON;
+        const json = JSON.parse(fs.readFileSync(jsonFile, 'utf8')) as ExampleJSON;
         if (json.name) {
           example.name = json.name;
         }

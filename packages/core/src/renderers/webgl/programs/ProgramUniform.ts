@@ -12,7 +12,7 @@ import {
   Vec3,
   vec3ArrayToFloat32Array,
   Vec4,
-  vec4ArrayToFloat32Array
+  vec4ArrayToFloat32Array,
 } from '@threeify/math';
 
 import { Buffer } from '../buffers/Buffer.js';
@@ -54,7 +54,7 @@ export class ProgramUniform {
     public readonly program: Program,
     public readonly index: number,
     public readonly block?: ProgramUniformBlock,
-    public readonly blockOffset: number = -1
+    public readonly blockOffset: number = -1,
   ) {
     this.context = program.context;
 
@@ -94,10 +94,7 @@ export class ProgramUniform {
       this.glType = typeInfo.glType;
 
       if (this.block === undefined) {
-        const glLocation = gl.getUniformLocation(
-          program.glProgram,
-          this.fullName
-        );
+        const glLocation = gl.getUniformLocation(program.glProgram, this.fullName);
         if (glLocation === null) {
           throw new Error(`can not find uniform named: ${this.fullName}`);
         }
@@ -123,39 +120,26 @@ export class ProgramUniform {
 
   setIntoBuffer(value: UniformValue, buffer: Buffer): this {
     if (this.block === undefined) {
-      throw new Error(
-        'Can not set uniform into buffer if uniform is not part of a block'
-      );
+      throw new Error('Can not set uniform into buffer if uniform is not part of a block');
     }
 
     const { blockOffset, uniformType, bytesPerElement } = this;
 
     const arrayBufferView = uniformValueToArrayBuffer(uniformType, value);
     //console.log('writing to buffer', arrayBufferView, blockOffset, numElements);
-    buffer.writeSubData(
-      arrayBufferView,
-      blockOffset,
-      0,
-      arrayBufferView.byteLength / bytesPerElement
-    );
+    buffer.writeSubData(arrayBufferView, blockOffset, 0, arrayBufferView.byteLength / bytesPerElement);
 
     return this;
   }
 
-  setIntoLocation(
-    value: UniformValue,
-    textureBindings?: TextureBindings
-  ): this {
+  setIntoLocation(value: UniformValue, textureBindings?: TextureBindings): this {
     if (this.glLocation === undefined) {
       throw new Error('Can not set uniform value for a uniform block - yet');
     }
     if ((value as any) === undefined) return this;
 
     if (value instanceof Array && value.length > 0) {
-      return this.setArrayIntoLocation(
-        value as UniformPrimitiveValue[],
-        textureBindings
-      );
+      return this.setArrayIntoLocation(value as UniformPrimitiveValue[], textureBindings);
     }
     this.program.context.program = this.program;
 
@@ -237,28 +221,26 @@ export class ProgramUniform {
         // case UniformType.UnsignedIntSampler2D:
         // case UniformType.Sampler2DShadow:
         if (value instanceof TexImage2D) {
-          if (textureBindings === undefined)
-            throw new Error('textureBindings is undefined');
+          if (textureBindings === undefined) throw new Error('textureBindings is undefined');
           const bindIndex = textureBindings.bind(value);
           gl.uniform1i(this.glLocation, bindIndex);
           return this;
         } else {
           throw new TypeError(
-            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`
+            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`,
           );
         }
         break;
       case UniformType.SamplerCube:
         // case UniformType.SamplerCubeShadow:
         if (value instanceof TexImage2D) {
-          if (textureBindings === undefined)
-            throw new Error('textureBindings is undefined');
+          if (textureBindings === undefined) throw new Error('textureBindings is undefined');
           const bindIndex = textureBindings.bind(value);
           gl.uniform1i(this.glLocation, bindIndex);
           return this;
         } else {
           throw new TypeError(
-            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`
+            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`,
           );
         }
         break;
@@ -266,16 +248,11 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(
-        value
-      )}`
+      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(value)}`,
     );
   }
 
-  setArrayIntoLocation(
-    value: UniformPrimitiveValue[],
-    textureBindings?: TextureBindings
-  ): this {
+  setArrayIntoLocation(value: UniformPrimitiveValue[], textureBindings?: TextureBindings): this {
     if (this.glLocation === undefined) {
       throw new Error('Can not set uniform value for a uniform block - yet');
     }
@@ -376,16 +353,13 @@ export class ProgramUniform {
         // case UniformType.UnsignedIntSampler2D:
         // case UniformType.Sampler2DShadow:
         if (firstElement instanceof TexImage2D) {
-          if (textureBindings === undefined)
-            throw new Error('textureBindings is undefined');
-          const bindIndices = textureBindings.bindAll(
-            value as unknown as TexImage2D[]
-          );
+          if (textureBindings === undefined) throw new Error('textureBindings is undefined');
+          const bindIndices = textureBindings.bindAll(value as unknown as TexImage2D[]);
           gl.uniform1iv(this.glLocation, bindIndices);
           return this;
         } else {
           throw new TypeError(
-            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`
+            `expected TexImage2D, are you using obsolete texture bindings?  ${value.constructor.name}`,
           );
         }
         break;
@@ -393,9 +367,7 @@ export class ProgramUniform {
     throw new Error(
       `unsupported uniform type - value mismatch: ${
         UniformType[this.uniformType]
-      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(
-        value
-      )}`
+      }(${this.uniformType}) on '${this.variableName}' via ${JSON.stringify(value)}`,
     );
   }
 }

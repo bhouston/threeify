@@ -1,9 +1,6 @@
 import { assert } from '../../../core/assert.js';
 import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
-import {
-  renderPass,
-  VirtualFramebuffer
-} from '../../webgl/framebuffers/VirtualFramebuffer.js';
+import { renderPass, VirtualFramebuffer } from '../../webgl/framebuffers/VirtualFramebuffer.js';
 import { shaderMaterialToProgram } from '../../webgl/programs/Program.js';
 import { RenderingContext } from '../../webgl/RenderingContext.js';
 import { TexImage2D } from '../../webgl/textures/TexImage2D.js';
@@ -22,9 +19,7 @@ export interface CombinePass extends IEffect {
   exec(props: ICombinePassProps): void;
 }
 
-export async function createCombinePass(
-  context: RenderingContext
-): Promise<CombinePass> {
+export async function createCombinePass(context: RenderingContext): Promise<CombinePass> {
   const programRef = context.programCache.acquireRef('combinePass', (name) => {
     const material = new ShaderMaterial(name, vertexSource, fragmentSource);
     return shaderMaterialToProgram(context, material);
@@ -33,29 +28,24 @@ export async function createCombinePass(
 
   return {
     exec: (props: ICombinePassProps) => {
-      const {
-        opaqueTexImage2D,
-        transmissionTexImage2D,
-        targetFramebuffer,
-        exposure
-      } = props;
+      const { opaqueTexImage2D, transmissionTexImage2D, targetFramebuffer, exposure } = props;
 
       assert(exposure > 0);
 
       const uniforms = {
         opaqueTexture: opaqueTexImage2D,
         transmissionTexture: transmissionTexImage2D,
-        exposure: exposure || 1
+        exposure: exposure || 1,
       };
 
       renderPass({
         framebuffer: targetFramebuffer,
         program,
-        uniforms
+        uniforms,
       });
     },
     dispose: () => {
       programRef.dispose();
-    }
+    },
   };
 }

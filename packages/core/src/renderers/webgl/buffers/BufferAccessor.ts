@@ -19,26 +19,18 @@ export class BufferAccessor {
     public componentsPerVertex: number,
     public normalized: boolean,
     public vertexStride: number,
-    public byteOffset: number
+    public byteOffset: number,
   ) {}
 }
 
 export function makeBufferAccessorFromAttribute(
   context: RenderingContext,
   attribute: Attribute,
-  bufferTarget: BufferTarget | undefined = undefined
+  bufferTarget: BufferTarget | undefined = undefined,
 ): BufferAccessor {
-  const {
-    attributeData,
-    componentType,
-    componentsPerVertex,
-    normalized,
-    vertexStride,
-    byteOffset
-  } = attribute;
+  const { attributeData, componentType, componentsPerVertex, normalized, vertexStride, byteOffset } = attribute;
 
-  const target =
-    bufferTarget !== undefined ? bufferTarget : attributeData.target;
+  const target = bufferTarget !== undefined ? bufferTarget : attributeData.target;
   const buffer = new Buffer(context, attributeData.arrayBuffer, target);
   buffer.version = attributeData.version;
   const bufferAccessor = new BufferAccessor(
@@ -47,7 +39,7 @@ export function makeBufferAccessorFromAttribute(
     componentsPerVertex,
     normalized,
     vertexStride,
-    byteOffset
+    byteOffset,
   );
 
   return bufferAccessor;

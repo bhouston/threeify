@@ -9,7 +9,7 @@ import {
   renderBufferGeometry,
   shaderSourceToProgram,
   Texture,
-  textureToTexImage2D
+  textureToTexImage2D,
 } from '@threeify/core';
 import { Vec2 } from '@threeify/math';
 
@@ -18,16 +18,10 @@ import vertexSource from './vertex.glsl.js';
 
 async function init(): Promise<void> {
   const fgTexture = new Texture(
-    await fetchImageElement(
-      '/assets/textures/alphaCompositing/fg75.svg',
-      new Vec2(1024, 1024)
-    )
+    await fetchImageElement('/assets/textures/alphaCompositing/fg75.svg', new Vec2(1024, 1024)),
   );
   const bgTexture = new Texture(
-    await fetchImageElement(
-      '/assets/textures/alphaCompositing/bg.svg',
-      new Vec2(1024, 1024)
-    )
+    await fetchImageElement('/assets/textures/alphaCompositing/bg.svg', new Vec2(1024, 1024)),
   );
 
   const context = createRenderingContext(document, 'framebuffer');
@@ -36,12 +30,7 @@ async function init(): Promise<void> {
 
   context.blendState = blendModeToBlendState(Blending.Over, true);
 
-  const program = await shaderSourceToProgram(
-    context,
-    'index',
-    vertexSource,
-    fragmentSource
-  );
+  const program = await shaderSourceToProgram(context, 'index', vertexSource, fragmentSource);
   const bgUniforms = { map: textureToTexImage2D(context, bgTexture) };
   const fgUniforms = { map: textureToTexImage2D(context, fgTexture) };
 
@@ -53,13 +42,13 @@ async function init(): Promise<void> {
     framebuffer: canvasFramebuffer,
     program,
     uniforms: bgUniforms,
-    bufferGeometry
+    bufferGeometry,
   });
   renderBufferGeometry({
     framebuffer: canvasFramebuffer,
     program,
     uniforms: fgUniforms,
-    bufferGeometry
+    bufferGeometry,
   });
 }
 

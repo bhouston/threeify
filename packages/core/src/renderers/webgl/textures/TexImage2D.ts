@@ -39,7 +39,7 @@ export class TexImage2D implements IResource {
     public dataType = DataType.UnsignedByte,
     public pixelFormat = PixelFormat.RGBA,
     public target = TextureTarget.Texture2D,
-    public texParameters = new TexParameters()
+    public texParameters = new TexParameters(),
   ) {
     const { gl, glxo, resources } = this.context;
     // Create a texture.
@@ -56,30 +56,20 @@ export class TexImage2D implements IResource {
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_S, texParameters.wrapS);
     gl.texParameteri(this.target, GL.TEXTURE_WRAP_T, texParameters.wrapT);
 
-    gl.texParameteri(
-      this.target,
-      GL.TEXTURE_MAG_FILTER,
-      texParameters.magFilter
-    );
-    gl.texParameteri(
-      this.target,
-      GL.TEXTURE_MIN_FILTER,
-      texParameters.minFilter
-    );
+    gl.texParameteri(this.target, GL.TEXTURE_MAG_FILTER, texParameters.magFilter);
+    gl.texParameteri(this.target, GL.TEXTURE_MIN_FILTER, texParameters.minFilter);
 
     if (texParameters.anisotropyLevels > 1) {
       const tfa = glxo.EXT_texture_filter_anisotropic;
       if (tfa !== null) {
         // TODO: Cache this at some point for speed improvements
         if (maxAllowableAnisotropy === -1) {
-          maxAllowableAnisotropy = gl.getParameter(
-            tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT
-          );
+          maxAllowableAnisotropy = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
         }
         gl.texParameterf(
           this.target,
           tfa.TEXTURE_MAX_ANISOTROPY_EXT,
-          Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy)
+          Math.min(texParameters.anisotropyLevels, maxAllowableAnisotropy),
         );
       }
     }
@@ -136,11 +126,7 @@ export class TexImage2D implements IResource {
     }
   }
 
-  private loadImage(
-    image: TextureSource,
-    target: TextureTarget | undefined = undefined,
-    level = 0
-  ): void {
+  private loadImage(image: TextureSource, target: TextureTarget | undefined = undefined, level = 0): void {
     const { gl } = this.context;
     if (image instanceof Vec2) {
       gl.texImage2D(
@@ -152,7 +138,7 @@ export class TexImage2D implements IResource {
         0,
         this.pixelFormat,
         this.dataType,
-        null
+        null,
       );
       if (level === 0) {
         this.size.set(image.x, image.y);
@@ -167,20 +153,13 @@ export class TexImage2D implements IResource {
         0,
         this.pixelFormat,
         this.dataType,
-        image.data
+        image.data,
       );
       if (level === 0) {
         this.size.set(image.width, image.height);
       }
     } else {
-      gl.texImage2D(
-        target ?? this.target,
-        level,
-        this.internalFormat,
-        this.pixelFormat,
-        this.dataType,
-        image
-      );
+      gl.texImage2D(target ?? this.target, level, this.internalFormat, this.pixelFormat, this.dataType, image);
       this.size.set(image.width, image.height);
     }
   }
@@ -189,7 +168,7 @@ export class TexImage2D implements IResource {
 export function textureToTexImage2D(
   context: RenderingContext,
   texture: Texture | CubeMapTexture,
-  internalFormat: PixelFormat = PixelFormat.RGBA
+  internalFormat: PixelFormat = PixelFormat.RGBA,
 ): TexImage2D {
   //console.time('makeTexImage2DFromTexture ' + texture.name);
   const params = new TexParameters();
@@ -210,10 +189,8 @@ export function textureToTexImage2D(
     texture.internalFormat,
     texture.dataType,
     internalFormat,
-    texture instanceof CubeMapTexture
-      ? TextureTarget.TextureCubeMap
-      : TextureTarget.Texture2D,
-    params
+    texture instanceof CubeMapTexture ? TextureTarget.TextureCubeMap : TextureTarget.Texture2D,
+    params,
   );
   texImage2D.version = texture.version;
   //console.timeEnd('makeTexImage2DFromTexture ' + texture.name);
@@ -236,10 +213,7 @@ export class TexImage2DPool extends Pool<Texture, TexImage2D> {
 }
 */
 
-export async function fetchTexImage2D(
-  context: RenderingContext,
-  url: string
-): Promise<TexImage2D> {
+export async function fetchTexImage2D(context: RenderingContext, url: string): Promise<TexImage2D> {
   const texture = await fetchTexture(url);
   return textureToTexImage2D(context, texture);
 }

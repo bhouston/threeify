@@ -11,7 +11,7 @@ import {
   vec3Add,
   vec3Cross,
   vec3Normalize,
-  vec3Subtract
+  vec3Subtract,
 } from '@threeify/math';
 
 import { Attribute, makeFloat32Attribute } from './Attribute.js';
@@ -23,7 +23,7 @@ function copyBytesUsingStride(
   source: ArrayBuffer,
   bytesPerVertex: number,
   byteStridePerVertex: number,
-  attributeOffset: number
+  attributeOffset: number,
 ): void {
   const destBytes = new Int8Array(dest);
   const sourceBytes = new Int8Array(source);
@@ -62,7 +62,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.attributeData.arrayBuffer,
         attribute.bytesPerVertex,
         byteStridePerVertex,
-        byteOffset
+        byteOffset,
       );
 
       interleavedGeometry.attributes[name] = new Attribute(
@@ -71,7 +71,7 @@ export function convertToInterleavedGeometry(geometry: Geometry): Geometry {
         attribute.componentType,
         byteStridePerVertex,
         byteOffset,
-        attribute.normalized
+        attribute.normalized,
       );
       byteOffset += Math.max(attribute.bytesPerVertex, 4);
     }
@@ -89,10 +89,7 @@ export function computeVertexNormals(geometry: Geometry): void {
   }
   let normalAttribute = attributes.normal;
   if (normalAttribute === undefined) {
-    normalAttribute = makeFloat32Attribute(
-      new Float32Array(positionAttribute.count * 3),
-      3
-    );
+    normalAttribute = makeFloat32Attribute(new Float32Array(positionAttribute.count * 3), 3);
     geometry.attributes.normal = normalAttribute;
   }
 
@@ -191,10 +188,7 @@ export function transformGeometry(geometry: Geometry, m: Mat4): void {
   }
 }
 
-export function positionAttributeToBoundingBox(
-  positionAttribute?: Attribute,
-  result = new Box3()
-): Box3 {
+export function positionAttributeToBoundingBox(positionAttribute?: Attribute, result = new Box3()): Box3 {
   if (positionAttribute === undefined) {
     throw new Error('missing position attribute');
   }
@@ -213,9 +207,5 @@ export function geometryToBoundingBox(geometry: Geometry): Box3 {
 }
 
 function makeVec3ViewFromAttribute(attribute: Attribute): PrimitiveView<Vec3> {
-  return makeVec3View(
-    attribute.attributeData.arrayBuffer,
-    attribute.bytesPerVertex / 4,
-    attribute.byteOffset / 4
-  );
+  return makeVec3View(attribute.attributeData.arrayBuffer, attribute.bytesPerVertex / 4, attribute.byteOffset / 4);
 }

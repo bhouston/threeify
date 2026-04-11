@@ -5,7 +5,7 @@ import {
   color4Lerp,
   color4MultiplyByScalar,
   color4Negate,
-  color4Subtract
+  color4Subtract,
 } from './Color4.Functions.js';
 import { Color4 } from './Color4.js';
 

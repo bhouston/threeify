@@ -23,22 +23,12 @@ export class CubeMapTexture extends VirtualTexture {
     internalFormat = InternalFormat.RGBA8,
     dataType = DataType.UnsignedByte,
     generateMipmaps = true,
-    anisotropicLevels = 1
+    anisotropicLevels = 1,
   ) {
-    super(
-      level,
-      magFilter,
-      minFilter,
-      internalFormat,
-      dataType,
-      generateMipmaps,
-      anisotropicLevels
-    );
+    super(level, magFilter, minFilter, internalFormat, dataType, generateMipmaps, anisotropicLevels);
 
     if (this.images.length % 6 !== 0 || this.images.length === 0) {
-      throw new Error(
-        `images.length (${this.images.length}) must be a positive multiple of 6`
-      );
+      throw new Error(`images.length (${this.images.length}) must be a positive multiple of 6`);
     }
     const firstImage = images[0];
     // check if firstImage is a Vec2 in typescript
@@ -50,14 +40,7 @@ export class CubeMapTexture extends VirtualTexture {
   }
 }
 
-export const cubeFaceNames = [
-  'right',
-  'left',
-  'top',
-  'bottom',
-  'back',
-  'front'
-];
+export const cubeFaceNames = ['right', 'left', 'top', 'bottom', 'back', 'front'];
 
 export const cubeFaceTargets = [
   TextureTarget.CubeMapPositiveX,
@@ -65,7 +48,7 @@ export const cubeFaceTargets = [
   TextureTarget.CubeMapPositiveY,
   TextureTarget.CubeMapNegativeY,
   TextureTarget.CubeMapPositiveZ,
-  TextureTarget.CubeMapNegativeZ
+  TextureTarget.CubeMapNegativeZ,
 ];
 
 export const cubeFaceLooks = [
@@ -74,7 +57,7 @@ export const cubeFaceLooks = [
   new Vec3(0, 1, 0),
   new Vec3(0, -1, 0),
   new Vec3(0, 0, 1),
-  new Vec3(0, 0, -1)
+  new Vec3(0, 0, -1),
 ];
 
 export const cubeFaceUps = [
@@ -83,20 +66,11 @@ export const cubeFaceUps = [
   new Vec3(0, 0, 1),
   new Vec3(0, 0, -1),
   new Vec3(0, 1, 0),
-  new Vec3(0, -1, 0)
+  new Vec3(0, -1, 0),
 ];
 
-export function makeMat4CubeMapTransform(
-  position: Vec3,
-  faceIndex: number,
-  result = new Mat4()
-): Mat4 {
-  return mat4LookAt(
-    position,
-    vec3Add(position, cubeFaceLooks[faceIndex]),
-    cubeFaceUps[faceIndex],
-    result
-  );
+export function makeMat4CubeMapTransform(position: Vec3, faceIndex: number, result = new Mat4()): Mat4 {
+  return mat4LookAt(position, vec3Add(position, cubeFaceLooks[faceIndex]), cubeFaceUps[faceIndex], result);
 }
 
 /*
@@ -105,8 +79,6 @@ export function makeMat4CubeMapProjection(near: number, far: number, result = ne
 }
 */
 
-export async function fetchCubeMapTexture(
-  urlPattern: string
-): Promise<CubeMapTexture> {
+export async function fetchCubeMapTexture(urlPattern: string): Promise<CubeMapTexture> {
   return new CubeMapTexture(await fetchCubeMapImages(urlPattern));
 }

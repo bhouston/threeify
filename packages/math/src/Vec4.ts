@@ -9,7 +9,12 @@ export class Vec4 {
     return new Vec4(0, 0, 0);
   }
 
-  constructor(public x = 0, public y = 0, public z = 0, public w = 0) {}
+  constructor(
+    public x = 0,
+    public y = 0,
+    public z = 0,
+    public w = 0,
+  ) {}
   getHashCode(): number {
     return hashFloat4(this.x, this.y, this.z, this.w);
   }

@@ -41,25 +41,19 @@ export enum DepthTestFunc {
   /**
    * Always pass.
    */
-  Always = GL.ALWAYS
+  Always = GL.ALWAYS,
 }
 
-export class DepthTestState
-  implements ICloneable<DepthTestState>, IEquatable<DepthTestState>
-{
+export class DepthTestState implements ICloneable<DepthTestState>, IEquatable<DepthTestState> {
   static readonly Less = new DepthTestState(true, DepthTestFunc.Less, true);
-  static readonly LessOrEqual = new DepthTestState(
-    true,
-    DepthTestFunc.LessOrEqual,
-    true
-  );
+  static readonly LessOrEqual = new DepthTestState(true, DepthTestFunc.LessOrEqual, true);
   static readonly None = new DepthTestState(false);
 
   // TODO: Should be intialized to default WebGL states
   constructor(
     public enabled = true,
     public func = DepthTestFunc.Less,
-    public write = true
+    public write = true,
   ) {}
 
   clone(): DepthTestState {
@@ -73,10 +67,6 @@ export class DepthTestState
   }
 
   equals(dts: DepthTestState): boolean {
-    return (
-      this.enabled === dts.enabled &&
-      this.func === dts.func &&
-      this.write === dts.write
-    );
+    return this.enabled === dts.enabled && this.func === dts.func && this.write === dts.write;
   }
 }

@@ -7,7 +7,7 @@ export enum EulerOrder3 {
   YZX,
   ZYX,
   ZXY,
-  Default = XYZ
+  Default = XYZ,
 }
 
 export type Euler3JSON = number[];
@@ -17,7 +17,7 @@ export class Euler3 {
     public x = 0,
     public y = 0,
     public z = 0,
-    public order: EulerOrder3 = EulerOrder3.XYZ
+    public order: EulerOrder3 = EulerOrder3.XYZ,
   ) {}
 
   getHashCode(): number {

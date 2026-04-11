@@ -1,15 +1,6 @@
-import {
-  AlphaMode,
-  generateUUID,
-  IIdentifiable,
-  IVersionable,
-  ShaderDefines
-} from '@threeify/core';
+import { AlphaMode, generateUUID, IIdentifiable, IVersionable, ShaderDefines } from '@threeify/core';
 
-import {
-  IMaterialParameterProvider,
-  MaterialParameters
-} from './MaterialParameters.js';
+import { IMaterialParameterProvider, MaterialParameters } from './MaterialParameters.js';
 
 export interface IMaterialProps {
   id?: string;
@@ -18,9 +9,7 @@ export interface IMaterialProps {
   name?: string;
 }
 
-export class Material
-  implements IVersionable, IIdentifiable, IMaterialParameterProvider
-{
+export class Material implements IVersionable, IIdentifiable, IMaterialParameterProvider {
   public readonly id;
   public version = 0;
   public name = '';

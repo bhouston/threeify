@@ -20,16 +20,8 @@ export class PrimitiveView<PrimitiveType> {
     floatPerPrimitive = -1,
     public floatStride: number = -1,
     public floatOffset: number = -1,
-    private primitiveToArray: (
-      p: PrimitiveType,
-      a: Float32Array,
-      i: number
-    ) => void,
-    private arrayToPrimitive: (
-      a: Float32Array,
-      i: number,
-      p: PrimitiveType
-    ) => void
+    private primitiveToArray: (p: PrimitiveType, a: Float32Array, i: number) => void,
+    private arrayToPrimitive: (a: Float32Array, i: number, p: PrimitiveType) => void,
   ) {
     if (dataArray instanceof Float32Array) {
       this.floatArray = dataArray;
@@ -39,9 +31,7 @@ export class PrimitiveView<PrimitiveType> {
       throw new TypeError('unsupported value');
     }
     if (floatPerPrimitive < 0) {
-      throw new Error(
-        'must specify bytesPerPrimitive or provide an Attribute argument'
-      );
+      throw new Error('must specify bytesPerPrimitive or provide an Attribute argument');
     }
     if (this.floatStride < 0) {
       this.floatStride = floatPerPrimitive;
@@ -53,20 +43,12 @@ export class PrimitiveView<PrimitiveType> {
   }
 
   set(index: number, v: PrimitiveType): this {
-    this.primitiveToArray(
-      v,
-      this.floatArray,
-      index * this.floatStride + this.floatOffset
-    );
+    this.primitiveToArray(v, this.floatArray, index * this.floatStride + this.floatOffset);
     return this;
   }
 
   get(index: number, v: PrimitiveType): PrimitiveType {
-    this.arrayToPrimitive(
-      this.floatArray,
-      index * this.floatStride + this.floatOffset,
-      v
-    );
+    this.arrayToPrimitive(this.floatArray, index * this.floatStride + this.floatOffset, v);
     return v;
   }
 
@@ -76,73 +58,18 @@ export class PrimitiveView<PrimitiveType> {
   }
 }
 
-export function makeVec2View(
-  dataArray: DataArray,
-  floatStride = -1,
-  floatOffset = -1
-): PrimitiveView<Vec2> {
-  return new PrimitiveView<Vec2>(
-    dataArray,
-    2,
-    floatStride,
-    floatOffset,
-    vec2ToArray,
-    arrayToVec2
-  );
+export function makeVec2View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Vec2> {
+  return new PrimitiveView<Vec2>(dataArray, 2, floatStride, floatOffset, vec2ToArray, arrayToVec2);
 }
-export function makeVec3View(
-  dataArray: DataArray,
-  floatStride = -1,
-  floatOffset = -1
-): PrimitiveView<Vec3> {
-  return new PrimitiveView<Vec3>(
-    dataArray,
-    3,
-    floatStride,
-    floatOffset,
-    vec3ToArray,
-    arrayToVec3
-  );
+export function makeVec3View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Vec3> {
+  return new PrimitiveView<Vec3>(dataArray, 3, floatStride, floatOffset, vec3ToArray, arrayToVec3);
 }
-export function makeQuatView(
-  dataArray: DataArray,
-  floatStride = -1,
-  floatOffset = -1
-): PrimitiveView<Quat> {
-  return new PrimitiveView<Quat>(
-    dataArray,
-    4,
-    floatStride,
-    floatOffset,
-    quatToArray,
-    arrayToQuat
-  );
+export function makeQuatView(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Quat> {
+  return new PrimitiveView<Quat>(dataArray, 4, floatStride, floatOffset, quatToArray, arrayToQuat);
 }
-export function makeMat3View(
-  dataArray: DataArray,
-  floatStride = -1,
-  floatOffset = -1
-): PrimitiveView<Mat3> {
-  return new PrimitiveView<Mat3>(
-    dataArray,
-    9,
-    floatStride,
-    floatOffset,
-    mat3ToArray,
-    arrayToMat3
-  );
+export function makeMat3View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Mat3> {
+  return new PrimitiveView<Mat3>(dataArray, 9, floatStride, floatOffset, mat3ToArray, arrayToMat3);
 }
-export function makeMat4View(
-  dataArray: DataArray,
-  floatStride = -1,
-  floatOffset = -1
-): PrimitiveView<Mat4> {
-  return new PrimitiveView<Mat4>(
-    dataArray,
-    16,
-    floatStride,
-    floatOffset,
-    mat4ToArray,
-    arrayToMat4
-  );
+export function makeMat4View(dataArray: DataArray, floatStride = -1, floatOffset = -1): PrimitiveView<Mat4> {
+  return new PrimitiveView<Mat4>(dataArray, 16, floatStride, floatOffset, mat4ToArray, arrayToMat4);
 }

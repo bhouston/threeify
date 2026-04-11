@@ -11,19 +11,17 @@ import { GL } from './GL.js';
 // set: void gl.frontFace(mode);
 export enum WindingOrder {
   Clockwise = GL.CW,
-  CounterClockwise = GL.CCW // default
+  CounterClockwise = GL.CCW, // default
 }
 
 // set: void gl.cullFace(mode);
 export enum CullingSide {
   Front = GL.FRONT,
   Back = GL.BACK, // default
-  FrontBack = GL.FRONT_AND_BACK
+  FrontBack = GL.FRONT_AND_BACK,
 }
 
-export class CullingState
-  implements ICloneable<CullingState>, IEquatable<CullingState>
-{
+export class CullingState implements ICloneable<CullingState>, IEquatable<CullingState> {
   static readonly None = new CullingState(false);
   static readonly Front = new CullingState(true, CullingSide.Front);
   static readonly Back = new CullingState(true, CullingSide.Back);
@@ -32,7 +30,7 @@ export class CullingState
   constructor(
     public enabled = true,
     public sides = CullingSide.Back,
-    public windingOrder = WindingOrder.CounterClockwise
+    public windingOrder = WindingOrder.CounterClockwise,
   ) {}
 
   clone(): CullingState {
@@ -46,10 +44,6 @@ export class CullingState
   }
 
   equals(cs: CullingState): boolean {
-    return (
-      this.enabled === cs.enabled &&
-      this.sides === cs.sides &&
-      this.windingOrder === cs.windingOrder
-    );
+    return this.enabled === cs.enabled && this.sides === cs.sides && this.windingOrder === cs.windingOrder;
   }
 }

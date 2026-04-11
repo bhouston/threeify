@@ -2,12 +2,12 @@
   "name": "@threeify/build",
   "version": "4.0.2",
   "private": true,
-  "type": "module",
-  "main": "./dist/index.js",
-  "source": "./src/index.ts",
   "bin": {
     "threeify-build": "./bin/cli.js"
   },
+  "source": "./src/index.ts",
+  "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch"

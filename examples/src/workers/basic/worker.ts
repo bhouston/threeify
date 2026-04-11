@@ -1,9 +1,4 @@
-import {
-  BackgroundWorker,
-  IBackgroundRequest,
-  IBackgroundResponse,
-  sleep
-} from '@threeify/core';
+import { BackgroundWorker, IBackgroundRequest, IBackgroundResponse, sleep } from '@threeify/core';
 
 const backgroundWorker = new BackgroundWorker();
 
@@ -17,7 +12,7 @@ backgroundWorker.handlers.set('delay', (request: IBackgroundRequest) => {
   return Promise.resolve({
     requestId: request.id,
     result: delay,
-    buffers: undefined
+    buffers: undefined,
   } as IBackgroundResponse);
 });
 
@@ -30,7 +25,7 @@ backgroundWorker.handlers.set('delay-async', (request: IBackgroundRequest) => {
         return resolve({
           requestId: request.id,
           result: delay,
-          buffers: undefined
+          buffers: undefined,
         } as IBackgroundResponse);
       })
       .catch((error: any) => {

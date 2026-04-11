@@ -6,7 +6,7 @@ import {
   mat4Compose,
   mat4Inverse,
   mat4Multiply,
-  mat4TransformBox3
+  mat4TransformBox3,
 } from '@threeify/math';
 
 import { MeshNode } from '../scene/Mesh.js';
@@ -29,10 +29,7 @@ export function subTreeStats(node: SceneNode): {
   return { numPrimitives, numNodes };
 }
 
-export function updateNodeTree(
-  node: SceneNode,
-  sceneUpdateCache: SceneTreeCache
-) {
+export function updateNodeTree(node: SceneNode, sceneUpdateCache: SceneTreeCache) {
   nodeVisitor(node, undefined, false, sceneUpdateCache);
 }
 
@@ -42,7 +39,7 @@ export function nodeVisitor(
   node: SceneNode,
   parentNode: SceneNode | undefined = undefined,
   parentNodeChanged: boolean,
-  sceneUpdateCache: SceneTreeCache
+  sceneUpdateCache: SceneTreeCache,
 ): boolean {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
 
@@ -53,30 +50,16 @@ export function nodeVisitor(
     node.version
   );*/
 
-  const parentOrNodeChanged = preOrderUpdateNode(
-    node,
-    parentNode,
-    parentNodeChanged,
-    sceneUpdateCache
-  );
+  const parentOrNodeChanged = preOrderUpdateNode(node, parentNode, parentNodeChanged, sceneUpdateCache);
 
   let childrenNodesChanged = false;
   node.children.forEach((child) => {
     child.parent = node;
-    const childNodeChanged = nodeVisitor(
-      child,
-      node,
-      parentOrNodeChanged,
-      sceneUpdateCache
-    );
+    const childNodeChanged = nodeVisitor(child, node, parentOrNodeChanged, sceneUpdateCache);
     childrenNodesChanged = childrenNodesChanged || childNodeChanged;
   });
 
-  const childOrNodeChanged = postOrderUpdateNode(
-    node,
-    childrenNodesChanged,
-    sceneUpdateCache
-  );
+  const childOrNodeChanged = postOrderUpdateNode(node, childrenNodesChanged, sceneUpdateCache);
 
   nodeIdToUpdateVersion.set(node.id, node.version);
 
@@ -87,12 +70,11 @@ export function nodeVisitor(
 export function postOrderUpdateNode(
   node: SceneNode,
   childNodeChanged: boolean,
-  sceneUpdateCache: SceneTreeCache
+  sceneUpdateCache: SceneTreeCache,
 ): boolean {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
 
-  if (!childNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version)
-    return false;
+  if (!childNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version) return false;
 
   // calculate subtree bounding box
   node.subTreeBoundingBox.copy(node.nodeBoundingBox);
@@ -101,7 +83,7 @@ export function postOrderUpdateNode(
     box3ExpandByBox3(
       node.subTreeBoundingBox,
       mat4TransformBox3(child.localToParent, child.subTreeBoundingBox, tempBox),
-      node.subTreeBoundingBox
+      node.subTreeBoundingBox,
     );
   });
 
@@ -112,12 +94,11 @@ export function preOrderUpdateNode(
   node: SceneNode,
   _parentNode: SceneNode | undefined,
   parentNodeChanged: boolean,
-  sceneUpdateCache: SceneTreeCache
+  sceneUpdateCache: SceneTreeCache,
 ): boolean {
   const nodeIdToUpdateVersion = sceneUpdateCache.nodeIdToVersion;
 
-  if (!parentNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version)
-    return false;
+  if (!parentNodeChanged && nodeIdToUpdateVersion.get(node.id) == node.version) return false;
 
   /*console.log(
     'local transform',
@@ -128,23 +109,14 @@ export function preOrderUpdateNode(
 
   // update local to parent matrices
   if (nodeIdToUpdateVersion.get(node.id) !== node.version) {
-    node.localToParent = mat4Compose(
-      node.translation,
-      node.rotation,
-      node.scale,
-      node.localToParent
-    );
+    node.localToParent = mat4Compose(node.translation, node.rotation, node.scale, node.localToParent);
     node.parentToLocal = mat4Inverse(node.localToParent, node.parentToLocal);
   }
 
   // update local to world matrices.
   if (node.parent !== undefined) {
     // localToParentMatrix happens first, and then parent.localToWorldMatrix - this is correct
-    mat4Multiply(
-      node.parent.localToWorld,
-      node.localToParent,
-      node.localToWorld
-    );
+    mat4Multiply(node.parent.localToWorld, node.localToParent, node.localToWorld);
     mat4Inverse(node.localToWorld, node.worldToLocal);
   } else {
     node.localToWorld.copy(node.localToParent);
@@ -170,7 +142,7 @@ export function preOrderUpdateNode(
       const meshNode = node as MeshNode;
       node.nodeBoundingBox = positionAttributeToBoundingBox(
         meshNode.geometry.attributes.position,
-        node.nodeBoundingBox
+        node.nodeBoundingBox,
       );
     } else {
       box3Empty(node.nodeBoundingBox);

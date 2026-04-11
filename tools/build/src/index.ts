@@ -26,7 +26,7 @@ export const main = async () => {
     sourcemap: !optimize,
     outbase: 'src',
     outdir: 'dist',
-    plugins: [glslTranspiler]
+    plugins: [glslTranspiler],
   } as esbuild.BuildOptions;
 
   if (serve) {
@@ -34,7 +34,7 @@ export const main = async () => {
     await ctx.serve({
       port: 8001,
       host: 'localhost',
-      servedir: '.'
+      servedir: '.',
     } as esbuild.ServeOptions);
   } else if (watch) {
     const ctx = await esbuild.context(params);

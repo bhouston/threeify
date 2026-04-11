@@ -8,6 +8,6 @@ export class TexParameters {
     public wrapS = TextureWrap.Repeat,
     public wrapT = TextureWrap.Repeat,
     public generateMipmaps = true,
-    public anisotropyLevels = 2
+    public anisotropyLevels = 2,
   ) {}
 }

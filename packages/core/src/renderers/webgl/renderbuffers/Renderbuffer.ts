@@ -15,7 +15,7 @@ export class Renderbuffer implements IResource {
     public context: RenderingContext,
     public samples = 2,
     public internalFormat = InternalFormat.RGBA8,
-    public size = new Vec2(1024, 1024)
+    public size = new Vec2(1024, 1024),
   ) {
     const { gl, resources } = this.context;
 
@@ -28,20 +28,9 @@ export class Renderbuffer implements IResource {
       gl.bindRenderbuffer(gl.RENDERBUFFER, glRenderbuffer);
 
       if (samples > 1) {
-        gl.renderbufferStorageMultisample(
-          gl.RENDERBUFFER,
-          this.samples,
-          this.internalFormat,
-          this.size.x,
-          this.size.y
-        );
+        gl.renderbufferStorageMultisample(gl.RENDERBUFFER, this.samples, this.internalFormat, this.size.x, this.size.y);
       } else {
-        gl.renderbufferStorage(
-          gl.RENDERBUFFER,
-          this.internalFormat,
-          this.size.x,
-          this.size.y
-        );
+        gl.renderbufferStorage(gl.RENDERBUFFER, this.internalFormat, this.size.x, this.size.y);
       }
 
       gl.bindRenderbuffer(gl.RENDERBUFFER, null);

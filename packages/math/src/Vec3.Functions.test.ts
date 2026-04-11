@@ -13,7 +13,7 @@ import {
   vec3MultiplyByScalar,
   vec3Negate,
   vec3Normalize,
-  vec3Subtract
+  vec3Subtract,
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 

@@ -1,18 +1,7 @@
 import { warnOnce } from '@threeify/core';
-import {
-  Euler3,
-  euler3ToMat4,
-  EulerOrder3,
-  Mat4,
-  mat4ToEuler3,
-  Vec3,
-  vec3Length
-} from '@threeify/math';
+import { Euler3, euler3ToMat4, EulerOrder3, Mat4, mat4ToEuler3, Vec3, vec3Length } from '@threeify/math';
 
-export function negativeZDirectionToEuler(
-  d: Vec3,
-  result = new Euler3()
-): Euler3 {
+export function negativeZDirectionToEuler(d: Vec3, result = new Euler3()): Euler3 {
   // NOTE: This has never been tested.  It may not work.
   // found on stackoverflow.
   warnOnce('This has never been tested.');
@@ -49,10 +38,7 @@ export function negativeZDirectionToEuler(
   return mat4ToEuler3(m, EulerOrder3.Default, result);
 }
 
-export function eulerToNegativeZDirection(
-  e: Euler3,
-  result = new Vec3()
-): Vec3 {
+export function eulerToNegativeZDirection(e: Euler3, result = new Vec3()): Vec3 {
   warnOnce('This has never been tested.');
   const m = euler3ToMat4(e);
   const te = m.elements;

@@ -23,8 +23,8 @@ console.log('ASSETS_ROOT', ASSETS_ROOT);
     compress({
       filter() {
         return true;
-      }
-    })
+      },
+    }),
   );
 
   app.use(mount('/assets', staticCache(ASSETS_ROOT, { maxAge: 60 })));

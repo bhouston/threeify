@@ -11,7 +11,7 @@ import {
   vec3Equals,
   vec3MultiplyByScalar,
   vec3Normalize,
-  vec3Subtract
+  vec3Subtract,
 } from './Vec3.Functions.js';
 import { Vec3 } from './Vec3.js';
 
@@ -40,7 +40,7 @@ export function box3ToSphere(box: Box3, result = new Sphere()): Sphere {
 export function vec3ArrayToSphere(
   points: Vec3[],
   optionalCenter: Vec3 | undefined = undefined,
-  result = new Sphere()
+  result = new Sphere(),
 ): Sphere {
   if (optionalCenter !== undefined) {
     optionalCenter.clone(result.center);
@@ -49,10 +49,7 @@ export function vec3ArrayToSphere(
   }
   let maxRadiusSq = 0;
   for (let i = 0, il = points.length; i < il; i++) {
-    maxRadiusSq = Math.max(
-      maxRadiusSq,
-      vec3DistanceSq(result.center, points[i])
-    );
+    maxRadiusSq = Math.max(maxRadiusSq, vec3DistanceSq(result.center, points[i]));
   }
   result.radius = Math.sqrt(maxRadiusSq);
 
@@ -67,51 +64,31 @@ export function sphereDistanceToPoint(sphere: Sphere, point: Vec3): number {
   return vec3Distance(point, sphere.center) - sphere.radius;
 }
 
-export function sphereClampPoint(
-  sphere: Sphere,
-  point: Vec3,
-  result = new Vec3()
-): Vec3 {
+export function sphereClampPoint(sphere: Sphere, point: Vec3, result = new Vec3()): Vec3 {
   const deltaLengthSq = vec3DistanceSq(sphere.center, point);
 
   point.clone(result);
   if (deltaLengthSq > sphere.radius * sphere.radius) {
     vec3Normalize(vec3Subtract(result, sphere.center, result), result);
-    vec3Add(
-      vec3MultiplyByScalar(result, sphere.radius, result),
-      sphere.center,
-      result
-    );
+    vec3Add(vec3MultiplyByScalar(result, sphere.radius, result), sphere.center, result);
   }
 
   return result;
 }
 
-export function sphereTranslate(
-  s: Sphere,
-  offset: Vec3,
-  result = new Sphere()
-): Sphere {
+export function sphereTranslate(s: Sphere, offset: Vec3, result = new Sphere()): Sphere {
   s.clone(result);
   vec3Add(result.center, offset, result.center);
   return result;
 }
 
-export function sphereScale(
-  s: Sphere,
-  scale: number,
-  result = new Sphere()
-): Sphere {
+export function sphereScale(s: Sphere, scale: number, result = new Sphere()): Sphere {
   s.clone(result);
   result.radius *= scale;
   return result;
 }
 
-export function mat4TransformSphere(
-  m: Mat4,
-  s: Sphere,
-  result = new Sphere()
-): Sphere {
+export function mat4TransformSphere(m: Mat4, s: Sphere, result = new Sphere()): Sphere {
   mat4TransformVec3(m, s.center, result.center);
   result.radius = s.radius * mat4ToMaxAxisScale(m);
   return result;

@@ -19,7 +19,7 @@ import {
   TexImage2D,
   TextureFilter,
   UniformValueMap,
-  VirtualFramebuffer
+  VirtualFramebuffer,
 } from '@threeify/core';
 import { Color3, vec2Ceil, vec2MultiplyByScalar } from '@threeify/math';
 
@@ -30,28 +30,25 @@ export async function createRenderCache(context: RenderingContext) {
   const [copyPass, gaussianBlur, toneMapper] = await Promise.all([
     createCopyPass(context),
     createGaussianBlur(context),
-    createToneMapper(context)
+    createToneMapper(context),
   ]);
   return new RenderCache(context, copyPass, gaussianBlur, toneMapper);
 }
 
-export function updateFramebuffers(
-  canvasFramebuffer: CanvasFramebuffer,
-  renderCache: RenderCache
-) {
+export function updateFramebuffers(canvasFramebuffer: CanvasFramebuffer, renderCache: RenderCache) {
   const { context, size } = canvasFramebuffer;
 
   const msaaColorRenderbuffer = new Renderbuffer(
     context,
     renderCache.numMSAASamples,
     renderCache.renderInternalFormat,
-    size
+    size,
   );
   const msaaDepthRenderbuffer = new Renderbuffer(
     context,
     renderCache.numMSAASamples,
     InternalFormat.DepthComponent24,
-    size
+    size,
   );
   const multisampleFramebuffer = new Framebuffer(context);
 
@@ -66,26 +63,20 @@ export function updateFramebuffers(
       size,
       renderCache.renderInternalFormat,
       TextureFilter.Linear,
-      TextureFilter.LinearMipmapLinear
-    )
+      TextureFilter.LinearMipmapLinear,
+    ),
   );
 
   const blurSize = vec2Ceil(vec2MultiplyByScalar(size, 1));
   const tempFramebuffer = new Framebuffer(context);
-  tempFramebuffer.attach(
-    Attachment.Color0,
-    makeColorAttachment(context, blurSize, renderCache.renderInternalFormat)
-  );
+  tempFramebuffer.attach(Attachment.Color0, makeColorAttachment(context, blurSize, renderCache.renderInternalFormat));
 
   renderCache.multisampleFramebuffer = multisampleFramebuffer;
   renderCache.tempMipmapFramebuffer = tempMipmapFramebuffer;
   renderCache.tempFramebuffer = tempFramebuffer;
 }
 
-export function renderScene(
-  canvasFramebuffer: CanvasFramebuffer,
-  renderCache: RenderCache
-) {
+export function renderScene(canvasFramebuffer: CanvasFramebuffer, renderCache: RenderCache) {
   const {
     opaqueMeshBatches,
     blendMeshBatches,
@@ -96,7 +87,7 @@ export function renderScene(
     gaussianBlur,
     toneMapper,
     isBloom,
-    isTransmission
+    isTransmission,
   } = renderCache;
   if (
     multisampleFramebuffer === undefined ||
@@ -118,11 +109,11 @@ export function renderScene(
     renderCache,
     opaqueMeshBatches,
     {
-      outputTransformFlags: 0x8
+      outputTransformFlags: 0x8,
     },
     DepthTestState.Less,
     BlendState.None,
-    CullingState.Back
+    CullingState.Back,
   );
 
   // capture normal buffer
@@ -137,21 +128,19 @@ export function renderScene(
     opaqueMeshBatches,
     {
       debugOutputIndex: userUniforms.debugOutputIndex,
-      outputTransformFlags: 0x4
+      outputTransformFlags: 0x4,
     },
     DepthTestState.LessOrEqual,
     BlendState.PremultipliedOver,
-    CullingState.Back
+    CullingState.Back,
   );
 
-  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(
-    Attachment.Color0
-  ) as TexImage2D;
+  const opaqueTexImage2D = opaqueFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
 
   if (blendMeshBatches.length > 0) {
     const blendUniforms: Record<string, any> = {
       debugOutputIndex: userUniforms.debugOutputIndex,
-      outputTransformFlags: 0x4
+      outputTransformFlags: 0x4,
     };
 
     if (isTransmission) {
@@ -167,7 +156,7 @@ export function renderScene(
       blendUniforms,
       DepthTestState.Less,
       BlendState.PremultipliedOver,
-      CullingState.Front
+      CullingState.Front,
     );
 
     renderMeshes(
@@ -177,7 +166,7 @@ export function renderScene(
       blendUniforms,
       DepthTestState.Less,
       BlendState.PremultipliedOver,
-      CullingState.Back
+      CullingState.Back,
     );
   }
 
@@ -185,9 +174,7 @@ export function renderScene(
   opaqueTexImage2D.generateMipmaps();
 
   if (isBloom) {
-    const tempTexImage2D = tempFramebuffer.getAttachment(
-      Attachment.Color0
-    ) as TexImage2D;
+    const tempTexImage2D = tempFramebuffer.getAttachment(Attachment.Color0) as TexImage2D;
 
     gaussianBlur.exec({
       sourceTexImage2D: opaqueTexImage2D,
@@ -195,7 +182,7 @@ export function renderScene(
       standardDeviationInTexels: 20,
       tempTexImage2D: tempTexImage2D,
       targetFramebuffer: multisampleFramebuffer,
-      targetAlpha: 0.05
+      targetAlpha: 0.05,
     });
 
     biltFramebuffers(multisampleFramebuffer, opaqueFramebuffer);
@@ -207,7 +194,7 @@ export function renderScene(
   toneMapper.exec({
     sourceTexImage2D: opaqueTexImage2D,
     exposure: 1,
-    targetFramebuffer: canvasFramebuffer
+    targetFramebuffer: canvasFramebuffer,
   });
 }
 
@@ -218,24 +205,18 @@ export function renderMeshes(
   extraUniforms?: UniformValueMap,
   depthTestState?: DepthTestState,
   blendState?: BlendState,
-  cullingState?: CullingState
+  cullingState?: CullingState,
 ) {
   const {
     cameraUniforms,
     lightParameters,
     shaderNameToLightingUniformBuffers,
     shaderNameToCameraUniformBuffers,
-    userUniforms: _userUniforms
+    userUniforms: _userUniforms,
   } = renderCache;
 
   for (const meshBatch of meshBatches) {
-    const {
-      program,
-      uniformsArray,
-      bufferGeometry,
-      programVertexArray,
-      uniformBuffers
-    } = meshBatch;
+    const { program, uniformsArray, bufferGeometry, programVertexArray, uniformBuffers } = meshBatch;
 
     const uniforms = [...uniformsArray] as UniformValueMap[];
 
@@ -265,7 +246,7 @@ export function renderMeshes(
       programVertexArray,
       depthTestState,
       blendState,
-      cullingState
+      cullingState,
     });
   }
 }

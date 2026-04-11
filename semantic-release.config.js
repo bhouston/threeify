@@ -7,9 +7,9 @@ export default {
     [
       '@semantic-release/npm',
       {
-        npmPublish: true
-      }
+        npmPublish: true,
+      },
     ],
-    '@semantic-release/git'
-  ]
+    '@semantic-release/git',
+  ],
 };

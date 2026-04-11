@@ -6,10 +6,7 @@ import { ShaderMaterial } from '../../../materials/ShaderMaterial.js';
 import { BlendState } from '../../webgl/BlendState.js';
 import { ClearState } from '../../webgl/ClearState.js';
 import { BufferBit } from '../../webgl/framebuffers/BufferBit.js';
-import {
-  colorAttachmentToFramebuffer,
-  Framebuffer
-} from '../../webgl/framebuffers/Framebuffer.js';
+import { colorAttachmentToFramebuffer, Framebuffer } from '../../webgl/framebuffers/Framebuffer.js';
 import { renderPass } from '../../webgl/framebuffers/VirtualFramebuffer.js';
 import { shaderMaterialToProgram } from '../../webgl/programs/Program.js';
 import { RenderingContext } from '../../webgl/RenderingContext.js';
@@ -31,9 +28,7 @@ export interface GaussianBlur extends IEffect {
   exec(props: IGaussianBlurProps): void;
 }
 
-export async function createGaussianBlur(
-  context: RenderingContext
-): Promise<GaussianBlur> {
+export async function createGaussianBlur(context: RenderingContext): Promise<GaussianBlur> {
   const programRef = context.programCache.acquireRef('gaussianBlur', (name) => {
     const material = new ShaderMaterial(name, vertexSource, fragmentSource);
     return shaderMaterialToProgram(context, material);
@@ -45,36 +40,29 @@ export async function createGaussianBlur(
       props = {
         sourceLod: 0,
         standardDeviationInTexels: 3,
-        targetAlpha: 1
-      } as IGaussianBlurProps
+        targetAlpha: 1,
+      } as IGaussianBlurProps,
     ) => {
-      const {
-        sourceTexImage2D,
-        sourceLod,
-        standardDeviationInTexels,
-        tempTexImage2D,
-        targetFramebuffer,
-        targetAlpha
-      } = props;
+      const { sourceTexImage2D, sourceLod, standardDeviationInTexels, tempTexImage2D, targetFramebuffer, targetAlpha } =
+        props;
 
       assert(sourceLod >= 0);
       assert(standardDeviationInTexels >= 0);
       assert(
         vec2Equals(tempTexImage2D.size, targetFramebuffer.size),
         `Temp texture size ${vec2ToString(
-          tempTexImage2D.size
-        )} does not match target size ${vec2ToString(targetFramebuffer.size)}.`
+          tempTexImage2D.size,
+        )} does not match target size ${vec2ToString(targetFramebuffer.size)}.`,
       );
       assert(0 <= targetAlpha && targetAlpha <= 1);
 
       const uniforms = {
         sourceMap: sourceTexImage2D,
         sourceLod,
-        standardDeviationInTexels:
-          standardDeviationInTexels / Math.pow(2, sourceLod),
+        standardDeviationInTexels: standardDeviationInTexels / Math.pow(2, sourceLod),
         kernelRadiusInTexels: Math.ceil(standardDeviationInTexels * 3),
         blurDirection: new Vec2(1, 0),
-        targetAlpha: 1
+        targetAlpha: 1,
       };
 
       using(colorAttachmentToFramebuffer(tempTexImage2D), (tempFramebuffer) => {
@@ -84,7 +72,7 @@ export async function createGaussianBlur(
         renderPass({
           framebuffer: tempFramebuffer,
           program,
-          uniforms
+          uniforms,
         });
       });
 
@@ -100,13 +88,12 @@ export async function createGaussianBlur(
         framebuffer: targetFramebuffer,
         program,
         uniforms,
-        blendState:
-          targetAlpha < 1 ? BlendState.PremultipliedOver : BlendState.None
+        blendState: targetAlpha < 1 ? BlendState.PremultipliedOver : BlendState.None,
       });
     },
 
     dispose: () => {
       programRef.dispose();
-    }
+    },
   };
 }

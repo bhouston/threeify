@@ -3,7 +3,11 @@ import { hashFloat3 } from './utils/hash.js';
 export class ColorHSV {
   static readonly NUM_COMPONENTS = 3;
 
-  constructor(public h = 0, public s = 0, public v = 0) {}
+  constructor(
+    public h = 0,
+    public s = 0,
+    public v = 0,
+  ) {}
 
   getHashCode(): number {
     return hashFloat3(this.h, this.s, this.v);
