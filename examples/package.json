@@ -9,8 +9,8 @@
   "main": "dist",
   "types": "dist",
   "scripts": {
-    "build": "glsl-transpiler -r src -o src && tsc --noEmit && threeify-build src/**/index.ts --bundle --optimize",
-    "watch": "glsl-transpiler -r src -o src --watch & tsc --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
+    "build": "glsl-transpiler -r src -o src && tsgo --noEmit && threeify-build src/**/index.ts --bundle --optimize",
+    "watch": "glsl-transpiler -r src -o src --watch & tsgo --noEmit --watch & threeify-build src/**/index.ts --bundle --serve"
   },
   "dependencies": {
     "@threeify/core": "workspace:*",

@@ -8,8 +8,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "glsl-transpiler && tsc",
-    "watch": "glsl-transpiler  -r src -o dist --watch & tsc --watch"
+    "build": "glsl-transpiler && tsgo",
+    "watch": "glsl-transpiler  -r src -o dist --watch & tsgo --watch"
   },
   "devDependencies": {
     "@threeify/build": "workspace:*",

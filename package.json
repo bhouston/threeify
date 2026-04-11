@@ -35,8 +35,7 @@
   },
   "dependencies": {
     "@gltf-transform/core": "^2.5.1",
-    "@gltf-transform/extensions": "^2.5.1",
-    "typescript": "^4.9.5"
+    "@gltf-transform/extensions": "^2.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
@@ -52,6 +51,7 @@
     "oxfmt": "^0.41.0",
     "oxlint": "^1.59.0",
     "semantic-release": "^22.0.8",
+    "@typescript/native-preview": "7.0.0-dev.20251229.1",
     "ts-jest": "^29.1.0",
     "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.1",

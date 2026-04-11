@@ -9,8 +9,8 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "build": "tsgo",
+    "watch": "tsgo --watch"
   },
   "devDependencies": {
     "@threeify/esbuild-plugin-glsl-transpiler": "workspace:*",

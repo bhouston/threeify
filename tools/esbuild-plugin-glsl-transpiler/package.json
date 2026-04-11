@@ -6,8 +6,8 @@
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "build": "tsgo",
+    "watch": "tsgo --watch"
   },
   "dependencies": {
     "commander": "^9.5.0",

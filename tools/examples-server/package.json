@@ -4,8 +4,8 @@
   "private": true,
   "main": "src/server.js",
   "scripts": {
-    "build": "tsc --noEmit && esbuild src/server.ts --format=cjs --platform=node --bundle --outfile=dist/server.js",
-    "watch": "tsc --noEmit --watch & esbuild src/server.ts --format=cjs --platform=node --bundle --sourcemap --outfile=dist/server.js --watch",
+    "build": "tsgo --noEmit && esbuild src/server.ts --format=cjs --platform=node --bundle --outfile=dist/server.js",
+    "watch": "tsgo --noEmit --watch & esbuild src/server.ts --format=cjs --platform=node --bundle --sourcemap --outfile=dist/server.js --watch",
     "start": "nodemon dist/server.js"
   },
   "dependencies": {

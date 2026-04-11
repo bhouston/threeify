@@ -27,6 +27,6 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "allowJs": false,
-    "incremental": true
+    "incremental": false
   }
 }

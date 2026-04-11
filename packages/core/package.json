@@ -19,8 +19,8 @@
     "./src/*": "./src/*"
   },
   "scripts": {
-    "build": "glsl-transpiler -r src -o src && tsc",
-    "watch": "glsl-transpiler -r src -o src --watch & tsc --watch"
+    "build": "glsl-transpiler -r src -o src && tsgo",
+    "watch": "glsl-transpiler -r src -o src --watch & tsgo --watch"
   },
   "dependencies": {
     "@threeify/math": "workspace:*"
