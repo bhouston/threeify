@@ -92,10 +92,5 @@ export async function getOptions() {
     exit(1);
   }
 
-  if (options.buildMode && options.watch) {
-    console.error('--buildMode cannot be used with --watch');
-    exit(1);
-  }
-
   return options;
 }

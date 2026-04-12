@@ -5,6 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "build": "tsgo --noEmit && esbuild src/server.ts --format=cjs --platform=node --bundle --outfile=dist/server.js",
+    "bundle:watch": "esbuild src/server.ts --format=cjs --platform=node --bundle --sourcemap --outfile=dist/server.js --watch",
     "watch": "tsgo --noEmit --watch & esbuild src/server.ts --format=cjs --platform=node --bundle --sourcemap --outfile=dist/server.js --watch",
     "start": "nodemon dist/server.js"
   },

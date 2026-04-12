@@ -24,13 +24,10 @@ export function fetchImageElement(url: string, size = new Vec2()): Promise<HTMLI
 }
 
 export function createImageBitmapFromArrayBuffer(
-  arrayBufferView: ArrayBufferView,
+  arrayBufferView: ArrayBufferView<ArrayBuffer>,
   mimeType: string,
 ): Promise<ImageBitmap> {
-  // Create a copy backed by ArrayBuffer to satisfy strict BlobPart typing.
-  const bytes = new Uint8Array(arrayBufferView.byteLength);
-  bytes.set(new Uint8Array(arrayBufferView.buffer, arrayBufferView.byteOffset, arrayBufferView.byteLength));
-  const blob = new Blob([bytes], { type: mimeType });
+  const blob = new Blob([arrayBufferView], { type: mimeType });
   return createImageBitmap(blob);
 }
 

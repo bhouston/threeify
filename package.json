@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "glsl-transpiler -b -c tsconfig.json && tsgo -b",
-    "watch": "pnpm -r --parallel run watch",
+    "watch": "glsl-transpiler -b -w -c tsconfig.json & tsgo -b --watch & pnpm --filter threeify-examples run serve & pnpm --filter examples-server run bundle:watch",
     "clean:node_modules": "node scripts/clean.js --node_modules",
     "clean:dist": "node scripts/clean.js --dist",
     "clean": "node scripts/clean.js --node_modules --dist",

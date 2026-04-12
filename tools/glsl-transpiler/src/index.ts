@@ -41,6 +41,31 @@ export async function main() {
       await transpileProject(options, project.projectDir, project.rootDir, project.outDir, project.tsconfigPath, true);
     }
 
+    if (!options.watch) {
+      return;
+    }
+
+    console.log('glsl-transpiler - watching all projects for changes');
+
+    for (const project of projects) {
+      const rootDir = path.resolve(project.projectDir, project.rootDir);
+
+      if (!fs.existsSync(rootDir)) {
+        continue;
+      }
+
+      const throttledRecompiler = throttle(async () => {
+        await transpileProject(options, project.projectDir, project.rootDir, project.outDir, project.tsconfigPath, true);
+      }, 0);
+
+      watch.watchTree(rootDir, (f, _curr, _prev) => {
+        if (typeof f === 'string' && f.endsWith('.glsl')) {
+          console.log('glsl-transpiler - recompile on changes', f);
+          throttledRecompiler();
+        }
+      });
+    }
+
     return;
   }
 
